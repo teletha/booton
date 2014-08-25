@@ -9,14 +9,15 @@
  */
 package booton.reactive;
 
-import static booton.reactive.EventHelper.*;
-
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import kiss.I;
 
 /**
  * @version 2014/08/21 13:31:48
@@ -30,26 +31,46 @@ public class TodoSample extends Reactive {
     Input input = new Input() {
 
         {
-            placeholder("新しい要件を入力").validate(input.value.is(Empty), "要件を入力してください");
+            Bindings.when(todos.sizeProperty().greaterThan(9)).then("新しい要件を入力").otherwise("要件は10件まで");
+
+            placeholder(I.observe(todos.sizeProperty()).map(v -> v.intValue() < 10 ? "新しい要件を入力" : "要件は10件まで"));
+
+            I.observe(todos.sizeProperty()).to(size -> {
+                if (size.intValue() < 10) {
+                    enable.set(true);
+                    placeholder("新しい要件を入力");
+                } else {
+                    enable.set(false);
+                    placeholder("要件は10件まで");
+                }
+            });
         }
     };
 
     /** The add button. */
     Button<Todo> add = new Button<Todo>().label("追加")
-            .dependOn(input)
+            .enableIf(input.enable)
+            .validate(input.value.isEmpty(), "要件を入力してください")
             .validate(todos.sizeProperty().greaterThan(9), "要件は10件まで")
-            .click(() -> todos.add(new Todo(input.value.value())));
+            .click(() -> todos.add(new Todo(input.value.get())));
 
     Button addon = new Button() {
 
         {
-            add.click.to(e -> todos.add(new Todo(input.value.value())));
+            add.click.to(e -> todos.add(new Todo(input.value.get())));
             // add.run(this::add).onclick();
         }
 
         // @On(UIAction.Click)
         private void add() {
-            todos.add(new Todo(input.value.value()));
+            todos.add(new Todo(input.value.get()));
+        }
+    };
+
+    javafx.scene.control.Button button = new javafx.scene.control.Button() {
+
+        {
+
         }
     };
 

@@ -9,6 +9,9 @@
  */
 package booton.reactive;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import kiss.Event;
 
 /**
@@ -16,7 +19,7 @@ import kiss.Event;
  */
 public class Input extends Piece {
 
-    public Event<String> value;
+    public final StringProperty value = new SimpleStringProperty();
 
     /**
      * @return
@@ -43,6 +46,10 @@ public class Input extends Piece {
      * @param string
      */
     protected Input placeholder(String string) {
+        return this;
+    }
+
+    protected Input placeholder(Event<String> value) {
         return this;
     }
 

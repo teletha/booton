@@ -20,14 +20,6 @@ public class Button<T> extends Piece<Button<T>> {
 
     protected Event<T> click;
 
-    public Button<T> enable(boolean enable) {
-        return this;
-    }
-
-    public Button<T> enable(Event<Boolean> enable) {
-        return this;
-    }
-
     /**
      * @param string
      * @return
