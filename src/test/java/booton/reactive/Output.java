@@ -9,12 +9,12 @@
  */
 package booton.reactive;
 
-import kiss.Reactive;
+import kiss.Events;
 
 /**
  * @version 2014/08/22 11:27:22
  */
 public class Output<V> extends Piece {
 
-    protected Reactive<V> value;
+    protected Events<V> value;
 }

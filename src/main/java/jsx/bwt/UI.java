@@ -21,7 +21,7 @@ import jsx.event.Publishable;
 import jsx.event.Subscribe;
 import jsx.event.SubscribeUI;
 import kiss.Disposable;
-import kiss.Reactive;
+import kiss.Events;
 
 /**
  * @version 2013/07/29 2:28:28
@@ -111,8 +111,8 @@ public abstract class UI<T extends UI> extends Publishable implements Elemental 
         }
     }
 
-    public Reactive<T> onKeyUp() {
-        return (Reactive<T>) root.observe(UIAction.KeyUp).map(this);
+    public Events<T> onKeyUp() {
+        return (Events<T>) root.observe(UIAction.KeyUp).map(this);
     }
 
     /**

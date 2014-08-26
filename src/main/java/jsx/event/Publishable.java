@@ -23,9 +23,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import kiss.Disposable;
+import kiss.Events;
 import kiss.I;
-import kiss.Reactive;
-import kiss.Reactor;
+import kiss.Observer;
 import kiss.Table;
 import kiss.model.ClassUtil;
 
@@ -45,7 +45,7 @@ public class Publishable<P extends Publishable<P>> {
     private static final Map<Class, Set<Class<?>>> cache = new HashMap();
 
     /** The actual listeners holder. */
-    private Table<Object, Reactor> holder;
+    private Table<Object, Observer> holder;
 
     private Map<Object, Disposable> disposer;
 
@@ -57,9 +57,9 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T> Reactive<T> observe(Class<T> type) {
+    public final <T> Events<T> observe(Class<T> type) {
         if (type == null) {
-            return Reactive.NEVER;
+            return Events.NEVER;
         }
         return add(ClassUtil.wrap(type));
     }
@@ -72,15 +72,15 @@ public class Publishable<P extends Publishable<P>> {
      * @param type An event type.
      * @return Chainable API.
      */
-    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Reactive<E> observe(T... types) {
+    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Events<E> observe(T... types) {
         if (types == null || types.length == 0) {
-            return Reactive.NEVER;
+            return Events.NEVER;
         }
 
-        Reactive<E> observable = null;
+        Events<E> observable = null;
 
         for (T type : types) {
-            Reactive<E> current = add(type);
+            Events<E> current = add(type);
 
             if (observable == null) {
                 observable = current;
@@ -177,14 +177,14 @@ public class Publishable<P extends Publishable<P>> {
 
     /**
      * <p>
-     * Create an event listener as {@link Reactive}.
+     * Create an event listener as {@link Events}.
      * </p>
      * 
      * @param type A event type.
      * @return
      */
-    private <V> Reactive<V> add(Object type) {
-        return new Reactive<V>(observer -> {
+    private <V> Events<V> add(Object type) {
+        return new Events<V>(observer -> {
             // create event listener holder if it is not initialized
             if (holder == null) {
                 holder = new Table();
@@ -310,10 +310,10 @@ public class Publishable<P extends Publishable<P>> {
 
             for (Object type : types) {
                 if (holder != null) {
-                    List<Reactor> subscribers = holder.get(type);
+                    List<Observer> subscribers = holder.get(type);
 
                     if (subscribers != null) {
-                        for (Reactor subscriber : subscribers) {
+                        for (Observer subscriber : subscribers) {
                             try {
                                 subscriber.onNext(event);
                             } catch (Throwable e) {
