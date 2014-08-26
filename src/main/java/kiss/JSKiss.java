@@ -435,12 +435,12 @@ class JSKiss {
      * @param observable A target to observe.
      * @return A observable event stream.
      */
-    public static <E extends Observable> Reactive<E> observe(E observable) {
+    public static <E extends Observable> Events<E> observe(E observable) {
         if (observable == null) {
-            return Reactive.NEVER;
+            return Events.NEVER;
         }
 
-        return new Reactive<>(observer -> {
+        return new Events<>(observer -> {
             // create actual listener
             InvalidationListener listener = value -> {
                 observer.onNext((E) value);
@@ -467,12 +467,12 @@ class JSKiss {
      * @param observable A target to observe.
      * @return A observable event stream.
      */
-    public static <E> Reactive<E> observe(ObservableValue<E> observable) {
+    public static <E> Events<E> observe(ObservableValue<E> observable) {
         if (observable == null) {
-            return Reactive.NEVER;
+            return Events.NEVER;
         }
 
-        return new Reactive<>(observer -> {
+        return new Events<>(observer -> {
             // create actual listener
             ChangeListener<E> listener = (o, oldValue, newValue) -> {
                 observer.onNext(newValue);

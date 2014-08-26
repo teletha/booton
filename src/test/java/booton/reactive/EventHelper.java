@@ -11,7 +11,7 @@ package booton.reactive;
 
 import java.util.function.Predicate;
 
-import kiss.Reactive;
+import kiss.Events;
 
 /**
  * @version 2014/08/21 21:43:04
@@ -28,7 +28,7 @@ public class EventHelper {
         return !value.isEmpty();
     };
 
-    public static final <T> Reactive<T> which(Reactive<Boolean> condition, T truePhase, T falsePhase) {
+    public static final <T> Events<T> which(Events<Boolean> condition, T truePhase, T falsePhase) {
         return null;
     }
 }

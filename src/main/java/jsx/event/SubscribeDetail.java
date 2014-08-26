@@ -14,7 +14,7 @@ import static java.util.concurrent.TimeUnit.*;
 import java.lang.reflect.Method;
 
 import kiss.Disposable;
-import kiss.Reactive;
+import kiss.Events;
 import kiss.model.ClassUtil;
 
 /**
@@ -35,7 +35,7 @@ class SubscribeDetail implements Subscribable<Subscribe> {
      * {@inheritDoc}
      */
     @Override
-    public Reactive create(Reactive<?> base, Subscribe annotation) {
+    public Events create(Events<?> base, Subscribe annotation) {
         base = base.take(annotation.count())
                 .delay(annotation.delay(), MILLISECONDS)
                 .throttle(annotation.throttle(), MILLISECONDS)
