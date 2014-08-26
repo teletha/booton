@@ -14,13 +14,13 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import kiss.Event;
-import kiss.Observer;
+import kiss.Reactive;
+import kiss.Reactor;
 
 /**
  * @version 2014/01/09 2:57:23
  */
-public class EventEmitter<E> implements Observer<E> {
+public class EventEmitter<E> implements Reactor<E> {
 
     /** The listener holder. */
     private final List<Listener> listeners = new CopyOnWriteArrayList();
@@ -30,14 +30,14 @@ public class EventEmitter<E> implements Observer<E> {
 
     /**
      * <p>
-     * Observe EventEmitter.
+     * Observe ReactiveEmitter.
      * </p>
      * 
      * @param emitter
      * @return
      */
-    public Event<E> observe() {
-        return new Event<E>(observer -> {
+    public Reactive<E> observe() {
+        return new Reactive<E>(observer -> {
             Listener<E> listener = event -> {
                 observer.onNext(event);
             };
@@ -142,7 +142,7 @@ public class EventEmitter<E> implements Observer<E> {
 
         /**
          * <p>
-         * Event listener.
+         * Reactive listener.
          * </p>
          * 
          * @param event
