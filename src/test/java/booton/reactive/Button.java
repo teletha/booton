@@ -9,16 +9,16 @@
  */
 package booton.reactive;
 
-import kiss.Event;
+import kiss.Reactive;
 
 /**
  * @version 2014/08/21 17:09:43
  */
 public class Button<T> extends Piece<Button<T>> {
 
-    protected Event<Boolean> press;
+    protected Reactive<Boolean> press;
 
-    protected Event<T> click;
+    protected Reactive<T> click;
 
     /**
      * @param string

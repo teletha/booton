@@ -15,7 +15,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
-import kiss.Event;
+import kiss.Reactive;
 import booton.reactive.css.Font;
 
 /**
@@ -33,7 +33,7 @@ public abstract class Piece<T extends Piece<T>> {
     protected void style() {
     }
 
-    public T click(Consumer<Event<UIEvent>> events) {
+    public T click(Consumer<Reactive<UIEvent>> events) {
         return (T) this;
     }
 
@@ -42,7 +42,7 @@ public abstract class Piece<T extends Piece<T>> {
      * @param string
      * @return
      */
-    public T validate(Event<Boolean> event, String string) {
+    public T validate(Reactive<Boolean> event, String string) {
         return null;
     }
 

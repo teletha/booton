@@ -13,16 +13,16 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import kiss.Disposable;
-import kiss.Observer;
+import kiss.Reactor;
 
 /**
  * @version 2014/01/14 10:23:18
  */
 @SuppressWarnings("serial")
-class Agent<V> extends ArrayList<Disposable> implements Observer<V>, Disposable {
+class Agent<V> extends ArrayList<Disposable> implements Reactor<V>, Disposable {
 
     /** The delegation. */
-    Observer<? super V> observer;
+    Reactor<? super V> observer;
 
     /** The delegation. */
     Consumer<? super V> next;
@@ -87,6 +87,7 @@ class Agent<V> extends ArrayList<Disposable> implements Observer<V>, Disposable 
      * @param disposable A target to dispose.
      * @return Chainable API.
      */
+    @Override
     public Agent<V> and(Disposable disposable) {
         add(disposable);
 

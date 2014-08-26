@@ -50,4 +50,12 @@ public class AtomicReferenceTest {
         assert reference.getAndSet("update").equals("test");
         assert reference.get().equals("update");
     }
+
+    @Test
+    public void updateAndSet() throws Exception {
+        AtomicReference<String> reference = new AtomicReference();
+        assert reference.updateAndGet(v -> {
+            return "update";
+        }) == "update";
+    }
 }

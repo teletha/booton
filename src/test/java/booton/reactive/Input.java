@@ -12,7 +12,7 @@ package booton.reactive;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import kiss.Event;
+import kiss.Reactive;
 
 /**
  * @version 2014/08/21 17:09:35
@@ -49,7 +49,7 @@ public class Input extends Piece {
         return this;
     }
 
-    protected Input placeholder(Event<String> value) {
+    protected Input placeholder(Reactive<String> value) {
         return this;
     }
 

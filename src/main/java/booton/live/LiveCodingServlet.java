@@ -21,8 +21,8 @@ import java.nio.file.WatchEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import kiss.Disposable;
-import kiss.Event;
 import kiss.I;
+import kiss.Reactive;
 import kiss.XML;
 
 import org.eclipse.jetty.websocket.WebSocket;
@@ -90,7 +90,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             this.connection.setMaxIdleTime(Integer.MAX_VALUE);
 
             // observe html
-            Event<WatchEvent<Path>> observable = I.observe(html);
+            Reactive<WatchEvent<Path>> observable = I.observe(html);
 
             XML xml = I.xml(html);
 
@@ -181,9 +181,9 @@ public class LiveCodingServlet extends WebSocketServlet {
          * 
          * @param relativePath A relative path from root.
          * @param file A target file.
-         * @return A {@link Event}.
+         * @return A {@link Reactive}.
          */
-        private Event<WatchEvent<Path>> observeFile(String relativePath) {
+        private Reactive<WatchEvent<Path>> observeFile(String relativePath) {
             int index = relativePath.indexOf('?');
 
             if (index != -1) {

@@ -67,13 +67,6 @@ public class TodoSample extends Reactive {
         }
     };
 
-    javafx.scene.control.Button button = new javafx.scene.control.Button() {
-
-        {
-            disableProperty().bind(input.enable);
-        }
-    };
-
     // private final Property<Predicate<Todo>> isCompleted = new SimpleObjectProperty();
     //
     // private final Property<Comparator<Todo>> order = new SimpleObjectProperty();
