@@ -37,8 +37,14 @@ public class Difference {
         int rightPosition = 0;
         int operatePosition = 0;
         int upCount = 0;
+        boolean[] skip = new boolean[max];
 
         for (int i = 0; i < max; i++) {
+            if (skip[leftPosition]) {
+                leftPosition++;
+                continue;
+            }
+
             if (leftPosition < leftSize) {
                 if (rightPosition < rightSize) {
                     // left and right items are remaining
@@ -82,8 +88,12 @@ public class Difference {
                         } else {
                             // right item is found in left
                             if (rightPosition <= leftIndex) {
+                                int from = operatePosition + leftIndex - leftPosition;
                                 upCount++;
-                                operations.add(new Up(rightItem, operatePosition + leftIndex - leftPosition, operatePosition++));
+                                skip[leftIndex] = true;
+                                operations.add(new Up(rightItem, from, operatePosition++));
+                                rightPosition++;
+                                continue;
                             } else {
                                 int from = operatePosition + leftIndex + upCount - leftPosition;
 
