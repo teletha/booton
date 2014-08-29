@@ -62,6 +62,11 @@ public class DifferenceListTest {
     }
 
     @Test
+    public void up() throws Exception {
+        assertDiff(list("a", "b", "c", "d"), list("c", "d", "a", "b"), 2);
+    }
+
+    @Test
     public void change() {
         assertDiff(list("a"), list("1"), 1);
         assertDiff(list("a", "b", "c"), list("1", "2"), 3);
@@ -72,6 +77,12 @@ public class DifferenceListTest {
     public void complex() {
         assertDiff(list("a", "b", "c"), list("0", "1", "a", "c"), 3);
         assertDiff(list("a", "b", "c"), list("0", "b", "1", "a", "c"), 3);
+        assertDiff(list("a", "b", "c", "d", "e"), list("0", "d", "a"), 5);
+    }
+
+    @Test
+    public void complex4() {
+        assertDiff(list("a", "b", "c", "d", "e"), list("0", "d", "e", "a"), 5);
     }
 
     /**
@@ -104,30 +115,14 @@ public class DifferenceListTest {
                 ops.get(i).operate(left);
                 snapshots.add(new ArrayList(left));
             } catch (IndexOutOfBoundsException e) {
-                StringBuilder builder = new StringBuilder("\r\n");
-                builder.append("LEFT: ").append(left).append("\r\n");
-                builder.append("RIGHT: ").append(right).append("\r\n");
-                builder.append("OPERATIONS:\r\n");
-
-                for (int j = 0; j < i; j++) {
-                    builder.append(ops.get(j)).append("  ").append(snapshots.get(j)).append("\r\n");
-                }
-
-                AssertionError error = new AssertionError(builder.toString());
+                AssertionError error = new AssertionError(message(left, right, ops, snapshots, i));
                 error.addSuppressed(e);
 
                 throw error;
             }
         }
 
-        StringBuilder message = new StringBuilder("\r\n");
-        message.append("LEFT: ").append(left).append("\r\n");
-        message.append("RIGHT: ").append(right).append("\r\n");
-        message.append("OPERATIONS:\r\n");
-
-        for (int i = 0; i < ops.size(); i++) {
-            message.append(ops.get(i)).append("  ").append(snapshots.get(i)).append("\r\n");
-        }
+        String message = message(left, right, ops, snapshots, ops.size());
 
         assert expectedOperationCount == ops.size() : message;
         assert left.size() == right.size() : message;
@@ -135,5 +130,35 @@ public class DifferenceListTest {
         for (int i = 0; i < left.size(); i++) {
             assert left.get(i) == right.get(i) : message;
         }
+    }
+
+    /**
+     * Helper to write erro message.
+     * 
+     * @param left
+     * @param right
+     * @param ops
+     * @param snapshots
+     * @param size
+     * @return
+     */
+    private String message(List left, List right, List<DiffOperation> ops, List<List> snapshots, int size) {
+        StringBuilder message = new StringBuilder("\r\n");
+        message.append("LEFT: ").append(left).append("\r\n");
+        message.append("RIGHT: ").append(right).append("\r\n");
+        message.append("OPERATIONS:\r\n");
+
+        for (int i = 0; i < size; i++) {
+            message.append(ops.get(i)).append("  ").append(snapshots.get(i)).append("\r\n");
+        }
+
+        if (size != ops.size()) {
+            message.append("\r\nNOEXECUTED:\r\n");
+
+            for (int i = size; i < ops.size(); i++) {
+                message.append(ops.get(i)).append("\r\n");
+            }
+        }
+        return message.toString();
     }
 }
