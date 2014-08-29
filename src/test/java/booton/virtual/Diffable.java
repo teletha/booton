@@ -10,11 +10,9 @@
 package booton.virtual;
 
 /**
- * @version 2014/08/29 0:55:12
+ * @version 2014/08/29 10:46:20
  */
-public enum PatchType {
+public interface Diffable {
 
-    INSERT,
-
-    REMOVE;
+    void apply(DiffOperation op);
 }
