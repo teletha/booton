@@ -14,5 +14,5 @@ package booton.virtual;
  */
 public interface Diffable {
 
-    void apply(DiffOperation op);
+    void apply(PatchListOperation op);
 }
