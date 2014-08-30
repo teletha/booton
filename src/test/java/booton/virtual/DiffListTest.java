@@ -17,7 +17,7 @@ import org.junit.Test;
 /**
  * @version 2014/08/29 9:17:17
  */
-public class DifferenceListTest {
+public class DiffListTest {
 
     @Test
     public void insertTail() {
@@ -64,11 +64,13 @@ public class DifferenceListTest {
     @Test
     public void up() throws Exception {
         assertDiff(list("a", "b", "c", "d"), list("c", "d", "a", "b"), 2);
+        assertDiff(list("a", "b", "c", "d"), list("b", "d", "a", "c"), 2);
     }
 
     @Test
     public void down() throws Exception {
         assertDiff(list("a", "b", "c", "d"), list("b", "c", "d", "a"), 1);
+        assertDiff(list("a", "b", "c", "d"), list("b", "d", "c", "a"), 2);
     }
 
     @Test
@@ -79,20 +81,34 @@ public class DifferenceListTest {
     }
 
     @Test
-    public void complex() {
+    public void complex1() {
         assertDiff(list("a", "b", "c"), list("0", "1", "a", "c"), 3);
-        assertDiff(list("a", "b", "c"), list("0", "b", "1", "a", "c"), 3);
+
+    }
+
+    @Test
+    public void complex2() throws Exception {
         assertDiff(list("a", "b", "c", "d", "e"), list("0", "d", "a"), 5);
     }
 
     @Test
+    public void complex3() throws Exception {
+        assertDiff(list("a", "b", "c"), list("0", "b", "1", "a", "c"), 4);
+    }
+
+    @Test
     public void complex4() {
-        assertDiff(list("a", "b", "c", "d", "e"), list("0", "d", "e", "a"), 5);
+        assertDiff(list("a", "b", "c", "d", "e"), list("0", "d", "e", "a"), 4);
     }
 
     @Test
     public void complex5() {
-        assertDiff(list("a", "b", "c", "d", "e"), list("0", "c", "d", "a"), 5);
+        assertDiff(list("a", "b", "c", "d", "e"), list("0", "c", "d", "a"), 4);
+    }
+
+    @Test
+    public void complex6() {
+        assertDiff(list("a", "b", "c"), list("0", "b", "1", "a", "2", "c"), 5);
     }
 
     /**
@@ -113,49 +129,49 @@ public class DifferenceListTest {
     /**
      * Assert list diff.
      * 
-     * @param left
-     * @param right
+     * @param prev
+     * @param next
      */
-    private void assertDiff(List left, List right, int expectedOperationCount) {
-        List<DiffOperation> ops = Difference.diff(left, right);
+    private void assertDiff(List prev, List next, int expectedOperationCount) {
+        List<PatchListOperation> ops = Diff.diff(prev, next);
         List<List> snapshots = new ArrayList();
 
         for (int i = 0; i < ops.size(); i++) {
             try {
-                ops.get(i).operate(left);
-                snapshots.add(new ArrayList(left));
+                ops.get(i).operate(prev);
+                snapshots.add(new ArrayList(prev));
             } catch (IndexOutOfBoundsException e) {
-                AssertionError error = new AssertionError(message(left, right, ops, snapshots, i));
+                AssertionError error = new AssertionError(message(prev, next, ops, snapshots, i));
                 error.addSuppressed(e);
 
                 throw error;
             }
         }
 
-        String message = message(left, right, ops, snapshots, ops.size());
+        String message = message(prev, next, ops, snapshots, ops.size());
 
         assert expectedOperationCount == ops.size() : message;
-        assert left.size() == right.size() : message;
+        assert prev.size() == next.size() : message;
 
-        for (int i = 0; i < left.size(); i++) {
-            assert left.get(i) == right.get(i) : message;
+        for (int i = 0; i < prev.size(); i++) {
+            assert prev.get(i) == next.get(i) : message;
         }
     }
 
     /**
      * Helper to write erro message.
      * 
-     * @param left
-     * @param right
+     * @param prev
+     * @param next
      * @param ops
      * @param snapshots
      * @param size
      * @return
      */
-    private String message(List left, List right, List<DiffOperation> ops, List<List> snapshots, int size) {
+    private String message(List prev, List next, List<PatchListOperation> ops, List<List> snapshots, int size) {
         StringBuilder message = new StringBuilder("\r\n");
-        message.append("LEFT: ").append(left).append("\r\n");
-        message.append("RIGHT: ").append(right).append("\r\n");
+        message.append("PREV: ").append(prev).append("\r\n");
+        message.append("NEXT: ").append(next).append("\r\n");
         message.append("OPERATIONS:\r\n");
 
         for (int i = 0; i < size; i++) {

@@ -16,7 +16,7 @@ import js.dom.Element;
 /**
  * @version 2014/08/29 9:19:56
  */
-public abstract class DiffOperation {
+public abstract class PatchListOperation {
 
     public final Object content;
 
@@ -25,7 +25,7 @@ public abstract class DiffOperation {
     /**
      * @param type
      */
-    private DiffOperation(Object content, int index) {
+    private PatchListOperation(Object content, int index) {
         this.content = content;
         this.index = index;
     }
@@ -36,9 +36,16 @@ public abstract class DiffOperation {
     protected abstract void operate(List target);
 
     /**
-     * @param child TODO
+     * 
      */
-    protected abstract void operate(Element parent, Element child);
+    protected abstract void operate(Element parent);
+
+    /**
+     * 
+     */
+    protected Element createElementFromVirtualElement(Object element) {
+        return null;
+    }
 
     /**
      * {@inheritDoc}
@@ -51,7 +58,7 @@ public abstract class DiffOperation {
     /**
      * @version 2014/08/29 9:49:18
      */
-    public static class Remove extends DiffOperation {
+    public static class Remove extends PatchListOperation {
 
         /**
          * @param content
@@ -72,15 +79,15 @@ public abstract class DiffOperation {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent, Element child) {
-            child.remove();
+        protected void operate(Element parent) {
+            parent.children().get(index).remove();
         }
     }
 
     /**
      * @version 2014/08/29 9:49:18
      */
-    public static class Insert extends DiffOperation {
+    public static class Insert extends PatchListOperation {
 
         /**
          * @param content
@@ -101,23 +108,22 @@ public abstract class DiffOperation {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent, Element child) {
-            parent.children().get(index).before(child);
+        protected void operate(Element parent) {
+            parent.children().get(index).before(createElementFromVirtualElement(content));
         }
     }
 
     /**
      * @version 2014/08/29 12:45:20
      */
-    public static class Up extends DiffOperation {
+    public static class Last extends PatchListOperation {
 
-        /** The from index. */
-        private final int from;
-
-        public Up(Object content, int from, int to) {
-            super(content, to);
-
-            this.from = from;
+        /**
+         * @param content
+         * @param to
+         */
+        public Last(Object content) {
+            super(content, 0);
         }
 
         /**
@@ -125,54 +131,16 @@ public abstract class DiffOperation {
          */
         @Override
         protected void operate(List target) {
-            target.remove(from);
-            target.add(index, content);
+            target.remove(content);
+            target.add(content);
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent, Element child) {
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return "UP " + content + " from " + from + " to " + index;
-        }
-    }
-
-    /**
-     * @version 2014/08/29 12:45:20
-     */
-    public static class Down extends DiffOperation {
-
-        /** The from index. */
-        private final int from;
-
-        public Down(Object content, int from, int to) {
-            super(content, to);
-
-            this.from = from;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void operate(List target) {
-            target.remove(from);
-            target.add(index, content);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void operate(Element parent, Element child) {
+        protected void operate(Element parent) {
+            parent.append(createElementFromVirtualElement(content));
         }
 
         /**
@@ -180,14 +148,14 @@ public abstract class DiffOperation {
          */
         @Override
         public String toString() {
-            return "DOWN " + content + " from " + from + " to " + index;
+            return "LAST " + content;
         }
     }
 
     /**
      * @version 2014/08/29 12:45:20
      */
-    public static class Replace extends DiffOperation {
+    public static class Replace extends PatchListOperation {
 
         /** The from index. */
         private final Object replace;
@@ -210,7 +178,8 @@ public abstract class DiffOperation {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent, Element child) {
+        protected void operate(Element parent) {
+            parent.replace(parent.children().get(index), createElementFromVirtualElement(content));
         }
 
         /**
