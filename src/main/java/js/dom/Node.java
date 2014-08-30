@@ -74,6 +74,21 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
 
     /**
      * <p>
+     * Replaces one child node of the specified element with another.
+     * </p>
+     * 
+     * @param oldChild The existing child to be replaced.
+     * @param newChild The new node to replace oldChild. If it already exists in the DOM, it is
+     *            first removed. @return The replaced node. This is the same node as oldChild.
+     * @return Chainable API.
+     */
+    public T replace(Node oldChild, Node newChild) {
+        replaceChild(newChild, oldChild);
+        return (T) this;
+    }
+
+    /**
+     * <p>
      * Indicates whether a node is a descendant of a given node.
      * </p>
      * 
