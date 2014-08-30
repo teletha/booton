@@ -200,4 +200,17 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      */
     @JavascriptNativeProperty
     protected abstract Node insertBefore(Node newNode, Node referenceNode);
+
+    /**
+     * <p>
+     * Replaces one child node of the specified element with another.
+     * </p>
+     * 
+     * @param newChild The new node to replace oldChild. If it already exists in the DOM, it is
+     *            first removed.
+     * @param oldChild The existing child to be replaced.
+     * @return The replaced node. This is the same node as oldChild.
+     */
+    @JavascriptNativeProperty
+    protected abstract Node replaceChild(Node newChild, Node oldChild);
 }

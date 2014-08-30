@@ -89,6 +89,14 @@ class EmulateText extends Text implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
+    protected Node replaceChild(Node newChild, Node oldChild) {
+        throw new EmulateDOMError();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected Node firstChild() {
         // API definition
         return null;

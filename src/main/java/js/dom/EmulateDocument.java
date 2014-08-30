@@ -124,6 +124,14 @@ class EmulateDocument extends Document {
      * {@inheritDoc}
      */
     @Override
+    protected Node replaceChild(Node newChild, Node oldChild) {
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Element documentElement() {
         return root;
     }

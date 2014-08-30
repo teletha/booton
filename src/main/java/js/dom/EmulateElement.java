@@ -229,6 +229,26 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
+    protected Node replaceChild(Node newChild, Node oldChild) {
+        if (newChild != null) {
+            if (oldChild != null) {
+                Node ref = oldChild.nextSibling();
+                removeChild(oldChild);
+
+                if (ref == null) {
+                    appendChild(newChild);
+                } else {
+                    insertBefore(newChild, ref);
+                }
+            }
+        }
+        return oldChild;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean contains(Node node) {
         while (node != null) {
             if (node == this) {
