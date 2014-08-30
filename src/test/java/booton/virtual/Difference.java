@@ -12,7 +12,6 @@ package booton.virtual;
 import java.util.ArrayList;
 import java.util.List;
 
-import booton.virtual.DiffOperation.Down;
 import booton.virtual.DiffOperation.Insert;
 import booton.virtual.DiffOperation.Remove;
 import booton.virtual.DiffOperation.Replace;
@@ -33,90 +32,109 @@ public class Difference {
         int leftSize = left.size();
         int rightSize = right.size();
         int max = leftSize + rightSize;
-        int leftPosition = 0;
-        int rightPosition = 0;
-        int operatePosition = 0;
+        int leftVirtualPosition = 0;
+        int rightVirtualPosition = 0;
+        int actualManipulatePosition = 0;
+        int actualOffset = 0;
         int upCount = 0;
         boolean[] skip = new boolean[max];
+        boolean[] alreadyOperated = new boolean[max];
 
         for (int i = 0; i < max; i++) {
-            if (skip[leftPosition]) {
-                leftPosition++;
+            if (alreadyOperated[leftVirtualPosition]) {
+                leftVirtualPosition++;
                 continue;
             }
 
-            if (leftPosition < leftSize) {
-                if (rightPosition < rightSize) {
-                    // left and right items are remaining
-                    Object leftItem = left.get(leftPosition);
-                    Object rightItem = right.get(rightPosition);
-
-                    if (leftItem == rightItem) {
-                        // same
-                        operatePosition++;
-                        leftPosition++;
-                        rightPosition++;
-                    } else {
-                        // diff
-                        int leftIndex = left.indexOf(rightItem);
-                        int rightIndex = right.indexOf(leftItem);
-
-                        if (leftIndex == -1) {
-                            // right item is not found in left
-                            if (rightIndex == -1) {
-                                // left item is not found in right
-                                operations.add(new Replace(leftItem, rightItem, operatePosition++));
-                                leftPosition++;
-                                rightPosition++;
-                            } else {
-                                // left item is found in right
-                                operations.add(new Insert(rightItem, operatePosition++));
-                                rightPosition++;
-                            }
-                        } else if (rightIndex == -1) {
-                            // left item is not found in right
-                            if (leftIndex == -1) {
-                                // right item is not found in left
-                                operations.add(new Replace(leftItem, rightItem, operatePosition++));
-                                leftPosition++;
-                                rightPosition++;
-                            } else {
-                                // right item is found in left
-                                operations.add(new Remove(leftItem, operatePosition));
-                                leftPosition++;
-                            }
-                        } else {
-                            // right item is found in left
-                            if (rightPosition <= leftIndex) {
-                                int from = operatePosition + leftIndex - leftPosition;
-                                upCount++;
-                                skip[leftIndex] = true;
-                                operations.add(new Up(rightItem, from, operatePosition++));
-                                rightPosition++;
-                                continue;
-                            } else {
-                                int from = operatePosition + leftIndex + upCount - leftPosition;
-
-                                if (from != operatePosition) {
-                                    operations.add(new Down(rightItem, from, operatePosition++));
-                                }
-                            }
-                            leftPosition++;
-                            rightPosition++;
-                        }
-                    }
+            if (leftSize <= leftVirtualPosition) {
+                if (rightSize <= rightVirtualPosition) {
+                    break; // all items were scanned
                 } else {
-                    // all right items are scanned, but left items are remaining
-                    operations.add(new Remove(left.get(leftPosition), operatePosition));
-                    leftPosition++;
+                    // all left items are scanned, but right items are remaining
+                    operations.add(new Insert(right.get(rightVirtualPosition++), actualManipulatePosition++));
+                    actualOffset++;
+                    continue;
                 }
             } else {
-                if (rightPosition < rightSize) {
-                    // all left items are scanned, but right items are remaining
-                    operations.add(new Insert(right.get(rightPosition), operatePosition++));
-                    rightPosition++;
+                if (rightSize <= rightVirtualPosition) {
+                    // all right items are scanned, but left items are remaining
+                    operations.add(new Remove(left.get(leftVirtualPosition++), actualManipulatePosition));
+                    actualOffset--;
+                    continue;
                 } else {
-                    break; // all items were scanned
+                    // left and right items are remaining
+                    Object leftItem = left.get(leftVirtualPosition);
+                    Object rightItem = right.get(rightVirtualPosition);
+
+                    if (leftItem == rightItem) {
+                        // same item
+                        actualManipulatePosition++;
+                        leftVirtualPosition++;
+                        rightVirtualPosition++;
+                        continue;
+                    } else {
+                        // different item
+                        int rightItemInLeft = left.indexOf(rightItem);
+                        int leftItemInRight = right.indexOf(leftItem);
+
+                        if (rightItemInLeft == -1 && leftItemInRight == -1) {
+                            operations.add(new Replace(leftItem, rightItem, actualManipulatePosition++));
+                            leftVirtualPosition++;
+                            rightVirtualPosition++;
+                            continue;
+                        }
+
+                        if (rightItemInLeft == -1) {
+                            operations.add(new Insert(rightItem, actualManipulatePosition++));
+                            rightVirtualPosition++;
+                            actualOffset++;
+                            continue;
+                        }
+
+                        if (leftItemInRight == -1) {
+                            operations.add(new Remove(leftItem, actualManipulatePosition));
+                            leftVirtualPosition++;
+                            actualOffset--;
+                            continue;
+                        }
+
+                        // both items are found in each other list
+                        if (rightVirtualPosition < rightItemInLeft + actualOffset) {
+                            operations.add(new Up(rightItem, rightItemInLeft + actualOffset, actualManipulatePosition++));
+                            rightVirtualPosition++;
+                            actualOffset++;
+                            alreadyOperated[rightItemInLeft] = true;
+                            continue;
+                        }
+                        leftVirtualPosition++;
+                        rightVirtualPosition++;
+
+                        // if (rightItemInLeft == -1) {
+                        // } else if (leftItemInRight == -1) {
+                        // } else {
+                        // // right item is found in left
+                        // if (rightVirtualPosition <= rightItemInLeft) {
+                        // // int from = actualManipulatePosition + rightItemInLeft -
+                        // // leftVirtualPosition;
+                        // // upCount++;
+                        // // skip[rightItemInLeft] = true;
+                        // // operations.add(new Up(rightItem, from,
+                        // // actualManipulatePosition++));
+                        // // rightVirtualPosition++;
+                        // // continue;
+                        // } else {
+                        // // int from = actualManipulatePosition + rightItemInLeft + upCount -
+                        // // leftVirtualPosition;
+                        // //
+                        // // if (from != actualManipulatePosition) {
+                        // // operations.add(new Down(rightItem, from,
+                        // // actualManipulatePosition++));
+                        // // }
+                        // }
+                        // // leftVirtualPosition++;
+                        // // rightVirtualPosition++;
+                        // }
+                    }
                 }
             }
         }
