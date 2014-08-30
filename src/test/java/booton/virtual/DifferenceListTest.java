@@ -67,6 +67,11 @@ public class DifferenceListTest {
     }
 
     @Test
+    public void down() throws Exception {
+        assertDiff(list("a", "b", "c", "d"), list("b", "c", "d", "a"), 1);
+    }
+
+    @Test
     public void change() {
         assertDiff(list("a"), list("1"), 1);
         assertDiff(list("a", "b", "c"), list("1", "2"), 3);
@@ -83,6 +88,11 @@ public class DifferenceListTest {
     @Test
     public void complex4() {
         assertDiff(list("a", "b", "c", "d", "e"), list("0", "d", "e", "a"), 5);
+    }
+
+    @Test
+    public void complex5() {
+        assertDiff(list("a", "b", "c", "d", "e"), list("0", "c", "d", "a"), 5);
     }
 
     /**
