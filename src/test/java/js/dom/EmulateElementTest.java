@@ -10,10 +10,6 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import js.dom.Element;
-import js.dom.HTMLCollection;
-import js.dom.Node;
-import js.dom.NodeList;
 
 import org.junit.Test;
 
@@ -256,6 +252,24 @@ public class EmulateElementTest {
 
         element.removeAttribute("class");
         assert element.classList().length() == 0;
+    }
+
+    @Test
+    public void replaceNode() throws Exception {
+        Element element = new EmulateElement();
+        Element child1 = new EmulateElement();
+        Element child2 = new EmulateElement();
+        element.append(child1).append(child2);
+        assert element.children().get(0) == child1;
+        assert element.children().get(1) == child2;
+
+        Element child3 = new EmulateElement();
+        assert element.children().contains(child3) == false;
+
+        Node replaced = element.replaceChild(child3, child1);
+        assert replaced == child1;
+        assert element.children().get(0) == child3;
+        assert element.children().get(1) == child2;
     }
 
     @Test
