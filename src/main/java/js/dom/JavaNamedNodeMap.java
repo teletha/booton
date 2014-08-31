@@ -9,9 +9,6 @@
  */
 package js.dom;
 
-import js.dom.EmulateElement.Attributes;
-import js.dom.EmulateElement.Key;
-
 import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -25,12 +22,12 @@ class JavaNamedNodeMap implements NamedNodeMap {
     private final JavaElement element;
 
     /** The delegator. */
-    private final Attributes attributes;
+    private final EmulateAttributes attributes;
 
     /**
      * @param attributes
      */
-    JavaNamedNodeMap(JavaElement element, Attributes attributes) {
+    JavaNamedNodeMap(JavaElement element, EmulateAttributes attributes) {
         this.element = element;
         this.attributes = attributes;
     }
@@ -70,9 +67,9 @@ class JavaNamedNodeMap implements NamedNodeMap {
      */
     @Override
     public Node item(int index) {
-        Key key = attributes.entries.get(index).getKey();
+        Attribute attribute = attributes.entries.get(index);
 
-        return new JavaAttr(element, key.namespace, key.name);
+        return new JavaAttr(element, null, attribute.name());
     }
 
     /**

@@ -9,9 +9,13 @@
  */
 package booton.virtual;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import js.dom.Node;
+import js.util.HashMap;
 
 /**
  * @version 2014/08/28 22:42:38
@@ -21,12 +25,15 @@ public class VNode {
     /** The element name. */
     public final String tagName;
 
-    /** The properties. */
-    public final Map properties;
+    /** The attributes. */
+    public final Map attributes;
 
     /** The children node. */
-    public final List children;
+    public final List<VNode> children;
 
+    /**
+     * @param tagName
+     */
     public VNode(String tagName) {
         this(tagName, Collections.EMPTY_MAP, Collections.EMPTY_LIST, "", "");
     }
@@ -34,10 +41,25 @@ public class VNode {
     /**
      * @param string
      */
-    public VNode(String tagName, Map properties, List children, String key, String namespace) {
+    public VNode(String tagName, Map properties, List<VNode> children, String key, String namespace) {
         this.tagName = tagName;
-        this.properties = properties;
+        this.attributes = properties;
         this.children = children;
     }
 
+    /**
+     * @param prev
+     */
+    public VNode(VNode copy) {
+        this.tagName = copy.tagName;
+        this.attributes = new HashMap(copy.attributes);
+        this.children = new ArrayList(copy.children);
+    }
+
+    /**
+     * @return
+     */
+    public Node createNode() {
+        return null;
+    }
 }
