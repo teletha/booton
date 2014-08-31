@@ -9,11 +9,14 @@
  */
 package booton.virtual;
 
+import static js.lang.Global.*;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import js.dom.Element;
 import js.dom.Node;
 import js.util.HashMap;
 
@@ -26,7 +29,7 @@ public class VNode {
     public final String tagName;
 
     /** The attributes. */
-    public final Map attributes;
+    public final Map<String, String> attributes;
 
     /** The children node. */
     public final List<VNode> children;
@@ -35,7 +38,7 @@ public class VNode {
      * @param tagName
      */
     public VNode(String tagName) {
-        this(tagName, Collections.EMPTY_MAP, Collections.EMPTY_LIST, "", "");
+        this(tagName, new HashMap(), new ArrayList(), "", "");
     }
 
     /**
@@ -60,6 +63,34 @@ public class VNode {
      * @return
      */
     public Node createNode() {
-        return null;
+        Element element = document.createElement(tagName);
+
+        for (Entry<String, String> attribute : attributes.entrySet()) {
+            element.attr(attribute.getKey(), attribute.getValue());
+        }
+
+        for (VNode child : children) {
+            element.append(child.createNode());
+        }
+        return element;
+    }
+
+    /**
+     * @param string
+     * @param string2
+     * @return
+     */
+    public VNode attr(String name, String value) {
+        attributes.put(name, value);
+        return this;
+    }
+
+    /**
+     * @param childName
+     * @return
+     */
+    public VNode add(String childName) {
+        children.add(new VNode(childName));
+        return this;
     }
 }

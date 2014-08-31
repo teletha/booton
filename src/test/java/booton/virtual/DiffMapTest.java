@@ -67,7 +67,7 @@ public class DiffMapTest {
      * @param prev
      * @param next
      */
-    private void assertDiff(Map<?, ?> prev, Map<?, ?> next, int expectedOperationCount) {
+    private void assertDiff(Map<String, String> prev, Map<String, String> next, int expectedOperationCount) {
         List<PatchMapOperation> ops = Diff.diff(prev, next);
         List<Map> snapshots = new ArrayList();
 
