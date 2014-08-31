@@ -559,6 +559,14 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
 
     /**
      * <p>
+     * A collection of all attribute nodes registered to the specified node.
+     * </p>
+     */
+    @JavascriptNativePropertyAccessor
+    protected abstract Attributes attributes();
+
+    /**
+     * <p>
      * A reference to the object which is the closest (nearest in the containment hierarchy)
      * positioned containing element. If the element is non-positioned, the nearest table cell or
      * root element (html in standards compliant mode; body in quirks rendering mode) is the

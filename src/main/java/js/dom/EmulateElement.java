@@ -9,11 +9,9 @@
  */
 package js.dom;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 import js.lang.NativeFunction;
 import kiss.I;
@@ -21,7 +19,7 @@ import kiss.XML;
 import booton.css.CSS;
 
 /**
- * @version 2013/10/05 10:40:36
+ * @version 2014/08/31 13:35:05
  */
 class EmulateElement extends Element implements EmulateNodable {
 
@@ -44,7 +42,7 @@ class EmulateElement extends Element implements EmulateNodable {
     private final EmulateHTMLCollection elements = new EmulateHTMLCollection();
 
     /** The attribute holder. */
-    final Attributes attributes = new Attributes();
+    final EmulateAttributes attributes = new EmulateAttributes();
 
     /** The parent element. */
     private EmulateElement parent;
@@ -434,6 +432,14 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
+    protected Attributes attributes() {
+        return attributes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected String tagName() {
         return name;
     }
@@ -795,189 +801,6 @@ class EmulateElement extends Element implements EmulateNodable {
                 count += element.getElementsByClassName(className).length();
             }
             throw new IndexOutOfBoundsException();
-        }
-    }
-
-    /**
-     * @version 2013/07/11 14:10:27
-     */
-    static class Attributes {
-
-        /** The manager. */
-        final List<Entry<Key, String>> entries = new ArrayList();
-
-        /** The class attribute. */
-        final EmulateDOMTokenList classes = new EmulateDOMTokenList();
-
-        /**
-         * <p>
-         * Add attribute.
-         * </p>
-         * 
-         * @param namespace
-         * @param name
-         * @param value
-         */
-        void add(String namespace, String name, String value) {
-            Key key = new Key(namespace, name);
-            value = String.valueOf(value);
-
-            if (Key.CLASS.equals(key)) {
-                classes.clear();
-
-                for (String className : value.trim().split(" ")) {
-                    classes.add(className);
-                }
-            }
-
-            Entry<Key, String> entry = find(key);
-
-            if (entry == null) {
-                entry = new SimpleEntry(key, value);
-                entries.add(entry);
-            } else {
-                entry.setValue(value);
-            }
-        }
-
-        /**
-         * <p>
-         * Remove attribute.
-         * </p>
-         * 
-         * @param namespace
-         * @param name
-         */
-        void remove(String namespace, String name) {
-            Key key = new Key(namespace, name);
-
-            if (Key.CLASS.equals(key)) {
-                classes.clear();
-            }
-
-            Entry<Key, String> entry = find(key);
-
-            if (entry != null) {
-                entries.remove(entry);
-            }
-        }
-
-        /**
-         * <p>
-         * Test attribute.
-         * </p>
-         * 
-         * @param namespace
-         * @param name
-         * @return
-         */
-        boolean has(String namespace, String name) {
-            Key key = new Key(namespace, name);
-
-            if (Key.CLASS.equals(key)) {
-                return classes.length() != 0;
-            } else {
-                return find(key) != null;
-            }
-        }
-
-        /**
-         * <p>
-         * Get attribute.
-         * </p>
-         * 
-         * @param namespace
-         * @param name
-         * @return
-         */
-        String get(String namespace, String name) {
-            Key key = new Key(namespace, name);
-
-            Entry<Key, String> entry = find(key);
-
-            if (entry == null) {
-                return null;
-            } else {
-                return entry.getValue();
-            }
-        }
-
-        /**
-         * <p>
-         * Helper method to find entry.
-         * </p>
-         * 
-         * @param key
-         * @return
-         */
-        private Entry<Key, String> find(Key key) {
-            for (Entry<Key, String> entry : entries) {
-                if (entry.getKey().equals(key)) {
-                    return entry;
-                }
-            }
-            return null;
-        }
-    }
-
-    /**
-     * @version 2013/07/11 14:16:13
-     */
-    static class Key {
-
-        /** The html class attribute name. */
-        private static final Key CLASS = new Key("", "class");
-
-        /** The uri. */
-        final String namespace;
-
-        /** The name. */
-        final String name;
-
-        /**
-         * @param namespace
-         * @param name
-         */
-        private Key(String namespace, String name) {
-            if (namespace == null) {
-                namespace = "";
-            }
-
-            this.namespace = namespace.toLowerCase();
-            this.name = String.valueOf(name).toLowerCase();
-
-            if (this.name.length() == 0) {
-                throw new EmulateDOMError();
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Key) {
-                Key attr = (Key) obj;
-
-                return name.equals(attr.name) && namespace.equals(attr.namespace);
-            }
-            return false;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int hashCode() {
-            return name.hashCode() + namespace.hashCode();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return (namespace == null ? "" : namespace + ":") + name;
         }
     }
 }

@@ -30,7 +30,20 @@ public class DiffMapTest {
 
     @Test
     public void remove() throws Exception {
+        assertDiff(map("a", "A"), map(), 1);
         assertDiff(map("a", "A", "b", "B"), map("b", "B"), 1);
+        assertDiff(map("a", "A", "b", "B"), map(), 2);
+    }
+
+    @Test
+    public void add() throws Exception {
+        assertDiff(map(), map("a", "A"), 1);
+        assertDiff(map("a", "A"), map("a", "A", "b", "B"), 1);
+    }
+
+    @Test
+    public void change() throws Exception {
+        assertDiff(map("a", "A"), map("b", "B"), 2);
     }
 
     /**
@@ -54,7 +67,7 @@ public class DiffMapTest {
      * @param prev
      * @param next
      */
-    private void assertDiff(Map prev, Map next, int expectedOperationCount) {
+    private void assertDiff(Map<?, ?> prev, Map<?, ?> next, int expectedOperationCount) {
         List<PatchMapOperation> ops = Diff.diff(prev, next);
         List<Map> snapshots = new ArrayList();
 
@@ -75,8 +88,9 @@ public class DiffMapTest {
         assert expectedOperationCount == ops.size() : message;
         assert prev.size() == next.size() : message;
 
-        for (int i = 0; i < prev.size(); i++) {
-            assert prev.get(i) == next.get(i) : message;
+        for (Object key : prev.keySet()) {
+            assert next.containsKey(key) : message;
+            assert prev.get(key) == next.get(key) : message;
         }
     }
 

@@ -26,6 +26,12 @@ import booton.virtual.PatchMapOperation.Change;
  */
 public class Diff {
 
+    public static List<PatchOperation> diff(VNode prev, VNode next) {
+        List<PatchOperation> operations = new ArrayList();
+
+        return operations;
+    }
+
     /**
      * @param prev
      * @param next
