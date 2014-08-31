@@ -12,11 +12,12 @@ package booton.virtual;
 import java.util.List;
 
 import js.dom.Element;
+import js.dom.Node;
 
 /**
  * @version 2014/08/29 9:19:56
  */
-public abstract class PatchListOperation {
+public abstract class PatchListOperation extends PatchOperation<Element> {
 
     public final Object content;
 
@@ -38,13 +39,8 @@ public abstract class PatchListOperation {
     /**
      * 
      */
-    protected abstract void operate(Element parent);
-
-    /**
-     * 
-     */
-    protected Element createElementFromVirtualElement(Object element) {
-        return null;
+    protected Node createElementFromVirtualElement(Object element) {
+        return ((VNode) element).createNode();
     }
 
     /**
@@ -109,7 +105,14 @@ public abstract class PatchListOperation {
          */
         @Override
         protected void operate(Element parent) {
-            parent.children().get(index).before(createElementFromVirtualElement(content));
+            Node child = createElementFromVirtualElement(content);
+            List<Element> children = parent.children();
+
+            if (children.size() == 0) {
+                parent.append(child);
+            } else {
+                children.get(index).before(child);
+            }
         }
     }
 

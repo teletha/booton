@@ -11,23 +11,25 @@ package booton.virtual;
 
 import java.util.Map;
 
+import js.dom.Element;
+
 /**
  * @version 2014/08/31 7:47:07
  */
-public abstract class PatchMapOperation {
+public abstract class PatchMapOperation extends PatchOperation<Element> {
 
-    /** The key. */
-    public final Object key;
+    /** The name. */
+    public final String name;
 
     /** The value. */
-    public final Object value;
+    public final String value;
 
     /**
-     * @param key
+     * @param name
      * @param value
      */
-    private PatchMapOperation(Object key, Object value) {
-        this.key = key;
+    private PatchMapOperation(String name, String value) {
+        this.name = name;
         this.value = value;
     }
 
@@ -44,8 +46,8 @@ public abstract class PatchMapOperation {
         /**
          * 
          */
-        public Add(Object key, Object value) {
-            super(key, value);
+        public Add(String name, String value) {
+            super(name, value);
         }
 
         /**
@@ -53,7 +55,15 @@ public abstract class PatchMapOperation {
          */
         @Override
         protected void operate(Map target) {
-            target.put(key, value);
+            target.put(name, value);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void operate(Element target) {
+            target.attr(name, value);
         }
 
         /**
@@ -61,7 +71,7 @@ public abstract class PatchMapOperation {
          */
         @Override
         public String toString() {
-            return "ADD [" + key + " = " + value + "]";
+            return "ADD [" + name + " = " + value + "]";
         }
     }
 
@@ -73,8 +83,8 @@ public abstract class PatchMapOperation {
         /**
          * 
          */
-        public Change(Object key, Object value) {
-            super(key, value);
+        public Change(String name, String value) {
+            super(name, value);
         }
 
         /**
@@ -82,7 +92,15 @@ public abstract class PatchMapOperation {
          */
         @Override
         protected void operate(Map target) {
-            target.put(key, value);
+            target.put(name, value);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void operate(Element target) {
+            target.attr(name, value);
         }
 
         /**
@@ -90,7 +108,7 @@ public abstract class PatchMapOperation {
          */
         @Override
         public String toString() {
-            return "CHANGE to [" + key + " = " + value + "]";
+            return "CHANGE to [" + name + " = " + value + "]";
         }
     }
 
@@ -102,8 +120,8 @@ public abstract class PatchMapOperation {
         /**
          * 
          */
-        public Remove(Object key) {
-            super(key, null);
+        public Remove(String name) {
+            super(name, null);
         }
 
         /**
@@ -111,7 +129,15 @@ public abstract class PatchMapOperation {
          */
         @Override
         protected void operate(Map target) {
-            target.remove(key);
+            target.remove(name);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void operate(Element target) {
+            target.remove(name);
         }
 
         /**
@@ -119,7 +145,7 @@ public abstract class PatchMapOperation {
          */
         @Override
         public String toString() {
-            return "REMOVE key " + key;
+            return "REMOVE key " + name;
         }
     }
 }

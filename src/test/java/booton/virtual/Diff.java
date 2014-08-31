@@ -26,9 +26,20 @@ import booton.virtual.PatchMapOperation.Change;
  */
 public class Diff {
 
+    /**
+     * @param prev
+     * @param next
+     * @return
+     */
     public static List<PatchOperation> diff(VNode prev, VNode next) {
         List<PatchOperation> operations = new ArrayList();
 
+        if (!prev.tagName.equals(next.tagName)) {
+            // operations.add(new PatchOperation.Replace());
+        } else {
+            operations.addAll(diff(prev.attributes, next.attributes));
+            operations.addAll(diff(prev.children, next.children));
+        }
         return operations;
     }
 
@@ -109,17 +120,17 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<PatchMapOperation> diff(Map<?, ?> prev, Map<?, ?> next) {
+    public static List<PatchMapOperation> diff(Map<String, String> prev, Map<String, String> next) {
         List<PatchMapOperation> operations = new ArrayList();
 
-        for (Entry entry : next.entrySet()) {
-            Object key = entry.getKey();
+        for (Entry<String, String> entry : next.entrySet()) {
+            String key = entry.getKey();
 
             if (!prev.containsKey(key)) {
                 operations.add(new Add(key, entry.getValue()));
             } else {
-                Object prevValue = prev.get(key);
-                Object nextValue = entry.getValue();
+                String prevValue = prev.get(key);
+                String nextValue = entry.getValue();
 
                 if (prevValue != nextValue) {
                     operations.add(new Change(key, nextValue));
@@ -127,8 +138,8 @@ public class Diff {
             }
         }
 
-        for (Entry entry : prev.entrySet()) {
-            Object key = entry.getKey();
+        for (Entry<String, String> entry : prev.entrySet()) {
+            String key = entry.getKey();
 
             if (!next.containsKey(key)) {
                 operations.add(new PatchMapOperation.Remove(key));

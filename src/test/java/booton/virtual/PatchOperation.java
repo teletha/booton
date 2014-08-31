@@ -14,7 +14,20 @@ import js.dom.Node;
 /**
  * @version 2014/08/31 10:09:03
  */
-public abstract class PatchOperation {
+public abstract class PatchOperation<T> {
 
-    public abstract void operate(Node node);
+    protected abstract void operate(T target);
+
+    /**
+     * @version 2014/08/31 14:18:16
+     */
+    public static class Replace extends PatchOperation<Node> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void operate(Node node) {
+        }
+    }
 }
