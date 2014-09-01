@@ -9,29 +9,18 @@
  */
 package booton.reactive;
 
-import kiss.Events;
 
 /**
  * @version 2014/08/21 17:09:43
  */
-public class Button<T> extends Piece<Button<T>> {
-
-    protected Events<Boolean> press;
-
-    protected Events<T> click;
+public class Button extends UI<Button> {
 
     /**
      * @param string
      * @return
      */
-    public Button<T> label(String label) {
+    public Button label(Object... texts) {
         return this;
     }
 
-    /**
-     * @return
-     */
-    public Button<T> click(Runnable action) {
-        return null;
-    }
 }

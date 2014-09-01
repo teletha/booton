@@ -9,18 +9,22 @@
  */
 package booton.reactive;
 
-import javafx.beans.value.ObservableValue;
-
-import kiss.Events;
-
 /**
- * @version 2014/08/22 11:27:22
+ * @version 2014/09/01 10:59:35
  */
-public class Output<V> extends UI {
+public class Key {
 
-    protected Events<V> value;
+    public static final Key Enter = null;
 
-    public Output(ObservableValue<V> value) {
+    public Key ctrl() {
+        return null;
+    }
 
+    public Key shift() {
+        return null;
+    }
+
+    public Key alt() {
+        return null;
     }
 }

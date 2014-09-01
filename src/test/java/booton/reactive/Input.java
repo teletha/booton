@@ -17,7 +17,7 @@ import kiss.Events;
 /**
  * @version 2014/08/21 17:09:35
  */
-public class Input extends Piece {
+public class Input extends UI<Input> {
 
     public final StringProperty value = new SimpleStringProperty();
 
