@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.scene.control.SingleSelectionModel;
 
 import kiss.I;
 
@@ -51,6 +52,10 @@ public abstract class Widget<V> {
 
             child.template();
         }
+    }
+
+    protected <T> void list(ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, SingleSelectionModel<Predicate<T>> filter) {
+        list(list, childWidgetClass, filter.selectedItemProperty());
     }
 
     protected <T> void list(ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, ObservableValue<Predicate<T>> filter) {

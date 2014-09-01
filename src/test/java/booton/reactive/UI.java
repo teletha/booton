@@ -9,23 +9,24 @@
  */
 package booton.reactive;
 
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
+import jsx.event.Publishable;
+import kiss.Disposable;
 import kiss.Events;
 import booton.reactive.css.StyleDefinition;
 
 /**
- * @version 2014/08/21 17:16:06
+ * @version 2014/09/01 20:06:01
  */
-public abstract class UI<T extends UI<T>> {
-
-    protected static final <V> Events<V> If(Events<Boolean> condition, V trueValue, V falseValue) {
-        return null;
-    }
+public abstract class UI<T extends UI<T>> extends Publishable<T> {
 
     protected BooleanProperty click;
 
@@ -33,15 +34,11 @@ public abstract class UI<T extends UI<T>> {
 
     protected final BooleanProperty enable = new SimpleBooleanProperty();
 
-    /**
-     * Define style.
-     */
-    protected void style() {
-    }
+    /** The disposable list. */
+    private List<Disposable> disposables;
 
-    public T click(Consumer<Events<UIEvent>> events) {
-        return (T) this;
-    }
+    /** The key bindings. */
+    private Map<Key, Runnable> keyBindings;
 
     /**
      * @return
@@ -50,15 +47,34 @@ public abstract class UI<T extends UI<T>> {
         return (T) this;
     }
 
-    public T key(Consumer<Events<UIEvent>> events) {
-        return (T) this;
+    /**
+     * <p>
+     * Create {@link Events} for key down.
+     * </p>
+     * 
+     * @return
+     */
+    public Events<Key> keyDown() {
+        return null;
     }
 
-    public T key(Runnable action) {
-        return (T) this;
-    }
-
+    /**
+     * <p>
+     * Set key binding aginst the specified action.
+     * </p>
+     * 
+     * @param key A shortcut key stroke.
+     * @param action A binding function.
+     * @return Chainable API.
+     */
     public T shortcut(Key key, Runnable action) {
+        if (key != null && action != null) {
+            if (keyBindings == null) {
+                keyBindings = new HashMap();
+            }
+            keyBindings.put(key, action);
+
+        }
         return (T) this;
     }
 
@@ -68,7 +84,7 @@ public abstract class UI<T extends UI<T>> {
      * @return
      */
     public T validate(Events<Boolean> event, String string) {
-        return null;
+        return (T) this;
     }
 
     /**
@@ -77,42 +93,56 @@ public abstract class UI<T extends UI<T>> {
      * @return
      */
     public T validate(ObservableValue<Boolean> event, String string) {
-        return null;
+        return (T) this;
     }
 
     public T enableIf(ObservableValue<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T enableIf(Events<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T disableIf(ObservableValue<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T disableIf(Events<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T showIf(ObservableValue<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T showIf(Events<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T hideIf(ObservableValue<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T hideIf(Events<Boolean> condition) {
-        return null;
+        return (T) this;
     }
 
     public T style(ObservableValue<StyleDefinition> style) {
         return (T) this;
+    }
+
+    /**
+     * <p>
+     * Helper method to create holder lazily.
+     * </p>
+     * 
+     * @return A cached list.
+     */
+    private List<Disposable> disposer() {
+        if (disposables == null) {
+            disposables = new ArrayList();
+        }
+        return disposables;
     }
 }

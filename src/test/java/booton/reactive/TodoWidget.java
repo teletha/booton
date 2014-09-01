@@ -58,28 +58,25 @@ public class TodoWidget extends Widget {
     };
 
     /** The input field. */
-    private final Input input = new Input()
+    final Input input = new Input()
             .disableIf(exceedSize)
             .placeholder(exceedSize.map(v -> v ? "新しい要件を入力" : "要件は10件まで"))
-            .shortcut(Key.Enter, this::add);
+            .shortcut(Key.ENTER, this::add);
 
     /** The filter button. */
-    private final Button all = new Button().label("all").click(this::showAll).style(selectedFileter.is(Filter.All));
+    final Button all = new Button().label("all").click(this::showAll).style(selectedFileter.is(Filter.All));
 
     /** The filter button. */
-    private final Button active = new Button()
-            .label("active")
-            .click(this::showActive)
-            .style(selectedFileter.is(Filter.Active));
+    final Button active = new Button().label("active").click(this::showActive).style(selectedFileter.is(Filter.Active));
 
     /** The filter button. */
-    private final Button completed = new Button()
+    final Button completed = new Button()
             .label("completed")
             .click(this::showCompleted)
             .style(selectedFileter.is(Filter.Completed));
 
     /** The clear button. */
-    private final Button clearCompleted = new Button()
+    final Button clear = new Button()
             .label("clear completed (", completedSize, ")")
             .showIf(completedSize.greaterThan(0))
             .click(this::removeCompleted);
@@ -87,25 +84,28 @@ public class TodoWidget extends Widget {
     /**
      * Add todo task.
      */
-    private void add() {
+    void add() {
         String value = input.value.get();
 
         if (value != null && value.length() != 0) {
             todos.add(new Todo(value));
+
+            input.clear();
+            System.out.println("invoked");
         }
     }
 
     /**
      * Remove todo task.
      */
-    private void remove(Todo todo) {
+    void remove(Todo todo) {
         todos.remove(todo);
     }
 
     /**
      * Make complete all tasks.
      */
-    private void makeAllComplete() {
+    void makeAllComplete() {
         for (Todo todo : todos) {
             todo.completed.set(true);
         }
@@ -114,7 +114,7 @@ public class TodoWidget extends Widget {
     /**
      * Remove all completed tasks.
      */
-    private void removeCompleted() {
+    void removeCompleted() {
         for (Todo todo : todos) {
             if (todo.completed.get()) {
                 remove(todo);
@@ -125,21 +125,21 @@ public class TodoWidget extends Widget {
     /**
      * Show all items.
      */
-    private void showAll() {
+    void showAll() {
         filter.setValue(Filter.All);
     }
 
     /**
      * Show all items.
      */
-    private void showActive() {
+    void showActive() {
         filter.setValue(Filter.Active);
     }
 
     /**
      * Show all items.
      */
-    private void showCompleted() {
+    void showCompleted() {
         filter.setValue(Filter.Completed);
     }
 
@@ -155,7 +155,7 @@ public class TodoWidget extends Widget {
         hbox(() -> {
             hbox(imcompleted, imcompleted == 1 ? " item" : "items", " left");
             hbox(all, active, completed);
-            hbox(clearCompleted);
+            hbox(clear);
         });
     }
 
@@ -182,12 +182,12 @@ public class TodoWidget extends Widget {
      */
     private static class Todo {
 
-        public BooleanProperty completed = new SimpleBooleanProperty();
+        public final BooleanProperty completed = new SimpleBooleanProperty();
 
-        public StringProperty contents = new SimpleStringProperty();
+        public final StringProperty contents = new SimpleStringProperty();
 
         /**
-         * @param value
+         * 
          */
         public Todo(String value) {
             contents.set(value);
@@ -206,7 +206,7 @@ public class TodoWidget extends Widget {
         Active(v -> v.completed.get() == false),
 
         /** Accept completed. */
-        Completed(v -> v.completed.get());
+        Completed(v -> v.completed.get() == true);
 
         /** The condition expression. */
         private final Predicate<Todo> predicate;
