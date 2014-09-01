@@ -32,11 +32,11 @@ public class Vox {
         this.type = type;
     }
 
-    public Vox vbox(Piece... pieces) {
+    public Vox vbox(UI... pieces) {
         return null;
     }
 
-    public Vox hbox(Piece... pieces) {
+    public Vox hbox(UI... pieces) {
         return null;
     }
 

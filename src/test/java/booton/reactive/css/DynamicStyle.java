@@ -7,20 +7,22 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package booton.reactive.css;
 
 import javafx.beans.value.ObservableValue;
 
-import kiss.Events;
-
 /**
- * @version 2014/08/22 11:27:22
+ * @version 2014/09/01 15:45:43
  */
-public class Output<V> extends UI {
+public class DynamicStyle<T> {
 
-    protected Events<V> value;
+    /**
+     * @param filterType
+     */
+    public DynamicStyle(ObservableValue<T> filterType) {
+    }
 
-    public Output(ObservableValue<V> value) {
-
+    public ObservableValue<StyleDefinition> is(T value) {
+        return null;
     }
 }

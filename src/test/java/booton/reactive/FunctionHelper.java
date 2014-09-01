@@ -9,19 +9,16 @@
  */
 package booton.reactive;
 
-import org.junit.Test;
+import java.util.function.Consumer;
 
 /**
- * @version 2014/08/22 7:42:04
+ * @version 2014/09/01 16:57:43
  */
-public class UseCaseTest {
+public class FunctionHelper {
 
-    @Test
-    public void testname() throws Exception {
-        TodoSample use = new TodoSample();
-        assert use.todos.size() == 0;
-        assert use.getVirtualElement() != null;
-
-        User.input("test", use.input);
+    public static <P> Runnable $(Consumer<P> consumer, P param) {
+        return () -> {
+            consumer.accept(param);
+        };
     }
 }
