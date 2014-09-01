@@ -19,20 +19,14 @@ import kiss.Events;
  */
 public class Input extends UI<Input> {
 
-    public final StringProperty value = new SimpleStringProperty();
-
-    /**
-     * @return
-     */
-    public String value() {
-        return null;
-    }
+    /** The input value. */
+    public final StringProperty value = new SimpleStringProperty("");
 
     /**
      * 
      */
     public String clear() {
-        String current = value();
+        String current = value.get();
 
         // clear value
 

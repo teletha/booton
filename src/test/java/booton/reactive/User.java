@@ -9,6 +9,8 @@
  */
 package booton.reactive;
 
+import java.util.Objects;
+
 /**
  * @version 2014/08/22 7:44:00
  */
@@ -20,6 +22,15 @@ public class User {
      * @param value
      * @param target
      */
-    public static final void input(String value, Input target) {
+    public static final void type(Input input, Object... strokes) {
+        Objects.nonNull(input);
+
+        for (Object stroke : strokes) {
+            if (stroke instanceof Key) {
+                input.publish(stroke);
+            } else {
+                input.value.setValue(input.value.get() + stroke);
+            }
+        }
     }
 }

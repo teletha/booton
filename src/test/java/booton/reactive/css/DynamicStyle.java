@@ -10,6 +10,7 @@
 package booton.reactive.css;
 
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.SingleSelectionModel;
 
 /**
  * @version 2014/09/01 15:45:43
@@ -19,7 +20,14 @@ public class DynamicStyle<T> {
     /**
      * @param filterType
      */
-    public DynamicStyle(ObservableValue<T> filterType) {
+    public DynamicStyle(SingleSelectionModel<T> type) {
+        this(type.selectedItemProperty());
+    }
+
+    /**
+     * @param filterType
+     */
+    public DynamicStyle(ObservableValue<T> type) {
     }
 
     public ObservableValue<StyleDefinition> is(T value) {
