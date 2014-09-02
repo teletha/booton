@@ -35,7 +35,7 @@ public class Stylist {
     /** The style classes which javascript reference. */
     private final List<CSS> styles = new ArrayList();
 
-    public String write(StyleDeclaration style) {
+    public String write(CSS style) {
         return write(style.rules);
     }
 

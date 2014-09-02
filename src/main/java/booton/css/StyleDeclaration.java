@@ -9,6 +9,9 @@
  */
 package booton.css;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kiss.I;
 import booton.css.property.AlignContent;
 import booton.css.property.AlignItems;
@@ -397,14 +400,14 @@ public class StyleDeclaration {
      */
     public Visibility visibility;
 
-    /** The current procesing rule set. */
-    RuleSet rules = new RuleSet(getClass());
+    /** The list of declared properties. */
+    private List<CSSProperty> properties;
 
     /**
      * Create user css.
      */
     protected StyleDeclaration() {
-        load(rules);
+        load(new ArrayList());
     }
 
     /**
@@ -412,13 +415,13 @@ public class StyleDeclaration {
      * 
      * @param mode
      */
-    protected void load(RuleSet set) {
+    protected void load(List<CSSProperty> properties) {
         try {
-            // update current rule set
-            rules = set;
+            // update current property set
+            this.properties = properties;
 
             // load property and assign it to field
-            for (CSSProperty property : set.properties) {
+            for (CSSProperty property : properties) {
                 property.css = this;
                 StyleDeclaration.class.getField(Strings.unhyphenate(property.name)).set(this, property);
             }
