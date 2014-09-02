@@ -9,10 +9,7 @@
  */
 package booton;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
-import kiss.I;
+import booton.css.StyleDeclaration;
 
 /**
  * @version 2014/03/08 11:13:39
@@ -29,13 +26,13 @@ public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        StringProperty p = new SimpleStringProperty();
+        System.out.println(new Def());
+    }
 
-        I.observe(p).buffer(2, 1).to(v -> System.out.println(v));
+    private static class Def extends StyleDeclaration {
 
-        p.set("1");
-        p.set("2");
-        p.set("3");
-        p.set("4");
+        {
+            font.size.large();
+        }
     }
 }

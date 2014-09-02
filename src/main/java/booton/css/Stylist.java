@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton;
+package booton.css;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,9 +21,6 @@ import java.util.Set;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.css.CSS;
-import booton.css.CSSWriter;
-import booton.css.Priority;
 import booton.css.value.Font;
 
 /**
@@ -38,6 +35,45 @@ public class Stylist {
     /** The style classes which javascript reference. */
     private final List<CSS> styles = new ArrayList();
 
+    public static String write(StyleDeclaration style) {
+        return write(style.rules);
+    }
+
+    public static String write(RuleSet rule) {
+        CSSWriter writer = new CSSWriter();
+
+        // count requested properties
+        int counter = 0;
+
+        List<String> assigned = new ArrayList();
+
+        for (String selector : rule.selectors) {
+            assigned.add(rule.template.replace("$", selector));
+        }
+
+        // write requested properties only.
+        writer.write(I.join(",", assigned), "{");
+
+        for (CSSProperty property : rule.properties) {
+            if (property.used) {
+                counter++;
+                writer.write(property.toString());
+            }
+        }
+        writer.write("}");
+
+        if (counter == 0) {
+            // this class has no properties, so we can remove it
+            writer = new CSSWriter();
+        }
+
+        for (RuleSet child : rule.children) {
+            writer.write(child.toString());
+        }
+
+        return writer.toString();
+    }
+
     /**
      * <p>
      * Write css file.
@@ -46,26 +82,26 @@ public class Stylist {
      * @param file
      */
     public void write(Path file) throws Exception {
-        CSSWriter writer = new CSSWriter();
+        CSSWriter root = new CSSWriter();
 
         // write font imports
         for (Font font : fonts) {
-            writer.write("@import url(" + font.uri + ");").line();
+            root.write("@import url(" + font.uri + ");").line();
         }
 
         // write require styles
         Collections.sort(styles, new Sorter());
 
         for (CSS style : styles) {
-            String css = style.toString();
+            String css = write(style.rules);
 
             if (css.length() != 0) {
-                writer.comment(style.getClass().getName());
-                writer.write(css);
+                root.comment(style.getClass().getName());
+                root.write(css);
             }
         }
 
-        Files.write(file, writer.toString().getBytes(I.$encoding));
+        Files.write(file, root.toString().getBytes(I.$encoding));
     }
 
     /**

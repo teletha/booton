@@ -9,7 +9,7 @@
  */
 package booton.css;
 
-import static booton.css.CSS.*;
+import static booton.css.StyleDeclaration.*;
 import static booton.css.value.Color.*;
 import booton.css.value.Color;
 import booton.css.value.Font;

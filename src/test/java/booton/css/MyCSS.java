@@ -36,7 +36,7 @@ public class MyCSS extends CSS {
      * @return
      */
     public boolean has(String name) {
-        return toString().contains(name + ":");
+        return Stylist.write(this).contains(name + ":");
     }
 
     /**
@@ -49,7 +49,7 @@ public class MyCSS extends CSS {
      * @return
      */
     public boolean has(String name, String value) {
-        return toString().contains(name + ": " + value + ";");
+        return Stylist.write(this).contains(name + ": " + value + ";");
     }
 
     /**
@@ -61,7 +61,7 @@ public class MyCSS extends CSS {
      * @return
      */
     public boolean has(Vendor vendor) {
-        return toString().contains(vendor.toString());
+        return Stylist.write(this).contains(vendor.toString());
     }
 
     /**
@@ -178,7 +178,7 @@ public class MyCSS extends CSS {
      * @return
      */
     private Stylesheet parse() {
-        return new Stylesheet(toString());
+        return new Stylesheet(Stylist.write(this));
     }
 
     /**
