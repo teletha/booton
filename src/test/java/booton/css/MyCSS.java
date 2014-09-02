@@ -27,6 +27,9 @@ public class MyCSS extends CSS {
         I.load(Booton.class, false);
     }
 
+    /** The style analyzer. */
+    private static final Stylist stylist = I.make(Stylist.class);
+
     /**
      * <p>
      * Test property name.
@@ -36,7 +39,7 @@ public class MyCSS extends CSS {
      * @return
      */
     public boolean has(String name) {
-        return Stylist.write(this).contains(name + ":");
+        return stylist.write(this).contains(name + ":");
     }
 
     /**
@@ -49,7 +52,7 @@ public class MyCSS extends CSS {
      * @return
      */
     public boolean has(String name, String value) {
-        return Stylist.write(this).contains(name + ": " + value + ";");
+        return stylist.write(this).contains(name + ": " + value + ";");
     }
 
     /**
@@ -61,7 +64,7 @@ public class MyCSS extends CSS {
      * @return
      */
     public boolean has(Vendor vendor) {
-        return Stylist.write(this).contains(vendor.toString());
+        return stylist.write(this).contains(vendor.toString());
     }
 
     /**
@@ -178,7 +181,7 @@ public class MyCSS extends CSS {
      * @return
      */
     private Stylesheet parse() {
-        return new Stylesheet(Stylist.write(this));
+        return new Stylesheet(stylist.write(this));
     }
 
     /**

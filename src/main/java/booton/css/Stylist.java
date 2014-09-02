@@ -35,11 +35,11 @@ public class Stylist {
     /** The style classes which javascript reference. */
     private final List<CSS> styles = new ArrayList();
 
-    public static String write(StyleDeclaration style) {
+    public String write(StyleDeclaration style) {
         return write(style.rules);
     }
 
-    public static String write(RuleSet rule) {
+    public String write(RuleSet rule) {
         CSSWriter writer = new CSSWriter();
 
         // count requested properties
@@ -68,7 +68,7 @@ public class Stylist {
         }
 
         for (RuleSet child : rule.children) {
-            writer.write(child.toString());
+            writer.write(write(child));
         }
 
         return writer.toString();
