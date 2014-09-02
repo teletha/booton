@@ -520,9 +520,9 @@ public class Text extends CSSProperty<Text> {
             userSelect.none();
             cursor.defaults();
 
-            while (selection()) {
+            selection(() -> {
                 background.color(Transparent);
-            }
+            });
         }
     }
 }

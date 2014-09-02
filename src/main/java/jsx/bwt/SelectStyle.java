@@ -44,9 +44,9 @@ class SelectStyle extends FormUIStyle {
             overflow.hidden();
             cursor.pointer();
 
-            while (hover()) {
+            hover(() -> {
                 background.color(SelectColor.grayscale());
-            }
+            });
         }
     }
 

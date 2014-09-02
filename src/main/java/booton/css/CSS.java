@@ -437,8 +437,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean link() {
-        return rule("$:link");
+    public final void link(Runnable sub) {
+        rule("$:link", sub);
     }
 
     /**
@@ -452,8 +452,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean visited() {
-        return rule("$:visited");
+    public final void visited(Runnable sub) {
+        rule("$:visited", sub);
     }
 
     /**
@@ -468,8 +468,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean hover() {
-        return rule("$:hover");
+    public final void hover(Runnable sub) {
+        rule("$:hover", sub);
     }
 
     /**
@@ -484,8 +484,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean active() {
-        return rule("$:active");
+    public final void active(Runnable sub) {
+        rule("$:active", sub);
     }
 
     /**
@@ -500,8 +500,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean focus() {
-        return rule("$:focus");
+    public final void focus(Runnable sub) {
+        rule("$:focus", sub);
     }
 
     /**
@@ -513,8 +513,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean enabled() {
-        return rule("$:enabled");
+    public final void enabled(Runnable sub) {
+        rule("$:enabled", sub);
     }
 
     /**
@@ -526,8 +526,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean disabled() {
-        return rule("$:disabled");
+    public final void disabled(Runnable sub) {
+        rule("$:disabled", sub);
     }
 
     /**
@@ -541,8 +541,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean checked() {
-        return rule("$:checked");
+    public final void checked(Runnable sub) {
+        rule("$:checked", sub);
     }
 
     /**
@@ -554,8 +554,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean indeterminate() {
-        return rule("$:indeterminate");
+    public final void indeterminate(Runnable sub) {
+        rule("$:indeterminate", sub);
     }
 
     /**
@@ -567,8 +567,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean required() {
-        return rule("$:required");
+    public final void required(Runnable sub) {
+        rule("$:required", sub);
     }
 
     /**
@@ -580,8 +580,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean optional() {
-        return rule("$:optional");
+    public final void optional(Runnable sub) {
+        rule("$:optional", sub);
     }
 
     /**
@@ -593,8 +593,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean valid() {
-        return rule("$:valid");
+    public final void valid(Runnable sub) {
+        rule("$:valid", sub);
     }
 
     /**
@@ -606,8 +606,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean invalid() {
-        return rule("$:invalid");
+    public final void invalid(Runnable sub) {
+        rule("$:invalid", sub);
     }
 
     /**
@@ -618,8 +618,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean firstChild() {
-        return rule("$:first-child");
+    public final void firstChild(Runnable sub) {
+        rule("$:first-child", sub);
     }
 
     /**
@@ -630,8 +630,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean firstOfType() {
-        return rule("$:first-of-type");
+    public final void firstOfType(Runnable sub) {
+        rule("$:first-of-type", sub);
     }
 
     /**
@@ -642,8 +642,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean lastChild() {
-        return rule("$:last-child");
+    public final void lastChild(Runnable sub) {
+        rule("$:last-child", sub);
     }
 
     /**
@@ -654,8 +654,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean lastOfType() {
-        return rule("$:last-of-type");
+    public final void lastOfType(Runnable sub) {
+        rule("$:last-of-type", sub);
     }
 
     /**
@@ -667,8 +667,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean onlyChild() {
-        return rule("$:only-child");
+    public final void onlyChild(Runnable sub) {
+        rule("$:only-child", sub);
     }
 
     /**
@@ -679,8 +679,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean onlyOfType() {
-        return rule("$:only-of-type");
+    public final void onlyOfType(Runnable sub) {
+        rule("$:only-of-type", sub);
     }
 
     /**
@@ -691,8 +691,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean nthChild(String pattern) {
-        return rule("$:nth-child(" + pattern + ")");
+    public final void nthChild(String pattern, Runnable sub) {
+        rule("$:nth-child(" + pattern + ")", sub);
     }
 
     /**
@@ -704,8 +704,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean nthLastChild(String pattern) {
-        return rule("$:nth-last-child(" + pattern + ")");
+    public final void nthLastChild(String pattern, Runnable sub) {
+        rule("$:nth-last-child(" + pattern + ")", sub);
     }
 
     /**
@@ -720,8 +720,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean nthOfType(String pattern) {
-        return rule("$:nth-of-type(" + pattern + ")");
+    public final void nthOfType(String pattern, Runnable sub) {
+        rule("$:nth-of-type(" + pattern + ")", sub);
     }
 
     /**
@@ -734,8 +734,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean nthLastOfType(String pattern) {
-        return rule("$:nth-last-of-type(" + pattern + ")");
+    public final void nthLastOfType(String pattern, Runnable sub) {
+        rule("$:nth-last-of-type(" + pattern + ")", sub);
     }
 
     /**
@@ -747,8 +747,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean empty() {
-        return rule("$:empty");
+    public final void empty(Runnable sub) {
+        rule("$:empty", sub);
     }
 
     /**
@@ -760,8 +760,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean not(Class<? extends CSS> clazz) {
-        return rule("$:not(." + Obfuscator.computeCSSName(clazz) + ")");
+    public final void not(Class<? extends CSS> clazz, Runnable sub) {
+        rule("$:not(." + Obfuscator.computeCSSName(clazz) + ")", sub);
     }
 
     /**
@@ -798,8 +798,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean firstLetter() {
-        return rule("$::first-letter");
+    public final void firstLetter(Runnable sub) {
+        rule("$::first-letter", sub);
     }
 
     /**
@@ -812,8 +812,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean firstLine() {
-        return rule("$::first-line");
+    public final void firstLine(Runnable sub) {
+        rule("$::first-line", sub);
     }
 
     /**
@@ -829,46 +829,17 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean selection() {
+    public final void selection(Runnable sub) {
         // Gecko is the only engine requiring the prefix. Due to the fact that the CSS parsing rules
         // require dropping the whole rule when encountering an invalid pseudo-element, two separate
         // rules must be written: ::-moz-selection, ::selection {...}. The rule would be dropped on
         // non-Gecko browsers as ::-moz-selection is invalid on them.
-
-        // dirty usage
-        int id = new Error().getStackTrace()[1].getLineNumber();
-
-        if (rules.id == id) {
-            rules.id = 0;
-
-            // restore parent rule set
-            load(rules.parent);
-
-            return false;
-        } else if (rules.id == -id) {
-            // restore parent rule set
-            load(rules.parent);
-
-            // create sub rule set
-            load(new RuleSet(rules, "$::-moz-selection"));
-
-            // update position info
-            rules.id = id;
-
-            return true;
-        } else {
-            // create sub rule set
-            load(new RuleSet(rules, "$::selection"));
-
-            // update position info
-            rules.id = -id;
-
-            return true;
-        }
+        rule("$::selection", sub);
+        rule("$::-moz-selection", sub);
     }
 
-    public final boolean children() {
-        return rule("$>*");
+    public final void children(Runnable sub) {
+        rule("$>*", sub);
     }
 
     /**
@@ -880,8 +851,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean inBackOf(Class<? extends CSS> clazz) {
-        return rule("." + Obfuscator.computeCSSName(clazz) + "+$");
+    public final void inBackOf(Class<? extends CSS> clazz, Runnable sub) {
+        rule("." + Obfuscator.computeCSSName(clazz) + "+$", sub);
     }
 
     /**
@@ -893,8 +864,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean insideOf(Class<? extends CSS> clazz) {
-        return rule("." + Obfuscator.computeCSSName(clazz) + " $");
+    public final void insideOf(Class<? extends CSS> clazz, Runnable sub) {
+        rule("." + Obfuscator.computeCSSName(clazz) + " $", sub);
     }
 
     /**
@@ -906,8 +877,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean with(Class<? extends CSS> clazz) {
-        return rule("." + Obfuscator.computeCSSName(clazz) + "$");
+    public final void with(Class<? extends CSS> clazz, Runnable sub) {
+        rule("." + Obfuscator.computeCSSName(clazz) + "$", sub);
     }
 
     /**
@@ -922,8 +893,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean parentHover() {
-        return rule("*:hover>$");
+    public final void parentHover(Runnable sub) {
+        rule("*:hover>$", sub);
     }
 
     /**
@@ -938,8 +909,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean adjacentHover() {
-        return rule("*:hover+$");
+    public final void adjacentHover(Runnable sub) {
+        rule("*:hover+$", sub);
     }
 
     /**
@@ -954,8 +925,8 @@ public abstract class CSS implements Extensible {
      * 
      * @return
      */
-    public final boolean siblingHover() {
-        return rule("*:hover~$");
+    public final void siblingHover(Runnable sub) {
+        rule("*:hover~$", sub);
     }
 
     /**
@@ -974,36 +945,6 @@ public abstract class CSS implements Extensible {
 
         // restore parent rule set
         load(rules.parent);
-    }
-
-    /**
-     * <p>
-     * Create sub rule set.
-     * </p>
-     * 
-     * @param selector
-     * @return
-     */
-    private final boolean rule(String selector) {
-        // dirty usage
-        int id = new Error().getStackTrace()[2].getLineNumber();
-
-        if (rules.id == id) {
-            rules.id = 0;
-
-            // restore parent rule set
-            load(rules.parent);
-
-            return false;
-        } else {
-            // create sub rule set
-            load(new RuleSet(rules, selector));
-
-            // update position info
-            rules.id = id;
-
-            return true;
-        }
     }
 
     /**
@@ -1213,9 +1154,6 @@ public abstract class CSS implements Extensible {
 
         /** The property store. */
         private final List<CSSProperty> properties = new ArrayList();
-
-        /** The flag whether this rule set process sub rule or not. */
-        private int id = 0;
 
         /**
          * <p>

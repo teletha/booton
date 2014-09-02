@@ -72,11 +72,11 @@ class ImageGridStyle {
                 background.color(hsla(0, 100, 100, 0.2));
             });
 
-            while (hover()) {
+            hover(() -> {
                 after(() -> {
                     visibility.hidden();
                 });
-            }
+            });
         }
     }
 
@@ -102,11 +102,11 @@ class ImageGridStyle {
 
             Snippet.createBottomBubble(7);
 
-            while (siblingHover()) {
+            siblingHover(() -> {
                 box.opacity(1);
                 position.bottom(ImageSize);
                 visibility.visible();
-            }
+            });
         }
     }
 
@@ -133,12 +133,12 @@ class ImageGridStyle {
             background.color(White);
             transition.property.all().duration(0.2, s).timing.linear();
 
-            while (focus()) {
+            focus(() -> {
                 border.color(rgba(82, 168, 236, 0.8));
                 outline.none();
                 box.shadowInset(0, px, 1, px, 1, px, rgba(0, 0, 0, 0.075))
                         .shadow(0, px, 0, px, 8, px, rgba(82, 168, 236, 0.6));
-            }
+            });
         }
     }
 }

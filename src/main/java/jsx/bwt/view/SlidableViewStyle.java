@@ -34,9 +34,9 @@ class SlidableViewStyle {
             transform.translateY(-100, percent);
             transition.property.all().timing.easeInOut().duration(200, ms);
 
-            while (insideOf(Shown.class)) {
+            insideOf(Shown.class, () -> {
                 transform.translateY(-1, px);
-            }
+            });
         }
     }
 

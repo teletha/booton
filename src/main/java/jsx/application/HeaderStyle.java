@@ -56,9 +56,9 @@ class HeaderStyle {
             font.color(153, 153, 153).weight.bold().size(14, px);
             text.decoration.none().shadow();
 
-            while (hover()) {
+            hover(() -> {
                 font.color(Color.Whity);
-            }
+            });
         }
     }
 
@@ -75,11 +75,11 @@ class HeaderStyle {
             border.radius(Radius, px);
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
 
-            while (parentHover()) {
+            parentHover(() -> {
                 box.opacity(1);
                 visibility.visible();
                 margin.size(0, px);
-            }
+            });
         }
     }
 
@@ -89,17 +89,17 @@ class HeaderStyle {
             display.block();
             border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
 
-            while (hover()) {
+            hover(() -> {
                 background.color(rgb(1, 134, 186)).image(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1)));
 
-                while (firstChild()) {
+                firstChild(() -> {
                     border.top.radius(Radius, px);
-                }
+                });
 
-                while (lastChild()) {
+                lastChild(() -> {
                     border.bottom.radius(Radius, px);
-                }
-            }
+                });
+            });
         }
     }
 }

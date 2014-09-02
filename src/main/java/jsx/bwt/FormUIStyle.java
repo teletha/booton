@@ -76,16 +76,16 @@ class FormUIStyle {
 
             transition.property.all().duration(0.2, s).timing.linear();
 
-            while (with(Focus.class)) {
+            with(Focus.class, () -> {
                 box.shadowInset(-1, px, 1, px, 1, px, BorderInsetShadow)
                         .shadow(0, px, 0, px, 8, px, BorderFocusColor.opacify(-0.2));
-            }
+            });
 
-            while (insideOf(FormRoot.class)) {
-                while (with(Focus.class)) {
+            insideOf(FormRoot.class, () -> {
+                with(Focus.class, () -> {
                     box.shadow(0, px, 0, px, 0, px, Color.Transparent);
-                }
-            }
+                });
+            });
         }
     }
 
@@ -148,9 +148,9 @@ class FormUIStyle {
         {
             border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
-            while (insideOf(Focus.class)) {
+            insideOf(Focus.class, () -> {
                 border(BorderFocusColor);
-            }
+            });
         }
     }
 
@@ -200,16 +200,16 @@ class FormUIStyle {
 
             // transition.property("background-color").timing.easeOut().duration(0.2, s);
 
-            while (hover()) {
+            hover(() -> {
                 background.color(back.lighten(6));
-            }
+            });
 
-            while (active()) {
+            active(() -> {
                 border.color(BorderColor.lighten(-20));
                 background.color(back.lighten(4)).imageNone();
                 box.shadowInset(0, px, 2, px, 4, px, Color.Black.opacify(-0.85))
                         .shadow(0, px, 1, px, 2, px, Color.Black.opacify(-0.95));
-            }
+            });
         }
     }
 
@@ -224,10 +224,10 @@ class FormUIStyle {
 
         {
 
-            while (focus()) {
+            focus(() -> {
                 border(BorderFocusColor.adjustHue(-180));
                 box.shadow(0, px, 0, px, 8, px, BorderFocusColor.adjustHue(-180).opacify(-0.2));
-            }
+            });
         }
     }
 
@@ -257,11 +257,11 @@ class FormUIStyle {
                 content.attr("icon");
             });
 
-            while (hover()) {
+            hover(() -> {
                 after(() -> {
                     font.color(BorderColor.lighten(-40));
                 });
-            }
+            });
         }
     }
 }
