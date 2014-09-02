@@ -42,8 +42,8 @@ import jsx.bwt.Input;
 import kiss.I;
 import kiss.model.ClassUtil;
 import booton.Obfuscator;
-import booton.Stylist;
 import booton.css.CSS;
+import booton.css.Stylist;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
 

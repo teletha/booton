@@ -25,17 +25,6 @@ public final class Display extends CSSProperty<Display> {
     }
 
     /**
-     * The element generates a horizontal block element box.
-     */
-    public Display blockLine() {
-        css.children(() -> {
-            css.box.floating.left();
-        });
-
-        return chain("block");
-    }
-
-    /**
      * The element generates one or more inline element boxes.
      */
     public Display inline() {
