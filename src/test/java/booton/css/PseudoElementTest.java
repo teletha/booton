@@ -55,13 +55,13 @@ public class PseudoElementTest {
     private static class Text extends MyCSS {
 
         {
-            while (firstLetter()) {
+            firstLetter(() -> {
                 display.inline();
-            }
+            });
 
-            while (firstLine()) {
+            firstLine(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -81,9 +81,9 @@ public class PseudoElementTest {
     private static class Select extends MyCSS {
 
         {
-            while (selection()) {
+            selection(() -> {
                 display.inline();
-            }
+            });
         }
     }
 }

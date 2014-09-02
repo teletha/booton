@@ -47,11 +47,11 @@ public class RequireWithPseudoTest {
             // display.inline();
             // }
 
-            while (hover()) {
+            hover(() -> {
                 after(() -> {
                     display.none();
                 });
-            }
+            });
         }
     }
 

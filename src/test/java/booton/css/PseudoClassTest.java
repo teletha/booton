@@ -33,17 +33,17 @@ public class PseudoClassTest {
     private static class Interaction extends MyCSS {
 
         {
-            while (hover()) {
+            hover(() -> {
                 display.inline();
-            }
+            });
 
-            while (focus()) {
+            focus(() -> {
                 display.inline();
-            }
+            });
 
-            while (active()) {
+            active(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -61,13 +61,13 @@ public class PseudoClassTest {
     private static class Link extends MyCSS {
 
         {
-            while (link()) {
+            link(() -> {
                 display.inline();
-            }
+            });
 
-            while (visited()) {
+            visited(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -90,37 +90,37 @@ public class PseudoClassTest {
     private static class Form extends MyCSS {
 
         {
-            while (enabled()) {
+            enabled(() -> {
                 display.inline();
-            }
+            });
 
-            while (disabled()) {
+            disabled(() -> {
                 display.inline();
-            }
+            });
 
-            while (checked()) {
+            checked(() -> {
                 display.inline();
-            }
+            });
 
-            while (indeterminate()) {
+            indeterminate(() -> {
                 display.inline();
-            }
+            });
 
-            while (optional()) {
+            optional(() -> {
                 display.inline();
-            }
+            });
 
-            while (required()) {
+            required(() -> {
                 display.inline();
-            }
+            });
 
-            while (valid()) {
+            valid(() -> {
                 display.inline();
-            }
+            });
 
-            while (invalid()) {
+            invalid(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -137,9 +137,9 @@ public class PseudoClassTest {
     private static class FirstChild extends MyCSS {
 
         {
-            while (firstChild()) {
+            firstChild(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -156,9 +156,9 @@ public class PseudoClassTest {
     private static class LastChild extends MyCSS {
 
         {
-            while (lastChild()) {
+            lastChild(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -177,17 +177,17 @@ public class PseudoClassTest {
     private static class NthChild extends MyCSS {
 
         {
-            while (nthChild("1")) {
+            nthChild("1", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthChild("2n")) {
+            nthChild("2n", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthChild("odd")) {
+            nthChild("odd", () -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -206,17 +206,17 @@ public class PseudoClassTest {
     private static class NthLastChild extends MyCSS {
 
         {
-            while (nthLastChild("1")) {
+            nthLastChild("1", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthLastChild("2n")) {
+            nthLastChild("2n", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthLastChild("odd")) {
+            nthLastChild("odd", () -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -233,9 +233,9 @@ public class PseudoClassTest {
     private static class FirstType extends MyCSS {
 
         {
-            while (firstOfType()) {
+            firstOfType(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -252,9 +252,9 @@ public class PseudoClassTest {
     private static class LastType extends MyCSS {
 
         {
-            while (lastOfType()) {
+            lastOfType(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -273,17 +273,17 @@ public class PseudoClassTest {
     private static class NthType extends MyCSS {
 
         {
-            while (nthOfType("1")) {
+            nthOfType("1", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthOfType("2n")) {
+            nthOfType("2n", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthOfType("odd")) {
+            nthOfType("odd", () -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -302,17 +302,17 @@ public class PseudoClassTest {
     private static class NthLastType extends MyCSS {
 
         {
-            while (nthLastOfType("1")) {
+            nthLastOfType("1", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthLastOfType("2n")) {
+            nthLastOfType("2n", () -> {
                 display.inline();
-            }
+            });
 
-            while (nthLastOfType("odd")) {
+            nthLastOfType("odd", () -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -329,9 +329,9 @@ public class PseudoClassTest {
     private static class OnlyChild extends MyCSS {
 
         {
-            while (onlyChild()) {
+            onlyChild(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -348,9 +348,9 @@ public class PseudoClassTest {
     private static class OnlyType extends MyCSS {
 
         {
-            while (onlyOfType()) {
+            onlyOfType(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -367,9 +367,9 @@ public class PseudoClassTest {
     private static class Empty extends MyCSS {
 
         {
-            while (empty()) {
+            empty(() -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -385,9 +385,9 @@ public class PseudoClassTest {
     private static class Not extends MyCSS {
 
         {
-            while (not(Empty.class)) {
+            not(Empty.class, () -> {
                 display.inline();
-            }
+            });
         }
     }
 
@@ -403,11 +403,11 @@ public class PseudoClassTest {
     private static class Nest extends MyCSS {
 
         {
-            while (active()) {
-                while (invalid()) {
+            active(() -> {
+                invalid(() -> {
                     display.none();
-                }
-            }
+                });
+            });
         }
     }
 }

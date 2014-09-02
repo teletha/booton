@@ -28,9 +28,9 @@ public final class Display extends CSSProperty<Display> {
      * The element generates a horizontal block element box.
      */
     public Display blockLine() {
-        while (css.children()) {
+        css.children(() -> {
             css.box.floating.left();
-        }
+        });
 
         return chain("block");
     }
