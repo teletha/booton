@@ -9,14 +9,12 @@
  */
 package booton.reactive;
 
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.List;
 
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.scene.control.SingleSelectionModel;
-
-import kiss.I;
+import js.dom.Node;
+import booton.virtual.Diff;
+import booton.virtual.PatchOperation;
+import booton.virtual.VNode;
 
 /**
  * @version 2014/08/21 13:31:25
@@ -25,47 +23,34 @@ public abstract class Widget<V> {
 
     protected V context;
 
-    protected void vbox(UI... pieces) {
+    /** The current associated virtual element. */
+    private VNode current;
 
-    }
+    /**
+     * <p>
+     * Create virtual element.
+     * </p>
+     * 
+     * @param $ Domain Specific Language for virtual element.
+     */
+    protected abstract void virtualize(VirtualStructureLanguage $);
 
-    protected UI hbox(Object... pieces) {
+    /**
+     * 
+     */
+    final VNode virtualize() {
         return null;
     }
 
-    protected UI hbox(Runnable children) {
-        return null;
-    }
+    /**
+     * @param node
+     */
+    public void materialize(Node node) {
+        VNode newly = virtualize();
+        List<PatchOperation> patches = Diff.diff(current, newly);
 
-    protected <T> UI hbox(ObservableList<T> list, Consumer<T> builder) {
-        return null;
-    }
+        if (!patches.isEmpty()) {
 
-    protected <T> UI vbox(ObservableList<T> list, Consumer<T> builder) {
-        return null;
-    }
-
-    protected <T> void list(ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass) {
-        for (T item : list) {
-            Widget<T> child = I.make(childWidgetClass);
-            child.context = item;
-
-            child.template();
         }
     }
-
-    protected <T> void list(ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, SingleSelectionModel<Predicate<T>> filter) {
-        list(list, childWidgetClass, filter.selectedItemProperty());
-    }
-
-    protected <T> void list(ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, ObservableValue<Predicate<T>> filter) {
-        for (T item : list) {
-            Widget<T> child = I.make(childWidgetClass);
-            child.context = item;
-
-            child.template();
-        }
-    }
-
-    protected abstract void template();
 }

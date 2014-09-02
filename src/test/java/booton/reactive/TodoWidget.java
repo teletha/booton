@@ -20,7 +20,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -35,16 +34,16 @@ import booton.reactive.css.DynamicStyle;
 public class TodoWidget extends Widget {
 
     /** The data model. */
-    public final ListProperty<Todo> todos = new SimpleListProperty();
+    public final ListProperty<Todo> todos = I.make(ListProperty.class);
 
     /** The filter model. */
     public final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
 
     /** The completed tasks. */
-    private final IntegerBinding completedSize = Bindings.size(todos.filtered(item -> item.completed.get()));
+    final IntegerBinding completedSize = Bindings.size(todos.filtered(item -> item.completed.get()));
 
     /** The incompleted tasks. */
-    private final NumberBinding incompletedSize = todos.sizeProperty().subtract(completedSize);
+    final NumberBinding incompletedSize = todos.sizeProperty().subtract(completedSize);
 
     /** The todo size state. */
     private final Events<Boolean> exceedSize = I.observe(todos.sizeProperty().greaterThan(10));
@@ -60,8 +59,8 @@ public class TodoWidget extends Widget {
     /** The input field. */
     final Input input = new Input()
             .disableIf(exceedSize)
-            .placeholder(exceedSize.map(v -> v ? "新しい要件を入力" : "要件は10件まで"))
-            .shortcut(Key.ENTER, this::add);
+            .shortcut(Key.ENTER, this::add)
+            .placeholder(exceedSize.map(v -> v ? "新しい要件を入力" : "要件は10件まで"));
 
     /** The filter button. */
     final Button all = new Button().label("all").click(this::showAll).style(selectedFileter.is(Filter.All));
@@ -84,28 +83,27 @@ public class TodoWidget extends Widget {
     /**
      * Add todo task.
      */
-    void add() {
+    private void add() {
         String value = input.value.get();
 
         if (value != null && value.length() != 0) {
             todos.add(new Todo(value));
 
             input.clear();
-            System.out.println("invoked");
         }
     }
 
     /**
      * Remove todo task.
      */
-    void remove(Todo todo) {
+    private void remove(Todo todo) {
         todos.remove(todo);
     }
 
     /**
      * Make complete all tasks.
      */
-    void makeAllComplete() {
+    private void makeAllComplete() {
         for (Todo todo : todos) {
             todo.completed.set(true);
         }
@@ -114,7 +112,7 @@ public class TodoWidget extends Widget {
     /**
      * Remove all completed tasks.
      */
-    void removeCompleted() {
+    private void removeCompleted() {
         for (Todo todo : todos) {
             if (todo.completed.get()) {
                 remove(todo);
@@ -125,21 +123,21 @@ public class TodoWidget extends Widget {
     /**
      * Show all items.
      */
-    void showAll() {
+    private void showAll() {
         filter.setValue(Filter.All);
     }
 
     /**
      * Show all items.
      */
-    void showActive() {
+    private void showActive() {
         filter.setValue(Filter.Active);
     }
 
     /**
      * Show all items.
      */
-    void showCompleted() {
+    private void showCompleted() {
         filter.setValue(Filter.Completed);
     }
 
@@ -147,40 +145,57 @@ public class TodoWidget extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void template() {
+    protected void virtualize(VirtualStructureLanguage box) {
         int imcompleted = incompletedSize.intValue();
 
-        hbox(input);
-        list(todos, ShowLine.class, filter);
-        hbox(() -> {
-            hbox(imcompleted, imcompleted == 1 ? " item" : "items", " left");
-            hbox(all, active, completed);
-            hbox(clear);
+        box.h(input);
+        box.v(todos, ShowLine.class, filter);
+        box.h(() -> {
+            box.h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
+            box.h(all, active, completed);
+            box.h(clear);
         });
+    }
+
+    protected VirtualStructureLanguage virtualize2() {
+        return new VirtualStructureLanguage() {
+
+            {
+                int imcompleted = incompletedSize.intValue();
+
+                h(input);
+                v(todos, ShowLine.class, filter);
+                h(() -> {
+                    h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
+                    h(all, active, completed);
+                    h(clear);
+                });
+            }
+        };
     }
 
     /**
      * @version 2014/09/01 11:31:37
      */
-    private class ShowLine extends Widget<Todo> {
+    class ShowLine extends Widget<Todo> {
 
-        private Output text = new Output(context.contents);
+        Output text = new Output(context.contents);
 
-        private Button delete = new Button().label("×").showIf(text.hover).click($(TodoWidget.this::remove, context));
+        Button delete = new Button().label("×").showIf(text.hover).click($(TodoWidget.this::remove, context));
 
         /**
          * {@inheritDoc}
          */
         @Override
-        protected void template() {
-            hbox(text, delete);
+        protected void virtualize(VirtualStructureLanguage $) {
+            $.h(text, delete);
         }
     }
 
     /**
      * @version 2014/08/22 9:46:49
      */
-    private static class Todo {
+    static class Todo {
 
         public final BooleanProperty completed = new SimpleBooleanProperty();
 
@@ -197,7 +212,7 @@ public class TodoWidget extends Widget {
     /**
      * @version 2014/09/01 16:44:22
      */
-    private static enum Filter implements Predicate<Todo> {
+    static enum Filter implements Predicate<Todo> {
 
         /** Accept any. */
         All(v -> true),
