@@ -110,41 +110,4 @@ class RuleSet {
             child.importSelectorsFrom(set);
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        // count requested properties
-        int counter = 0;
-
-        List<String> assigned = new ArrayList();
-
-        for (String selector : selectors) {
-            assigned.add(template.replace("$", selector));
-        }
-
-        // write requested properties only.
-        CSSWriter writer = new CSSWriter();
-        writer.write(I.join(",", assigned), "{");
-
-        for (CSSProperty property : properties) {
-            if (property.used) {
-                counter++;
-                writer.write(property.toString());
-            }
-        }
-        writer.write("}");
-
-        if (counter == 0) {
-            // this class has no properties, so we can remove it
-            writer = new CSSWriter();
-        }
-
-        for (RuleSet child : children) {
-            writer.write(child.toString());
-        }
-        return writer.toString();
-    }
 }
