@@ -528,14 +528,12 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
         rule("*:hover~$", sub);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected void load(RuleSet set) {
         current = this;
-        super.load(set);
+        super.load(set.properties);
     }
+
+    RuleSet rules = new RuleSet(getClass());
 
     /**
      * <p>
