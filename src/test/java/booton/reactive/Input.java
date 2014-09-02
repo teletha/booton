@@ -29,6 +29,7 @@ public class Input extends UI<Input> {
         String current = value.get();
 
         // clear value
+        value.setValue("");
 
         // API definition
         return current;

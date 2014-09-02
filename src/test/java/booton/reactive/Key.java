@@ -9,6 +9,8 @@
  */
 package booton.reactive;
 
+import js.dom.UIAction;
+
 /**
  * @version 2014/09/01 10:59:35
  */
@@ -17,7 +19,7 @@ public class Key {
     /**
      * Constant for the {@code Enter} key.
      */
-    public static final Key ENTER = new Key(0x0A, "Enter");
+    public static final Key ENTER = new Key(114, "Enter", UIAction.Key_Enter);
 
     /**
      * Constant for the {@code Backspace} key.
@@ -1146,13 +1148,24 @@ public class Key {
     public static final Key SHORTCUT = new Key(-1, "Shortcut");
 
     /** The native key code. */
-    public final int nativeCode;
+    public final int code;
+
+    /** The event type. */
+    public final UIAction event;
 
     /**
-     * @param nativeCode A native key code.
+     * @param code A native key code.
      */
-    private Key(int nativeCode, String name) {
-        this.nativeCode = nativeCode;
+    private Key(int code, String name) {
+        this(code, name, null);
+    }
+
+    /**
+     * @param code A native key code.
+     */
+    private Key(int code, String name, UIAction event) {
+        this.code = code;
+        this.event = event;
     }
 
     public Key ctrl() {

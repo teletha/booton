@@ -10,14 +10,13 @@
 package booton.reactive;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
+import js.dom.UIAction;
 import jsx.event.Publishable;
 import kiss.Disposable;
 import kiss.Events;
@@ -36,9 +35,6 @@ public abstract class UI<T extends UI<T>> extends Publishable<T> {
 
     /** The disposable list. */
     private List<Disposable> disposables;
-
-    /** The key bindings. */
-    private Map<Key, Runnable> keyBindings;
 
     /**
      * @return
@@ -69,11 +65,9 @@ public abstract class UI<T extends UI<T>> extends Publishable<T> {
      */
     public T shortcut(Key key, Runnable action) {
         if (key != null && action != null) {
-            if (keyBindings == null) {
-                keyBindings = new HashMap();
-            }
-            keyBindings.put(key, action);
-
+            disposer().add(observe(UIAction.KeyUp).filter(e -> e.which == key.code).to(e -> {
+                action.run();
+            }));
         }
         return (T) this;
     }
