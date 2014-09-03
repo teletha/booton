@@ -10,6 +10,7 @@
 package booton.live;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,7 +75,11 @@ public class ResourceServlet extends HttpServlet {
                 I.copy(Files.newInputStream(file), response.getOutputStream(), true);
             } else {
                 // from resource directory in jar
-                I.copy(ClassLoader.getSystemResourceAsStream("init/" + path), response.getOutputStream(), true);
+                InputStream resource = ClassLoader.getSystemResourceAsStream("init/" + path);
+
+                if (resource != null) {
+                    I.copy(resource, response.getOutputStream(), true);
+                }
             }
         }
     }
@@ -110,7 +115,8 @@ public class ResourceServlet extends HttpServlet {
         XML html = I.xml(file);
 
         // append live coding script
-        html.find("script[src=\"application.js\"]").after(I.xml("script")
+        html.find("script[src=\"application.js\"]").after(I
+                .xml("script")
                 .attr("type", "text/javascript")
                 .attr("src", "live.js"));
 
