@@ -28,6 +28,8 @@ import booton.css.property.BoxLength;
 import booton.css.property.Content;
 import booton.css.property.Cursor;
 import booton.css.property.Display;
+import booton.css.property.Flex;
+import booton.css.property.FlexBasis;
 import booton.css.property.FlexDirection;
 import booton.css.property.FlexShrink;
 import booton.css.property.FlexWrap;
@@ -256,6 +258,10 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
     public FlexWrap flexWrap;
 
     public FlexShrink flexShrink;
+
+    public FlexBasis flexBasis;
+
+    public Flex flex;
 
     /**
      * <p>

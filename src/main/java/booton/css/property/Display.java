@@ -46,43 +46,44 @@ public final class Display extends CSSProperty<Display> {
         return chain("list-item");
     }
 
-    /**
-     * <p>
-     * If the run-in box contains a block box, same as block.
-     * </p>
-     * <p>
-     * If a block box follows the run-in box, the run-in box becomes the first inline box of the
-     * block box.
-     * </p>
-     * <p>
-     * If a inline box follows, the run-in box becomes a block box.
-     * </p>
-     */
-    public Display runIn() {
-        return chain("run-in");
-    }
-
-    /**
-     * The element behaves like a block element and lay out its content according to the grid model.
-     */
-    public Display grid() {
-        return chain("grid");
-    }
-
-    /**
-     * The element behaves like an inline element and lay out its content according to the grid
-     * model.
-     */
-    public Display inlineGrid() {
-        return chain("inline-grid");
-    }
+    // /**
+    // * <p>
+    // * If the run-in box contains a block box, same as block.
+    // * </p>
+    // * <p>
+    // * If a block box follows the run-in box, the run-in box becomes the first inline box of the
+    // * block box.
+    // * </p>
+    // * <p>
+    // * If a inline box follows, the run-in box becomes a block box.
+    // * </p>
+    // */
+    // public Display runIn() {
+    // return chain("run-in");
+    // }
+    //
+    // /**
+    // * The element behaves like a block element and lay out its content according to the grid
+    // model.
+    // */
+    // public Display grid() {
+    // return chain("grid");
+    // }
+    //
+    // /**
+    // * The element behaves like an inline element and lay out its content according to the grid
+    // * model.
+    // */
+    // public Display inlineGrid() {
+    // return chain("inline-grid");
+    // }
 
     /**
      * The element behaves like a block element and lays out its content according to the flexbox
      * model.
      */
     public Display flex() {
-        return chain(prefixValue("flex").ie("flexbox").safari("box").omit(Mozilla));
+        return chain(prefixValue("flex").safari("box").omit(Mozilla, IE));
     }
 
     /**
@@ -90,7 +91,7 @@ public final class Display extends CSSProperty<Display> {
      * model.
      */
     public Display inlineFlex() {
-        return chain(prefixValue("inline-flex").ie("inline-flexbox").safari("box").omit(Mozilla));
+        return chain(prefixValue("inline-flex").safari("box").omit(Mozilla, IE));
     }
 
     // /**
