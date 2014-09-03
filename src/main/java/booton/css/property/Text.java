@@ -197,7 +197,7 @@ public class Text extends CSSProperty<Text> {
      * </p>
      */
     public Text unselectable() {
-        CSS.require(Unselectable.class);
+        css.require(Unselectable.class);
 
         return chain();
     }

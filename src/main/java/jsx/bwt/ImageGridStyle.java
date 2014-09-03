@@ -13,7 +13,6 @@ import static booton.css.Unit.*;
 import static booton.css.value.Color.*;
 import booton.css.CSS;
 import booton.css.Priority;
-import booton.css.Snippet;
 import booton.css.value.Color;
 import booton.css.value.Numeric;
 
@@ -100,7 +99,7 @@ class ImageGridStyle {
             pointerEvents.none();
             transition.property.all().duration(0.2, s).timing.easeInOut().delay(100, ms);
 
-            Snippet.createBottomBubble(7);
+            createBottomBubble(7);
 
             siblingHover(() -> {
                 box.opacity(1);

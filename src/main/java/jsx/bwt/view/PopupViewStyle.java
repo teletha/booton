@@ -10,7 +10,6 @@
 package jsx.bwt.view;
 
 import booton.css.CSS;
-import booton.css.Snippet;
 import booton.css.value.Color;
 import booton.css.value.Numeric;
 
@@ -42,7 +41,7 @@ public class PopupViewStyle {
             transition.property.all().duration(0.15, s).timing.easeInOut().delay(0.2, s);
             pointerEvents.none();
 
-            Snippet.createBottomBubble(6);
+            createBottomBubble(6);
         }
     }
 
@@ -69,7 +68,7 @@ public class PopupViewStyle {
             // transition.property("opacity").duration(0.15, s).timing.easeInOut().delay(0.2, s);
             pointerEvents.none();
 
-            Snippet.createTopBubble(6);
+            createTopBubble(6);
         }
     }
 

@@ -9,7 +9,7 @@
  */
 package booton;
 
-import booton.css.StyleDeclaration;
+import booton.css.CSS;
 
 /**
  * @version 2014/03/08 11:13:39
@@ -29,7 +29,7 @@ public class HelloWorld {
         System.out.println(new Def());
     }
 
-    private static class Def extends StyleDeclaration {
+    private static class Def extends CSS {
 
         {
             font.size.large();

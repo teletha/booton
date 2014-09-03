@@ -76,7 +76,7 @@ public class MyCSS extends CSS {
      * @return
      */
     public boolean no(Vendor... vendors) {
-        String code = toString();
+        String code = stylist.write(this);
 
         for (Vendor vendor : vendors) {
             if (code.contains(vendor.toString())) {
