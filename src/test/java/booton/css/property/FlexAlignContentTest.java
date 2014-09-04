@@ -18,12 +18,12 @@ import booton.css.MyCSS;
 /**
  * @version 2013/07/22 11:49:05
  */
-public class AlignContentTest {
+public class FlexAlignContentTest {
 
     @Test
     public void start() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignContent.start();
+        css.display.flex().alignContent.start();
 
         assert css.has("align-content", "flex-start");
         assert css.has("-webkit-align-content", "flex-start");
@@ -34,7 +34,7 @@ public class AlignContentTest {
     @Test
     public void end() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignContent.end();
+        css.display.flex().alignContent.end();
 
         assert css.has("align-content", "flex-end");
         assert css.has("-webkit-align-content", "flex-end");
@@ -45,7 +45,7 @@ public class AlignContentTest {
     @Test
     public void center() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignContent.center();
+        css.display.flex().alignContent.center();
 
         assert css.has("align-content", "center");
         assert css.has("-webkit-align-content", "center");
@@ -56,7 +56,7 @@ public class AlignContentTest {
     @Test
     public void spaceAround() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignContent.spaceAround();
+        css.display.flex().alignContent.spaceAround();
 
         assert css.has("align-content", "space-around");
         assert css.has("-webkit-align-content", "space-around");
@@ -67,7 +67,7 @@ public class AlignContentTest {
     @Test
     public void spaceBetween() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignContent.spaceBetween();
+        css.display.flex().alignContent.spaceBetween();
 
         assert css.has("align-content", "space-between");
         assert css.has("-webkit-align-content", "space-between");
@@ -78,7 +78,7 @@ public class AlignContentTest {
     @Test
     public void stretch() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignContent.stretch();
+        css.display.flex().alignContent.stretch();
 
         assert css.has("align-content", "stretch");
         assert css.has("-webkit-align-content", "stretch");

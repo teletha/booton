@@ -18,12 +18,12 @@ import booton.css.MyCSS;
 /**
  * @version 2013/07/22 11:27:19
  */
-public class AlignItemsTest {
+public class FlexAlignItemsTest {
 
     @Test
     public void start() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignItems.start();
+        css.display.flex().alignItems.start();
 
         assert css.has("align-items", "flex-start");
         assert css.has("-webkit-align-items", "flex-start");
@@ -35,7 +35,7 @@ public class AlignItemsTest {
     @Test
     public void end() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignItems.end();
+        css.display.flex().alignItems.end();
 
         assert css.has("align-items", "flex-end");
         assert css.has("-webkit-align-items", "flex-end");
@@ -47,7 +47,7 @@ public class AlignItemsTest {
     @Test
     public void center() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignItems.center();
+        css.display.flex().alignItems.center();
 
         assert css.has("align-items", "center");
         assert css.has("-webkit-align-items", "center");
@@ -59,7 +59,7 @@ public class AlignItemsTest {
     @Test
     public void baseline() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignItems.baseline();
+        css.display.flex().alignItems.baseline();
 
         assert css.has("align-items", "baseline");
         assert css.has("-webkit-align-items", "baseline");
@@ -71,7 +71,7 @@ public class AlignItemsTest {
     @Test
     public void stretch() throws Exception {
         MyCSS css = new MyCSS();
-        css.alignItems.stretch();
+        css.display.flex().alignItems.stretch();
 
         assert css.has("align-items", "stretch");
         assert css.has("-webkit-align-items", "stretch");

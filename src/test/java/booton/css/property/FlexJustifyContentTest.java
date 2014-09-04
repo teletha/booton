@@ -18,12 +18,12 @@ import booton.css.MyCSS;
 /**
  * @version 2013/07/22 11:26:47
  */
-public class JustifyContentTest {
+public class FlexJustifyContentTest {
 
     @Test
     public void start() throws Exception {
         MyCSS css = new MyCSS();
-        css.justifyContent.start();
+        css.display.flex().justifyContent.start();
 
         assert css.has("justify-content", "flex-start");
         assert css.has("-webkit-justify-content", "flex-start");
@@ -35,7 +35,7 @@ public class JustifyContentTest {
     @Test
     public void end() throws Exception {
         MyCSS css = new MyCSS();
-        css.justifyContent.end();
+        css.display.flex().justifyContent.end();
 
         assert css.has("justify-content", "flex-end");
         assert css.has("-webkit-justify-content", "flex-end");
@@ -47,7 +47,7 @@ public class JustifyContentTest {
     @Test
     public void center() throws Exception {
         MyCSS css = new MyCSS();
-        css.justifyContent.center();
+        css.display.flex().justifyContent.center();
 
         assert css.has("justify-content", "center");
         assert css.has("-webkit-justify-content", "center");
@@ -59,7 +59,7 @@ public class JustifyContentTest {
     @Test
     public void spaceAround() throws Exception {
         MyCSS css = new MyCSS();
-        css.justifyContent.spaceAround();
+        css.display.flex().justifyContent.spaceAround();
 
         assert css.has("justify-content", "space-around");
         assert css.has("-webkit-justify-content", "space-around");
@@ -71,7 +71,7 @@ public class JustifyContentTest {
     @Test
     public void spaceBetween() throws Exception {
         MyCSS css = new MyCSS();
-        css.justifyContent.spaceBetween();
+        css.display.flex().justifyContent.spaceBetween();
 
         assert css.has("justify-content", "space-between");
         assert css.has("-webkit-justify-content", "space-between");

@@ -84,6 +84,19 @@ public class CSSWriter {
      * @param values
      * @param vendors
      */
+    public void property(CSSProperty property) {
+        property.write(this);
+    }
+
+    /**
+     * <p>
+     * Write property.
+     * </p>
+     * 
+     * @param name
+     * @param values
+     * @param vendors
+     */
     public void property(String name, List values, Vendor... vendors) {
         property(EnumSet.of(Standard, vendors), " ", name, values.toArray());
     }

@@ -22,7 +22,7 @@ public class FlexDirectionTest {
     @Test
     public void row() throws Exception {
         MyCSS css = new MyCSS();
-        css.flexDirection.row();
+        css.display.flex().direction.row();
 
         assert css.has("flex-direction", "row");
         assert css.has("-webkit-flex-direction", "row");
@@ -35,7 +35,7 @@ public class FlexDirectionTest {
     @Test
     public void rowReverse() throws Exception {
         MyCSS css = new MyCSS();
-        css.flexDirection.rowReverse();
+        css.display.flex().direction.rowReverse();
 
         assert css.has("flex-direction", "row-reverse");
         assert css.has("-webkit-flex-direction", "row-reverse");
@@ -48,7 +48,7 @@ public class FlexDirectionTest {
     @Test
     public void colmun() throws Exception {
         MyCSS css = new MyCSS();
-        css.flexDirection.column();
+        css.display.flex().direction.column();
 
         assert css.has("flex-direction", "column");
         assert css.has("-webkit-flex-direction", "column");
@@ -61,7 +61,7 @@ public class FlexDirectionTest {
     @Test
     public void colmunReverse() throws Exception {
         MyCSS css = new MyCSS();
-        css.flexDirection.columnReverse();
+        css.display.flex().direction.columnReverse();
 
         assert css.has("flex-direction", "column-reverse");
         assert css.has("-webkit-flex-direction", "column-reverse");

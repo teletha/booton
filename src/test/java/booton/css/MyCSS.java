@@ -185,6 +185,14 @@ public class MyCSS extends CSS {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return stylist.write(this);
+    }
+
+    /**
      * @version 2013/07/24 9:24:57
      */
     private static class Stylesheet {
