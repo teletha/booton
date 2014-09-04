@@ -33,7 +33,7 @@ public abstract class Widget<V> {
      * 
      * @param $ Domain Specific Language for virtual element.
      */
-    protected abstract void virtualize(VirtualStructureLanguage $);
+    protected abstract void virtualize(VirtualStructure $);
 
     /**
      * 

@@ -7,16 +7,33 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive.sample;
+package booton.reactive;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import booton.css.CSS;
 
 /**
- * @version 2014/08/21 16:33:35
+ * @version 2014/09/04 15:19:35
  */
-public class Group {
+class TodoWidgetStyle {
 
-    /** The property. */
-    public final ListProperty<Person> members = new SimpleListProperty();
+    class LIST extends CSS {
+
+        {
+
+        }
+    }
+
+    class FOOTER extends CSS {
+
+        {
+
+        }
+    }
+
+    class CLEAR extends CSS {
+
+        {
+
+        }
+    }
 }
