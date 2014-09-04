@@ -18,7 +18,7 @@ import javafx.collections.ObservableList;
 
 import kiss.I;
 import booton.css.CSS;
-import booton.virtual.VNode;
+import booton.virtual.VirtualNode;
 
 /**
  * @version 2014/09/04 16:39:32
@@ -26,22 +26,25 @@ import booton.virtual.VNode;
 public class VirtualStructure {
 
     /** The node stack. */
-    private final Deque<VNode> nodes = new ArrayDeque();
+    private final Deque<VirtualNode> nodes = new ArrayDeque();
 
     /** The current node. */
-    private VNode current;
+    private VirtualNode current;
+
+    /** The ccurent value. */
+    private Object value;
 
     /**
      * 
      */
     public VirtualStructure() {
-        this(new VNode("div"));
+        this(new VirtualNode("div"));
     }
 
     /**
      * 
      */
-    public VirtualStructure(VNode root) {
+    public VirtualStructure(VirtualNode root) {
         nodes.add(root);
         current = root;
     }

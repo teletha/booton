@@ -141,7 +141,7 @@ class EmulateText extends Text implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected String textContent() {
+    public String textContent() {
         return text;
     }
 
@@ -149,7 +149,7 @@ class EmulateText extends Text implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected void textContent(String textContent) {
+    public void textContent(String textContent) {
         text = String.valueOf(textContent);
     }
 

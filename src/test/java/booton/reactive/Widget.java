@@ -14,7 +14,7 @@ import java.util.List;
 import js.dom.Node;
 import booton.virtual.Diff;
 import booton.virtual.PatchOperation;
-import booton.virtual.VNode;
+import booton.virtual.VirtualNode;
 
 /**
  * @version 2014/08/21 13:31:25
@@ -24,7 +24,7 @@ public abstract class Widget<V> {
     protected V context;
 
     /** The current associated virtual element. */
-    private VNode current;
+    private VirtualNode current;
 
     /**
      * <p>
@@ -38,7 +38,7 @@ public abstract class Widget<V> {
     /**
      * 
      */
-    final VNode virtualize() {
+    final VirtualNode virtualize() {
         return null;
     }
 
@@ -46,7 +46,7 @@ public abstract class Widget<V> {
      * @param node
      */
     public void materialize(Node node) {
-        VNode newly = virtualize();
+        VirtualNode newly = virtualize();
         List<PatchOperation> patches = Diff.diff(current, newly);
 
         if (!patches.isEmpty()) {

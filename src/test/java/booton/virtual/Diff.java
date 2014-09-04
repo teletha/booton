@@ -31,10 +31,10 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<PatchOperation> diff(VNode prev, VNode next) {
+    public static List<PatchOperation> diff(VirtualNode prev, VirtualNode next) {
         List<PatchOperation> operations = new ArrayList();
 
-        if (!prev.tagName.equals(next.tagName)) {
+        if (!prev.equals(next)) {
             // operations.add(new PatchOperation.Replace());
         } else {
             operations.addAll(diff(prev.attributes, next.attributes));
@@ -80,7 +80,7 @@ public class Diff {
                     Object prevItem = prev.get(prevPosition);
                     Object nextItem = next.get(nextPosition);
 
-                    if (prevItem == nextItem) {
+                    if (prevItem.equals(nextItem)) {
                         // same item
                         actualManipulationPosition++;
                         prevPosition++;
@@ -132,7 +132,7 @@ public class Diff {
                 String prevValue = prev.get(key);
                 String nextValue = entry.getValue();
 
-                if (prevValue != nextValue) {
+                if (!prevValue.equals(nextValue)) {
                     operations.add(new Change(key, nextValue));
                 }
             }
