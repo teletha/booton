@@ -106,8 +106,10 @@ public final class Display extends CSSProperty<Display> {
      * The element behaves like an inline element and lays out its content according to the flexbox
      * model.
      */
-    public Display inlineFlex() {
-        return chain(prefixValue("inline-flex").safari("box").omit(Mozilla, IE));
+    public Flex inlineFlex() {
+        chain(prefixValue("inline-flex").safari("box").omit(Mozilla, IE));
+
+        return flex = new Flex();
     }
 
     // /**
