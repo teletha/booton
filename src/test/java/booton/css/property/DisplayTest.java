@@ -55,7 +55,7 @@ public class DisplayTest {
         assert css.has("display", "flex");
         assert css.has("display", "-webkit-flex");
         assert css.has("display", "-webkit-box");
-        assert css.has("display", "-ms-flexbox");
+        assert css.no(IE);
         assert css.no(Mozilla);
     }
 
@@ -67,7 +67,7 @@ public class DisplayTest {
         assert css.has("display", "inline-flex");
         assert css.has("display", "-webkit-inline-flex");
         assert css.has("display", "-webkit-box");
-        assert css.has("display", "-ms-inline-flexbox");
+        assert css.no(IE);
         assert css.no(Mozilla);
     }
 }

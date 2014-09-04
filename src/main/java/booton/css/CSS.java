@@ -19,8 +19,6 @@ import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 import booton.Obfuscator;
-import booton.css.property.AlignContent;
-import booton.css.property.AlignItems;
 import booton.css.property.Background;
 import booton.css.property.Borders;
 import booton.css.property.Box;
@@ -28,13 +26,8 @@ import booton.css.property.BoxLength;
 import booton.css.property.Content;
 import booton.css.property.Cursor;
 import booton.css.property.Display;
-import booton.css.property.Flex;
-import booton.css.property.FlexBasis;
-import booton.css.property.FlexDirection;
-import booton.css.property.FlexShrink;
-import booton.css.property.FlexWrap;
+import booton.css.property.FlexItem;
 import booton.css.property.Font;
-import booton.css.property.JustifyContent;
 import booton.css.property.Line;
 import booton.css.property.ListStyle;
 import booton.css.property.Overflows;
@@ -170,23 +163,6 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
 
     /**
      * <p>
-     * The CSS align-items property aligns flex items of the current flex line the same way as
-     * justify-content but in the perpendicular direction.
-     * </p>
-     */
-    public AlignItems alignItems;
-
-    /**
-     * <p>
-     * The CSS align-content property aligns a flex container's lines within the flex container when
-     * there is extra space on the cross-axis. This property has no effect on single line flexible
-     * boxes.
-     * </p>
-     */
-    public AlignContent alignContent;
-
-    /**
-     * <p>
      * The background CSS property is a shorthand for setting the individual background values in a
      * single place in the style sheet. background can be used to set the values for one or more of:
      * background-color, background-image, background-position, background-repeat, background-size,
@@ -243,25 +219,12 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
 
     /**
      * <p>
-     * The CSS flex-direction property specifies how flex items are placed in the flex container
-     * defining the main axis and the direction (normal or reversed).
+     * The flex CSS property is a shorthand property specifying the ability of a flex item to alter
+     * its dimensions to fill available space. Flex items can be stretched to use available space
+     * proportional to their flex grow factor or their flex shrink factor to prevent overflow.
      * </p>
      */
-    public FlexDirection flexDirection;
-
-    /**
-     * <p>
-     * The CSS flex-wrap property specifies whether the children are forced into a single line or if
-     * the items can be flowed on multiple lines.
-     * </p>
-     */
-    public FlexWrap flexWrap;
-
-    public FlexShrink flexShrink;
-
-    public FlexBasis flexBasis;
-
-    public Flex flex;
+    public FlexItem flexItem;
 
     /**
      * <p>
@@ -287,17 +250,6 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
         }
         return definition;
     }
-
-    /**
-     * <p>
-     * The CSS justify-content property defines how a browser distributes available space between
-     * and around elements when aligning flex items in the main-axis of the current line. The
-     * alignment is done after the lengths and auto margins are applied, meaning that, if there is
-     * at least one flexible element, with flex-grow different than 0, it will have no effect as
-     * there won't be any available space.
-     * </p>
-     */
-    public JustifyContent justifyContent;
 
     /**
      * <p>

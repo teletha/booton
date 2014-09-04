@@ -11,11 +11,25 @@ package booton.css.property;
 
 import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
+import booton.css.CSSWriter;
 
 /**
  * @version 2013/06/13 16:03:10
  */
 public final class Display extends CSSProperty<Display> {
+
+    /** The flex model. */
+    private Flex flex;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void write(CSSWriter writer) {
+        super.write(writer);
+
+        if (flex != null) writer.property(flex);
+    }
 
     /**
      * The element generates a block element box.
@@ -82,8 +96,10 @@ public final class Display extends CSSProperty<Display> {
      * The element behaves like a block element and lays out its content according to the flexbox
      * model.
      */
-    public Display flex() {
-        return chain(prefixValue("flex").safari("box").omit(Mozilla, IE));
+    public Flex flex() {
+        chain(prefixValue("flex").safari("box").omit(Mozilla, IE));
+
+        return flex = new Flex();
     }
 
     /**
