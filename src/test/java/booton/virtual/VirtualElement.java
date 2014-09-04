@@ -21,31 +21,31 @@ import js.dom.Node;
 import js.util.HashMap;
 
 /**
- * @version 2014/08/28 22:42:38
+ * @version 2014/09/04 23:22:40
  */
-public class VNode {
+public class VirtualElement extends VirtualNode {
 
-    /** The element name. */
-    public final String tagName;
+    /** The node name. */
+    public final String name;
 
     /** The attributes. */
     public final Map<String, String> attributes;
 
     /** The children node. */
-    public final List<VNode> children;
+    public final List<VirtualNode> children;
 
     /**
      * @param tagName
      */
-    public VNode(String tagName) {
-        this(tagName, new HashMap(), new ArrayList(), "", "");
+    public VirtualElement(String tagName) {
+        this(tagName, new HashMap(), new ArrayList());
     }
 
     /**
      * @param string
      */
-    public VNode(String tagName, Map properties, List<VNode> children, String key, String namespace) {
-        this.tagName = tagName;
+    public VirtualElement(String name, Map properties, List<VirtualNode> children) {
+        this.name = name;
         this.attributes = properties;
         this.children = children;
     }
@@ -53,44 +53,26 @@ public class VNode {
     /**
      * @param prev
      */
-    public VNode(VNode copy) {
-        this.tagName = copy.tagName;
+    public VirtualElement(VirtualElement copy) {
+        this.name = copy.name;
         this.attributes = new HashMap(copy.attributes);
         this.children = new ArrayList(copy.children);
     }
 
     /**
-     * @return
+     * {@inheritDoc}
      */
+    @Override
     public Node createNode() {
-        Element element = document.createElement(tagName);
+        Element element = document.createElement(name);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
             element.attr(attribute.getKey(), attribute.getValue());
         }
 
-        for (VNode child : children) {
+        for (VirtualNode child : children) {
             element.append(child.createNode());
         }
         return element;
-    }
-
-    /**
-     * @param string
-     * @param string2
-     * @return
-     */
-    public VNode attr(String name, String value) {
-        attributes.put(name, value);
-        return this;
-    }
-
-    /**
-     * @param childName
-     * @return
-     */
-    public VNode add(String childName) {
-        children.add(new VNode(childName));
-        return this;
     }
 }

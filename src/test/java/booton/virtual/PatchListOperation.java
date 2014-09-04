@@ -40,7 +40,7 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
      * 
      */
     protected Node createElementFromVirtualElement(Object element) {
-        return ((VNode) element).createNode();
+        return ((VirtualNode) element).createNode();
     }
 
     /**

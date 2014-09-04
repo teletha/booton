@@ -16,4 +16,16 @@ import booton.translator.JavascriptAPIProvider;
  */
 @JavascriptAPIProvider
 public abstract class Text extends Node<Text> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract String textContent();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract void textContent(String textContent);
 }
