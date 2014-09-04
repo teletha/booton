@@ -26,6 +26,9 @@ import javafx.beans.property.StringProperty;
 
 import kiss.Events;
 import kiss.I;
+import booton.reactive.TodoWidgetStyle.CLEAR;
+import booton.reactive.TodoWidgetStyle.FOOTER;
+import booton.reactive.TodoWidgetStyle.LIST;
 import booton.reactive.css.DynamicStyle;
 
 /**
@@ -145,33 +148,16 @@ public class TodoWidget extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructureLanguage box) {
+    protected void virtualize(VirtualStructure box) {
         int imcompleted = incompletedSize.intValue();
 
         box.h(input);
-        box.v(todos, ShowLine.class, filter);
-        box.h(() -> {
+        box.v(LIST.class, todos, ShowLine.class, filter);
+        box.h(FOOTER.class, () -> {
             box.h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
             box.h(all, active, completed);
-            box.h(clear);
+            box.h(CLEAR.class, clear);
         });
-    }
-
-    protected VirtualStructureLanguage virtualize2() {
-        return new VirtualStructureLanguage() {
-
-            {
-                int imcompleted = incompletedSize.intValue();
-
-                h(input);
-                v(todos, ShowLine.class, filter);
-                h(() -> {
-                    h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
-                    h(all, active, completed);
-                    h(clear);
-                });
-            }
-        };
     }
 
     /**
@@ -187,8 +173,8 @@ public class TodoWidget extends Widget {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(VirtualStructureLanguage $) {
-            $.h(text, delete);
+        protected void virtualize(VirtualStructure box) {
+            box.h(text, delete);
         }
     }
 
