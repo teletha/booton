@@ -62,7 +62,7 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element target) {
+        public void operate(Element target) {
             target.attr(name, value);
         }
 
@@ -99,7 +99,7 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element target) {
+        public void operate(Element target) {
             target.attr(name, value);
         }
 
@@ -136,7 +136,7 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element target) {
+        public void operate(Element target) {
             target.remove(name);
         }
 

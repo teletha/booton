@@ -18,7 +18,8 @@ import javafx.collections.ObservableList;
 
 import kiss.I;
 import booton.css.CSS;
-import booton.virtual.VirtualNode;
+import booton.virtual.VirtualElement;
+import booton.virtual.VirtualReactiveElement;
 
 /**
  * @version 2014/09/04 16:39:32
@@ -26,10 +27,10 @@ import booton.virtual.VirtualNode;
 public class VirtualStructure {
 
     /** The node stack. */
-    private final Deque<VirtualNode> nodes = new ArrayDeque();
+    private final Deque<VirtualElement> nodes = new ArrayDeque();
 
     /** The current node. */
-    private VirtualNode current;
+    private VirtualElement current;
 
     /** The ccurent value. */
     private Object value;
@@ -38,13 +39,13 @@ public class VirtualStructure {
      * 
      */
     public VirtualStructure() {
-        this(new VirtualNode("div"));
+        this(new VirtualElement("div"));
     }
 
     /**
      * 
      */
-    public VirtualStructure(VirtualNode root) {
+    public VirtualStructure(VirtualElement root) {
         nodes.add(root);
         current = root;
     }
@@ -78,7 +79,7 @@ public class VirtualStructure {
      */
     private void add(Object child) {
         if (child instanceof ObservableValue) {
-
+            current.children.add(new VirtualReactiveElement("div", (ObservableValue) child));
         } else {
         }
     }
@@ -118,5 +119,12 @@ public class VirtualStructure {
 
             child.virtualize(this);
         }
+    }
+
+    /**
+     * @return
+     */
+    public VirtualElement getRoot() {
+        return nodes.peekFirst();
     }
 }

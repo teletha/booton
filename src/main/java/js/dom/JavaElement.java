@@ -71,6 +71,7 @@ class JavaElement implements org.w3c.dom.Element {
      * <code>tagName</code> of an HTML element in the canonical uppercase form, regardless of the
      * case in the source HTML document.
      */
+    @Override
     public String getTagName() {
         return element.nameOriginal;
     }
@@ -82,6 +83,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @return The <code>Attr</code> value as a string, or the empty string if that attribute does
      *         not have a specified or default value.
      */
+    @Override
     public String getAttribute(String name) {
         return element.attr(name);
     }
@@ -105,6 +107,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                <code>Document.xmlVersion</code> attribute. <br>
      *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
      */
+    @Override
     public void setAttribute(String name, String value) throws DOMException {
         element.attr(name, String.valueOf(value));
     }
@@ -122,6 +125,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @param name The name of the attribute to remove.
      * @exception DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
      */
+    @Override
     public void removeAttribute(String name) throws DOMException {
         element.removeAttribute(name);
     }
@@ -135,6 +139,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @return The <code>Attr</code> node with the specified name ( <code>nodeName</code>) or
      *         <code>null</code> if there is no such attribute.
      */
+    @Override
     public Attr getAttributeNode(String name) {
         return new JavaAttr(this, "", name);
     }
@@ -156,6 +161,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                another <code>Element</code> object. The DOM user must explicitly clone
      *                <code>Attr</code> nodes to re-use them in other elements.
      */
+    @Override
     public Attr setAttributeNode(Attr newAttr) throws DOMException {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
@@ -175,6 +181,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                NOT_FOUND_ERR: Raised if <code>oldAttr</code> is not an attribute of the
      *                element.
      */
+    @Override
     public Attr removeAttributeNode(Attr oldAttr) throws DOMException {
         throw new Error();
     }
@@ -186,6 +193,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @param name The name of the tag to match on. The special value "*" matches all tags.
      * @return A list of matching <code>Element</code> nodes.
      */
+    @Override
     public NodeList getElementsByTagName(String name) {
         throw new Error();
     }
@@ -206,6 +214,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
+    @Override
     public String getAttributeNS(String namespaceURI, String localName) throws DOMException {
         throw new Error();
     }
@@ -250,6 +259,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
+    @Override
     public void setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
         throw new Error();
     }
@@ -274,6 +284,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
+    @Override
     public void removeAttributeNS(String namespaceURI, String localName) throws DOMException {
         throw new Error();
     }
@@ -294,6 +305,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
+    @Override
     public Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
         throw new Error();
     }
@@ -322,6 +334,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
+    @Override
     public Attr setAttributeNodeNS(Attr newAttr) throws DOMException {
         throw new Error();
     }
@@ -341,6 +354,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
+    @Override
     public NodeList getElementsByTagNameNS(String namespaceURI, String localName) throws DOMException {
         throw new Error();
     }
@@ -354,6 +368,7 @@ class JavaElement implements org.w3c.dom.Element {
      *         has a default value, <code>false</code> otherwise.
      * @since DOM Level 2
      */
+    @Override
     public boolean hasAttribute(String name) {
         throw new Error();
     }
@@ -375,6 +390,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                href='http://www.w3.org/TR/1999/REC-html401-19991224/'>HTML 4.01</a>]).
      * @since DOM Level 2
      */
+    @Override
     public boolean hasAttributeNS(String namespaceURI, String localName) throws DOMException {
         throw new Error();
     }
@@ -384,6 +400,7 @@ class JavaElement implements org.w3c.dom.Element {
      * 
      * @since DOM Level 3
      */
+    @Override
     public TypeInfo getSchemaTypeInfo() {
         throw new Error();
     }
@@ -406,6 +423,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                element.
      * @since DOM Level 3
      */
+    @Override
     public void setIdAttribute(String name, boolean isId) throws DOMException {
         throw new Error();
     }
@@ -427,6 +445,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                element.
      * @since DOM Level 3
      */
+    @Override
     public void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
         throw new Error();
     }
@@ -447,6 +466,7 @@ class JavaElement implements org.w3c.dom.Element {
      *                element.
      * @since DOM Level 3
      */
+    @Override
     public void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
         throw new Error();
     }
@@ -745,7 +765,7 @@ class JavaElement implements org.w3c.dom.Element {
         } else if (node instanceof EmulateElement) {
             return new JavaElement((EmulateElement) node);
         } else if (node instanceof EmulateText) {
-            throw new Error();
+            return new JavaText((EmulateText) node);
         } else if (node instanceof EmulateDocument) {
             return new JavaDocument((EmulateDocument) node);
         } else {

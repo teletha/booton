@@ -31,15 +31,11 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<PatchOperation> diff(VirtualNode prev, VirtualNode next) {
+    public static List<PatchOperation> diff(VirtualElement prev, VirtualElement next) {
         List<PatchOperation> operations = new ArrayList();
+        operations.addAll(diff(prev.attributes, next.attributes));
+        operations.addAll(diff(prev.children, next.children));
 
-        if (!prev.equals(next)) {
-            // operations.add(new PatchOperation.Replace());
-        } else {
-            operations.addAll(diff(prev.attributes, next.attributes));
-            operations.addAll(diff(prev.children, next.children));
-        }
         return operations;
     }
 

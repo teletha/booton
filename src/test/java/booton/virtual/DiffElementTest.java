@@ -20,9 +20,9 @@ import js.dom.NodeComparator;
 import org.junit.Test;
 
 /**
- * @version 2014/08/31 10:07:37
+ * @version 2014/09/05 9:24:53
  */
-public class DiffNodeTest {
+public class DiffElementTest {
 
     /** The reusable child list. */
     private static final List<VirtualNode> noChild = new ArrayList();
@@ -32,42 +32,90 @@ public class DiffNodeTest {
 
     @Test
     public void addAttribute() {
-        VirtualNode n1 = new VirtualElement("div");
-        VirtualNode n2 = new VirtualElement("div", attr("a", "A"), noChild);
+        VirtualElement n1 = new VirtualElement("div");
+        VirtualElement n2 = new VirtualElement("div", attr("a", "A"), noChild);
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void removeAttribute() {
-        VirtualNode n1 = new VirtualElement("div", attr("a", "A"), noChild);
-        VirtualNode n2 = new VirtualElement("div");
+        VirtualElement n1 = new VirtualElement("div", attr("a", "A"), noChild);
+        VirtualElement n2 = new VirtualElement("div");
+
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void replaceAttributeValue() {
+        VirtualElement n1 = new VirtualElement("div", attr("a", "A"), noChild);
+        VirtualElement n2 = new VirtualElement("div", attr("a", "B"), noChild);
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void addChild() {
-        VirtualNode n1 = new VirtualElement("div");
-        VirtualNode n2 = new VirtualElement("div", noAttr, children("c"));
+        VirtualElement n1 = new VirtualElement("div");
+        VirtualElement n2 = new VirtualElement("div", noAttr, children("c"));
+
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void addChildText() {
+        VirtualElement n1 = new VirtualElement("div");
+        VirtualElement n2 = new VirtualElement("div", noAttr, children("text1"));
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void removeChild1() {
-        VirtualNode n1 = new VirtualElement("div", noAttr, children("c"));
-        VirtualNode n2 = new VirtualElement("div");
+        VirtualElement n1 = new VirtualElement("div", noAttr, children("c"));
+        VirtualElement n2 = new VirtualElement("div");
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void removeChild2() {
-        VirtualNode n1 = new VirtualElement("div", noAttr, children("c1", "c2"));
-        VirtualNode n2 = new VirtualElement("div", noAttr, children("c1"));
+        VirtualElement n1 = new VirtualElement("div", noAttr, children("c1", "c2"));
+        VirtualElement n2 = new VirtualElement("div", noAttr, children("c1"));
 
         assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void replaceChildElement() {
+        VirtualElement n1 = new VirtualElement("div", noAttr, children("c1"));
+        VirtualElement n2 = new VirtualElement("div", noAttr, children("c2"));
+
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void replaceChildNode() {
+        VirtualElement n1 = new VirtualElement("div", noAttr, children("c"));
+        VirtualElement n2 = new VirtualElement("div", noAttr, children("text1"));
+
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void nestNoDiff() {
+        VirtualElement n1 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c"))));
+        VirtualElement n2 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c"))));
+
+        assertDiff(n1, n2, 0);
+    }
+
+    @Test
+    public void dontCheckNestedDiff() {
+        VirtualElement n1 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c1"))));
+        VirtualElement n2 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c2"))));
+
+        assert Diff.diff(n1, n2).size() == 0;
     }
 
     /**
@@ -76,7 +124,7 @@ public class DiffNodeTest {
      * @param prev
      * @param next
      */
-    private void assertDiff(VirtualNode prev, VirtualNode next, int expectedOperationCount) {
+    private void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
         List<PatchOperation> ops = Diff.diff(prev, next);
 
         Node prevNode = prev.createNode();
@@ -140,7 +188,7 @@ public class DiffNodeTest {
     private static Map<String, String> attr(String... attributes) {
         Map<String, String> map = new HashMap();
 
-        for (int i = 0; i < attributes.length; i++) {
+        for (int i = 0; i < attributes.length; i += 2) {
             map.put(attributes[i], attributes[i + 1]);
         }
         return map;
@@ -154,11 +202,21 @@ public class DiffNodeTest {
      * @param children
      * @return
      */
-    private static List<VirtualNode> children(String... children) {
+    private static List<VirtualNode> children(Object... children) {
         List<VirtualNode> list = new ArrayList();
 
-        for (String child : children) {
-            list.add(new VirtualElement(child));
+        for (Object child : children) {
+            if (child instanceof VirtualElement) {
+                list.add((VirtualElement) child);
+            } else {
+                String value = child.toString();
+
+                if (value.startsWith("text")) {
+                    list.add(new VirtualText(value));
+                } else {
+                    list.add(new VirtualElement(value));
+                }
+            }
         }
         return list;
     }

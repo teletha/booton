@@ -9,14 +9,14 @@
  */
 package booton.virtual;
 
-import java.util.List;
-
 import js.dom.Node;
 
 /**
  * @version 2014/09/04 23:21:40
  */
-public abstract class VirtualNode {
+public abstract class VirtualNode<N extends Node> {
+
+    private boolean updated = false;
 
     /**
      * 
@@ -32,11 +32,13 @@ public abstract class VirtualNode {
      * 
      * @return A created node.
      */
-    public abstract Node createNode();
+    public abstract N createNode();
 
-    /**
-     * @param node
-     * @return
-     */
-    public abstract List<PatchOperation> diff(VirtualNode node);
+    public void updateNode(N node) {
+
+    }
+
+    public void doUpdate() {
+        Updater.update(this);
+    }
 }

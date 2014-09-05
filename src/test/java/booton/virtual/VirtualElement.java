@@ -75,4 +75,25 @@ public class VirtualElement extends VirtualNode {
         }
         return element;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof VirtualElement) {
+            VirtualElement element = (VirtualElement) obj;
+
+            return name.equals(element.name);
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

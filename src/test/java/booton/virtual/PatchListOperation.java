@@ -75,7 +75,7 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent) {
+        public void operate(Element parent) {
             parent.children().get(index).remove();
         }
     }
@@ -104,7 +104,7 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent) {
+        public void operate(Element parent) {
             Node child = createElementFromVirtualElement(content);
             List<Element> children = parent.children();
 
@@ -142,7 +142,7 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent) {
+        public void operate(Element parent) {
             parent.append(createElementFromVirtualElement(content));
         }
 
@@ -181,8 +181,8 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        protected void operate(Element parent) {
-            parent.replace(parent.children().get(index), createElementFromVirtualElement(content));
+        public void operate(Element parent) {
+            parent.replace(parent.children().get(index), createElementFromVirtualElement(replace));
         }
 
         /**
