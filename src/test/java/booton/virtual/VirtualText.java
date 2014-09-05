@@ -10,12 +10,7 @@
 package booton.virtual;
 
 import static js.lang.Global.*;
-
-import java.util.Collections;
-import java.util.List;
-
 import js.dom.Node;
-import js.dom.Text;
 
 /**
  * @version 2014/09/04 23:22:51
@@ -48,40 +43,20 @@ public class VirtualText extends VirtualNode {
      * {@inheritDoc}
      */
     @Override
-    public List<PatchOperation> diff(VirtualNode node) {
-        if (node instanceof VirtualText) {
-            VirtualText virtual = (VirtualText) node;
+    public boolean equals(Object obj) {
+        if (obj instanceof VirtualText) {
+            VirtualText node = (VirtualText) obj;
 
-            if (text.equals(virtual.text)) {
-                return Collections.EMPTY_LIST;
-            } else {
-                return Collections.singletonList(new Modify(virtual.text));
-            }
+            return text.equals(node.text);
         }
-        return null;
+        return false;
     }
 
     /**
-     * @version 2014/09/05 2:18:41
+     * {@inheritDoc}
      */
-    private static class Modify extends PatchOperation<Text> {
-
-        /** The text to replace. */
-        private final String text;
-
-        /**
-         * @param text
-         */
-        private Modify(String text) {
-            this.text = text;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void operate(Text target) {
-            target.textContent(text);
-        }
+    @Override
+    public int hashCode() {
+        return text.hashCode();
     }
 }

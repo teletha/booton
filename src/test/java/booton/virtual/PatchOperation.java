@@ -16,7 +16,7 @@ import js.dom.Node;
  */
 public abstract class PatchOperation<T> {
 
-    protected abstract void operate(T target);
+    public abstract void operate(T target);
 
     /**
      * @version 2014/08/31 14:18:16
