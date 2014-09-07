@@ -11,8 +11,6 @@ package booton.virtual;
 
 import static js.lang.Global.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -28,26 +26,46 @@ public class VirtualElement extends VirtualNode {
     /** The node name. */
     public final String name;
 
+    /** The associated key. */
+    public final Object key;
+
     /** The attributes. */
     public final Map<String, String> attributes;
 
     /** The children node. */
-    public final List<VirtualNode> children;
+    public final VirtualNodeList children;
+
+    /**
+     * 
+     */
+    public VirtualElement() {
+        this("");
+    }
 
     /**
      * @param tagName
      */
     public VirtualElement(String tagName) {
-        this(tagName, new HashMap(), new ArrayList());
+        this(tagName, new HashMap());
     }
 
     /**
      * @param string
      */
-    public VirtualElement(String name, Map properties, List<VirtualNode> children) {
+    public VirtualElement(String name, Map properties, VirtualNode... children) {
+        this(name, null, properties, children);
+    }
+
+    /**
+     * @param string
+     */
+    public VirtualElement(String name, Object key, Map properties, VirtualNode... children) {
+        super(name, key);
+
         this.name = name;
+        this.key = key;
         this.attributes = properties;
-        this.children = children;
+        this.children = new VirtualNodeList(children);
     }
 
     /**
@@ -55,8 +73,9 @@ public class VirtualElement extends VirtualNode {
      */
     public VirtualElement(VirtualElement copy) {
         this.name = copy.name;
+        this.key = copy.key;
         this.attributes = new HashMap(copy.attributes);
-        this.children = new ArrayList(copy.children);
+        this.children = copy.children;
     }
 
     /**
@@ -70,30 +89,9 @@ public class VirtualElement extends VirtualNode {
             element.attr(attribute.getKey(), attribute.getValue());
         }
 
-        for (VirtualNode child : children) {
+        for (VirtualNode child : children.items) {
             element.append(child.createNode());
         }
         return element;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VirtualElement) {
-            VirtualElement element = (VirtualElement) obj;
-
-            return name.equals(element.name);
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return name.hashCode();
     }
 }

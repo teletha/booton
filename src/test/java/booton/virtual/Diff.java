@@ -34,8 +34,82 @@ public class Diff {
     public static List<PatchOperation> diff(VirtualElement prev, VirtualElement next) {
         List<PatchOperation> operations = new ArrayList();
         operations.addAll(diff(prev.attributes, next.attributes));
-        operations.addAll(diff(prev.children, next.children));
+        operations.addAll(diffChildren(prev.children, next.children));
 
+        return operations;
+    }
+
+    /**
+     * @param prev
+     * @param next
+     */
+    public static List<PatchListOperation> diffChildren(VirtualNodeList prev, VirtualNodeList next) {
+        List<PatchListOperation> operations = new ArrayList();
+
+        int prevSize = prev.items.length;
+        int nextSize = next.items.length;
+        int max = prevSize + nextSize;
+        int prevPosition = 0;
+        int nextPosition = 0;
+        int actualManipulationPosition = 0;
+
+        for (int i = 0; i < max; i++) {
+            if (prevSize <= prevPosition) {
+                if (nextSize <= nextPosition) {
+                    break; // all items were scanned
+                } else {
+                    // all prev items are scanned, but next items are remaining
+                    VirtualNode nextItem = next.items[nextPosition++];
+
+                    if (prev.indexOf(nextItem) == -1) {
+                        operations.add(new Insert(nextItem, actualManipulationPosition++));
+                    } else {
+                        operations.add(new Last(nextItem));
+                    }
+                }
+            } else {
+                if (nextSize <= nextPosition) {
+                    // all next items are scanned, but prev items are remaining
+                    operations.add(new Remove(prev.items[prevPosition++], actualManipulationPosition));
+                } else {
+                    // prev and next items are remaining
+                    VirtualNode prevItem = prev.items[prevPosition];
+                    VirtualNode nextItem = next.items[nextPosition];
+
+                    if (prevItem.id == nextItem.id) {
+                        // same item
+                        actualManipulationPosition++;
+                        prevPosition++;
+                        nextPosition++;
+                        System.out.println("SAME");
+                    } else {
+                        System.out.println("DIFF");
+                        // different item
+                        int nextItemInPrev = prev.indexOf(nextItem);
+                        int prevItemInNext = next.indexOf(prevItem);
+
+                        if (nextItemInPrev == -1) {
+                            if (prevItemInNext == -1) {
+                                operations.add(new Replace(prevItem, nextItem, actualManipulationPosition++));
+                                prevPosition++;
+                            } else {
+                                operations.add(new Insert(nextItem, actualManipulationPosition++));
+                            }
+                            nextPosition++;
+                        } else {
+                            if (prevItemInNext == -1) {
+                                operations.add(new Remove(prevItem, actualManipulationPosition));
+                            } else {
+                                // both items are found in each other list
+                                // hold and skip the current value
+                                actualManipulationPosition++;
+                            }
+                            prevPosition++;
+                        }
+                    }
+                }
+            }
+        }
         return operations;
     }
 

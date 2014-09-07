@@ -161,6 +161,24 @@ public class TodoWidget extends Widget {
     }
 
     /**
+     * @version 2014/09/08 1:44:32
+     */
+    private class Structure extends VirtualStructure {
+
+        {
+            int imcompleted = incompletedSize.intValue();
+
+            h(input);
+            v(LIST.class, todos, ShowLine.class, filter);
+            h(FOOTER.class, () -> {
+                h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
+                h(all, active, completed);
+                h(CLEAR.class, clear);
+            });
+        }
+    }
+
+    /**
      * @version 2014/09/01 11:31:37
      */
     class ShowLine extends Widget<Todo> {

@@ -28,6 +28,8 @@ public class VirtualText extends VirtualNode {
      * @param text
      */
     public VirtualText(String text) {
+        super(text);
+
         this.text = text;
     }
 
@@ -37,26 +39,5 @@ public class VirtualText extends VirtualNode {
     @Override
     public Node createNode() {
         return document.createTextNode(text);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VirtualText) {
-            VirtualText node = (VirtualText) obj;
-
-            return text.equals(node.text);
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return text.hashCode();
     }
 }
