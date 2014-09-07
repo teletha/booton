@@ -25,7 +25,7 @@ import org.junit.Test;
 public class DiffElementTest {
 
     /** The reusable child list. */
-    private static final List<VirtualNode> noChild = new ArrayList();
+    private static final VirtualNode[] noChild = new VirtualNode[0];
 
     /** The reusable attribute map. */
     private static final Map<String, String> noAttr = new HashMap();
@@ -111,11 +111,19 @@ public class DiffElementTest {
     }
 
     @Test
-    public void dontCheckNestedDiff() {
-        VirtualElement n1 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c1"))));
-        VirtualElement n2 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c2"))));
+    public void nestChildAdd() {
+        VirtualElement n1 = e("root", e("child"));
+        VirtualElement n2 = e("root", e("child", e("grand")));
 
-        assert Diff.diff(n1, n2).size() == 0;
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void nestAttributeAdd() {
+        VirtualElement n1 = e("root", e("child"));
+        VirtualElement n2 = e("root", e("child", attr("a", "A")));
+
+        assertDiff(n1, n2, 1, PatchMapOperation.Change.class);
     }
 
     /**
@@ -125,6 +133,16 @@ public class DiffElementTest {
      * @param next
      */
     private void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
+        assertDiff(prev, next, expectedOperationCount, new Class[0]);
+    }
+
+    /**
+     * Assert map diff.
+     * 
+     * @param prev
+     * @param next
+     */
+    private void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount, Class... patches) {
         List<PatchOperation> ops = Diff.diff(prev, next);
 
         Node prevNode = prev.createNode();
@@ -132,6 +150,9 @@ public class DiffElementTest {
 
         for (int i = 0; i < ops.size(); i++) {
             try {
+                if (patches.length != 0) {
+                    assert patches[i] == ops.get(i).getClass();
+                }
                 ops.get(i).operate(prevNode);
             } catch (IndexOutOfBoundsException e) {
                 AssertionError error = new AssertionError(message(prevNode, nextNode, ops, i));
@@ -159,8 +180,8 @@ public class DiffElementTest {
      */
     private String message(Node prev, Node next, List<PatchOperation> ops, int size) {
         StringBuilder message = new StringBuilder("\r\n");
-        message.append("PREV: ").append(prev).append("\r\n");
-        message.append("NEXT: ").append(next).append("\r\n");
+        message.append("PREV:\r\n").append(prev).append("\r\n\r\n");
+        message.append("NEXT:\r\n").append(next).append("\r\n\r\n");
         message.append("OPERATIONS:\r\n");
 
         for (int i = 0; i < size; i++) {
@@ -175,6 +196,30 @@ public class DiffElementTest {
             }
         }
         return message.toString();
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
+    private static VirtualElement e(String key, VirtualElement... children) {
+        return new VirtualElement(key, key, noAttr, children);
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
+    private static VirtualElement e(String key, Map<String, String> attributes, VirtualElement... children) {
+        return new VirtualElement(key, key, attributes, children);
     }
 
     /**
@@ -202,7 +247,7 @@ public class DiffElementTest {
      * @param children
      * @return
      */
-    private static List<VirtualNode> children(Object... children) {
+    private static VirtualNode[] children(Object... children) {
         List<VirtualNode> list = new ArrayList();
 
         for (Object child : children) {
@@ -218,6 +263,6 @@ public class DiffElementTest {
                 }
             }
         }
-        return list;
+        return list.toArray(new VirtualNode[list.size()]);
     }
 }

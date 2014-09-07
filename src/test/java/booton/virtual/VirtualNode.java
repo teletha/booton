@@ -9,6 +9,8 @@
  */
 package booton.virtual;
 
+import java.util.Objects;
+
 import js.dom.Node;
 
 /**
@@ -16,13 +18,16 @@ import js.dom.Node;
  */
 public abstract class VirtualNode<N extends Node> {
 
+    /** The node identifier. */
+    public final int id;
+
     private boolean updated = false;
 
     /**
      * 
      */
-    protected VirtualNode() {
-
+    protected VirtualNode(Object... values) {
+        this.id = Objects.hash(values);
     }
 
     /**
@@ -32,13 +37,5 @@ public abstract class VirtualNode<N extends Node> {
      * 
      * @return A created node.
      */
-    public abstract N createNode();
-
-    public void updateNode(N node) {
-
-    }
-
-    public void doUpdate() {
-        Updater.update(this);
-    }
+    public abstract Node createNode();
 }
