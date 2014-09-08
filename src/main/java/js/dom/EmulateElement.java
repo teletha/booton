@@ -190,7 +190,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected Node removeChild(Node childNode) {
+    public Node removeChild(Node childNode) {
         int index = nodes.indexOf(childNode);
 
         if (index == -1) {
@@ -205,7 +205,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected Node insertBefore(Node newNode, Node referenceNode) {
+    public Node insertBefore(Node newNode, Node referenceNode) {
         if (newNode != null) {
             int index;
 

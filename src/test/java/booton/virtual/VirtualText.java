@@ -11,11 +11,12 @@ package booton.virtual;
 
 import static js.lang.Global.*;
 import js.dom.Node;
+import js.dom.Text;
 
 /**
  * @version 2014/09/04 23:22:51
  */
-public class VirtualText extends VirtualNode {
+public class VirtualText extends VirtualNode<Text> {
 
     /** The text content. */
     public final String text;
@@ -27,8 +28,8 @@ public class VirtualText extends VirtualNode {
      * 
      * @param text
      */
-    public VirtualText(String text) {
-        super(text);
+    public VirtualText(int id, String text) {
+        super(id);
 
         this.text = text;
     }
@@ -38,6 +39,6 @@ public class VirtualText extends VirtualNode {
      */
     @Override
     public Node createNode() {
-        return document.createTextNode(text);
+        return dom = document.createTextNode(text);
     }
 }

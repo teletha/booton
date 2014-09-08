@@ -9,8 +9,6 @@
  */
 package booton.virtual;
 
-import java.util.Objects;
-
 import js.dom.Node;
 
 /**
@@ -18,16 +16,16 @@ import js.dom.Node;
  */
 public abstract class VirtualNode<N extends Node> {
 
+    public N dom;
+
     /** The node identifier. */
     public final int id;
-
-    private boolean updated = false;
 
     /**
      * 
      */
-    protected VirtualNode(Object... values) {
-        this.id = Objects.hash(values);
+    protected VirtualNode(int id) {
+        this.id = id;
     }
 
     /**

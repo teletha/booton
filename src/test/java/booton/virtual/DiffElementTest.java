@@ -9,7 +9,6 @@
  */
 package booton.virtual;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,82 +31,106 @@ public class DiffElementTest {
 
     @Test
     public void addAttribute() {
-        VirtualElement n1 = new VirtualElement("div");
-        VirtualElement n2 = new VirtualElement("div", attr("a", "A"), noChild);
+        VirtualElement n1 = e("div");
+        VirtualElement n2 = e("div", attr("a", "A"));
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void removeAttribute() {
-        VirtualElement n1 = new VirtualElement("div", attr("a", "A"), noChild);
-        VirtualElement n2 = new VirtualElement("div");
+        VirtualElement n1 = e("div", attr("a", "A"));
+        VirtualElement n2 = e("div");
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void replaceAttributeValue() {
-        VirtualElement n1 = new VirtualElement("div", attr("a", "A"), noChild);
-        VirtualElement n2 = new VirtualElement("div", attr("a", "B"), noChild);
-
-        assertDiff(n1, n2, 1);
-    }
-
-    @Test
-    public void addChild() {
-        VirtualElement n1 = new VirtualElement("div");
-        VirtualElement n2 = new VirtualElement("div", noAttr, children("c"));
+        VirtualElement n1 = e("div", attr("a", "A"));
+        VirtualElement n2 = e("div", attr("a", "B"));
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void addChildText() {
-        VirtualElement n1 = new VirtualElement("div");
-        VirtualElement n2 = new VirtualElement("div", noAttr, children("text1"));
+        VirtualElement n1 = e("root");
+        VirtualElement n2 = e("root", text("text1"));
+
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void removeChildText() {
+        VirtualElement n1 = e("root", text("text1"));
+        VirtualElement n2 = e("root");
+
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void replaceChildText() {
+        VirtualElement n1 = e("root", text("text1"));
+        VirtualElement n2 = e("root", text("text2"));
+
+        assertDiff(n1, n2, 1);
+    }
+
+    @Test
+    public void addChild() {
+        VirtualElement n1 = e("root");
+        VirtualElement n2 = e("root", e("child"));
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void removeChild1() {
-        VirtualElement n1 = new VirtualElement("div", noAttr, children("c"));
-        VirtualElement n2 = new VirtualElement("div");
+        VirtualElement n1 = e("root", e("child"));
+        VirtualElement n2 = e("root");
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void removeChild2() {
-        VirtualElement n1 = new VirtualElement("div", noAttr, children("c1", "c2"));
-        VirtualElement n2 = new VirtualElement("div", noAttr, children("c1"));
+        VirtualElement n1 = e("root", e("c1"), e("c2"));
+        VirtualElement n2 = e("root", e("c1"));
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void replaceChildElement() {
-        VirtualElement n1 = new VirtualElement("div", noAttr, children("c1"));
-        VirtualElement n2 = new VirtualElement("div", noAttr, children("c2"));
+        VirtualElement n1 = e("root", e("c1"));
+        VirtualElement n2 = e("root", e("c2"));
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void replaceChildNode() {
-        VirtualElement n1 = new VirtualElement("div", noAttr, children("c"));
-        VirtualElement n2 = new VirtualElement("div", noAttr, children("text1"));
+        VirtualElement n1 = e("root", e("child"));
+        VirtualElement n2 = e("root", text("child"));
 
         assertDiff(n1, n2, 1);
     }
 
     @Test
     public void nestNoDiff() {
-        VirtualElement n1 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c"))));
-        VirtualElement n2 = new VirtualElement("div", noAttr, children(new VirtualElement("child", noAttr, children("c"))));
+        VirtualElement n1 = e("root", e("child", e("grand")));
+        VirtualElement n2 = e("root", e("child", e("grand")));
 
         assertDiff(n1, n2, 0);
+    }
+
+    @Test
+    public void nestAttributeAdd() {
+        VirtualElement n1 = e("root", e("child"));
+        VirtualElement n2 = e("root", e("child", attr("a", "A")));
+
+        assertDiff(n1, n2, 1);
     }
 
     @Test
@@ -119,11 +142,11 @@ public class DiffElementTest {
     }
 
     @Test
-    public void nestAttributeAdd() {
-        VirtualElement n1 = e("root", e("child"));
-        VirtualElement n2 = e("root", e("child", attr("a", "A")));
+    public void nestComplex() {
+        VirtualElement n1 = e("root", e("child", e("grand")));
+        VirtualElement n2 = e("root", e("inserted", e("grand")), e("child", e("changed")));
 
-        assertDiff(n1, n2, 1, PatchMapOperation.Change.class);
+        assertDiff(n1, n2, 2);
     }
 
     /**
@@ -150,10 +173,7 @@ public class DiffElementTest {
 
         for (int i = 0; i < ops.size(); i++) {
             try {
-                if (patches.length != 0) {
-                    assert patches[i] == ops.get(i).getClass();
-                }
-                ops.get(i).operate(prevNode);
+                ops.get(i).operate();
             } catch (IndexOutOfBoundsException e) {
                 AssertionError error = new AssertionError(message(prevNode, nextNode, ops, i));
                 error.addSuppressed(e);
@@ -206,8 +226,8 @@ public class DiffElementTest {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, VirtualElement... children) {
-        return new VirtualElement(key, key, noAttr, children);
+    private static VirtualElement e(String key, VirtualNode... children) {
+        return new VirtualElement(key.hashCode(), key, noAttr, children);
     }
 
     /**
@@ -218,8 +238,8 @@ public class DiffElementTest {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, Map<String, String> attributes, VirtualElement... children) {
-        return new VirtualElement(key, key, attributes, children);
+    private static VirtualElement e(String key, Map<String, String> attributes, VirtualNode... children) {
+        return new VirtualElement(key.hashCode(), key, attributes, children);
     }
 
     /**
@@ -241,28 +261,13 @@ public class DiffElementTest {
 
     /**
      * <p>
-     * Helper method to create child list.
+     * Helper method to create attribute map.
      * </p>
      * 
-     * @param children
+     * @param attributes
      * @return
      */
-    private static VirtualNode[] children(Object... children) {
-        List<VirtualNode> list = new ArrayList();
-
-        for (Object child : children) {
-            if (child instanceof VirtualElement) {
-                list.add((VirtualElement) child);
-            } else {
-                String value = child.toString();
-
-                if (value.startsWith("text")) {
-                    list.add(new VirtualText(value));
-                } else {
-                    list.add(new VirtualElement(value));
-                }
-            }
-        }
-        return list.toArray(new VirtualNode[list.size()]);
+    private static VirtualText text(String value) {
+        return new VirtualText(value.hashCode() ^ 31, value);
     }
 }

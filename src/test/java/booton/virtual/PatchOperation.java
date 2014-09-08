@@ -16,7 +16,9 @@ import js.dom.Node;
  */
 public abstract class PatchOperation<T> {
 
-    public abstract void operate(T target);
+    public T context;
+
+    public abstract void operate();
 
     /**
      * @version 2014/08/31 14:18:16
@@ -27,7 +29,7 @@ public abstract class PatchOperation<T> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Node node) {
+        public void operate() {
         }
     }
 }

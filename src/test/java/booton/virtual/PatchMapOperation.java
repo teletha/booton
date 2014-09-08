@@ -11,12 +11,10 @@ package booton.virtual;
 
 import java.util.Map;
 
-import js.dom.Element;
-
 /**
  * @version 2014/08/31 7:47:07
  */
-public abstract class PatchMapOperation extends PatchOperation<Element> {
+public abstract class PatchMapOperation extends PatchOperation<VirtualElement> {
 
     /** The name. */
     public final String name;
@@ -46,8 +44,10 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
         /**
          * 
          */
-        public Add(String name, String value) {
+        public Add(VirtualElement context, String name, String value) {
             super(name, value);
+
+            this.context = context;
         }
 
         /**
@@ -62,8 +62,8 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Element target) {
-            target.attr(name, value);
+        public void operate() {
+            context.dom.attr(name, value);
         }
 
         /**
@@ -83,8 +83,10 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
         /**
          * 
          */
-        public Change(String name, String value) {
+        public Change(VirtualElement context, String name, String value) {
             super(name, value);
+
+            this.context = context;
         }
 
         /**
@@ -99,8 +101,8 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Element target) {
-            target.attr(name, value);
+        public void operate() {
+            context.dom.attr(name, value);
         }
 
         /**
@@ -120,8 +122,10 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
         /**
          * 
          */
-        public Remove(String name) {
+        public Remove(VirtualElement context, String name) {
             super(name, null);
+
+            this.context = context;
         }
 
         /**
@@ -136,8 +140,8 @@ public abstract class PatchMapOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Element target) {
-            target.remove(name);
+        public void operate() {
+            context.dom.remove(name);
         }
 
         /**

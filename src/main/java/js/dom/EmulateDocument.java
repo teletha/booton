@@ -108,7 +108,7 @@ class EmulateDocument extends Document {
      * {@inheritDoc}
      */
     @Override
-    protected Node removeChild(Node childNode) {
+    public Node removeChild(Node childNode) {
         throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
@@ -116,7 +116,7 @@ class EmulateDocument extends Document {
      * {@inheritDoc}
      */
     @Override
-    protected Node insertBefore(Node newNode, Node referenceNode) {
+    public Node insertBefore(Node newNode, Node referenceNode) {
         throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
