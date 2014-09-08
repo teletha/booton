@@ -20,54 +20,6 @@ import org.junit.Test;
 public class DiffListTest {
 
     @Test
-    public void insertTail() {
-        assertDiff(list("a", "b"), list("a", "b", "c"), 1);
-        assertDiff(list("a", "b"), list("a", "b", "c", "d"), 2);
-    }
-
-    @Test
-    public void insertHead() {
-        assertDiff(list("a", "b"), list("0", "a", "b"), 1);
-        assertDiff(list("a", "b"), list("0", "1", "a", "b"), 2);
-    }
-
-    @Test
-    public void insertMiddle() {
-        assertDiff(list("a", "b"), list("a", "0", "b"), 1);
-        assertDiff(list("a", "b"), list("a", "0", "1", "b"), 2);
-    }
-
-    @Test
-    public void removeTail() {
-        assertDiff(list("a", "b", "c"), list("a", "b"), 1);
-        assertDiff(list("a", "b", "c"), list("a"), 2);
-    }
-
-    @Test
-    public void removeHead() {
-        assertDiff(list("a", "b", "c"), list("b", "c"), 1);
-        assertDiff(list("a", "b", "c"), list("c"), 2);
-    }
-
-    @Test
-    public void removeMiddle() {
-        assertDiff(list("a", "b", "c"), list("a", "c"), 1);
-        assertDiff(list("a", "b", "c", "d"), list("a", "d"), 2);
-    }
-
-    @Test
-    public void reverse() {
-        assertDiff(list("a", "b"), list("b", "a"), 1);
-        assertDiff(list("a", "b", "c"), list("c", "b", "a"), 2);
-    }
-
-    @Test
-    public void up() throws Exception {
-        assertDiff(list("a", "b", "c", "d"), list("c", "d", "a", "b"), 2);
-        assertDiff(list("a", "b", "c", "d"), list("b", "d", "a", "c"), 2);
-    }
-
-    @Test
     public void down() throws Exception {
         assertDiff(list("a", "b", "c", "d"), list("b", "c", "d", "a"), 1);
         assertDiff(list("a", "b", "c", "d"), list("b", "d", "c", "a"), 2);
