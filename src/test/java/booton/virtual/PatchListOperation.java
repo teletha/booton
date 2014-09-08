@@ -9,8 +9,6 @@
  */
 package booton.virtual;
 
-import java.util.List;
-
 import js.dom.Node;
 
 /**
@@ -18,24 +16,17 @@ import js.dom.Node;
  */
 public abstract class PatchListOperation extends PatchOperation<VirtualElement> {
 
+    /** The target child node. */
     protected VirtualNode child;
 
     public final Object content;
 
-    public final int index;
-
     /**
      * @param type
      */
-    private PatchListOperation(Object content, int index) {
+    private PatchListOperation(Object content) {
         this.content = content;
-        this.index = index;
     }
-
-    /**
-     * 
-     */
-    protected abstract void operate(List target);
 
     /**
      * 
@@ -49,7 +40,7 @@ public abstract class PatchListOperation extends PatchOperation<VirtualElement> 
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName().toUpperCase() + " " + content + " at " + index;
+        return getClass().getSimpleName().toUpperCase() + " " + content;
     }
 
     /**
@@ -61,18 +52,10 @@ public abstract class PatchListOperation extends PatchOperation<VirtualElement> 
          * @param content
          */
         public Remove(VirtualElement context, VirtualNode child) {
-            super(null, -1);
+            super(null);
 
             this.context = context;
             this.child = child;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void operate(List target) {
-            target.remove(index);
         }
 
         /**
@@ -93,18 +76,10 @@ public abstract class PatchListOperation extends PatchOperation<VirtualElement> 
          * @param content
          */
         public Insert(VirtualElement context, Object content, VirtualNode indexChild) {
-            super(content, -1);
+            super(content);
 
             this.context = context;
             this.child = indexChild;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void operate(List target) {
-            target.add(index, content);
         }
 
         /**
@@ -131,19 +106,11 @@ public abstract class PatchListOperation extends PatchOperation<VirtualElement> 
          * @param content
          * @param to
          */
-        public Last(VirtualElement context, Object content) {
-            super(content, 0);
+        public Last(VirtualElement context, VirtualNode child) {
+            super(null);
 
             this.context = context;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void operate(List target) {
-            target.remove(content);
-            target.add(content);
+            this.child = child;
         }
 
         /**
@@ -151,7 +118,7 @@ public abstract class PatchListOperation extends PatchOperation<VirtualElement> 
          */
         @Override
         public void operate() {
-            context.dom.append(createElementFromVirtualElement(content));
+            context.dom.append(child.dom);
         }
 
         /**
@@ -172,19 +139,11 @@ public abstract class PatchListOperation extends PatchOperation<VirtualElement> 
         private final Object replace;
 
         public Replace(VirtualElement context, Object replace, VirtualNode child) {
-            super(null, -1);
+            super(null);
 
             this.replace = replace;
             this.context = context;
             this.child = child;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void operate(List target) {
-            target.set(index, replace);
         }
 
         /**
@@ -200,7 +159,7 @@ public abstract class PatchListOperation extends PatchOperation<VirtualElement> 
          */
         @Override
         public String toString() {
-            return "REPLACE " + content + " at " + index;
+            return "REPLACE " + content;
         }
     }
 }

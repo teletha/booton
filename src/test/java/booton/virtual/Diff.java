@@ -22,7 +22,7 @@ import booton.virtual.PatchMapOperation.Add;
 import booton.virtual.PatchMapOperation.Change;
 
 /**
- * @version 2014/08/29 9:19:06
+ * @version 2014/09/08 16:29:52
  */
 public class Diff {
 
@@ -93,11 +93,12 @@ public class Diff {
                 } else {
                     // all prev items are scanned, but next items are remaining
                     VirtualNode nextItem = next.items[nextPosition++];
+                    int index = prev.indexOf(nextItem);
 
-                    if (prev.indexOf(nextItem) == -1) {
+                    if (index == -1) {
                         operations.add(new Insert(context, nextItem, null));
                     } else {
-                        operations.add(new Last(context, nextItem));
+                        operations.add(new Last(context, prev.items[index]));
                     }
                 }
             } else {

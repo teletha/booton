@@ -78,27 +78,56 @@ public class DiffElementTest {
     }
 
     @Test
-    public void addChild() {
-        VirtualElement n1 = e("root");
-        VirtualElement n2 = e("root", e("child"));
-
-        assertDiff(n1, n2, 1);
+    public void insertChildFromEmpty() {
+        assertDiff(e("root"), e("root", e("child")), 1);
     }
 
     @Test
-    public void removeChild1() {
-        VirtualElement n1 = e("root", e("child"));
-        VirtualElement n2 = e("root");
-
-        assertDiff(n1, n2, 1);
+    public void insertChildAtTail() {
+        assertDiff(root("c1", "c2"), root("c1", "c2", "c3"), 1);
+        assertDiff(root("c1", "c2"), root("c1", "c2", "A", "B"), 2);
     }
 
     @Test
-    public void removeChild2() {
-        VirtualElement n1 = e("root", e("c1"), e("c2"));
-        VirtualElement n2 = e("root", e("c1"));
+    public void insertChildAtHead() {
+        assertDiff(root("c1", "c2"), root("c1", "c2", "c3"), 1);
+        assertDiff(root("c1", "c2"), root("A", "B", "c1", "c2"), 2);
+    }
 
-        assertDiff(n1, n2, 1);
+    @Test
+    public void insertChildAtMiddle() {
+        assertDiff(root("c1", "c2"), root("c1", "c2", "c3"), 1);
+        assertDiff(root("c1", "c2"), root("c1", "A", "B", "c2"), 2);
+    }
+
+    @Test
+    public void removeChildAtTail() {
+        assertDiff(root("c1", "c2", "c3"), root("c1", "c2"), 1);
+        assertDiff(root("c1", "c2", "c3"), root("c1"), 2);
+    }
+
+    @Test
+    public void removeChildAtHead() {
+        assertDiff(root("c1", "c2", "c3"), root("c2", "c3"), 1);
+        assertDiff(root("c1", "c2", "c3"), root("c3"), 2);
+    }
+
+    @Test
+    public void removeChildAtMiddle() {
+        assertDiff(root("c1", "c2", "c3"), root("c1", "c3"), 1);
+        assertDiff(root("c1", "c2", "c3", "c4"), root("c1", "c4"), 2);
+    }
+
+    @Test
+    public void reverseChild() {
+        assertDiff(root("c1", "c2"), root("c2", "c1"), 1);
+        assertDiff(root("c1", "c2", "c3"), root("c3", "c2", "c1"), 2);
+    }
+
+    @Test
+    public void upChild() {
+        assertDiff(root("a", "b", "c", "d"), root("c", "d", "a", "b"), 2);
+        assertDiff(root("a", "b", "c", "d"), root("b", "d", "a", "c"), 2);
     }
 
     @Test
@@ -216,6 +245,35 @@ public class DiffElementTest {
             }
         }
         return message.toString();
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
+    private static VirtualElement root(String... children) {
+        VirtualElement[] elements = new VirtualElement[children.length];
+
+        for (int i = 0; i < children.length; i++) {
+            elements[i] = e(children[i]);
+        }
+        return e("root", elements);
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
+    private static VirtualElement root(VirtualNode... children) {
+        return e("root", children);
     }
 
     /**
