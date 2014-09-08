@@ -21,13 +21,10 @@ import js.util.HashMap;
 /**
  * @version 2014/09/04 23:22:40
  */
-public class VirtualElement extends VirtualNode {
+public class VirtualElement extends VirtualNode<Element> {
 
     /** The node name. */
     public final String name;
-
-    /** The associated key. */
-    public final Object key;
 
     /** The attributes. */
     public final Map<String, String> attributes;
@@ -36,34 +33,12 @@ public class VirtualElement extends VirtualNode {
     public final VirtualNodeList children;
 
     /**
-     * 
-     */
-    public VirtualElement() {
-        this("");
-    }
-
-    /**
-     * @param tagName
-     */
-    public VirtualElement(String tagName) {
-        this(tagName, new HashMap());
-    }
-
-    /**
      * @param string
      */
-    public VirtualElement(String name, Map properties, VirtualNode... children) {
-        this(name, null, properties, children);
-    }
-
-    /**
-     * @param string
-     */
-    public VirtualElement(String name, Object key, Map properties, VirtualNode... children) {
-        super(name, key);
+    public VirtualElement(int id, String name, Map properties, VirtualNode... children) {
+        super(id);
 
         this.name = name;
-        this.key = key;
         this.attributes = properties;
         this.children = new VirtualNodeList(children);
     }
@@ -72,8 +47,8 @@ public class VirtualElement extends VirtualNode {
      * @param prev
      */
     public VirtualElement(VirtualElement copy) {
+        super(copy.id);
         this.name = copy.name;
-        this.key = copy.key;
         this.attributes = new HashMap(copy.attributes);
         this.children = copy.children;
     }
@@ -83,15 +58,15 @@ public class VirtualElement extends VirtualNode {
      */
     @Override
     public Node createNode() {
-        Element element = document.createElement(name);
+        dom = document.createElement(name);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
-            element.attr(attribute.getKey(), attribute.getValue());
+            dom.attr(attribute.getKey(), attribute.getValue());
         }
 
         for (VirtualNode child : children.items) {
-            element.append(child.createNode());
+            dom.append(child.createNode());
         }
-        return element;
+        return dom;
     }
 }

@@ -33,15 +33,15 @@ public class VirtualReactiveElement extends VirtualElement implements Disposable
     /**
      * @param tagName
      */
-    public VirtualReactiveElement(String tagName, ObservableValue value) {
-        this(tagName, I.observe(value));
+    public VirtualReactiveElement(int id, String tagName, ObservableValue value) {
+        this(id, tagName, I.observe(value));
     }
 
     /**
      * @param tagName
      */
-    public VirtualReactiveElement(String tagName, Events events) {
-        super(tagName);
+    public VirtualReactiveElement(int id, String tagName, Events events) {
+        super(id, tagName, null);
 
         this.events = events;
     }

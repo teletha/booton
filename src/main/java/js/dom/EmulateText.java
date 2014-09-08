@@ -73,7 +73,7 @@ class EmulateText extends Text implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected Node removeChild(Node childNode) {
+    public Node removeChild(Node childNode) {
         throw new EmulateDOMError();
     }
 
@@ -81,7 +81,7 @@ class EmulateText extends Text implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected Node insertBefore(Node newNode, Node referenceNode) {
+    public Node insertBefore(Node newNode, Node referenceNode) {
         throw new EmulateDOMError();
     }
 

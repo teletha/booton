@@ -10,6 +10,10 @@
 package js.dom;
 
 import static js.lang.Global.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -70,6 +74,25 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
         appendChild(ui.getElement());
 
         return ui;
+    }
+
+    /**
+     * <p>
+     * Get the children of this node.
+     * </p>
+     * 
+     * @return A list of child nodes.
+     */
+    public List<Node> childNodes() {
+        List<Node> list = new ArrayList();
+        Node node = firstChild();
+
+        while (node != null) {
+            list.add(node);
+
+            node = node.nextSibling();
+        }
+        return list;
     }
 
     /**
@@ -202,7 +225,7 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @return The node being removed, that is child node.
      */
     @JavascriptNativeProperty
-    protected abstract <N extends Node> N removeChild(N childNode);
+    public abstract <N extends Node> N removeChild(N childNode);
 
     /**
      * <p>
@@ -214,7 +237,7 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @return The node being inserted, that is newNode.
      */
     @JavascriptNativeProperty
-    protected abstract Node insertBefore(Node newNode, Node referenceNode);
+    public abstract Node insertBefore(Node newNode, Node referenceNode);
 
     /**
      * <p>

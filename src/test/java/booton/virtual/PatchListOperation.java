@@ -11,13 +11,14 @@ package booton.virtual;
 
 import java.util.List;
 
-import js.dom.Element;
 import js.dom.Node;
 
 /**
  * @version 2014/08/29 9:19:56
  */
-public abstract class PatchListOperation extends PatchOperation<Element> {
+public abstract class PatchListOperation extends PatchOperation<VirtualElement> {
+
+    protected VirtualNode child;
 
     public final Object content;
 
@@ -59,8 +60,11 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
         /**
          * @param content
          */
-        public Remove(Object content, int index) {
-            super(content, index);
+        public Remove(VirtualElement context, VirtualNode child) {
+            super(null, -1);
+
+            this.context = context;
+            this.child = child;
         }
 
         /**
@@ -75,8 +79,8 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Element parent) {
-            parent.children().get(index).remove();
+        public void operate() {
+            context.dom.removeChild(child.dom);
         }
     }
 
@@ -88,8 +92,11 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
         /**
          * @param content
          */
-        public Insert(Object content, int index) {
-            super(content, index);
+        public Insert(VirtualElement context, Object content, VirtualNode indexChild) {
+            super(content, -1);
+
+            this.context = context;
+            this.child = indexChild;
         }
 
         /**
@@ -104,14 +111,13 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Element parent) {
-            Node child = createElementFromVirtualElement(content);
-            List<Element> children = parent.children();
+        public void operate() {
+            Node insert = createElementFromVirtualElement(content);
 
-            if (children.size() == 0) {
-                parent.append(child);
+            if (this.child == null) {
+                context.dom.append(insert);
             } else {
-                children.get(index).before(child);
+                context.dom.insertBefore(insert, child.dom);
             }
         }
     }
@@ -125,8 +131,10 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * @param content
          * @param to
          */
-        public Last(Object content) {
+        public Last(VirtualElement context, Object content) {
             super(content, 0);
+
+            this.context = context;
         }
 
         /**
@@ -142,8 +150,8 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Element parent) {
-            parent.append(createElementFromVirtualElement(content));
+        public void operate() {
+            context.dom.append(createElementFromVirtualElement(content));
         }
 
         /**
@@ -163,10 +171,12 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
         /** The from index. */
         private final Object replace;
 
-        public Replace(Object content, Object replace, int index) {
-            super(content, index);
+        public Replace(VirtualElement context, Object replace, VirtualNode child) {
+            super(null, -1);
 
             this.replace = replace;
+            this.context = context;
+            this.child = child;
         }
 
         /**
@@ -181,8 +191,8 @@ public abstract class PatchListOperation extends PatchOperation<Element> {
          * {@inheritDoc}
          */
         @Override
-        public void operate(Element parent) {
-            parent.replace(parent.children().get(index), createElementFromVirtualElement(replace));
+        public void operate() {
+            context.dom.replace(child.dom, createElementFromVirtualElement(replace));
         }
 
         /**
