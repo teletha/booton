@@ -49,7 +49,7 @@ public class VirtualStructureDiffTest {
 
         for (int i = 0; i < ops.size(); i++) {
             try {
-                ops.get(i).operate(prevNode);
+                ops.get(i).apply();
             } catch (IndexOutOfBoundsException e) {
                 AssertionError error = new AssertionError(message(prevNode, nextNode, ops, i));
                 error.addSuppressed(e);

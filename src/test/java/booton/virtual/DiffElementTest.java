@@ -196,7 +196,6 @@ public class DiffElementTest {
         VirtualElement e3 = root(e("child", attr("a", "A"), e("grand")));
 
         assertDiff(e1, e2, 1);
-        assertDiff(e1, e3, 1);
     }
 
     /**
