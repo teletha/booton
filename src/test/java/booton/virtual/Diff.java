@@ -28,24 +28,33 @@ import booton.virtual.PatchOperation.ReplaceChild;
 public class Diff {
 
     /**
+     * <p>
+     * Diff elements.
+     * </p>
+     * 
      * @param prev
      * @param next
      * @return
      */
     public static List<PatchOperation> diff(VirtualElement prev, VirtualElement next) {
         List<PatchOperation> operations = new ArrayList();
-        operations.addAll(diffAttribute(prev, prev.attributes, next.attributes));
-        operations.addAll(diffChildren(prev, prev.children, next.children));
+        operations.addAll(diff(prev, prev.attributes, next.attributes));
+        operations.addAll(diff(prev, prev.children, next.children));
 
         return operations;
     }
 
     /**
+     * <p>
+     * Diff attributes.
+     * </p>
+     * 
+     * @param context
      * @param prev
      * @param next
      * @return
      */
-    public static List<PatchOperation> diffAttribute(VirtualElement context, Map<String, String> prev, Map<String, String> next) {
+    public static List<PatchOperation> diff(VirtualElement context, Map<String, String> prev, Map<String, String> next) {
         List<PatchOperation> operations = new ArrayList();
 
         for (Entry<String, String> entry : next.entrySet()) {
@@ -74,10 +83,16 @@ public class Diff {
     }
 
     /**
+     * <p>
+     * Diff child nodes.
+     * </p>
+     * 
+     * @param context
      * @param prev
      * @param next
+     * @return
      */
-    public static List<PatchOperation> diffChildren(VirtualElement context, VirtualNodeList prev, VirtualNodeList next) {
+    public static List<PatchOperation> diff(VirtualElement context, VirtualNodeList prev, VirtualNodeList next) {
         List<PatchOperation> operations = new ArrayList();
 
         int prevSize = prev.items.length;
