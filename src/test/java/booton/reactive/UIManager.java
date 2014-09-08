@@ -70,14 +70,14 @@ public class UIManager {
             VirtualElement next = widget.virtualize();
 
             // create patch to manipulate DOM
-            List<Patch<Element>> operations = Diff.diff(virtual, next);
+            List<Patch> patches = Diff.diff(virtual, next);
 
             // update virtual element
             virtual = next;
 
             // update real element
-            for (Patch<Element> operation : operations) {
-                operation.operate(real);
+            for (Patch patch : patches) {
+                patch.apply();
             }
         }
 
