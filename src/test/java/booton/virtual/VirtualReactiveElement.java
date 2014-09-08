@@ -14,7 +14,6 @@ import static js.lang.Global.*;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.Element;
-import js.dom.Node;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
@@ -50,7 +49,7 @@ public class VirtualReactiveElement extends VirtualElement implements Disposable
      * {@inheritDoc}
      */
     @Override
-    public Node createNode() {
+    public Element createNode() {
         Element e = document.createElement("span");
 
         disposable = events.to(v -> {

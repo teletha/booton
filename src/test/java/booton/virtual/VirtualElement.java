@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import js.dom.Element;
-import js.dom.Node;
-import js.util.HashMap;
 
 /**
  * @version 2014/09/04 23:22:40
@@ -44,20 +42,10 @@ public class VirtualElement extends VirtualNode<Element> {
     }
 
     /**
-     * @param prev
-     */
-    public VirtualElement(VirtualElement copy) {
-        super(copy.id);
-        this.name = copy.name;
-        this.attributes = new HashMap(copy.attributes);
-        this.children = copy.children;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    public Node createNode() {
+    public Element createNode() {
         dom = document.createElement(name);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {

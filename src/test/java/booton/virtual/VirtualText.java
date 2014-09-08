@@ -10,7 +10,6 @@
 package booton.virtual;
 
 import static js.lang.Global.*;
-import js.dom.Node;
 import js.dom.Text;
 
 /**
@@ -38,7 +37,7 @@ public class VirtualText extends VirtualNode<Text> {
      * {@inheritDoc}
      */
     @Override
-    public Node createNode() {
+    public Text createNode() {
         return dom = document.createTextNode(text);
     }
 }

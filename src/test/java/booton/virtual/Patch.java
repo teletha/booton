@@ -14,7 +14,7 @@ import js.dom.Node;
 /**
  * @version 2014/09/08 18:21:16
  */
-public abstract class PatchOperation {
+public abstract class Patch {
 
     /** The parent element. */
     protected final VirtualElement parent;
@@ -26,7 +26,7 @@ public abstract class PatchOperation {
      * 
      * @param parent A parent (context) element.
      */
-    protected PatchOperation(VirtualElement parent) {
+    protected Patch(VirtualElement parent) {
         this.parent = parent;
     }
 
@@ -42,13 +42,13 @@ public abstract class PatchOperation {
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName().toUpperCase();
+        return getClass().getSimpleName();
     }
 
     /**
      * @version 2014/08/29 9:19:56
      */
-    private static abstract class ChildOperation extends PatchOperation {
+    private static abstract class ChildPatch extends Patch {
 
         /** The target child node. */
         protected final VirtualNode child;
@@ -61,7 +61,7 @@ public abstract class PatchOperation {
          * @param parent A parent element.
          * @param child A target child node.
          */
-        private ChildOperation(VirtualElement parent, VirtualNode child) {
+        private ChildPatch(VirtualElement parent, VirtualNode child) {
             super(parent);
 
             this.child = child;
@@ -78,7 +78,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/08/29 9:49:18
      */
-    static class RemoveChild extends ChildOperation {
+    static class RemoveChild extends ChildPatch {
 
         /**
          * <p>
@@ -104,7 +104,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/08/29 9:49:18
      */
-    static class InsertChild extends ChildOperation {
+    static class InsertChild extends ChildPatch {
 
         /** The new contents to insert. */
         private final VirtualNode insert;
@@ -141,7 +141,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/08/29 12:45:20
      */
-    static class MoveChild extends ChildOperation {
+    static class MoveChild extends ChildPatch {
 
         /**
          * <p>
@@ -167,7 +167,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/08/29 12:45:20
      */
-    static class ReplaceChild extends ChildOperation {
+    static class ReplaceChild extends ChildPatch {
 
         /** The new contents to replace. */
         private final VirtualNode replace;
@@ -199,7 +199,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/09/08 18:19:19
      */
-    private static abstract class AttributeOperation extends PatchOperation {
+    private static abstract class AttributePatch extends Patch {
 
         /** The name. */
         protected final String name;
@@ -211,7 +211,7 @@ public abstract class PatchOperation {
          * @param name
          * @param value
          */
-        private AttributeOperation(VirtualElement parent, String name, String value) {
+        private AttributePatch(VirtualElement parent, String name, String value) {
             super(parent);
 
             this.name = name;
@@ -222,7 +222,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/08/31 8:20:20
      */
-    static class AddAttribute extends AttributeOperation {
+    static class AddAttribute extends AttributePatch {
 
         /**
          * <p>
@@ -249,7 +249,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/08/31 8:20:20
      */
-    static class ChangeAttribute extends AttributeOperation {
+    static class ChangeAttribute extends AttributePatch {
 
         /**
          * <p>
@@ -276,7 +276,7 @@ public abstract class PatchOperation {
     /**
      * @version 2014/08/31 8:20:20
      */
-    static class RemoveAttribute extends AttributeOperation {
+    static class RemoveAttribute extends AttributePatch {
 
         /**
          * <p>

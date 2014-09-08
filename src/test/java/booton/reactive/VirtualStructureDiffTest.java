@@ -17,7 +17,7 @@ import js.dom.NodeComparator;
 import org.junit.Test;
 
 import booton.virtual.Diff;
-import booton.virtual.PatchOperation;
+import booton.virtual.Patch;
 
 /**
  * @version 2014/09/05 15:45:45
@@ -42,7 +42,7 @@ public class VirtualStructureDiffTest {
      * @param next
      */
     private void assertDiff(VirtualStructure prev, VirtualStructure next, int expectedOperationCount) {
-        List<PatchOperation> ops = Diff.diff(prev.getRoot(), next.getRoot());
+        List<Patch> ops = Diff.diff(prev.getRoot(), next.getRoot());
 
         Node prevNode = prev.getRoot().createNode();
         Node nextNode = next.getRoot().createNode();
@@ -74,7 +74,7 @@ public class VirtualStructureDiffTest {
      * @param size
      * @return
      */
-    private String message(Node prev, Node next, List<PatchOperation> ops, int size) {
+    private String message(Node prev, Node next, List<Patch> ops, int size) {
         StringBuilder message = new StringBuilder("\r\n");
         message.append("PREV: ").append(prev).append("\r\n");
         message.append("NEXT: ").append(next).append("\r\n");

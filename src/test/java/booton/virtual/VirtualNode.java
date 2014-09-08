@@ -14,9 +14,10 @@ import js.dom.Node;
 /**
  * @version 2014/09/04 23:21:40
  */
-public abstract class VirtualNode<N extends Node> {
+public abstract class VirtualNode<D extends Node> {
 
-    public N dom;
+    /** The real DOM node. */
+    public D dom;
 
     /** The node identifier. */
     public final int id;
@@ -35,5 +36,5 @@ public abstract class VirtualNode<N extends Node> {
      * 
      * @return A created node.
      */
-    public abstract Node createNode();
+    public abstract D createNode();
 }

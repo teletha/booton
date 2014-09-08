@@ -23,9 +23,6 @@ import org.junit.Test;
  */
 public class DiffElementTest {
 
-    /** The reusable child list. */
-    private static final VirtualNode[] noChild = new VirtualNode[0];
-
     /** The reusable attribute map. */
     private static final Map<String, String> noAttr = new HashMap();
 
@@ -186,10 +183,20 @@ public class DiffElementTest {
 
     @Test
     public void nestComplex() {
-        VirtualElement e1 = e("root", e("child", e("grand")));
-        VirtualElement e2 = e("root", e("inserted", e("grand")), e("child", e("changed")));
+        VirtualElement e1 = root(e("child", e("grand")));
+        VirtualElement e2 = root(e("inserted", e("grand")), e("child", e("changed")));
 
         assertDiff(e1, e2, 2);
+    }
+
+    @Test
+    public void applyPatchTwice() throws Exception {
+        VirtualElement e1 = root(e("child"));
+        VirtualElement e2 = root(e("child", attr("a", "A")));
+        VirtualElement e3 = root(e("child", attr("a", "A"), e("grand")));
+
+        assertDiff(e1, e2, 1);
+        assertDiff(e1, e3, 1);
     }
 
     /**
@@ -199,7 +206,7 @@ public class DiffElementTest {
      * @param next
      */
     private void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
-        List<PatchOperation> ops = Diff.diff(prev, next);
+        List<Patch> ops = Diff.diff(prev, next);
 
         Node prevNode = prev.createNode();
         Node nextNode = next.createNode();
@@ -231,7 +238,7 @@ public class DiffElementTest {
      * @param size
      * @return
      */
-    private String message(Node prev, Node next, List<PatchOperation> ops, int size) {
+    private String message(Node prev, Node next, List<Patch> ops, int size) {
         StringBuilder message = new StringBuilder("\r\n");
         message.append("PREV:\r\n").append(prev).append("\r\n\r\n");
         message.append("NEXT:\r\n").append(next).append("\r\n\r\n");
