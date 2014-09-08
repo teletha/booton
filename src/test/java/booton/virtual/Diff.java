@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import booton.virtual.PatchListOperation.Insert;
-import booton.virtual.PatchListOperation.Last;
-import booton.virtual.PatchListOperation.Remove;
-import booton.virtual.PatchListOperation.Replace;
-import booton.virtual.PatchMapOperation.Add;
-import booton.virtual.PatchMapOperation.Change;
+import booton.virtual.PatchOperation.AddAttribute;
+import booton.virtual.PatchOperation.ChangeAttribute;
+import booton.virtual.PatchOperation.InsertChild;
+import booton.virtual.PatchOperation.MoveChild;
+import booton.virtual.PatchOperation.RemoveAttribute;
+import booton.virtual.PatchOperation.RemoveChild;
+import booton.virtual.PatchOperation.ReplaceChild;
 
 /**
  * @version 2014/09/08 16:29:52
@@ -44,20 +45,20 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<PatchMapOperation> diffAttribute(VirtualElement context, Map<String, String> prev, Map<String, String> next) {
-        List<PatchMapOperation> operations = new ArrayList();
+    public static List<PatchOperation> diffAttribute(VirtualElement context, Map<String, String> prev, Map<String, String> next) {
+        List<PatchOperation> operations = new ArrayList();
 
         for (Entry<String, String> entry : next.entrySet()) {
             String key = entry.getKey();
 
             if (!prev.containsKey(key)) {
-                operations.add(new Add(context, key, entry.getValue()));
+                operations.add(new AddAttribute(context, key, entry.getValue()));
             } else {
                 String prevValue = prev.get(key);
                 String nextValue = entry.getValue();
 
                 if (!prevValue.equals(nextValue)) {
-                    operations.add(new Change(context, key, nextValue));
+                    operations.add(new ChangeAttribute(context, key, nextValue));
                 }
             }
         }
@@ -66,7 +67,7 @@ public class Diff {
             String key = entry.getKey();
 
             if (!next.containsKey(key)) {
-                operations.add(new PatchMapOperation.Remove(context, key));
+                operations.add(new RemoveAttribute(context, key));
             }
         }
         return operations;
@@ -96,15 +97,15 @@ public class Diff {
                     int index = prev.indexOf(nextItem);
 
                     if (index == -1) {
-                        operations.add(new Insert(context, nextItem, null));
+                        operations.add(new InsertChild(context, null, nextItem));
                     } else {
-                        operations.add(new Last(context, prev.items[index]));
+                        operations.add(new MoveChild(context, prev.items[index]));
                     }
                 }
             } else {
                 if (nextSize <= nextPosition) {
                     // all next items are scanned, but prev items are remaining
-                    operations.add(new Remove(context, prev.items[prevPosition++]));
+                    operations.add(new RemoveChild(context, prev.items[prevPosition++]));
                 } else {
                     // prev and next items are remaining
                     VirtualNode prevItem = prev.items[prevPosition];
@@ -129,16 +130,16 @@ public class Diff {
 
                         if (nextItemInPrev == -1) {
                             if (prevItemInNext == -1) {
-                                operations.add(new Replace(context, nextItem, prevItem));
+                                operations.add(new ReplaceChild(context, prevItem, nextItem));
                                 prevPosition++;
                             } else {
-                                operations.add(new Insert(context, nextItem, prevItem));
+                                operations.add(new InsertChild(context, prevItem, nextItem));
                             }
                             nextPosition++;
                             actualManipulationPosition++;
                         } else {
                             if (prevItemInNext == -1) {
-                                operations.add(new Remove(context, prevItem));
+                                operations.add(new RemoveChild(context, prevItem));
                             } else {
                                 // both items are found in each other list
                                 // hold and skip the current value
@@ -152,110 +153,4 @@ public class Diff {
         }
         return operations;
     }
-    //
-    // /**
-    // * @param prev
-    // * @param next
-    // */
-    // public static List<PatchListOperation> diff(List prev, List next) {
-    // List<PatchListOperation> operations = new ArrayList();
-    //
-    // int prevSize = prev.size();
-    // int nextSize = next.size();
-    // int max = prevSize + nextSize;
-    // int prevPosition = 0;
-    // int nextPosition = 0;
-    // int actualManipulationPosition = 0;
-    //
-    // for (int i = 0; i < max; i++) {
-    // if (prevSize <= prevPosition) {
-    // if (nextSize <= nextPosition) {
-    // break; // all items were scanned
-    // } else {
-    // // all prev items are scanned, but next items are remaining
-    // Object nextItem = next.get(nextPosition++);
-    //
-    // if (prev.indexOf(nextItem) == -1) {
-    // operations.add(new Insert(nextItem, actualManipulationPosition++));
-    // } else {
-    // operations.add(new Last(nextItem));
-    // }
-    // }
-    // } else {
-    // if (nextSize <= nextPosition) {
-    // // all next items are scanned, but prev items are remaining
-    // operations.add(new Remove(prev.get(prevPosition++), actualManipulationPosition));
-    // } else {
-    // // prev and next items are remaining
-    // Object prevItem = prev.get(prevPosition);
-    // Object nextItem = next.get(nextPosition);
-    //
-    // if (prevItem.equals(nextItem)) {
-    // // same item
-    // actualManipulationPosition++;
-    // prevPosition++;
-    // nextPosition++;
-    // } else {
-    // // different item
-    // int nextItemInPrev = prev.indexOf(nextItem);
-    // int prevItemInNext = next.indexOf(prevItem);
-    //
-    // if (nextItemInPrev == -1) {
-    // if (prevItemInNext == -1) {
-    // operations.add(new Replace(prevItem, nextItem, actualManipulationPosition++));
-    // prevPosition++;
-    // } else {
-    // operations.add(new Insert(nextItem, actualManipulationPosition++));
-    // }
-    // nextPosition++;
-    // } else {
-    // if (prevItemInNext == -1) {
-    // operations.add(new Remove(prevItem, actualManipulationPosition));
-    // } else {
-    // // both items are found in each other list
-    // // hold and skip the current value
-    // actualManipulationPosition++;
-    // }
-    // prevPosition++;
-    // }
-    // }
-    // }
-    // }
-    // }
-    // return operations;
-    // }
-    //
-    // /**
-    // * @param prev
-    // * @param next
-    // * @return
-    // */
-    // public static List<PatchMapOperation> diff(Map<String, String> prev, Map<String, String>
-    // next) {
-    // List<PatchMapOperation> operations = new ArrayList();
-    //
-    // for (Entry<String, String> entry : next.entrySet()) {
-    // String key = entry.getKey();
-    //
-    // if (!prev.containsKey(key)) {
-    // operations.add(new Add(key, entry.getValue()));
-    // } else {
-    // String prevValue = prev.get(key);
-    // String nextValue = entry.getValue();
-    //
-    // if (!prevValue.equals(nextValue)) {
-    // operations.add(new Change(key, nextValue));
-    // }
-    // }
-    // }
-    //
-    // for (Entry<String, String> entry : prev.entrySet()) {
-    // String key = entry.getKey();
-    //
-    // if (!next.containsKey(key)) {
-    // operations.add(new PatchMapOperation.Remove(key));
-    // }
-    // }
-    // return operations;
-    // }
 }

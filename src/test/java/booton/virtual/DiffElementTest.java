@@ -30,27 +30,28 @@ public class DiffElementTest {
     private static final Map<String, String> noAttr = new HashMap();
 
     @Test
-    public void addAttribute() {
-        VirtualElement n1 = e("div");
-        VirtualElement n2 = e("div", attr("a", "A"));
-
-        assertDiff(n1, n2, 1);
+    public void changeAttributeValue() throws Exception {
+        assertDiff(rootAttr("a", "A"), rootAttr("a", "1"), 1);
+        assertDiff(rootAttr("a", "A", "b", "B"), rootAttr("a", "1", "b", "2"), 2);
+        assertDiff(rootAttr("a", "A"), rootAttr("a", "A"), 0);
     }
 
     @Test
-    public void removeAttribute() {
-        VirtualElement n1 = e("div", attr("a", "A"));
-        VirtualElement n2 = e("div");
-
-        assertDiff(n1, n2, 1);
+    public void removeAttribute() throws Exception {
+        assertDiff(rootAttr("a", "A"), rootAttr(), 1);
+        assertDiff(rootAttr("a", "A", "b", "B"), rootAttr("b", "B"), 1);
+        assertDiff(rootAttr("a", "A", "b", "B"), rootAttr(), 2);
     }
 
     @Test
-    public void replaceAttributeValue() {
-        VirtualElement n1 = e("div", attr("a", "A"));
-        VirtualElement n2 = e("div", attr("a", "B"));
+    public void addAttribute() throws Exception {
+        assertDiff(rootAttr(), rootAttr("a", "A"), 1);
+        assertDiff(rootAttr("a", "A"), rootAttr("a", "A", "b", "B"), 1);
+    }
 
-        assertDiff(n1, n2, 1);
+    @Test
+    public void changeAttribute() throws Exception {
+        assertDiff(rootAttr("a", "A"), rootAttr("b", "B"), 2);
     }
 
     @Test
@@ -131,11 +132,47 @@ public class DiffElementTest {
     }
 
     @Test
-    public void replaceChildElement() {
-        VirtualElement n1 = e("root", e("c1"));
-        VirtualElement n2 = e("root", e("c2"));
+    public void downChild() throws Exception {
+        assertDiff(root("a", "b", "c", "d"), root("b", "c", "d", "a"), 1);
+        assertDiff(root("a", "b", "c", "d"), root("b", "d", "c", "a"), 2);
+    }
 
-        assertDiff(n1, n2, 1);
+    @Test
+    public void replaceChild() {
+        assertDiff(root("a"), root("1"), 1);
+        assertDiff(root("a", "b", "c"), root("1", "2"), 3);
+        assertDiff(root("a", "b"), root("1", "2", "3"), 3);
+    }
+
+    @Test
+    public void complexChildOperation1() {
+        assertDiff(root("a", "b", "c"), root("0", "1", "a", "c"), 3);
+
+    }
+
+    @Test
+    public void complexChildOperation2() throws Exception {
+        assertDiff(root("a", "b", "c", "d", "e"), root("0", "d", "a"), 5);
+    }
+
+    @Test
+    public void complexChildOperation3() throws Exception {
+        assertDiff(root("a", "b", "c"), root("0", "b", "1", "a", "c"), 4);
+    }
+
+    @Test
+    public void complexChildOperation4() {
+        assertDiff(root("a", "b", "c", "d", "e"), root("0", "d", "e", "a"), 4);
+    }
+
+    @Test
+    public void complexChildOperation5() {
+        assertDiff(root("a", "b", "c", "d", "e"), root("0", "c", "d", "a"), 4);
+    }
+
+    @Test
+    public void complexChildOperation6() {
+        assertDiff(root("a", "b", "c"), root("0", "b", "1", "a", "2", "c"), 5);
     }
 
     @Test
@@ -202,7 +239,7 @@ public class DiffElementTest {
 
         for (int i = 0; i < ops.size(); i++) {
             try {
-                ops.get(i).operate();
+                ops.get(i).apply();
             } catch (IndexOutOfBoundsException e) {
                 AssertionError error = new AssertionError(message(prevNode, nextNode, ops, i));
                 error.addSuppressed(e);
@@ -262,6 +299,18 @@ public class DiffElementTest {
             elements[i] = e(children[i]);
         }
         return e("root", elements);
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
+    private static VirtualElement rootAttr(String... attributes) {
+        return e("root", attr(attributes));
     }
 
     /**
