@@ -14,7 +14,7 @@ import java.util.List;
 import js.dom.Element;
 import js.dom.Node;
 import booton.virtual.Diff;
-import booton.virtual.PatchOperation;
+import booton.virtual.Patch;
 import booton.virtual.VirtualElement;
 import booton.virtual.VirtualNode;
 
@@ -49,7 +49,7 @@ public abstract class Widget<V> {
      */
     public void materialize(Node node) {
         VirtualNode newly = virtualize();
-        List<PatchOperation<Element>> patches = Diff.diff(current, newly);
+        List<Patch<Element>> patches = Diff.diff(current, newly);
 
         if (!patches.isEmpty()) {
 

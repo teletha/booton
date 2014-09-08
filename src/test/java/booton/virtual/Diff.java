@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import booton.virtual.PatchOperation.AddAttribute;
-import booton.virtual.PatchOperation.ChangeAttribute;
-import booton.virtual.PatchOperation.InsertChild;
-import booton.virtual.PatchOperation.MoveChild;
-import booton.virtual.PatchOperation.RemoveAttribute;
-import booton.virtual.PatchOperation.RemoveChild;
-import booton.virtual.PatchOperation.ReplaceChild;
+import booton.virtual.Patch.AddAttribute;
+import booton.virtual.Patch.ChangeAttribute;
+import booton.virtual.Patch.InsertChild;
+import booton.virtual.Patch.MoveChild;
+import booton.virtual.Patch.RemoveAttribute;
+import booton.virtual.Patch.RemoveChild;
+import booton.virtual.Patch.ReplaceChild;
 
 /**
  * @version 2014/09/08 16:29:52
@@ -36,12 +36,12 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<PatchOperation> diff(VirtualElement prev, VirtualElement next) {
-        List<PatchOperation> operations = new ArrayList();
-        operations.addAll(diff(prev, prev.attributes, next.attributes));
-        operations.addAll(diff(prev, prev.children, next.children));
+    public static List<Patch> diff(VirtualElement prev, VirtualElement next) {
+        List<Patch> patches = new ArrayList();
+        patches.addAll(diff(prev, prev.attributes, next.attributes));
+        patches.addAll(diff(prev, prev.children, next.children));
 
-        return operations;
+        return patches;
     }
 
     /**
@@ -54,20 +54,20 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<PatchOperation> diff(VirtualElement context, Map<String, String> prev, Map<String, String> next) {
-        List<PatchOperation> operations = new ArrayList();
+    public static List<Patch> diff(VirtualElement context, Map<String, String> prev, Map<String, String> next) {
+        List<Patch> patches = new ArrayList();
 
         for (Entry<String, String> entry : next.entrySet()) {
             String key = entry.getKey();
 
             if (!prev.containsKey(key)) {
-                operations.add(new AddAttribute(context, key, entry.getValue()));
+                patches.add(new AddAttribute(context, key, entry.getValue()));
             } else {
                 String prevValue = prev.get(key);
                 String nextValue = entry.getValue();
 
                 if (!prevValue.equals(nextValue)) {
-                    operations.add(new ChangeAttribute(context, key, nextValue));
+                    patches.add(new ChangeAttribute(context, key, nextValue));
                 }
             }
         }
@@ -76,10 +76,10 @@ public class Diff {
             String key = entry.getKey();
 
             if (!next.containsKey(key)) {
-                operations.add(new RemoveAttribute(context, key));
+                patches.add(new RemoveAttribute(context, key));
             }
         }
-        return operations;
+        return patches;
     }
 
     /**
@@ -92,8 +92,8 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<PatchOperation> diff(VirtualElement context, VirtualNodeList prev, VirtualNodeList next) {
-        List<PatchOperation> operations = new ArrayList();
+    public static List<Patch> diff(VirtualElement context, VirtualNodeList prev, VirtualNodeList next) {
+        List<Patch> patches = new ArrayList();
 
         int prevSize = prev.items.length;
         int nextSize = next.items.length;
@@ -112,15 +112,15 @@ public class Diff {
                     int index = prev.indexOf(nextItem);
 
                     if (index == -1) {
-                        operations.add(new InsertChild(context, null, nextItem));
+                        patches.add(new InsertChild(context, null, nextItem));
                     } else {
-                        operations.add(new MoveChild(context, prev.items[index]));
+                        patches.add(new MoveChild(context, prev.items[index]));
                     }
                 }
             } else {
                 if (nextSize <= nextPosition) {
                     // all next items are scanned, but prev items are remaining
-                    operations.add(new RemoveChild(context, prev.items[prevPosition++]));
+                    patches.add(new RemoveChild(context, prev.items[prevPosition++]));
                 } else {
                     // prev and next items are remaining
                     VirtualNode prevItem = prev.items[prevPosition];
@@ -132,7 +132,7 @@ public class Diff {
                             VirtualElement prevElement = (VirtualElement) prevItem;
                             VirtualElement nextElement = (VirtualElement) nextItem;
 
-                            operations.addAll(diff(prevElement, nextElement));
+                            patches.addAll(diff(prevElement, nextElement));
                         }
 
                         actualManipulationPosition++;
@@ -145,16 +145,16 @@ public class Diff {
 
                         if (nextItemInPrev == -1) {
                             if (prevItemInNext == -1) {
-                                operations.add(new ReplaceChild(context, prevItem, nextItem));
+                                patches.add(new ReplaceChild(context, prevItem, nextItem));
                                 prevPosition++;
                             } else {
-                                operations.add(new InsertChild(context, prevItem, nextItem));
+                                patches.add(new InsertChild(context, prevItem, nextItem));
                             }
                             nextPosition++;
                             actualManipulationPosition++;
                         } else {
                             if (prevItemInNext == -1) {
-                                operations.add(new RemoveChild(context, prevItem));
+                                patches.add(new RemoveChild(context, prevItem));
                             } else {
                                 // both items are found in each other list
                                 // hold and skip the current value
@@ -166,6 +166,6 @@ public class Diff {
                 }
             }
         }
-        return operations;
+        return patches;
     }
 }

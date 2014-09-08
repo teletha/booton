@@ -15,7 +15,7 @@ import java.util.Objects;
 import js.dom.Element;
 import kiss.Disposable;
 import booton.virtual.Diff;
-import booton.virtual.PatchOperation;
+import booton.virtual.Patch;
 import booton.virtual.VirtualElement;
 
 /**
@@ -70,13 +70,13 @@ public class UIManager {
             VirtualElement next = widget.virtualize();
 
             // create patch to manipulate DOM
-            List<PatchOperation<Element>> operations = Diff.diff(virtual, next);
+            List<Patch<Element>> operations = Diff.diff(virtual, next);
 
             // update virtual element
             virtual = next;
 
             // update real element
-            for (PatchOperation<Element> operation : operations) {
+            for (Patch<Element> operation : operations) {
                 operation.operate(real);
             }
         }
