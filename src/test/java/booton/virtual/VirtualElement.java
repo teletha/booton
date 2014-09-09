@@ -10,10 +10,6 @@
 package booton.virtual;
 
 import static js.lang.Global.*;
-
-import java.util.Map;
-import java.util.Map.Entry;
-
 import js.dom.Element;
 
 /**
@@ -25,20 +21,18 @@ public class VirtualElement extends VirtualNode<Element> {
     public final String name;
 
     /** The attributes. */
-    public final Map<String, String> attributes;
+    public final VirtualKVS attributes = new VirtualKVS();
 
     /** The children node. */
-    public final VirtualNodeList children;
+    public final VirtualNodeList children = new VirtualNodeList();
 
     /**
      * @param string
      */
-    public VirtualElement(int id, String name, Map properties, VirtualNode... children) {
+    public VirtualElement(int id, String name) {
         super(id);
 
         this.name = name;
-        this.attributes = properties;
-        this.children = new VirtualNodeList(children);
     }
 
     /**
@@ -48,12 +42,12 @@ public class VirtualElement extends VirtualNode<Element> {
     public Element createNode() {
         dom = document.createElement(name);
 
-        for (Entry<String, String> attribute : attributes.entrySet()) {
-            dom.attr(attribute.getKey(), attribute.getValue());
+        for (int i = 0; i < attributes.names.length(); i++) {
+            dom.attr(attributes.names.get(i), attributes.values.get(i));
         }
 
-        for (VirtualNode child : children.items) {
-            dom.append(child.createNode());
+        for (int i = 0; i < children.items.length(); i++) {
+            dom.append(children.items.get(i).createNode());
         }
         return dom;
     }

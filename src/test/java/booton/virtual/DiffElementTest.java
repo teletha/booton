@@ -12,6 +12,7 @@ package booton.virtual;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import js.dom.Node;
 import js.dom.NodeComparator;
@@ -307,7 +308,7 @@ public class DiffElementTest {
      * @return
      */
     private static VirtualElement e(String key, VirtualNode... children) {
-        return new VirtualElement(key.hashCode(), key, noAttr, children);
+        return e(key, noAttr, children);
     }
 
     /**
@@ -319,7 +320,17 @@ public class DiffElementTest {
      * @return
      */
     private static VirtualElement e(String key, Map<String, String> attributes, VirtualNode... children) {
-        return new VirtualElement(key.hashCode(), key, attributes, children);
+        VirtualElement e = new VirtualElement(key.hashCode(), key);
+
+        for (Entry<String, String> attribute : attributes.entrySet()) {
+            e.attributes.set(attribute.getKey(), attribute.getValue());
+        }
+
+        for (VirtualNode child : children) {
+            e.children.items.push(child);
+        }
+
+        return e;
     }
 
     /**

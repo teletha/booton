@@ -7,10 +7,11 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package booton.virtual;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import javafx.beans.value.ObservableValue;
@@ -18,8 +19,7 @@ import javafx.collections.ObservableList;
 
 import kiss.I;
 import booton.css.CSS;
-import booton.virtual.VirtualElement;
-import booton.virtual.VirtualReactiveElement;
+import booton.reactive.Widget;
 
 /**
  * @version 2014/09/04 16:39:32
@@ -29,17 +29,14 @@ public class VirtualStructure {
     /** The node stack. */
     private final Deque<VirtualElement> nodes = new ArrayDeque();
 
-    /** The current node. */
-    private VirtualElement current;
-
-    /** The ccurent value. */
+    /** The current value. */
     private Object value;
 
     /**
      * 
      */
     public VirtualStructure() {
-        this(new VirtualElement("div"));
+        this(new VirtualElement(0, "div"));
     }
 
     /**
@@ -47,7 +44,6 @@ public class VirtualStructure {
      */
     public VirtualStructure(VirtualElement root) {
         nodes.add(root);
-        current = root;
     }
 
     /**
@@ -67,20 +63,10 @@ public class VirtualStructure {
      * @return A styler.
      */
     public void h(Class<? extends CSS> css, Object... children) {
+        int id = Objects.hash(children);
 
-    }
-
-    /**
-     * <p>
-     * Add child item.
-     * </p>
-     * 
-     * @param child
-     */
-    private void add(Object child) {
-        if (child instanceof ObservableValue) {
-            current.children.add(new VirtualReactiveElement("div", (ObservableValue) child));
-        } else {
+        for (Object child : children) {
+            add(id, child);
         }
     }
 
@@ -101,23 +87,37 @@ public class VirtualStructure {
      * @return A styler.
      */
     public void h(Class<? extends CSS> css, Runnable children) {
+        add(Objects.hash(children), children);
     }
 
-    public <T> void v(ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, ObservableValue<? extends Predicate<T>> filter) {
-        for (T item : list) {
-            Widget<T> child = I.make(childWidgetClass);
-            child.context = item;
-
-            child.virtualize(this);
-        }
+    public <T> void h(Class<? extends CSS> css, ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, ObservableValue<? extends Predicate<T>> filter) {
+        h(css, () -> {
+            for (T item : list) {
+                Widget<T> child = I.make(childWidgetClass);
+    
+                add(Objects.hash(item), child);
+            }
+        });
     }
 
-    public <T> void v(Class<? extends CSS> css, ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, ObservableValue<? extends Predicate<T>> filter) {
-        for (T item : list) {
-            Widget<T> child = I.make(childWidgetClass);
-            child.context = item;
-
-            child.virtualize(this);
+    /**
+     * <p>
+     * Add child item.
+     * </p>
+     * 
+     * @param child
+     */
+    private void add(int id, Object child) {
+        if (child instanceof ObservableValue) {
+            nodes.peekLast().children.items.push(new VirtualReactiveElement(id, "div", (ObservableValue) child));
+        } else if (child instanceof Runnable) {
+            VirtualElement e = new VirtualElement(id, "div");
+            nodes.peekLast().children.items.push(e);
+            nodes.addLast(e);
+            ((Runnable) child).run();
+            nodes.pollLast();
+        } else {
+            nodes.peekLast().children.items.push(new VirtualText(id, String.valueOf(child)));
         }
     }
 

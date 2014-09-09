@@ -9,6 +9,8 @@
  */
 package booton.virtual;
 
+import js.lang.NativeArray;
+
 /**
  * <p>
  * Optimized list for child node container.
@@ -19,13 +21,12 @@ package booton.virtual;
 public class VirtualNodeList {
 
     /** The child nodes. */
-    public final VirtualNode[] items;
+    public final NativeArray<VirtualNode> items = new NativeArray();
 
     /**
      * @param children
      */
-    public VirtualNodeList(VirtualNode[] children) {
-        this.items = children;
+    public VirtualNodeList() {
     }
 
     /**
@@ -37,8 +38,8 @@ public class VirtualNodeList {
      * @return A index of the specified node.
      */
     public int indexOf(VirtualNode node) {
-        for (int index = 0, length = items.length; index < length; index++) {
-            if (items[index].id == node.id) {
+        for (int index = 0, length = items.length(); index < length; index++) {
+            if (items.get(index).id == node.id) {
                 return index;
             }
         }

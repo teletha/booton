@@ -30,6 +30,7 @@ import booton.reactive.TodoWidgetStyle.CLEAR;
 import booton.reactive.TodoWidgetStyle.FOOTER;
 import booton.reactive.TodoWidgetStyle.LIST;
 import booton.reactive.css.DynamicStyle;
+import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/09/01 15:14:06
@@ -152,30 +153,12 @@ public class TodoWidget extends Widget {
         int imcompleted = incompletedSize.intValue();
 
         box.h(input);
-        box.v(LIST.class, todos, ShowLine.class, filter);
+        box.h(LIST.class, todos, ShowLine.class, filter);
         box.h(FOOTER.class, () -> {
             box.h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
             box.h(all, active, completed);
             box.h(CLEAR.class, clear);
         });
-    }
-
-    /**
-     * @version 2014/09/08 1:44:32
-     */
-    private class Structure extends VirtualStructure {
-
-        {
-            int imcompleted = incompletedSize.intValue();
-
-            h(input);
-            v(LIST.class, todos, ShowLine.class, filter);
-            h(FOOTER.class, () -> {
-                h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
-                h(all, active, completed);
-                h(CLEAR.class, clear);
-            });
-        }
     }
 
     /**

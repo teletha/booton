@@ -9,13 +9,10 @@
  */
 package booton.reactive;
 
-import java.util.List;
-
 import js.dom.Node;
-import booton.virtual.Diff;
-import booton.virtual.Patch;
 import booton.virtual.VirtualElement;
 import booton.virtual.VirtualNode;
+import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/21 13:31:25
@@ -47,11 +44,6 @@ public abstract class Widget<V> {
      * @param node
      */
     public void materialize(Node node) {
-        VirtualNode newly = virtualize();
-        List<Patch> patches = Diff.diff(current, newly);
 
-        if (!patches.isEmpty()) {
-
-        }
     }
 }

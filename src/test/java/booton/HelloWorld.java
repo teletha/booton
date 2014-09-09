@@ -9,7 +9,11 @@
  */
 package booton;
 
-import booton.css.CSS;
+import js.lang.Global;
+import booton.reactive.TodoWidget;
+import booton.reactive.UIManager;
+import booton.reactive.Widget;
+import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/03/08 11:13:39
@@ -26,13 +30,20 @@ public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        System.out.println(new Def());
+        UIManager.render(Global.document.getElementById("Content"), new TodoWidget());
     }
 
-    private static class Def extends CSS {
+    /**
+     * @version 2014/09/09 14:50:03
+     */
+    private static class Weee extends Widget {
 
-        {
-            font.size.large();
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize(VirtualStructure box) {
+            box.h("test");
         }
     }
 }

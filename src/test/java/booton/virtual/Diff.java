@@ -11,8 +11,6 @@ package booton.virtual;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import booton.virtual.Patch.AddAttribute;
 import booton.virtual.Patch.ChangeAttribute;
@@ -54,17 +52,18 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<Patch> diff(VirtualElement context, Map<String, String> prev, Map<String, String> next) {
+    public static List<Patch> diff(VirtualElement context, VirtualKVS prev, VirtualKVS next) {
         List<Patch> patches = new ArrayList();
 
-        for (Entry<String, String> entry : next.entrySet()) {
-            String key = entry.getKey();
+        for (int nextIndex = 0; nextIndex < next.names.length(); nextIndex++) {
+            String key = next.names.get(nextIndex);
+            int prevIndex = prev.names.indexOf(key);
 
-            if (!prev.containsKey(key)) {
-                patches.add(new AddAttribute(context, key, entry.getValue()));
+            if (prevIndex == -1) {
+                patches.add(new AddAttribute(context, key, next.values.get(nextIndex)));
             } else {
-                String prevValue = prev.get(key);
-                String nextValue = entry.getValue();
+                String prevValue = prev.values.get(prevIndex);
+                String nextValue = next.values.get(nextIndex);
 
                 if (!prevValue.equals(nextValue)) {
                     patches.add(new ChangeAttribute(context, key, nextValue));
@@ -72,10 +71,10 @@ public class Diff {
             }
         }
 
-        for (Entry<String, String> entry : prev.entrySet()) {
-            String key = entry.getKey();
+        for (int i = 0; i < prev.names.length(); i++) {
+            String key = prev.names.get(i);
 
-            if (!next.containsKey(key)) {
+            if (next.names.indexOf(key) == -1) {
                 patches.add(new RemoveAttribute(context, key));
             }
         }
@@ -95,8 +94,8 @@ public class Diff {
     public static List<Patch> diff(VirtualElement context, VirtualNodeList prev, VirtualNodeList next) {
         List<Patch> patches = new ArrayList();
 
-        int prevSize = prev.items.length;
-        int nextSize = next.items.length;
+        int prevSize = prev.items.length();
+        int nextSize = next.items.length();
         int max = prevSize + nextSize;
         int prevPosition = 0;
         int nextPosition = 0;
@@ -108,23 +107,23 @@ public class Diff {
                     break; // all items were scanned
                 } else {
                     // all prev items are scanned, but next items are remaining
-                    VirtualNode nextItem = next.items[nextPosition++];
+                    VirtualNode nextItem = next.items.get(nextPosition++);
                     int index = prev.indexOf(nextItem);
 
                     if (index == -1) {
                         patches.add(new InsertChild(context, null, nextItem));
                     } else {
-                        patches.add(new MoveChild(context, prev.items[index]));
+                        patches.add(new MoveChild(context, prev.items.get(index)));
                     }
                 }
             } else {
                 if (nextSize <= nextPosition) {
                     // all next items are scanned, but prev items are remaining
-                    patches.add(new RemoveChild(context, prev.items[prevPosition++]));
+                    patches.add(new RemoveChild(context, prev.items.get(prevPosition++)));
                 } else {
                     // prev and next items are remaining
-                    VirtualNode prevItem = prev.items[prevPosition];
-                    VirtualNode nextItem = next.items[nextPosition];
+                    VirtualNode prevItem = prev.items.get(prevPosition);
+                    VirtualNode nextItem = next.items.get(nextPosition);
 
                     if (prevItem.id == nextItem.id) {
                         // same item

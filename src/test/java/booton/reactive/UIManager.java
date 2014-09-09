@@ -32,9 +32,14 @@ public class UIManager {
      * @param widget A rendering widget.
      */
     public static void render(Element root, Widget widget) {
+        System.out.println("render");
         Objects.nonNull(root);
+        System.out.println("render");
         Objects.nonNull(widget);
-
+        System.out.println("render");
+        Rendering rendering = new Rendering(root, widget);
+        System.out.println("render");
+        rendering.execute();
     }
 
     /**
@@ -49,7 +54,7 @@ public class UIManager {
         private final Element real;
 
         /** The virtual root element. */
-        private VirtualElement virtual = new VirtualElement();
+        private VirtualElement virtual = new VirtualElement(0, "div");
 
         /**
          * @param root A target to DOM element to render widget.
@@ -65,7 +70,7 @@ public class UIManager {
          * Render UI if needed.
          * </p>
          */
-        private void render() {
+        private void execute() {
             // create new virtual element
             VirtualElement next = widget.virtualize();
 
@@ -73,10 +78,12 @@ public class UIManager {
             List<Patch> patches = Diff.diff(virtual, next);
 
             // update virtual element
+            virtual.dom = real;
             virtual = next;
 
             // update real element
             for (Patch patch : patches) {
+                System.out.println(patch);
                 patch.apply();
             }
         }
