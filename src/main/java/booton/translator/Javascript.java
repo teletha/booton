@@ -76,7 +76,8 @@ public class Javascript {
     private static final Constructor primitiveLongConstructor;
 
     /** The primitive types. */
-    private static final List<Class<?>> primitives = Arrays.asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
+    private static final List<Class<?>> primitives = Arrays
+            .asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
 
     /** The fixed id for primitives. */
     private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);

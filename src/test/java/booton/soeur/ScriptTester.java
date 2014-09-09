@@ -297,6 +297,9 @@ public class ScriptTester {
                 Throwable cause = e.getCause();
 
                 if (cause instanceof EcmaError) {
+                    EcmaError ecmaError = (EcmaError) cause;
+                    System.out.println(ecmaError.lineNumber() + "  " + ecmaError.details() + "  " + ecmaError
+                            .getScriptStackTrace());
                     throw new ScriptRuntimeError(code, (EcmaError) cause);
                 } else {
                     // error in boot.js
@@ -580,7 +583,8 @@ public class ScriptTester {
                     js = Character.valueOf((char) (((Double) js).intValue() + 48));
                 }
                 if (js instanceof NativeObject) {
-                    js = NativeObject.callMethod((NativeObject) js, Javascript.computeMethodName(Object.class, "toString", "()Ljava/lang/String;"), new Object[] {});
+                    js = NativeObject.callMethod((NativeObject) js, Javascript
+                            .computeMethodName(Object.class, "toString", "()Ljava/lang/String;"), new Object[] {});
                 }
                 assert ((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {

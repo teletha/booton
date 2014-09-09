@@ -73,7 +73,8 @@ class JSMethod extends Parameterizable {
      * @since 1.8
      */
     public boolean isDefault() {
-        return (getModifiers() & (JSModifier.ABSTRACT | JSModifier.PUBLIC | JSModifier.STATIC)) == JSModifier.PUBLIC && getDeclaringClass().isInterface();
+        return (getModifiers() & (JSModifier.ABSTRACT | JSModifier.PUBLIC | JSModifier.STATIC)) == JSModifier.PUBLIC && getDeclaringClass()
+                .isInterface();
     }
 
     /**
@@ -261,6 +262,7 @@ class JSMethod extends Parameterizable {
         if (mod != 0) {
             builder.append(Modifier.toString(mod)).append(' ');
         }
+
         builder.append(getTypeName(getReturnType())).append(' ');
         builder.append(getTypeName(getDeclaringClass())).append('.');
         builder.append(getName()).append('(');
