@@ -40,7 +40,7 @@ public class VirtualReactiveElement extends VirtualElement implements Disposable
      * @param tagName
      */
     public VirtualReactiveElement(int id, String tagName, Events events) {
-        super(id, tagName, null);
+        super(id, tagName);
 
         this.events = events;
     }

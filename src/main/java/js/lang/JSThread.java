@@ -10,6 +10,8 @@
 package js.lang;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.ArrayList;
+import java.util.List;
 
 import booton.translator.JavaAPIProvider;
 
@@ -21,6 +23,9 @@ class JSThread {
 
     /** The javascript main thread. */
     private static final Thread main = new Thread();
+
+    /** The uncaught exceptions. */
+    private static final List<Throwable> errors = new ArrayList();
 
     /** This filed is null unless explicitly set. */
     private static volatile UncaughtExceptionHandler defaultUncaughtExceptionHandler;
@@ -397,6 +402,13 @@ class JSThread {
      */
     public static void setDefaultUncaughtExceptionHandler(UncaughtExceptionHandler handler) {
         defaultUncaughtExceptionHandler = handler;
+
+        if (!errors.isEmpty()) {
+            for (Throwable error : errors) {
+                defaultUncaughtExceptionHandler.uncaughtException(null, error);
+            }
+            errors.clear();
+        }
     }
 
     /**
@@ -437,8 +449,16 @@ class JSThread {
      * @param error
      */
     static void handleUncaughtException(Object error) {
+        Throwable wrap = JSThrowable.wrap(error);
+
         if (defaultUncaughtExceptionHandler != null) {
-            defaultUncaughtExceptionHandler.uncaughtException(null, JSThrowable.wrap(error));
+            defaultUncaughtExceptionHandler.uncaughtException(null, wrap);
+        } else {
+            System.out.println(wrap.getMessage());
+            wrap.printStackTrace();
+
+            errors.add(wrap);
         }
     }
+
 }

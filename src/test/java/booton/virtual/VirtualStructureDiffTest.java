@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package booton.virtual;
 
 import java.util.List;
 
@@ -16,16 +16,13 @@ import js.dom.NodeComparator;
 
 import org.junit.Test;
 
-import booton.virtual.Diff;
-import booton.virtual.Patch;
-
 /**
  * @version 2014/09/05 15:45:45
  */
 public class VirtualStructureDiffTest {
 
     @Test
-    public void diff() {
+    public void text() {
         VirtualStructure box1 = new VirtualStructure();
         box1.h("text");
 
@@ -35,11 +32,29 @@ public class VirtualStructureDiffTest {
         assertDiff(box1, box2, 1);
     }
 
+    @Test
+    public void childText() {
+        VirtualStructure box1 = new VirtualStructure();
+        box1.h(() -> {
+            box1.h("text");
+        });
+
+        VirtualStructure box2 = new VirtualStructure();
+        box2.h(() -> {
+            box2.h("change");
+        });
+
+        assertDiff(box1, box2, 1);
+    }
+
     /**
+     * <p>
      * Assert map diff.
+     * </p>
      * 
      * @param prev
      * @param next
+     * @param expectedOperationCount
      */
     private void assertDiff(VirtualStructure prev, VirtualStructure next, int expectedOperationCount) {
         List<Patch> ops = Diff.diff(prev.getRoot(), next.getRoot());
@@ -65,12 +80,13 @@ public class VirtualStructureDiffTest {
     }
 
     /**
+     * <p>
      * Helper to write erro message.
+     * </p>
      * 
      * @param prev
      * @param next
      * @param ops
-     * @param snapshots
      * @param size
      * @return
      */
