@@ -44,7 +44,8 @@ public class GenericMethodTest {
 
     @Test
     public void parameterVariables() throws Exception {
-        Method method = MultipleVariables.class.getDeclaredMethod("method", Runnable.class, CharSequence.class, List.class);
+        Method method = MultipleVariables.class
+                .getDeclaredMethod("method", Runnable.class, CharSequence.class, List.class);
         Class[] classes = method.getParameterTypes();
         assert classes[0] == Runnable.class;
         assert classes[1] == CharSequence.class;

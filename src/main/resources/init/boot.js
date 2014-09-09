@@ -86,6 +86,7 @@ function boot(global) {
       }
     
       // Default superClass is native Object.
+      console.log("SUPER " + superClassName + " FROM " + name);
       var superClass = boot[superClassName] || Object;
 
       // This is actual counstructor of class to define.
@@ -152,6 +153,7 @@ function boot(global) {
             });
 
             // invoke static initializer at first time access.
+            console.log(name, init);
             init();
             init = null;
 

@@ -352,7 +352,10 @@ class JavaMetadataCompiler {
             }
 
             // code.append(modifier);
-            code.append(modifier, ",\"" + JavaAPIProviders.revert(clazz).getName() + "\"", ",", new JavaSignatureCompiler(clazz.getTypeParameters()), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz.getGenericInterfaces()));
+            code
+                    .append(modifier, ",\"" + JavaAPIProviders.revert(clazz).getName() + "\"", ",", new JavaSignatureCompiler(clazz
+                            .getTypeParameters()), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz
+                            .getGenericInterfaces()));
         }
     }
 
@@ -378,7 +381,8 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void defineMetadata() {
-            code.append(field.getModifiers(), ",\"", field.getName(), "\",", new JavaSignatureCompiler(field.getGenericType()));
+            code.append(field.getModifiers(), ",\"", field.getName(), "\",", new JavaSignatureCompiler(field
+                    .getGenericType()));
         }
     }
 

@@ -21,7 +21,7 @@ import booton.soeur.ScriptRunner;
 import booton.translator.annotation.PrimitiveMarker;
 
 /**
- * @version 2013/09/10 23:57:01
+ * @version 2014/09/09 22:32:26
  */
 @RunWith(ScriptRunner.class)
 public class MethodTest {
@@ -54,6 +54,9 @@ public class MethodTest {
 
         method = ExtendedMethods.class.getMethod("extendedMethod");
         assert method.getReturnType() == void.class;
+
+        method = Methods.class.getDeclaredMethod("packageMethod");
+        assert method.getReturnType() == Object.class;
     }
 
     /**
@@ -70,6 +73,11 @@ public class MethodTest {
          * 
          */
         private native Number privateMethod(int value);
+
+        /**
+         * 
+         */
+        private native Object packageMethod();
     }
 
     /**

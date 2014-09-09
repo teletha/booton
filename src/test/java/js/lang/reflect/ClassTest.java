@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import org.junit.Test;
@@ -24,7 +25,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
- * @version 2013/09/03 21:43:55
+ * @version 2014/09/09 22:32:12
  */
 @RunWith(ScriptRunner.class)
 public class ClassTest {
@@ -108,6 +109,17 @@ public class ClassTest {
     }
 
     @Test
+    public void getGenericSuperclass() throws Exception {
+        assert ExtendedClass.class.getGenericSuperclass() == SuperClass.class;
+        assert SuperClass.class.getGenericSuperclass() == Object.class;
+        assert Object.class.getGenericSuperclass() == null;
+
+        assert Interface.class.getGenericSuperclass() == null;
+        assert ExtendedInterface.class.getGenericSuperclass() == null;
+        assert int.class.getGenericSuperclass() == null;
+    }
+
+    @Test
     public void getInterfaces() throws Exception {
         assert ExtendedClass.class.getInterfaces().length == 0;
         assert SuperClass.class.getInterfaces().length == 0;
@@ -123,6 +135,26 @@ public class ClassTest {
         assert interfaces[0] == ExtendedInterface.class;
 
         interfaces = ImplementdExtendedClass.class.getInterfaces();
+        assert interfaces.length == 1;
+        assert interfaces[0] == ExtendedInterface.class;
+    }
+
+    @Test
+    public void getGenericInterfaces() throws Exception {
+        assert ExtendedClass.class.getGenericInterfaces().length == 0;
+        assert SuperClass.class.getGenericInterfaces().length == 0;
+        assert Object.class.getGenericInterfaces().length == 0;
+        assert Interface.class.getGenericInterfaces().length == 0;
+
+        Type[] interfaces = ExtendedInterface.class.getGenericInterfaces();
+        assert interfaces.length == 1;
+        assert interfaces[0] == Interface.class;
+
+        interfaces = ImplementdClass.class.getGenericInterfaces();
+        assert interfaces.length == 1;
+        assert interfaces[0] == ExtendedInterface.class;
+
+        interfaces = ImplementdExtendedClass.class.getGenericInterfaces();
         assert interfaces.length == 1;
         assert interfaces[0] == ExtendedInterface.class;
     }

@@ -334,7 +334,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
                 char ch = name.charAt(0);
 
                 if (ch == '$' && name.length() != 1) {
-                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, (Class) (Object) this, prototype, prototype.getPropertyAs(NativeFunction.class, name), definition.getPropertyAs(NativeArray.class, name));
+                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, (Class) (Object) this, prototype, prototype
+                            .getPropertyAs(NativeFunction.class, name), definition
+                            .getPropertyAs(NativeArray.class, name));
                     privateConstructors.put(hash("", constructor.getParameterTypes()), constructor);
                 }
             }
@@ -1093,7 +1095,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @since 1.5
      */
     public Type getGenericSuperclass() {
-        if (superclassType == null) {
+        if (superclassType == null && (Object) this != Object.class && !isPrimitive()) {
             superclassType = (Type) new Signature((String) metadata.get(2), this).types.get(0);
             metadata.deleteProperty(2);
         }

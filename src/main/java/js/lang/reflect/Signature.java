@@ -82,7 +82,8 @@ class Signature {
             }
 
             if (c == '<') {
-                return new Parameterized(signature.substring(0, index), split(signature.substring(index + 1, signature.length() - 1), ','), declaration);
+                return new Parameterized(signature.substring(0, index), split(signature.substring(index + 1, signature
+                        .length() - 1), ','), declaration);
             }
         }
         return JSClass.forName(signature);
@@ -156,7 +157,8 @@ class Signature {
         }
 
         if (type instanceof Array) {
-            return (Class) (Object) ((JSClass) (Object) convert(((GenericArrayType) type).getGenericComponentType())).getArrayClass();
+            return (Class) (Object) ((JSClass) (Object) convert(((GenericArrayType) type).getGenericComponentType()))
+                    .getArrayClass();
         }
         return (Class) type;
     }
@@ -294,7 +296,8 @@ class Signature {
             if (obj instanceof TypeVariable) {
                 TypeVariable variable = (TypeVariable) obj;
 
-                return variable.getName().equals(name) && variable.getGenericDeclaration() == declaration && Arrays.equals(variable.getBounds(), bounds);
+                return variable.getName().equals(name) && variable.getGenericDeclaration() == declaration && Arrays
+                        .equals(variable.getBounds(), bounds);
             }
             return false;
         }

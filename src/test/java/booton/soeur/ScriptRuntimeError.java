@@ -40,10 +40,15 @@ public class ScriptRuntimeError extends Error {
         List<StackTraceElement> list = new ArrayList();
 
         for (int i = 0; i < elements.length; i++) {
-            int line = elements[i].lineNumber;
+            ScriptStackElement element = elements[i];
+            int line = element.lineNumber;
 
             if (1 < line) {
-                list.add(source.search(elements[i].lineNumber));
+                if (element.fileName.endsWith(".js")) {
+                    list.add(new StackTraceElement("", "", element.fileName, element.lineNumber));
+                } else {
+                    list.add(source.search(elements[i].lineNumber));
+                }
             }
         }
         setStackTrace(list.toArray(new StackTraceElement[list.size()]));

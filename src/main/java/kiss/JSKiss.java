@@ -42,8 +42,18 @@ import javax.script.ScriptException;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 import js.lang.Global;
 import js.lang.NativeArray;
@@ -88,6 +98,18 @@ class JSKiss {
         lifestyles.put(List.class, new Prototype(ArrayList.class));
         lifestyles.put(Map.class, new Prototype(HashMap.class));
         lifestyles.put(Prototype.class, new Prototype(Prototype.class));
+        lifestyles.put(ListProperty.class, () -> {
+            return new SimpleListProperty(FXCollections.observableArrayList());
+        });
+        lifestyles.put(ObservableList.class, FXCollections::observableArrayList);
+        lifestyles.put(MapProperty.class, () -> {
+            return new SimpleMapProperty(FXCollections.observableHashMap());
+        });
+        lifestyles.put(ObservableMap.class, FXCollections::observableHashMap);
+        lifestyles.put(SetProperty.class, () -> {
+            return new SimpleSetProperty(FXCollections.observableSet());
+        });
+        lifestyles.put(ObservableSet.class, FXCollections::observableSet);
     }
 
     /**
@@ -671,7 +693,8 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
+                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles
+                            .lookup()
                             .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
                     prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
                 }
@@ -741,7 +764,8 @@ class JSKiss {
             if (object != null) {
                 Class clazz = object.getPropertyAs(Class.class, "$");
 
-                if (((Modifier.INTERFACE | Modifier.ABSTRACT) & clazz.getModifiers()) == 0 && type != clazz && type.isAssignableFrom(clazz)) {
+                if (((Modifier.INTERFACE | Modifier.ABSTRACT) & clazz.getModifiers()) == 0 && type != clazz && type
+                        .isAssignableFrom(clazz)) {
                     matched.add(clazz);
                 }
             }

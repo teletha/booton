@@ -33,9 +33,7 @@ class JavaSignatureCompiler {
      * @param separator
      */
     JavaSignatureCompiler(Type type) {
-        if (type != Object.class) {
-            compile(type);
-        }
+        compile(type);
     }
 
     /**
