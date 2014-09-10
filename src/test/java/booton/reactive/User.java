@@ -86,7 +86,7 @@ public class User {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.publish(event);
+        button.publisher.publish(event);
     }
 
     /**

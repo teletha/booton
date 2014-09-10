@@ -9,6 +9,7 @@
  */
 package booton.reactive;
 
+import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/21 17:09:43
@@ -23,4 +24,10 @@ public class Button extends UI<Button> {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualize(VirtualStructure box) {
+    }
 }

@@ -32,13 +32,10 @@ public class UIManager {
      * @param widget A rendering widget.
      */
     public static void render(Element root, Widget widget) {
-        System.out.println("render");
         Objects.nonNull(root);
-        System.out.println("render");
         Objects.nonNull(widget);
-        System.out.println("render");
+
         Rendering rendering = new Rendering(root, widget);
-        System.out.println("render");
         rendering.execute();
     }
 
