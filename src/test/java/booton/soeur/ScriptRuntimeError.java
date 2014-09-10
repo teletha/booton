@@ -45,7 +45,7 @@ public class ScriptRuntimeError extends Error {
 
             if (1 < line) {
                 if (element.fileName.endsWith(".js")) {
-                    list.add(new StackTraceElement("", "", element.fileName, element.lineNumber));
+                    list.add(new StackTraceElement(element.fileName, "", element.fileName, element.lineNumber));
                 } else {
                     list.add(source.search(elements[i].lineNumber));
                 }

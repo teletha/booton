@@ -44,7 +44,7 @@ public class TodoWidget extends Widget {
     public final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
 
     /** The completed tasks. */
-    final IntegerBinding completedSize = Bindings.size(log(todos).filtered(item -> item.completed.get()));
+    final IntegerBinding completedSize = Bindings.size(todos.filtered(item -> item.completed.get()));
 
     /** The incompleted tasks. */
     final NumberBinding incompletedSize = todos.sizeProperty().subtract(completedSize);
@@ -59,12 +59,6 @@ public class TodoWidget extends Widget {
             // font.bold();
         }
     };
-
-    private static <T> T log(T value) {
-        System.out.println(value);
-
-        return value;
-    }
 
     /** The input field. */
     final Input input = new Input()

@@ -179,7 +179,7 @@ public class Translator<T> implements Extensible {
         }
 
         try {
-            Method method = getClass().getMethod(methodName, parameterTypes);
+            Method method = translator.getMethod(methodName, parameterTypes);
 
             if (method.getDeclaringClass() == Object.class) {
                 throw new NoSuchMethodException();

@@ -297,9 +297,6 @@ public class ScriptTester {
                 Throwable cause = e.getCause();
 
                 if (cause instanceof EcmaError) {
-                    EcmaError ecmaError = (EcmaError) cause;
-                    System.out.println(ecmaError.lineNumber() + "  " + ecmaError.details() + "  " + ecmaError
-                            .getScriptStackTrace());
                     throw new ScriptRuntimeError(code, (EcmaError) cause);
                 } else {
                     // error in boot.js
