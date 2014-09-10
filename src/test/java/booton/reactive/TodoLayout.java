@@ -9,26 +9,21 @@
  */
 package booton.reactive;
 
-import javafx.beans.value.ObservableValue;
-
-import kiss.Events;
-import booton.virtual.VirtualStructure;
+import booton.reactive.layout.Layout;
 
 /**
- * @version 2014/08/22 11:27:22
+ * @version 2014/09/10 14:02:07
  */
-public class Output<V> extends UI {
-
-    protected Events<V> value;
-
-    public Output(ObservableValue<V> value) {
-
-    }
+public class TodoLayout extends Layout<TodoWidget> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure box) {
+    protected void width1024() {
+        int imcompleted = w.incompletedSize.intValue();
+
+        lay(w.input);
+        lay($(imcompleted, imcompleted < 2 ? " item" : "items", " left"), $(w.all, w.active, w.completed));
     }
 }

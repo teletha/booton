@@ -12,7 +12,10 @@ package booton.reactive;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import js.dom.Element;
+import js.dom.UIAction;
 import kiss.Events;
+import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/21 17:09:35
@@ -55,5 +58,22 @@ public class Input extends UI<Input> {
      */
     protected Input require() {
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualize(VirtualStructure box) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void materialize(Element element) {
+        element.observe(UIAction.Click).to(e -> {
+            System.out.println("CLICLED " + e);
+        });
     }
 }

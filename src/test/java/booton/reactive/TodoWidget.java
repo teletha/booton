@@ -155,7 +155,7 @@ public class TodoWidget extends Widget {
         box.h(input);
         box.h(LIST.class, todos, ShowLine.class, filter);
         box.h(FOOTER.class, () -> {
-            box.h(imcompleted, imcompleted == 1 ? " item" : "items", " left");
+            box.h(imcompleted, imcompleted < 2 ? " item" : "items", " left");
             box.h(all, active, completed);
             box.h(CLEAR.class, clear);
         });

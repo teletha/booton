@@ -7,28 +7,30 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package booton.reactive.layout;
 
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.IntegerProperty;
 
-import kiss.Events;
+import booton.reactive.Output;
+import booton.reactive.Widget;
 import booton.virtual.VirtualStructure;
 
 /**
- * @version 2014/08/22 11:27:22
+ * @version 2014/09/10 16:36:48
  */
-public class Output<V> extends UI {
+public class ChampionDetail extends Widget {
 
-    protected Events<V> value;
+    public IntegerProperty level;
 
-    public Output(ObservableValue<V> value) {
+    public Icon icon;
+
+    @Override
+    protected void virtualize(VirtualStructure box) {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualize(VirtualStructure box) {
+    private class Icon {
+
+        private Output level;
     }
 }

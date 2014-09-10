@@ -25,13 +25,15 @@ import booton.reactive.css.StyleDefinition;
 /**
  * @version 2014/09/01 20:06:01
  */
-public abstract class UI<T extends UI<T>> extends Publishable<T> {
+public abstract class UI<T extends UI<T>> extends Widget<T> {
 
     protected BooleanProperty click;
 
     protected BooleanProperty hover;
 
     protected final BooleanProperty enable = new SimpleBooleanProperty();
+
+    Publishable<?> publisher = new Publishable();
 
     /** The disposable list. */
     private List<Disposable> disposables;
@@ -65,7 +67,7 @@ public abstract class UI<T extends UI<T>> extends Publishable<T> {
      */
     public T shortcut(Key key, Runnable action) {
         if (key != null && action != null) {
-            disposer().add(observe(UIAction.KeyUp).filter(e -> e.which == key.code).to(e -> {
+            disposer().add(publisher.observe(UIAction.KeyUp).filter(e -> e.which == key.code).to(e -> {
                 action.run();
             }));
         }

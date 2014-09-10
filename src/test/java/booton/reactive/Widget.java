@@ -9,7 +9,7 @@
  */
 package booton.reactive;
 
-import js.dom.Node;
+import js.dom.Element;
 import booton.virtual.VirtualElement;
 import booton.virtual.VirtualNode;
 import booton.virtual.VirtualStructure;
@@ -29,21 +29,23 @@ public abstract class Widget<V> {
      * Create virtual element.
      * </p>
      * 
-     * @param $ Domain Specific Language for virtual element.
+     * @param box Domain Specific Language for virtual element.
      */
-    protected abstract void virtualize(VirtualStructure $);
+    protected abstract void virtualize(VirtualStructure box);
 
     /**
      * 
      */
     final VirtualElement virtualize() {
-        return null;
+        VirtualStructure box = new VirtualStructure();
+        virtualize(box);
+        return box.getRoot();
     }
 
     /**
-     * @param node
+     * @param element
      */
-    public void materialize(Node node) {
+    public void materialize(Element element) {
 
     }
 }

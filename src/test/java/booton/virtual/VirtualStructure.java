@@ -94,7 +94,7 @@ public class VirtualStructure {
         h(css, () -> {
             for (T item : list) {
                 Widget<T> child = I.make(childWidgetClass);
-    
+
                 add(Objects.hash(item), child);
             }
         });
@@ -108,7 +108,9 @@ public class VirtualStructure {
      * @param child
      */
     private void add(int id, Object child) {
-        if (child instanceof ObservableValue) {
+        if (child instanceof Widget) {
+            nodes.peekLast().children.items.push(new VirtualWidgetElement(id, (Widget) child));
+        } else if (child instanceof ObservableValue) {
             nodes.peekLast().children.items.push(new VirtualReactiveElement(id, "div", (ObservableValue) child));
         } else if (child instanceof Runnable) {
             VirtualElement e = new VirtualElement(id, "div");
