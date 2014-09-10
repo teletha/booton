@@ -85,9 +85,8 @@ function boot(global) {
         return;
       }
     
-      // Default superClass is native Object.
-      console.log("SUPER " + superClassName + " FROM " + name);
-      var superClass = boot[superClassName] || Object;
+      // Default superClass is javascript native Object.
+      var superClass = boot.direct[superClassName] || Object;
 
       // This is actual counstructor of class to define.
       function Class() {
@@ -134,6 +133,9 @@ function boot(global) {
       
       // assign "prototype" constructor
       prototype.$ = Class;
+      
+      // bypass mapping to avoid invoking static initializer when some class extends this class
+      boot.direct[name] = Class;
 
       // Expose and define class at global scope.
       if (!init) {
@@ -153,7 +155,6 @@ function boot(global) {
             });
 
             // invoke static initializer at first time access.
-            console.log(name, init);
             init();
             init = null;
 
@@ -219,6 +220,7 @@ function boot(global) {
      * </p>
      */
     names: {},
+    direct: {},
         
     /**
      * <p>

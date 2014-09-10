@@ -2151,11 +2151,11 @@ class JavaMethodCompiler extends MethodVisitor {
      * Record the current instruction.
      */
     private final void record(int opcode) {
-        if (recordIndex == 0 && records[0] == 0 && opcode != LABEL) {
-            Debugger.enable();
-            Debugger.printHeader(true);
+        // insert anonymous label at head if the processing method has no label
+        if (records[0] == 0 && opcode != LABEL) {
             visitLabel(new Label());
         }
+
         records[recordIndex++] = opcode;
 
         if (recordIndex == records.length) {

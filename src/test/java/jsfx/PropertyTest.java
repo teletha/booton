@@ -9,7 +9,9 @@
  */
 package jsfx;
 
-import javafx.beans.binding.MapExpression;
+import javafx.beans.property.ListProperty;
+
+import kiss.I;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,15 +25,8 @@ import booton.soeur.ScriptRunner;
 public class PropertyTest {
 
     @Test
-    public void testname() throws Exception {
-        System.out.println(MapExpression.class);
+    public void getBean() throws Exception {
+        ListProperty property = I.make(ListProperty.class);
+        assert property.getBean() == null;
     }
-
-    // @Test
-    // public void getBean() throws Exception {
-    // ListProperty property = I.make(ListProperty.class);
-    // System.out.println(property.getClass());
-    // assert property.getBean() == null;
-    // System.out.println(property.toString());
-    // }
 }

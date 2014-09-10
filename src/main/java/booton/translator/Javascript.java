@@ -381,9 +381,7 @@ public class Javascript {
             StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
 
             for (Class type : source.getInterfaces()) {
-                if (hasImplementation(type, false)) {
-                    interfaces.add(computeSimpleClassName(type));
-                }
+                interfaces.add(computeSimpleClassName(type));
             }
 
             // write class definition

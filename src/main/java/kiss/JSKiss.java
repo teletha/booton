@@ -31,7 +31,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -82,7 +81,7 @@ class JSKiss {
     private static Table<Class, Class> extensions;
 
     /** The mapping from extension point to assosiated extension mapping. */
-    private static final Table<Integer, Class> keys = new Table();
+    private static final Table<String, Class> keys = new Table();
 
     /** The circularity dependency graph per thread. */
     static final ThreadSpecific<Deque<Class>> dependencies = new ThreadSpecific(ArrayDeque.class);
@@ -178,7 +177,7 @@ class JSKiss {
     public static <E extends Extensible> E find(Class<E> extensionPoint, Class key) {
         initialize();
 
-        Class<E> clazz = keys.find(Objects.hash(extensionPoint, key));
+        Class<E> clazz = keys.find(extensionPoint.getName().concat(key.getName()));
 
         return clazz == null ? null : make(clazz);
     }
@@ -728,7 +727,7 @@ class JSKiss {
                 Class[] params = ClassUtil.getParameter(extension, extensionPoint);
 
                 if (params.length != 0 && params[0] != Object.class) {
-                    keys.push(Objects.hash(extensionPoint, params[0]), extension);
+                    keys.push(extensionPoint.getName().concat(params[0].getName()), extension);
 
                     // The user has registered a newly custom lifestyle, so we should update
                     // lifestyle for this extension key class. Normally, when we update some data,
