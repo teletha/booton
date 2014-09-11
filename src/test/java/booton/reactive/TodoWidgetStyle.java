@@ -30,6 +30,13 @@ class TodoWidgetStyle {
         }
     }
 
+    class BUTTONS extends CSS {
+
+        {
+
+        }
+    }
+
     class CLEAR extends CSS {
 
         {

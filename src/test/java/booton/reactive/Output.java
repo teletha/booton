@@ -11,17 +11,14 @@ package booton.reactive;
 
 import javafx.beans.value.ObservableValue;
 
-import kiss.Events;
 import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/22 11:27:22
  */
-public class Output<V> extends UI {
+public class Output extends UI<Output> {
 
-    protected Events<V> value;
-
-    public Output(ObservableValue<V> value) {
+    public Output(ObservableValue value) {
 
     }
 

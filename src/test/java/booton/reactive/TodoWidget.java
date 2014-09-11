@@ -26,9 +26,8 @@ import javafx.beans.property.StringProperty;
 
 import kiss.Events;
 import kiss.I;
-import booton.reactive.TodoWidgetStyle.CLEAR;
+import booton.reactive.TodoWidgetStyle.BUTTONS;
 import booton.reactive.TodoWidgetStyle.FOOTER;
-import booton.reactive.TodoWidgetStyle.LIST;
 import booton.reactive.css.DynamicStyle;
 import booton.virtual.VirtualStructure;
 
@@ -149,33 +148,57 @@ public class TodoWidget extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure box) {
+    protected void virtualize(VirtualStructure $) {
         int imcompleted = incompletedSize.intValue();
 
-        box.h(input);
-        box.h(LIST.class, todos, ShowLine.class, filter);
-        box.h(FOOTER.class, () -> {
-            box.h(imcompleted, imcompleted < 2 ? " item" : "items", " left");
-            box.h(all, active, completed);
-            box.h(CLEAR.class, clear);
+        $.ᐸᐳ(input);
+        $.ᐸvboxᐳ(Item.class, todos);
+        $.ᐸhboxᐳ(FOOTER.class, () -> {
+            $.ᐸhboxᐳ(imcompleted, imcompleted < 2 ? " item" : "items", " left");
+            $.ᐸhboxᐳ(BUTTONS.class, all, active, completed);
+            $.ᐸᐳ(clear);
         });
     }
 
     /**
      * @version 2014/09/01 11:31:37
      */
-    class ShowLine extends Widget<Todo> {
+    class Item extends Widget<Todo> {
 
-        Output text = new Output(context.contents);
+        /** The edit mode. */
+        private BooleanProperty editing = new SimpleBooleanProperty();
 
-        Button delete = new Button().label("×").showIf(text.hover).click($(TodoWidget.this::remove, context));
+        /** The todo text. */
+        Output text = new Output(model.contents).hideIf(editing).dbclick(this::startEdit);
+
+        /** The remove button. */
+        Button delete = new Button().label("×").showIf(text.hover).click($(TodoWidget.this::remove, model));
+
+        /** The editable todo text. */
+        Input edit = new Input(model.contents).showIf(editing).shortcut(Key.ENTER, this::finishEdit);
 
         /**
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(VirtualStructure box) {
-            box.h(text, delete);
+        protected void virtualize(VirtualStructure $) {
+            $.ᐸsboxᐳ(text, delete);
+            $.ᐸᐳ(edit);
+        }
+
+        /**
+         * 
+         */
+        private void startEdit() {
+            editing.set(true);
+        }
+
+        /**
+         * 
+         */
+        private void finishEdit() {
+            editing.set(false);
+            model.contents.set(edit.value.get());
         }
     }
 
@@ -184,8 +207,10 @@ public class TodoWidget extends Widget {
      */
     static class Todo {
 
+        /** The completion flag. */
         public final BooleanProperty completed = new SimpleBooleanProperty();
 
+        /** The todo contents. */
         public final StringProperty contents = new SimpleStringProperty();
 
         /**

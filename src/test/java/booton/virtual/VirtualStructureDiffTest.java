@@ -24,10 +24,10 @@ public class VirtualStructureDiffTest {
     @Test
     public void text() {
         VirtualStructure box1 = new VirtualStructure();
-        box1.h("text");
+        box1.hbox("text");
 
         VirtualStructure box2 = new VirtualStructure();
-        box2.h("change");
+        box2.hbox("change");
 
         assertDiff(box1, box2, 1);
     }
@@ -36,12 +36,12 @@ public class VirtualStructureDiffTest {
     public void childText() {
         VirtualStructure box1 = new VirtualStructure();
         box1.h(() -> {
-            box1.h("text");
+            box1.hbox("text");
         });
 
         VirtualStructure box2 = new VirtualStructure();
         box2.h(() -> {
-            box2.h("change");
+            box2.hbox("change");
         });
 
         assertDiff(box1, box2, 1);

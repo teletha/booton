@@ -46,6 +46,20 @@ public abstract class UI<T extends UI<T>> extends Widget<T> {
     }
 
     /**
+     * @return
+     */
+    public T dbclick(Runnable action) {
+        return (T) this;
+    }
+
+    /**
+     * @return
+     */
+    public T hover(Runnable action) {
+        return (T) this;
+    }
+
+    /**
      * <p>
      * Create {@link Events} for key down.
      * </p>

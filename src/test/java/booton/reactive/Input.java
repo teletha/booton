@@ -23,7 +23,15 @@ import booton.virtual.VirtualStructure;
 public class Input extends UI<Input> {
 
     /** The input value. */
-    public final StringProperty value = new SimpleStringProperty("");
+    public final StringProperty value;
+
+    public Input() {
+        this(new SimpleStringProperty(""));
+    }
+
+    public Input(StringProperty value) {
+        this.value = value;
+    }
 
     /**
      * 

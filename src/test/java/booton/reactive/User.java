@@ -46,7 +46,7 @@ public class User {
 
         for (Object stroke : strokes) {
             if (stroke instanceof Key) {
-                type(input, (Key) stroke);
+                type(input.publisher, (Key) stroke);
             } else {
                 input.value.setValue(input.value.get() + stroke);
             }

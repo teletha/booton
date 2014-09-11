@@ -11,7 +11,7 @@ package booton.reactive;
 
 import org.junit.Test;
 
-import booton.reactive.TodoWidget.ShowLine;
+import booton.reactive.TodoWidget.Item;
 import booton.reactive.TodoWidget.Todo;
 
 /**
@@ -21,29 +21,29 @@ public class TodoWidgetTest {
 
     @Test
     public void add() throws Exception {
-        TodoWidget widget = new TodoWidget();
-        assert widget.todos.size() == 0;
-        assert widget.completedSize.get() == 0;
-        assert widget.incompletedSize.getValue().intValue() == 0;
+        TodoWidget w = new TodoWidget();
+        assert w.todos.size() == 0;
+        assert w.completedSize.get() == 0;
+        assert w.incompletedSize.getValue().intValue() == 0;
 
-        User.input(widget.input, "text").willBe("text");
-        User.input(widget.input, Key.ENTER).willBeEmpty();
+        User.input(w.input, "text").willBe("text");
+        User.input(w.input, Key.ENTER).willBeEmpty();
 
-        assert widget.todos.size() == 1;
-        assert widget.completedSize.get() == 0;
-        assert widget.incompletedSize.getValue().intValue() == 1;
-        assert widget.todos.get(0).contents.get().equals("text");
+        assert w.todos.size() == 1;
+        assert w.completedSize.get() == 0;
+        assert w.incompletedSize.getValue().intValue() == 1;
+        assert w.todos.get(0).contents.get().equals("text");
     }
 
     @Test
     public void remove() throws Exception {
         Todo todo = new Todo("now");
-        TodoWidget widget = new TodoWidget();
-        widget.todos.add(todo);
-        assert widget.todos.size() == 1;
+        TodoWidget w = new TodoWidget();
+        w.todos.add(todo);
+        assert w.todos.size() == 1;
 
-        ShowLine line = Virtualizer.findFirst(widget, ShowLine.class);
-        User.click(line.delete);
-        assert widget.todos.size() == 0;
+        Item item = Virtualizer.findFirst(w, Item.class);
+        User.click(item.delete);
+        assert w.todos.size() == 0;
     }
 }
