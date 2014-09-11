@@ -11,13 +11,11 @@ package booton.virtual;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 
-import kiss.I;
 import booton.css.CSS;
 import booton.reactive.Widget;
 
@@ -46,14 +44,8 @@ public class VirtualStructure {
         nodes.add(root);
     }
 
-    /**
-     * Define horizontal box with children.
-     * 
-     * @param children A list of children.
-     * @return A styler.
-     */
-    public void h(Object... children) {
-        h(null, children);
+    public void ᐸᐳ(Object ui) {
+
     }
 
     /**
@@ -62,12 +54,7 @@ public class VirtualStructure {
      * @param children A list of children.
      * @return A styler.
      */
-    public void h(Class<? extends CSS> css, Object... children) {
-        int id = Objects.hash(children);
-
-        for (Object child : children) {
-            add(id, child);
-        }
+    public void ᐸhboxᐳ(Object... children) {
     }
 
     /**
@@ -76,8 +63,7 @@ public class VirtualStructure {
      * @param children A list of children.
      * @return A styler.
      */
-    public void h(Runnable children) {
-        h(null, children);
+    public void ᐸsboxᐳ(Object... children) {
     }
 
     /**
@@ -86,18 +72,17 @@ public class VirtualStructure {
      * @param children A list of children.
      * @return A styler.
      */
-    public void h(Class<? extends CSS> css, Runnable children) {
+    public <T> void ᐸvboxᐳ(Class<? extends Widget<T>> childWidget, List<T> items) {
+    }
+
+    /**
+     * Define horizontal box with children.
+     * 
+     * @param children A list of children.
+     * @return A styler.
+     */
+    public void ᐸhboxᐳ(Class<? extends CSS> css, Runnable children) {
         add(Objects.hash(children), children);
-    }
-
-    public <T> void h(Class<? extends CSS> css, ObservableList<T> list, Class<? extends Widget<T>> childWidgetClass, ObservableValue<? extends Predicate<T>> filter) {
-        h(css, () -> {
-            for (T item : list) {
-                Widget<T> child = I.make(childWidgetClass);
-
-                add(Objects.hash(item), child);
-            }
-        });
     }
 
     /**

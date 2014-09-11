@@ -43,7 +43,7 @@ public class HelloWorld {
          */
         @Override
         protected void virtualize(VirtualStructure box) {
-            box.h("test");
+            box.hbox("test");
         }
     }
 }

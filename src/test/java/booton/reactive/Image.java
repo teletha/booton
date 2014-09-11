@@ -9,21 +9,17 @@
  */
 package booton.reactive;
 
-import booton.reactive.layout.Layout;
+import booton.virtual.VirtualStructure;
 
 /**
- * @version 2014/09/10 14:02:07
+ * @version 2014/09/11 8:59:42
  */
-public class TodoLayout extends Layout<TodoWidget> {
+public class Image extends UI<Image> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void width1024() {
-        int imcompleted = w.incompletedSize.intValue();
-
-        lay(w.input);
-        lay($(imcompleted, imcompleted < 2 ? " item" : "items", " left"), $(w.all, w.active, w.completed));
+    protected void virtualize(VirtualStructure box) {
     }
 }

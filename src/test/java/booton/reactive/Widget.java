@@ -19,7 +19,7 @@ import booton.virtual.VirtualStructure;
  */
 public abstract class Widget<V> {
 
-    protected V context;
+    protected V model;
 
     /** The current associated virtual element. */
     private VirtualNode current;
@@ -29,9 +29,9 @@ public abstract class Widget<V> {
      * Create virtual element.
      * </p>
      * 
-     * @param box Domain Specific Language for virtual element.
+     * @param ø Domain Specific Language for virtual element.
      */
-    protected abstract void virtualize(VirtualStructure box);
+    protected abstract void virtualize(VirtualStructure ø);
 
     /**
      * 

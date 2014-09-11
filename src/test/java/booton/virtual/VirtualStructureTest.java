@@ -7,12 +7,18 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive.layout;
+package booton.virtual;
 
+import org.junit.Test;
 
 /**
- * @version 2014/09/10 16:13:00
+ * @version 2014/09/11 14:57:41
  */
-public class Var {
+public class VirtualStructureTest {
 
+    @Test
+    public void testname() {
+        VirtualStructure $ = new VirtualStructure();
+        $.ᐸᐳ("text");
+    }
 }
