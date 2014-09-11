@@ -44,7 +44,7 @@ public class VirtualStructure {
         nodes.add(root);
     }
 
-    public void ᐸᐳ(Object ui) {
+    public void 〡(Object ui) {
 
     }
 
@@ -54,7 +54,7 @@ public class VirtualStructure {
      * @param children A list of children.
      * @return A styler.
      */
-    public void ᐸhboxᐳ(Object... children) {
+    public void hbox〡(Object... children) {
     }
 
     /**
@@ -63,7 +63,7 @@ public class VirtualStructure {
      * @param children A list of children.
      * @return A styler.
      */
-    public void ᐸsboxᐳ(Object... children) {
+    public void sbox〡(Object... children) {
     }
 
     /**
@@ -72,7 +72,7 @@ public class VirtualStructure {
      * @param children A list of children.
      * @return A styler.
      */
-    public <T> void ᐸvboxᐳ(Class<? extends Widget<T>> childWidget, List<T> items) {
+    public <T> void vbox〡(Class<? extends Widget<T>> childWidget, List<T> items) {
     }
 
     /**
@@ -81,7 +81,7 @@ public class VirtualStructure {
      * @param children A list of children.
      * @return A styler.
      */
-    public void ᐸhboxᐳ(Class<? extends CSS> css, Runnable children) {
+    public void hbox〡(Class<? extends CSS> css, Runnable children) {
         add(Objects.hash(children), children);
     }
 
