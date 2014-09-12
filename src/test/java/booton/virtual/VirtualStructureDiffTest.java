@@ -24,10 +24,10 @@ public class VirtualStructureDiffTest {
     @Test
     public void textChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis〡("text");
+        prev〡.asis(1).〡("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis〡("change");
+        next〡.asis(1).〡("change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -35,10 +35,10 @@ public class VirtualStructureDiffTest {
     @Test
     public void textNoChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis〡("text");
+        prev〡.asis〡(1, "text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis〡("text");
+        next〡.asis〡(1, "text");
 
         assertDiff(prev〡, next〡, 0);
     }
@@ -46,10 +46,10 @@ public class VirtualStructureDiffTest {
     @Test
     public void hboxTextChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.hbox〡("text");
+        prev〡.hbox(1, "text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.hbox〡("change");
+        next〡.hbox(1, "change");
 
         assertDiff(prev〡, next〡, 1);
     }

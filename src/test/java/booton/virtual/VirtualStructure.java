@@ -25,6 +25,15 @@ import booton.virtual.VirtualStructureStyle.HBOX;
  */
 public class VirtualStructure {
 
+    /** The Attribute helper. */
+    public final AttributeMode hbox〡 = new AttributeMode();
+
+    /** The Attribute helper. */
+    public final AttributeMode sbox〡 = new AttributeMode();
+
+    /** The Attribute helper. */
+    public final AttributeMode vbox〡 = new AttributeMode();
+
     /** The node stack. */
     private final Deque<VirtualElement> nodes = new ArrayDeque();
 
@@ -52,7 +61,8 @@ public class VirtualStructure {
      * 
      * @param items Child nodes to append.
      */
-    public void asis〡(Object... children) {
+    @SafeVarargs
+    public final void asis〡(Object... children) {
         for (Object child : children) {
             append(new VirtualText(child.hashCode(), child.toString()));
         }
@@ -65,14 +75,24 @@ public class VirtualStructure {
      * @return A styler.
      */
     public void hbox〡(Object... children) {
-        VirtualElement next = new VirtualElement(Objects.hash(children), "div");
+        throw new Error("Use virtual mode.");
+    }
+
+    /**
+     * Define horizontal box with children.
+     * 
+     * @param children A list of children.
+     * @return A styler.
+     */
+    void hbox(int localID, Object... children) {
+        VirtualElement next = new VirtualElement(localID, "div");
         next.classList.push(HBOX.class);
 
         nodes.addLast(next);
         for (Object child : children) {
             append(new VirtualText(child.hashCode(), child.toString()));
         }
-        nodes.pollLast();
+        append(nodes.pollLast());
     }
 
     /**
@@ -142,5 +162,52 @@ public class VirtualStructure {
      */
     public VirtualElement getRoot() {
         return nodes.peekFirst();
+    }
+
+    /**
+     * @version 2014/09/12 13:08:06
+     */
+    public class AttributeMode {
+
+        /**
+         * <p>
+         * Append the specified items as child node.
+         * </p>
+         * 
+         * @param items Child nodes to append.
+         */
+        public final ChildMode ﹟(Class<? extends CSS> className) {
+            throw new Error("Use virtual mode.");
+        }
+    }
+
+    /**
+     * @version 2014/09/12 13:28:26
+     */
+    public class ChildMode {
+
+        /** The container id. */
+        private int containerID;
+
+        /**
+         * @param children
+         */
+        public final void 〡(Object... children) {
+            VirtualElement next = new VirtualElement(containerID, "div");
+            next.classList.push(HBOX.class);
+
+            nodes.addLast(next);
+            for (Object child : children) {
+                append(new VirtualText(child.hashCode(), child.toString()));
+            }
+            append(nodes.pollLast());
+        }
+
+        /**
+         * @param children
+         */
+        public final void 〡(Runnable children) {
+
+        }
     }
 }

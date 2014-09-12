@@ -153,9 +153,9 @@ public class TodoWidget extends Widget {
 
         $〡.asis〡(input);
         $〡.vbox〡(Item.class, todos);
-        $〡.hbox〡(FOOTER.class, () -> {
+        $〡.hbox〡.﹟(FOOTER.class).〡(() -> {
             $〡.hbox〡(imcompleted, imcompleted < 2 ? " item" : "items", " left");
-            $〡.hbox〡(BUTTONS.class, all, active, completed);
+            $〡.hbox〡.﹟(BUTTONS.class).〡(all, active, completed);
             $〡.asis〡(clear);
         });
     }
