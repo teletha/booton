@@ -9,6 +9,7 @@
  */
 package booton.virtual;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,8 @@ import js.dom.NodeComparator;
 
 import org.junit.Test;
 
+import booton.css.CSS;
+
 /**
  * @version 2014/09/05 9:24:53
  */
@@ -26,6 +29,19 @@ public class DiffElementTest {
 
     /** The reusable attribute map. */
     private static final Map<String, String> noAttr = new HashMap();
+
+    @Test
+    public void addClass() throws Exception {
+        assertDiff(rootClass(), rootClass(A.class), 1);
+        assertDiff(rootClass(A.class), rootClass(A.class, B.class), 1);
+        assertDiff(rootClass(A.class), rootClass(A.class, B.class, C.class), 2);
+    }
+
+    @Test
+    public void removeClass() throws Exception {
+        assertDiff(rootClass(A.class, B.class, C.class), rootClass(A.class, B.class), 1);
+        assertDiff(rootClass(A.class, B.class, C.class), rootClass(B.class), 2);
+    }
 
     @Test
     public void attributeChange() throws Exception {
@@ -295,6 +311,18 @@ public class DiffElementTest {
      * @param attributes
      * @return
      */
+    private static VirtualElement rootClass(Class<? extends CSS>... classes) {
+        return e("root", clazz(classes));
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
     private static VirtualElement root(VirtualNode... children) {
         return e("root", children);
     }
@@ -319,11 +347,49 @@ public class DiffElementTest {
      * @param attributes
      * @return
      */
+    private static VirtualElement e(String key, List<Class<? extends CSS>> classes, VirtualNode... children) {
+        return e(key, noAttr, classes, children);
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
     private static VirtualElement e(String key, Map<String, String> attributes, VirtualNode... children) {
         VirtualElement e = new VirtualElement(key.hashCode(), key);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
             e.attributes.set(attribute.getKey(), attribute.getValue());
+        }
+
+        for (VirtualNode child : children) {
+            e.children.items.push(child);
+        }
+
+        return e;
+    }
+
+    /**
+     * <p>
+     * Helper method to create element.
+     * </p>
+     * 
+     * @param attributes
+     * @return
+     */
+    private static VirtualElement e(String key, Map<String, String> attributes, List<Class<? extends CSS>> classes, VirtualNode... children) {
+        VirtualElement e = new VirtualElement(key.hashCode(), key);
+
+        for (Entry<String, String> attribute : attributes.entrySet()) {
+            e.attributes.set(attribute.getKey(), attribute.getValue());
+        }
+
+        for (Class<? extends CSS> clazz : classes) {
+            e.classList.push(clazz);
         }
 
         for (VirtualNode child : children) {
@@ -352,6 +418,23 @@ public class DiffElementTest {
 
     /**
      * <p>
+     * Helper method to create class.
+     * </p>
+     * 
+     * @param classes
+     * @return
+     */
+    private static List<Class<? extends CSS>> clazz(Class... classes) {
+        List<Class<? extends CSS>> list = new ArrayList();
+
+        for (int i = 0; i < classes.length; i++) {
+            list.add(classes[i]);
+        }
+        return list;
+    }
+
+    /**
+     * <p>
      * Helper method to create attribute map.
      * </p>
      * 
@@ -360,5 +443,23 @@ public class DiffElementTest {
      */
     private static VirtualText text(String value) {
         return new VirtualText(value.hashCode() ^ 31, value);
+    }
+
+    /**
+     * @version 2014/09/12 11:17:24
+     */
+    private static class A extends CSS {
+    }
+
+    /**
+     * @version 2014/09/12 11:17:24
+     */
+    private static class B extends CSS {
+    }
+
+    /**
+     * @version 2014/09/12 11:17:24
+     */
+    private static class C extends CSS {
     }
 }

@@ -11,6 +11,8 @@ package booton.virtual;
 
 import static js.lang.Global.*;
 import js.dom.Element;
+import js.lang.NativeArray;
+import booton.css.CSS;
 
 /**
  * @version 2014/09/04 23:22:40
@@ -22,6 +24,9 @@ public class VirtualElement extends VirtualNode<Element> {
 
     /** The attributes. */
     public final VirtualKVS attributes = new VirtualKVS();
+
+    /** The class attributes. */
+    public final NativeArray<Class<? extends CSS>> classList = new NativeArray();
 
     /** The children node. */
     public final VirtualNodeList children = new VirtualNodeList();
@@ -44,6 +49,10 @@ public class VirtualElement extends VirtualNode<Element> {
 
         for (int i = 0; i < attributes.names.length(); i++) {
             dom.attr(attributes.names.get(i), attributes.values.get(i));
+        }
+
+        for (int i = 0; i < classList.length(); i++) {
+            dom.add(classList.get(i));
         }
 
         for (int i = 0; i < children.items.length(); i++) {

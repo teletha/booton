@@ -18,6 +18,7 @@ import javafx.beans.value.ObservableValue;
 
 import booton.css.CSS;
 import booton.reactive.Widget;
+import booton.virtual.VirtualStructureStyle.HBOX;
 
 /**
  * @version 2014/09/04 16:39:32
@@ -44,8 +45,17 @@ public class VirtualStructure {
         nodes.add(root);
     }
 
-    public void 〡(Object ui) {
-
+    /**
+     * <p>
+     * Append the specified items as child node.
+     * </p>
+     * 
+     * @param items Child nodes to append.
+     */
+    public void asis〡(Object... children) {
+        for (Object child : children) {
+            append(new VirtualText(child.hashCode(), child.toString()));
+        }
     }
 
     /**
@@ -55,6 +65,14 @@ public class VirtualStructure {
      * @return A styler.
      */
     public void hbox〡(Object... children) {
+        VirtualElement next = new VirtualElement(Objects.hash(children), "div");
+        next.classList.push(HBOX.class);
+
+        nodes.addLast(next);
+        for (Object child : children) {
+            append(new VirtualText(child.hashCode(), child.toString()));
+        }
+        nodes.pollLast();
     }
 
     /**
@@ -82,7 +100,7 @@ public class VirtualStructure {
      * @return A styler.
      */
     public void hbox〡(Class<? extends CSS> css, Runnable children) {
-        add(Objects.hash(children), children);
+        append(Objects.hash(children), children);
     }
 
     /**
@@ -92,7 +110,7 @@ public class VirtualStructure {
      * 
      * @param child
      */
-    private void add(int id, Object child) {
+    private void append(int id, Object child) {
         if (child instanceof Widget) {
             nodes.peekLast().children.items.push(new VirtualWidgetElement(id, (Widget) child));
         } else if (child instanceof ObservableValue) {
@@ -106,6 +124,17 @@ public class VirtualStructure {
         } else {
             nodes.peekLast().children.items.push(new VirtualText(id, String.valueOf(child)));
         }
+    }
+
+    /**
+     * <p>
+     * Append child node.
+     * </p>
+     * 
+     * @param child
+     */
+    private void append(VirtualNode child) {
+        nodes.peekLast().children.items.push(child);
     }
 
     /**

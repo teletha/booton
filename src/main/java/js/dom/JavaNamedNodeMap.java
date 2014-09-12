@@ -67,7 +67,7 @@ class JavaNamedNodeMap implements NamedNodeMap {
      */
     @Override
     public Node item(int index) {
-        Attribute attribute = attributes.entries.get(index);
+        Attribute attribute = attributes.get(index);
 
         return new JavaAttr(element, null, attribute.name());
     }
@@ -77,7 +77,7 @@ class JavaNamedNodeMap implements NamedNodeMap {
      */
     @Override
     public int getLength() {
-        return attributes.entries.size();
+        return attributes.length();
     }
 
     /**
