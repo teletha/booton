@@ -10,6 +10,7 @@
 package booton.virtual;
 
 import js.dom.Node;
+import booton.css.CSS;
 
 /**
  * @version 2014/09/08 18:21:16
@@ -274,7 +275,7 @@ public abstract class Patch {
     }
 
     /**
-     * @version 2014/08/31 8:20:20
+     * @version 2014/09/12 12:11:25
      */
     static class RemoveAttribute extends AttributePatch {
 
@@ -296,6 +297,77 @@ public abstract class Patch {
         @Override
         public void apply() {
             parent.dom.remove(name);
+        }
+    }
+
+    /**
+     * @version 2014/09/08 18:19:19
+     */
+    private static abstract class ClassPatch extends Patch {
+
+        /** The class name. */
+        protected final Class<? extends CSS> className;
+
+        /**
+         * @param parent
+         * @param className
+         */
+        private ClassPatch(VirtualElement parent, Class<? extends CSS> className) {
+            super(parent);
+
+            this.className = className;
+        }
+    }
+
+    /**
+     * @version 2014/08/31 8:20:20
+     */
+    static class AddClass extends ClassPatch {
+
+        /**
+         * <p>
+         * Create remove attribute operation.
+         * </p>
+         * 
+         * @param parent
+         * @param name
+         */
+        AddClass(VirtualElement parent, Class<? extends CSS> className) {
+            super(parent, className);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void apply() {
+            parent.dom.add(className);
+        }
+    }
+
+    /**
+     * @version 2014/08/31 8:20:20
+     */
+    static class RemoveClass extends ClassPatch {
+
+        /**
+         * <p>
+         * Create remove attribute operation.
+         * </p>
+         * 
+         * @param parent
+         * @param name
+         */
+        RemoveClass(VirtualElement parent, Class<? extends CSS> className) {
+            super(parent, className);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void apply() {
+            parent.dom.remove(className);
         }
     }
 }

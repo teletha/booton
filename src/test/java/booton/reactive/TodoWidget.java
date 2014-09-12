@@ -148,16 +148,15 @@ public class TodoWidget extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure 〡) {
+    protected void virtualize(VirtualStructure $〡) {
         int imcompleted = incompletedSize.intValue();
 
-        〡.〡(input);
-        〡.vbox〡(Item.class, todos);
-        〡.hbox〡(FOOTER.class, () -> {
-            〡.hbox〡(imcompleted, imcompleted < 2 ? " item" : "items", " left");
-            〡.hbox〡(BUTTONS.class, all, active, completed);
-            〡.〡(clear);
-            〡.hbox〡();
+        $〡.asis〡(input);
+        $〡.vbox〡(Item.class, todos);
+        $〡.hbox〡(FOOTER.class, () -> {
+            $〡.hbox〡(imcompleted, imcompleted < 2 ? " item" : "items", " left");
+            $〡.hbox〡(BUTTONS.class, all, active, completed);
+            $〡.asis〡(clear);
         });
     }
 
@@ -182,9 +181,9 @@ public class TodoWidget extends Widget {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(VirtualStructure ᐸ) {
-            ᐸ.ᐸsboxᐳ(text, delete);
-            ᐸ.〡(edit);
+        protected void virtualize(VirtualStructure $〡) {
+            $〡.sbox〡(text, delete);
+            $〡.asis〡(edit);
         }
 
         /**

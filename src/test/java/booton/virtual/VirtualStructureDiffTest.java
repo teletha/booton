@@ -22,29 +22,36 @@ import org.junit.Test;
 public class VirtualStructureDiffTest {
 
     @Test
-    public void text() {
-        VirtualStructure box1 = new VirtualStructure();
-        box1.hbox("text");
+    public void textChange() {
+        VirtualStructure prev〡 = new VirtualStructure();
+        prev〡.asis〡("text");
 
-        VirtualStructure box2 = new VirtualStructure();
-        box2.hbox("change");
+        VirtualStructure next〡 = new VirtualStructure();
+        next〡.asis〡("change");
 
-        assertDiff(box1, box2, 1);
+        assertDiff(prev〡, next〡, 1);
     }
 
     @Test
-    public void childText() {
-        VirtualStructure box1 = new VirtualStructure();
-        box1.h(() -> {
-            box1.hbox("text");
-        });
+    public void textNoChange() {
+        VirtualStructure prev〡 = new VirtualStructure();
+        prev〡.asis〡("text");
 
-        VirtualStructure box2 = new VirtualStructure();
-        box2.h(() -> {
-            box2.hbox("change");
-        });
+        VirtualStructure next〡 = new VirtualStructure();
+        next〡.asis〡("text");
 
-        assertDiff(box1, box2, 1);
+        assertDiff(prev〡, next〡, 0);
+    }
+
+    @Test
+    public void hboxTextChange() {
+        VirtualStructure prev〡 = new VirtualStructure();
+        prev〡.hbox〡("text");
+
+        VirtualStructure next〡 = new VirtualStructure();
+        next〡.hbox〡("change");
+
+        assertDiff(prev〡, next〡, 1);
     }
 
     /**

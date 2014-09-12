@@ -28,7 +28,7 @@ public class EmulateAttributes extends Attributes {
      */
     @Override
     protected int length() {
-        return entries.size();
+        return entries.size() + classes.length() == 0 ? 0 : 1;
     }
 
     /**
@@ -36,7 +36,11 @@ public class EmulateAttributes extends Attributes {
      */
     @Override
     protected Attribute get(int index) {
-        return entries.get(index);
+        if (classes.length() == 0 || entries.size() != index) {
+            return entries.get(index);
+        } else {
+            return new EmulateAttribute("class", classes.toString());
+        }
     }
 
     /**
@@ -124,9 +128,12 @@ public class EmulateAttributes extends Attributes {
      * @return
      */
     String get(String namespace, String name) {
+        if (isClass(namespace, name)) {
+            return classes.toString();
+        }
+
         namespace = String.valueOf(namespace).toLowerCase();
         name = String.valueOf(name).toLowerCase();
-
         Attribute entry = find(namespace, name);
 
         if (entry == null) {
@@ -146,6 +153,9 @@ public class EmulateAttributes extends Attributes {
      * @return
      */
     private boolean isClass(String uri, String name) {
+        if (name == null) {
+            return false;
+        }
         return name.equalsIgnoreCase("class");
     }
 

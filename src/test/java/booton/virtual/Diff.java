@@ -12,12 +12,16 @@ package booton.virtual;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.lang.NativeArray;
+import booton.css.CSS;
 import booton.virtual.Patch.AddAttribute;
+import booton.virtual.Patch.AddClass;
 import booton.virtual.Patch.ChangeAttribute;
 import booton.virtual.Patch.InsertChild;
 import booton.virtual.Patch.MoveChild;
 import booton.virtual.Patch.RemoveAttribute;
 import booton.virtual.Patch.RemoveChild;
+import booton.virtual.Patch.RemoveClass;
 import booton.virtual.Patch.ReplaceChild;
 
 /**
@@ -37,8 +41,41 @@ public class Diff {
     public static List<Patch> diff(VirtualElement prev, VirtualElement next) {
         List<Patch> patches = new ArrayList();
         patches.addAll(diff(prev, prev.attributes, next.attributes));
+        patches.addAll(diff(prev, prev.classList, next.classList));
         patches.addAll(diff(prev, prev.children, next.children));
 
+        return patches;
+    }
+
+    /**
+     * <p>
+     * Diff class list.
+     * </p>
+     * 
+     * @param context
+     * @param prev
+     * @param next
+     * @return
+     */
+    public static List<Patch> diff(VirtualElement context, NativeArray<Class<? extends CSS>> prev, NativeArray<Class<? extends CSS>> next) {
+        List<Patch> patches = new ArrayList();
+
+        for (int i = 0, length = next.length(); i < length; i++) {
+            Class nextClass = next.get(i);
+            int prevIndex = prev.indexOf(nextClass);
+
+            if (prevIndex == -1) {
+                patches.add(new AddClass(context, nextClass));
+            }
+        }
+
+        for (int i = 0, length = prev.length(); i < length; i++) {
+            Class prevClass = prev.get(i);
+
+            if (next.indexOf(prevClass) == -1) {
+                patches.add(new RemoveClass(context, prevClass));
+            }
+        }
         return patches;
     }
 

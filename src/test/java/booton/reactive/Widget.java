@@ -29,9 +29,9 @@ public abstract class Widget<V> {
      * Create virtual element.
      * </p>
      * 
-     * @param 〡 Domain Specific Language for virtual element.
+     * @param $〡 Domain Specific Language for virtual element.
      */
-    protected abstract void virtualize(VirtualStructure 〡);
+    protected abstract void virtualize(VirtualStructure $〡);
 
     /**
      * 
