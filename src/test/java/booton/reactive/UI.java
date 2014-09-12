@@ -21,6 +21,7 @@ import jsx.event.Publishable;
 import kiss.Disposable;
 import kiss.Events;
 import booton.reactive.css.StyleDefinition;
+import booton.virtual.Widget;
 
 /**
  * @version 2014/09/01 20:06:01

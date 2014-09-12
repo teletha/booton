@@ -17,6 +17,7 @@ import kiss.Disposable;
 import booton.virtual.Diff;
 import booton.virtual.Patch;
 import booton.virtual.VirtualElement;
+import booton.virtual.Widget;
 
 /**
  * @version 2014/09/06 10:10:57

@@ -16,10 +16,37 @@ import booton.css.CSS;
  */
 class VirtualStructureStyle {
 
+    /**
+     * @version 2014/09/12 19:20:09
+     */
     class HBOX extends CSS {
 
         {
             display.flex();
+        }
+    }
+
+    /**
+     * @version 2014/09/12 19:20:11
+     */
+    class VBOX extends CSS {
+
+        {
+            display.flex().direction.column();
+        }
+    }
+
+    /**
+     * @version 2014/09/12 19:20:14
+     */
+    class SBOX extends CSS {
+
+        {
+            position.relative();
+
+            children(() -> {
+                position.absolute();
+            });
         }
     }
 }

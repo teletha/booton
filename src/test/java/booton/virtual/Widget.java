@@ -7,12 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package booton.virtual;
 
 import js.dom.Element;
-import booton.virtual.VirtualElement;
-import booton.virtual.VirtualNode;
-import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/21 13:31:25

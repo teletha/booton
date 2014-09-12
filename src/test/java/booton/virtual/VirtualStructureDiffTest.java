@@ -10,6 +10,7 @@
 package booton.virtual;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import js.dom.Node;
 import js.dom.NodeComparator;
@@ -17,17 +18,17 @@ import js.dom.NodeComparator;
 import org.junit.Test;
 
 /**
- * @version 2014/09/05 15:45:45
+ * @version 2014/09/13 2:05:34
  */
 public class VirtualStructureDiffTest {
 
     @Test
     public void textChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis(1).〡("text");
+        prev〡.asis.〡("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis(1).〡("change");
+        next〡.asis.〡("change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -35,10 +36,10 @@ public class VirtualStructureDiffTest {
     @Test
     public void textNoChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis〡(1, "text");
+        prev〡.asis.〡("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis〡(1, "text");
+        next〡.asis.〡("text");
 
         assertDiff(prev〡, next〡, 0);
     }
@@ -46,10 +47,10 @@ public class VirtualStructureDiffTest {
     @Test
     public void hboxTextChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.hbox(1, "text");
+        prev〡.hbox(1).〡("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.hbox(1, "change");
+        next〡.hbox(1).〡("change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -115,5 +116,40 @@ public class VirtualStructureDiffTest {
             }
         }
         return message.toString();
+    }
+
+    /**
+     * <p>
+     * Helper method to create widget.
+     * </p>
+     * 
+     * @param dsl
+     * @return
+     */
+    private static Widget widget(Consumer<VirtualStructure> dsl) {
+        return new WidgetDelegator(dsl);
+    }
+
+    /**
+     * @version 2014/09/13 2:07:14
+     */
+    private static class WidgetDelegator extends Widget {
+
+        private final Consumer<VirtualStructure> delegator;
+
+        /**
+         * @param delegator
+         */
+        private WidgetDelegator(Consumer<VirtualStructure> delegator) {
+            this.delegator = delegator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize(VirtualStructure $〡) {
+            delegator.accept($〡);
+        }
     }
 }
