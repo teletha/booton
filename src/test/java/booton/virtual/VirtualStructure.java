@@ -11,34 +11,64 @@ package booton.virtual;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.List;
-import java.util.Objects;
 
 import javafx.beans.value.ObservableValue;
 
 import booton.css.CSS;
-import booton.reactive.Widget;
 import booton.virtual.VirtualStructureStyle.HBOX;
+import booton.virtual.VirtualStructureStyle.SBOX;
+import booton.virtual.VirtualStructureStyle.VBOX;
 
 /**
- * @version 2014/09/04 16:39:32
+ * @version 2014/09/13 1:52:02
  */
 public class VirtualStructure {
 
-    /** The Attribute helper. */
-    public final AttributeMode hbox〡 = new AttributeMode();
+    /**
+     * <p>
+     * Define anonymous-transparent container and get the descriptor of the container element.
+     * </p>
+     */
+    public final Descriptor asis = new Descriptor(null, null);
 
-    /** The Attribute helper. */
-    public final AttributeMode sbox〡 = new AttributeMode();
+    /**
+     * <p>
+     * Define horizontal container and get the descriptor of the container element.
+     * </p>
+     * <p>
+     * This field is equivalent to the method call <code>hbox(auto-assignment-id)</code>.
+     * </p>
+     * 
+     * @see #hbox(int)
+     */
+    public final ContainerDescriptor hbox = new ContainerDescriptor("hbox", HBOX.class);
 
-    /** The Attribute helper. */
-    public final AttributeMode vbox〡 = new AttributeMode();
+    /**
+     * <p>
+     * Define vertiacal container and get the descriptor of the container element.
+     * </p>
+     * <p>
+     * This field is equivalent to the method call <code>vbox(auto-assignment-id)</code>.
+     * </p>
+     * 
+     * @see #vbox(int)
+     */
+    public final ContainerDescriptor sbox = new ContainerDescriptor("sbox", SBOX.class);
+
+    /**
+     * <p>
+     * Define stackable container and get the descriptor of the container element.
+     * </p>
+     * <p>
+     * This field is equivalent to the method call <code>sbox(auto-assignment-id)</code>.
+     * </p>
+     * 
+     * @see #sbox(int)
+     */
+    public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX.class);
 
     /** The node stack. */
     private final Deque<VirtualElement> nodes = new ArrayDeque();
-
-    /** The current value. */
-    private Object value;
 
     /**
      * 
@@ -56,71 +86,44 @@ public class VirtualStructure {
 
     /**
      * <p>
-     * Append the specified items as child node.
+     * Define horizontal container with local id.
      * </p>
      * 
-     * @param items Child nodes to append.
+     * @param localID A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #hbox
      */
-    @SafeVarargs
-    public final void asis〡(Object... children) {
-        for (Object child : children) {
-            append(new VirtualText(child.hashCode(), child.toString()));
-        }
+    public final ContainerDescriptor hbox(int localID) {
+        hbox.localID = localID;
+        return hbox;
     }
 
     /**
-     * Define horizontal box with children.
+     * <p>
+     * Define vertical container with local id.
+     * </p>
      * 
-     * @param children A list of children.
-     * @return A styler.
+     * @param localID A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #vbox
      */
-    public void hbox〡(Object... children) {
-        throw new Error("Use virtual mode.");
+    public final ContainerDescriptor vbox(int localID) {
+        vbox.localID = localID;
+        return vbox;
     }
 
     /**
-     * Define horizontal box with children.
+     * <p>
+     * Define stackable container with local id.
+     * </p>
      * 
-     * @param children A list of children.
-     * @return A styler.
+     * @param localID A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #sbox
      */
-    void hbox(int localID, Object... children) {
-        VirtualElement next = new VirtualElement(localID, "div");
-        next.classList.push(HBOX.class);
-
-        nodes.addLast(next);
-        for (Object child : children) {
-            append(new VirtualText(child.hashCode(), child.toString()));
-        }
-        append(nodes.pollLast());
-    }
-
-    /**
-     * Define horizontal box with children.
-     * 
-     * @param children A list of children.
-     * @return A styler.
-     */
-    public void sbox〡(Object... children) {
-    }
-
-    /**
-     * Define horizontal box with children.
-     * 
-     * @param children A list of children.
-     * @return A styler.
-     */
-    public <T> void vbox〡(Class<? extends Widget<T>> childWidget, List<T> items) {
-    }
-
-    /**
-     * Define horizontal box with children.
-     * 
-     * @param children A list of children.
-     * @return A styler.
-     */
-    public void hbox〡(Class<? extends CSS> css, Runnable children) {
-        append(Objects.hash(children), children);
+    public final ContainerDescriptor sbox(int localID) {
+        sbox.localID = localID;
+        return sbox;
     }
 
     /**
@@ -147,17 +150,6 @@ public class VirtualStructure {
     }
 
     /**
-     * <p>
-     * Append child node.
-     * </p>
-     * 
-     * @param child
-     */
-    private void append(VirtualNode child) {
-        nodes.peekLast().children.items.push(child);
-    }
-
-    /**
      * @return
      */
     public VirtualElement getRoot() {
@@ -167,7 +159,110 @@ public class VirtualStructure {
     /**
      * @version 2014/09/12 13:08:06
      */
-    public class AttributeMode {
+    public class Descriptor {
+
+        /** The container element name. */
+        protected final String name;
+
+        /** The built-in style. */
+        protected final Class<? extends CSS> builtin;
+
+        /** The container */
+        protected VirtualElement container;
+
+        /** The local id. */
+        protected int localID;
+
+        /**
+         * @param name
+         * @param builtin
+         */
+        private Descriptor(String name, Class<? extends CSS> builtin) {
+            this.name = name;
+            this.builtin = builtin;
+        }
+
+        /**
+         * <p>
+         * Retrieve the current container element.
+         * </p>
+         * 
+         * @return The current container element.
+         */
+        protected VirtualElement container() {
+            if (container == null) {
+                if (name == null) {
+                    // as-is
+                    container = nodes.peekLast();
+                } else {
+                    // built-in containers
+                    container = new VirtualElement(LocalID.find(), name);
+
+                    if (builtin != null) {
+                        container.classList.push(builtin);
+                    }
+                    nodes.peekLast().children.items.push(container);
+                    nodes.addLast(container);
+                }
+            }
+            return container;
+        }
+
+        /**
+         * @param children
+         */
+        public final void 〡(Object... children) {
+            for (Object child : children) {
+                if (child instanceof Widget) {
+                    ((Widget) child).virtualize(VirtualStructure.this);
+                } else {
+                    append(new VirtualText(child.hashCode(), child.toString()));
+                }
+            }
+
+            // reset context environment
+            if (name != null) {
+                nodes.pollLast();
+            }
+
+            container = null;
+            localID = 0;
+        }
+
+        /**
+         * <p>
+         * Append child node.
+         * </p>
+         * 
+         * @param child
+         */
+        private void append(VirtualNode child) {
+            container().children.items.push(child);
+        }
+
+        /**
+         * @param children
+         */
+        public final void 〡(Runnable children) {
+        }
+    }
+
+    /**
+     * @version 2014/09/12 19:03:27
+     */
+    public class ContainerDescriptor extends Descriptor {
+
+        /**
+         * <p>
+         * DSL to define element.
+         * </p>
+         * 
+         * @param name A container element name.
+         * @param style A element style.
+         */
+        private ContainerDescriptor(String name, Class<? extends CSS> style) {
+            super(name, style);
+        }
 
         /**
          * <p>
@@ -176,38 +271,10 @@ public class VirtualStructure {
          * 
          * @param items Child nodes to append.
          */
-        public final ChildMode ﹟(Class<? extends CSS> className) {
-            throw new Error("Use virtual mode.");
-        }
-    }
+        public final ContainerDescriptor 〡﹟(Class<? extends CSS> className) {
+            container().classList.push(className);
 
-    /**
-     * @version 2014/09/12 13:28:26
-     */
-    public class ChildMode {
-
-        /** The container id. */
-        private int containerID;
-
-        /**
-         * @param children
-         */
-        public final void 〡(Object... children) {
-            VirtualElement next = new VirtualElement(containerID, "div");
-            next.classList.push(HBOX.class);
-
-            nodes.addLast(next);
-            for (Object child : children) {
-                append(new VirtualText(child.hashCode(), child.toString()));
-            }
-            append(nodes.pollLast());
-        }
-
-        /**
-         * @param children
-         */
-        public final void 〡(Runnable children) {
-
+            return this;
         }
     }
 }

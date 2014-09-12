@@ -9,6 +9,8 @@
  */
 package booton.reactive;
 
+import booton.virtual.Widget;
+
 /**
  * @version 2014/09/11 9:18:40
  */

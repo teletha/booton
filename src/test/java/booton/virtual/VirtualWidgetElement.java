@@ -10,7 +10,6 @@
 package booton.virtual;
 
 import js.dom.Element;
-import booton.reactive.Widget;
 
 /**
  * @version 2014/09/10 13:10:45
