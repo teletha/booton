@@ -24,13 +24,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import jsx.ui.virtual.VirtualStructure;
+import jsx.ui.virtual.Widget;
 import kiss.Events;
 import kiss.I;
 import booton.reactive.TodoWidgetStyle.BUTTONS;
 import booton.reactive.TodoWidgetStyle.FOOTER;
 import booton.reactive.css.DynamicStyle;
-import booton.virtual.VirtualStructure;
-import booton.virtual.Widget;
 
 /**
  * @version 2014/09/01 15:14:06

@@ -7,12 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.virtual;
+package jsx.ui.virtual;
 
-import booton.virtual.VirtualStructure.Descriptor;
+import jsx.ui.virtual.VirtualStructure.Descriptor;
+import booton.translator.Translator;
 
 /**
- * @version 2014/09/12 21:41:01
+ * @version 2014/09/13 9:44:24
  */
 class LocalID {
 
@@ -21,12 +22,12 @@ class LocalID {
 
     /**
      * <p>
-     * Find local id.
+     * Generate local id.
      * </p>
      * 
-     * @return A local id.
+     * @return A generated local id.
      */
-    static final int find() {
+    static final int generate() {
         Error error = new Error();
         StackTraceElement[] elements = error.getStackTrace();
 
@@ -41,5 +42,23 @@ class LocalID {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
+    }
+
+    /**
+     * @version 2014/09/13 9:36:39
+     */
+    @SuppressWarnings("unused")
+    private static class Coder extends Translator<LocalID> {
+
+        /**
+         * <p>
+         * Generate local id.
+         * </p>
+         * 
+         * @return A generated local id.
+         */
+        public String generate() {
+            return "0";
+        }
     }
 }

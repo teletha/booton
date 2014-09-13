@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.virtual;
+package jsx.ui.virtual;
 
 import booton.css.CSS;
 

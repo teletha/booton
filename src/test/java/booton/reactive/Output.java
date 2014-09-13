@@ -11,7 +11,7 @@ package booton.reactive;
 
 import javafx.beans.value.ObservableValue;
 
-import booton.virtual.VirtualStructure;
+import jsx.ui.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/22 11:27:22

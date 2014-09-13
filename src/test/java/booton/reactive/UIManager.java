@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Objects;
 
 import js.dom.Element;
+import jsx.ui.virtual.Diff;
+import jsx.ui.virtual.Patch;
+import jsx.ui.virtual.VirtualElement;
+import jsx.ui.virtual.Widget;
 import kiss.Disposable;
-import booton.virtual.Diff;
-import booton.virtual.Patch;
-import booton.virtual.VirtualElement;
-import booton.virtual.Widget;
 
 /**
  * @version 2014/09/06 10:10:57
