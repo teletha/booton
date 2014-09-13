@@ -7,17 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.virtual;
+package jsx.ui.virtual;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 import javafx.beans.value.ObservableValue;
 
+import jsx.ui.virtual.VirtualStructureStyle.HBOX;
+import jsx.ui.virtual.VirtualStructureStyle.SBOX;
+import jsx.ui.virtual.VirtualStructureStyle.VBOX;
 import booton.css.CSS;
-import booton.virtual.VirtualStructureStyle.HBOX;
-import booton.virtual.VirtualStructureStyle.SBOX;
-import booton.virtual.VirtualStructureStyle.VBOX;
 
 /**
  * @version 2014/09/13 1:52:02
@@ -196,9 +196,9 @@ public class VirtualStructure {
                     container = nodes.peekLast();
                 } else {
                     // built-in containers
-                    container = new VirtualElement(LocalID.find(), name);
+                    container = new VirtualElement(LocalID.generate(), name);
 
-                    if (builtin != null) {
+                    if (name != null) {
                         container.classList.push(builtin);
                     }
                     nodes.peekLast().children.items.push(container);
@@ -212,11 +212,18 @@ public class VirtualStructure {
          * @param children
          */
         public final void 〡(Object... children) {
+            // store the current context
+            VirtualElement container = container();
+
+            // then, clean it for nested invocation
+            this.container = null;
+
+            // precess into child items
             for (Object child : children) {
                 if (child instanceof Widget) {
                     ((Widget) child).virtualize(VirtualStructure.this);
                 } else {
-                    append(new VirtualText(child.hashCode(), child.toString()));
+                    container.children.items.push(new VirtualText(child.hashCode(), child.toString()));
                 }
             }
 
@@ -224,20 +231,6 @@ public class VirtualStructure {
             if (name != null) {
                 nodes.pollLast();
             }
-
-            container = null;
-            localID = 0;
-        }
-
-        /**
-         * <p>
-         * Append child node.
-         * </p>
-         * 
-         * @param child
-         */
-        private void append(VirtualNode child) {
-            container().children.items.push(child);
         }
 
         /**

@@ -14,8 +14,8 @@ import javafx.beans.property.StringProperty;
 
 import js.dom.Element;
 import js.dom.UIAction;
+import jsx.ui.virtual.VirtualStructure;
 import kiss.Events;
-import booton.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/21 17:09:35

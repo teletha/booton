@@ -11,7 +11,7 @@ package booton.reactive;
 
 import java.util.List;
 
-import booton.virtual.Widget;
+import jsx.ui.virtual.Widget;
 
 /**
  * @version 2014/09/02 10:16:32

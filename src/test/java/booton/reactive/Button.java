@@ -9,7 +9,7 @@
  */
 package booton.reactive;
 
-import booton.virtual.VirtualStructure;
+import jsx.ui.virtual.VirtualStructure;
 
 /**
  * @version 2014/08/21 17:09:43
