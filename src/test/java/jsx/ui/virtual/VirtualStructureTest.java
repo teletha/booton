@@ -9,17 +9,15 @@
  */
 package jsx.ui.virtual;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/11 14:57:41
  */
-@RunWith(ScriptRunner.class)
 public class VirtualStructureTest {
 
     @Test
@@ -74,7 +72,7 @@ public class VirtualStructureTest {
 
         VirtualElement root = root〡.getRoot();
         assert root.children.items.length() == 1;
-        assertAsElement(root.children.items.get(0), "hbox", e -> {
+        assertAsElement(root, 0, "hbox", e -> {
             assertAsText(e.children.items.get(0), "text");
         });
     }
@@ -87,10 +85,10 @@ public class VirtualStructureTest {
 
         VirtualElement root = root〡.getRoot();
         assert root.children.items.length() == 2;
-        assertAsElement(root.children.items.get(0), "hbox", e -> {
+        assertAsElement(root, 0, "hbox", e -> {
             assertAsText(e.children.items.get(0), "first");
         });
-        assertAsElement(root.children.items.get(1), "hbox", e -> {
+        assertAsElement(root, 1, "hbox", e -> {
             assertAsText(e.children.items.get(0), "second");
         });
     }
@@ -98,17 +96,70 @@ public class VirtualStructureTest {
     @Test
     public void boxTextNestedCall() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
+        root〡.hbox.〡(() -> {
+            root〡.hbox.〡("nested text");
+        });
+
+        VirtualElement root = root〡.getRoot();
+        assert root.children.items.length() == 1;
+        assertAsElement(root, 0, "hbox", e -> {
+            assertAsElement(e, 0, "hbox", text -> {
+                assertAsText(text.children.items.get(0), "nested text");
+            });
+        });
+    }
+
+    @Test
+    public void boxWidgetText() throws Exception {
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.hbox.〡(widget(sub〡 -> {
             sub〡.hbox.〡("nested text");
         }));
 
         VirtualElement root = root〡.getRoot();
         assert root.children.items.length() == 1;
-        assertAsElement(root.children.items.get(0), "hbox", e -> {
-            assertAsElement(e.children.items.get(0), "hbox", text -> {
+        assertAsElement(root, 0, "hbox", e -> {
+            assertAsElement(e, 0, "hbox", text -> {
                 assertAsText(text.children.items.get(0), "nested text");
             });
         });
+    }
+
+    @Test
+    public void group() throws Exception {
+        List<String> items = Arrays.asList("first", "second", "third");
+
+        VirtualStructure root〡 = new VirtualStructure();
+        root〡.hbox.〡(StringWidget.class, items);
+
+        VirtualElement root = root〡.getRoot();
+        assert root.children.items.length() == 1;
+        assertAsElement(root, 0, "hbox", e -> {
+            assert e.children.items.length() == 3;
+            assertAsElement(e, 0, "hbox", text -> {
+                assertAsText(text.children.items.get(0), "first");
+            });
+            assertAsElement(e, 1, "hbox", text -> {
+                assertAsText(text.children.items.get(0), "second");
+            });
+            assertAsElement(e, 2, "hbox", text -> {
+                assertAsText(text.children.items.get(0), "third");
+            });
+        });
+    }
+
+    /**
+     * @version 2014/09/13 12:18:58
+     */
+    private static class StringWidget extends Widget<String> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize(VirtualStructure $〡) {
+            $〡.hbox.〡(model);
+        }
     }
 
     /**
@@ -116,11 +167,13 @@ public class VirtualStructureTest {
      * Assertion helper for {@link VirtualElement}.
      * </p>
      * 
-     * @param node
+     * @param e
+     * @param index
      * @param name
      * @param child
      */
-    private void assertAsElement(VirtualNode node, String name, Consumer<VirtualElement> child) {
+    private void assertAsElement(VirtualElement e, int index, String name, Consumer<VirtualElement> child) {
+        VirtualNode node = e.children.items.get(index);
         assert node instanceof VirtualElement;
 
         VirtualElement virtual = (VirtualElement) node;
@@ -177,5 +230,4 @@ public class VirtualStructureTest {
             delegator.accept($〡);
         }
     }
-
 }

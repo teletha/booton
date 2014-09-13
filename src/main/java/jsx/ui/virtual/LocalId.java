@@ -9,16 +9,15 @@
  */
 package jsx.ui.virtual;
 
-import jsx.ui.virtual.VirtualStructure.Descriptor;
 import booton.translator.Translator;
 
 /**
  * @version 2014/09/13 9:44:24
  */
-class LocalID {
+class LocalId {
 
     /** The class name. */
-    private static final String CLASS = Descriptor.class.getName();
+    private static final String CLASS = VirtualStructure.class.getName() + "$";
 
     /**
      * <p>
@@ -33,8 +32,9 @@ class LocalID {
 
         for (int i = 0; i < elements.length; i++) {
             StackTraceElement e = elements[i];
+            StackTraceElement n = elements[i + 1];
 
-            if (e.getClassName().equals(CLASS)) {
+            if (e.getClassName().startsWith(CLASS) && !n.getClassName().startsWith(CLASS)) {
                 return elements[i + 1].getLineNumber();
             }
         }
@@ -48,7 +48,7 @@ class LocalID {
      * @version 2014/09/13 9:36:39
      */
     @SuppressWarnings("unused")
-    private static class Coder extends Translator<LocalID> {
+    private static class Coder extends Translator<LocalId> {
 
         /**
          * <p>

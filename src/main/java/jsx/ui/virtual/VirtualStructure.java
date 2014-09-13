@@ -10,13 +10,14 @@
 package jsx.ui.virtual;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Deque;
-
-import javafx.beans.value.ObservableValue;
 
 import jsx.ui.virtual.VirtualStructureStyle.HBOX;
 import jsx.ui.virtual.VirtualStructureStyle.SBOX;
 import jsx.ui.virtual.VirtualStructureStyle.VBOX;
+import kiss.I;
 import booton.css.CSS;
 
 /**
@@ -67,6 +68,9 @@ public class VirtualStructure {
      */
     public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX.class);
 
+    /** The local id modifier. */
+    protected int modifier;
+
     /** The node stack. */
     private final Deque<VirtualElement> nodes = new ArrayDeque();
 
@@ -94,7 +98,7 @@ public class VirtualStructure {
      * @see #hbox
      */
     public final ContainerDescriptor hbox(int localID) {
-        hbox.localID = localID;
+        hbox.localId = localID;
         return hbox;
     }
 
@@ -108,7 +112,7 @@ public class VirtualStructure {
      * @see #vbox
      */
     public final ContainerDescriptor vbox(int localID) {
-        vbox.localID = localID;
+        vbox.localId = localID;
         return vbox;
     }
 
@@ -122,37 +126,18 @@ public class VirtualStructure {
      * @see #sbox
      */
     public final ContainerDescriptor sbox(int localID) {
-        sbox.localID = localID;
+        sbox.localId = localID;
         return sbox;
     }
 
     /**
      * <p>
-     * Add child item.
+     * Retrieve the root {@link VirtualElement}.
      * </p>
      * 
-     * @param child
+     * @return A single root element.
      */
-    private void append(int id, Object child) {
-        if (child instanceof Widget) {
-            nodes.peekLast().children.items.push(new VirtualWidgetElement(id, (Widget) child));
-        } else if (child instanceof ObservableValue) {
-            nodes.peekLast().children.items.push(new VirtualReactiveElement(id, "div", (ObservableValue) child));
-        } else if (child instanceof Runnable) {
-            VirtualElement e = new VirtualElement(id, "div");
-            nodes.peekLast().children.items.push(e);
-            nodes.addLast(e);
-            ((Runnable) child).run();
-            nodes.pollLast();
-        } else {
-            nodes.peekLast().children.items.push(new VirtualText(id, String.valueOf(child)));
-        }
-    }
-
-    /**
-     * @return
-     */
-    public VirtualElement getRoot() {
+    protected final VirtualElement getRoot() {
         return nodes.peekFirst();
     }
 
@@ -171,7 +156,7 @@ public class VirtualStructure {
         protected VirtualElement container;
 
         /** The local id. */
-        protected int localID;
+        protected int localId;
 
         /**
          * @param name
@@ -189,14 +174,24 @@ public class VirtualStructure {
          * 
          * @return The current container element.
          */
-        protected VirtualElement container() {
+        protected final VirtualElement container() {
             if (container == null) {
                 if (name == null) {
                     // as-is
                     container = nodes.peekLast();
                 } else {
-                    // built-in containers
-                    container = new VirtualElement(LocalID.generate(), name);
+                    int id = localId;
+
+                    if (id == 0) {
+                        id = LocalId.generate();
+                    }
+
+                    if (modifier != 0) {
+                        id = id ^ modifier;
+                    }
+
+                    // built-in container
+                    container = new VirtualElement(id, name);
 
                     if (name != null) {
                         container.classList.push(builtin);
@@ -209,8 +204,13 @@ public class VirtualStructure {
         }
 
         /**
-         * @param children
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child nodes.
          */
+        @SafeVarargs
         public final void 〡(Object... children) {
             // store the current context
             VirtualElement container = container();
@@ -232,12 +232,6 @@ public class VirtualStructure {
                 nodes.pollLast();
             }
         }
-
-        /**
-         * @param children
-         */
-        public final void 〡(Runnable children) {
-        }
     }
 
     /**
@@ -255,6 +249,67 @@ public class VirtualStructure {
          */
         private ContainerDescriptor(String name, Class<? extends CSS> style) {
             super(name, style);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child nodes.
+         */
+        public final void 〡(Runnable children) {
+            // store the current context
+            container();
+
+            // then, clean it for nested invocation
+            this.container = null;
+
+            // precess into child items
+            children.run();
+
+            // restore context environment
+            nodes.pollLast();
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡(Class<? extends Widget<T>> childType, T... children) {
+            〡(childType, Arrays.asList(children));
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡(Class<? extends Widget<T>> childType, Collection<T> children) {
+            // store the current context
+            container();
+            int storedModifier = modifier;
+
+            // then, clean it for nested invocation
+            this.container = null;
+
+            // precess into child items
+            for (T child : children) {
+                Widget<T> widget = I.make(childType);
+                widget.model = child;
+
+                modifier = child.hashCode();
+                widget.virtualize(VirtualStructure.this);
+            }
+
+            // reset context environment
+            nodes.pollLast();
+            modifier = storedModifier;
         }
 
         /**
