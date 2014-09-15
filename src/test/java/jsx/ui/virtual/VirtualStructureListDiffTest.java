@@ -13,13 +13,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import antibug.powerassert.PowerAssertOff;
+import booton.sample.Person;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/13 14:10:28
  */
-@PowerAssertOff
+@RunWith(ScriptRunner.class)
 public class VirtualStructureListDiffTest extends VirtualStructureDiffBase {
 
     @Test
@@ -40,10 +42,40 @@ public class VirtualStructureListDiffTest extends VirtualStructureDiffBase {
 
     @Test
     public void addNestBox() {
-        List<String> prev = Arrays.asList("1", "2");
-        List<String> next = Arrays.asList("A", "1", "B", "2", "C");
+        List<String> prev = Arrays.asList("1", "2", "3");
+        List<String> next = Arrays.asList("A", "1", "B", "2");
 
         assertDiff(nest(prev), nest(next), 6);
+    }
+
+    @Test
+    public void changeBeanProperty() {
+        Person person = new Person();
+
+        person.setName("Yukina");
+        person.setAge(14);
+        VirtualStructure prev = bean(person);
+
+        person.setName("Asagi");
+        person.setAge(15);
+        VirtualStructure next = bean(person);
+
+        assertDiff(prev, next, 2);
+    }
+
+    @Test
+    public void changeBeanObject() {
+        Person person = new Person();
+        person.setName("Yukina");
+        person.setAge(14);
+        VirtualStructure prev = bean(person);
+
+        person = new Person();
+        person.setName("Asagi");
+        person.setAge(15);
+        VirtualStructure next = bean(person);
+
+        assertDiff(prev, next, 1);
     }
 
     /**
@@ -134,6 +166,47 @@ public class VirtualStructureListDiffTest extends VirtualStructureDiffBase {
 
             $〡.hbox.〡(SingleBox.class, items);
             $〡.vbox.〡(SingleBox.class, items);
+        }
+    }
+
+    /**
+     * <p>
+     * Create structure for bean box list.
+     * </p>
+     * 
+     * @param item A bean item.
+     * @return A created structure.
+     */
+    private <T> VirtualStructure bean(Person item) {
+        return bean(Arrays.asList(item));
+    }
+
+    /**
+     * <p>
+     * Create structure for bean box list.
+     * </p>
+     * 
+     * @param items A list items.
+     * @return A created structure.
+     */
+    private <T> VirtualStructure bean(List<Person> items) {
+        VirtualStructure $〡 = new VirtualStructure();
+        $〡.hbox.〡(PersonBox.class, items);
+
+        return $〡;
+    }
+
+    /**
+     * @version 2014/09/13 14:11:31
+     */
+    private static class PersonBox extends Widget<Person> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize(VirtualStructure $〡) {
+            $〡.hbox.〡(model.getName(), " is ", model.getAge(), " years old.");
         }
     }
 }

@@ -21,7 +21,7 @@ public class VirtualStructureDiffBase {
 
     /**
      * <p>
-     * Assert map diff.
+     * Assert structure diff.
      * </p>
      * 
      * @param prev
@@ -29,10 +29,23 @@ public class VirtualStructureDiffBase {
      * @param expectedOperationCount
      */
     protected void assertDiff(VirtualStructure prev, VirtualStructure next, int expectedOperationCount) {
-        List<Patch> ops = Diff.diff(prev.getRoot(), next.getRoot());
+        assertDiff(prev.getRoot(), next.getRoot(), expectedOperationCount);
+    }
 
-        Node prevNode = prev.getRoot().createNode();
-        Node nextNode = next.getRoot().createNode();
+    /**
+     * <p>
+     * Assert structure diff.
+     * </p>
+     * 
+     * @param prev
+     * @param next
+     * @param expectedOperationCount
+     */
+    protected void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
+        List<Patch> ops = Diff.diff(prev, next);
+
+        Node prevNode = prev.createNode();
+        Node nextNode = next.createNode();
 
         for (int i = 0; i < ops.size(); i++) {
             try {

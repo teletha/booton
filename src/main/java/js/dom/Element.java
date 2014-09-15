@@ -420,32 +420,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
 
     /**
      * <p>
-     * Get the combined text contents of this element, including its descendants.
-     * </p>
-     * 
-     * @return A text contents.
-     */
-    public String text() {
-        return textContent();
-    }
-
-    /**
-     * <p>
-     * Set the content of this element.
-     * </p>
-     * 
-     * @param text A text to set.
-     * @return Chainable API.
-     */
-    public Element text(Object text) {
-        textContent(String.valueOf(text));
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
      * Add or remove class from this element, depending on either the class's presence or the value
      * of the switch argument.
      * </p>

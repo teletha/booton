@@ -9,6 +9,8 @@
  */
 package js.dom;
 
+import static js.dom.JavaElement.*;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -174,9 +176,7 @@ class JavaText implements org.w3c.dom.Text {
      */
     @Override
     public Node getPreviousSibling() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return convert(text.previousSibling());
     }
 
     /**
@@ -184,7 +184,7 @@ class JavaText implements org.w3c.dom.Text {
      */
     @Override
     public Node getNextSibling() {
-        return null;
+        return convert(text.nextSibling());
     }
 
     /**

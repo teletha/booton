@@ -9,13 +9,15 @@
  */
 package js.dom;
 
+import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
+import booton.translator.Translator;
 
 /**
  * @version 2014/08/31 12:11:27
  */
-public abstract class Attributes {
+public abstract class Attributes implements JavascriptNative {
 
     /**
      * <p>
@@ -32,4 +34,29 @@ public abstract class Attributes {
      */
     @JavascriptNativeProperty
     protected abstract Attribute get(int index);
+
+    /**
+     * @version 2014/09/14 2:27:03
+     */
+    @SuppressWarnings("unused")
+    private static class Coder extends Translator<Attributes> {
+
+        /**
+         * <p>
+         * </p>
+         * 
+         * @return
+         */
+        public String length() {
+            return that + ".length";
+        }
+
+        /**
+         * @param index
+         * @return
+         */
+        public String get(int index) {
+            return that + "[" + param(0) + "]";
+        }
+    }
 }

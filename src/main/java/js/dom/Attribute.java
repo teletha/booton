@@ -9,12 +9,13 @@
  */
 package js.dom;
 
+import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativePropertyAccessor;
 
 /**
  * @version 2014/08/31 12:40:20
  */
-public abstract class Attribute {
+public abstract class Attribute implements JavascriptNative {
 
     /**
      * <p>
