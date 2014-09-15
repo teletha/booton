@@ -14,10 +14,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/11 14:57:41
  */
+@RunWith(ScriptRunner.class)
 public class VirtualStructureTest {
 
     @Test

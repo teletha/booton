@@ -10,10 +10,14 @@
 package jsx.ui.virtual;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/13 2:05:34
  */
+@RunWith(ScriptRunner.class)
 public class VirtualStructureDiffTest extends VirtualStructureDiffBase {
 
     @Test
@@ -47,5 +51,28 @@ public class VirtualStructureDiffTest extends VirtualStructureDiffBase {
         next〡.hbox(1).〡("change");
 
         assertDiff(prev〡, next〡, 1);
+    }
+
+    @Test
+    public void boxTypeChange() {
+        assertDiff(change(true), change(false), 1);
+    }
+
+    /**
+     * <p>
+     * Create structure for multi box list.
+     * </p>
+     * 
+     * @param items A list items.
+     * @return A created structure.
+     */
+    private <T> VirtualStructure change(boolean condition) {
+        VirtualStructure $〡 = new VirtualStructure();
+        if (condition) {
+            $〡.vbox.〡("text");
+        } else {
+            $〡.hbox.〡("text");
+        }
+        return $〡;
     }
 }

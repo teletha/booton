@@ -22,6 +22,7 @@ import jsx.ui.virtual.Patch.RemoveAttribute;
 import jsx.ui.virtual.Patch.RemoveChild;
 import jsx.ui.virtual.Patch.RemoveClass;
 import jsx.ui.virtual.Patch.ReplaceChild;
+import jsx.ui.virtual.Patch.ReplaceText;
 import booton.css.CSS;
 
 /**
@@ -181,7 +182,11 @@ public class Diff {
 
                         if (nextItemInPrev == -1) {
                             if (prevItemInNext == -1) {
-                                patches.add(new ReplaceChild(context, prevItem, nextItem));
+                                if (prevItem instanceof VirtualText && nextItem instanceof VirtualText) {
+                                    patches.add(new ReplaceText((VirtualText) prevItem, (VirtualText) nextItem));
+                                } else {
+                                    patches.add(new ReplaceChild(context, prevItem, nextItem));
+                                }
                                 prevPosition++;
                             } else {
                                 patches.add(new InsertChild(context, prevItem, nextItem));

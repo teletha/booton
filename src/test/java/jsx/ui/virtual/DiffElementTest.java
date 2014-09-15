@@ -19,12 +19,15 @@ import js.dom.Node;
 import js.dom.NodeComparator;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import booton.css.CSS;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/05 9:24:53
  */
+@RunWith(ScriptRunner.class)
 public class DiffElementTest {
 
     /** The reusable attribute map. */

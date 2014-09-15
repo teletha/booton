@@ -112,6 +112,32 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
 
     /**
      * <p>
+     * Get the combined text contents of this element, including its descendants.
+     * </p>
+     * 
+     * @return A text contents.
+     */
+    public String text() {
+        return textContent();
+    }
+
+    /**
+     * <p>
+     * Set the content of this element.
+     * </p>
+     * 
+     * @param text A text to set.
+     * @return Chainable API.
+     */
+    public T text(Object text) {
+        textContent(String.valueOf(text));
+
+        // API definition
+        return (T) this;
+    }
+
+    /**
+     * <p>
      * Indicates whether a node is a descendant of a given node.
      * </p>
      * 

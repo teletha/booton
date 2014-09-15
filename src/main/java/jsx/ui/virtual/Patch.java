@@ -198,6 +198,37 @@ public abstract class Patch {
     }
 
     /**
+     * @version 2014/09/14 12:51:53
+     */
+    static class ReplaceText extends ChildPatch {
+
+        /** The new contents to replace. */
+        private final VirtualText replace;
+
+        /**
+         * <p>
+         * Create text replace operation.
+         * </p>
+         * 
+         * @param child
+         * @param replace
+         */
+        ReplaceText(VirtualText child, VirtualText replace) {
+            super(null, child);
+
+            this.replace = replace;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void apply() {
+            child.dom.text(replace.text);
+        }
+    }
+
+    /**
      * @version 2014/09/08 18:19:19
      */
     private static abstract class AttributePatch extends Patch {

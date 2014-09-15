@@ -23,7 +23,7 @@ import booton.css.CSS;
 /**
  * @version 2014/09/13 1:52:02
  */
-public class VirtualStructure {
+public final class VirtualStructure {
 
     /**
      * <p>

@@ -10,6 +10,7 @@
 package js.dom;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @version 2014/08/31 11:08:37
@@ -41,7 +42,7 @@ public class NodeComparator {
             }
             equals((Element) one, (Element) other);
         } else if (one instanceof Text) {
-            if (other instanceof Element == false) {
+            if (other instanceof Text == false) {
                 throw new AssertionError("One is text but the other is not text.");
             }
             equals((Text) one, (Text) other);
@@ -57,7 +58,7 @@ public class NodeComparator {
      * @param other
      */
     public static void equals(Text one, Text other) {
-        assert one.textContent().equals(other.textContent());
+        assert Objects.equals(one.textContent(), other.textContent());
     }
 
     /**
@@ -65,7 +66,8 @@ public class NodeComparator {
      * @param other
      */
     public static void equals(Element one, Element other) {
-        assert one.tagName().equals(other.tagName());
+
+        assert Objects.equals(one.tagName(), other.tagName());
 
         Attributes attributes1 = one.attributes();
         Attributes attributes2 = other.attributes();
@@ -74,13 +76,20 @@ public class NodeComparator {
         for (int i = 0; i < attributes1.length(); i++) {
             Attribute attribute1 = attributes1.get(i);
             Attribute attribute2 = attributes2.get(i);
-            assert attribute1.namespaceURI().equals(attribute2.namespaceURI());
-            assert attribute1.name().equals(attribute2.name());
-            assert attribute1.value().equals(attribute2.value());
-        }
+            assert attribute1 != null;
+            assert attribute2 != null;
+            assert Objects.equals(attribute1.namespaceURI(), attribute2.namespaceURI());
+            assert Objects.equals(attribute1.name(), attribute2.name());
 
-        List<Element> children1 = one.children();
-        List<Element> children2 = other.children();
+            // HTMLUnit bug? https://sourceforge.net/p/htmlunit/bugs/1643/
+            if (attribute1.name().equals("class")) {
+                assert Objects.equals(attribute1.value().trim(), attribute2.value().trim());
+            } else {
+                assert Objects.equals(attribute1.value(), attribute2.value());
+            }
+        }
+        List<Node> children1 = one.childNodes();
+        List<Node> children2 = other.childNodes();
         assert children1.size() == children2.size();
 
         for (int i = 0; i < children1.size(); i++) {

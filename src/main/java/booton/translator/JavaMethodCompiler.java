@@ -39,6 +39,9 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
+import jsx.ui.virtual.VirtualStructure;
+import jsx.ui.virtual.VirtualStructure.ContainerDescriptor;
+import jsx.ui.virtual.VirtualStructure.Descriptor;
 import kiss.I;
 import kiss.model.ClassUtil;
 import booton.Obfuscator;
@@ -247,6 +250,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /** The synchronized block related nodes. */
     private Set<Node> synchronizer = new HashSet();
+
+    /** The local id of the virtual structure. */
+    private int virtualStructureLocalId = 1;
 
     /**
      * @param script A target script to compile.
@@ -465,7 +471,15 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETFIELD:
-            current.addOperand(translator.translateField(owner, name, current.remove(0)), type);
+            if (owner == VirtualStructure.class && !name.equals("asis") && script.source != VirtualStructure.class && script.source != Descriptor.class && script.source != ContainerDescriptor.class) {
+                ArrayList<Operand> context = new ArrayList();
+                context.add(current.remove(0)); // "this" context
+                context.add(new OperandNumber(virtualStructureLocalId++)); // local id parameter
+                current
+                        .addOperand(translator.translateMethod(owner, name, "(I)".concat(desc), new Class[] {int.class}, context), type);
+            } else {
+                current.addOperand(translator.translateField(owner, name, current.remove(0)), type);
+            }
             break;
 
         case PUTSTATIC:

@@ -532,7 +532,7 @@ class JavaElement implements org.w3c.dom.Element {
      */
     @Override
     public Node getPreviousSibling() {
-        throw new Error();
+        return convert(element.previousSibling());
     }
 
     /**
