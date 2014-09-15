@@ -72,14 +72,15 @@ public class Input extends UI<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure box) {
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.e("input", 1).〡();
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public void materialize(Element element) {
+        System.out.println("materialized");
         element.observe(UIAction.Click).to(e -> {
             System.out.println("CLICLED " + e);
         });

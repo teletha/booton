@@ -10,8 +10,8 @@
 package booton;
 
 import js.lang.Global;
+import jsx.ui.virtual.UIManager;
 import booton.reactive.TodoWidget;
-import booton.reactive.UIManager;
 
 /**
  * @version 2014/03/08 11:13:39

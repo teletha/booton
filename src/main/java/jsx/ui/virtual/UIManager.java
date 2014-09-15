@@ -7,16 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui.virtual;
 
 import java.util.List;
 import java.util.Objects;
 
 import js.dom.Element;
-import jsx.ui.virtual.Diff;
-import jsx.ui.virtual.Patch;
-import jsx.ui.virtual.VirtualElement;
-import jsx.ui.virtual.Widget;
 import kiss.Disposable;
 
 /**
@@ -70,7 +66,9 @@ public class UIManager {
          */
         private void execute() {
             // create new virtual element
-            VirtualElement next = widget.virtualize();
+            VirtualStructure structure = new VirtualStructure();
+            widget.virtualize(structure);
+            VirtualElement next = structure.getRoot();
 
             // create patch to manipulate DOM
             List<Patch> patches = Diff.diff(virtual, next);
@@ -81,7 +79,6 @@ public class UIManager {
 
             // update real element
             for (Patch patch : patches) {
-                System.out.println(patch);
                 patch.apply();
             }
         }

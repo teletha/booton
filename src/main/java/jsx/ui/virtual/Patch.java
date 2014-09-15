@@ -72,7 +72,7 @@ public abstract class Patch {
      * 
      */
         protected Node createElementFromVirtualElement(Object element) {
-            return ((VirtualNode) element).createNode();
+            return ((VirtualNode) element).materialize();
         }
     }
 
@@ -99,6 +99,7 @@ public abstract class Patch {
         @Override
         public void apply() {
             parent.dom.removeChild(child.dom);
+            child.dispose();
         }
     }
 

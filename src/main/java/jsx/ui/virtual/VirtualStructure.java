@@ -93,12 +93,12 @@ public final class VirtualStructure {
      * Define horizontal container with local id.
      * </p>
      * 
-     * @param localID A local id for the container element.
+     * @param localId A local id for the container element.
      * @return A descriptor of the container element.
      * @see #hbox
      */
-    public final ContainerDescriptor hbox(int localID) {
-        hbox.localId = localID;
+    public final ContainerDescriptor hbox(int localId) {
+        hbox.localId = localId;
         return hbox;
     }
 
@@ -107,12 +107,12 @@ public final class VirtualStructure {
      * Define vertical container with local id.
      * </p>
      * 
-     * @param localID A local id for the container element.
+     * @param localId A local id for the container element.
      * @return A descriptor of the container element.
      * @see #vbox
      */
-    public final ContainerDescriptor vbox(int localID) {
-        vbox.localId = localID;
+    public final ContainerDescriptor vbox(int localId) {
+        vbox.localId = localId;
         return vbox;
     }
 
@@ -121,13 +121,29 @@ public final class VirtualStructure {
      * Define stackable container with local id.
      * </p>
      * 
-     * @param localID A local id for the container element.
+     * @param localId A local id for the container element.
      * @return A descriptor of the container element.
      * @see #sbox
      */
-    public final ContainerDescriptor sbox(int localID) {
-        sbox.localId = localID;
+    public final ContainerDescriptor sbox(int localId) {
+        sbox.localId = localId;
         return sbox;
+    }
+
+    /**
+     * <p>
+     * Define html element with local id.
+     * </p>
+     * @param name A element name.
+     * @param localId A local id for the container element.
+     * 
+     * @return A descriptor of the container element.
+     */
+    public final ContainerDescriptor e(String name, int localId) {
+        ContainerDescriptor container = new ContainerDescriptor(name, null);
+        container.localId = localId;
+
+        return container;
     }
 
     /**

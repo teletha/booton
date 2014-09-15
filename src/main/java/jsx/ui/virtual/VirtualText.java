@@ -37,7 +37,7 @@ public class VirtualText extends VirtualNode<Text> {
      * {@inheritDoc}
      */
     @Override
-    public Text createNode() {
+    public Text materialize() {
         return dom = document.createTextNode(text);
     }
 }
