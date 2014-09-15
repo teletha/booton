@@ -209,15 +209,6 @@ public class DiffElementTest {
         assertDiff(e1, e2, 2);
     }
 
-    @Test
-    public void applyPatchTwice() throws Exception {
-        VirtualElement e1 = root(e("child"));
-        VirtualElement e2 = root(e("child", attr("a", "A")));
-        VirtualElement e3 = root(e("child", attr("a", "A"), e("grand")));
-
-        assertDiff(e1, e2, 1);
-    }
-
     /**
      * Assert map diff.
      * 
@@ -227,8 +218,8 @@ public class DiffElementTest {
     private void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
         List<Patch> ops = Diff.diff(prev, next);
 
-        Node prevNode = prev.createNode();
-        Node nextNode = next.createNode();
+        Node prevNode = prev.materialize();
+        Node nextNode = next.materialize();
 
         for (int i = 0; i < ops.size(); i++) {
             try {

@@ -11,23 +11,17 @@ package jsx.ui.virtual;
 
 import js.dom.Node;
 
-import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
-
 /**
- * @version 2014/09/04 23:21:40
+ * @version 2014/09/15 21:22:53
  */
-public abstract class VirtualNode<D extends Node> implements Materializer<D>, Disposable {
-
-    /** The real DOM node. */
-    public D dom;
-
-    /** The node identifier. */
-    public final int id;
+public interface Materializer<D extends Node> {
 
     /**
+     * <p>
+     * Create actual DOM {@link Node}.
+     * </p>
      * 
+     * @return A created node.
      */
-    protected VirtualNode(int id) {
-        this.id = id;
-    }
+    D materialize();
 }

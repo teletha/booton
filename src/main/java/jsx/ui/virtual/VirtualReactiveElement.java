@@ -49,7 +49,7 @@ public class VirtualReactiveElement extends VirtualElement implements Disposable
      * {@inheritDoc}
      */
     @Override
-    public Element createNode() {
+    public Element materialize() {
         Element e = document.createElement("span");
 
         disposable = events.to(v -> {

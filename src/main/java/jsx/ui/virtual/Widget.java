@@ -9,7 +9,6 @@
  */
 package jsx.ui.virtual;
 
-import js.dom.Element;
 
 /**
  * @version 2014/08/21 13:31:25
@@ -29,20 +28,4 @@ public abstract class Widget<V> {
      * @param $〡 Domain Specific Language for virtual element.
      */
     protected abstract void virtualize(VirtualStructure $〡);
-
-    /**
-     * 
-     */
-    final VirtualElement virtualize() {
-        VirtualStructure box = new VirtualStructure();
-        virtualize(box);
-        return box.getRoot();
-    }
-
-    /**
-     * @param element
-     */
-    public void materialize(Element element) {
-
-    }
 }

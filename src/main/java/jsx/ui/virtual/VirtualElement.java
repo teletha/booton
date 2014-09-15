@@ -44,7 +44,7 @@ public class VirtualElement extends VirtualNode<Element> {
      * {@inheritDoc}
      */
     @Override
-    public Element createNode() {
+    public Element materialize() {
         dom = document.createElement(name);
 
         for (int i = 0; i < attributes.names.length(); i++) {
@@ -56,7 +56,7 @@ public class VirtualElement extends VirtualNode<Element> {
         }
 
         for (int i = 0; i < children.items.length(); i++) {
-            dom.append(children.items.get(i).createNode());
+            dom.append(children.items.get(i).materialize());
         }
         return dom;
     }

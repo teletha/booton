@@ -44,8 +44,8 @@ public class VirtualStructureDiffBase {
     protected void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
         List<Patch> ops = Diff.diff(prev, next);
 
-        Node prevNode = prev.createNode();
-        Node nextNode = next.createNode();
+        Node prevNode = prev.materialize();
+        Node nextNode = next.materialize();
 
         for (int i = 0; i < ops.size(); i++) {
             try {
