@@ -22,7 +22,7 @@ import booton.soeur.ScriptRunner;
  * @version 2014/09/13 14:10:28
  */
 @RunWith(ScriptRunner.class)
-public class VirtualStructureListDiffTest extends VirtualStructureDiffBase {
+public class VirtualStructureListDiffTest extends DiffTestBase {
 
     @Test
     public void add() {
