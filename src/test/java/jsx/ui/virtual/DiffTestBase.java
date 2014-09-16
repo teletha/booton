@@ -17,7 +17,7 @@ import js.dom.NodeComparator;
 /**
  * @version 2014/09/13 14:18:22
  */
-public class VirtualStructureDiffBase {
+public class DiffTestBase {
 
     /**
      * <p>
@@ -42,10 +42,12 @@ public class VirtualStructureDiffBase {
      * @param expectedOperationCount
      */
     protected void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
-        List<Patch> ops = Diff.diff(prev, next);
-
         Node prevNode = prev.materialize();
         Node nextNode = next.materialize();
+
+        clean(next);
+
+        List<Patch> ops = Diff.diff(prev, next);
 
         for (int i = 0; i < ops.size(); i++) {
             try {
@@ -61,7 +63,28 @@ public class VirtualStructureDiffBase {
         String message = message(prevNode, nextNode, ops, ops.size());
 
         assert expectedOperationCount == ops.size() : message;
+        System.out.println(prevNode);
+        System.out.println(nextNode);
         NodeComparator.equals(prevNode, nextNode);
+    }
+
+    /**
+     * <p>
+     * Clean up dom reference.
+     * </p>
+     * 
+     * @param node
+     */
+    private void clean(VirtualNode node) {
+        node.dom = null;
+
+        if (node instanceof VirtualElement) {
+            VirtualElement element = (VirtualElement) node;
+
+            for (int i = 0; i < element.children.items.length(); i++) {
+                clean(element.children.items.get(i));
+            }
+        }
     }
 
     /**

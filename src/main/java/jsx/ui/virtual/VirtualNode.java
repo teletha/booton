@@ -11,12 +11,10 @@ package jsx.ui.virtual;
 
 import js.dom.Node;
 
-import com.sun.media.jfxmediaimpl.MediaDisposer.Disposable;
-
 /**
  * @version 2014/09/04 23:21:40
  */
-public abstract class VirtualNode<D extends Node> implements Materializer<D>, Disposable {
+public abstract class VirtualNode<D extends Node> implements Materializer<D> {
 
     /** The real DOM node. */
     public D dom;

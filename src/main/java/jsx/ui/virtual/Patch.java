@@ -99,7 +99,6 @@ public abstract class Patch {
         @Override
         public void apply() {
             parent.dom.removeChild(child.dom);
-            child.dispose();
         }
     }
 

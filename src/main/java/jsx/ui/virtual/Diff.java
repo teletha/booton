@@ -40,10 +40,13 @@ public class Diff {
      * @return
      */
     public static List<Patch> diff(VirtualElement prev, VirtualElement next) {
+        next.dom = prev.dom;
+        prev.dom = null;
+
         List<Patch> patches = new ArrayList();
-        patches.addAll(diff(prev, prev.attributes, next.attributes));
-        patches.addAll(diff(prev, prev.classList, next.classList));
-        patches.addAll(diff(prev, prev.children, next.children));
+        patches.addAll(diff(next, prev.attributes, next.attributes));
+        patches.addAll(diff(next, prev.classList, next.classList));
+        patches.addAll(diff(next, prev.children, next.children));
 
         return patches;
     }
