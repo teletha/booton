@@ -74,7 +74,7 @@ public class DiffTestBase {
      * @param node
      */
     private void clean(VirtualNode node) {
-        node.real = null;
+        node.dom = null;
 
         if (node instanceof VirtualElement) {
             VirtualElement element = (VirtualElement) node;
