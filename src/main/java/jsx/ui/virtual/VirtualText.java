@@ -15,7 +15,7 @@ import js.dom.Text;
 /**
  * @version 2014/09/04 23:22:51
  */
-public class VirtualText extends VirtualNode<Text> {
+class VirtualText extends VirtualNode<Text> {
 
     /** The text content. */
     public final String text;

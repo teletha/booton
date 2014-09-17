@@ -18,7 +18,7 @@ import js.lang.NativeArray;
  * 
  * @version 2014/09/09 12:22:54
  */
-public class VirtualKVS {
+class VirtualKVS {
 
     /** The attribute name list. */
     public final NativeArray<String> names = new NativeArray();

@@ -11,7 +11,7 @@ package booton.reactive;
 
 import javafx.beans.value.ObservableValue;
 
-import jsx.ui.virtual.VirtualStructure;
+import jsx.ui.virtual.StructureDSL;
 
 /**
  * @version 2014/08/22 11:27:22
@@ -26,6 +26,6 @@ public class Output extends UI<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure box) {
+    protected void virtualize(StructureDSL box) {
     }
 }

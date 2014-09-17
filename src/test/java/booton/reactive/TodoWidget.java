@@ -24,7 +24,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.ui.virtual.VirtualStructure;
+import jsx.ui.virtual.StructureDSL;
 import jsx.ui.virtual.Widget;
 import kiss.Events;
 import kiss.I;
@@ -149,7 +149,7 @@ public class TodoWidget extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
+    protected void virtualize(StructureDSL $〡) {
         int imcompleted = incompletedSize.intValue();
 
         $〡.asis.〡(input);
@@ -182,7 +182,7 @@ public class TodoWidget extends Widget {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(VirtualStructure $〡) {
+        protected void virtualize(StructureDSL $〡) {
             $〡.sbox.〡(text, delete);
             $〡.asis.〡(edit);
         }

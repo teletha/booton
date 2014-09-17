@@ -14,7 +14,7 @@ import booton.css.CSS;
 /**
  * @version 2014/09/12 11:00:18
  */
-class VirtualStructureStyle {
+class StructureDSLStyle {
 
     /**
      * @version 2014/09/12 19:20:09

@@ -9,7 +9,7 @@
  */
 package booton.reactive;
 
-import jsx.ui.virtual.VirtualStructure;
+import jsx.ui.virtual.StructureDSL;
 
 /**
  * @version 2014/09/11 8:59:42
@@ -20,6 +20,6 @@ public class Image extends UI<Image> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure box) {
+    protected void virtualize(StructureDSL box) {
     }
 }

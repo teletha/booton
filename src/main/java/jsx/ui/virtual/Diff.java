@@ -29,7 +29,7 @@ import booton.css.CSS;
 /**
  * @version 2014/09/17 9:24:03
  */
-public class Diff {
+class Diff {
 
     /**
      * <p>
@@ -40,7 +40,7 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<Patch> diff(VirtualElement prev, VirtualElement next) {
+    static List<Patch> diff(VirtualElement prev, VirtualElement next) {
         /**
          * {@link VirtualNode#dom}
          * <p>
@@ -70,7 +70,7 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<Patch> diff(Element context, NativeArray<Class<? extends CSS>> prev, NativeArray<Class<? extends CSS>> next) {
+    static List<Patch> diff(Element context, NativeArray<Class<? extends CSS>> prev, NativeArray<Class<? extends CSS>> next) {
         List<Patch> patches = new ArrayList();
 
         for (int i = 0, length = next.length(); i < length; i++) {
@@ -102,7 +102,7 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<Patch> diff(Element context, VirtualKVS prev, VirtualKVS next) {
+    static List<Patch> diff(Element context, VirtualKVS prev, VirtualKVS next) {
         List<Patch> patches = new ArrayList();
 
         for (int nextIndex = 0; nextIndex < next.names.length(); nextIndex++) {
@@ -141,7 +141,7 @@ public class Diff {
      * @param next
      * @return
      */
-    public static List<Patch> diff(Element context, VirtualNodeList prev, VirtualNodeList next) {
+    static List<Patch> diff(Element context, VirtualNodeList prev, VirtualNodeList next) {
         List<Patch> patches = new ArrayList();
 
         int prevSize = prev.items.length();

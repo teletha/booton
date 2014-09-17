@@ -17,7 +17,7 @@ import booton.css.CSS;
 /**
  * @version 2014/09/04 23:22:40
  */
-public class VirtualElement extends VirtualNode<Element> {
+class VirtualElement extends VirtualNode<Element> {
 
     /** The node name. */
     public final String name;

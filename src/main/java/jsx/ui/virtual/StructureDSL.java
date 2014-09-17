@@ -14,16 +14,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
-import jsx.ui.virtual.VirtualStructureStyle.HBOX;
-import jsx.ui.virtual.VirtualStructureStyle.SBOX;
-import jsx.ui.virtual.VirtualStructureStyle.VBOX;
+import jsx.ui.virtual.StructureDSLStyle.HBOX;
+import jsx.ui.virtual.StructureDSLStyle.SBOX;
+import jsx.ui.virtual.StructureDSLStyle.VBOX;
 import kiss.I;
 import booton.css.CSS;
 
 /**
  * @version 2014/09/13 1:52:02
  */
-public final class VirtualStructure {
+public final class StructureDSL {
 
     /**
      * <p>
@@ -77,14 +77,14 @@ public final class VirtualStructure {
     /**
      * 
      */
-    public VirtualStructure() {
+    public StructureDSL() {
         this(new VirtualElement(0, "div"));
     }
 
     /**
      * 
      */
-    public VirtualStructure(VirtualElement root) {
+    public StructureDSL(VirtualElement root) {
         nodes.add(root);
     }
 
@@ -237,7 +237,7 @@ public final class VirtualStructure {
             // precess into child items
             for (Object child : children) {
                 if (child instanceof Widget) {
-                    ((Widget) child).virtualize(VirtualStructure.this);
+                    ((Widget) child).virtualize(StructureDSL.this);
                 } else {
                     container.children.items.push(new VirtualText(child.hashCode(), child.toString()));
                 }
@@ -320,7 +320,7 @@ public final class VirtualStructure {
                 widget.model = child;
 
                 modifier = child.hashCode();
-                widget.virtualize(VirtualStructure.this);
+                widget.virtualize(StructureDSL.this);
             }
 
             // reset context environment
