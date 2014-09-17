@@ -68,13 +68,6 @@ abstract class Patch {
 
             this.child = child;
         }
-
-        /**
-     * 
-     */
-        protected Node createElementFromVirtualElement(Object element) {
-            return ((VirtualNode) element).materialize();
-        }
     }
 
     /**
@@ -131,7 +124,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            Node created = createElementFromVirtualElement(child);
+            Node created = child.materialize();
 
             if (this.child == null) {
                 parent.append(created);
@@ -200,7 +193,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.replace(child.dom, createElementFromVirtualElement(replace));
+            parent.replace(child.dom, replace.materialize());
             child.dispose();
         }
     }

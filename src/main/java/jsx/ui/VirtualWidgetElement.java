@@ -17,7 +17,7 @@ import js.dom.Element;
 class VirtualWidgetElement extends VirtualElement {
 
     /** The associated widget. */
-    private final Widget widget;
+    final Widget widget;
 
     /**
      * @param id

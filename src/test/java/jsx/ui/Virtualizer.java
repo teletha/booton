@@ -7,11 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import jsx.ui.Widget;
 
 /**
  * @version 2014/09/02 10:16:32
@@ -24,8 +23,41 @@ public class Virtualizer {
      * @return
      */
     public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
-        widget.virtualize();
-        return null;
+        StructureDSL structure = new StructureDSL();
+        widget.virtualize(structure);
+        VirtualElement root = structure.getRoot();
+
+        List<T> list = new ArrayList();
+        find(list, childWidgetType, root);
+
+        return list;
+    }
+
+    /**
+     * <p>
+     * Find all child widgets.
+     * </p>
+     * 
+     * @param list
+     * @param type
+     * @param element
+     */
+    private static <T extends Widget> void find(List<T> list, Class<T> type, VirtualElement element) {
+        if (element instanceof VirtualWidgetElement) {
+            Widget widget = ((VirtualWidgetElement) element).widget;
+
+            if (type.isAssignableFrom(widget.getClass())) {
+                list.add((T) widget);
+            }
+        }
+
+        for (int i = 0; i < element.children.items.length(); i++) {
+            VirtualNode child = element.children.items.get(i);
+
+            if (child instanceof VirtualElement) {
+                find(list, type, (VirtualElement) child);
+            }
+        }
     }
 
     /**

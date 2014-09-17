@@ -28,7 +28,6 @@ import jsx.ui.TodoWidgetStyle.BUTTONS;
 import jsx.ui.TodoWidgetStyle.FOOTER;
 import kiss.Events;
 import kiss.I;
-import booton.reactive.Key;
 import booton.reactive.css.DynamicStyle;
 
 /**

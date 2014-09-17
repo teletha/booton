@@ -72,7 +72,7 @@ public class Input extends UI<Input> {
      */
     @Override
     protected VirtualElement virtualize() {
-        return null;
+        return new VirtualElement(0, "input");
     }
 
     /**
