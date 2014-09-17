@@ -45,19 +45,19 @@ public class VirtualElement extends VirtualNode<Element> {
      */
     @Override
     public Element materialize() {
-        dom = document.createElement(name);
+        real = document.createElement(name);
 
         for (int i = 0; i < attributes.names.length(); i++) {
-            dom.attr(attributes.names.get(i), attributes.values.get(i));
+            real.attr(attributes.names.get(i), attributes.values.get(i));
         }
 
         for (int i = 0; i < classList.length(); i++) {
-            dom.add(classList.get(i));
+            real.add(classList.get(i));
         }
 
         for (int i = 0; i < children.items.length(); i++) {
-            dom.append(children.items.get(i).materialize());
+            real.append(children.items.get(i).materialize());
         }
-        return dom;
+        return real;
     }
 }

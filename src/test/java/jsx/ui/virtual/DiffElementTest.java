@@ -96,7 +96,7 @@ public class DiffElementTest extends DiffTestBase {
 
     @Test
     public void childInsertAtHead() {
-        // assertDiff(root("c1", "c2"), root("c1", "c2", "c3"), 1);
+        assertDiff(root("c1", "c2"), root("c1", "c2", "c3"), 1);
         assertDiff(root("c1", "c2"), root("A", "B", "c1", "c2"), 2);
     }
 

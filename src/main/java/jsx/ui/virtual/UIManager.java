@@ -74,7 +74,7 @@ public class UIManager {
             List<Patch> patches = Diff.diff(virtual, next);
 
             // update virtual element
-            virtual.dom = real;
+            virtual.real = real;
             virtual = next;
 
             // update real element
