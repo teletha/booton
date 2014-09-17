@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.virtual;
+package jsx.ui;
 
 
 /**

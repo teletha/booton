@@ -7,16 +7,16 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.virtual;
+package jsx.ui;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
-import jsx.ui.virtual.StructureDSLStyle.HBOX;
-import jsx.ui.virtual.StructureDSLStyle.SBOX;
-import jsx.ui.virtual.StructureDSLStyle.VBOX;
+import jsx.ui.StructureDSLStyle.HBOX;
+import jsx.ui.StructureDSLStyle.SBOX;
+import jsx.ui.StructureDSLStyle.VBOX;
 import kiss.I;
 import booton.css.CSS;
 

@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.virtual;
+package jsx.ui;
 
 import static booton.reactive.FunctionHelper.*;
 
@@ -24,13 +24,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.ui.virtual.Button;
-import jsx.ui.virtual.Input;
-import jsx.ui.virtual.Output;
-import jsx.ui.virtual.StructureDSL;
-import jsx.ui.virtual.Widget;
-import jsx.ui.virtual.TodoWidgetStyle.BUTTONS;
-import jsx.ui.virtual.TodoWidgetStyle.FOOTER;
+import jsx.ui.TodoWidgetStyle.BUTTONS;
+import jsx.ui.TodoWidgetStyle.FOOTER;
 import kiss.Events;
 import kiss.I;
 import booton.reactive.Key;
