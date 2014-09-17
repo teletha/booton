@@ -17,7 +17,6 @@ import java.util.Deque;
 import jsx.ui.StructureDSLStyle.HBOX;
 import jsx.ui.StructureDSLStyle.SBOX;
 import jsx.ui.StructureDSLStyle.VBOX;
-import kiss.I;
 import booton.css.CSS;
 
 /**
@@ -134,9 +133,9 @@ public final class StructureDSL {
      * <p>
      * Define html element with local id.
      * </p>
+     * 
      * @param name A element name.
      * @param localId A local id for the container element.
-     * 
      * @return A descriptor of the container element.
      */
     public final ContainerDescriptor e(String name, int localId) {
@@ -238,6 +237,12 @@ public final class StructureDSL {
             for (Object child : children) {
                 if (child instanceof Widget) {
                     ((Widget) child).virtualize(StructureDSL.this);
+                } else if (child instanceof UI) {
+                    VirtualElement virtualize = ((UI) child).virtualize();
+
+                    if (virtualize != null) {
+                        container.children.items.push(virtualize);
+                    }
                 } else {
                     container.children.items.push(new VirtualText(child.hashCode(), child.toString()));
                 }
@@ -316,11 +321,9 @@ public final class StructureDSL {
 
             // precess into child items
             for (T child : children) {
-                Widget<T> widget = I.make(childType);
-                widget.model = child;
-
                 modifier = child.hashCode();
-                widget.virtualize(StructureDSL.this);
+
+                Widget.create(childType, child).virtualize(StructureDSL.this);
             }
 
             // reset context environment

@@ -14,9 +14,6 @@ import jsx.ui.TodoWidget.Todo;
 
 import org.junit.Test;
 
-import booton.reactive.Key;
-import booton.reactive.Virtualizer;
-
 /**
  * @version 2014/09/01 19:42:57
  */

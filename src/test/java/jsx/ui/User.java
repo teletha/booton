@@ -11,7 +11,6 @@ package jsx.ui;
 
 import java.util.Objects;
 
-import booton.reactive.Key;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;
@@ -47,7 +46,7 @@ public class User {
 
         for (Object stroke : strokes) {
             if (stroke instanceof Key) {
-                type(input.publisher, (Key) stroke);
+                type(input.publish(), (Key) stroke);
             } else {
                 input.value.setValue(input.value.get() + stroke);
             }
@@ -87,7 +86,7 @@ public class User {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.publisher.publish(event);
+        button.publish().publish(event);
     }
 
     /**

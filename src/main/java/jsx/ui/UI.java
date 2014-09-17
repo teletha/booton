@@ -20,7 +20,6 @@ import js.dom.UIAction;
 import jsx.event.Publishable;
 import kiss.Disposable;
 import kiss.Events;
-import booton.reactive.Key;
 import booton.reactive.css.StyleDefinition;
 
 /**
@@ -34,7 +33,7 @@ public abstract class UI<T extends UI<T>> {
 
     protected final BooleanProperty enable = new SimpleBooleanProperty();
 
-    Publishable<?> publisher = new Publishable();
+    private Publishable<?> publisher;
 
     /** The disposable list. */
     private List<Disposable> disposables;
@@ -47,6 +46,20 @@ public abstract class UI<T extends UI<T>> {
      * @return A single element.
      */
     protected abstract VirtualElement virtualize();
+
+    /**
+     * <p>
+     * Retrieve the event publisher.
+     * </p>
+     * 
+     * @return
+     */
+    protected final Publishable<?> publish() {
+        if (publisher == null) {
+            publisher = new Publishable();
+        }
+        return publisher;
+    }
 
     /**
      * @return
@@ -91,7 +104,7 @@ public abstract class UI<T extends UI<T>> {
      */
     public T shortcut(Key key, Runnable action) {
         if (key != null && action != null) {
-            disposer().add(publisher.observe(UIAction.KeyUp).filter(e -> e.which == key.code).to(e -> {
+            disposer().add(publish().observe(UIAction.KeyUp).filter(e -> e.which == key.code).to(e -> {
                 action.run();
             }));
         }
