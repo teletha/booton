@@ -15,7 +15,7 @@ import kiss.Disposable;
 /**
  * @version 2014/09/04 23:21:40
  */
-abstract class VirtualNode<D extends Node> implements Materializer<D>, Disposable {
+abstract class VirtualNode<D extends Node> implements Disposable {
 
     /**
      * <p>
@@ -44,10 +44,19 @@ abstract class VirtualNode<D extends Node> implements Materializer<D>, Disposabl
     }
 
     /**
+     * <p>
+     * Create actual DOM {@link Node}.
+     * </p>
+     * 
+     * @return A created node.
+     */
+    protected abstract D materialize();
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void dispose() {
+        dom = null;
     }
-
 }

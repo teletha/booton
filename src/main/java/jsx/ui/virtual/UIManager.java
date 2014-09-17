@@ -44,19 +44,17 @@ public class UIManager {
         /** The widget to render. */
         private final Widget widget;
 
-        /** The real root element. */
-        private final Element real;
-
         /** The virtual root element. */
-        private VirtualElement virtual = new VirtualElement(0, "div");
+        private VirtualElement virtual;
 
         /**
          * @param root A target to DOM element to render widget.
          * @param widget A rendering widget.
          */
         private Rendering(Element root, Widget widget) {
-            this.real = root;
             this.widget = widget;
+            this.virtual = new VirtualElement(0, "div");
+            this.virtual.dom = root;
         }
 
         /**
@@ -74,7 +72,6 @@ public class UIManager {
             List<Patch> patches = Diff.diff(virtual, next);
 
             // update virtual element
-            virtual.dom = real;
             virtual = next;
 
             // update real element

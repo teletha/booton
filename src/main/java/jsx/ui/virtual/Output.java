@@ -9,19 +9,22 @@
  */
 package jsx.ui.virtual;
 
-import js.dom.Node;
+import javafx.beans.value.ObservableValue;
 
 /**
- * @version 2014/09/15 21:22:53
+ * @version 2014/08/22 11:27:22
  */
-public interface Materializer<D extends Node> {
+public class Output extends UI<Output> {
+
+    public Output(ObservableValue value) {
+
+    }
 
     /**
-     * <p>
-     * Create actual DOM {@link Node}.
-     * </p>
-     * 
-     * @return A created node.
+     * {@inheritDoc}
      */
-    D materialize();
+    @Override
+    protected VirtualElement virtualize() {
+        return null;
+    }
 }

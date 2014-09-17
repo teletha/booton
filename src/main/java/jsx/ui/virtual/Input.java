@@ -7,14 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui.virtual;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.Element;
 import js.dom.UIAction;
-import jsx.ui.virtual.StructureDSL;
 import kiss.Events;
 
 /**
@@ -72,8 +71,8 @@ public class Input extends UI<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(StructureDSL $〡) {
-        $〡.e("input", 1).〡();
+    protected VirtualElement virtualize() {
+        return null;
     }
 
     /**

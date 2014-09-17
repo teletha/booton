@@ -233,7 +233,6 @@ abstract class Patch {
         @Override
         public void apply() {
             child.dom.text(replace.text);
-            child.dispose();
         }
     }
 

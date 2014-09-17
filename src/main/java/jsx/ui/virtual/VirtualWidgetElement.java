@@ -14,7 +14,7 @@ import js.dom.Element;
 /**
  * @version 2014/09/10 13:10:45
  */
-public class VirtualWidgetElement extends VirtualElement {
+class VirtualWidgetElement extends VirtualElement {
 
     /** The associated widget. */
     private final Widget widget;
