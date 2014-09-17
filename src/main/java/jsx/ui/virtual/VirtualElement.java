@@ -60,4 +60,16 @@ class VirtualElement extends VirtualNode<Element> {
         }
         return dom;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        for (int i = 0; i < children.items.length(); i++) {
+            children.items.get(i).dispose();
+        }
+    }
 }

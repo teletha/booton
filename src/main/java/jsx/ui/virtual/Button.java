@@ -7,19 +7,26 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
-
-import jsx.ui.virtual.StructureDSL;
+package jsx.ui.virtual;
 
 /**
- * @version 2014/09/11 8:59:42
+ * @version 2014/08/21 17:09:43
  */
-public class Image extends UI<Image> {
+public class Button extends UI<Button> {
+
+    /**
+     * @param string
+     * @return
+     */
+    public Button label(Object... texts) {
+        return this;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(StructureDSL box) {
+    protected VirtualElement virtualize() {
+        return null;
     }
 }

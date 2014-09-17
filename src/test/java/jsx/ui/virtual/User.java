@@ -7,10 +7,11 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui.virtual;
 
 import java.util.Objects;
 
+import booton.reactive.Key;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;

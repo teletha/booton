@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui.virtual;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +18,15 @@ import javafx.beans.value.ObservableValue;
 
 import js.dom.UIAction;
 import jsx.event.Publishable;
-import jsx.ui.virtual.Widget;
 import kiss.Disposable;
 import kiss.Events;
+import booton.reactive.Key;
 import booton.reactive.css.StyleDefinition;
 
 /**
  * @version 2014/09/01 20:06:01
  */
-public abstract class UI<T extends UI<T>> extends Widget<T> {
+public abstract class UI<T extends UI<T>> {
 
     protected BooleanProperty click;
 
@@ -38,6 +38,15 @@ public abstract class UI<T extends UI<T>> extends Widget<T> {
 
     /** The disposable list. */
     private List<Disposable> disposables;
+
+    /**
+     * <p>
+     * Virtualize this user interface.
+     * </p>
+     * 
+     * @return A single element.
+     */
+    protected abstract VirtualElement virtualize();
 
     /**
      * @return

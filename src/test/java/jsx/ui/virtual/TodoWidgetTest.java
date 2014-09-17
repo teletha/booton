@@ -7,12 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui.virtual;
+
+import jsx.ui.virtual.TodoWidget.Item;
+import jsx.ui.virtual.TodoWidget.Todo;
 
 import org.junit.Test;
 
-import booton.reactive.TodoWidget.Item;
-import booton.reactive.TodoWidget.Todo;
+import booton.reactive.Key;
+import booton.reactive.Virtualizer;
 
 /**
  * @version 2014/09/01 19:42:57
