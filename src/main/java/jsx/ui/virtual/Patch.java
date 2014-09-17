@@ -53,7 +53,7 @@ abstract class Patch {
     private static abstract class ChildPatch extends Patch {
 
         /** The target child node. */
-        protected final Node child;
+        protected final VirtualNode child;
 
         /**
          * <p>
@@ -63,7 +63,7 @@ abstract class Patch {
          * @param parent A parent element.
          * @param child A target child node.
          */
-        private ChildPatch(Element parent, Node child) {
+        private ChildPatch(Element parent, VirtualNode child) {
             super(parent);
 
             this.child = child;
@@ -90,7 +90,7 @@ abstract class Patch {
          * @param parent
          * @param child
          */
-        RemoveChild(Element parent, Node child) {
+        RemoveChild(Element parent, VirtualNode child) {
             super(parent, child);
         }
 
@@ -99,7 +99,8 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.removeChild(child);
+            parent.removeChild(child.dom);
+            child.dispose();
         }
     }
 
@@ -108,8 +109,8 @@ abstract class Patch {
      */
     static class InsertChild extends ChildPatch {
 
-        /** The new contents to insert. */
-        private final VirtualNode insert;
+        /** The index to insert. */
+        private final Node index;
 
         /**
          * <p>
@@ -117,12 +118,12 @@ abstract class Patch {
          * </p>
          * 
          * @param parent
+         * @param index
          * @param child
-         * @param insert
          */
-        InsertChild(Element parent, Node child, VirtualNode insert) {
+        InsertChild(Element parent, Node index, VirtualNode child) {
             super(parent, child);
-            this.insert = insert;
+            this.index = index;
         }
 
         /**
@@ -130,12 +131,12 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            Node created = createElementFromVirtualElement(insert);
+            Node created = createElementFromVirtualElement(child);
 
             if (this.child == null) {
                 parent.append(created);
             } else {
-                parent.insertBefore(created, child);
+                parent.insertBefore(created, index);
             }
         }
     }
@@ -144,6 +145,9 @@ abstract class Patch {
      * @version 2014/08/29 12:45:20
      */
     static class MoveChild extends ChildPatch {
+
+        /** The child node to move. */
+        private final Node child;
 
         /**
          * <p>
@@ -154,7 +158,9 @@ abstract class Patch {
          * @param child
          */
         MoveChild(Element parent, Node child) {
-            super(parent, child);
+            super(parent, null);
+
+            this.child = child;
         }
 
         /**
@@ -183,7 +189,7 @@ abstract class Patch {
          * @param child
          * @param replace
          */
-        ReplaceChild(Element parent, Node child, VirtualNode replace) {
+        ReplaceChild(Element parent, VirtualNode child, VirtualNode replace) {
             super(parent, child);
 
             this.replace = replace;
@@ -194,7 +200,8 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.replace(child, createElementFromVirtualElement(replace));
+            parent.replace(child.dom, createElementFromVirtualElement(replace));
+            child.dispose();
         }
     }
 
@@ -214,7 +221,7 @@ abstract class Patch {
          * @param child
          * @param replace
          */
-        ReplaceText(Node child, VirtualText replace) {
+        ReplaceText(VirtualNode child, VirtualText replace) {
             super(null, child);
 
             this.replace = replace;
@@ -225,7 +232,8 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            child.text(replace.text);
+            child.dom.text(replace.text);
+            child.dispose();
         }
     }
 

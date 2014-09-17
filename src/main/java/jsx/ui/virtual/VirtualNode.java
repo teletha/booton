@@ -10,11 +10,12 @@
 package jsx.ui.virtual;
 
 import js.dom.Node;
+import kiss.Disposable;
 
 /**
  * @version 2014/09/04 23:21:40
  */
-abstract class VirtualNode<D extends Node> implements Materializer<D> {
+abstract class VirtualNode<D extends Node> implements Materializer<D>, Disposable {
 
     /**
      * <p>
@@ -30,7 +31,7 @@ abstract class VirtualNode<D extends Node> implements Materializer<D> {
      * immediately.
      * </p>
      */
-    public D real;
+    public D dom;
 
     /** The node identifier. */
     public final int id;
@@ -41,4 +42,12 @@ abstract class VirtualNode<D extends Node> implements Materializer<D> {
     protected VirtualNode(int id) {
         this.id = id;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+    }
+
 }

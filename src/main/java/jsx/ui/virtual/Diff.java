@@ -49,13 +49,13 @@ class Diff {
          * the reference.
          * </p>
          */
-        next.real = prev.real;
-        prev.real = null;
+        next.dom = prev.dom;
+        prev.dom = null;
 
         List<Patch> patches = new ArrayList();
-        patches.addAll(diff(next.real, prev.attributes, next.attributes));
-        patches.addAll(diff(next.real, prev.classList, next.classList));
-        patches.addAll(diff(next.real, prev.children, next.children));
+        patches.addAll(diff(next.dom, prev.attributes, next.attributes));
+        patches.addAll(diff(next.dom, prev.classList, next.classList));
+        patches.addAll(diff(next.dom, prev.children, next.children));
 
         return patches;
     }
@@ -163,13 +163,13 @@ class Diff {
                     if (index == -1) {
                         patches.add(new InsertChild(context, null, nextItem));
                     } else {
-                        patches.add(new MoveChild(context, prev.items.get(index).real));
+                        patches.add(new MoveChild(context, prev.items.get(index).dom));
                     }
                 }
             } else {
                 if (nextSize <= nextPosition) {
                     // all next items are scanned, but prev items are remaining
-                    patches.add(new RemoveChild(context, prev.items.get(prevPosition++).real));
+                    patches.add(new RemoveChild(context, prev.items.get(prevPosition++)));
                 } else {
                     // prev and next items are remaining
                     VirtualNode prevItem = prev.items.get(prevPosition);
@@ -195,19 +195,19 @@ class Diff {
                         if (nextItemInPrev == -1) {
                             if (prevItemInNext == -1) {
                                 if (prevItem instanceof VirtualText && nextItem instanceof VirtualText) {
-                                    patches.add(new ReplaceText(prevItem.real, (VirtualText) nextItem));
+                                    patches.add(new ReplaceText(prevItem, (VirtualText) nextItem));
                                 } else {
-                                    patches.add(new ReplaceChild(context, prevItem.real, nextItem));
+                                    patches.add(new ReplaceChild(context, prevItem, nextItem));
                                 }
                                 prevPosition++;
                             } else {
-                                patches.add(new InsertChild(context, prevItem.real, nextItem));
+                                patches.add(new InsertChild(context, prevItem.dom, nextItem));
                             }
                             nextPosition++;
                             actualManipulationPosition++;
                         } else {
                             if (prevItemInNext == -1) {
-                                patches.add(new RemoveChild(context, prevItem.real));
+                                patches.add(new RemoveChild(context, prevItem));
                             } else {
                                 // both items are found in each other list
                                 // hold and skip the current value
