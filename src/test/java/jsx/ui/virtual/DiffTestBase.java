@@ -63,8 +63,6 @@ public class DiffTestBase {
         String message = message(prevNode, nextNode, ops, ops.size());
 
         assert expectedOperationCount == ops.size() : message;
-        System.out.println(prevNode);
-        System.out.println(nextNode);
         NodeComparator.equals(prevNode, nextNode);
     }
 
@@ -76,7 +74,7 @@ public class DiffTestBase {
      * @param node
      */
     private void clean(VirtualNode node) {
-        node.dom = null;
+        node.real = null;
 
         if (node instanceof VirtualElement) {
             VirtualElement element = (VirtualElement) node;

@@ -16,8 +16,21 @@ import js.dom.Node;
  */
 public abstract class VirtualNode<D extends Node> implements Materializer<D> {
 
-    /** The real DOM node. */
-    public D dom;
+    /**
+     * <p>
+     * The real DOM node.
+     * </p>
+     * <p>
+     * To tell the truth, we DON'T want Virtual DOM to have Real DOM. However, if virtual DOM don't
+     * have it, a patch will scan or search the position of Real DOM by any index or ID information
+     * at every time to apply a diff patch. Its cost is slightly expensive than this way.
+     * </p>
+     * <p>
+     * Only the latest Virtual DOM has the Real DOM, and other Virtual DOM discards its reference
+     * immediately.
+     * </p>
+     */
+    public D real;
 
     /** The node identifier. */
     public final int id;

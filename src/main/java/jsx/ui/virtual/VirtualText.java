@@ -38,6 +38,6 @@ public class VirtualText extends VirtualNode<Text> {
      */
     @Override
     public Text materialize() {
-        return dom = document.createTextNode(text);
+        return real = document.createTextNode(text);
     }
 }

@@ -9,6 +9,7 @@
  */
 package jsx.ui.virtual;
 
+import js.dom.Element;
 import js.dom.Node;
 import booton.css.CSS;
 
@@ -18,7 +19,7 @@ import booton.css.CSS;
 public abstract class Patch {
 
     /** The parent element. */
-    protected final VirtualElement parent;
+    protected final Element parent;
 
     /**
      * <p>
@@ -27,7 +28,7 @@ public abstract class Patch {
      * 
      * @param parent A parent (context) element.
      */
-    protected Patch(VirtualElement parent) {
+    protected Patch(Element parent) {
         this.parent = parent;
     }
 
@@ -52,7 +53,7 @@ public abstract class Patch {
     private static abstract class ChildPatch extends Patch {
 
         /** The target child node. */
-        protected final VirtualNode child;
+        protected final Node child;
 
         /**
          * <p>
@@ -62,7 +63,7 @@ public abstract class Patch {
          * @param parent A parent element.
          * @param child A target child node.
          */
-        private ChildPatch(VirtualElement parent, VirtualNode child) {
+        private ChildPatch(Element parent, Node child) {
             super(parent);
 
             this.child = child;
@@ -89,7 +90,7 @@ public abstract class Patch {
          * @param parent
          * @param child
          */
-        RemoveChild(VirtualElement parent, VirtualNode child) {
+        RemoveChild(Element parent, Node child) {
             super(parent, child);
         }
 
@@ -98,7 +99,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.removeChild(child.dom);
+            parent.removeChild(child);
         }
     }
 
@@ -119,7 +120,7 @@ public abstract class Patch {
          * @param child
          * @param insert
          */
-        InsertChild(VirtualElement parent, VirtualNode child, VirtualNode insert) {
+        InsertChild(Element parent, Node child, VirtualNode insert) {
             super(parent, child);
             this.insert = insert;
         }
@@ -132,9 +133,9 @@ public abstract class Patch {
             Node created = createElementFromVirtualElement(insert);
 
             if (this.child == null) {
-                parent.dom.append(created);
+                parent.append(created);
             } else {
-                parent.dom.insertBefore(created, child.dom);
+                parent.insertBefore(created, child);
             }
         }
     }
@@ -152,7 +153,7 @@ public abstract class Patch {
          * @param parent
          * @param child
          */
-        MoveChild(VirtualElement parent, VirtualNode child) {
+        MoveChild(Element parent, Node child) {
             super(parent, child);
         }
 
@@ -161,7 +162,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.append(child.dom);
+            parent.append(child);
         }
     }
 
@@ -182,7 +183,7 @@ public abstract class Patch {
          * @param child
          * @param replace
          */
-        ReplaceChild(VirtualElement parent, VirtualNode child, VirtualNode replace) {
+        ReplaceChild(Element parent, Node child, VirtualNode replace) {
             super(parent, child);
 
             this.replace = replace;
@@ -193,7 +194,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.replace(child.dom, createElementFromVirtualElement(replace));
+            parent.replace(child, createElementFromVirtualElement(replace));
         }
     }
 
@@ -213,7 +214,7 @@ public abstract class Patch {
          * @param child
          * @param replace
          */
-        ReplaceText(VirtualText child, VirtualText replace) {
+        ReplaceText(Node child, VirtualText replace) {
             super(null, child);
 
             this.replace = replace;
@@ -224,7 +225,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            child.dom.text(replace.text);
+            child.text(replace.text);
         }
     }
 
@@ -243,7 +244,7 @@ public abstract class Patch {
          * @param name
          * @param value
          */
-        private AttributePatch(VirtualElement parent, String name, String value) {
+        private AttributePatch(Element parent, String name, String value) {
             super(parent);
 
             this.name = name;
@@ -265,7 +266,7 @@ public abstract class Patch {
          * @param name
          * @param value
          */
-        AddAttribute(VirtualElement parent, String name, String value) {
+        AddAttribute(Element parent, String name, String value) {
             super(parent, name, value);
         }
 
@@ -274,7 +275,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.attr(name, value);
+            parent.attr(name, value);
         }
     }
 
@@ -292,7 +293,7 @@ public abstract class Patch {
          * @param name
          * @param value
          */
-        ChangeAttribute(VirtualElement parent, String name, String value) {
+        ChangeAttribute(Element parent, String name, String value) {
             super(parent, name, value);
         }
 
@@ -301,7 +302,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.attr(name, value);
+            parent.attr(name, value);
         }
     }
 
@@ -318,7 +319,7 @@ public abstract class Patch {
          * @param parent
          * @param name
          */
-        RemoveAttribute(VirtualElement parent, String name) {
+        RemoveAttribute(Element parent, String name) {
             super(parent, name, null);
         }
 
@@ -327,7 +328,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.remove(name);
+            parent.remove(name);
         }
     }
 
@@ -343,7 +344,7 @@ public abstract class Patch {
          * @param parent
          * @param className
          */
-        private ClassPatch(VirtualElement parent, Class<? extends CSS> className) {
+        private ClassPatch(Element parent, Class<? extends CSS> className) {
             super(parent);
 
             this.className = className;
@@ -363,7 +364,7 @@ public abstract class Patch {
          * @param parent
          * @param name
          */
-        AddClass(VirtualElement parent, Class<? extends CSS> className) {
+        AddClass(Element parent, Class<? extends CSS> className) {
             super(parent, className);
         }
 
@@ -372,7 +373,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.add(className);
+            parent.add(className);
         }
     }
 
@@ -389,7 +390,7 @@ public abstract class Patch {
          * @param parent
          * @param name
          */
-        RemoveClass(VirtualElement parent, Class<? extends CSS> className) {
+        RemoveClass(Element parent, Class<? extends CSS> className) {
             super(parent, className);
         }
 
@@ -398,7 +399,7 @@ public abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.dom.remove(className);
+            parent.remove(className);
         }
     }
 }
