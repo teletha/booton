@@ -7,10 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.virtual;
+package jsx.ui;
 
-import jsx.ui.virtual.TodoWidget.Item;
-import jsx.ui.virtual.TodoWidget.Todo;
+import jsx.ui.TodoWidget.Item;
+import jsx.ui.TodoWidget.Todo;
 
 import org.junit.Test;
 

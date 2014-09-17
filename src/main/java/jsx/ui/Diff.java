@@ -7,23 +7,23 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.virtual;
+package jsx.ui;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import js.dom.Element;
 import js.lang.NativeArray;
-import jsx.ui.virtual.Patch.AddAttribute;
-import jsx.ui.virtual.Patch.AddClass;
-import jsx.ui.virtual.Patch.ChangeAttribute;
-import jsx.ui.virtual.Patch.InsertChild;
-import jsx.ui.virtual.Patch.MoveChild;
-import jsx.ui.virtual.Patch.RemoveAttribute;
-import jsx.ui.virtual.Patch.RemoveChild;
-import jsx.ui.virtual.Patch.RemoveClass;
-import jsx.ui.virtual.Patch.ReplaceChild;
-import jsx.ui.virtual.Patch.ReplaceText;
+import jsx.ui.Patch.AddAttribute;
+import jsx.ui.Patch.AddClass;
+import jsx.ui.Patch.ChangeAttribute;
+import jsx.ui.Patch.InsertChild;
+import jsx.ui.Patch.MoveChild;
+import jsx.ui.Patch.RemoveAttribute;
+import jsx.ui.Patch.RemoveChild;
+import jsx.ui.Patch.RemoveClass;
+import jsx.ui.Patch.ReplaceChild;
+import jsx.ui.Patch.ReplaceText;
 import booton.css.CSS;
 
 /**
