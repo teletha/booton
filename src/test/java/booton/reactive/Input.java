@@ -14,7 +14,7 @@ import javafx.beans.property.StringProperty;
 
 import js.dom.Element;
 import js.dom.UIAction;
-import jsx.ui.virtual.VirtualStructure;
+import jsx.ui.virtual.StructureDSL;
 import kiss.Events;
 
 /**
@@ -72,7 +72,7 @@ public class Input extends UI<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
+    protected void virtualize(StructureDSL $〡) {
         $〡.e("input", 1).〡();
     }
 

@@ -16,7 +16,7 @@ import booton.css.CSS;
 /**
  * @version 2014/09/08 18:21:16
  */
-public abstract class Patch {
+abstract class Patch {
 
     /** The parent element. */
     protected final Element parent;

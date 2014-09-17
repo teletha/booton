@@ -21,7 +21,7 @@ import kiss.I;
 /**
  * @version 2014/09/05 13:03:04
  */
-public class VirtualReactiveElement extends VirtualElement implements Disposable {
+class VirtualReactiveElement extends VirtualElement implements Disposable {
 
     /** The binded value. */
     private final Events events;

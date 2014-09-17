@@ -39,9 +39,9 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
-import jsx.ui.virtual.VirtualStructure;
-import jsx.ui.virtual.VirtualStructure.ContainerDescriptor;
-import jsx.ui.virtual.VirtualStructure.Descriptor;
+import jsx.ui.virtual.StructureDSL;
+import jsx.ui.virtual.StructureDSL.ContainerDescriptor;
+import jsx.ui.virtual.StructureDSL.Descriptor;
 import kiss.I;
 import kiss.model.ClassUtil;
 import booton.Obfuscator;
@@ -471,7 +471,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETFIELD:
-            if (owner == VirtualStructure.class && !name.equals("asis") && script.source != VirtualStructure.class && script.source != Descriptor.class && script.source != ContainerDescriptor.class) {
+            if (owner == StructureDSL.class && !name.equals("asis") && script.source != StructureDSL.class && script.source != Descriptor.class && script.source != ContainerDescriptor.class) {
                 ArrayList<Operand> context = new ArrayList();
                 context.add(current.remove(0)); // "this" context
                 context.add(new OperandNumber(virtualStructureLocalId++)); // local id parameter

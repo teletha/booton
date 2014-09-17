@@ -9,7 +9,7 @@
  */
 package booton.reactive;
 
-import jsx.ui.virtual.VirtualStructure;
+import jsx.ui.virtual.StructureDSL;
 
 /**
  * @version 2014/08/21 17:09:43
@@ -28,6 +28,6 @@ public class Button extends UI<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure box) {
+    protected void virtualize(StructureDSL box) {
     }
 }

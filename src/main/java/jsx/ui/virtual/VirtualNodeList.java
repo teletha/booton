@@ -18,7 +18,7 @@ import js.lang.NativeArray;
  * 
  * @version 2014/09/07 21:34:34
  */
-public class VirtualNodeList {
+class VirtualNodeList {
 
     /** The child nodes. */
     public final NativeArray<VirtualNode> items = new NativeArray();

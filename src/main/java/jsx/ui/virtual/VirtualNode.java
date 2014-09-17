@@ -14,7 +14,7 @@ import js.dom.Node;
 /**
  * @version 2014/09/04 23:21:40
  */
-public abstract class VirtualNode<D extends Node> implements Materializer<D> {
+abstract class VirtualNode<D extends Node> implements Materializer<D> {
 
     /**
      * <p>
