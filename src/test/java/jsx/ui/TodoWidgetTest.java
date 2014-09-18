@@ -42,7 +42,7 @@ public class TodoWidgetTest {
         w.todos.add(todo);
         assert w.todos.size() == 1;
 
-        Item item = Virtualizer.findFirst(w, Item.class);
+        Item item = WidgetQuery.findFirst(w, Item.class);
         User.click(item.delete);
         assert w.todos.size() == 0;
     }
