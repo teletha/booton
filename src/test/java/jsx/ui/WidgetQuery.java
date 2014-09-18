@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @version 2014/09/02 10:16:32
  */
-public class Virtualizer {
+public class WidgetQuery {
 
     /**
      * @param widget

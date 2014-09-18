@@ -52,13 +52,13 @@ public abstract class Widget<V> {
      * @param model An associated model.
      * @return A new created widget.
      */
-    static final <V> Widget<V> create(Class<? extends Widget<V>> widgetType, V model) {
+    static final <W extends Widget<V>, V> W create(Class<? extends Widget<V>> widgetType, V model) {
         Widget<V> widget;
 
         loophole = model;
         widget = I.make(widgetType);
         loophole = null;
 
-        return widget;
+        return (W) widget;
     }
 }
