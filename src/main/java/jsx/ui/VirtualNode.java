@@ -39,7 +39,7 @@ abstract class VirtualNode<D extends Node> implements Disposable {
     /**
      * 
      */
-    protected VirtualNode(int id) {
+    VirtualNode(int id) {
         this.id = id;
     }
 
@@ -50,7 +50,7 @@ abstract class VirtualNode<D extends Node> implements Disposable {
      * 
      * @return A created node.
      */
-    protected abstract D materialize();
+    abstract D materialize();
 
     /**
      * {@inheritDoc}

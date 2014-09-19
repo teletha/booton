@@ -16,7 +16,7 @@ import js.lang.NativeArray;
 /**
  * @version 2014/09/18 9:37:03
  */
-class VirtualFragment<N extends Node> extends VirtualNode<N> {
+abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
 
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
@@ -24,7 +24,7 @@ class VirtualFragment<N extends Node> extends VirtualNode<N> {
     /**
      * @param id
      */
-    protected VirtualFragment(int id) {
+    VirtualFragment(int id) {
         super(id);
     }
 
@@ -36,7 +36,7 @@ class VirtualFragment<N extends Node> extends VirtualNode<N> {
      * @param node A target node to search.
      * @return A index of the specified node.
      */
-    protected int indexOf(VirtualNode node) {
+    int indexOf(VirtualNode node) {
         for (int index = 0, length = items.length(); index < length; index++) {
             if (items.get(index).id == node.id) {
                 return index;
@@ -49,7 +49,7 @@ class VirtualFragment<N extends Node> extends VirtualNode<N> {
      * {@inheritDoc}
      */
     @Override
-    protected final N materialize() {
+    final N materialize() {
         N root = materializeRoot();
 
         for (int i = 0, length = items.length(); i < length; i++) {
@@ -66,7 +66,7 @@ class VirtualFragment<N extends Node> extends VirtualNode<N> {
      * 
      * @return
      */
-    protected N materializeRoot() {
+    N materializeRoot() {
         return dom = (N) document.createDocumentFragment();
     }
 

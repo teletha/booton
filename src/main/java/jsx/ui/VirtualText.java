@@ -18,7 +18,7 @@ import js.dom.Text;
 class VirtualText extends VirtualNode<Text> {
 
     /** The text content. */
-    public final String text;
+    final String text;
 
     /**
      * <p>
@@ -27,7 +27,7 @@ class VirtualText extends VirtualNode<Text> {
      * 
      * @param text
      */
-    public VirtualText(int id, String text) {
+    VirtualText(int id, String text) {
         super(id);
 
         this.text = text;
@@ -37,7 +37,7 @@ class VirtualText extends VirtualNode<Text> {
      * {@inheritDoc}
      */
     @Override
-    public Text materialize() {
+    Text materialize() {
         return dom = document.createTextNode(text);
     }
 }

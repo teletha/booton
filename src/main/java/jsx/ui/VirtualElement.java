@@ -20,18 +20,18 @@ import booton.css.CSS;
 class VirtualElement extends VirtualFragment<Element> {
 
     /** The node name. */
-    public final String name;
+    final String name;
 
     /** The attributes. */
-    public final VirtualKVS attributes = new VirtualKVS();
+    final VirtualKVS attributes = new VirtualKVS();
 
     /** The class attributes. */
-    public final NativeArray<Class<? extends CSS>> classList = new NativeArray();
+    final NativeArray<Class<? extends CSS>> classList = new NativeArray();
 
     /**
      * @param string
      */
-    public VirtualElement(int id, String name) {
+    VirtualElement(int id, String name) {
         super(id);
 
         this.name = name;

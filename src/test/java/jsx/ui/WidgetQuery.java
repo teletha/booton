@@ -12,6 +12,8 @@ package jsx.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.dom.Node;
+
 /**
  * @version 2014/09/02 10:16:32
  */
@@ -40,22 +42,22 @@ public class WidgetQuery {
      * 
      * @param list
      * @param type
-     * @param element
+     * @param fragment
      */
-    private static <T extends Widget> void find(List<T> list, Class<T> type, VirtualElement element) {
-        if (element instanceof VirtualWidgetElement) {
-            Widget widget = ((VirtualWidgetElement) element).widget;
+    private static <T extends Widget> void find(List<T> list, Class<T> type, VirtualFragment<? extends Node> fragment) {
+        if (fragment instanceof VirtualWidget) {
+            Widget widget = ((VirtualWidget) fragment).widget;
 
             if (type.isAssignableFrom(widget.getClass())) {
                 list.add((T) widget);
             }
         }
 
-        for (int i = 0; i < element.items.length(); i++) {
-            VirtualNode child = element.items.get(i);
+        for (int i = 0; i < fragment.items.length(); i++) {
+            VirtualNode child = fragment.items.get(i);
 
-            if (child instanceof VirtualElement) {
-                find(list, type, (VirtualElement) child);
+            if (child instanceof VirtualFragment) {
+                find(list, type, (VirtualFragment) child);
             }
         }
     }
