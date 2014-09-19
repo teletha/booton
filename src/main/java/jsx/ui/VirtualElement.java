@@ -17,7 +17,7 @@ import booton.css.CSS;
 /**
  * @version 2014/09/04 23:22:40
  */
-class VirtualElement extends VirtualNode<Element> {
+class VirtualElement extends VirtualFragment<Element> {
 
     /** The node name. */
     public final String name;
@@ -27,9 +27,6 @@ class VirtualElement extends VirtualNode<Element> {
 
     /** The class attributes. */
     public final NativeArray<Class<? extends CSS>> classList = new NativeArray();
-
-    /** The children node. */
-    public final VirtualNodeList children = new VirtualNodeList();
 
     /**
      * @param string
@@ -44,7 +41,7 @@ class VirtualElement extends VirtualNode<Element> {
      * {@inheritDoc}
      */
     @Override
-    public Element materialize() {
+    protected Element materializeRoot() {
         dom = document.createElement(name);
 
         for (int i = 0; i < attributes.names.length(); i++) {
@@ -54,22 +51,6 @@ class VirtualElement extends VirtualNode<Element> {
         for (int i = 0; i < classList.length(); i++) {
             dom.add(classList.get(i));
         }
-
-        for (int i = 0; i < children.items.length(); i++) {
-            dom.append(children.items.get(i).materialize());
-        }
         return dom;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void dispose() {
-        super.dispose();
-
-        for (int i = 0; i < children.items.length(); i++) {
-            children.items.get(i).dispose();
-        }
     }
 }

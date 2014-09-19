@@ -51,8 +51,8 @@ public class WidgetQuery {
             }
         }
 
-        for (int i = 0; i < element.children.items.length(); i++) {
-            VirtualNode child = element.children.items.get(i);
+        for (int i = 0; i < element.items.length(); i++) {
+            VirtualNode child = element.items.get(i);
 
             if (child instanceof VirtualElement) {
                 find(list, type, (VirtualElement) child);

@@ -34,7 +34,7 @@ class VirtualWidgetElement extends VirtualElement {
      * {@inheritDoc}
      */
     @Override
-    public Element materialize() {
-        return super.materialize();
+    protected Element materializeRoot() {
+        return super.materializeRoot();
     }
 }

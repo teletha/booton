@@ -79,8 +79,8 @@ public class DiffTestBase {
         if (node instanceof VirtualElement) {
             VirtualElement element = (VirtualElement) node;
 
-            for (int i = 0; i < element.children.items.length(); i++) {
-                clean(element.children.items.get(i));
+            for (int i = 0; i < element.items.length(); i++) {
+                clean(element.items.get(i));
             }
         }
     }
