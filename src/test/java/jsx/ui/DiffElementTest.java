@@ -299,7 +299,7 @@ public class DiffElementTest extends DiffTestBase {
         }
 
         for (VirtualNode child : children) {
-            e.children.items.push(child);
+            e.items.push(child);
         }
 
         return e;
@@ -325,7 +325,7 @@ public class DiffElementTest extends DiffTestBase {
         }
 
         for (VirtualNode child : children) {
-            e.children.items.push(child);
+            e.items.push(child);
         }
 
         return e;

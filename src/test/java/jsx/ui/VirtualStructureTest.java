@@ -30,8 +30,8 @@ public class VirtualStructureTest {
         root〡.asis.〡("text");
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 1;
-        assertAsText(root.children.items.get(0), "text");
+        assert root.items.length() == 1;
+        assertAsText(root.items.get(0), "text");
     }
 
     @Test
@@ -40,9 +40,9 @@ public class VirtualStructureTest {
         root〡.asis.〡("first", "second");
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 2;
-        assertAsText(root.children.items.get(0), "first");
-        assertAsText(root.children.items.get(1), "second");
+        assert root.items.length() == 2;
+        assertAsText(root.items.get(0), "first");
+        assertAsText(root.items.get(1), "second");
     }
 
     @Test
@@ -52,9 +52,9 @@ public class VirtualStructureTest {
         root〡.asis.〡("second");
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 2;
-        assertAsText(root.children.items.get(0), "first");
-        assertAsText(root.children.items.get(1), "second");
+        assert root.items.length() == 2;
+        assertAsText(root.items.get(0), "first");
+        assertAsText(root.items.get(1), "second");
     }
 
     @Test
@@ -65,8 +65,8 @@ public class VirtualStructureTest {
         }));
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 1;
-        assertAsText(root.children.items.get(0), "widget text");
+        assert root.items.length() == 1;
+        assertAsText(root.items.get(0), "widget text");
     }
 
     @Test
@@ -75,9 +75,9 @@ public class VirtualStructureTest {
         root〡.hbox.〡("text");
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 1;
+        assert root.items.length() == 1;
         assertAsElement(root, 0, "hbox", e -> {
-            assertAsText(e.children.items.get(0), "text");
+            assertAsText(e.items.get(0), "text");
         });
     }
 
@@ -88,12 +88,12 @@ public class VirtualStructureTest {
         root〡.hbox.〡("second");
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 2;
+        assert root.items.length() == 2;
         assertAsElement(root, 0, "hbox", e -> {
-            assertAsText(e.children.items.get(0), "first");
+            assertAsText(e.items.get(0), "first");
         });
         assertAsElement(root, 1, "hbox", e -> {
-            assertAsText(e.children.items.get(0), "second");
+            assertAsText(e.items.get(0), "second");
         });
     }
 
@@ -105,10 +105,10 @@ public class VirtualStructureTest {
         });
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 1;
+        assert root.items.length() == 1;
         assertAsElement(root, 0, "hbox", e -> {
             assertAsElement(e, 0, "hbox", text -> {
-                assertAsText(text.children.items.get(0), "nested text");
+                assertAsText(text.items.get(0), "nested text");
             });
         });
     }
@@ -121,10 +121,10 @@ public class VirtualStructureTest {
         }));
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 1;
+        assert root.items.length() == 1;
         assertAsElement(root, 0, "hbox", e -> {
             assertAsElement(e, 0, "hbox", text -> {
-                assertAsText(text.children.items.get(0), "nested text");
+                assertAsText(text.items.get(0), "nested text");
             });
         });
     }
@@ -137,17 +137,17 @@ public class VirtualStructureTest {
         root〡.hbox.〡(StringWidget.class, items);
 
         VirtualElement root = root〡.getRoot();
-        assert root.children.items.length() == 1;
+        assert root.items.length() == 1;
         assertAsElement(root, 0, "hbox", e -> {
-            assert e.children.items.length() == 3;
+            assert e.items.length() == 3;
             assertAsElement(e, 0, "hbox", text -> {
-                assertAsText(text.children.items.get(0), "first");
+                assertAsText(text.items.get(0), "first");
             });
             assertAsElement(e, 1, "hbox", text -> {
-                assertAsText(text.children.items.get(0), "second");
+                assertAsText(text.items.get(0), "second");
             });
             assertAsElement(e, 2, "hbox", text -> {
-                assertAsText(text.children.items.get(0), "third");
+                assertAsText(text.items.get(0), "third");
             });
         });
     }
@@ -177,7 +177,7 @@ public class VirtualStructureTest {
      * @param child
      */
     private void assertAsElement(VirtualElement e, int index, String name, Consumer<VirtualElement> child) {
-        VirtualNode node = e.children.items.get(index);
+        VirtualNode node = e.items.get(index);
         assert node instanceof VirtualElement;
 
         VirtualElement virtual = (VirtualElement) node;

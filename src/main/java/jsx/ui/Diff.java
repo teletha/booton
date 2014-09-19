@@ -55,7 +55,7 @@ class Diff {
         List<Patch> patches = new ArrayList();
         patches.addAll(diff(next.dom, prev.attributes, next.attributes));
         patches.addAll(diff(next.dom, prev.classList, next.classList));
-        patches.addAll(diff(next.dom, prev.children, next.children));
+        patches.addAll(diff(next.dom, prev, next));
 
         return patches;
     }
@@ -141,7 +141,7 @@ class Diff {
      * @param next
      * @return
      */
-    static List<Patch> diff(Element context, VirtualNodeList prev, VirtualNodeList next) {
+    static List<Patch> diff(Element context, VirtualFragment<Element> prev, VirtualFragment<Element> next) {
         List<Patch> patches = new ArrayList();
 
         int prevSize = prev.items.length();

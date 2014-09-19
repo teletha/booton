@@ -64,62 +64,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
 
     /**
      * <p>
-     * Insert content, specified by the parameter, after this element.
-     * </p>
-     * 
-     * @param content A content to insert.
-     * @return Chainable API.
-     */
-    public Element after(Object content) {
-        if (content != null) {
-            Node parent = parentElement();
-
-            if (parent != null) {
-                parent.insertBefore(nodify(content), nextSibling());
-            }
-        }
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Insert content to the end of this element.
-     * </p>
-     * 
-     * @param content DOM element to insert at the end of this element.
-     * @return Chainable API.
-     */
-    public Element append(Object content) {
-        if (content != null) {
-            appendChild(nodify(content));
-        }
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Insert this element to the end of the target element.
-     * </p>
-     * 
-     * @param target This element will be inserted at the end of the element specified by this
-     *            parameter.
-     * @return Chainable API.
-     */
-    public Element appendTo(Element target) {
-        if (target != null) {
-            target.append(this);
-        }
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
      * Get the value of the specified attribute.
      * </p>
      * 
@@ -155,27 +99,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public Element attr(String namespace, String name, Object value) {
         setAttributeNS(namespace, name, String.valueOf(value));
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Insert content, specified by the parameter, before this element.
-     * </p>
-     * 
-     * @param content A content to insert.
-     * @return Chainable API.
-     */
-    public Element before(Object content) {
-        if (content != null) {
-            Node parent = parentElement();
-
-            if (parent != null) {
-                parent.insertBefore(nodify(content), this);
-            }
-        }
 
         // API definition
         return this;
@@ -316,23 +239,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public ClientRect position() {
         return getBoundingClientRect();
-    }
-
-    /**
-     * <p>
-     * Insert content to the begining of this element.
-     * </p>
-     * 
-     * @param content DOM element to insert at the begining of this element.
-     * @return Chainable API.
-     */
-    public Element prepend(Object content) {
-        if (content != null) {
-            insertBefore(nodify(content), firstChild());
-        }
-
-        // API definition
-        return this;
     }
 
     /**
@@ -510,24 +416,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
 
         if (type == Object.class) {
             remove(EventListenable.class);
-        }
-    }
-
-    /**
-     * <p>
-     * Create {@link Node}.
-     * </p>
-     * 
-     * @param content A content like {@link Element}, {@link String}.
-     * @return
-     */
-    private Node nodify(Object content) {
-        if (content instanceof Node) {
-            return (Node) content;
-        } else if (content instanceof Elemental) {
-            return ((Elemental) content).getElement();
-        } else {
-            return document.createTextNode(content.toString());
         }
     }
 

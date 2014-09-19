@@ -28,6 +28,83 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
 
     /**
      * <p>
+     * Insert content to the end of this element.
+     * </p>
+     * 
+     * @param content DOM element to insert at the end of this element.
+     * @return Chainable API.
+     */
+    public T append(Object content) {
+        if (content != null) {
+            appendChild(nodify(content));
+        }
+
+        // API definition
+        return (T) this;
+    }
+
+    /**
+     * <p>
+     * Insert this element to the end of the target element.
+     * </p>
+     * 
+     * @param target This element will be inserted at the end of the element specified by this
+     *            parameter.
+     * @return Chainable API.
+     */
+    public T appendTo(Node target) {
+        if (target != null) {
+            target.append(this);
+        }
+
+        // API definition
+        return (T) this;
+    }
+
+    /**
+     * <p>
+     * Insert content, specified by the parameter, after this element.
+     * </p>
+     * 
+     * @param content A content to insert.
+     * @return Chainable API.
+     */
+    public T after(Object content) {
+        if (content != null) {
+            Node parent = parentNode();
+
+            if (parent != null) {
+                parent.insertBefore(nodify(content), nextSibling());
+            }
+        }
+
+        // API definition
+        return (T) this;
+    }
+
+    /**
+     * <p>
+     * Insert content, specified by the parameter, before this element.
+     * </p>
+     * 
+     * @param content A content to insert.
+     * @return Chainable API.
+     */
+    public T before(Object content) {
+        if (content != null) {
+            Node parent = parentNode();
+
+            if (parent != null) {
+                parent.insertBefore(nodify(content), this);
+            }
+        }
+
+        // API definition
+        return (T) this;
+    }
+
+    /**
+     * <p>
      * Create child element.
      * </p>
      * 
@@ -97,6 +174,23 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
 
     /**
      * <p>
+     * Insert content to the begining of this element.
+     * </p>
+     * 
+     * @param content DOM element to insert at the begining of this element.
+     * @return Chainable API.
+     */
+    public T prepend(Object content) {
+        if (content != null) {
+            insertBefore(nodify(content), firstChild());
+        }
+
+        // API definition
+        return (T) this;
+    }
+
+    /**
+     * <p>
      * Replaces one child node of the specified element with another.
      * </p>
      * 
@@ -134,6 +228,24 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
 
         // API definition
         return (T) this;
+    }
+
+    /**
+     * <p>
+     * Create {@link Node}.
+     * </p>
+     * 
+     * @param content A content like {@link Element}, {@link String}.
+     * @return
+     */
+    protected Node nodify(Object content) {
+        if (content instanceof Node) {
+            return (Node) content;
+        } else if (content instanceof Elemental) {
+            return ((Elemental) content).getElement();
+        } else {
+            return document.createTextNode(content.toString());
+        }
     }
 
     /**

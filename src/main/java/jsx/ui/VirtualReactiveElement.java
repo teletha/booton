@@ -21,7 +21,7 @@ import kiss.I;
 /**
  * @version 2014/09/05 13:03:04
  */
-class VirtualReactiveElement extends VirtualElement implements Disposable {
+class VirtualReactiveElement extends VirtualElement {
 
     /** The binded value. */
     private final Events events;
@@ -49,7 +49,7 @@ class VirtualReactiveElement extends VirtualElement implements Disposable {
      * {@inheritDoc}
      */
     @Override
-    public Element materialize() {
+    protected Element materializeRoot() {
         Element e = document.createElement("span");
 
         disposable = events.to(v -> {

@@ -211,7 +211,7 @@ public final class StructureDSL {
                     if (name != null) {
                         container.classList.push(builtin);
                     }
-                    nodes.peekLast().children.items.push(container);
+                    nodes.peekLast().items.push(container);
                     nodes.addLast(container);
                 }
             }
@@ -241,10 +241,10 @@ public final class StructureDSL {
                     VirtualElement virtualize = ((UI) child).virtualize();
 
                     if (virtualize != null) {
-                        container.children.items.push(virtualize);
+                        container.items.push(virtualize);
                     }
                 } else {
-                    container.children.items.push(new VirtualText(child.hashCode(), child.toString()));
+                    container.items.push(new VirtualText(child.hashCode(), child.toString()));
                 }
             }
 
