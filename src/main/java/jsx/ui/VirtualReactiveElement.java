@@ -32,14 +32,14 @@ class VirtualReactiveElement extends VirtualElement {
     /**
      * @param tagName
      */
-    public VirtualReactiveElement(int id, String tagName, ObservableValue value) {
+    VirtualReactiveElement(int id, String tagName, ObservableValue value) {
         this(id, tagName, I.observe(value));
     }
 
     /**
      * @param tagName
      */
-    public VirtualReactiveElement(int id, String tagName, Events events) {
+    VirtualReactiveElement(int id, String tagName, Events events) {
         super(id, tagName);
 
         this.events = events;
@@ -63,6 +63,8 @@ class VirtualReactiveElement extends VirtualElement {
      */
     @Override
     public void dispose() {
+        super.dispose();
+
         if (disposable != null) {
             disposable.dispose();
         }

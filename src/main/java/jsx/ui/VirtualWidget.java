@@ -9,32 +9,21 @@
  */
 package jsx.ui;
 
-import js.dom.Element;
-
 /**
  * @version 2014/09/10 13:10:45
  */
-class VirtualWidgetElement extends VirtualElement {
+class VirtualWidget extends VirtualFragment {
 
     /** The associated widget. */
     final Widget widget;
 
     /**
      * @param id
-     * @param child
-     * @param name
+     * @param widget
      */
-    protected VirtualWidgetElement(int id, Widget widget) {
-        super(id, "div");
+    protected VirtualWidget(int id, Widget widget) {
+        super(id);
 
         this.widget = widget;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Element materializeRoot() {
-        return super.materializeRoot();
     }
 }
