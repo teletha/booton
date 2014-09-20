@@ -12,16 +12,16 @@ package jsx.ui;
 /**
  * @version 2014/09/10 13:10:45
  */
-class VirtualWidget extends VirtualFragment {
+class VirtualUI extends VirtualFragment {
 
     /** The associated widget. */
-    final Widget widget;
+    final UI widget;
 
     /**
      * @param id
      * @param widget
      */
-    protected VirtualWidget(int id, Widget widget) {
+    protected VirtualUI(int id, UI widget) {
         super(id);
 
         this.widget = widget;

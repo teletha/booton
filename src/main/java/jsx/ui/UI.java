@@ -9,173 +9,56 @@
  */
 package jsx.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
-
-import js.dom.UIAction;
-import jsx.event.Publishable;
-import kiss.Disposable;
-import kiss.Events;
-import booton.reactive.css.StyleDefinition;
+import kiss.I;
 
 /**
- * @version 2014/09/01 20:06:01
+ * @version 2014/08/21 13:31:25
  */
-public abstract class UI<T extends UI<T>> {
+public abstract class UI<V> {
 
-    protected BooleanProperty click;
+    /** The associated model. */
+    protected final V model;
 
-    protected BooleanProperty hover;
-
-    protected final BooleanProperty enable = new SimpleBooleanProperty();
-
-    private Publishable<?> publisher;
-
-    /** The disposable list. */
-    private List<Disposable> disposables;
+    /** The current associated virtual element. */
+    private VirtualNode current;
 
     /**
      * <p>
-     * Virtualize this user interface.
+     * This constructor is dirty.
      * </p>
-     * 
-     * @return A single element.
      */
-    protected abstract VirtualElement virtualize();
-
-    /**
-     * <p>
-     * Retrieve the event publisher.
-     * </p>
-     * 
-     * @return
-     */
-    protected final Publishable<?> publish() {
-        if (publisher == null) {
-            publisher = new Publishable();
-        }
-        return publisher;
-    }
-
-    /**
-     * @return
-     */
-    public T click(Runnable action) {
-        return (T) this;
-    }
-
-    /**
-     * @return
-     */
-    public T dbclick(Runnable action) {
-        return (T) this;
-    }
-
-    /**
-     * @return
-     */
-    public T hover(Runnable action) {
-        return (T) this;
+    protected UI() {
+        this.model = (V) loophole;
     }
 
     /**
      * <p>
-     * Create {@link Events} for key down.
+     * Create virtual element.
      * </p>
      * 
-     * @return
+     * @param $〡 Domain Specific Language for virtual element.
      */
-    public Events<Key> keyDown() {
-        return null;
-    }
+    protected abstract void virtualize(StructureDSL $〡);
+
+    /** The model loophole. */
+    private static Object loophole;
 
     /**
      * <p>
-     * Set key binding aginst the specified action.
+     * Create widget which is associated with the specified model.
      * </p>
      * 
-     * @param key A shortcut key stroke.
-     * @param action A binding function.
-     * @return Chainable API.
+     * @param widgetType A widget type.
+     * @param model An associated model.
+     * @return A new created widget.
      */
-    public T shortcut(Key key, Runnable action) {
-        if (key != null && action != null) {
-            disposer().add(publish().observe(UIAction.KeyUp).filter(e -> e.which == key.code).to(e -> {
-                action.run();
-            }));
-        }
-        return (T) this;
-    }
+    static final <W extends UI<V>, V> W create(Class<? extends UI<V>> widgetType, V model) {
+        UI<V> widget;
 
-    /**
-     * @param event
-     * @param string
-     * @return
-     */
-    public T validate(Events<Boolean> event, String string) {
-        return (T) this;
-    }
+        loophole = model;
+        widget = I.make(widgetType);
+        loophole = null;
 
-    /**
-     * @param greaterThan
-     * @param string
-     * @return
-     */
-    public T validate(ObservableValue<Boolean> event, String string) {
-        return (T) this;
-    }
-
-    public T enableIf(ObservableValue<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T enableIf(Events<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T disableIf(ObservableValue<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T disableIf(Events<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T showIf(ObservableValue<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T showIf(Events<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T hideIf(ObservableValue<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T hideIf(Events<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T style(ObservableValue<StyleDefinition> style) {
-        return (T) this;
-    }
-
-    /**
-     * <p>
-     * Helper method to create holder lazily.
-     * </p>
-     * 
-     * @return A cached list.
-     */
-    private List<Disposable> disposer() {
-        if (disposables == null) {
-            disposables = new ArrayList();
-        }
-        return disposables;
+        return (W) widget;
     }
 }

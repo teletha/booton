@@ -10,7 +10,7 @@
 package booton;
 
 import js.lang.Global;
-import jsx.ui.TodoWidget;
+import jsx.ui.TodoUI;
 import jsx.ui.UIManager;
 
 /**
@@ -28,6 +28,6 @@ public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        UIManager.render(Global.document.getElementById("Content"), new TodoWidget());
+        UIManager.render(Global.document.getElementById("Content"), new TodoUI());
     }
 }

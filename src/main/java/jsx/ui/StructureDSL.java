@@ -71,7 +71,7 @@ public final class StructureDSL {
     protected int modifier;
 
     /** The node stack. */
-    private final Deque<VirtualElement> nodes = new ArrayDeque();
+    private final Deque<VirtualFragment> nodes = new ArrayDeque();
 
     /**
      * 
@@ -153,7 +153,7 @@ public final class StructureDSL {
      * @return A single root element.
      */
     protected final VirtualElement getRoot() {
-        return nodes.peekFirst();
+        return (VirtualElement) nodes.peekFirst();
     }
 
     /**
@@ -168,7 +168,7 @@ public final class StructureDSL {
         protected final Class<? extends CSS> builtin;
 
         /** The container */
-        protected VirtualElement container;
+        protected VirtualFragment container;
 
         /** The local id. */
         protected int localId;
@@ -189,7 +189,7 @@ public final class StructureDSL {
          * 
          * @return The current container element.
          */
-        protected final VirtualElement container() {
+        protected final VirtualFragment container() {
             if (container == null) {
                 if (name == null) {
                     // as-is
@@ -209,7 +209,7 @@ public final class StructureDSL {
                     container = new VirtualElement(id, name);
 
                     if (name != null) {
-                        container.classList.push(builtin);
+                        ((VirtualElement) container).classList.push(builtin);
                     }
                     nodes.peekLast().items.push(container);
                     nodes.addLast(container);
@@ -228,17 +228,20 @@ public final class StructureDSL {
         @SafeVarargs
         public final void 〡(Object... children) {
             // store the current context
-            VirtualElement container = container();
+            VirtualFragment container = container();
 
             // then, clean it for nested invocation
             this.container = null;
 
             // precess into child items
             for (Object child : children) {
-                if (child instanceof Widget) {
-                    ((Widget) child).virtualize(StructureDSL.this);
-                } else if (child instanceof UI) {
-                    VirtualElement virtualize = ((UI) child).virtualize();
+                if (child instanceof UI) {
+                    UI childUI = (UI) child;
+
+                    container.items.push(new VirtualUI(childUI.hashCode(), childUI));
+                    childUI.virtualize(StructureDSL.this);
+                } else if (child instanceof LowLevelUI) {
+                    VirtualElement virtualize = ((LowLevelUI) child).virtualize();
 
                     if (virtualize != null) {
                         container.items.push(virtualize);
@@ -300,7 +303,7 @@ public final class StructureDSL {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends Widget<T>> childType, T... children) {
+        public final <T> void 〡(Class<? extends UI<T>> childType, T... children) {
             〡(childType, Arrays.asList(children));
         }
 
@@ -311,24 +314,16 @@ public final class StructureDSL {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends Widget<T>> childType, Collection<T> children) {
-            // store the current context
-            container();
-            int storedModifier = modifier;
-
-            // then, clean it for nested invocation
-            this.container = null;
-
+        public final <T> void 〡(Class<? extends UI<T>> childType, Collection<T> children) {
             // precess into child items
-            for (T child : children) {
-                modifier = child.hashCode();
+            int index = 0;
+            Object[] childrenUI = new Object[children.size()];
 
-                Widget.create(childType, child).virtualize(StructureDSL.this);
+            for (T child : children) {
+                childrenUI[index++] = UI.create(childType, child);
             }
 
-            // reset context environment
-            nodes.pollLast();
-            modifier = storedModifier;
+            〡(childrenUI);
         }
 
         /**
@@ -339,7 +334,7 @@ public final class StructureDSL {
          * @param items Child nodes to append.
          */
         public final ContainerDescriptor 〡﹟(Class<? extends CSS> className) {
-            container().classList.push(className);
+            ((VirtualElement) container()).classList.push(className);
 
             return this;
         }

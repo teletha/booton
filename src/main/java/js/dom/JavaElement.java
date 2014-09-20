@@ -23,16 +23,13 @@ import org.w3c.dom.UserDataHandler;
 /**
  * @version 2014/01/22 0:55:59
  */
-class JavaElement implements org.w3c.dom.Element {
-
-    /** The delegator. */
-    final EmulateElement element;
+class JavaElement extends JavaNode<EmulateElement> implements org.w3c.dom.Element {
 
     /**
-     * @param element
+     * @param emulation
      */
-    JavaElement(EmulateElement element) {
-        this.element = element;
+    JavaElement(EmulateElement emulation) {
+        super(emulation);
     }
 
     /**
@@ -48,7 +45,7 @@ class JavaElement implements org.w3c.dom.Element {
      */
     @Override
     public NamedNodeMap getAttributes() {
-        return new JavaNamedNodeMap(this, element.attributes);
+        return new JavaNamedNodeMap(this, emulation.attributes);
     }
 
     /**
@@ -60,20 +57,20 @@ class JavaElement implements org.w3c.dom.Element {
     }
 
     /**
-     * The name of the element. If <code>Node.localName</code> is different from <code>null</code>,
-     * this attribute is a qualified name. For example, in:
+     * The name of the emulation. If <code>Node.localName</code> is different from <code>null</code>
+     * , this attribute is a qualified name. For example, in:
      * 
-     * <pre> &lt;elementExample id="demo"&gt; ... 
-     * &lt;/elementExample&gt; , </pre>
+     * <pre> &lt;emulationExample id="demo"&gt; ... 
+     * &lt;/emulationExample&gt; , </pre>
      * 
-     * <code>tagName</code> has the value <code>"elementExample"</code>. Note that this is
+     * <code>tagName</code> has the value <code>"emulationExample"</code>. Note that this is
      * case-preserving in XML, as are all of the operations of the DOM. The HTML DOM returns the
-     * <code>tagName</code> of an HTML element in the canonical uppercase form, regardless of the
+     * <code>tagName</code> of an HTML emulation in the canonical uppercase form, regardless of the
      * case in the source HTML document.
      */
     @Override
     public String getTagName() {
-        return element.nameOriginal;
+        return emulation.nameOriginal;
     }
 
     /**
@@ -85,11 +82,11 @@ class JavaElement implements org.w3c.dom.Element {
      */
     @Override
     public String getAttribute(String name) {
-        return element.attr(name);
+        return emulation.attr(name);
     }
 
     /**
-     * Adds a new attribute. If an attribute with that name is already present in the element, its
+     * Adds a new attribute. If an attribute with that name is already present in the emulation, its
      * value is changed to be that of the value parameter. This value is a simple string; it is not
      * parsed as it is being set. So any markup (such as syntax to be recognized as an entity
      * reference) is treated as literal text, and needs to be appropriately escaped by the
@@ -109,7 +106,7 @@ class JavaElement implements org.w3c.dom.Element {
      */
     @Override
     public void setAttribute(String name, String value) throws DOMException {
-        element.attr(name, String.valueOf(value));
+        emulation.attr(name, String.valueOf(value));
     }
 
     /**
@@ -127,7 +124,7 @@ class JavaElement implements org.w3c.dom.Element {
      */
     @Override
     public void removeAttribute(String name) throws DOMException {
-        element.removeAttribute(name);
+        emulation.removeAttribute(name);
     }
 
     /**
@@ -146,8 +143,8 @@ class JavaElement implements org.w3c.dom.Element {
 
     /**
      * Adds a new attribute node. If an attribute with that name ( <code>nodeName</code>) is already
-     * present in the element, it is replaced by the new one. Replacing an attribute node by itself
-     * has no effect. <br>
+     * present in the emulation, it is replaced by the new one. Replacing an attribute node by
+     * itself has no effect. <br>
      * To add a new attribute node with a qualified name and namespace URI, use the
      * <code>setAttributeNodeNS</code> method.
      * 
@@ -155,11 +152,11 @@ class JavaElement implements org.w3c.dom.Element {
      * @return If the <code>newAttr</code> attribute replaces an existing attribute, the replaced
      *         <code>Attr</code> node is returned, otherwise <code>null</code> is returned.
      * @exception DOMException WRONG_DOCUMENT_ERR: Raised if <code>newAttr</code> was created from a
-     *                different document than the one that created the element. <br>
+     *                different document than the one that created the emulation. <br>
      *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly. <br>
      *                INUSE_ATTRIBUTE_ERR: Raised if <code>newAttr</code> is already an attribute of
      *                another <code>Element</code> object. The DOM user must explicitly clone
-     *                <code>Attr</code> nodes to re-use them in other elements.
+     *                <code>Attr</code> nodes to re-use them in other emulations.
      */
     @Override
     public Attr setAttributeNode(Attr newAttr) throws DOMException {
@@ -179,7 +176,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @return The <code>Attr</code> node that was removed.
      * @exception DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly. <br>
      *                NOT_FOUND_ERR: Raised if <code>oldAttr</code> is not an attribute of the
-     *                element.
+     *                emulation.
      */
     @Override
     public Attr removeAttributeNode(Attr oldAttr) throws DOMException {
@@ -221,7 +218,7 @@ class JavaElement implements org.w3c.dom.Element {
 
     /**
      * Adds a new attribute. If an attribute with the same local name and namespace URI is already
-     * present on the element, its prefix is changed to be the prefix part of the
+     * present on the emulation, its prefix is changed to be the prefix part of the
      * <code>qualifiedName</code>, and its value is changed to be the <code>value</code> parameter.
      * This value is a simple string{ throw new Error();} it is not parsed as it is being set. So
      * any markup (such as syntax to be recognized as an entity reference) is treated as literal
@@ -312,8 +309,8 @@ class JavaElement implements org.w3c.dom.Element {
 
     /**
      * Adds a new attribute. If an attribute with that local name and that namespace URI is already
-     * present in the element, it is replaced by the new one. Replacing an attribute node by itself
-     * has no effect. <br>
+     * present in the emulation, it is replaced by the new one. Replacing an attribute node by
+     * itself has no effect. <br>
      * Per [<a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>] ,
      * applications must use the value <code>null</code> as the <code>namespaceURI</code> parameter
      * for methods if they wish to have no namespace.
@@ -323,11 +320,11 @@ class JavaElement implements org.w3c.dom.Element {
      *         local name and namespace URI, the replaced <code>Attr</code> node is returned,
      *         otherwise <code>null</code> is returned.
      * @exception DOMException WRONG_DOCUMENT_ERR: Raised if <code>newAttr</code> was created from a
-     *                different document than the one that created the element. <br>
+     *                different document than the one that created the emulation. <br>
      *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly. <br>
      *                INUSE_ATTRIBUTE_ERR: Raised if <code>newAttr</code> is already an attribute of
      *                another <code>Element</code> object. The DOM user must explicitly clone
-     *                <code>Attr</code> nodes to re-use them in other elements. <br>
+     *                <code>Attr</code> nodes to re-use them in other emulations. <br>
      *                NOT_SUPPORTED_ERR: May be raised if the implementation does not support the
      *                feature <code>"XML"</code> and the language exposed through the Document does
      *                not support XML Namespaces (such as [<a
@@ -343,9 +340,9 @@ class JavaElement implements org.w3c.dom.Element {
      * Returns a <code>NodeList</code> of all the descendant <code>Elements</code> with a given
      * local name and namespace URI in document order.
      * 
-     * @param namespaceURI The namespace URI of the elements to match on. The special value "*"
+     * @param namespaceURI The namespace URI of the emulations to match on. The special value "*"
      *            matches all namespaces.
-     * @param localName The local name of the elements to match on. The special value "*" matches
+     * @param localName The local name of the emulations to match on. The special value "*" matches
      *            all local names.
      * @return A new <code>NodeList</code> object containing all the matched <code>Elements</code>.
      * @exception DOMException NOT_SUPPORTED_ERR: May be raised if the implementation does not
@@ -360,12 +357,12 @@ class JavaElement implements org.w3c.dom.Element {
     }
 
     /**
-     * Returns <code>true</code> when an attribute with a given name is specified on this element or
-     * has a default value, <code>false</code> otherwise.
+     * Returns <code>true</code> when an attribute with a given name is specified on this emulation
+     * or has a default value, <code>false</code> otherwise.
      * 
      * @param name The name of the attribute to look for.
-     * @return <code>true</code> if an attribute with the given name is specified on this element or
-     *         has a default value, <code>false</code> otherwise.
+     * @return <code>true</code> if an attribute with the given name is specified on this emulation
+     *         or has a default value, <code>false</code> otherwise.
      * @since DOM Level 2
      */
     @Override
@@ -375,7 +372,7 @@ class JavaElement implements org.w3c.dom.Element {
 
     /**
      * Returns <code>true</code> when an attribute with a given local name and namespace URI is
-     * specified on this element or has a default value, <code>false</code> otherwise. <br>
+     * specified on this emulation or has a default value, <code>false</code> otherwise. <br>
      * Per [<a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>] ,
      * applications must use the value <code>null</code> as the <code>namespaceURI</code> parameter
      * for methods if they wish to have no namespace.
@@ -383,7 +380,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @param namespaceURI The namespace URI of the attribute to look for.
      * @param localName The local name of the attribute to look for.
      * @return <code>true</code> if an attribute with the given local name and namespace URI is
-     *         specified or has a default value on this element, <code>false</code> otherwise.
+     *         specified or has a default value on this emulation, <code>false</code> otherwise.
      * @exception DOMException NOT_SUPPORTED_ERR: May be raised if the implementation does not
      *                support the feature <code>"XML"</code> and the language exposed through the
      *                Document does not support XML Namespaces (such as [<a
@@ -396,7 +393,7 @@ class JavaElement implements org.w3c.dom.Element {
     }
 
     /**
-     * The type information associated with this element.
+     * The type information associated with this emulation.
      * 
      * @since DOM Level 3
      */
@@ -420,7 +417,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @param isId Whether the attribute is a of type ID.
      * @exception DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly. <br>
      *                NOT_FOUND_ERR: Raised if the specified node is not an attribute of this
-     *                element.
+     *                emulation.
      * @since DOM Level 3
      */
     @Override
@@ -442,7 +439,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @param isId Whether the attribute is a of type ID.
      * @exception DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly. <br>
      *                NOT_FOUND_ERR: Raised if the specified node is not an attribute of this
-     *                element.
+     *                emulation.
      * @since DOM Level 3
      */
     @Override
@@ -463,7 +460,7 @@ class JavaElement implements org.w3c.dom.Element {
      * @param isId Whether the attribute is a of type ID.
      * @exception DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly. <br>
      *                NOT_FOUND_ERR: Raised if the specified node is not an attribute of this
-     *                element.
+     *                emulation.
      * @since DOM Level 3
      */
     @Override
@@ -499,56 +496,8 @@ class JavaElement implements org.w3c.dom.Element {
      * {@inheritDoc}
      */
     @Override
-    public Node getParentNode() {
-        return convert(element.parentNode());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public NodeList getChildNodes() {
         throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Node getFirstChild() {
-        return convert(element.firstChild());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Node getLastChild() {
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Node getPreviousSibling() {
-        return convert(element.previousSibling());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Node getNextSibling() {
-        return convert(element.nextSibling());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Document getOwnerDocument() {
-        return new JavaDocument(I.make(EmulateDocument.class));
     }
 
     /**
@@ -581,14 +530,6 @@ class JavaElement implements org.w3c.dom.Element {
     @Override
     public Node appendChild(Node newChild) throws DOMException {
         throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasChildNodes() {
-        return element.firstChild() != null;
     }
 
     /**
@@ -722,32 +663,6 @@ class JavaElement implements org.w3c.dom.Element {
     public boolean isEqualNode(Node arg) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getFeature(String feature, String version) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object setUserData(String key, Object data, UserDataHandler handler) {
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getUserData(String key) {
         throw new Error();
     }
 

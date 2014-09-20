@@ -14,7 +14,7 @@ import booton.css.CSS;
 /**
  * @version 2014/09/04 15:19:35
  */
-class TodoWidgetStyle {
+class TodoUIStyle {
 
     class LIST extends CSS {
 

@@ -24,8 +24,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.ui.TodoWidgetStyle.BUTTONS;
-import jsx.ui.TodoWidgetStyle.FOOTER;
+import jsx.ui.TodoUIStyle.BUTTONS;
+import jsx.ui.TodoUIStyle.FOOTER;
 import kiss.Events;
 import kiss.I;
 import booton.reactive.css.DynamicStyle;
@@ -33,7 +33,7 @@ import booton.reactive.css.DynamicStyle;
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoWidget extends Widget {
+public class TodoUI extends UI {
 
     /** The data model. */
     public final ListProperty<Todo> todos = I.make(ListProperty.class);
@@ -162,7 +162,7 @@ public class TodoWidget extends Widget {
     /**
      * @version 2014/09/01 11:31:37
      */
-    class Item extends Widget<Todo> {
+    class Item extends UI<Todo> {
 
         /** The edit mode. */
         private BooleanProperty editing = new SimpleBooleanProperty();
@@ -171,7 +171,7 @@ public class TodoWidget extends Widget {
         Output text = new Output(model.contents).hideIf(editing).dbclick(this::startEdit);
 
         /** The remove button. */
-        Button delete = new Button().label("×").showIf(text.hover).click($(TodoWidget.this::remove, model));
+        Button delete = new Button().label("×").showIf(text.hover).click($(TodoUI.this::remove, model));
 
         /** The editable todo text. */
         Input edit = new Input(model.contents).showIf(editing).shortcut(Key.ENTER, this::finishEdit);

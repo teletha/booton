@@ -29,16 +29,13 @@ import org.w3c.dom.UserDataHandler;
 /**
  * @version 2014/01/22 12:23:06
  */
-class JavaDocument implements org.w3c.dom.Document {
-
-    /** The delegator. */
-    private final EmulateDocument document;
+class JavaDocument extends JavaNode<EmulateDocument> implements org.w3c.dom.Document {
 
     /**
      * @param document
      */
     JavaDocument(EmulateDocument document) {
-        this.document = document;
+        super(document);
     }
 
     /**
@@ -95,27 +92,7 @@ class JavaDocument implements org.w3c.dom.Document {
      */
     @Override
     public NodeList getChildNodes() {
-        return new JavaNodeList(document.documentElement());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Node getFirstChild() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Node getLastChild() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return new JavaNodeList(emulation.documentElement());
     }
 
     /**
@@ -146,14 +123,6 @@ class JavaDocument implements org.w3c.dom.Document {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public org.w3c.dom.Document getOwnerDocument() {
-        return this;
     }
 
     /**
@@ -191,16 +160,6 @@ class JavaDocument implements org.w3c.dom.Document {
      */
     @Override
     public Node appendChild(Node newChild) throws DOMException {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasChildNodes() {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
@@ -367,36 +326,6 @@ class JavaDocument implements org.w3c.dom.Document {
      */
     @Override
     public boolean isEqualNode(Node arg) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getFeature(String feature, String version) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object setUserData(String key, Object data, UserDataHandler handler) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getUserData(String key) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();

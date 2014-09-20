@@ -9,19 +9,19 @@
  */
 package jsx.ui;
 
-import jsx.ui.TodoWidget.Item;
-import jsx.ui.TodoWidget.Todo;
+import jsx.ui.TodoUI.Item;
+import jsx.ui.TodoUI.Todo;
 
 import org.junit.Test;
 
 /**
  * @version 2014/09/01 19:42:57
  */
-public class TodoWidgetTest {
+public class TodoUITest {
 
     @Test
     public void add() throws Exception {
-        TodoWidget w = new TodoWidget();
+        TodoUI w = new TodoUI();
         assert w.todos.size() == 0;
         assert w.completedSize.get() == 0;
         assert w.incompletedSize.getValue().intValue() == 0;
@@ -38,11 +38,11 @@ public class TodoWidgetTest {
     @Test
     public void remove() throws Exception {
         Todo todo = new Todo("now");
-        TodoWidget w = new TodoWidget();
+        TodoUI w = new TodoUI();
         w.todos.add(todo);
         assert w.todos.size() == 1;
 
-        Item item = WidgetQuery.findFirst(w, Item.class);
+        Item item = UIQuery.findFirst(w, Item.class);
         User.click(item.delete);
         assert w.todos.size() == 0;
     }
