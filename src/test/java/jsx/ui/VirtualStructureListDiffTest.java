@@ -96,7 +96,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class SingleBox extends Widget<String> {
+    private static class SingleBox extends UI<String> {
 
         /**
          * {@inheritDoc}
@@ -125,7 +125,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class MultiBox extends Widget<String> {
+    private static class MultiBox extends UI<String> {
 
         /**
          * {@inheritDoc}
@@ -155,7 +155,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class NestBox extends Widget<String> {
+    private static class NestBox extends UI<String> {
 
         /**
          * {@inheritDoc}
@@ -199,7 +199,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class PersonBox extends Widget<Person> {
+    private static class PersonBox extends UI<Person> {
 
         /**
          * {@inheritDoc}

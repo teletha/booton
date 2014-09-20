@@ -542,7 +542,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * @return
      */
     static EmulateElement convert(XML xml) {
-        return ((JavaElement) xml.to()).element;
+        return ((JavaElement) xml.to()).emulation;
     }
 
     /**

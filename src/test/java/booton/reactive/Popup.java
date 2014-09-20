@@ -9,14 +9,14 @@
  */
 package booton.reactive;
 
-import jsx.ui.Widget;
+import jsx.ui.UI;
 
 /**
  * @version 2014/09/11 9:18:40
  */
 public class Popup {
 
-    public static void show(Widget widget) {
+    public static void show(UI widget) {
 
     }
 }

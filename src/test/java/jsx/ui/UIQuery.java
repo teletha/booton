@@ -17,14 +17,14 @@ import js.dom.Node;
 /**
  * @version 2014/09/02 10:16:32
  */
-public class WidgetQuery {
+public class UIQuery {
 
     /**
      * @param widget
      * @param childWidgetType
      * @return
      */
-    public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
+    public static <T extends UI> List<T> find(UI widget, Class<T> childWidgetType) {
         StructureDSL structure = new StructureDSL();
         widget.virtualize(structure);
         VirtualElement root = structure.getRoot();
@@ -44,9 +44,9 @@ public class WidgetQuery {
      * @param type
      * @param fragment
      */
-    private static <T extends Widget> void find(List<T> list, Class<T> type, VirtualFragment<? extends Node> fragment) {
-        if (fragment instanceof VirtualWidget) {
-            Widget widget = ((VirtualWidget) fragment).widget;
+    private static <T extends UI> void find(List<T> list, Class<T> type, VirtualFragment<? extends Node> fragment) {
+        if (fragment instanceof VirtualUI) {
+            UI widget = ((VirtualUI) fragment).widget;
 
             if (type.isAssignableFrom(widget.getClass())) {
                 list.add((T) widget);
@@ -71,7 +71,7 @@ public class WidgetQuery {
      * @param childWidgetType
      * @return
      */
-    public static <T extends Widget> T findFirst(Widget widget, Class<T> childWidgetType) {
+    public static <T extends UI> T findFirst(UI widget, Class<T> childWidgetType) {
         List<T> list = find(widget, childWidgetType);
         assert list != null;
         assert list.isEmpty() == false;
@@ -87,7 +87,7 @@ public class WidgetQuery {
      * @param childWidgetType
      * @return
      */
-    public static <T extends Widget> T findLast(Widget widget, Class<T> childWidgetType) {
+    public static <T extends UI> T findLast(UI widget, Class<T> childWidgetType) {
         List<T> list = find(widget, childWidgetType);
         assert list != null;
         assert list.isEmpty() == false;

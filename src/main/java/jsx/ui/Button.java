@@ -12,7 +12,7 @@ package jsx.ui;
 /**
  * @version 2014/08/21 17:09:43
  */
-public class Button extends UI<Button> {
+public class Button extends LowLevelUI<Button> {
 
     /**
      * @param string
