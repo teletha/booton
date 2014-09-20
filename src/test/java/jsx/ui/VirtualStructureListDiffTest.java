@@ -37,7 +37,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
         List<String> prev = Arrays.asList("1", "2");
         List<String> next = Arrays.asList("A", "1", "B", "2", "C");
 
-        assertDiff(multi(prev), multi(next), 6);
+        assertDiff(multi(prev), multi(next), 3);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
         List<String> prev = Arrays.asList("1", "2", "3");
         List<String> next = Arrays.asList("A", "1", "B", "2");
 
-        assertDiff(nest(prev), nest(next), 6);
+        assertDiff(nest(prev), nest(next), 3);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class SingleBox extends UI<String> {
+    private static class SingleBox extends Widget<String> {
 
         /**
          * {@inheritDoc}
@@ -125,7 +125,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class MultiBox extends UI<String> {
+    private static class MultiBox extends Widget<String> {
 
         /**
          * {@inheritDoc}
@@ -155,7 +155,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class NestBox extends UI<String> {
+    private static class NestBox extends Widget<String> {
 
         /**
          * {@inheritDoc}
@@ -199,7 +199,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class PersonBox extends UI<Person> {
+    private static class PersonBox extends Widget<Person> {
 
         /**
          * {@inheritDoc}

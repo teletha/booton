@@ -155,7 +155,7 @@ public class VirtualStructureTest {
     /**
      * @version 2014/09/13 12:18:58
      */
-    private static class StringWidget extends UI<String> {
+    private static class StringWidget extends Widget<String> {
 
         /**
          * {@inheritDoc}
@@ -208,14 +208,14 @@ public class VirtualStructureTest {
      * @param dsl
      * @return
      */
-    private static UI widget(Consumer<StructureDSL> dsl) {
-        return new WidgetDelegator(dsl);
+    private static Widget widget(Consumer<StructureDSL> dsl, Object model) {
+        return Widget.create(WidgetDelegator.class, model);
     }
 
     /**
      * @version 2014/09/13 2:07:14
      */
-    private static class WidgetDelegator extends UI {
+    private static class WidgetDelegator extends Widget<Object> {
 
         private final Consumer<StructureDSL> delegator;
 

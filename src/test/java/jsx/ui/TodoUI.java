@@ -33,7 +33,7 @@ import booton.reactive.css.DynamicStyle;
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends UI {
+public class TodoUI extends Widget {
 
     /** The data model. */
     public final ListProperty<Todo> todos = I.make(ListProperty.class);
@@ -99,7 +99,9 @@ public class TodoUI extends UI {
      * Remove todo task.
      */
     private void remove(Todo todo) {
+        System.out.println("remove todo " + todo + "  " + todos.size());
         todos.remove(todo);
+        System.out.println("size" + todos.size());
     }
 
     /**
@@ -162,7 +164,7 @@ public class TodoUI extends UI {
     /**
      * @version 2014/09/01 11:31:37
      */
-    class Item extends UI<Todo> {
+    class Item extends Widget<Todo> {
 
         /** The edit mode. */
         private BooleanProperty editing = new SimpleBooleanProperty();
@@ -181,6 +183,7 @@ public class TodoUI extends UI {
          */
         @Override
         protected void virtualize(StructureDSL $〡) {
+            System.out.println("crate item widget " + delete + " " + TodoUI.this);
             $〡.sbox.〡(text, delete);
             $〡.asis.〡(edit);
         }

@@ -14,7 +14,7 @@ import javafx.beans.value.ObservableValue;
 /**
  * @version 2014/08/22 11:27:22
  */
-public class Output extends LowLevelUI<Output> {
+public class Output extends LowLevelWidget<Output> {
 
     public Output(ObservableValue value) {
 
