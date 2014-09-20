@@ -22,13 +22,13 @@ public class UIManager {
 
     /**
      * <p>
-     * Render UI {@link UI} on the specified {@link Element}.
+     * Render UI {@link Widget} on the specified {@link Element}.
      * </p>
      * 
      * @param root A target to DOM element to render widget.
      * @param widget A rendering widget.
      */
-    public static void render(Element root, UI widget) {
+    public static void render(Element root, Widget widget) {
         Objects.nonNull(root);
         Objects.nonNull(widget);
 
@@ -42,7 +42,7 @@ public class UIManager {
     private static class Rendering implements Disposable {
 
         /** The widget to render. */
-        private final UI widget;
+        private final Widget widget;
 
         /** The virtual root element. */
         private VirtualElement virtual;
@@ -51,7 +51,7 @@ public class UIManager {
          * @param root A target to DOM element to render widget.
          * @param widget A rendering widget.
          */
-        private Rendering(Element root, UI widget) {
+        private Rendering(Element root, Widget widget) {
             this.widget = widget;
             this.virtual = new VirtualElement(0, "div");
             this.virtual.dom = root;

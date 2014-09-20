@@ -41,6 +41,7 @@ public class TodoUITest {
         TodoUI w = new TodoUI();
         w.todos.add(todo);
         assert w.todos.size() == 1;
+        System.out.println(w);
 
         Item item = UIQuery.findFirst(w, Item.class);
         User.click(item.delete);

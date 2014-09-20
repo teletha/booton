@@ -24,10 +24,12 @@ public class UIQuery {
      * @param childWidgetType
      * @return
      */
-    public static <T extends UI> List<T> find(UI widget, Class<T> childWidgetType) {
+    public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
+        StructureAwareLifestyle.hierarchy.push(widget.getClass(), widget);
         StructureDSL structure = new StructureDSL();
         widget.virtualize(structure);
         VirtualElement root = structure.getRoot();
+        StructureAwareLifestyle.hierarchy.pull(widget.getClass(), widget);
 
         List<T> list = new ArrayList();
         find(list, childWidgetType, root);
@@ -44,9 +46,9 @@ public class UIQuery {
      * @param type
      * @param fragment
      */
-    private static <T extends UI> void find(List<T> list, Class<T> type, VirtualFragment<? extends Node> fragment) {
-        if (fragment instanceof VirtualUI) {
-            UI widget = ((VirtualUI) fragment).widget;
+    private static <T extends Widget> void find(List<T> list, Class<T> type, VirtualFragment<? extends Node> fragment) {
+        if (fragment instanceof VirtualWidget) {
+            Widget widget = ((VirtualWidget) fragment).widget;
 
             if (type.isAssignableFrom(widget.getClass())) {
                 list.add((T) widget);
@@ -71,7 +73,7 @@ public class UIQuery {
      * @param childWidgetType
      * @return
      */
-    public static <T extends UI> T findFirst(UI widget, Class<T> childWidgetType) {
+    public static <T extends Widget> T findFirst(Widget widget, Class<T> childWidgetType) {
         List<T> list = find(widget, childWidgetType);
         assert list != null;
         assert list.isEmpty() == false;
@@ -87,7 +89,7 @@ public class UIQuery {
      * @param childWidgetType
      * @return
      */
-    public static <T extends UI> T findLast(UI widget, Class<T> childWidgetType) {
+    public static <T extends Widget> T findLast(Widget widget, Class<T> childWidgetType) {
         List<T> list = find(widget, childWidgetType);
         assert list != null;
         assert list.isEmpty() == false;

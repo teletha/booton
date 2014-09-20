@@ -10,11 +10,13 @@
 package jsx.ui;
 
 import kiss.I;
+import kiss.Manageable;
 
 /**
  * @version 2014/08/21 13:31:25
  */
-public abstract class UI<V> {
+@Manageable(lifestyle = StructureAwareLifestyle.class)
+public abstract class Widget<V> {
 
     /** The associated model. */
     protected final V model;
@@ -27,7 +29,7 @@ public abstract class UI<V> {
      * This constructor is dirty.
      * </p>
      */
-    protected UI() {
+    protected Widget() {
         this.model = (V) loophole;
     }
 
@@ -52,8 +54,8 @@ public abstract class UI<V> {
      * @param model An associated model.
      * @return A new created widget.
      */
-    static final <W extends UI<V>, V> W create(Class<? extends UI<V>> widgetType, V model) {
-        UI<V> widget;
+    static final <W extends Widget<V>, V> W create(Class<? extends Widget<V>> widgetType, V model) {
+        Widget<V> widget;
 
         loophole = model;
         widget = I.make(widgetType);

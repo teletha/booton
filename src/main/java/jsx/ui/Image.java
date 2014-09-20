@@ -12,7 +12,7 @@ package jsx.ui;
 /**
  * @version 2014/09/11 8:59:42
  */
-public class Image extends LowLevelUI<Image> {
+public class Image extends LowLevelWidget<Image> {
 
     /**
      * {@inheritDoc}

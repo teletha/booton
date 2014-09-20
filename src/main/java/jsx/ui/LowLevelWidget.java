@@ -25,7 +25,7 @@ import booton.reactive.css.StyleDefinition;
 /**
  * @version 2014/09/01 20:06:01
  */
-public abstract class LowLevelUI<T extends LowLevelUI<T>> {
+public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
 
     protected BooleanProperty click;
 
@@ -65,6 +65,10 @@ public abstract class LowLevelUI<T extends LowLevelUI<T>> {
      * @return
      */
     public T click(Runnable action) {
+        publish().observe(UIAction.Click).to(e -> {
+            action.run();
+        });
+
         return (T) this;
     }
 

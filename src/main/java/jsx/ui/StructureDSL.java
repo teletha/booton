@@ -235,13 +235,18 @@ public final class StructureDSL {
 
             // precess into child items
             for (Object child : children) {
-                if (child instanceof UI) {
-                    UI childUI = (UI) child;
+                if (child instanceof Widget) {
+                    Widget childUI = (Widget) child;
+                    VirtualWidget virtualize = new VirtualWidget(childUI.model.hashCode(), childUI);
+                    container.items.push(virtualize);
 
-                    container.items.push(new VirtualUI(childUI.hashCode(), childUI));
+                    StructureAwareLifestyle.hierarchy.push(childUI.getClass(), childUI);
+                    nodes.addLast(virtualize);
                     childUI.virtualize(StructureDSL.this);
-                } else if (child instanceof LowLevelUI) {
-                    VirtualElement virtualize = ((LowLevelUI) child).virtualize();
+                    nodes.pollLast();
+                    StructureAwareLifestyle.hierarchy.pull(childUI.getClass(), childUI);
+                } else if (child instanceof LowLevelWidget) {
+                    VirtualElement virtualize = ((LowLevelWidget) child).virtualize();
 
                     if (virtualize != null) {
                         container.items.push(virtualize);
@@ -303,7 +308,7 @@ public final class StructureDSL {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends UI<T>> childType, T... children) {
+        public final <T> void 〡(Class<? extends Widget<T>> childType, T... children) {
             〡(childType, Arrays.asList(children));
         }
 
@@ -314,15 +319,14 @@ public final class StructureDSL {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends UI<T>> childType, Collection<T> children) {
+        public final <T> void 〡(Class<? extends Widget<T>> childType, Collection<T> children) {
             // precess into child items
             int index = 0;
             Object[] childrenUI = new Object[children.size()];
 
             for (T child : children) {
-                childrenUI[index++] = UI.create(childType, child);
+                childrenUI[index++] = Widget.create(childType, child);
             }
-
             〡(childrenUI);
         }
 

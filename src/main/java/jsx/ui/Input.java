@@ -19,7 +19,7 @@ import kiss.Events;
 /**
  * @version 2014/08/21 17:09:35
  */
-public class Input extends LowLevelUI<Input> {
+public class Input extends LowLevelWidget<Input> {
 
     /** The input value. */
     public final StringProperty value;
