@@ -64,7 +64,7 @@ public class UIManager {
          */
         private void execute() {
             // create new virtual element
-            StructureDSL structure = new StructureDSL();
+            VirtualStructure structure = new VirtualStructure();
             widget.virtualize(structure);
             VirtualElement next = structure.getRoot();
 

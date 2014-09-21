@@ -28,7 +28,7 @@ public class DiffTestBase {
      * @param next
      * @param expectedOperationCount
      */
-    protected void assertDiff(StructureDSL prev, StructureDSL next, int expectedOperationCount) {
+    protected void assertDiff(VirtualStructure prev, VirtualStructure next, int expectedOperationCount) {
         assertDiff(prev.getRoot(), next.getRoot(), expectedOperationCount);
     }
 

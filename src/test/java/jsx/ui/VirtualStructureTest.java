@@ -26,7 +26,7 @@ public class VirtualStructureTest {
 
     @Test
     public void text() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.asis.〡("text");
 
         VirtualElement root = root〡.getRoot();
@@ -36,7 +36,7 @@ public class VirtualStructureTest {
 
     @Test
     public void texts() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.asis.〡("first", "second");
 
         VirtualElement root = root〡.getRoot();
@@ -47,7 +47,7 @@ public class VirtualStructureTest {
 
     @Test
     public void textSequencialCall() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.asis.〡("first");
         root〡.asis.〡("second");
 
@@ -59,7 +59,7 @@ public class VirtualStructureTest {
 
     @Test
     public void widgetText() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.asis.〡(widget(sub〡 -> {
             sub〡.asis.〡("widget text");
         }));
@@ -71,7 +71,7 @@ public class VirtualStructureTest {
 
     @Test
     public void boxText() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.hbox.〡("text");
 
         VirtualElement root = root〡.getRoot();
@@ -83,7 +83,7 @@ public class VirtualStructureTest {
 
     @Test
     public void boxTextSequentialCall() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.hbox.〡("first");
         root〡.hbox.〡("second");
 
@@ -99,7 +99,7 @@ public class VirtualStructureTest {
 
     @Test
     public void boxTextNestedCall() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.hbox.〡(() -> {
             root〡.hbox.〡("nested text");
         });
@@ -115,7 +115,7 @@ public class VirtualStructureTest {
 
     @Test
     public void boxWidgetText() throws Exception {
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.hbox.〡(widget(sub〡 -> {
             sub〡.hbox.〡("nested text");
         }));
@@ -133,7 +133,7 @@ public class VirtualStructureTest {
     public void group() throws Exception {
         List<String> items = Arrays.asList("first", "second", "third");
 
-        StructureDSL root〡 = new StructureDSL();
+        VirtualStructure root〡 = new VirtualStructure();
         root〡.hbox.〡(StringWidget.class, items);
 
         VirtualElement root = root〡.getRoot();
@@ -161,7 +161,7 @@ public class VirtualStructureTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(StructureDSL $〡) {
+        protected void virtualize(VirtualStructure $〡) {
             $〡.hbox.〡(model);
         }
     }
@@ -208,8 +208,8 @@ public class VirtualStructureTest {
      * @param dsl
      * @return
      */
-    private static Widget widget(Consumer<StructureDSL> dsl, Object model) {
-        return Widget.create(WidgetDelegator.class, model);
+    private static Widget widget(Consumer<VirtualStructure> dsl, Object model) {
+        return Widget.cheatConstruction(WidgetDelegator.class, model);
     }
 
     /**
@@ -217,12 +217,12 @@ public class VirtualStructureTest {
      */
     private static class WidgetDelegator extends Widget<Object> {
 
-        private final Consumer<StructureDSL> delegator;
+        private final Consumer<VirtualStructure> delegator;
 
         /**
          * @param delegator
          */
-        private WidgetDelegator(Consumer<StructureDSL> delegator) {
+        private WidgetDelegator(Consumer<VirtualStructure> delegator) {
             this.delegator = delegator;
         }
 
@@ -230,7 +230,7 @@ public class VirtualStructureTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(StructureDSL $〡) {
+        protected void virtualize(VirtualStructure $〡) {
             delegator.accept($〡);
         }
     }

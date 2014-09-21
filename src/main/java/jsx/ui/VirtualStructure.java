@@ -14,15 +14,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
-import jsx.ui.StructureDSLStyle.HBOX;
-import jsx.ui.StructureDSLStyle.SBOX;
-import jsx.ui.StructureDSLStyle.VBOX;
+import jsx.ui.VirtualStructureStyle.HBOX;
+import jsx.ui.VirtualStructureStyle.SBOX;
+import jsx.ui.VirtualStructureStyle.VBOX;
 import booton.css.CSS;
 
 /**
  * @version 2014/09/13 1:52:02
  */
-public final class StructureDSL {
+public final class VirtualStructure {
 
     /**
      * <p>
@@ -76,14 +76,14 @@ public final class StructureDSL {
     /**
      * 
      */
-    public StructureDSL() {
+    public VirtualStructure() {
         this(new VirtualElement(0, "div"));
     }
 
     /**
      * 
      */
-    public StructureDSL(VirtualElement root) {
+    public VirtualStructure(VirtualElement root) {
         nodes.add(root);
     }
 
@@ -236,15 +236,18 @@ public final class StructureDSL {
             // precess into child items
             for (Object child : children) {
                 if (child instanceof Widget) {
-                    Widget childUI = (Widget) child;
-                    VirtualWidget virtualize = new VirtualWidget(childUI.model.hashCode(), childUI);
+                    Widget widget = (Widget) child;
+
+                    // create virtual element for wiget
+                    VirtualWidget virtualize = new VirtualWidget(widget.model.hashCode(), widget);
+
+                    // mount virtual element on virtual structure
                     container.items.push(virtualize);
 
-                    StructureAwareLifestyle.hierarchy.push(childUI.getClass(), childUI);
+                    //
                     nodes.addLast(virtualize);
-                    childUI.virtualize(StructureDSL.this);
+                    widget.assemble(VirtualStructure.this);
                     nodes.pollLast();
-                    StructureAwareLifestyle.hierarchy.pull(childUI.getClass(), childUI);
                 } else if (child instanceof LowLevelWidget) {
                     VirtualElement virtualize = ((LowLevelWidget) child).virtualize();
 
@@ -325,7 +328,7 @@ public final class StructureDSL {
             Object[] childrenUI = new Object[children.size()];
 
             for (T child : children) {
-                childrenUI[index++] = Widget.create(childType, child);
+                childrenUI[index++] = Widget.cheatConstruction(childType, child);
             }
             〡(childrenUI);
         }

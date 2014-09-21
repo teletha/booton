@@ -22,10 +22,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
 
     @Test
     public void textChange() {
-        StructureDSL prev〡 = new StructureDSL();
+        VirtualStructure prev〡 = new VirtualStructure();
         prev〡.asis.〡("text");
 
-        StructureDSL next〡 = new StructureDSL();
+        VirtualStructure next〡 = new VirtualStructure();
         next〡.asis.〡("change");
 
         assertDiff(prev〡, next〡, 1);
@@ -33,10 +33,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
 
     @Test
     public void textNoChange() {
-        StructureDSL prev〡 = new StructureDSL();
+        VirtualStructure prev〡 = new VirtualStructure();
         prev〡.asis.〡("text");
 
-        StructureDSL next〡 = new StructureDSL();
+        VirtualStructure next〡 = new VirtualStructure();
         next〡.asis.〡("text");
 
         assertDiff(prev〡, next〡, 0);
@@ -44,10 +44,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
 
     @Test
     public void hboxTextChange() {
-        StructureDSL prev〡 = new StructureDSL();
+        VirtualStructure prev〡 = new VirtualStructure();
         prev〡.hbox(1).〡("text");
 
-        StructureDSL next〡 = new StructureDSL();
+        VirtualStructure next〡 = new VirtualStructure();
         next〡.hbox(1).〡("change");
 
         assertDiff(prev〡, next〡, 1);
@@ -66,8 +66,8 @@ public class VirtualStructureDiffTest extends DiffTestBase {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> StructureDSL change(boolean condition) {
-        StructureDSL $〡 = new StructureDSL();
+    private <T> VirtualStructure change(boolean condition) {
+        VirtualStructure $〡 = new VirtualStructure();
         if (condition) {
             $〡.vbox.〡("text");
         } else {

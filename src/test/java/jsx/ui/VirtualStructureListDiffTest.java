@@ -54,11 +54,11 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
 
         person.setName("Yukina");
         person.setAge(14);
-        StructureDSL prev = bean(person);
+        VirtualStructure prev = bean(person);
 
         person.setName("Asagi");
         person.setAge(15);
-        StructureDSL next = bean(person);
+        VirtualStructure next = bean(person);
 
         assertDiff(prev, next, 2);
     }
@@ -68,12 +68,12 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
         Person person = new Person();
         person.setName("Yukina");
         person.setAge(14);
-        StructureDSL prev = bean(person);
+        VirtualStructure prev = bean(person);
 
         person = new Person();
         person.setName("Asagi");
         person.setAge(15);
-        StructureDSL next = bean(person);
+        VirtualStructure next = bean(person);
 
         assertDiff(prev, next, 1);
     }
@@ -86,8 +86,8 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> StructureDSL single(List<String> items) {
-        StructureDSL $〡 = new StructureDSL();
+    private <T> VirtualStructure single(List<String> items) {
+        VirtualStructure $〡 = new VirtualStructure();
         $〡.hbox.〡(SingleBox.class, items);
 
         return $〡;
@@ -102,7 +102,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(StructureDSL $〡) {
+        protected void virtualize(VirtualStructure $〡) {
             $〡.hbox.〡(model);
         }
     }
@@ -115,8 +115,8 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> StructureDSL multi(List<String> items) {
-        StructureDSL $〡 = new StructureDSL();
+    private <T> VirtualStructure multi(List<String> items) {
+        VirtualStructure $〡 = new VirtualStructure();
         $〡.hbox.〡(MultiBox.class, items);
 
         return $〡;
@@ -131,7 +131,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(StructureDSL $〡) {
+        protected void virtualize(VirtualStructure $〡) {
             $〡.hbox.〡(model + "1");
             $〡.hbox.〡(model + "2");
         }
@@ -145,8 +145,8 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> StructureDSL nest(List<String> items) {
-        StructureDSL $〡 = new StructureDSL();
+    private <T> VirtualStructure nest(List<String> items) {
+        VirtualStructure $〡 = new VirtualStructure();
         $〡.hbox.〡(NestBox.class, items);
 
         return $〡;
@@ -161,7 +161,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(StructureDSL $〡) {
+        protected void virtualize(VirtualStructure $〡) {
             List<String> items = Arrays.asList(model + "A", model + "B");
 
             $〡.hbox.〡(SingleBox.class, items);
@@ -177,7 +177,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * @param item A bean item.
      * @return A created structure.
      */
-    private <T> StructureDSL bean(Person item) {
+    private <T> VirtualStructure bean(Person item) {
         return bean(Arrays.asList(item));
     }
 
@@ -189,8 +189,8 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> StructureDSL bean(List<Person> items) {
-        StructureDSL $〡 = new StructureDSL();
+    private <T> VirtualStructure bean(List<Person> items) {
+        VirtualStructure $〡 = new VirtualStructure();
         $〡.hbox.〡(PersonBox.class, items);
 
         return $〡;
@@ -205,7 +205,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(StructureDSL $〡) {
+        protected void virtualize(VirtualStructure $〡) {
             $〡.hbox.〡(model.getName(), " is ", model.getAge(), " years old.");
         }
     }
