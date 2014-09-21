@@ -15,11 +15,11 @@ import kiss.Manageable;
 /**
  * @version 2014/08/21 13:31:25
  */
-@Manageable(lifestyle = StructureAwareLifestyle.class)
-public abstract class Widget<V> {
+@Manageable(lifestyle = VirtualStructureHierarchy.class)
+public abstract class Widget<M> {
 
     /** The associated model. */
-    protected final V model;
+    protected final M model;
 
     /** The current associated virtual element. */
     private VirtualNode current;
@@ -30,17 +30,67 @@ public abstract class Widget<V> {
      * </p>
      */
     protected Widget() {
-        this.model = (V) loophole;
+        this((M) loophole);
     }
 
     /**
      * <p>
-     * Create virtual element.
+     * This constructor is dirty.
+     * </p>
+     */
+    protected Widget(M model) {
+        this.model = model;
+    }
+
+    /**
+     * 
+     */
+    protected void initialize() {
+
+    }
+
+    /**
+     * <p>
+     * Assemble the virtual structure for this {@link Widget}.
      * </p>
      * 
-     * @param $〡 Domain Specific Language for virtual element.
+     * @param structure A current processing structure which has the parent container.
      */
-    protected abstract void virtualize(StructureDSL $〡);
+    final void assemble(VirtualStructure structure) {
+        Class clazz = getClass();
+
+        /**
+         * <p>
+         * Enter the hierarchy of {@link VirtualStructure}.
+         * </p>
+         */
+        Widget previous = VirtualStructureHierarchy.hierarchy.putIfAbsent(clazz, this);
+
+        if (previous == null) {
+            throw new IllegalStateException(clazz + " is a nest in virtual structure.");
+        }
+
+        /**
+         * Assemble {@link VirtualStructure} actually.
+         */
+        virtualize(structure);
+
+        /**
+         * <p>
+         * Leave the hierarchy of {@link VirtualStructure}.
+         * </p>
+         */
+        VirtualStructureHierarchy.hierarchy.remove(clazz);
+    }
+
+    /**
+     * <p>
+     * Create virtual elements of this {@link Widget}.
+     * </p>
+     * 
+     * @param $〡 Domain Specific Language for virtual elements.
+     */
+    protected abstract void virtualize(VirtualStructure $〡);
 
     /** The model loophole. */
     private static Object loophole;
@@ -54,7 +104,7 @@ public abstract class Widget<V> {
      * @param model An associated model.
      * @return A new created widget.
      */
-    static final <W extends Widget<V>, V> W create(Class<? extends Widget<V>> widgetType, V model) {
+    static final <W extends Widget<V>, V> W cheatConstruction(Class<? extends Widget<V>> widgetType, V model) {
         Widget<V> widget;
 
         loophole = model;

@@ -9,21 +9,29 @@
  */
 package jsx.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kiss.Prototype;
-import kiss.Table;
 
 /**
  * @version 2014/09/20 16:49:00
  */
-class StructureAwareLifestyle extends Prototype<Widget> {
+class VirtualStructureHierarchy extends Prototype<Widget> {
 
-    static Table<Class, Widget> hierarchy = new Table();
+    /** The hierarchy manager. */
+    static final Map<Class, Widget> hierarchy = new HashMap();
+
+    /** The widget class. */
+    private final Class widgetClass;
 
     /**
      * @param modelClass
      */
-    protected StructureAwareLifestyle(Class modelClass) {
+    protected VirtualStructureHierarchy(Class modelClass) {
         super(modelClass);
+
+        this.widgetClass = modelClass;
     }
 
     /**
@@ -31,7 +39,7 @@ class StructureAwareLifestyle extends Prototype<Widget> {
      */
     @Override
     public Widget get() {
-        Widget widget = hierarchy.find(instantiator.getDeclaringClass());
+        Widget widget = hierarchy.get(widgetClass);
 
         if (widget == null) {
             widget = super.get();

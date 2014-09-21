@@ -85,7 +85,8 @@ public class TodoUI extends Widget {
     /**
      * Add todo task.
      */
-    private void add() {
+    @ModelModifier
+    protected void add() {
         String value = input.value.get();
 
         if (value != null && value.length() != 0) {
@@ -98,16 +99,16 @@ public class TodoUI extends Widget {
     /**
      * Remove todo task.
      */
-    private void remove(Todo todo) {
-        System.out.println("remove todo " + todo + "  " + todos.size());
+    @ModelModifier
+    protected void remove(Todo todo) {
         todos.remove(todo);
-        System.out.println("size" + todos.size());
     }
 
     /**
      * Make complete all tasks.
      */
-    private void makeAllComplete() {
+    @ModelModifier
+    protected void makeAllComplete() {
         for (Todo todo : todos) {
             todo.completed.set(true);
         }
@@ -116,7 +117,8 @@ public class TodoUI extends Widget {
     /**
      * Remove all completed tasks.
      */
-    private void removeCompleted() {
+    @ModelModifier
+    protected void removeCompleted() {
         for (Todo todo : todos) {
             if (todo.completed.get()) {
                 remove(todo);
@@ -127,21 +129,24 @@ public class TodoUI extends Widget {
     /**
      * Show all items.
      */
-    private void showAll() {
+    @ModelModifier
+    protected void showAll() {
         filter.setValue(Filter.All);
     }
 
     /**
      * Show all items.
      */
-    private void showActive() {
+    @ModelModifier
+    protected void showActive() {
         filter.setValue(Filter.Active);
     }
 
     /**
      * Show all items.
      */
-    private void showCompleted() {
+    @ModelModifier
+    protected void showCompleted() {
         filter.setValue(Filter.Completed);
     }
 
@@ -149,7 +154,7 @@ public class TodoUI extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(StructureDSL $〡) {
+    protected void virtualize(VirtualStructure $〡) {
         int imcompleted = incompletedSize.intValue();
 
         $〡.asis.〡(input);
@@ -182,8 +187,22 @@ public class TodoUI extends Widget {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(StructureDSL $〡) {
-            System.out.println("crate item widget " + delete + " " + TodoUI.this);
+        protected void initialize() {
+            /** The todo text. */
+            text = new Output(model.contents).hideIf(editing).dbclick(this::startEdit);
+
+            /** The remove button. */
+            delete = new Button().label("×").showIf(text.hover).click($(TodoUI.this::remove, model));
+
+            /** The editable todo text. */
+            edit = new Input(model.contents).showIf(editing).shortcut(Key.ENTER, this::finishEdit);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize(VirtualStructure $〡) {
             $〡.sbox.〡(text, delete);
             $〡.asis.〡(edit);
         }
@@ -191,14 +210,16 @@ public class TodoUI extends Widget {
         /**
          * 
          */
-        private void startEdit() {
+        @ModelModifier
+        protected void startEdit() {
             editing.set(true);
         }
 
         /**
          * 
          */
-        private void finishEdit() {
+        @ModelModifier
+        protected void finishEdit() {
             editing.set(false);
             model.contents.set(edit.value.get());
         }

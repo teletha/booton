@@ -25,11 +25,11 @@ public class UIQuery {
      * @return
      */
     public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
-        StructureAwareLifestyle.hierarchy.push(widget.getClass(), widget);
-        StructureDSL structure = new StructureDSL();
+        VirtualStructureHierarchy.hierarchy.push(widget.getClass(), widget);
+        VirtualStructure structure = new VirtualStructure();
         widget.virtualize(structure);
         VirtualElement root = structure.getRoot();
-        StructureAwareLifestyle.hierarchy.pull(widget.getClass(), widget);
+        VirtualStructureHierarchy.hierarchy.pull(widget.getClass(), widget);
 
         List<T> list = new ArrayList();
         find(list, childWidgetType, root);
