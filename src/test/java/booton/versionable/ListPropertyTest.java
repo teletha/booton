@@ -17,6 +17,7 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ListChangeListener;
 
 import kiss.I;
 
@@ -38,6 +39,9 @@ public class ListPropertyTest {
 
     @Test
     public void testname() {
+        todos.addListener((ListChangeListener)v -> {
+            v.
+        });
 
         completedSize.addListener((observable, oldV, newV) -> {
             System.out.println("completedSize ChangeListener");
@@ -59,6 +63,13 @@ public class ListPropertyTest {
         System.out.println(completedSize);
 
         todo.completed.set(true);
+    }
+
+    /**
+     * @version 2014/09/21 16:50:45
+     */
+    private static class ItemAwareListProperty {
+
     }
 
     /**

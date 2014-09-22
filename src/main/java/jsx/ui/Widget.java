@@ -18,6 +18,10 @@ import kiss.Manageable;
 @Manageable(lifestyle = VirtualStructureHierarchy.class)
 public abstract class Widget<M> {
 
+    static {
+        I.load(Widget.class, true);
+    }
+
     /** The associated model. */
     protected final M model;
 
