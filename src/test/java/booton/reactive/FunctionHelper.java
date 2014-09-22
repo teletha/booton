@@ -10,6 +10,7 @@
 package booton.reactive;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * @version 2014/09/01 16:57:43
@@ -20,5 +21,9 @@ public class FunctionHelper {
         return () -> {
             consumer.accept(param);
         };
+    }
+
+    public static <T> Predicate not(Predicate<T> predicate) {
+        return predicate.negate();
     }
 }

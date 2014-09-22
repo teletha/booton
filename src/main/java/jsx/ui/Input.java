@@ -9,12 +9,12 @@
  */
 package jsx.ui;
 
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.Element;
 import js.dom.UIAction;
-import kiss.Events;
 
 /**
  * @version 2014/08/21 17:09:35
@@ -54,7 +54,7 @@ public class Input extends LowLevelWidget<Input> {
         return this;
     }
 
-    protected Input placeholder(Events<String> value) {
+    protected Input placeholder(StringExpression value) {
         return this;
     }
 

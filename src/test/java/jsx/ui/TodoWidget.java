@@ -32,16 +32,16 @@ import booton.reactive.css.DynamicStyle;
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends Widget {
+public class TodoWidget extends Widget {
 
     /** The data model. */
     public final Todos todos = new Todos();
 
     /** The completed tasks. */
-    final IntegerBinding completedSize = Bindings.size(todos.list.filtered(Todo::isCompleted));
+    final IntegerBinding completedSize = Bindings.size(todos.list.filtered(item -> item.completed.get()));
 
     /** The incompleted tasks. */
-    final IntegerBinding incompletedSize = Bindings.size(todos.list.filtered(not(Todo::isCompleted)));
+    final IntegerBinding incompletedSize = Bindings.size(todos.list.filtered(item -> !item.completed.get()));
 
     /** The todo size state. */
     private final BooleanBinding exceedSize = todos.list.sizeProperty().greaterThan(10);
@@ -178,7 +178,7 @@ public class TodoUI extends Widget {
          * Remove all completed tasks.
          */
         public void removeCompleted() {
-            list.removeIf(Todo::isCompleted);
+            list.removeIf(v -> v.completed.get());
         }
 
         /**
@@ -219,14 +219,6 @@ public class TodoUI extends Widget {
          */
         public Todo(String value) {
             contents.set(value);
-        }
-
-        /**
-         * @param todo
-         * @return
-         */
-        private static boolean isCompleted(Todo todo) {
-            return todo.completed.get();
         }
     }
 
