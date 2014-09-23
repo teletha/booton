@@ -9,6 +9,8 @@
  */
 package jsx.ui;
 
+import java.util.Objects;
+
 import kiss.I;
 import kiss.Manageable;
 
@@ -16,42 +18,17 @@ import kiss.Manageable;
  * @version 2014/08/21 13:31:25
  */
 @Manageable(lifestyle = VirtualStructureHierarchy.class)
-public abstract class Widget<M> {
+public abstract class Widget {
 
     static {
         I.load(Widget.class, true);
     }
 
-    /** The associated model. */
-    protected final M model;
+    /** The model loophole to CHEAT. */
+    static Object[] loophole;
 
-    /** The current associated virtual element. */
-    private VirtualNode current;
-
-    /**
-     * <p>
-     * This constructor is dirty.
-     * </p>
-     */
-    protected Widget() {
-        this((M) loophole);
-    }
-
-    /**
-     * <p>
-     * This constructor is dirty.
-     * </p>
-     */
-    protected Widget(M model) {
-        this.model = model;
-    }
-
-    /**
-     * 
-     */
-    protected void initialize() {
-
-    }
+    /** The identifier of this {@link Widget}. */
+    int id = loophole == null ? hashCode() : Objects.hash(loophole);
 
     /**
      * <p>
@@ -70,7 +47,7 @@ public abstract class Widget<M> {
          */
         Widget previous = VirtualStructureHierarchy.hierarchy.putIfAbsent(clazz, this);
 
-        if (previous == null) {
+        if (previous != null) {
             throw new IllegalStateException(clazz + " is a nest in virtual structure.");
         }
 
@@ -96,25 +73,97 @@ public abstract class Widget<M> {
      */
     protected abstract void virtualize(VirtualStructure $〡);
 
-    /** The model loophole. */
-    private static Object loophole;
-
     /**
      * <p>
-     * Create widget which is associated with the specified model.
+     * Create widget which is associated with the specified models.
      * </p>
      * 
      * @param widgetType A widget type.
-     * @param model An associated model.
-     * @return A new created widget.
+     * @param model1 An associated model.
+     * @return A widget with the specified models.
      */
-    static final <W extends Widget<V>, V> W cheatConstruction(Class<? extends Widget<V>> widgetType, V model) {
-        Widget<V> widget;
+    public static final <W extends Widget1<First>, First> W of(Class<W> widgetType, First model1) {
+        return create(widgetType, new Object[] {model1});
+    }
 
-        loophole = model;
+    /**
+     * <p>
+     * Create widget which is associated with the specified models.
+     * </p>
+     * 
+     * @param widgetType A widget type.
+     * @param model1 An associated model.
+     * @param model2 An associated model.
+     * @return A widget with the specified models.
+     */
+    public static final <W extends Widget2<First, Second>, First, Second> W of(Class<W> widgetType, First model1, Second model2) {
+        return create(widgetType, new Object[] {model1, model2});
+    }
+
+    /**
+     * <p>
+     * Create widget which is associated with the specified models.
+     * </p>
+     * 
+     * @param widgetType A widget type.
+     * @param model1 An associated model.
+     * @param model2 An associated model.
+     * @param model3 An associated model.
+     * @return A widget with the specified models.
+     */
+    public static final <W extends Widget3<First, Second, Third>, First, Second, Third> W of(Class<W> widgetType, First model1, Second model2, Third model3) {
+        return create(widgetType, new Object[] {model1, model2, model3});
+    }
+
+    /**
+     * <p>
+     * Create widget which is associated with the specified models.
+     * </p>
+     * 
+     * @param widgetType A widget type.
+     * @param model1 An associated model.
+     * @param model2 An associated model.
+     * @param model3 An associated model.
+     * @param model4 An associated model.
+     * @return A widget with the specified models.
+     */
+    public static final <W extends Widget4<First, Second, Third, Fourth>, First, Second, Third, Fourth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4) {
+        return create(widgetType, new Object[] {model1, model2, model3, model4});
+    }
+
+    /**
+     * <p>
+     * Create widget which is associated with the specified models.
+     * </p>
+     * 
+     * @param widgetType A widget type.
+     * @param model1 An associated model.
+     * @param model2 An associated model.
+     * @param model3 An associated model.
+     * @param model4 An associated model.
+     * @param model5 An associated model.
+     * @return A widget with the specified models.
+     */
+    public static final <W extends Widget5<First, Second, Third, Fourth, Fifth>, First, Second, Third, Fourth, Fifth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4, Fifth model5) {
+        return create(widgetType, new Object[] {model1, model2, model3, model4, model5});
+    }
+
+    /**
+     * <p>
+     * Create widget which is associated with the specified models.
+     * </p>
+     * 
+     * @param widgetType A widget type.
+     * @param models Associated models.
+     * @return A widget with the specified models.
+     */
+    private static final <W> W create(Class<W> widgetType, Object[] models) {
+        W widget;
+
+        loophole = models;
         widget = I.make(widgetType);
         loophole = null;
 
-        return (W) widget;
+        return widget;
     }
 }

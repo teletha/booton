@@ -497,18 +497,18 @@ class JavaMethodCompiler extends MethodVisitor {
                 current.remove(0);
                 current.remove(0);
 
-                current.addOperand(increment(Javascript.computeClassName(owner) + "." + Javascript
-                        .computeFieldName(owner, name), type, true, false));
+                current.addOperand(increment(translator.translateStaticField(owner, name), type, true, false));
             } else if (match(GETSTATIC, CONSTANT_1, SUB, DUPLICATE, PUTSTATIC)) {
                 // The pattenr of pre-decrement field is like above.
                 current.remove(0);
                 current.remove(0);
 
-                current.addOperand(increment(Javascript.computeClassName(owner) + "." + Javascript
-                        .computeFieldName(owner, name), type, false, false));
+                current.addOperand(increment(translator.translateStaticField(owner, name), type, false, false));
             } else {
-                current.addExpression(new OperandExpression(Javascript.computeClassName(owner) + "." + Javascript
-                        .computeFieldName(owner, name) + "=" + current.remove(0).cast(type), type));
+                current
+                        .addExpression(new OperandExpression(translator.translateStaticField(owner, name) + "=" + current
+                                .remove(0)
+                                .cast(type), type));
             }
             break;
 

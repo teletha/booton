@@ -239,7 +239,7 @@ public final class VirtualStructure {
                     Widget widget = (Widget) child;
 
                     // create virtual element for wiget
-                    VirtualWidget virtualize = new VirtualWidget(widget.model.hashCode(), widget);
+                    VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
 
                     // mount virtual element on virtual structure
                     container.items.push(virtualize);
@@ -311,7 +311,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends Widget<T>> childType, T... children) {
+        public final <T> void 〡(Class<? extends Widget1<T>> childType, T... children) {
             〡(childType, Arrays.asList(children));
         }
 
@@ -322,13 +322,13 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends Widget<T>> childType, Collection<T> children) {
+        public final <T> void 〡(Class<? extends Widget1<T>> childType, Collection<T> children) {
             // precess into child items
             int index = 0;
             Object[] childrenUI = new Object[children.size()];
 
             for (T child : children) {
-                childrenUI[index++] = Widget.cheatConstruction(childType, child);
+                childrenUI[index++] = Widget.of(childType, child);
             }
             〡(childrenUI);
         }
