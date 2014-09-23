@@ -96,14 +96,14 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class SingleBox extends Widget<String> {
+    private static class SingleBox extends Widget1<String> {
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model);
+            $〡.hbox.〡(model1);
         }
     }
 
@@ -125,15 +125,15 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class MultiBox extends Widget<String> {
+    private static class MultiBox extends Widget1<String> {
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model + "1");
-            $〡.hbox.〡(model + "2");
+            $〡.hbox.〡(model1 + "1");
+            $〡.hbox.〡(model1 + "2");
         }
     }
 
@@ -155,14 +155,14 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class NestBox extends Widget<String> {
+    private static class NestBox extends Widget1<String> {
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            List<String> items = Arrays.asList(model + "A", model + "B");
+            List<String> items = Arrays.asList(model1 + "A", model1 + "B");
 
             $〡.hbox.〡(SingleBox.class, items);
             $〡.vbox.〡(SingleBox.class, items);
@@ -199,14 +199,14 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
     /**
      * @version 2014/09/13 14:11:31
      */
-    private static class PersonBox extends Widget<Person> {
+    private static class PersonBox extends Widget1<Person> {
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model.getName(), " is ", model.getAge(), " years old.");
+            $〡.hbox.〡(model1.getName(), " is ", model1.getAge(), " years old.");
         }
     }
 }

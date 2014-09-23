@@ -107,6 +107,29 @@ public class StaticMemberTest extends ScriptTester {
     }
 
     @Test
+    public void GetStaticFieldFromSubClass() {
+        test(new GetStaticFieldFromSubClass());
+    }
+
+    /**
+     * @version 2014/09/23 16:54:45
+     */
+    private static class StaticFieldSuperClass {
+
+        protected static int superField = 10;
+    }
+
+    /**
+     * @version 2014/09/23 16:54:45
+     */
+    private static class GetStaticFieldFromSubClass extends StaticFieldSuperClass implements Scriptable {
+
+        public int act() {
+            return superField;
+        }
+    }
+
+    @Test
     public void SetStaticField() {
         test(new SetStaticField());
     }
@@ -122,6 +145,23 @@ public class StaticMemberTest extends ScriptTester {
             field = value;
 
             return field;
+        }
+    }
+
+    @Test
+    public void SetStaticFieldFromSubClass() {
+        test(new SetStaticFieldFromSubClass());
+    }
+
+    /**
+     * @version 2014/09/23 17:06:51
+     */
+    private static class SetStaticFieldFromSubClass extends StaticFieldSuperClass implements Scriptable {
+
+        public int act(int value) {
+            superField = value;
+
+            return superField;
         }
     }
 

@@ -11,37 +11,31 @@ package jsx.ui;
 
 import static booton.reactive.FunctionHelper.*;
 
-import java.util.function.Predicate;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
+import jsx.ui.TodoTasks.Filter;
+import jsx.ui.TodoTasks.Task;
 import jsx.ui.TodoUIStyle.BUTTONS;
 import jsx.ui.TodoUIStyle.FOOTER;
-import kiss.I;
 import booton.reactive.css.DynamicStyle;
 
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends Widget {
+public class TodoUI extends Widget1<TodoTasks> {
 
-    /** The data model. */
-    public final Todos todos = new Todos();
+    /** Reassign to meaningful name. */
+    private final TodoTasks todos = model1;
 
     /** The completed tasks. */
-    final IntegerBinding completedSize = Bindings.size(todos.list.filtered(Todo::isCompleted));
+    final IntegerBinding completedSize = Bindings.size(todos.list.filtered(Task::isCompleted));
 
     /** The incompleted tasks. */
-    final IntegerBinding incompletedSize = Bindings.size(todos.list.filtered(not(Todo::isCompleted)));
+    final IntegerBinding incompletedSize = Bindings.size(todos.list.filtered(not(Task::isCompleted)));
 
     /** The todo size state. */
     private final BooleanBinding exceedSize = todos.list.sizeProperty().greaterThan(10);
@@ -88,7 +82,7 @@ public class TodoUI extends Widget {
         String value = input.value.get();
 
         if (value != null && value.length() != 0) {
-            todos.list.add(new Todo(value));
+            todos.list.add(new Task(value));
 
             input.clear();
         }
@@ -113,19 +107,19 @@ public class TodoUI extends Widget {
     /**
      * @version 2014/09/01 11:31:37
      */
-    class Item extends Widget<Todo> {
+    class Item extends Widget1<Task> {
 
         /** The edit mode. */
         private BooleanProperty editing = new SimpleBooleanProperty();
 
         /** The todo text. */
-        Output text = new Output(model.contents).hideIf(editing).dbclick(this::startEdit);
+        Output text = new Output(model1.contents).hideIf(editing).dbclick(this::startEdit);
 
         /** The remove button. */
-        Button delete = new Button().label("×").showIf(text.hover).click($(todos.list::remove, model));
+        Button delete = new Button().label("×").showIf(text.hover).click($(todos.list::remove, model1));
 
         /** The editable todo text. */
-        Input edit = new Input(model.contents).showIf(editing).shortcut(Key.ENTER, this::finishEdit);
+        Input edit = new Input(model1.contents).showIf(editing).shortcut(Key.ENTER, this::finishEdit);
 
         /**
          * {@inheritDoc}
@@ -150,116 +144,7 @@ public class TodoUI extends Widget {
         @ModelModifier
         protected void finishEdit() {
             editing.set(false);
-            model.contents.set(edit.value.get());
-        }
-    }
-
-    /**
-     * @version 2014/09/22 13:49:09
-     */
-    public static class Todos {
-
-        /** The data model. */
-        public final ListProperty<Todo> list = I.make(ListProperty.class);
-
-        /** The filter model. */
-        public final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
-
-        /**
-         * Make complete all tasks.
-         */
-        public void makeAllComplete() {
-            for (Todo todo : list) {
-                todo.completed.set(true);
-            }
-        }
-
-        /**
-         * Remove all completed tasks.
-         */
-        public void removeCompleted() {
-            list.removeIf(Todo::isCompleted);
-        }
-
-        /**
-         * Show all items.
-         */
-        public void showAll() {
-            filter.setValue(Filter.All);
-        }
-
-        /**
-         * Show all items.
-         */
-        public void showActive() {
-            filter.setValue(Filter.Active);
-        }
-
-        /**
-         * Show all items.
-         */
-        public void showCompleted() {
-            filter.setValue(Filter.Completed);
-        }
-    }
-
-    /**
-     * @version 2014/08/22 9:46:49
-     */
-    public static class Todo {
-
-        /** The completion flag. */
-        public final BooleanProperty completed = new SimpleBooleanProperty();
-
-        /** The todo contents. */
-        public final StringProperty contents = new SimpleStringProperty();
-
-        /**
-         * 
-         */
-        public Todo(String value) {
-            contents.set(value);
-        }
-
-        /**
-         * @param todo
-         * @return
-         */
-        private static boolean isCompleted(Todo todo) {
-            return todo.completed.get();
-        }
-    }
-
-    /**
-     * @version 2014/09/01 16:44:22
-     */
-    static enum Filter implements Predicate<Todo> {
-
-        /** Accept any. */
-        All(v -> true),
-
-        /** Accept incompleted. */
-        Active(v -> v.completed.get() == false),
-
-        /** Accept completed. */
-        Completed(v -> v.completed.get() == true);
-
-        /** The condition expression. */
-        private final Predicate<Todo> predicate;
-
-        /**
-         * @param predicate
-         */
-        private Filter(Predicate<Todo> predicate) {
-            this.predicate = predicate;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean test(Todo t) {
-            return predicate.test(t);
+            model1.contents.set(edit.value.get());
         }
     }
 }

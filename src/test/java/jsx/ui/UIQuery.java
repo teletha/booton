@@ -25,11 +25,11 @@ public class UIQuery {
      * @return
      */
     public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
-        VirtualStructureHierarchy.hierarchy.push(widget.getClass(), widget);
+        VirtualStructureHierarchy.hierarchy.put(widget.getClass(), widget);
         VirtualStructure structure = new VirtualStructure();
         widget.virtualize(structure);
         VirtualElement root = structure.getRoot();
-        VirtualStructureHierarchy.hierarchy.pull(widget.getClass(), widget);
+        VirtualStructureHierarchy.hierarchy.remove(widget.getClass(), widget);
 
         List<T> list = new ArrayList();
         find(list, childWidgetType, root);
