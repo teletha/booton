@@ -50,11 +50,11 @@ public class Input extends LowLevelWidget<Input> {
      * 
      * @param string
      */
-    protected Input placeholder(String string) {
+    public Input placeholder(String string) {
         return this;
     }
 
-    protected Input placeholder(StringExpression value) {
+    public Input placeholder(StringExpression value) {
         return this;
     }
 
@@ -63,7 +63,7 @@ public class Input extends LowLevelWidget<Input> {
      * 
      * @return
      */
-    protected Input require() {
+    public Input require() {
         return this;
     }
 

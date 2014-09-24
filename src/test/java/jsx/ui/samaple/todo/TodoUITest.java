@@ -7,10 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.samaple.todo;
 
-import jsx.ui.TodoTasks.Task;
-import jsx.ui.TodoUI.Item;
+import jsx.ui.Key;
+import jsx.ui.UIQuery;
+import jsx.ui.User;
+import jsx.ui.Widget;
+import jsx.ui.samaple.todo.TodoTasks.Task;
+import jsx.ui.samaple.todo.TodoUI.Item;
 
 import org.junit.Test;
 

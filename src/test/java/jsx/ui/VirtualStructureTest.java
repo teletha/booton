@@ -155,14 +155,14 @@ public class VirtualStructureTest {
     /**
      * @version 2014/09/13 12:18:58
      */
-    private static class StringWidget extends WidgetItem<String> {
+    private static class StringWidget extends Widget1<String> {
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model);
+            $〡.hbox.〡(model1);
         }
     }
 
