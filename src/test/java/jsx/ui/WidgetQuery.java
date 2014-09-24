@@ -17,7 +17,7 @@ import js.dom.Node;
 /**
  * @version 2014/09/02 10:16:32
  */
-public class UIQuery {
+public class WidgetQuery {
 
     /**
      * @param widget

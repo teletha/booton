@@ -66,7 +66,9 @@ public class VirtualStructureTest {
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsText(root.items.get(0), "widget text");
+        assertAsElement(root, 0, "widget", c -> {
+            assertAsText(c.items.get(0), "widget text");
+        });
     }
 
     @Test
@@ -123,8 +125,10 @@ public class VirtualStructureTest {
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
         assertAsElement(root, 0, "hbox", e -> {
-            assertAsElement(e, 0, "hbox", text -> {
-                assertAsText(text.items.get(0), "nested text");
+            assertAsElement(e, 0, "widget", w -> {
+                assertAsElement(w, 0, "hbox", nest -> {
+                    assertAsText(nest.items.get(0), "nested text");
+                });
             });
         });
     }
@@ -140,13 +144,13 @@ public class VirtualStructureTest {
         assert root.items.length() == 1;
         assertAsElement(root, 0, "hbox", e -> {
             assert e.items.length() == 3;
-            assertAsElement(e, 0, "hbox", text -> {
+            assertAsElement(e, 0, "widget", text -> {
                 assertAsText(text.items.get(0), "first");
             });
-            assertAsElement(e, 1, "hbox", text -> {
+            assertAsElement(e, 1, "widget", text -> {
                 assertAsText(text.items.get(0), "second");
             });
-            assertAsElement(e, 2, "hbox", text -> {
+            assertAsElement(e, 2, "widget", text -> {
                 assertAsText(text.items.get(0), "third");
             });
         });
@@ -162,7 +166,7 @@ public class VirtualStructureTest {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model1);
+            $〡.asis.〡(model1);
         }
     }
 

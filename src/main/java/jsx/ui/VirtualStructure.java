@@ -225,7 +225,6 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        @SafeVarargs
         public final void 〡(Object... children) {
             // store the current context
             VirtualFragment container = container();
@@ -330,6 +329,7 @@ public final class VirtualStructure {
             for (T child : children) {
                 childrenUI[index++] = Widget.of(childType, child);
             }
+
             〡(childrenUI);
         }
 

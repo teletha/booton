@@ -11,6 +11,8 @@ package booton;
 
 import js.lang.Global;
 import jsx.ui.UIManager;
+import jsx.ui.Widget;
+import jsx.ui.samaple.todo.TodoTasks;
 import jsx.ui.samaple.todo.TodoUI;
 
 /**
@@ -28,6 +30,8 @@ public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello World!");
 
-        UIManager.render(Global.document.getElementById("Content"), new TodoUI());
+        TodoTasks tasks = new TodoTasks();
+
+        UIManager.render(Global.document.getElementById("Content"), Widget.of(TodoUI.class, tasks));
     }
 }
