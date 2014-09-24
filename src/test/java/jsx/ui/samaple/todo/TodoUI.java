@@ -7,20 +7,30 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.samaple.todo;
 
 import static booton.reactive.FunctionHelper.*;
+
+import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
-import jsx.ui.TodoTasks.Filter;
-import jsx.ui.TodoTasks.Task;
-import jsx.ui.TodoUIStyle.BUTTONS;
-import jsx.ui.TodoUIStyle.FOOTER;
+import jsx.ui.Button;
+import jsx.ui.Input;
+import jsx.ui.Key;
+import jsx.ui.ModelModifier;
+import jsx.ui.Output;
+import jsx.ui.VirtualStructure;
+import jsx.ui.Widget1;
+import jsx.ui.samaple.todo.TodoTasks.Task;
+import jsx.ui.samaple.todo.TodoUIStyle.BUTTONS;
+import jsx.ui.samaple.todo.TodoUIStyle.FOOTER;
 import booton.reactive.css.DynamicStyle;
 
 /**
@@ -30,6 +40,9 @@ public class TodoUI extends Widget1<TodoTasks> {
 
     /** Reassign to meaningful name. */
     private final TodoTasks todos = model1;
+
+    /** The filter model. */
+    private final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
 
     /** The completed tasks. */
     final IntegerBinding completedSize = Bindings.size(todos.list.filtered(Task::isCompleted));
@@ -41,7 +54,7 @@ public class TodoUI extends Widget1<TodoTasks> {
     private final BooleanBinding exceedSize = todos.list.sizeProperty().greaterThan(10);
 
     /** The selected filter style. */
-    private final DynamicStyle<Filter> selectedFileter = new DynamicStyle(todos.filter) {
+    private final DynamicStyle<Filter> selectedFileter = new DynamicStyle(filter) {
 
         {
             // font.bold();
@@ -55,18 +68,15 @@ public class TodoUI extends Widget1<TodoTasks> {
             .placeholder(Bindings.when(exceedSize).then("要件は10件まで").otherwise("新しい要件"));
 
     /** The filter button. */
-    final Button all = new Button().label("all").click(todos::showAll).style(selectedFileter.is(Filter.All));
+    final Button all = new Button().label("all").click(this::showAll).style(selectedFileter.is(Filter.All));
 
     /** The filter button. */
-    final Button active = new Button()
-            .label("active")
-            .click(todos::showActive)
-            .style(selectedFileter.is(Filter.Active));
+    final Button active = new Button().label("active").click(this::showActive).style(selectedFileter.is(Filter.Active));
 
     /** The filter button. */
     final Button completed = new Button()
             .label("completed")
-            .click(todos::showCompleted)
+            .click(this::showCompleted)
             .style(selectedFileter.is(Filter.Completed));
 
     /** The clear button. */
@@ -79,6 +89,7 @@ public class TodoUI extends Widget1<TodoTasks> {
      * Add todo task.
      */
     private void add() {
+        // input.value.is(nonEmpty).
         String value = input.value.get();
 
         if (value != null && value.length() != 0) {
@@ -86,6 +97,27 @@ public class TodoUI extends Widget1<TodoTasks> {
 
             input.clear();
         }
+    }
+
+    /**
+     * Show all items.
+     */
+    private void showAll() {
+        filter.setValue(Filter.All);
+    }
+
+    /**
+     * Show all items.
+     */
+    private void showActive() {
+        filter.setValue(Filter.Active);
+    }
+
+    /**
+     * Show all items.
+     */
+    private void showCompleted() {
+        filter.setValue(Filter.Completed);
     }
 
     /**
@@ -145,6 +177,39 @@ public class TodoUI extends Widget1<TodoTasks> {
         protected void finishEdit() {
             editing.set(false);
             model1.contents.set(edit.value.get());
+        }
+    }
+
+    /**
+     * @version 2014/09/01 16:44:22
+     */
+    private static enum Filter implements Predicate<Task> {
+
+        /** Accept any. */
+        All(v -> true),
+
+        /** Accept incompleted. */
+        Active(Task::isCompleted),
+
+        /** Accept completed. */
+        Completed(Task::isCompleted);
+
+        /** The condition expression. */
+        private final Predicate<Task> predicate;
+
+        /**
+         * @param predicate
+         */
+        private Filter(Predicate<Task> predicate) {
+            this.predicate = predicate;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean test(Task t) {
+            return predicate.test(t);
         }
     }
 }

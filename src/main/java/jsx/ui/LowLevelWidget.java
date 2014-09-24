@@ -27,11 +27,11 @@ import booton.reactive.css.StyleDefinition;
  */
 public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
 
-    protected BooleanProperty click;
+    public BooleanProperty click;
 
-    protected BooleanProperty hover;
+    public BooleanProperty hover;
 
-    protected final BooleanProperty enable = new SimpleBooleanProperty();
+    public final BooleanProperty enable = new SimpleBooleanProperty();
 
     private Publishable<?> publisher;
 
