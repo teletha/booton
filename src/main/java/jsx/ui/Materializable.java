@@ -12,22 +12,9 @@ package jsx.ui;
 import js.dom.Element;
 
 /**
- * @version 2014/09/11 8:59:42
+ * @version 2014/09/24 15:23:54
  */
-public class Image extends LowLevelWidget<Image> {
+public interface Materializable {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected VirtualElement virtualize() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void materialize(Element element) {
-    }
+    void materialize(Element element);
 }

@@ -78,6 +78,7 @@ public class Input extends LowLevelWidget<Input> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void materialize(Element element) {
         System.out.println("materialized");
         element.observe(UIAction.Click).to(e -> {

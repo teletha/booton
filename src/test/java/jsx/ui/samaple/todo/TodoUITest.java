@@ -10,9 +10,9 @@
 package jsx.ui.samaple.todo;
 
 import jsx.ui.Key;
-import jsx.ui.UIQuery;
 import jsx.ui.User;
 import jsx.ui.Widget;
+import jsx.ui.WidgetQuery;
 import jsx.ui.samaple.todo.TodoTasks.Task;
 import jsx.ui.samaple.todo.TodoUI.Item;
 
@@ -46,7 +46,8 @@ public class TodoUITest {
         todos.list.add(new Task("now"));
 
         TodoUI w = Widget.of(TodoUI.class, todos);
-        Item item = UIQuery.findFirst(w, Item.class);
+        Item item = WidgetQuery.findFirst(w, Item.class);
+
         User.click(item.delete);
         assert todos.list.size() == 0;
     }

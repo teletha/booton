@@ -9,6 +9,8 @@
  */
 package jsx.ui;
 
+import js.dom.Element;
+
 /**
  * @version 2014/08/21 17:09:43
  */
@@ -28,5 +30,12 @@ public class Button extends LowLevelWidget<Button> {
     @Override
     protected VirtualElement virtualize() {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void materialize(Element element) {
     }
 }

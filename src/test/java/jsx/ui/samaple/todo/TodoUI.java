@@ -128,7 +128,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         int imcompleted = incompletedSize.get();
 
         $〡.asis.〡(input);
-        $〡.vbox.〡(Item.class, todos);
+        $〡.vbox.〡(Item.class, todos.list);
         $〡.hbox.〡﹟(FOOTER.class).〡(() -> {
             $〡.hbox.〡(imcompleted, imcompleted < 2 ? " item" : "items", " left");
             $〡.hbox.〡﹟(BUTTONS.class).〡(all, active, completed);
