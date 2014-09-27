@@ -340,7 +340,7 @@ public final class VirtualStructure {
          * 
          * @param items Child nodes to append.
          */
-        public final ContainerDescriptor 〡﹟(Class<? extends CSS> className) {
+        public final ContainerDescriptor 〡(Class<? extends CSS> className) {
             ((VirtualElement) container()).classList.push(className);
 
             return this;

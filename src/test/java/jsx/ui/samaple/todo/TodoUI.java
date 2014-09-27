@@ -14,7 +14,6 @@ import static booton.reactive.FunctionHelper.*;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
@@ -50,9 +49,6 @@ public class TodoUI extends Widget1<TodoTasks> {
     /** The incompleted tasks. */
     final IntegerBinding incompletedSize = Bindings.size(todos.list.filtered(not(Task::isCompleted)));
 
-    /** The todo size state. */
-    private final BooleanBinding exceedSize = todos.list.sizeProperty().greaterThan(10);
-
     /** The selected filter style. */
     private final DynamicStyle<Filter> selectedFileter = new DynamicStyle(filter) {
 
@@ -63,9 +59,10 @@ public class TodoUI extends Widget1<TodoTasks> {
 
     /** The input field. */
     final Input input = new Input()
-            .disableIf(exceedSize)
+            .disableIf(this::isValidTaskSize)
             .shortcut(Key.ENTER, this::add)
-            .placeholder(Bindings.when(exceedSize).then("要件は10件まで").otherwise("新しい要件"));
+            .click(() -> System.out.println("clicked"))
+            .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
     final Button all = new Button().label("all").click(this::showAll).style(selectedFileter.is(Filter.All));
@@ -100,6 +97,13 @@ public class TodoUI extends Widget1<TodoTasks> {
     }
 
     /**
+     * @return
+     */
+    private boolean isValidTaskSize() {
+        return todos.list.size() <= 10;
+    }
+
+    /**
      * Show all items.
      */
     private void showAll() {
@@ -129,9 +133,9 @@ public class TodoUI extends Widget1<TodoTasks> {
 
         $〡.asis.〡(input);
         $〡.vbox.〡(Item.class, todos.list);
-        $〡.hbox.〡﹟(FOOTER.class).〡(() -> {
+        $〡.hbox.〡(FOOTER.class).〡(() -> {
             $〡.hbox.〡(imcompleted, imcompleted < 2 ? " item" : "items", " left");
-            $〡.hbox.〡﹟(BUTTONS.class).〡(all, active, completed);
+            $〡.hbox.〡(BUTTONS.class).〡(all, active, completed);
             $〡.asis.〡(clear);
         });
     }

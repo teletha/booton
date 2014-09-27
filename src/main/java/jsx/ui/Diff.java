@@ -102,7 +102,7 @@ class Diff {
      * @param next
      * @return
      */
-    static List<Patch> diff(Element context, VirtualKVS prev, VirtualKVS next) {
+    static List<Patch> diff(Element context, VirtualKVS<String, String> prev, VirtualKVS<String, String> next) {
         List<Patch> patches = new ArrayList();
 
         for (int nextIndex = 0; nextIndex < next.names.length(); nextIndex++) {

@@ -9,12 +9,11 @@
  */
 package jsx.ui;
 
+import java.util.function.Supplier;
+
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
-import js.dom.Element;
-import js.dom.UIAction;
 
 /**
  * @version 2014/08/21 17:09:35
@@ -54,6 +53,15 @@ public class Input extends LowLevelWidget<Input> {
         return this;
     }
 
+    /**
+     * Configure placeholder string.
+     * 
+     * @param string
+     */
+    public Input placeholder(Supplier<String> string) {
+        return this;
+    }
+
     public Input placeholder(StringExpression value) {
         return this;
     }
@@ -72,17 +80,9 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected VirtualElement virtualize() {
-        return new VirtualElement(0, "input");
-    }
+        VirtualElement e = new VirtualElement(0, "input");
+        e.events = publish();
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void materialize(Element element) {
-        System.out.println("materialized");
-        element.observe(UIAction.Click).to(e -> {
-            System.out.println("CLICLED " + e);
-        });
+        return e;
     }
 }

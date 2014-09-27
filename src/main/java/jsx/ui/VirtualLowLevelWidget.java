@@ -9,10 +9,9 @@
  */
 package jsx.ui;
 
-
 /**
  * @version 2014/09/24 15:26:26
  */
-public class VirtualLowLevelWidget extends  {
+public class VirtualLowLevelWidget {
 
 }

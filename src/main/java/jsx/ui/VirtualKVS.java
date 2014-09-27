@@ -18,13 +18,13 @@ import js.lang.NativeArray;
  * 
  * @version 2014/09/09 12:22:54
  */
-class VirtualKVS {
+class VirtualKVS<K, V> {
 
     /** The attribute name list. */
-    final NativeArray<String> names = new NativeArray();
+    final NativeArray<K> names = new NativeArray();
 
     /** The attribute value list. */
-    final NativeArray<String> values = new NativeArray();
+    final NativeArray<V> values = new NativeArray();
 
     /**
      * <p>
@@ -34,7 +34,7 @@ class VirtualKVS {
      * @param name
      * @param value
      */
-    void set(String name, String value) {
+    void set(K name, V value) {
         int index = names.indexOf(name);
 
         if (index == -1) {
@@ -53,7 +53,7 @@ class VirtualKVS {
      * @param name
      * @return
      */
-    String get(String name) {
+    V get(K name) {
         int index = names.indexOf(name);
 
         if (index == -1) {
