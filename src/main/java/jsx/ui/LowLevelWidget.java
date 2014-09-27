@@ -11,11 +11,13 @@ package jsx.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
+import js.dom.Element;
 import js.dom.UIAction;
 import jsx.event.Publishable;
 import kiss.Disposable;
@@ -37,6 +39,13 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> implements Mat
 
     /** The disposable list. */
     private List<Disposable> disposables;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void materialize(Element element) {
+    }
 
     /**
      * <p>
@@ -141,6 +150,10 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> implements Mat
         return (T) this;
     }
 
+    public T disableIf(Supplier<Boolean> condition) {
+        return (T) this;
+    }
+
     public T disableIf(ObservableValue<Boolean> condition) {
         return (T) this;
     }
@@ -182,4 +195,5 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> implements Mat
         }
         return disposables;
     }
+
 }

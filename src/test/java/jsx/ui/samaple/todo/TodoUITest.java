@@ -50,5 +50,7 @@ public class TodoUITest {
 
         User.click(item.delete);
         assert todos.list.size() == 0;
+
+        User.click(w.input);
     }
 }

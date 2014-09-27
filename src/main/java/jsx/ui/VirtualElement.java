@@ -12,6 +12,7 @@ package jsx.ui;
 import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
+import jsx.event.Publishable;
 import booton.css.CSS;
 
 /**
@@ -23,10 +24,12 @@ class VirtualElement extends VirtualFragment<Element> {
     final String name;
 
     /** The attributes. */
-    final VirtualKVS attributes = new VirtualKVS();
+    final VirtualKVS<String, String> attributes = new VirtualKVS();
 
     /** The class attributes. */
     final NativeArray<Class<? extends CSS>> classList = new NativeArray();
+
+    Publishable<?> events;
 
     /**
      * @param string
@@ -51,6 +54,11 @@ class VirtualElement extends VirtualFragment<Element> {
         for (int i = 0; i < classList.length(); i++) {
             dom.add(classList.get(i));
         }
+
+        if (events != null) {
+            dom.delegateTo(events);
+        }
+
         return dom;
     }
 }

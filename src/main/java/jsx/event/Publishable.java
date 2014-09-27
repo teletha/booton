@@ -49,6 +49,15 @@ public class Publishable<P extends Publishable<P>> {
 
     private Map<Object, Disposable> disposer;
 
+    public void delegateTo(Publishable<?> publishable) {
+        if (publishable.holder != null) {
+            for (Entry<Object, List<Observer>> entry : publishable.holder.entrySet()) {
+                add(entry.getKey());
+                holder.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
     /**
      * <p>
      * Observe this event sequence of this {@link Publishable}.

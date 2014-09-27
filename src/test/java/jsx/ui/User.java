@@ -90,6 +90,22 @@ public class User {
     }
 
     /**
+     * <p>
+     * Emulate button click event.
+     * </p>
+     * 
+     * @param delete
+     */
+    public static void click(Input button) {
+        Objects.nonNull(button);
+
+        UIEvent event = new UIEvent();
+        event.action = UIAction.Click;
+
+        button.publish().publish(event);
+    }
+
+    /**
      * @version 2014/09/02 9:49:58
      */
     public static class InputResult {
