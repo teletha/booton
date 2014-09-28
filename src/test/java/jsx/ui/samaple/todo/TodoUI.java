@@ -60,7 +60,7 @@ public class TodoUI extends Widget1<TodoTasks> {
     /** The input field. */
     final Input input = new Input()
             .disableIf(this::isValidTaskSize)
-            .shortcut(Key.ENTER, this::add)
+            .shortcut(Key.Enter, this::add)
             .click(() -> System.out.println("clicked"))
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
@@ -93,6 +93,7 @@ public class TodoUI extends Widget1<TodoTasks> {
             todos.list.add(new Task(value));
 
             input.clear();
+            System.out.println("clear");
         }
     }
 
@@ -155,7 +156,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         Button delete = new Button().label("×").showIf(text.hover).click($(todos.list::remove, model1));
 
         /** The editable todo text. */
-        Input edit = new Input(model1.contents).showIf(editing).shortcut(Key.ENTER, this::finishEdit);
+        Input edit = new Input(model1.contents).showIf(editing).shortcut(Key.Enter, this::finishEdit);
 
         /**
          * {@inheritDoc}

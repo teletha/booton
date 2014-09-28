@@ -32,7 +32,7 @@ public class TodoUITest {
         assert w.completedSize.get() == 0;
         assert w.incompletedSize.get() == 0;
 
-        User.input(w.input, "text", Key.ENTER).willBeEmpty();
+        User.input(w.input, "text", Key.Enter).willBeEmpty();
 
         assert todos.list.size() == 1;
         assert w.completedSize.get() == 0;
