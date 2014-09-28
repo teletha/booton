@@ -51,9 +51,11 @@ public class Publishable<P extends Publishable<P>> {
 
     public void delegateTo(Publishable<?> publishable) {
         if (publishable.holder != null) {
+
             for (Entry<Object, List<Observer>> entry : publishable.holder.entrySet()) {
-                add(entry.getKey());
-                holder.put(entry.getKey(), entry.getValue());
+                for (Observer observer : entry.getValue()) {
+                    add(entry.getKey()).to(observer);
+                }
             }
         }
     }

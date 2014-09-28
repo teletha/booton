@@ -15,6 +15,8 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import js.dom.UIAction;
+
 /**
  * @version 2014/08/21 17:09:35
  */
@@ -80,9 +82,11 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected VirtualElement virtualize() {
-        VirtualElement e = new VirtualElement(0, "input");
-        e.events = publish();
+        VirtualElement element = new VirtualElement(0, "input");
 
-        return e;
+        publish().observe(UIAction.Change).to(event -> value.set(event.target.val()));
+        element.events = publish();
+
+        return element;
     }
 }

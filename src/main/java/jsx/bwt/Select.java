@@ -10,8 +10,8 @@
 package jsx.bwt;
 
 import js.dom.Element;
-import js.dom.UIEvent;
 import js.dom.UIAction;
+import js.dom.UIEvent;
 import jsx.bwt.FormUIStyle.Focus;
 import jsx.bwt.SelectStyle.SelectArrow;
 import jsx.bwt.SelectStyle.SelectForm;
@@ -75,12 +75,13 @@ public class Select<M> extends FormUI<Select> {
         view = new ScrollableListView(10, 28).provide(binder);
         view.root.add(SelectItemList.class).subscribe(binder);
 
+        options = root.child(new SlidableView(view));
+
         arrow = root.child(new Button(Icon.BottomArrow, event -> {
             options.toggle();
         }));
         arrow.root.add(SelectArrow.class);
 
-        options = root.child(new SlidableView(view));
         // options.bind(binder);q
 
         if (model.size() == 0) {

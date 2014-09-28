@@ -84,6 +84,9 @@ public enum UIAction implements Predicate<UIEvent> {
     Resize,
 
     /** The ui event type. */
+    Change,
+
+    /** The ui event type. */
     Click,
 
     /** The ui event type. */
