@@ -9,6 +9,7 @@
  */
 package js.util;
 
+import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
