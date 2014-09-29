@@ -86,14 +86,12 @@ public class TodoUI extends Widget1<TodoTasks> {
      * Add todo task.
      */
     private void add() {
-        // input.value.is(nonEmpty).
         String value = input.value.get();
 
         if (value != null && value.length() != 0) {
             todos.list.add(new Task(value));
 
             input.clear();
-            System.out.println("clear");
         }
     }
 

@@ -48,6 +48,7 @@ class VirtualElement extends VirtualFragment<Element> {
         dom = document.createElement(name);
 
         for (int i = 0; i < attributes.names.length(); i++) {
+            // dom.property(attributes.names.get(i), attributes.values.get(i));
             dom.attr(attributes.names.get(i), attributes.values.get(i));
         }
 
@@ -60,5 +61,17 @@ class VirtualElement extends VirtualFragment<Element> {
         }
 
         return dom;
+    }
+
+    /**
+     * Helper method to create attribute. For the sake of speed, this method does no checking for
+     * name conflicts or well-formedness: such checks are the responsibility of the application.
+     * 
+     * @param name An attribute name.
+     * @param value An attribute value;
+     */
+    void atrribute(String name, String value) {
+        this.attributes.names.push(name);
+        this.attributes.values.push(value);
     }
 }

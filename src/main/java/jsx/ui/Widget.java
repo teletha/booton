@@ -9,8 +9,20 @@
  */
 package jsx.ui;
 
-import java.util.Objects;
+import static js.lang.Global.*;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
+import javafx.collections.ListChangeListener;
+
+import js.dom.Element;
 import kiss.I;
 import kiss.Manageable;
 
@@ -19,6 +31,9 @@ import kiss.Manageable;
  */
 @Manageable(lifestyle = VirtualStructureHierarchy.class)
 public abstract class Widget {
+
+    /** The re-rendering queue. */
+    private static final Set<Rendering> update = new HashSet();
 
     static {
         I.load(Widget.class, true);
@@ -29,6 +44,23 @@ public abstract class Widget {
 
     /** The identifier of this {@link Widget}. */
     int id = loophole == null ? hashCode() : Objects.hash(loophole);
+
+    /** The {@link Widget} rendering machine. */
+    private Rendering rendering;
+
+    /**
+     * <p>
+     * Render UI {@link Widget} on the specified {@link Element}.
+     * </p>
+     * 
+     * @param root A target to DOM element to render widget.
+     */
+    public final void renderIn(Element root) {
+        Objects.nonNull(root);
+
+        rendering = new Rendering(root);
+        rendering.willExecute();
+    }
 
     /**
      * <p>
@@ -72,6 +104,17 @@ public abstract class Widget {
      * @param $〡 Domain Specific Language for virtual elements.
      */
     protected abstract void virtualize(VirtualStructure $〡);
+
+    /**
+     * <p>
+     * Collect models to observe modification.
+     * </p>
+     * 
+     * @return
+     */
+    protected Object[] collectModel() {
+        return new Object[0];
+    }
 
     /**
      * <p>
@@ -157,7 +200,7 @@ public abstract class Widget {
      * @param models Associated models.
      * @return A widget with the specified models.
      */
-    private static final <W> W create(Class<W> widgetType, Object[] models) {
+    private static final <W extends Widget> W create(Class<W> widgetType, Object[] models) {
         W widget;
 
         loophole = models;
@@ -165,5 +208,112 @@ public abstract class Widget {
         loophole = null;
 
         return widget;
+    }
+
+    /**
+     * @version 2014/09/29 9:31:25
+     */
+    private class Rendering implements ListChangeListener, Runnable {
+
+        /** The virtual root element. */
+        private VirtualElement virtual = new VirtualElement(0, "div");
+
+        /**
+         * @param root A target to DOM element to render widget.
+         */
+        private Rendering(Element root) {
+            virtual.dom = root;
+
+            for (Object model : collectModel()) {
+                inspect(model);
+            }
+        }
+
+        /**
+         * Inspect the specified model.
+         * 
+         * @param property
+         */
+        void inspect(Object model) {
+            try {
+                for (Field field : model.getClass().getFields()) {
+                    if (Modifier.isFinal(field.getModifiers())) {
+                        Class type = field.getType();
+
+                        if (ListProperty.class.isAssignableFrom(type)) {
+                            inspect((ListProperty) field.get(model));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+        }
+
+        /**
+         * Inspect the specified {@link Property}.
+         * 
+         * @param property
+         */
+        private void inspect(ListProperty property) {
+            property.addListener(this);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onChanged(Change change) {
+            willExecute();
+        }
+
+        /**
+         * <p>
+         * Render UI if needed.
+         * </p>
+         */
+        private void execute() {
+            // create new virtual element
+            VirtualStructure structure = new VirtualStructure();
+            VirtualStructureHierarchy.hierarchy.put(Widget.this.getClass(), Widget.this);
+            virtualize(structure);
+            VirtualStructureHierarchy.hierarchy.remove(Widget.this.getClass(), Widget.this);
+            VirtualElement next = structure.getRoot();
+
+            // create patch to manipulate DOM
+            List<Patch> patches = Diff.diff(virtual, next);
+
+            // update virtual element
+            virtual = next;
+
+            // update real element
+            for (Patch patch : patches) {
+                patch.apply();
+            }
+        }
+
+        /**
+         * <p>
+         * Try to render UI in the future.
+         * </p>
+         */
+        private void willExecute() {
+            update.add(this);
+
+            if (update.size() == 1) {
+                requestAnimationFrame(this);
+            }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            for (Rendering rendering : update) {
+                rendering.execute();
+            }
+            update.clear();
+        }
     }
 }

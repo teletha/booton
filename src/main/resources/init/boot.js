@@ -24,6 +24,12 @@ function boot(global) {
   // Error Extensions
   //====================================================================
   Error.stackTraceLimit = 100;
+  
+  
+  //====================================================================
+  // Window Extensions
+  //====================================================================
+  window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
 
 
   //====================================================================

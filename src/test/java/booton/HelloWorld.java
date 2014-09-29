@@ -10,7 +10,6 @@
 package booton;
 
 import js.lang.Global;
-import jsx.ui.UIManager;
 import jsx.ui.Widget;
 import jsx.ui.samaple.todo.TodoTasks;
 import jsx.ui.samaple.todo.TodoUI;
@@ -32,6 +31,7 @@ public class HelloWorld {
 
         TodoTasks tasks = new TodoTasks();
 
-        UIManager.render(Global.document.getElementById("Content"), Widget.of(TodoUI.class, tasks));
+        TodoUI widget = Widget.of(TodoUI.class, tasks);
+        widget.renderIn(Global.document.getElementById("Content"));
     }
 }
