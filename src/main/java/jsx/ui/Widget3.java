@@ -33,4 +33,12 @@ public abstract class Widget3<First, Second, Third> extends Widget {
         this.model2 = (Second) loophole[1];
         this.model3 = (Third) loophole[2];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Object[] collectModel() {
+        return new Object[] {model1, model2, model3};
+    }
 }

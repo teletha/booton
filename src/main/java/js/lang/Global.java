@@ -175,6 +175,27 @@ public class Global {
 
     /**
      * <p>
+     * The requestAnimationFrame function tells the browser that you wish to perform an animation
+     * and requests that the browser call a specified function to update an animation before the
+     * next repaint. The method takes as an argument a callback to be invoked before the repaint.
+     * </p>
+     * <p>
+     * You should call this method whenever you're ready to update your animation onscreen. This
+     * will request that your animation function be called before the browser performs the next
+     * repaint. The number of callbacks is usually 60 times per second, but will generally match the
+     * display refresh rate in most web browsers as per W3C recommendation. The callback rate may be
+     * reduced to a lower rate when running in background tabs.
+     * </p>
+     * 
+     * @param callback A parameter specifying a function to call when it's time to update your
+     *            animation for the next repaint. The callback has one single argument, a
+     *            DOMHighResTimeStamp, which indicates the current time for when
+     *            requestAnimationFrame starts to fire callbacks.
+     */
+    public static native void requestAnimationFrame(Runnable callback);
+
+    /**
+     * <p>
      * Calls a function or executes a code snippet after specified delay.
      * </p>
      * 
@@ -623,6 +644,30 @@ public class Global {
          */
         public String $(Window object) {
             return "$(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * The requestAnimationFrame function tells the browser that you wish to perform an
+         * animation and requests that the browser call a specified function to update an animation
+         * before the next repaint. The method takes as an argument a callback to be invoked before
+         * the repaint.
+         * </p>
+         * <p>
+         * You should call this method whenever you're ready to update your animation onscreen. This
+         * will request that your animation function be called before the browser performs the next
+         * repaint. The number of callbacks is usually 60 times per second, but will generally match
+         * the display refresh rate in most web browsers as per W3C recommendation. The callback
+         * rate may be reduced to a lower rate when running in background tabs.
+         * </p>
+         * 
+         * @param callback A parameter specifying a function to call when it's time to update your
+         *            animation for the next repaint. The callback has one single argument, a
+         *            DOMHighResTimeStamp, which indicates the current time for when
+         *            requestAnimationFrame starts to fire callbacks.
+         */
+        public String requestAnimationFrame(Runnable callback) {
+            return "requestAnimationFrame(" + function(0) + ")";
         }
 
         /**
