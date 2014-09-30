@@ -213,7 +213,7 @@ public abstract class Widget {
     /**
      * @version 2014/09/29 9:31:25
      */
-    private class Rendering implements ListChangeListener, Runnable {
+    private class Rendering implements Runnable, ListChangeListener {
 
         /** The virtual root element. */
         private VirtualElement virtual = new VirtualElement(0, "div");
@@ -234,7 +234,7 @@ public abstract class Widget {
          * 
          * @param property
          */
-        void inspect(Object model) {
+        private void inspect(Object model) {
             try {
                 for (Field field : model.getClass().getFields()) {
                     if (Modifier.isFinal(field.getModifiers())) {
@@ -269,31 +269,6 @@ public abstract class Widget {
 
         /**
          * <p>
-         * Render UI if needed.
-         * </p>
-         */
-        private void execute() {
-            // create new virtual element
-            VirtualStructure structure = new VirtualStructure();
-            VirtualStructureHierarchy.hierarchy.put(Widget.this.getClass(), Widget.this);
-            virtualize(structure);
-            VirtualStructureHierarchy.hierarchy.remove(Widget.this.getClass(), Widget.this);
-            VirtualElement next = structure.getRoot();
-
-            // create patch to manipulate DOM
-            List<Patch> patches = Diff.diff(virtual, next);
-
-            // update virtual element
-            virtual = next;
-
-            // update real element
-            for (Patch patch : patches) {
-                patch.apply();
-            }
-        }
-
-        /**
-         * <p>
          * Try to render UI in the future.
          * </p>
          */
@@ -314,6 +289,31 @@ public abstract class Widget {
                 rendering.execute();
             }
             update.clear();
+        }
+
+        /**
+         * <p>
+         * Render UI if needed.
+         * </p>
+         */
+        private void execute() {
+            // create new virtual element
+            VirtualStructure structure = new VirtualStructure();
+            VirtualStructureHierarchy.hierarchy.put(Widget.this.getClass(), Widget.this);
+            virtualize(structure);
+            VirtualStructureHierarchy.hierarchy.remove(Widget.this.getClass(), Widget.this);
+            VirtualElement next = structure.getRoot();
+        
+            // create patch to manipulate DOM
+            List<Patch> patches = Diff.diff(virtual, next);
+        
+            // update virtual element
+            virtual = next;
+        
+            // update real element
+            for (Patch patch : patches) {
+                patch.apply();
+            }
         }
     }
 }
