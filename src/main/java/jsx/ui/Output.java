@@ -11,8 +11,6 @@ package jsx.ui;
 
 import javafx.beans.value.ObservableValue;
 
-import js.dom.Element;
-
 /**
  * @version 2014/08/22 11:27:22
  */
@@ -28,12 +26,5 @@ public class Output extends LowLevelWidget<Output> {
     @Override
     protected VirtualElement virtualize() {
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void materialize(Element element) {
     }
 }
