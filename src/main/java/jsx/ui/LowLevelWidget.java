@@ -39,13 +39,6 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     /** The disposable list. */
     private List<Disposable> disposables;
 
-    /**
-     * <p>
-     * Virtualize this user interface.
-     * </p>
-     * 
-     * @return A single element.
-     */
     protected abstract VirtualElement virtualize();
 
     /**

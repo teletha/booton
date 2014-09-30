@@ -29,7 +29,8 @@ class VirtualElement extends VirtualFragment<Element> {
     /** The class attributes. */
     final NativeArray<Class<? extends CSS>> classList = new NativeArray();
 
-    Publishable<?> events;
+    /** The event listeners. */
+    Publishable publishable;
 
     /**
      * @param string
@@ -48,7 +49,6 @@ class VirtualElement extends VirtualFragment<Element> {
         dom = document.createElement(name);
 
         for (int i = 0; i < attributes.names.length(); i++) {
-            // dom.property(attributes.names.get(i), attributes.values.get(i));
             dom.attr(attributes.names.get(i), attributes.values.get(i));
         }
 
@@ -56,8 +56,8 @@ class VirtualElement extends VirtualFragment<Element> {
             dom.add(classList.get(i));
         }
 
-        if (events != null) {
-            dom.delegateTo(events);
+        if (publishable != null) {
+            dom.delegateTo(publishable);
         }
 
         return dom;
@@ -70,7 +70,7 @@ class VirtualElement extends VirtualFragment<Element> {
      * @param name An attribute name.
      * @param value An attribute value;
      */
-    void atrribute(String name, String value) {
+    void attribute(String name, String value) {
         this.attributes.names.push(name);
         this.attributes.values.push(value);
     }
