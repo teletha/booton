@@ -9,7 +9,6 @@
  */
 package jsx.ui;
 
-
 /**
  * @version 2014/09/11 8:59:42
  */

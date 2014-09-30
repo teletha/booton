@@ -70,6 +70,67 @@ class EmulateElement extends Element implements EmulateNodable {
     }
 
     /**
+     * <p>
+     * Get the value of the specified attribute.
+     * </p>
+     * 
+     * @param name The name of the attribute to get.
+     * @return The specified attribute value.
+     */
+    @Override
+    public String attr(String name) {
+        return getAttribute(String.valueOf(name));
+    }
+
+    /**
+     * <p>
+     * Set attribute for this element.
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @param value An attribute value.
+     * @return A chainable API.
+     */
+    @Override
+    public Element attr(String name, Object value) {
+        return attr(null, name, value);
+    }
+
+    /**
+     * <p>
+     * Set attribute with namespace for this element.
+     * </p>
+     * 
+     * @param namespace The namespace uri of the attribute.
+     * @param name An attribute name.
+     * @param value An attribute value.
+     * @return A chainable API.
+     */
+    @Override
+    public Element attr(String namespace, String name, Object value) {
+        setAttributeNS(namespace, name, String.valueOf(value));
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Remove an attribute from this element.
+     * </p>
+     * 
+     * @param attributeName An attribute to remove.
+     * @return A chainable API.
+     */
+    @Override
+    public Element remove(String name) {
+        removeAttribute(String.valueOf(name));
+
+        // API definition
+        return this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

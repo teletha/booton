@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
+import jsx.event.Publishable;
 import jsx.ui.VirtualStructureStyle.HBOX;
 import jsx.ui.VirtualStructureStyle.SBOX;
 import jsx.ui.VirtualStructureStyle.VBOX;
@@ -342,6 +343,33 @@ public final class VirtualStructure {
          */
         public final ContainerDescriptor 〡(Class<? extends CSS> className) {
             ((VirtualElement) container()).classList.push(className);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Define attribute or property of this container.
+         * </p>
+         * 
+         * @param name An attribute or property name.
+         * @param value An attribute or property value.
+         */
+        public final ContainerDescriptor 〡ª(String name, String value) {
+            ((VirtualElement) container()).attribute(name, value);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Assign event listeners of this container.
+         * </p>
+         * 
+         * @param publishable
+         */
+        public final ContainerDescriptor with(Publishable publishable) {
+            ((VirtualElement) container()).publishable = publishable;
 
             return this;
         }

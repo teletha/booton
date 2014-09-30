@@ -31,6 +31,8 @@ public class Input extends LowLevelWidget<Input> {
 
     public Input(StringProperty value) {
         this.value = value;
+
+        publish().observe(UIAction.KeyUp).map(e -> e.target.val()).diff().to(v -> value.set(v));
     }
 
     /**
@@ -83,11 +85,9 @@ public class Input extends LowLevelWidget<Input> {
     @Override
     protected VirtualElement virtualize() {
         VirtualElement element = new VirtualElement(0, "input");
-        System.out.println("virtulize input " + value.get());
-        element.atrribute("value", value.get());
-
-        publish().observe(UIAction.Change).to(event -> value.set(event.target.val()));
-        element.events = publish();
+        element.attribute("type", "text");
+        element.attribute("value", value.get());
+        element.publishable = publish();
 
         return element;
     }

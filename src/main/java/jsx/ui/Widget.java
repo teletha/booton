@@ -58,7 +58,7 @@ public abstract class Widget {
     public final void renderIn(Element root) {
         Objects.nonNull(root);
 
-        rendering = new Rendering(root);
+        rendering = new Rendering(this, root);
         rendering.willExecute();
     }
 
@@ -213,7 +213,10 @@ public abstract class Widget {
     /**
      * @version 2014/09/29 9:31:25
      */
-    private class Rendering implements Runnable, ListChangeListener {
+    private static class Rendering implements Runnable, ListChangeListener {
+
+        /** The associated widget. */
+        private final Widget widget;
 
         /** The virtual root element. */
         private VirtualElement virtual = new VirtualElement(0, "div");
@@ -221,10 +224,11 @@ public abstract class Widget {
         /**
          * @param root A target to DOM element to render widget.
          */
-        private Rendering(Element root) {
-            virtual.dom = root;
+        private Rendering(Widget widget, Element root) {
+            this.widget = widget;
+            this.virtual.dom = root;
 
-            for (Object model : collectModel()) {
+            for (Object model : widget.collectModel()) {
                 inspect(model);
             }
         }
@@ -299,17 +303,17 @@ public abstract class Widget {
         private void execute() {
             // create new virtual element
             VirtualStructure structure = new VirtualStructure();
-            VirtualStructureHierarchy.hierarchy.put(Widget.this.getClass(), Widget.this);
-            virtualize(structure);
-            VirtualStructureHierarchy.hierarchy.remove(Widget.this.getClass(), Widget.this);
+            VirtualStructureHierarchy.hierarchy.put(widget.getClass(), widget);
+            widget.virtualize(structure);
+            VirtualStructureHierarchy.hierarchy.remove(widget.getClass(), widget);
             VirtualElement next = structure.getRoot();
-        
+
             // create patch to manipulate DOM
             List<Patch> patches = Diff.diff(virtual, next);
-        
+
             // update virtual element
             virtual = next;
-        
+
             // update real element
             for (Patch patch : patches) {
                 patch.apply();

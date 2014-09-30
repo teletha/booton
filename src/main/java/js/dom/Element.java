@@ -14,6 +14,7 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.lang.NativeObject;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -71,7 +72,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return The specified attribute value.
      */
     public String attr(String name) {
-        return getAttribute(String.valueOf(name));
+        return ((NativeObject) (Object) this).getPropertyAs(String.class, name);
     }
 
     /**
@@ -84,7 +85,10 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A chainable API.
      */
     public Element attr(String name, Object value) {
-        return attr(null, name, value);
+        System.out.println("set attribute " + name + " : " + value);
+        ((NativeObject) (Object) this).setProperty(name, value);
+
+        return this;
     }
 
     /**
@@ -286,7 +290,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A chainable API.
      */
     public Element remove(String name) {
-        removeAttribute(String.valueOf(name));
+        ((NativeObject) (Object) this).deleteProperty(name);
 
         // API definition
         return this;
