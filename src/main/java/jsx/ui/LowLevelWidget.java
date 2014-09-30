@@ -17,7 +17,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
-import js.dom.Element;
 import js.dom.UIAction;
 import jsx.event.Publishable;
 import kiss.Disposable;
@@ -27,7 +26,7 @@ import booton.reactive.css.StyleDefinition;
 /**
  * @version 2014/09/01 20:06:01
  */
-public abstract class LowLevelWidget<T extends LowLevelWidget<T>> implements Materializable {
+public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
 
     public BooleanProperty click;
 
@@ -39,13 +38,6 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> implements Mat
 
     /** The disposable list. */
     private List<Disposable> disposables;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void materialize(Element element) {
-    }
 
     /**
      * <p>

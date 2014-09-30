@@ -9,7 +9,6 @@
  */
 package jsx.ui;
 
-import js.dom.Element;
 
 /**
  * @version 2014/09/11 8:59:42
@@ -22,12 +21,5 @@ public class Image extends LowLevelWidget<Image> {
     @Override
     protected VirtualElement virtualize() {
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void materialize(Element element) {
     }
 }
