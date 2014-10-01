@@ -9,18 +9,19 @@
  */
 package jsx.ui;
 
+import static java.util.concurrent.TimeUnit.*;
+import static js.dom.UIAction.*;
+
 import java.util.function.Supplier;
 
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import js.dom.UIAction;
-
 /**
  * @version 2014/08/21 17:09:35
  */
-public class Input extends LowLevelWidget<Input> {
+public class Input extends LowLevelElement<Input> {
 
     /** The input value. */
     public final StringProperty value;
@@ -32,7 +33,10 @@ public class Input extends LowLevelWidget<Input> {
     public Input(StringProperty value) {
         this.value = value;
 
-        publish().observe(UIAction.KeyUp).map(e -> e.target.val()).diff().to(v -> value.set(v));
+        publish().observe(KeyUp, Paste, Cut).debounce(50, MILLISECONDS).map(e -> e.target.val()).diff().to(v -> {
+            System.out.println(v);
+            value.set(v);
+        });
     }
 
     /**
@@ -43,6 +47,8 @@ public class Input extends LowLevelWidget<Input> {
 
         // clear value
         value.setValue("");
+
+        System.out.println("clear input value from " + current);
 
         // API definition
         return current;

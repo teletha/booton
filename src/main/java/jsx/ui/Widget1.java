@@ -32,12 +32,4 @@ public abstract class Widget1<First> extends Widget {
     @Override
     protected void virtualize(VirtualStructure $〡) {
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Object[] collectModel() {
-        return new Object[] {model1};
-    }
 }

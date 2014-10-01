@@ -9,15 +9,17 @@
  */
 package jsx.ui;
 
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.StringProperty;
 
 /**
  * @version 2014/08/22 11:27:22
  */
-public class Output extends LowLevelWidget<Output> {
+public class Output extends LowLevelElement<Output> {
 
-    public Output(ObservableValue value) {
-
+    /**
+     * @param name
+     */
+    public Output(StringProperty a) {
     }
 
     /**

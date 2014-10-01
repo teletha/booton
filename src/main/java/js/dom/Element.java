@@ -85,7 +85,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A chainable API.
      */
     public Element attr(String name, Object value) {
-        System.out.println("set attribute " + name + " : " + value);
         ((NativeObject) (Object) this).setProperty(name, value);
 
         return this;

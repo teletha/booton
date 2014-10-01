@@ -20,6 +20,8 @@ import java.util.Set;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 
 import js.dom.Element;
@@ -104,17 +106,6 @@ public abstract class Widget {
      * @param $〡 Domain Specific Language for virtual elements.
      */
     protected abstract void virtualize(VirtualStructure $〡);
-
-    /**
-     * <p>
-     * Collect models to observe modification.
-     * </p>
-     * 
-     * @return
-     */
-    protected Object[] collectModel() {
-        return new Object[0];
-    }
 
     /**
      * <p>
@@ -213,7 +204,7 @@ public abstract class Widget {
     /**
      * @version 2014/09/29 9:31:25
      */
-    private static class Rendering implements Runnable, ListChangeListener {
+    private static class Rendering implements Runnable, ListChangeListener, ChangeListener {
 
         /** The associated widget. */
         private final Widget widget;
@@ -228,8 +219,21 @@ public abstract class Widget {
             this.widget = widget;
             this.virtual.dom = root;
 
-            for (Object model : widget.collectModel()) {
-                inspect(model);
+            Class type = widget.getClass();
+
+            try {
+                while (type != Widget.class) {
+                    for (Field field : type.getDeclaredFields()) {
+                        Class fieldType = field.getType();
+
+                        if (field.getName().startsWith("model") || Input.class.isAssignableFrom(fieldType)) {
+                            inspect(field.get(widget));
+                        }
+                    }
+                    type = type.getSuperclass();
+                }
+            } catch (Exception e) {
+                throw I.quiet(e);
             }
         }
 
@@ -246,6 +250,8 @@ public abstract class Widget {
 
                         if (ListProperty.class.isAssignableFrom(type)) {
                             inspect((ListProperty) field.get(model));
+                        } else if (Property.class.isAssignableFrom(type)) {
+                            inspect((Property) field.get(model));
                         }
                     }
                 }
@@ -260,7 +266,24 @@ public abstract class Widget {
          * @param property
          */
         private void inspect(ListProperty property) {
+            property.addListener((ListChangeListener) this);
+        }
+
+        /**
+         * Inspect the specified {@link Property}.
+         * 
+         * @param property
+         */
+        private void inspect(Property property) {
             property.addListener(this);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+            willExecute();
         }
 
         /**
@@ -289,10 +312,15 @@ public abstract class Widget {
          */
         @Override
         public void run() {
-            for (Rendering rendering : update) {
-                rendering.execute();
+            try {
+                System.out.println("start UI update");
+                for (Rendering rendering : update) {
+                    rendering.execute();
+                }
+                update.clear();
+            } catch (Throwable e) {
+                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
             }
-            update.clear();
         }
 
         /**

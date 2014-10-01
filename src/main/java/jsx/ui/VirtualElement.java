@@ -70,8 +70,10 @@ class VirtualElement extends VirtualFragment<Element> {
      * @param name An attribute name.
      * @param value An attribute value;
      */
-    void attribute(String name, String value) {
+    int attribute(String name, String value) {
         this.attributes.names.push(name);
         this.attributes.values.push(value);
+
+        return attributes.values.length() - 1;
     }
 }

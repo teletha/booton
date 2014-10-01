@@ -663,7 +663,9 @@ class Node {
                         buffer.write(variable, "=", "$;").line();
                         process(current.node, buffer);
                     } else {
-                        buffer.write("if", "($ instanceof " + Javascript.computeClassName(current.exception) + ")", "{");
+                        String condition = current.exception == Throwable.class ? "(true)"
+                                : "($ instanceof " + Javascript.computeClassName(current.exception) + ")";
+                        buffer.write("if", condition, "{");
                         buffer.write(variable, "=", "$;").line();
                         process(current.node, buffer);
                         buffer.write("}", "else");
@@ -683,7 +685,8 @@ class Node {
 
                 if (exit != null) {
                     if (Debugger.isEnable()) {
-                        buffer.comment("Start " + block.start.id + "  End " + block.end.id + "   Catcher " + block.catcher.id);
+                        buffer
+                                .comment("Start " + block.start.id + "  End " + block.end.id + "   Catcher " + block.catcher.id);
                     }
                     buffer.comment("ext block " + exit.id);
                     process(exit, buffer);
@@ -1010,7 +1013,8 @@ class Node {
                 // continue
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
                     if (Debugger.isEnable()) {
-                        buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
+                        buffer
+                                .comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
                     }
 
                     String label = loop.computeLabelFor(next);
@@ -1026,7 +1030,8 @@ class Node {
                     // check whether the current node connects to the exit node directly or not
                     if (loop.exit.incoming.contains(this)) {
                         if (Debugger.isEnable()) {
-                            buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
+                            buffer
+                                    .comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
                         }
                         buffer.append("break", loop.computeLabelFor(next), ";").line();
                     }
@@ -1035,8 +1040,9 @@ class Node {
             }
 
             if (Debugger.isEnable()) {
-                buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")   " + (loop != null ? loop
-                        : ""));
+                buffer
+                        .comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")   " + (loop != null ? loop
+                                : ""));
             }
 
             // normal process

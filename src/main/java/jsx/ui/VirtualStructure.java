@@ -248,11 +248,11 @@ public final class VirtualStructure {
                     nodes.addLast(virtualize);
                     widget.assemble(VirtualStructure.this);
                     nodes.pollLast();
-                } else if (child instanceof LowLevelWidget) {
-                    VirtualElement virtualize = ((LowLevelWidget) child).virtualize();
+                } else if (child instanceof LowLevelElement) {
+                    VirtualElement e = ((LowLevelElement) child).virtualize();
 
-                    if (virtualize != null) {
-                        container.items.push(virtualize);
+                    if (e != null) {
+                        container.items.push(e);
                     }
                 } else {
                     container.items.push(new VirtualText(child.hashCode(), child.toString()));

@@ -125,6 +125,15 @@ public enum UIAction implements Predicate<UIEvent> {
     /** The ui event type. */
     Selection,
 
+    /** The ui event type. */
+    Cut,
+
+    /** The ui event type. */
+    Copy,
+
+    /** The ui event type. */
+    Paste,
+
     /** The ui key input type. */
     Key_N0(48),
 
