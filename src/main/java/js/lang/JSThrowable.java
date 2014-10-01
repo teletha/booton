@@ -464,7 +464,8 @@ class JSThrowable {
             int index = -1;
 
             for (int i = 0; i < elements.size(); i++) {
-                if (elements.get(i).getMethodName().equals("Class") && elements.get(i)
+                if (elements.get(i).getMethodName().equals("Class") && elements
+                        .get(i)
                         .getFileName()
                         .contains("boot.js")) {
                     index = i;
