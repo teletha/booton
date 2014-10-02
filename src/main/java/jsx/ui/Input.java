@@ -26,17 +26,24 @@ public class Input extends LowLevelElement<Input> {
     /** The input value. */
     public final StringProperty value;
 
+    /**
+     * <p>
+     * Create {@link Input} form field with empty value.
+     * </p>
+     */
     public Input() {
         this(new SimpleStringProperty(""));
     }
 
+    /**
+     * <p>
+     * Create {@link Input} form field with the specified value.
+     * </p>
+     */
     public Input(StringProperty value) {
         this.value = value;
 
-        publish().observe(KeyUp, Paste, Cut).debounce(50, MILLISECONDS).map(e -> e.target.val()).diff().to(v -> {
-            System.out.println(v);
-            value.set(v);
-        });
+        publish().observe(KeyUp, Paste, Cut).debounce(50, MILLISECONDS).map(e -> e.target.val()).diff().to(value::set);
     }
 
     /**
@@ -47,8 +54,6 @@ public class Input extends LowLevelElement<Input> {
 
         // clear value
         value.setValue("");
-
-        System.out.println("clear input value from " + current);
 
         // API definition
         return current;
@@ -89,7 +94,7 @@ public class Input extends LowLevelElement<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected VirtualElement virtualize() {
+    protected VirtualNode virtualize() {
         VirtualElement element = new VirtualElement(0, "input");
         element.attribute("type", "text");
         element.attribute("value", value.get());

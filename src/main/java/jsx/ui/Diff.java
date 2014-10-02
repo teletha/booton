@@ -114,7 +114,7 @@ class Diff {
             } else {
                 String prevValue = prev.values.get(prevIndex);
                 String nextValue = next.values.get(nextIndex);
-                System.out.println(key + "  [" + prevValue + "@" + nextValue + "]");
+
                 if (!prevValue.equals(nextValue)) {
                     patches.add(new ChangeAttribute(context, key, nextValue));
                 }
