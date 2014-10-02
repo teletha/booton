@@ -67,7 +67,9 @@ abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
      * @return
      */
     N materializeRoot() {
-        return dom = (N) document.createDocumentFragment();
+        setDom((N) document.createDocumentFragment());
+
+        return getDom();
     }
 
     /**

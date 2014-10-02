@@ -38,6 +38,16 @@ class VirtualText extends VirtualNode<Text> {
      */
     @Override
     Text materialize() {
-        return dom = document.createTextNode(text);
+        setDom(document.createTextNode(text));
+
+        return getDom();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "VText[" + text + "]";
     }
 }

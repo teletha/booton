@@ -46,21 +46,21 @@ class VirtualElement extends VirtualFragment<Element> {
      */
     @Override
     protected Element materializeRoot() {
-        dom = document.createElement(name);
+        setDom(document.createElement(name));
 
         for (int i = 0; i < attributes.names.length(); i++) {
-            dom.attr(attributes.names.get(i), attributes.values.get(i));
+            getDom().attr(attributes.names.get(i), attributes.values.get(i));
         }
 
         for (int i = 0; i < classList.length(); i++) {
-            dom.add(classList.get(i));
+            getDom().add(classList.get(i));
         }
 
         if (publishable != null) {
-            dom.delegateTo(publishable);
+            getDom().delegateTo(publishable);
         }
 
-        return dom;
+        return getDom();
     }
 
     /**
@@ -75,5 +75,13 @@ class VirtualElement extends VirtualFragment<Element> {
         this.attributes.values.push(value);
 
         return attributes.values.length() - 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "VElement<" + name + "/>";
     }
 }
