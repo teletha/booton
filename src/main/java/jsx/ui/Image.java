@@ -24,7 +24,7 @@ public class Image extends LowLevelElement<Image> {
      * {@inheritDoc}
      */
     @Override
-    protected VirtualElement virtualize() {
+    protected VirtualNode virtualize() {
         return null;
     }
 }

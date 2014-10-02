@@ -32,7 +32,7 @@ public class Button extends LowLevelElement<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected VirtualElement virtualize() {
+    protected VirtualNode virtualize() {
         return null;
     }
 }

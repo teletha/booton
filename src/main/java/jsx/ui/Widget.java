@@ -313,7 +313,6 @@ public abstract class Widget {
         @Override
         public void run() {
             try {
-                System.out.println("start UI update");
                 for (Rendering rendering : update) {
                     rendering.execute();
                 }

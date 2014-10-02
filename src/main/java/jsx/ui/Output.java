@@ -16,17 +16,27 @@ import javafx.beans.property.StringProperty;
  */
 public class Output extends LowLevelElement<Output> {
 
+    /** The text contents. */
+    public final StringProperty text;
+
     /**
-     * @param name
+     * <p>
+     * Create text {@link Output} with the specified value.
+     * </p>
+     * 
+     * @param text
      */
-    public Output(StringProperty a) {
+    public Output(StringProperty text) {
+        this.text = text;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected VirtualElement virtualize() {
-        return null;
+    protected VirtualNode virtualize() {
+        String value = text.get();
+
+        return new VirtualText(value.hashCode(), value);
     }
 }
