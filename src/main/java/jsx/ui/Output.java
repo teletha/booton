@@ -34,9 +34,7 @@ public class Output extends LowLevelElement<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected VirtualNode virtualize() {
-        String value = text.get();
-
-        return new VirtualText(value.hashCode(), value);
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.e("div", 0).〡(text.get());
     }
 }

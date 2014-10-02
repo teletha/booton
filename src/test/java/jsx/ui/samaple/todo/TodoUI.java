@@ -13,13 +13,13 @@ import static booton.reactive.FunctionHelper.*;
 
 import java.util.function.Predicate;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import jsx.ui.BindingHelper;
 import jsx.ui.Button;
 import jsx.ui.Input;
 import jsx.ui.Key;
@@ -44,10 +44,10 @@ public class TodoUI extends Widget1<TodoTasks> {
     private final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
 
     /** The completed tasks. */
-    final IntegerBinding completedSize = Bindings.size(todos.list.filtered(Task::isCompleted));
+    final IntegerExpression completedSize = BindingHelper.filter(todos.list, Task::isCompleted).sizeProperty();
 
     /** The incompleted tasks. */
-    final IntegerBinding incompletedSize = Bindings.size(todos.list.filtered(not(Task::isCompleted)));
+    final IntegerExpression incompletedSize = BindingHelper.filter(todos.list, not(Task::isCompleted)).sizeProperty();
 
     /** The selected filter style. */
     private final DynamicStyle<Filter> selectedFileter = new DynamicStyle(filter) {
@@ -129,6 +129,7 @@ public class TodoUI extends Widget1<TodoTasks> {
     @Override
     protected void virtualize(VirtualStructure $〡) {
         int imcompleted = incompletedSize.get();
+        System.out.println("incompleted size is " + imcompleted);
 
         $〡.asis.〡(input);
         $〡.vbox.〡(Item.class, todos.list);

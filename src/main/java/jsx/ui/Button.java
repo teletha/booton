@@ -9,10 +9,16 @@
  */
 package jsx.ui;
 
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.SimpleStringProperty;
+
 /**
  * @version 2014/08/21 17:09:43
  */
 public class Button extends LowLevelElement<Button> {
+
+    /** The label text. */
+    private StringExpression label;
 
     /**
      * @param name
@@ -24,15 +30,30 @@ public class Button extends LowLevelElement<Button> {
      * @param string
      * @return
      */
-    public Button label(Object... texts) {
+    public Button label(StringExpression text) {
+        this.label = text;
+
         return this;
+    }
+
+    /**
+     * @param texts
+     * @return
+     */
+    public Button label(Object... texts) {
+        StringExpression label = new SimpleStringProperty("");
+
+        for (Object text : texts) {
+            label = label.concat(text);
+        }
+        return label(label);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected VirtualNode virtualize() {
-        return null;
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.e("div", 0).〡(label.get());
     }
 }
