@@ -39,7 +39,10 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
     /** The disposable list. */
     private List<Disposable> disposables;
 
-    protected abstract VirtualNode virtualize();
+    /**
+     * {@inheritDoc}
+     */
+    protected abstract void virtualize(VirtualStructure $〡);
 
     /**
      * <p>

@@ -101,7 +101,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(int[] array, int fromIndex, int toIndex, int key) {
-        return search((Integer[]) (Object) array, fromIndex, toIndex, (Integer) key);
+        return search((double[]) (Object) array, fromIndex, toIndex, key);
     }
 
     /**
@@ -145,7 +145,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(long[] array, int fromIndex, int toIndex, long key) {
-        return search((Long[]) (Object) array, fromIndex, toIndex, (Long) key);
+        return search((double[]) (Object) array, fromIndex, toIndex, key);
     }
 
     /**
@@ -189,7 +189,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(short[] array, int fromIndex, int toIndex, short key) {
-        return search((Short[]) (Object) array, fromIndex, toIndex, (Short) key);
+        return search((double[]) (Object) array, fromIndex, toIndex, key);
     }
 
     /**
@@ -233,7 +233,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(char[] array, int fromIndex, int toIndex, char key) {
-        return search((Character[]) (Object) array, fromIndex, toIndex, (Character) key);
+        return search((double[]) (Object) array, fromIndex, toIndex, key);
     }
 
     /**
@@ -277,7 +277,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(byte[] array, int fromIndex, int toIndex, byte key) {
-        return search((Byte[]) (Object) array, fromIndex, toIndex, (Byte) key);
+        return search((double[]) (Object) array, fromIndex, toIndex, key);
     }
 
     /**
@@ -322,7 +322,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(double[] array, int fromIndex, int toIndex, double key) {
-        return search((Double[]) (Object) array, fromIndex, toIndex, (Double) key);
+        return search((double[]) array, fromIndex, toIndex, key);
     }
 
     /**
@@ -367,7 +367,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(float[] array, int fromIndex, int toIndex, float key) {
-        return search((Float[]) (Object) array, fromIndex, toIndex, (Float) key);
+        return search((double[]) (Object) array, fromIndex, toIndex, key);
     }
 
     /**
@@ -455,6 +455,36 @@ class Arrays {
      */
     public static <T> int binarySearch(T[] array, int fromIndex, int toIndex, T key, Comparator<? super T> comparator) {
         return search(array, fromIndex, toIndex, key, comparator);
+    }
+
+    /**
+     * <p>
+     * Generic binary search method.
+     * </p>
+     * 
+     * @param array
+     * @param fromIndex
+     * @param toIndex
+     * @param key
+     * @return
+     */
+    private static <T> int search(double[] array, int fromIndex, int toIndex, double key) {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            double midVal = array[mid];
+
+            if (midVal < key) {
+                low = mid + 1;
+            } else if (midVal > key) {
+                high = mid - 1;
+            } else {
+                return mid; // key found
+            }
+        }
+        return -(low + 1); // key not found.
     }
 
     /**

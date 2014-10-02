@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -44,5 +46,13 @@ public class IntegerTest {
     @Test
     public void toStringRadix() throws Exception {
         assert Integer.toString(16, 36).equals("g");
+    }
+
+    @Test
+    public void compare() {
+        Integer one = Integer.valueOf(1);
+        Integer two = Integer.valueOf(2);
+
+        assert one.compareTo(two) == -1;
     }
 }

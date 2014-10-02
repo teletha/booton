@@ -71,8 +71,8 @@ public final class VirtualStructure {
     /** The local id modifier. */
     protected int modifier;
 
-    /** The node stack. */
-    private final Deque<VirtualFragment> nodes = new ArrayDeque();
+    /** The node route. */
+    private final Deque<VirtualFragment> route = new ArrayDeque();
 
     /**
      * 
@@ -85,7 +85,7 @@ public final class VirtualStructure {
      * 
      */
     public VirtualStructure(VirtualElement root) {
-        nodes.add(root);
+        route.add(root);
     }
 
     /**
@@ -154,7 +154,7 @@ public final class VirtualStructure {
      * @return A single root element.
      */
     protected final VirtualElement getRoot() {
-        return (VirtualElement) nodes.peekFirst();
+        return (VirtualElement) route.peekFirst();
     }
 
     /**
@@ -194,7 +194,7 @@ public final class VirtualStructure {
             if (container == null) {
                 if (name == null) {
                     // as-is
-                    container = nodes.peekLast();
+                    container = route.peekLast();
                 } else {
                     int id = localId;
 
@@ -209,11 +209,11 @@ public final class VirtualStructure {
                     // built-in container
                     container = new VirtualElement(id, name);
 
-                    if (name != null) {
+                    if (builtin != null) {
                         ((VirtualElement) container).classList.push(builtin);
                     }
-                    nodes.peekLast().items.push(container);
-                    nodes.addLast(container);
+                    route.peekLast().items.push(container);
+                    route.addLast(container);
                 }
             }
             return container;
@@ -245,14 +245,17 @@ public final class VirtualStructure {
                     container.items.push(virtualize);
 
                     //
-                    nodes.addLast(virtualize);
+                    route.addLast(virtualize);
                     widget.assemble(VirtualStructure.this);
-                    nodes.pollLast();
+                    route.pollLast();
                 } else if (child instanceof LowLevelElement) {
-                    VirtualNode e = ((LowLevelElement) child).virtualize();
+                    VirtualFragment latest = route.peekLast();
+                    LowLevelElement e = (LowLevelElement) child;
 
-                    if (e != null) {
-                        container.items.push(e);
+                    e.virtualize(VirtualStructure.this);
+
+                    if (latest != route.peekLast()) {
+                        route.pollLast();
                     }
                 } else {
                     container.items.push(new VirtualText(child.hashCode(), child.toString()));
@@ -261,7 +264,7 @@ public final class VirtualStructure {
 
             // reset context environment
             if (name != null) {
-                nodes.pollLast();
+                route.pollLast();
             }
         }
     }
@@ -301,7 +304,7 @@ public final class VirtualStructure {
             children.run();
 
             // restore context environment
-            nodes.pollLast();
+            route.pollLast();
         }
 
         /**

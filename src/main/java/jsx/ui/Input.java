@@ -94,12 +94,7 @@ public class Input extends LowLevelElement<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected VirtualNode virtualize() {
-        VirtualElement element = new VirtualElement(0, "input");
-        element.attribute("type", "text");
-        element.attribute("value", value.get());
-        element.publishable = publish();
-
-        return element;
+    protected void virtualize(VirtualStructure $) {
+        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value.get()).with(publish());
     }
 }
