@@ -15,7 +15,7 @@ import js.dom.Node;
 import js.dom.NodeComparator;
 
 /**
- * @version 2014/09/13 14:18:22
+ * @version 2014/10/03 2:37:24
  */
 public class DiffTestBase {
 
@@ -42,8 +42,8 @@ public class DiffTestBase {
      * @param expectedOperationCount
      */
     protected void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
-        Node prevNode = prev.materialize();
-        Node nextNode = next.materialize();
+        Node prevNode = prev.dom != null ? prev.dom : prev.materialize();
+        Node nextNode = next.dom != null ? next.dom : next.materialize();
 
         clean(next);
 
@@ -76,8 +76,8 @@ public class DiffTestBase {
     private void clean(VirtualNode node) {
         node.dom = null;
 
-        if (node instanceof VirtualElement) {
-            VirtualElement element = (VirtualElement) node;
+        if (node instanceof VirtualFragment) {
+            VirtualFragment<Node> element = (VirtualFragment) node;
 
             for (int i = 0; i < element.items.length(); i++) {
                 clean(element.items.get(i));

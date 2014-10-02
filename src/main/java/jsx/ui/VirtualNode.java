@@ -31,7 +31,28 @@ abstract class VirtualNode<N extends Node> implements Disposable {
      * immediately.
      * </p>
      */
-    public N dom;
+    private N dom;
+
+    /**
+     * Get the dom property of this {@link VirtualNode}.
+     * 
+     * @return The dom property.
+     */
+    public N getDom() {
+        return dom;
+    }
+
+    /**
+     * Set the dom property of this {@link VirtualNode}.
+     * 
+     * @param dom The dom value to set.
+     */
+    public void setDom(N dom) {
+        if (this instanceof VirtualText) {
+            System.out.println("set dom " + dom + " for this " + this);
+        }
+        this.dom = dom;
+    }
 
     /** The node identifier. */
     public final int id;
@@ -57,6 +78,7 @@ abstract class VirtualNode<N extends Node> implements Disposable {
      */
     @Override
     public void dispose() {
+        System.out.println("dispose virtual node " + this);
         dom = null;
     }
 }

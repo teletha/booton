@@ -14,7 +14,6 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
-import booton.translator.Debuggable;
 
 /**
  * @version 2014/06/28 18:12:01
@@ -572,37 +571,6 @@ public class WhileTest extends ScriptTester {
                     }
                 }
                 return a;
-            }
-        });
-    }
-
-    @Test
-    public void testname() {
-        test(new Scriptable() {
-
-            @Debuggable
-            String act(String value) {
-                begin();
-                while (value.contains("a")) {
-                    if (value.contains("b")) {
-                        value = "1";
-                    } else if (value.contains("c")) {
-                        value = "2";
-                    } else {
-                        value = "3";
-                    }
-                }
-                after();
-
-                return value;
-            }
-
-            private void begin() {
-
-            }
-
-            private void after() {
-
             }
         });
     }

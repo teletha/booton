@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        enable(".+FilteredList", "sourceChanged");
+        // enable(".+FilteredList", "sourceChanged");
 
         boolean flag = false;
 

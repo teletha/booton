@@ -49,13 +49,13 @@ class Diff {
          * the reference.
          * </p>
          */
-        next.dom = prev.dom;
-        prev.dom = null;
+        next.setDom(prev.getDom());
+        prev.setDom(null);
 
         List<Patch> patches = new ArrayList();
-        patches.addAll(diff(next.dom, prev.attributes, next.attributes));
-        patches.addAll(diff(next.dom, prev.classList, next.classList));
-        patches.addAll(diff(next.dom, prev, next));
+        patches.addAll(diff(next.getDom(), prev.attributes, next.attributes));
+        patches.addAll(diff(next.getDom(), prev.classList, next.classList));
+        patches.addAll(diff(next.getDom(), prev, next));
 
         return patches;
     }
@@ -163,7 +163,7 @@ class Diff {
                     if (index == -1) {
                         patches.add(new InsertChild(context, null, nextItem));
                     } else {
-                        patches.add(new MoveChild(context, prev.items.get(index).dom));
+                        patches.add(new MoveChild(context, prev.items.get(index).getDom()));
                     }
                 }
             } else {
@@ -195,13 +195,24 @@ class Diff {
                         if (nextItemInPrev == -1) {
                             if (prevItemInNext == -1) {
                                 if (prevItem instanceof VirtualText && nextItem instanceof VirtualText) {
+                                    /**
+                                     * {@link VirtualNode#dom}
+                                     * <p>
+                                     * We passes the Real DOM from the previous Virtual DOM to the
+                                     * next Virtual DOM. To tell the truth, we don't want to
+                                     * manipulate Real DOM in here. But here is the best place to
+                                     * pass the reference.
+                                     * </p>
+                                     */
+                                    nextItem.setDom(prevItem.getDom());
+
                                     patches.add(new ReplaceText(prevItem, (VirtualText) nextItem));
                                 } else {
                                     patches.add(new ReplaceChild(context, prevItem, nextItem));
                                 }
                                 prevPosition++;
                             } else {
-                                patches.add(new InsertChild(context, prevItem.dom, nextItem));
+                                patches.add(new InsertChild(context, prevItem.getDom(), nextItem));
                             }
                             nextPosition++;
                             actualManipulationPosition++;

@@ -837,16 +837,6 @@ class Node {
 
             LoopStructure loop = new LoopStructure(this, nodes[0], nodes[1], update, buffer);
 
-            Operand operand = peek(0);
-
-            if (operand instanceof OperandCondition) {
-                OperandCondition condition = (OperandCondition) operand;
-
-                if (condition.then != nodes[0]) {
-                    condition.invert();
-                }
-            }
-
             // write script fragment
             buffer.write("for", "(;", this + ";", update + ")", "{");
             breakables.add(loop);
@@ -1076,11 +1066,30 @@ class Node {
             return null;
         }
 
+        Node[] nodes;
+
         if (backedges.get(0).hasDominator(first)) {
-            return new Node[] {first, last};
+            nodes = new Node[] {first, last};
         } else {
-            return new Node[] {last, first};
+            nodes = new Node[] {last, first};
         }
+
+        /**
+         * condition's destination node must be the process node
+         * 
+         * <pre>
+         * loop (condition) {
+         *      process-node
+         * }
+         * exit-node
+         * </pre>
+         */
+        OperandCondition condition = (OperandCondition) stack.peekLast();
+
+        if (condition.then != nodes[0]) {
+            condition.invert();
+        }
+        return nodes;
     }
 
     /**
