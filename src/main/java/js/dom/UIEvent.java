@@ -22,18 +22,22 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
 
     /** The DOM element that initiated the event. */
     @JavascriptNativeProperty
+    @Deprecated
     public Element target;
 
     /** The current DOM element within the event bubbling phase. */
     @JavascriptNativeProperty
+    @Deprecated
     public Element currentTarget;
 
     /** The other DOM element involved in the event, if any. */
     @JavascriptNativeProperty
+    @Deprecated
     public Element relatedTarget;
 
     /** The element where the currently-called jQuery event handler was attached. */
     @JavascriptNativeProperty
+    @Deprecated
     public Element delegateTarget;
 
     /** The namespace specified when the event was triggered. */
@@ -143,5 +147,28 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
      */
     @Override
     public void dispose() {
+    }
+
+    /**
+     * <p>
+     * Access to the attribute or property of the current {@link EventTarget} by the specified name.
+     * </p>
+     * 
+     * @param name A name of attribute or property.
+     * @return A value of the specified attribute or property.
+     */
+    public String attr(String name) {
+        return target.attr(name);
+    }
+
+    /**
+     * <p>
+     * Retrieve the value property of the current {@link EventTarget}.
+     * </p>
+     * 
+     * @return A value property.
+     */
+    public String value() {
+        return attr("value");
     }
 }

@@ -7,7 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.piece;
+
+import jsx.ui.LowLevelElement;
+import jsx.ui.VirtualStructure;
 
 /**
  * @version 2014/09/11 8:59:42

@@ -7,9 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.piece;
 
 import javafx.beans.property.StringProperty;
+
+import jsx.ui.LowLevelElement;
+import jsx.ui.VirtualStructure;
 
 /**
  * @version 2014/08/22 11:27:22

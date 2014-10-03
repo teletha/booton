@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.piece;
 
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
@@ -19,6 +19,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
+import jsx.ui.LowLevelElement;
+import jsx.ui.VirtualStructure;
 import kiss.Events;
 
 /**
@@ -46,10 +48,10 @@ public class Input extends LowLevelElement<Input> {
     public Input(StringProperty value) {
         this.value = value;
 
-        Events<UIEvent> functionInput = publish().observe(Paste, Cut).debounce(50, MILLISECONDS);
-        Events<UIEvent> keybordInput = publish().observe(KeyUp);
+        Events<UIEvent> functionInput = event().observe(Paste, Cut).debounce(50, MILLISECONDS);
+        Events<UIEvent> keybordInput = event().observe(KeyUp);
 
-        functionInput.merge(keybordInput).map(e -> e.target.val()).diff().to(value::set);
+        functionInput.merge(keybordInput).map(UIEvent::value).diff().to(value::set);
     }
 
     /**
@@ -101,6 +103,6 @@ public class Input extends LowLevelElement<Input> {
      */
     @Override
     protected void virtualize(VirtualStructure $) {
-        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value.get()).with(publish());
+        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value.get()).with(event());
     }
 }

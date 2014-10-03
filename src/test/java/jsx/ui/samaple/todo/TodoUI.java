@@ -20,13 +20,13 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import jsx.ui.BindingHelper;
-import jsx.ui.Button;
-import jsx.ui.Input;
 import jsx.ui.Key;
 import jsx.ui.ModelModifier;
-import jsx.ui.Output;
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
+import jsx.ui.piece.Button;
+import jsx.ui.piece.Input;
+import jsx.ui.piece.Output;
 import jsx.ui.samaple.todo.TodoTasks.Task;
 import jsx.ui.samaple.todo.TodoUIStyle.BUTTONS;
 import jsx.ui.samaple.todo.TodoUIStyle.FOOTER;
@@ -61,7 +61,6 @@ public class TodoUI extends Widget1<TodoTasks> {
     final Input input = new Input()
             .disableIf(this::isValidTaskSize)
             .shortcut(Key.Enter, this::add)
-            .click(() -> System.out.println("clicked"))
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
