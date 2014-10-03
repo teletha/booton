@@ -129,7 +129,6 @@ public class TodoUI extends Widget1<TodoTasks> {
     @Override
     protected void virtualize(VirtualStructure $〡) {
         int imcompleted = incompletedSize.get();
-        System.out.println("incompleted size is " + imcompleted);
 
         $〡.asis.〡(input);
         $〡.vbox.〡(Item.class, todos.list);
@@ -162,8 +161,8 @@ public class TodoUI extends Widget1<TodoTasks> {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.sbox.〡(text, delete);
-            $〡.asis.〡(edit);
+            $〡.hbox.〡(text, delete);
+            // $〡.asis.〡(edit);
         }
 
         /**

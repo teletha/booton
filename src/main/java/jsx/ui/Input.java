@@ -18,6 +18,9 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import js.dom.UIEvent;
+import kiss.Events;
+
 /**
  * @version 2014/08/21 17:09:35
  */
@@ -43,7 +46,10 @@ public class Input extends LowLevelElement<Input> {
     public Input(StringProperty value) {
         this.value = value;
 
-        publish().observe(KeyUp, Paste, Cut).debounce(50, MILLISECONDS).map(e -> e.target.val()).diff().to(value::set);
+        Events<UIEvent> functionInput = publish().observe(Paste, Cut).debounce(50, MILLISECONDS);
+        Events<UIEvent> keybordInput = publish().observe(KeyUp);
+
+        functionInput.merge(keybordInput).map(e -> e.target.val()).diff().to(value::set);
     }
 
     /**

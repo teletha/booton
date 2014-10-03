@@ -9,8 +9,11 @@
  */
 package jsx.ui;
 
+import static js.dom.UIAction.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javafx.beans.property.BooleanProperty;
@@ -18,6 +21,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIAction;
+import js.dom.UIEvent;
 import jsx.event.Publishable;
 import kiss.Disposable;
 import kiss.Events;
@@ -105,9 +109,16 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
      */
     public T shortcut(Key key, Runnable action) {
         if (key != null && action != null) {
-            disposer().add(publish().observe(UIAction.KeyUp).filter(e -> e.which == key.code).to(e -> {
-                action.run();
-            }));
+            Predicate<UIEvent> byKey = e -> e.which == key.code;
+
+            Events<UIEvent> keyPress = publish().observe(KeyPress).filter(byKey);
+            Events<UIEvent> keyUp = publish().observe(KeyUp).filter(byKey);
+            // All browser never fire keypress event in IME mode.
+            // So the following code can ignore key event while IME is on.
+            Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
+
+            // activate shortcut command
+            disposer().add(keyInput.to(e -> action.run()));
         }
         return (T) this;
     }

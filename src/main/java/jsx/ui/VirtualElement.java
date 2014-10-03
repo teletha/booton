@@ -46,21 +46,21 @@ class VirtualElement extends VirtualFragment<Element> {
      */
     @Override
     protected Element materializeRoot() {
-        setDom(document.createElement(name));
+        dom = document.createElement(name);
 
         for (int i = 0; i < attributes.names.length(); i++) {
-            getDom().attr(attributes.names.get(i), attributes.values.get(i));
+            dom.attr(attributes.names.get(i), attributes.values.get(i));
         }
 
         for (int i = 0; i < classList.length(); i++) {
-            getDom().add(classList.get(i));
+            dom.add(classList.get(i));
         }
 
         if (publishable != null) {
-            getDom().delegateTo(publishable);
+            dom.delegateTo(publishable);
         }
 
-        return getDom();
+        return dom;
     }
 
     /**
@@ -82,6 +82,45 @@ class VirtualElement extends VirtualFragment<Element> {
      */
     @Override
     public String toString() {
-        return "VElement<" + name + "/>";
+        return serialize(1, this);
+    }
+
+    private String serialize(int indent, VirtualElement e) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<").append(e.name);
+
+        if (e.items.length() != 0) {
+            builder.append(">");
+        }
+
+        for (int i = 0; i < e.items.length(); i++) {
+            builder.append("\r\n").append(indent(indent));
+
+            VirtualNode item = e.items.get(i);
+
+            if (item instanceof VirtualElement) {
+                builder.append(serialize(indent + 1, (VirtualElement) item));
+            } else {
+                builder.append(item);
+            }
+        }
+
+        if (e.items.length() != 0) {
+            builder.append("\r\n").append(indent(indent - 1)).append("</").append(e.name).append(">");
+        } else {
+            builder.append("/>");
+        }
+
+        return builder.toString();
+    }
+
+    private String indent(int size) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < size; i++) {
+            builder.append("  ");
+        }
+
+        return builder.toString();
     }
 }

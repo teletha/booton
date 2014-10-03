@@ -33,18 +33,23 @@ public class VirtualStructureDiffTest extends DiffTestBase {
 
     @Test
     public void textChangeSequentially() {
-        VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis.〡("text");
+        VirtualStructure fisrt〡 = new VirtualStructure();
+        fisrt〡.asis.〡("text1", "text2");
 
-        VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis.〡("change");
+        VirtualStructure second〡 = new VirtualStructure();
+        second〡.asis.〡("second", "text2");
 
-        assertDiff(prev〡, next〡, 1);
+        assertDiff(fisrt〡, second〡, 1);
+
+        VirtualStructure third〡 = new VirtualStructure();
+        third〡.asis.〡("third", "text2");
+
+        assertDiff(second〡, third〡, 1);
 
         VirtualStructure last〡 = new VirtualStructure();
-        last〡.asis.〡("finish");
+        last〡.asis.〡("third", "last");
 
-        assertDiff(next〡, last〡, 1);
+        assertDiff(third〡, last〡, 1);
     }
 
     @Test
