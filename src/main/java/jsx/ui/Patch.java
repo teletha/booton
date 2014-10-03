@@ -92,7 +92,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.removeChild(child.getDom());
+            parent.removeChild(child.dom);
             child.dispose();
         }
     }
@@ -193,7 +193,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.replace(child.getDom(), replace.materialize());
+            parent.replace(child.dom, replace.materialize());
             child.dispose();
         }
     }
@@ -225,8 +225,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            System.out.println("try to replace text " + replace + " from " + child);
-            child.getDom().text(replace.text);
+            child.dom.text(replace.text);
         }
     }
 

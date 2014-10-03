@@ -258,7 +258,7 @@ public final class VirtualStructure {
                         route.pollLast();
                     }
                 } else {
-                    container.items.push(new VirtualText(child.hashCode(), child.toString()));
+                    container.items.push(new VirtualText(child.toString()));
                 }
             }
 

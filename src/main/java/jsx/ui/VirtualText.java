@@ -27,8 +27,8 @@ class VirtualText extends VirtualNode<Text> {
      * 
      * @param text
      */
-    VirtualText(int id, String text) {
-        super(id);
+    VirtualText(String text) {
+        super(text.hashCode() ^ 31);
 
         this.text = text;
     }
@@ -38,9 +38,7 @@ class VirtualText extends VirtualNode<Text> {
      */
     @Override
     Text materialize() {
-        setDom(document.createTextNode(text));
-
-        return getDom();
+        return dom = document.createTextNode(text);
     }
 
     /**
@@ -48,6 +46,6 @@ class VirtualText extends VirtualNode<Text> {
      */
     @Override
     public String toString() {
-        return "VText[" + text + "]";
+        return "[" + text + "]";
     }
 }

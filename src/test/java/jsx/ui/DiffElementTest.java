@@ -374,7 +374,7 @@ public class DiffElementTest extends DiffTestBase {
      * @return
      */
     private static VirtualText text(String value) {
-        return new VirtualText(value.hashCode() ^ 31, value);
+        return new VirtualText(value);
     }
 
     /**
