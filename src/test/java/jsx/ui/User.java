@@ -13,7 +13,8 @@ import java.util.Objects;
 
 import js.dom.UIAction;
 import js.dom.UIEvent;
-import jsx.event.Publishable;
+import jsx.ui.piece.Button;
+import jsx.ui.piece.Input;
 
 /**
  * @version 2014/08/22 7:44:00
@@ -46,7 +47,7 @@ public class User {
 
         for (Object stroke : strokes) {
             if (stroke instanceof Key) {
-                type(input.publish(), (Key) stroke);
+                type(input, (Key) stroke);
             } else {
                 input.value.setValue(input.value.get() + stroke);
             }
@@ -61,15 +62,15 @@ public class User {
      * @param key
      * @return
      */
-    private static final void type(Publishable publishable, Key key) {
+    private static final void type(Input input, Key key) {
         UIAction[] actions = {UIAction.KeyDown, UIAction.KeyPress, UIAction.KeyUp};
 
         for (UIAction action : actions) {
-            UIEvent event = new UIEvent();
+            UIEvent event = new UIEventMockForInput(input);
             event.action = action;
             event.which = key.code;
 
-            publishable.publish(event);
+            input.event().publish(event);
         }
     }
 
@@ -86,7 +87,7 @@ public class User {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.publish().publish(event);
+        button.event().publish(event);
     }
 
     /**
@@ -102,7 +103,7 @@ public class User {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.publish().publish(event);
+        button.event().publish(event);
     }
 
     /**
@@ -140,6 +141,30 @@ public class User {
          */
         public void willBeEmpty() {
             willBe("");
+        }
+    }
+
+    /**
+     * @version 2014/10/04 1:19:17
+     */
+    private static class UIEventMockForInput extends UIEvent {
+
+        /** The UI holder. */
+        private final Input input;
+
+        /**
+         * @param input
+         */
+        private UIEventMockForInput(Input input) {
+            this.input = input;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String value() {
+            return input.value.get();
         }
     }
 }

@@ -25,6 +25,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 
 import js.dom.Element;
+import jsx.ui.piece.Input;
 import kiss.I;
 import kiss.Manageable;
 

@@ -38,6 +38,7 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
 
     public final BooleanProperty enable = new SimpleBooleanProperty();
 
+    /** The event listener holder. */
     private Publishable<?> publisher;
 
     /** The disposable list. */
@@ -55,7 +56,7 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
      * 
      * @return
      */
-    protected final Publishable<?> publish() {
+    protected final Publishable<?> event() {
         if (publisher == null) {
             publisher = new Publishable();
         }
@@ -66,9 +67,7 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
      * @return
      */
     public T click(Runnable action) {
-        publish().observe(UIAction.Click).to(e -> {
-            action.run();
-        });
+        event().observe(UIAction.Click).to(e -> action.run());
 
         return (T) this;
     }
@@ -111,9 +110,9 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = publish().observe(KeyPress).filter(byKey);
-            Events<UIEvent> keyUp = publish().observe(KeyUp).filter(byKey);
-            // All browser never fire keypress event in IME mode.
+            Events<UIEvent> keyPress = event().observe(KeyPress).filter(byKey);
+            Events<UIEvent> keyUp = event().observe(KeyUp).filter(byKey);
+            // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
 

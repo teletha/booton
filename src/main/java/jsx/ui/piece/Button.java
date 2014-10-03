@@ -7,10 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.piece;
 
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
+
+import jsx.ui.LowLevelElement;
+import jsx.ui.VirtualStructure;
 
 /**
  * @version 2014/08/21 17:09:43
@@ -54,6 +57,6 @@ public class Button extends LowLevelElement<Button> {
      */
     @Override
     protected void virtualize(VirtualStructure $〡) {
-        $〡.e("div", 0).〡(label.get());
+        $〡.e("div", 0).with(event()).〡(label.get());
     }
 }
