@@ -25,6 +25,7 @@ import jsx.ui.ModelModifier;
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
 import jsx.ui.piece.Button;
+import jsx.ui.piece.CheckBox;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.samaple.todo.TodoTasks.Task;
@@ -146,21 +147,24 @@ public class TodoUI extends Widget1<TodoTasks> {
         /** The edit mode. */
         private BooleanProperty editing = new SimpleBooleanProperty();
 
+        /** The completion box. */
+        final CheckBox complete = new CheckBox(model1.completed);
+
         /** The todo text. */
-        Output text = new Output(model1.contents).hideIf(editing).dbclick(this::startEdit);
+        final Output text = new Output(model1.contents).hideIf(editing).dbclick(this::startEdit);
 
         /** The remove button. */
-        Button delete = new Button().label("×").showIf(text.hover).click($(todos.list::remove, model1));
+        final Button delete = new Button().label("×").showIf(text.hover).click($(todos.list::remove, model1));
 
         /** The editable todo text. */
-        Input edit = new Input(model1.contents).showIf(editing).shortcut(Key.Enter, this::finishEdit);
+        final Input edit = new Input(model1.contents).showIf(editing).shortcut(Key.Enter, this::finishEdit);
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(text, delete);
+            $〡.hbox.〡(complete, text, delete);
             // $〡.asis.〡(edit);
         }
 
