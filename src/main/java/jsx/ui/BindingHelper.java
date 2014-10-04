@@ -42,6 +42,8 @@ public class BindingHelper {
         FilteredList<T> filtered = list.filtered(filter);
         Inspector<T> inspector = new Inspector(filtered);
 
+        list.addListener(inspector);
+
         for (T item : list) {
             inspector.inspect(item);
         }
@@ -96,8 +98,16 @@ public class BindingHelper {
          */
         @Override
         public void onChanged(Change<? extends T> change) {
-            System.out.println("invoke list change");
-            refilter();
+            while (change.next()) {
+                System.out.println("new change");
+                if (change.wasAdded()) {
+                    System.out.println("added");
+                    for (T item : change.getAddedSubList()) {
+                        System.out.println("inspect new item " + item);
+                        inspect(item);
+                    }
+                }
+            }
         }
 
         /**
@@ -105,6 +115,7 @@ public class BindingHelper {
          */
         @Override
         public void changed(ObservableValue<? extends T> observable, T oldValue, T newValue) {
+            System.out.println("value changed " + oldValue + "  " + newValue);
             refilter();
         }
 

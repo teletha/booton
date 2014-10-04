@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -205,7 +207,7 @@ public abstract class Widget {
     /**
      * @version 2014/09/29 9:31:25
      */
-    private static class Rendering implements Runnable, ListChangeListener, ChangeListener {
+    private static class Rendering implements Runnable, ListChangeListener, ChangeListener, InvalidationListener {
 
         /** The associated widget. */
         private final Widget widget;
@@ -229,6 +231,8 @@ public abstract class Widget {
 
                         if (field.getName().startsWith("model") || Input.class.isAssignableFrom(fieldType)) {
                             inspect(field.get(widget));
+                        } else if (Observable.class.isAssignableFrom(fieldType)) {
+                            ((Observable) field.get(widget)).addListener(this);
                         }
                     }
                     type = type.getSuperclass();
@@ -276,7 +280,15 @@ public abstract class Widget {
          * @param property
          */
         private void inspect(Property property) {
-            property.addListener(this);
+            property.addListener((ChangeListener) this);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void invalidated(Observable observable) {
+            willExecute();
         }
 
         /**
