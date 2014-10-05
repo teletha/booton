@@ -17,7 +17,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIAction;
@@ -36,13 +35,14 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
 
     public BooleanProperty hover;
 
-    public final BooleanProperty enable = new SimpleBooleanProperty();
-
     /** The event listener holder. */
     private Publishable<?> publisher;
 
     /** The disposable list. */
     private List<Disposable> disposables;
+
+    /** The enable state. */
+    private Events<Boolean> enable = Events.just(true);
 
     /**
      * {@inheritDoc}
@@ -67,7 +67,7 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
      * @return
      */
     public T click(Runnable action) {
-        event().observe(UIAction.Click).to(e -> action.run());
+        event().observe(UIAction.Click).filter(enable).to(e -> action.run());
 
         return (T) this;
     }
@@ -117,34 +117,25 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
 
             // activate shortcut command
-            disposer().add(keyInput.to(e -> action.run()));
+            disposer().add(keyInput.filter(enable).to(e -> action.run()));
         }
         return (T) this;
     }
 
-    /**
-     * @param event
-     * @param string
-     * @return
-     */
-    public T validate(Events<Boolean> event, String string) {
-        return (T) this;
-    }
-
-    /**
-     * @param greaterThan
-     * @param string
-     * @return
-     */
-    public T validate(ObservableValue<Boolean> event, String string) {
-        return (T) this;
+    private boolean enable() {
+        if (enable == null) {
+            return true;
+        }
+        return enable.value();
     }
 
     public T enableIf(ObservableValue<Boolean> condition) {
+
         return (T) this;
     }
 
     public T enableIf(Events<Boolean> condition) {
+        enable = enable.join(condition, (one, other) -> one && other);
         return (T) this;
     }
 

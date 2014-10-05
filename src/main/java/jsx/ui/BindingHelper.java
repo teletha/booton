@@ -99,11 +99,8 @@ public class BindingHelper {
         @Override
         public void onChanged(Change<? extends T> change) {
             while (change.next()) {
-                System.out.println("new change");
                 if (change.wasAdded()) {
-                    System.out.println("added");
                     for (T item : change.getAddedSubList()) {
-                        System.out.println("inspect new item " + item);
                         inspect(item);
                     }
                 }
@@ -115,15 +112,12 @@ public class BindingHelper {
          */
         @Override
         public void changed(ObservableValue<? extends T> observable, T oldValue, T newValue) {
-            System.out.println("value changed " + oldValue + "  " + newValue);
             refilter();
         }
 
         private void refilter() {
             try {
-                System.out.println("refilter before size: " + filtered.size());
                 refilter.invoke(filtered);
-                System.out.println("refilter after size: " + filtered.size());
             } catch (Exception e) {
                 throw I.quiet(e);
             }

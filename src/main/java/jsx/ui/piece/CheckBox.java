@@ -38,7 +38,7 @@ public class CheckBox extends LowLevelElement<CheckBox> {
      */
     @Override
     protected void virtualize(VirtualStructure $〡) {
-        System.out.println(check.get());
+        System.out.println("check box " + check.get());
         $〡.e("input", 0).〡ª("type", "checkbox").〡ª("checked", check.get() ? "checked" : "").with(event());
     }
 }
