@@ -12,16 +12,22 @@ package jsx.ui.piece;
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
 import jsx.ui.LowLevelElement;
 import jsx.ui.VirtualStructure;
 import kiss.Events;
+import kiss.I;
 
 /**
  * @version 2014/08/21 17:09:35
@@ -30,6 +36,9 @@ public class Input extends LowLevelElement<Input> {
 
     /** The input value. */
     public final StringProperty value;
+
+    /** The validation list. */
+    private List<Validation> valids;
 
     /**
      * <p>
@@ -65,6 +74,46 @@ public class Input extends LowLevelElement<Input> {
 
         // API definition
         return current;
+    }
+
+    /**
+     * @param event
+     * @param string
+     * @return
+     */
+    public Input validate(Predicate<String> condition, String string) {
+        validate(I.observe(value).map($(condition)), string);
+
+        return this;
+    }
+
+    private <V> Function<V, Boolean> $(Predicate<V> predicate) {
+        return v -> {
+            return predicate.test(v);
+        };
+    }
+
+    /**
+     * @param event
+     * @param message
+     * @return
+     */
+    public Input validate(Events<Boolean> condition, String message) {
+        if (valids == null) {
+            valids = new ArrayList();
+        }
+        valids.add(new Validation(condition, message));
+
+        return this;
+    }
+
+    /**
+     * @param greaterThan
+     * @param string
+     * @return
+     */
+    public Input validate(ObservableValue<Boolean> event, String string) {
+        return this;
     }
 
     /**

@@ -60,6 +60,7 @@ public class TodoUI extends Widget1<TodoTasks> {
 
     /** The input field. */
     final Input input = new Input()
+            .validate(v -> 10 < v.length(), "10文字以内でお願いします")
             .disableIf(this::isValidTaskSize)
             .shortcut(Key.Enter, this::add)
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
@@ -133,7 +134,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         $〡.asis.〡(input);
         $〡.vbox.〡(Item.class, todos.list);
         $〡.hbox.〡(FOOTER.class).〡(() -> {
-            $〡.hbox.〡(imcompleted, imcompleted < 2 ? " item" : "items", " left");
+            $〡.hbox.〡(imcompleted, imcompleted < 2 ? " item" : " items", " left");
             $〡.hbox.〡(BUTTONS.class).〡(all, active, completed);
             $〡.asis.〡(clear);
         });
@@ -195,7 +196,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         All(v -> true),
 
         /** Accept incompleted. */
-        Active(Task::isCompleted),
+        Active(not(Task::isCompleted)),
 
         /** Accept completed. */
         Completed(Task::isCompleted);

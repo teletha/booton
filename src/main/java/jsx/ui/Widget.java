@@ -27,7 +27,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 
 import js.dom.Element;
-import jsx.ui.piece.Input;
 import kiss.I;
 import kiss.Manageable;
 
@@ -229,7 +228,7 @@ public abstract class Widget {
                     for (Field field : type.getDeclaredFields()) {
                         Class fieldType = field.getType();
 
-                        if (field.getName().startsWith("model") || Input.class.isAssignableFrom(fieldType)) {
+                        if (field.getName().startsWith("model")) {
                             inspect(field.get(widget));
                         } else if (Observable.class.isAssignableFrom(fieldType)) {
                             ((Observable) field.get(widget)).addListener(this);
