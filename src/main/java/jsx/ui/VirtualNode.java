@@ -13,6 +13,10 @@ import js.dom.Node;
 import kiss.Disposable;
 
 /**
+ * <p>
+ * {@link VirtualNode} is a snapshot of the {@link Widget} state which includes its tree structure.
+ * </p>
+ * 
  * @version 2014/09/04 23:21:40
  */
 abstract class VirtualNode<N extends Node> implements Disposable {

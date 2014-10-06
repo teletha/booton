@@ -194,4 +194,26 @@ public class FieldTest extends ScriptTester {
             return value + this.field + super.field;
         }
     }
+
+    @Test
+    public void Wrapper() {
+        test(new Wrapper());
+    }
+
+    /**
+     * @version 2014/10/06 10:09:13
+     */
+    private static class Wrapper implements Scriptable {
+
+        private int field = 10;
+
+        public int act(int value) {
+            setWrapper(value);
+            return field;
+        }
+
+        private void setWrapper(Integer value) {
+            this.field = value;
+        }
+    }
 }

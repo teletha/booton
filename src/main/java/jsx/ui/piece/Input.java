@@ -21,7 +21,6 @@ import java.util.function.Supplier;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
 import jsx.ui.LowLevelElement;
@@ -76,44 +75,10 @@ public class Input extends LowLevelElement<Input> {
         return current;
     }
 
-    /**
-     * @param event
-     * @param string
-     * @return
-     */
-    public Input validate(Predicate<String> condition, String string) {
-        validate(I.observe(value).map($(condition)), string);
-
-        return this;
-    }
-
     private <V> Function<V, Boolean> $(Predicate<V> predicate) {
         return v -> {
             return predicate.test(v);
         };
-    }
-
-    /**
-     * @param event
-     * @param message
-     * @return
-     */
-    public Input validate(Events<Boolean> condition, String message) {
-        if (valids == null) {
-            valids = new ArrayList();
-        }
-        valids.add(new Validation(condition, message));
-
-        return this;
-    }
-
-    /**
-     * @param greaterThan
-     * @param string
-     * @return
-     */
-    public Input validate(ObservableValue<Boolean> event, String string) {
-        return this;
     }
 
     /**
@@ -148,10 +113,73 @@ public class Input extends LowLevelElement<Input> {
     }
 
     /**
+     * @param event
+     * @param string
+     * @return
+     */
+    public Input validate(Predicate<String> condition, String string) {
+        validate(I.observe(value).map($(condition)), string);
+    
+        return this;
+    }
+
+    /**
+     * @param condition
+     * @param message
+     * @return
+     */
+    public Input validate(Events<Boolean> condition, String message) {
+        if (valids == null) {
+            valids = new ArrayList();
+        }
+        valids.add(new Validation(condition, message));
+
+        return this;
+    }
+
+    /**
+     * @param e
+     * @return
+     */
+    @Override
+    protected boolean isValid(UIEvent e) {
+        if (valids != null) {
+            for (Validation validation : valids) {
+                if (!validation.valid) {
+                    return false;
+                }
+            }
+        }
+        return super.isValid(e);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     protected void virtualize(VirtualStructure $) {
         $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value.get()).with(event());
+    }
+
+    /**
+     * @version 2014/10/06 9:35:44
+     */
+    private static class Validation {
+    
+        /** The validation message. */
+        private final String message;
+    
+        /** The validation condition. */
+        private boolean valid = true;
+    
+        /**
+         * @param validation
+         * @param message
+         */
+        private Validation(Events<Boolean> validation, String message) {
+            this.message = message;
+    
+            validation.to(v -> valid = v);
+        }
     }
 }

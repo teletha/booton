@@ -67,7 +67,10 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
      * @return
      */
     public T click(Runnable action) {
-        event().observe(UIAction.Click).filter(enable).to(e -> action.run());
+        event().observe(UIAction.Click).filter(this::isValid).to(e -> {
+            action.run();
+            update();
+        });
 
         return (T) this;
     }
@@ -117,16 +120,9 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
 
             // activate shortcut command
-            disposer().add(keyInput.filter(enable).to(e -> action.run()));
+            disposer().add(keyInput.filter(this::isValid).to(e -> action.run()));
         }
         return (T) this;
-    }
-
-    private boolean enable() {
-        if (enable == null) {
-            return true;
-        }
-        return enable.value();
     }
 
     public T enableIf(ObservableValue<Boolean> condition) {
@@ -185,4 +181,23 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
         return disposables;
     }
 
+    protected boolean isValid(UIEvent e) {
+        return true;
+    }
+
+    protected void update() {
+        VirtualStructure newly = new VirtualStructure();
+        virtualize(newly);
+
+        VirtualElement element = newly.getRoot();
+
+        int index = parent.indexOf(previous);
+        parent.items.set(index, element);
+        previous = element;
+        System.out.println("update lle");
+    }
+
+    VirtualFragment parent;
+
+    VirtualNode previous;
 }

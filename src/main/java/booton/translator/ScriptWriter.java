@@ -202,6 +202,8 @@ class ScriptWriter {
     public void optimize() {
         remove(",");
         remove(";");
+        remove(" ");
+        remove("return");
     }
 
     /**
