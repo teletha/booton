@@ -255,7 +255,8 @@ public final class VirtualStructure {
                     e.virtualize(VirtualStructure.this);
 
                     if (latest != route.peekLast()) {
-                        route.pollLast();
+                        e.previous = route.pollLast();
+                        e.parent = route.peekLast();
                     }
                 } else {
                     container.items.push(new VirtualText(child.toString()));

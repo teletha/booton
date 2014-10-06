@@ -9,6 +9,7 @@
  */
 package booton.translator.lambda;
 
+import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
 import org.junit.Test;
@@ -38,4 +39,25 @@ public class LambdaTest {
         }
     }
 
+    @Test
+    public void setFieldOnly() {
+        SetFieldOnly operation = new SetFieldOnly();
+        assert operation.value == 10;
+    }
+
+    /**
+     * @version 2014/10/06 9:54:57
+     */
+    private static class SetFieldOnly {
+
+        private int value;
+
+        private SetFieldOnly() {
+            lambda(v -> value = v);
+        }
+
+        private void lambda(Consumer<Integer> consumer) {
+            consumer.accept(10);
+        }
+    }
 }
