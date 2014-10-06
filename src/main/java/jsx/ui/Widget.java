@@ -115,6 +115,18 @@ public abstract class Widget {
      * </p>
      * 
      * @param widgetType A widget type.
+     * @return A widget with the specified models.
+     */
+    public static final <W extends Widget> W of(Class<W> widgetType) {
+        return create(widgetType, new Object[0]);
+    }
+
+    /**
+     * <p>
+     * Create widget which is associated with the specified models.
+     * </p>
+     * 
+     * @param widgetType A widget type.
      * @param model1 An associated model.
      * @return A widget with the specified models.
      */

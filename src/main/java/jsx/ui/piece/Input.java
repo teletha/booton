@@ -14,6 +14,7 @@ import static js.dom.UIAction.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -59,7 +60,11 @@ public class Input extends LowLevelElement<Input> {
         Events<UIEvent> functionInput = event().observe(Paste, Cut).debounce(50, MILLISECONDS);
         Events<UIEvent> keybordInput = event().observe(KeyUp);
 
-        functionInput.merge(keybordInput).map(UIEvent::value).diff().to(value::set);
+        functionInput.merge(keybordInput).map(UIEvent::value).diff().to(userAction(value::set));
+    }
+
+    protected <In> Consumer<In> userAction(Consumer<In> consumer) {
+        return consumer;
     }
 
     /**
@@ -119,7 +124,7 @@ public class Input extends LowLevelElement<Input> {
      */
     public Input validate(Predicate<String> condition, String string) {
         validate(I.observe(value).map($(condition)), string);
-    
+
         return this;
     }
 
@@ -158,27 +163,27 @@ public class Input extends LowLevelElement<Input> {
      */
     @Override
     protected void virtualize(VirtualStructure $) {
-        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value.get()).with(event());
+        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value).with(event());
     }
 
     /**
      * @version 2014/10/06 9:35:44
      */
     private static class Validation {
-    
+
         /** The validation message. */
         private final String message;
-    
+
         /** The validation condition. */
         private boolean valid = true;
-    
+
         /**
          * @param validation
          * @param message
          */
         private Validation(Events<Boolean> validation, String message) {
             this.message = message;
-    
+
             validation.to(v -> valid = v);
         }
     }
