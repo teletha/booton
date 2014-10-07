@@ -55,7 +55,6 @@ class VirtualElement extends VirtualFragment<Element> {
         }
 
         // assign event listeners
-        System.out.println("materialize event [" + name + "] " + events);
         dom.delegateTo(events);
 
         // API definition
