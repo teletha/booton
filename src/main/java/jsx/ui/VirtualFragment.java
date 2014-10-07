@@ -77,7 +77,7 @@ abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
     public void dispose() {
         super.dispose();
 
-        for (int i = 0, length = items.length(); i < length; i++) {
+        for (int i = items.length() - 1; 0 <= i; i--) {
             items.get(i).dispose();
         }
     }

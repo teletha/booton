@@ -25,11 +25,7 @@ public class WidgetQuery {
      * @return
      */
     public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
-        VirtualStructureHierarchy.hierarchy.put(widget.getClass(), widget);
-        VirtualStructure structure = new VirtualStructure();
-        widget.virtualize(structure);
-        VirtualElement root = structure.getRoot();
-        VirtualStructureHierarchy.hierarchy.remove(widget.getClass(), widget);
+        VirtualElement root = widget.virtualize();
 
         List<T> list = new ArrayList();
         find(list, childWidgetType, root);
