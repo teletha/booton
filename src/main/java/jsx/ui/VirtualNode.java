@@ -61,7 +61,6 @@ abstract class VirtualNode<N extends Node> implements Disposable {
      */
     @Override
     public void dispose() {
-        System.out.println("dispose on node " + this);
         dom = null;
     }
 }
