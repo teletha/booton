@@ -230,7 +230,7 @@ public final class VirtualStructure {
             VirtualFragment container = container();
 
             // then, clean it for nested invocation
-            this.container = null;
+            // this.container = null;
 
             // precess into child items
             for (Object child : children) {
