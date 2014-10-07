@@ -11,13 +11,13 @@ package jsx.ui.piece;
 
 import javafx.beans.property.StringProperty;
 
-import jsx.ui.LowLevelElement;
-import jsx.ui.VirtualStructure;
+import jsx.ui.LowLevelWidget;
+import jsx.ui.VirtualStructure.ContainerDescriptor;
 
 /**
  * @version 2014/08/22 11:27:22
  */
-public class Output extends LowLevelElement<Output> {
+public class Output extends LowLevelWidget<Output> {
 
     /** The text contents. */
     public final StringProperty text;
@@ -37,7 +37,16 @@ public class Output extends LowLevelElement<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
-        $〡.e("div", 0).〡(text.get());
+    protected String virtualizeName() {
+        return "div";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualizeStructure(ContainerDescriptor descriptor) {
+        descriptor.〡(text.get());
+    }
+
 }

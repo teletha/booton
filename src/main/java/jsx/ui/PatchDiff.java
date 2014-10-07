@@ -29,7 +29,7 @@ import booton.css.CSS;
 /**
  * @version 2014/10/07 12:49:34
  */
-class Diff {
+class PatchDiff {
 
     /**
      * <p>

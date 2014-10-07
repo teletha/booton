@@ -12,7 +12,6 @@ package jsx.ui;
 import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
-import jsx.event.Publishable;
 import booton.css.CSS;
 
 /**
@@ -28,9 +27,6 @@ class VirtualElement extends VirtualFragment<Element> {
 
     /** The class attributes. */
     final NativeArray<Class<? extends CSS>> classList = new NativeArray();
-
-    /** The event listeners. */
-    Publishable publishable;
 
     /**
      * @param string
@@ -48,18 +44,21 @@ class VirtualElement extends VirtualFragment<Element> {
     protected Element materializeRoot() {
         dom = document.createElement(name);
 
+        // assign attributes
         for (int i = 0; i < attributes.names.length(); i++) {
             dom.attr(attributes.names.get(i), attributes.values.get(i));
         }
 
+        // assign classes
         for (int i = 0; i < classList.length(); i++) {
             dom.add(classList.get(i));
         }
 
-        if (publishable != null) {
-            dom.delegateTo(publishable);
-        }
+        // assign event listeners
+        System.out.println("materialize event [" + name + "] " + events);
+        dom.delegateTo(events);
 
+        // API definition
         return dom;
     }
 
@@ -75,6 +74,16 @@ class VirtualElement extends VirtualFragment<Element> {
         this.attributes.values.push(value);
 
         return attributes.values.length() - 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        events = null;
     }
 
     /**

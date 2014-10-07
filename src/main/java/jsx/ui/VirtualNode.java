@@ -10,6 +10,7 @@
 package jsx.ui;
 
 import js.dom.Node;
+import jsx.event.Publishable;
 import kiss.Disposable;
 
 /**
@@ -22,7 +23,7 @@ import kiss.Disposable;
 abstract class VirtualNode<N extends Node> implements Disposable {
 
     /** The node identifier. */
-    public final int id;
+    final int id;
 
     /**
      * <p>
@@ -38,7 +39,18 @@ abstract class VirtualNode<N extends Node> implements Disposable {
      * immediately.
      * </p>
      */
-    public N dom;
+    N dom;
+
+    /**
+     * <p>
+     * The holder of event listeners.
+     * </p>
+     * <p>
+     * Only the latest Virtual DOM has the event listeners, and other Virtual DOM discards its
+     * reference immediately.
+     * </p>
+     */
+    Publishable events;
 
     /**
      * 

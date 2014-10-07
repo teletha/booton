@@ -13,13 +13,13 @@ import static js.dom.UIAction.*;
 
 import javafx.beans.property.BooleanProperty;
 
-import jsx.ui.LowLevelElement;
-import jsx.ui.VirtualStructure;
+import jsx.ui.LowLevelWidget;
+import jsx.ui.VirtualStructure.ContainerDescriptor;
 
 /**
  * @version 2014/10/04 10:26:04
  */
-public class CheckBox extends LowLevelElement<CheckBox> {
+public class CheckBox extends LowLevelWidget<CheckBox> {
 
     /** The check status. */
     public final BooleanProperty check;
@@ -37,8 +37,15 @@ public class CheckBox extends LowLevelElement<CheckBox> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
-        System.out.println("check box " + check.get());
-        $〡.e("input", 0).〡ª("type", "checkbox").〡ª("checked", check.get() ? "checked" : "").with(event());
+    protected String virtualizeName() {
+        return "input";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualizeStructure(ContainerDescriptor descriptor) {
+        descriptor.〡ª("type", "checkbox").〡ª("checked", check.get() ? "checked" : "");
     }
 }

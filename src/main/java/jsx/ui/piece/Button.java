@@ -12,16 +12,16 @@ package jsx.ui.piece;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
-import jsx.ui.LowLevelElement;
-import jsx.ui.VirtualStructure;
+import jsx.ui.LowLevelWidget;
+import jsx.ui.VirtualStructure.ContainerDescriptor;
 
 /**
  * @version 2014/08/21 17:09:43
  */
-public class Button extends LowLevelElement<Button> {
+public class Button extends LowLevelWidget<Button> {
 
     /** The label text. */
-    private StringExpression label;
+    public StringExpression label;
 
     /**
      * @param name
@@ -56,7 +56,15 @@ public class Button extends LowLevelElement<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
-        $〡.e("div", 0).with(event()).〡(label.get());
+    protected String virtualizeName() {
+        return "button";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualizeStructure(ContainerDescriptor descriptor) {
+        descriptor.〡(label.get());
     }
 }

@@ -23,15 +23,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
-import jsx.ui.LowLevelElement;
-import jsx.ui.VirtualStructure;
+import jsx.ui.LowLevelWidget;
+import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Events;
 import kiss.I;
 
 /**
  * @version 2014/08/21 17:09:35
  */
-public class Input extends LowLevelElement<Input> {
+public class Input extends LowLevelWidget<Input> {
 
     /** The input value. */
     public final StringProperty value;
@@ -157,8 +157,16 @@ public class Input extends LowLevelElement<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $) {
-        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value.get()).with(event());
+    protected String virtualizeName() {
+        return "input";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualizeStructure(ContainerDescriptor descriptor) {
+        descriptor.〡ª("type", "text").〡ª("value", value.get());
     }
 
     /**

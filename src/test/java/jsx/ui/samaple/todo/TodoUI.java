@@ -21,7 +21,6 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import jsx.ui.BindingHelper;
 import jsx.ui.Key;
-import jsx.ui.ModelModifier;
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
 import jsx.ui.piece.Button;
@@ -172,7 +171,6 @@ public class TodoUI extends Widget1<TodoTasks> {
         /**
          * 
          */
-        @ModelModifier
         protected void startEdit() {
             editing.set(true);
         }
@@ -180,7 +178,6 @@ public class TodoUI extends Widget1<TodoTasks> {
         /**
          * 
          */
-        @ModelModifier
         protected void finishEdit() {
             editing.set(false);
             model1.contents.set(edit.value.get());

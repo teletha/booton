@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
-import jsx.event.Publishable;
 import jsx.ui.VirtualStructureStyle.HBOX;
 import jsx.ui.VirtualStructureStyle.SBOX;
 import jsx.ui.VirtualStructureStyle.VBOX;
@@ -238,7 +237,7 @@ public final class VirtualStructure {
                 if (child instanceof Widget) {
                     Widget widget = (Widget) child;
 
-                    // create virtual element for wiget
+                    // create virtual element for this widget
                     VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
 
                     // mount virtual element on virtual structure
@@ -248,15 +247,21 @@ public final class VirtualStructure {
                     route.addLast(virtualize);
                     widget.assemble(VirtualStructure.this);
                     route.pollLast();
-                } else if (child instanceof LowLevelElement) {
-                    VirtualFragment latest = route.peekLast();
-                    LowLevelElement e = (LowLevelElement) child;
+                } else if (child instanceof LowLevelWidget) {
+                    LowLevelWidget widget = (LowLevelWidget) child;
 
-                    e.virtualize(VirtualStructure.this);
+                    // create descriptor
+                    ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
+                    descriptor.localId = widget.hashCode();
 
-                    if (latest != route.peekLast()) {
-                        route.pollLast();
-                    }
+                    // create virtual element for this widget
+                    widget.virtualizeStructure(descriptor);
+
+                    VirtualFragment virtualize = descriptor.container();
+                    virtualize.events = widget.events;
+
+                    // mount virtual element on virtual structure
+                    route.pollLast();
                 } else {
                     container.items.push(new VirtualText(child.toString()));
                 }
@@ -360,19 +365,6 @@ public final class VirtualStructure {
          */
         public final ContainerDescriptor 〡ª(String name, String value) {
             ((VirtualElement) container()).attribute(name, value);
-
-            return this;
-        }
-
-        /**
-         * <p>
-         * Assign event listeners of this container.
-         * </p>
-         * 
-         * @param publishable
-         */
-        public final ContainerDescriptor with(Publishable publishable) {
-            ((VirtualElement) container()).publishable = publishable;
 
             return this;
         }

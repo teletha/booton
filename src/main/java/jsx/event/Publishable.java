@@ -50,7 +50,7 @@ public class Publishable<P extends Publishable<P>> {
     private Map<Object, Disposable> disposer;
 
     public void delegateTo(Publishable<?> publishable) {
-        if (publishable.holder != null) {
+        if (publishable != null && publishable.holder != null) {
 
             for (Entry<Object, List<Observer>> entry : publishable.holder.entrySet()) {
                 for (Observer observer : entry.getValue()) {
