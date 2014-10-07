@@ -10,29 +10,39 @@
 package jsx.ui;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/10/06 23:29:29
  */
+@RunWith(ScriptRunner.class)
 public class VirtualStructureReferenceCheckTest {
 
     @Test
     public void text() throws Exception {
         SingleRootText widget = Widget.of(SingleRootText.class);
 
-        VirtualNodeInfo prev = new VirtualNodeInfo(widget);
+        VirtualNodeInfo info = new VirtualNodeInfo(widget);
 
         // change widget state
         widget.property.set("change");
 
-        VirtualNodeInfo next = new VirtualNodeInfo(widget, prev);
+        info = new VirtualNodeInfo(widget, info);
+
+        // change widget state
+        widget.property.set("change again");
+
+        info = new VirtualNodeInfo(widget, info);
     }
 
     /**
@@ -40,7 +50,7 @@ public class VirtualStructureReferenceCheckTest {
      */
     private static class SingleRootText extends Widget {
 
-        private StringProperty property = new SimpleStringProperty("base");
+        private final StringProperty property = new SimpleStringProperty("base");
 
         /**
          * {@inheritDoc}
@@ -48,6 +58,43 @@ public class VirtualStructureReferenceCheckTest {
         @Override
         protected void virtualize(VirtualStructure $〡) {
             $〡.asis.〡(property);
+        }
+    }
+
+    @Test
+    public void nestedElement() throws Exception {
+        NestedElement widget = Widget.of(NestedElement.class);
+
+        VirtualNodeInfo info = new VirtualNodeInfo(widget);
+
+        // change widget state
+        widget.property.set(5);
+
+        info = new VirtualNodeInfo(widget, info);
+
+        // change widget state
+        widget.property.set(1);
+
+        info = new VirtualNodeInfo(widget, info);
+    }
+
+    /**
+     * @version 2014/10/06 23:42:12
+     */
+    private static class NestedElement extends Widget {
+
+        private final IntegerProperty property = new SimpleIntegerProperty(3);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize(VirtualStructure $〡) {
+            $〡.hbox.〡(() -> {
+                for (int i = 1; i <= property.get(); i++) {
+                    $〡.vbox(i).〡("Text" + i);
+                }
+            });
         }
     }
 
@@ -62,6 +109,13 @@ public class VirtualStructureReferenceCheckTest {
         /** The node container. */
         private final Set<VirtualNode> nodes = new HashSet();
 
+        /**
+         * <p>
+         * Collect {@link VirtualNode} info.
+         * </p>
+         * 
+         * @param widget A target widget.
+         */
         private VirtualNodeInfo(Widget widget) {
             // virtualize element
             this.root = widget.virtualize();
@@ -98,12 +152,7 @@ public class VirtualStructureReferenceCheckTest {
             hasNoDOMReference();
 
             // create real DOM from previous
-            List<Patch> diff = Diff.diff(previous.root, root);
-
-            for (Patch patch : diff) {
-                patch.apply();
-            }
-            previous.root.dispose();
+            Diff.apply(previous.root, root);
 
             // all nodes accept the reference
             hasDOMReference();

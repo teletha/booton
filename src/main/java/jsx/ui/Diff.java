@@ -27,17 +27,34 @@ import jsx.ui.Patch.ReplaceText;
 import booton.css.CSS;
 
 /**
- * @version 2014/09/17 9:24:03
+ * @version 2014/10/07 12:49:34
  */
 class Diff {
+
+    /**
+     * <p>
+     * Helper method to diff elements and apply patches.
+     * </p>
+     * 
+     * @param prev A previouse state.
+     * @param next A next state.
+     */
+    static void apply(VirtualElement prev, VirtualElement next) {
+        List<Patch> diff = diff(prev, next);
+
+        for (int i = 0; i < diff.size(); i++) {
+            diff.get(i).apply();
+        }
+        prev.dispose();
+    }
 
     /**
      * <p>
      * Diff elements.
      * </p>
      * 
-     * @param prev
-     * @param next
+     * @param prev A previouse state.
+     * @param next A next state.
      * @return
      */
     static List<Patch> diff(VirtualElement prev, VirtualElement next) {
@@ -50,7 +67,6 @@ class Diff {
          * </p>
          */
         next.dom = prev.dom;
-        prev.dom = null;
 
         List<Patch> patches = new ArrayList();
         patches.addAll(diff(next.dom, prev.attributes, next.attributes));
@@ -66,8 +82,8 @@ class Diff {
      * </p>
      * 
      * @param context
-     * @param prev
-     * @param next
+     * @param prev A previouse state.
+     * @param next A next state.
      * @return
      */
     static List<Patch> diff(Element context, NativeArray<Class<? extends CSS>> prev, NativeArray<Class<? extends CSS>> next) {
@@ -98,8 +114,8 @@ class Diff {
      * </p>
      * 
      * @param context
-     * @param prev
-     * @param next
+     * @param prev A previouse state.
+     * @param next A next state.
      * @return
      */
     static List<Patch> diff(Element context, VirtualKVS<String, String> prev, VirtualKVS<String, String> next) {
@@ -137,8 +153,8 @@ class Diff {
      * </p>
      * 
      * @param context
-     * @param prev
-     * @param next
+     * @param prev A previouse state.
+     * @param next A next state.
      * @return
      */
     static List<Patch> diff(Element context, VirtualFragment<Element> prev, VirtualFragment<Element> next) {
@@ -193,7 +209,6 @@ class Diff {
                              * </p>
                              */
                             nextItem.dom = prevItem.dom;
-                            prevItem.dom = null;
                         }
 
                         actualManipulationPosition++;

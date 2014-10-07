@@ -14,7 +14,6 @@ import static js.lang.Global.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -239,7 +238,7 @@ public abstract class Widget {
     }
 
     /**
-     * @version 2014/09/29 9:31:25
+     * @version 2014/10/07 12:49:44
      */
     private static class Rendering implements Runnable, ListChangeListener, ChangeListener, InvalidationListener {
 
@@ -376,21 +375,12 @@ public abstract class Widget {
          */
         private void execute() {
             // create new virtual element
-            VirtualElement prev = virtual;
             VirtualElement next = widget.virtualize();
 
-            // create patch to manipulate DOM
-            List<Patch> patches = Diff.diff(prev, next);
+            // create patch to manipulate DOM and apply it
+            Diff.apply(virtual, next);
 
-            // update real element
-            for (Patch patch : patches) {
-                patch.apply();
-            }
-
-            // dispose previous
-            prev.dispose();
-
-            // update virtual element
+            // update to new virtual element
             virtual = next;
 
         }

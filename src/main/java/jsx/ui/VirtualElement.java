@@ -16,7 +16,7 @@ import jsx.event.Publishable;
 import booton.css.CSS;
 
 /**
- * @version 2014/09/04 23:22:40
+ * @version 2014/10/07 12:49:29
  */
 class VirtualElement extends VirtualFragment<Element> {
 
@@ -82,45 +82,62 @@ class VirtualElement extends VirtualFragment<Element> {
      */
     @Override
     public String toString() {
-        return serialize(1, this);
+        return format(this, 1);
     }
 
-    private String serialize(int indent, VirtualElement e) {
+    /**
+     * <p>
+     * Create human-readable element structure.
+     * </p>
+     * 
+     * @param element A target element to format.
+     * @param indentSize A size of indent.
+     * @return A string expression of human-readable element structure.
+     */
+    private String format(VirtualElement element, int indentSize) {
         StringBuilder builder = new StringBuilder();
-        builder.append("<").append(e.name);
+        builder.append("<").append(element.name);
 
-        if (e.items.length() != 0) {
+        boolean hasChild = element.items.length() != 0;
+
+        if (hasChild) {
             builder.append(">");
         }
 
-        for (int i = 0; i < e.items.length(); i++) {
-            builder.append("\r\n").append(indent(indent));
+        for (int i = 0; i < element.items.length(); i++) {
+            builder.append("\r\n").append(indent(indentSize));
 
-            VirtualNode item = e.items.get(i);
+            VirtualNode item = element.items.get(i);
 
             if (item instanceof VirtualElement) {
-                builder.append(serialize(indent + 1, (VirtualElement) item));
+                builder.append(format((VirtualElement) item, indentSize + 1));
             } else {
                 builder.append(item);
             }
         }
 
-        if (e.items.length() != 0) {
-            builder.append("\r\n").append(indent(indent - 1)).append("</").append(e.name).append(">");
+        if (hasChild) {
+            builder.append("\r\n").append(indent(indentSize - 1)).append("</").append(element.name).append(">");
         } else {
             builder.append("/>");
         }
-
         return builder.toString();
     }
 
+    /**
+     * <p>
+     * Compute indent expression.
+     * </p>
+     * 
+     * @param size A size of indent.
+     * @return A space expression for indent.
+     */
     private String indent(int size) {
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
             builder.append("  ");
         }
-
         return builder.toString();
     }
 }

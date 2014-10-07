@@ -9,12 +9,11 @@
  */
 package jsx.ui;
 
-import static js.lang.Global.*;
 import js.dom.Node;
 import js.lang.NativeArray;
 
 /**
- * @version 2014/09/18 9:37:03
+ * @version 2014/10/07 12:51:36
  */
 abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
 
@@ -36,7 +35,7 @@ abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
      * @param node A target node to search.
      * @return A index of the specified node.
      */
-    int indexOf(VirtualNode node) {
+    final int indexOf(VirtualNode node) {
         for (int index = 0, length = items.length(); index < length; index++) {
             if (items.get(index).id == node.id) {
                 return index;
@@ -64,11 +63,9 @@ abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
      * root node.
      * </p>
      * 
-     * @return
+     * @return A created node.
      */
-    N materializeRoot() {
-        return dom = (N) document.createDocumentFragment();
-    }
+    abstract N materializeRoot();
 
     /**
      * {@inheritDoc}
@@ -77,8 +74,9 @@ abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
     public void dispose() {
         super.dispose();
 
+        // discard children reference
         for (int i = items.length() - 1; 0 <= i; i--) {
-            items.get(i).dispose();
+            items.remove(i).dispose();
         }
     }
 }
