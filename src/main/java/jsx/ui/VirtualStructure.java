@@ -71,7 +71,7 @@ public final class VirtualStructure {
     protected int modifier;
 
     /** The node route. */
-    private final Deque<VirtualFragment> route = new ArrayDeque();
+    private final Deque<VirtualElement> parents = new ArrayDeque();
 
     /**
      * 
@@ -84,7 +84,7 @@ public final class VirtualStructure {
      * 
      */
     public VirtualStructure(VirtualElement root) {
-        route.add(root);
+        parents.add(root);
     }
 
     /**
@@ -153,7 +153,7 @@ public final class VirtualStructure {
      * @return A single root element.
      */
     protected final VirtualElement getRoot() {
-        return (VirtualElement) route.peekFirst();
+        return parents.peekFirst();
     }
 
     /**
@@ -167,8 +167,8 @@ public final class VirtualStructure {
         /** The built-in style. */
         protected final Class<? extends CSS> builtin;
 
-        /** The container */
-        protected VirtualFragment container;
+        /** The container {@link VirtualElement}. */
+        protected VirtualElement container;
 
         /** The local id. */
         protected int localId;
@@ -189,11 +189,11 @@ public final class VirtualStructure {
          * 
          * @return The current container element.
          */
-        protected final VirtualFragment container() {
+        protected final VirtualElement container() {
             if (container == null) {
                 if (name == null) {
                     // as-is
-                    container = route.peekLast();
+                    container = parents.peekLast();
                 } else {
                     int id = localId;
 
@@ -209,10 +209,10 @@ public final class VirtualStructure {
                     container = new VirtualElement(id, name);
 
                     if (builtin != null) {
-                        ((VirtualElement) container).classList.push(builtin);
+                        container.classList.push(builtin);
                     }
-                    route.peekLast().items.push(container);
-                    route.addLast(container);
+                    parents.peekLast().items.push(container);
+                    parents.addLast(container);
                 }
             }
             return container;
@@ -230,7 +230,7 @@ public final class VirtualStructure {
             VirtualFragment container = container();
 
             // then, clean it for nested invocation
-            // this.container = null;
+            this.container = null;
 
             // precess into child items
             for (Object child : children) {
@@ -244,9 +244,9 @@ public final class VirtualStructure {
                     container.items.push(virtualize);
 
                     //
-                    route.addLast(virtualize);
+                    parents.addLast(virtualize);
                     widget.assemble(VirtualStructure.this);
-                    route.pollLast();
+                    parents.pollLast();
                 } else if (child instanceof LowLevelWidget) {
                     LowLevelWidget widget = (LowLevelWidget) child;
 
@@ -261,7 +261,7 @@ public final class VirtualStructure {
                     virtualize.events = widget.events;
 
                     // mount virtual element on virtual structure
-                    route.pollLast();
+                    parents.pollLast();
                 } else {
                     container.items.push(new VirtualText(child.toString()));
                 }
@@ -269,7 +269,7 @@ public final class VirtualStructure {
 
             // reset context environment
             if (name != null) {
-                route.pollLast();
+                parents.pollLast();
             }
         }
     }
@@ -309,7 +309,7 @@ public final class VirtualStructure {
             children.run();
 
             // restore context environment
-            route.pollLast();
+            parents.pollLast();
         }
 
         /**
@@ -350,7 +350,7 @@ public final class VirtualStructure {
          * @param items Child nodes to append.
          */
         public final ContainerDescriptor 〡(Class<? extends CSS> className) {
-            ((VirtualElement) container()).classList.push(className);
+            container().classList.push(className);
 
             return this;
         }
@@ -364,7 +364,7 @@ public final class VirtualStructure {
          * @param value An attribute or property value.
          */
         public final ContainerDescriptor 〡ª(String name, String value) {
-            ((VirtualElement) container()).attribute(name, value);
+            container().attribute(name, value);
 
             return this;
         }
