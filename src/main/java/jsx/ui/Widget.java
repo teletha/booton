@@ -69,6 +69,37 @@ public abstract class Widget {
 
     /**
      * <p>
+     * Create virtual elements of this {@link Widget}.
+     * </p>
+     * 
+     * @param $〡 Domain Specific Language for virtual elements.
+     */
+    protected abstract void virtualize(VirtualStructure $〡);
+
+    /**
+     * <p>
+     * This is internal API.
+     * </p>
+     * <p>
+     * Create the virtual elements of this {@link Widget} and return the root {@link VirtualElement}
+     * if present .
+     * </p>
+     */
+    final VirtualElement virtualize() {
+        VirtualStructure structure = new VirtualStructure();
+
+        // assemble the virtual structure
+        assemble(structure);
+
+        // API definition
+        return structure.getRoot();
+    }
+
+    /**
+     * <p>
+     * This is internal API.
+     * </p>
+     * <p>
      * Assemble the virtual structure for this {@link Widget}.
      * </p>
      * 
@@ -100,15 +131,6 @@ public abstract class Widget {
          */
         VirtualStructureHierarchy.hierarchy.remove(clazz);
     }
-
-    /**
-     * <p>
-     * Create virtual elements of this {@link Widget}.
-     * </p>
-     * 
-     * @param $〡 Domain Specific Language for virtual elements.
-     */
-    protected abstract void virtualize(VirtualStructure $〡);
 
     /**
      * <p>
@@ -354,22 +376,23 @@ public abstract class Widget {
          */
         private void execute() {
             // create new virtual element
-            VirtualStructure structure = new VirtualStructure();
-            VirtualStructureHierarchy.hierarchy.put(widget.getClass(), widget);
-            widget.virtualize(structure);
-            VirtualStructureHierarchy.hierarchy.remove(widget.getClass(), widget);
-            VirtualElement next = structure.getRoot();
+            VirtualElement prev = virtual;
+            VirtualElement next = widget.virtualize();
 
             // create patch to manipulate DOM
-            List<Patch> patches = Diff.diff(virtual, next);
-
-            // update virtual element
-            virtual = next;
+            List<Patch> patches = Diff.diff(prev, next);
 
             // update real element
             for (Patch patch : patches) {
                 patch.apply();
             }
+
+            // dispose previous
+            prev.dispose();
+
+            // update virtual element
+            virtual = next;
+
         }
     }
 }
