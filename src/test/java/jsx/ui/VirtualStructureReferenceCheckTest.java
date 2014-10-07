@@ -17,6 +17,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import jsx.ui.piece.Input;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -98,6 +100,39 @@ public class VirtualStructureReferenceCheckTest {
         }
     }
 
+    @Test
+    public void widget() throws Exception {
+        SingleWidget widget = Widget.of(SingleWidget.class);
+
+        VirtualNodeInfo info = new VirtualNodeInfo(widget);
+
+        // change widget state
+        widget.input.value.set("change");
+
+        info = new VirtualNodeInfo(widget, info);
+
+        // change widget state
+        widget.input.value.set("change again");
+
+        info = new VirtualNodeInfo(widget, info);
+    }
+
+    /**
+     * @version 2014/10/06 23:42:12
+     */
+    private static class SingleWidget extends Widget {
+
+        private final Input input = new Input();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize(VirtualStructure $〡) {
+            $〡.asis.〡(input);
+        }
+    }
+
     /**
      * @version 2014/10/07 10:27:26
      */
@@ -124,13 +159,13 @@ public class VirtualStructureReferenceCheckTest {
             collect(root);
 
             // all nodes don't have reference yet
-            hasNoDOMReference();
+            hasNoReference();
 
             // create real DOM
             root.materialize();
 
             // all nodes create the reference
-            hasDOMReference();
+            hasReference();
         }
 
         /**
@@ -149,16 +184,16 @@ public class VirtualStructureReferenceCheckTest {
             collect(root);
 
             // all nodes don't have reference yet
-            hasNoDOMReference();
+            hasNoReference();
 
             // create real DOM from previous
-            Diff.apply(previous.root, root);
+            PatchDiff.apply(previous.root, root);
 
             // all nodes accept the reference
-            hasDOMReference();
+            hasReference();
 
             // all previous nodes pass or discard the reference
-            previous.hasNoDOMReference();
+            previous.hasNoReference();
         }
 
         /**
@@ -178,10 +213,10 @@ public class VirtualStructureReferenceCheckTest {
 
         /**
          * <p>
-         * Check DOM reference of {@link VirtualNode} recursively.
+         * Check reference of {@link VirtualNode} recursively.
          * </p>
          */
-        private void hasDOMReference() {
+        private void hasReference() {
             for (VirtualNode node : nodes) {
                 assert node.dom != null;
             }
@@ -189,12 +224,16 @@ public class VirtualStructureReferenceCheckTest {
 
         /**
          * <p>
-         * Check DOM reference of {@link VirtualNode} recursively.
+         * Check reference of {@link VirtualNode} recursively.
          * </p>
          */
-        private void hasNoDOMReference() {
+        private void hasNoReference() {
             for (VirtualNode node : nodes) {
                 assert node.dom == null;
+
+                if (node instanceof VirtualElement) {
+                    assert ((VirtualElement) node).events == null;
+                }
             }
         }
     }

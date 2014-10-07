@@ -378,11 +378,10 @@ public abstract class Widget {
             VirtualElement next = widget.virtualize();
 
             // create patch to manipulate DOM and apply it
-            Diff.apply(virtual, next);
+            PatchDiff.apply(virtual, next);
 
             // update to new virtual element
             virtual = next;
-
         }
     }
 }

@@ -9,13 +9,13 @@
  */
 package jsx.ui.piece;
 
-import jsx.ui.LowLevelElement;
-import jsx.ui.VirtualStructure;
+import jsx.ui.LowLevelWidget;
+import jsx.ui.VirtualStructure.ContainerDescriptor;
 
 /**
  * @version 2014/09/11 8:59:42
  */
-public class Image extends LowLevelElement<Image> {
+public class Image extends LowLevelWidget<Image> {
 
     /**
      * @param name
@@ -27,6 +27,15 @@ public class Image extends LowLevelElement<Image> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
+    protected String virtualizeName() {
+        return "img";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualizeStructure(ContainerDescriptor descriptor) {
+    }
+
 }

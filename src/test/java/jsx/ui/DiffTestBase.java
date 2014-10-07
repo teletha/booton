@@ -47,7 +47,7 @@ public class DiffTestBase {
 
         clean(next);
 
-        List<Patch> ops = Diff.diff(prev, next);
+        List<Patch> ops = PatchDiff.diff(prev, next);
 
         for (int i = 0; i < ops.size(); i++) {
             try {

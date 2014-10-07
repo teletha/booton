@@ -22,6 +22,7 @@ import javafx.beans.value.ObservableValue;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;
+import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Disposable;
 import kiss.Events;
 import booton.reactive.css.StyleDefinition;
@@ -29,14 +30,14 @@ import booton.reactive.css.StyleDefinition;
 /**
  * @version 2014/09/01 20:06:01
  */
-public abstract class LowLevelElement<T extends LowLevelElement<T>> {
+public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
 
     public BooleanProperty click;
 
     public BooleanProperty hover;
 
-    /** The event listener holder. */
-    private Publishable<?> publisher;
+    /** The holder of event listeners. */
+    Publishable<?> events;
 
     /** The disposable list. */
     private List<Disposable> disposables;
@@ -45,9 +46,14 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
     private Events<Boolean> enable = Events.just(true);
 
     /**
-     * {@inheritDoc}
+     * @return
      */
-    protected abstract void virtualize(VirtualStructure $〡);
+    protected abstract String virtualizeName();
+
+    /**
+     * @param descriptor
+     */
+    protected abstract void virtualizeStructure(ContainerDescriptor descriptor);
 
     /**
      * <p>
@@ -57,10 +63,10 @@ public abstract class LowLevelElement<T extends LowLevelElement<T>> {
      * @return
      */
     protected final Publishable<?> event() {
-        if (publisher == null) {
-            publisher = new Publishable();
+        if (events == null) {
+            events = new Publishable();
         }
-        return publisher;
+        return events;
     }
 
     /**
