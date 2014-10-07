@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
-import javafx.beans.property.StringProperty;
-
 import jsx.event.Publishable;
 import jsx.ui.VirtualStructureStyle.HBOX;
 import jsx.ui.VirtualStructureStyle.SBOX;
@@ -257,8 +255,7 @@ public final class VirtualStructure {
                     e.virtualize(VirtualStructure.this);
 
                     if (latest != route.peekLast()) {
-                        e.previous = route.pollLast();
-                        e.parent = route.peekLast();
+                        route.pollLast();
                     }
                 } else {
                     container.items.push(new VirtualText(child.toString()));
@@ -363,20 +360,6 @@ public final class VirtualStructure {
          */
         public final ContainerDescriptor 〡ª(String name, String value) {
             ((VirtualElement) container()).attribute(name, value);
-
-            return this;
-        }
-
-        /**
-         * <p>
-         * Define attribute or property of this container.
-         * </p>
-         * 
-         * @param name An attribute or property name.
-         * @param value An attribute or property value.
-         */
-        public final ContainerDescriptor 〡ª(String name, StringProperty value) {
-            ((VirtualElement) container()).attribute(name, value.get());
 
             return this;
         }

@@ -14,7 +14,6 @@ import static js.dom.UIAction.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -57,14 +56,10 @@ public class Input extends LowLevelElement<Input> {
     public Input(StringProperty value) {
         this.value = value;
 
-        Events<UIEvent> functionInput = event().observe(Paste, Cut).debounce(50, MILLISECONDS);
+        Events<UIEvent> functionInput = event().observe(Paste, Cut);
         Events<UIEvent> keybordInput = event().observe(KeyUp);
 
-        functionInput.merge(keybordInput).map(UIEvent::value).diff().to(userAction(value::set));
-    }
-
-    protected <In> Consumer<In> userAction(Consumer<In> consumer) {
-        return consumer;
+        functionInput.merge(keybordInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
     }
 
     /**
@@ -163,7 +158,7 @@ public class Input extends LowLevelElement<Input> {
      */
     @Override
     protected void virtualize(VirtualStructure $) {
-        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value).with(event());
+        $.e("input", hashCode()).〡ª("type", "text").〡ª("value", value.get()).with(event());
     }
 
     /**
