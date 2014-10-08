@@ -70,9 +70,6 @@ public final class VirtualStructure {
     /** The latest context line number. */
     protected int latestContextId;
 
-    /** The latest context line number. */
-    protected int latestLocalId;
-
     /** The local id modifier. */
     protected int modifier;
 
@@ -179,6 +176,9 @@ public final class VirtualStructure {
         /** The local id. */
         protected int localId;
 
+        /** The latest local id. */
+        private int latestLocalId;
+
         /**
          * @param name
          * @param builtin
@@ -196,6 +196,8 @@ public final class VirtualStructure {
          * @return The current container element.
          */
         protected final VirtualElement container(int contextId) {
+            // This process is used in java environment only. (because js implementation of
+            // LocalId always return 0)
             if (contextId != 0 && latestContextId != contextId) {
                 if (localId == latestContextId) {
                     localId = contextId;
@@ -204,6 +206,7 @@ public final class VirtualStructure {
                 latestContextId = contextId;
             }
 
+            //
             if (localId != 0 && latestLocalId != localId) {
                 latestLocalId = localId;
                 container = null;
