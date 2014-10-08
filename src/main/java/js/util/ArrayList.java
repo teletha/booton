@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 import js.lang.NativeArray;
 import booton.translator.JavaAPIProvider;
@@ -43,6 +44,9 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
      * @param initial The initial capacity of the list.
      */
     public ArrayList(int initial) {
+        if (initial < 0) {
+            throw new IllegalArgumentException();
+        }
     }
 
     /**
@@ -53,6 +57,8 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
      * @throws NullPointerException if the specified collection is null
      */
     public ArrayList(Collection<? extends E> items) {
+        Objects.nonNull(items);
+
         addAll(items);
     }
 
@@ -94,6 +100,16 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
      * {@inheritDoc}
      */
     @Override
+    public void add(int index, E element) {
+        checkRange(index);
+
+        array.add(index, element);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean remove(Object item) {
         int index = array.indexOf(item);
 
@@ -128,14 +144,6 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
     @Override
     public E set(int index, E element) {
         return array.set(index, element);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void add(int index, E element) {
-        array.add(index, element);
     }
 
     /**
@@ -184,28 +192,28 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
     }
 
     /**
+     * Trims the capacity of this <tt>ArrayList</tt> instance to be the list's current size. An
+     * application can use this operation to minimize the storage of an <tt>ArrayList</tt> instance.
+     */
+    public void trimToSize() {
+        // do nothing
+    }
+
+    /**
      * <p>
      * Helper method to check index range,
      * </p>
      * 
-     * @param index
+     * @param index A index to chech.
      */
     private void checkRange(int index) {
         if (index < 0) {
             throw new IndexOutOfBoundsException("Negative index is unacceptable. Size: " + size() + "  Index: " + index);
         }
 
-        if (size() <= index) {
+        if (size() < index) {
             throw new IndexOutOfBoundsException("Index is overflowed. Size: " + size() + "  Index: " + index);
         }
-    }
-
-    /**
-     * Trims the capacity of this <tt>ArrayList</tt> instance to be the list's current size. An
-     * application can use this operation to minimize the storage of an <tt>ArrayList</tt> instance.
-     */
-    public void trimToSize() {
-        // do nothing
     }
 
     /**
@@ -278,7 +286,7 @@ class ArrayList<E> extends AbstractList<E> implements List<E> {
         @Override
         public void remove() {
             if (0 < index) {
-                array.remove(index - 1);
+                array.remove(--index);
             }
         }
 
