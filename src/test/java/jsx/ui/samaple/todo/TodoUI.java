@@ -164,8 +164,10 @@ public class TodoUI extends Widget1<TodoTasks> {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(complete, text, delete);
-            // $〡.asis.〡(edit);
+            if (filter.getValue().test(model1)) {
+                $〡.hbox.〡(complete, text, delete);
+                // $〡.asis.〡(edit);
+            }
         }
 
         /**
