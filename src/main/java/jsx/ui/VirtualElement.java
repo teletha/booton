@@ -106,6 +106,14 @@ class VirtualElement extends VirtualFragment<Element> {
         StringBuilder builder = new StringBuilder();
         builder.append("<").append(element.name);
 
+        for (int i = 0; i < attributes.names.length(); i++) {
+            builder.append(" ")
+                    .append(attributes.names.get(i))
+                    .append("=\"")
+                    .append(attributes.values.get(i))
+                    .append("\"");
+        }
+
         boolean hasChild = element.items.length() != 0;
 
         if (hasChild) {
