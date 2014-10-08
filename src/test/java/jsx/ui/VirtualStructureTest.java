@@ -14,11 +14,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/11 14:57:41
  */
-// @RunWith(ScriptRunner.class)
+@RunWith(ScriptRunner.class)
 public class VirtualStructureTest {
 
     @Test
@@ -153,6 +156,22 @@ public class VirtualStructureTest {
         });
     }
 
+    @Test
+    public void attributeOnly() throws Exception {
+        VirtualStructure root〡 = new VirtualStructure();
+        root〡.hbox.〡ª("name1", "value1").〡ª("name2", "value2");
+        root〡.hbox.〡ª("name3", "value3");
+
+        VirtualElement root = root〡.getRoot();
+        assert root.items.length() == 2;
+        assertAsElement(root, 0, "hbox", e -> {
+            assertAttribute(e, "name1", "value1");
+        });
+        assertAsElement(root, 1, "hbox", e -> {
+            assertAttribute(e, "name3", "value3");
+        });
+    }
+
     /**
      * @version 2014/09/13 12:18:58
      */
@@ -199,6 +218,24 @@ public class VirtualStructureTest {
 
         VirtualText virtual = (VirtualText) node;
         assert virtual.text.equals(expectedText);
+    }
+
+    /**
+     * <p>
+     * Assertion helper for {@link VirtualElement}.
+     * </p>
+     * 
+     * @param node
+     * @param name
+     * @param value
+     */
+    private void assertAttribute(VirtualNode node, String name, String value) {
+        assert node instanceof VirtualElement;
+
+        VirtualElement virtual = (VirtualElement) node;
+        int index = virtual.attributes.names.indexOf(name);
+        assert index != -1;
+        assert virtual.attributes.values.get(index).equals(value);
     }
 
     /**

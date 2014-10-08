@@ -67,6 +67,12 @@ public final class VirtualStructure {
      */
     public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX.class);
 
+    /** The latest context line number. */
+    protected int latestContextId;
+
+    /** The latest context line number. */
+    protected int latestLocalId;
+
     /** The local id modifier. */
     protected int modifier;
 
@@ -189,7 +195,20 @@ public final class VirtualStructure {
          * 
          * @return The current container element.
          */
-        protected final VirtualElement container() {
+        protected final VirtualElement container(int contextId) {
+            if (contextId != 0 && latestContextId != contextId) {
+                if (localId == latestContextId) {
+                    localId = contextId;
+                }
+                // update context line number
+                latestContextId = contextId;
+            }
+
+            if (localId != 0 && latestLocalId != localId) {
+                latestLocalId = localId;
+                container = null;
+            }
+
             if (container == null) {
                 if (name == null) {
                     // as-is
@@ -212,7 +231,6 @@ public final class VirtualStructure {
                         container.classList.push(builtin);
                     }
                     parents.peekLast().items.push(container);
-                    parents.addLast(container);
                 }
             }
             return container;
@@ -227,12 +245,12 @@ public final class VirtualStructure {
          */
         public final void 〡(Object... children) {
             // store the current context
-            VirtualFragment container = container();
+            VirtualElement container = container(LocalId.findContextLineNumber());
 
-            // then, clean it for nested invocation
-            this.container = null;
+            // enter into the child node
+            if (name != null) parents.addLast(container);
 
-            // precess into child items
+            // process into child nodes
             for (Object child : children) {
                 if (child instanceof Widget) {
                     Widget widget = (Widget) child;
@@ -243,10 +261,8 @@ public final class VirtualStructure {
                     // mount virtual element on virtual structure
                     container.items.push(virtualize);
 
-                    //
-                    parents.addLast(virtualize);
-                    widget.assemble(VirtualStructure.this);
-                    parents.pollLast();
+                    // process child nodes
+                    widget.assemble(new VirtualStructure(virtualize));
                 } else if (child instanceof LowLevelWidget) {
                     LowLevelWidget widget = (LowLevelWidget) child;
 
@@ -254,23 +270,18 @@ public final class VirtualStructure {
                     ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
                     descriptor.localId = widget.hashCode();
 
-                    // create virtual element for this widget
+                    // process child node
                     widget.virtualizeStructure(descriptor);
 
-                    VirtualFragment virtualize = descriptor.container();
-                    virtualize.events = widget.events;
-
-                    // mount virtual element on virtual structure
-                    parents.pollLast();
+                    // pass event listners
+                    descriptor.container(0).events = widget.events;
                 } else {
                     container.items.push(new VirtualText(child.toString()));
                 }
             }
 
-            // reset context environment
-            if (name != null) {
-                parents.pollLast();
-            }
+            // leave from the child node
+            if (name != null) parents.pollLast();
         }
     }
 
@@ -300,9 +311,10 @@ public final class VirtualStructure {
          */
         public final void 〡(Runnable children) {
             // store the current context
-            container();
+            VirtualElement container = container(LocalId.findContextLineNumber());
 
             // then, clean it for nested invocation
+            parents.addLast(container);
             this.container = null;
 
             // precess into child items
@@ -350,7 +362,7 @@ public final class VirtualStructure {
          * @param items Child nodes to append.
          */
         public final ContainerDescriptor 〡(Class<? extends CSS> className) {
-            container().classList.push(className);
+            container(LocalId.findContextLineNumber()).classList.push(className);
 
             return this;
         }
@@ -364,7 +376,7 @@ public final class VirtualStructure {
          * @param value An attribute or property value.
          */
         public final ContainerDescriptor 〡ª(String name, String value) {
-            container().attribute(name, value);
+            container(LocalId.findContextLineNumber()).attribute(name, value);
 
             return this;
         }
