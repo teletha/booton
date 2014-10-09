@@ -187,4 +187,11 @@ public class Input extends LowLevelWidget<Input> {
             this.message = message;
         }
     }
+
+    /**
+     * @version 2014/10/09 16:17:26
+     */
+    public static class Builder {
+
+    }
 }
