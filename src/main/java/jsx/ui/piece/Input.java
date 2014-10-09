@@ -37,7 +37,10 @@ public class Input extends LowLevelWidget<Input> {
     public final StringProperty value;
 
     /** The validation list. */
-    private List<Validation> valids;
+    private List<Validation> validations;
+
+    /** The validation list. */
+    private List<Events<String>> valids;
 
     /**
      * <p>
@@ -56,10 +59,13 @@ public class Input extends LowLevelWidget<Input> {
     public Input(StringProperty value) {
         this.value = value;
 
+        // user input functionality
         Events<UIEvent> functionInput = event().observe(Paste, Cut);
         Events<UIEvent> keybordInput = event().observe(KeyUp);
 
         functionInput.merge(keybordInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
+
+        // validation functionality
     }
 
     /**
@@ -114,38 +120,30 @@ public class Input extends LowLevelWidget<Input> {
 
     /**
      * @param event
-     * @param string
-     * @return
-     */
-    public Input validate(Predicate<String> condition, String string) {
-        validate(I.observe(value).map($(condition)), string);
-
-        return this;
-    }
-
-    /**
-     * @param condition
      * @param message
      * @return
      */
-    public Input validate(Events<Boolean> condition, String message) {
+    public Input validate(Predicate<String> condition, String message) {
         if (valids == null) {
             valids = new ArrayList();
         }
-        valids.add(new Validation(condition, message));
+        valids.add(I.observe(value).filter(condition).map(message));
 
         return this;
     }
 
+    public Events<List<String>> invalid() {
+        return Events.join(valids);
+    }
+
     /**
-     * @param e
-     * @return
+     * {@inheritDoc}
      */
     @Override
     protected boolean isValid(UIEvent e) {
-        if (valids != null) {
-            for (Validation validation : valids) {
-                if (!validation.valid) {
+        if (validations != null) {
+            for (Validation validation : validations) {
+                if (!validation.condition.test(value.get())) {
                     return false;
                 }
             }
@@ -174,20 +172,19 @@ public class Input extends LowLevelWidget<Input> {
      */
     private static class Validation {
 
+        /** The validation condition. */
+        private final Predicate<String> condition;
+
         /** The validation message. */
         private final String message;
-
-        /** The validation condition. */
-        private boolean valid = true;
 
         /**
          * @param validation
          * @param message
          */
-        private Validation(Events<Boolean> validation, String message) {
+        private Validation(Predicate<String> validation, String message) {
+            this.condition = validation;
             this.message = message;
-
-            validation.to(v -> valid = v);
         }
     }
 }

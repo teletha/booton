@@ -170,6 +170,10 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         return (T) this;
     }
 
+    public T popupIf(Events<Boolean> condition, Widget widget) {
+        return (T) this;
+    }
+
     /**
      * <p>
      * Helper method to create holder lazily.
