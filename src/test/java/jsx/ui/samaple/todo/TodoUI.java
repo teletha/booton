@@ -62,8 +62,7 @@ public class TodoUI extends Widget1<TodoTasks> {
             .disableIf(this::isValidTaskSize)
             .shortcut(Key.Enter, this::add)
             .validate(v -> v.length() <= 10, "10文字以内でお願いします")
-            .validate(v -> v.contains("a") || v.contains("A"), "Aの文字は使えません")
-            .validate(v -> check(v), "既に使われています")
+            .validate(v -> !v.contains("a") && !v.contains("A"), "Aの文字は使えません")
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
@@ -83,10 +82,6 @@ public class TodoUI extends Widget1<TodoTasks> {
             .label("clear completed (", completedSize, ")")
             .showIf(completedSize.greaterThan(0))
             .click(todos::removeCompleted);
-
-    private boolean check(String value) {
-        return true;
-    }
 
     /**
      * Add todo task.

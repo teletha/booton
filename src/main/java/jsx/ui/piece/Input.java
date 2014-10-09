@@ -12,13 +12,13 @@ package jsx.ui.piece;
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.property.ReadOnlySetProperty;
+import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -29,18 +29,18 @@ import kiss.Events;
 import kiss.I;
 
 /**
- * @version 2014/08/21 17:09:35
+ * @version 2014/10/10 8:42:34
  */
 public class Input extends LowLevelWidget<Input> {
 
     /** The input value. */
     public final StringProperty value;
 
-    /** The validation list. */
-    private List<Validation> validations;
+    /** The input value validity. */
+    public final ReadOnlySetProperty<String> invalid = I.make(SetProperty.class);
 
-    /** The validation list. */
-    private List<Events<String>> valids;
+    /** The input value validity. */
+    public final BooleanBinding valid = invalid.sizeProperty().isEqualTo(0);
 
     /**
      * <p>
@@ -81,12 +81,6 @@ public class Input extends LowLevelWidget<Input> {
         return current;
     }
 
-    private <V> Function<V, Boolean> $(Predicate<V> predicate) {
-        return v -> {
-            return predicate.test(v);
-        };
-    }
-
     /**
      * Configure placeholder string.
      * 
@@ -119,21 +113,24 @@ public class Input extends LowLevelWidget<Input> {
     }
 
     /**
-     * @param event
-     * @param message
-     * @return
+     * <p>
+     * Validate input value.
+     * </p>
+     * 
+     * @param prerequisite A necessary condition of the input value.
+     * @param message A message when the input value doesn't fulfill.
+     * @return Chainable API.
      */
-    public Input validate(Predicate<String> condition, String message) {
-        if (valids == null) {
-            valids = new ArrayList();
-        }
-        valids.add(I.observe(value).filter(condition).map(message));
+    public Input validate(Predicate<String> prerequisite, String message) {
+        I.observe(value).to(input -> {
+            if (prerequisite.test(input)) {
+                invalid.remove(message);
+            } else {
+                invalid.add(message);
+            }
+        });
 
         return this;
-    }
-
-    public Events<List<String>> invalid() {
-        return Events.join(valids);
     }
 
     /**
@@ -141,12 +138,8 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected boolean isValid(UIEvent e) {
-        if (validations != null) {
-            for (Validation validation : validations) {
-                if (!validation.condition.test(value.get())) {
-                    return false;
-                }
-            }
+        if (!invalid.isEmpty()) {
+            return false;
         }
         return super.isValid(e);
     }
