@@ -11,11 +11,11 @@ package jsx.ui.piece;
 
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
+import static jsx.ui.EventHelper.*;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
@@ -38,9 +38,6 @@ public class Input extends LowLevelWidget<Input> {
 
     /** The input value validity. */
     public final ReadOnlySetProperty<String> invalid = I.make(SetProperty.class);
-
-    /** The input value validity. */
-    public final BooleanBinding valid = invalid.sizeProperty().isEqualTo(0);
 
     /**
      * <p>
@@ -104,12 +101,14 @@ public class Input extends LowLevelWidget<Input> {
     }
 
     /**
-     * Configure requirement.
+     * <p>
+     * Validate that the input value must not be empty.
+     * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public Input require() {
-        return this;
+        return validate(NotEmpty, "The input value is empty.");
     }
 
     /**
@@ -122,13 +121,13 @@ public class Input extends LowLevelWidget<Input> {
      * @return Chainable API.
      */
     public Input validate(Predicate<String> prerequisite, String message) {
-        I.observe(value).to(input -> {
+        disposeLater(I.observe(value).to(input -> {
             if (prerequisite.test(input)) {
                 invalid.remove(message);
             } else {
                 invalid.add(message);
             }
-        });
+        }));
 
         return this;
     }

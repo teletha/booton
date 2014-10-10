@@ -42,9 +42,6 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     /** The disposable list. */
     private List<Disposable> disposables;
 
-    /** The enable state. */
-    private Events<Boolean> enable = Events.just(true);
-
     /**
      * @return
      */
@@ -123,7 +120,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
 
             // activate shortcut command
-            disposer().add(keyInput.filter(this::isValid).to(e -> action.run()));
+            disposeLater(keyInput.filter(this::isValid).to(e -> action.run()));
         }
         return (T) this;
     }
@@ -134,7 +131,6 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     }
 
     public T enableIf(Events<Boolean> condition) {
-        enable = enable.join(condition, (one, other) -> one && other);
         return (T) this;
     }
 
@@ -176,16 +172,14 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
 
     /**
      * <p>
-     * Helper method to create holder lazily.
+     * Helper method to create cleanup holder.
      * </p>
-     * 
-     * @return A cached list.
      */
-    private List<Disposable> disposer() {
+    protected final void disposeLater(Disposable disposable) {
         if (disposables == null) {
             disposables = new ArrayList();
         }
-        return disposables;
+        disposables.add(disposable);
     }
 
     protected boolean isValid(UIEvent e) {

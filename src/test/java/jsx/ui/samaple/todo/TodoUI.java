@@ -61,8 +61,8 @@ public class TodoUI extends Widget1<TodoTasks> {
     final Input input = new Input()
             .disableIf(this::isValidTaskSize)
             .shortcut(Key.Enter, this::add)
-            .validate(v -> v.length() <= 10, "10文字以内でお願いします")
-            .validate(v -> !v.contains("a") && !v.contains("A"), "Aの文字は使えません")
+            .require()
+            .validate(v -> v.length() <= 15, "15文字以内でお願いします")
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
