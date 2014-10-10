@@ -9,7 +9,6 @@
  */
 package jsx.ui.piece;
 
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import javafx.beans.value.ObservableValue;
@@ -20,7 +19,7 @@ import booton.css.CSS;
 /**
  * @version 2014/10/10 11:23:34
  */
-public class Skin<W> {
+public class Snazz<W> extends CSS {
 
     /** The target widget. */
     protected final W widget;
@@ -28,7 +27,7 @@ public class Skin<W> {
     /**
      * @param widget
      */
-    protected Skin() {
+    protected Snazz() {
         this.widget = null;
     }
 
@@ -59,7 +58,7 @@ public class Skin<W> {
             return this;
         }
 
-        protected void style(Consumer<CSS> definition) {
+        protected void style(Runnable definition) {
 
         }
     }
@@ -79,7 +78,11 @@ public class Skin<W> {
             this.value = value;
         }
 
-        protected void is(Predicate<T> condition, Consumer<CSS> definition) {
+        protected ValueCondition<T> is(Predicate<T> condition) {
+            return this;
+        }
+
+        protected void style(Runnable definition) {
 
         }
     }
