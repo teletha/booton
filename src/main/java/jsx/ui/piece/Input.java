@@ -11,7 +11,7 @@ package jsx.ui.piece;
 
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
-import static jsx.ui.EventHelper.*;
+import static jsx.ui.FunctionHelper.*;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -33,7 +33,7 @@ import kiss.I;
  */
 public class Input extends LowLevelWidget<Input> {
 
-    /** The input value. */
+    /** The current input value. */
     public final StringProperty value;
 
     /** The input value validity. */
@@ -59,14 +59,15 @@ public class Input extends LowLevelWidget<Input> {
         // user input functionality
         Events<UIEvent> functionInput = event().observe(Paste, Cut);
         Events<UIEvent> keybordInput = event().observe(KeyUp);
-
         functionInput.merge(keybordInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
-
-        // validation functionality
     }
 
     /**
+     * <p>
+     * Clear the current input value.
+     * </p>
      * 
+     * @return The current input value.
      */
     public String clear() {
         String current = value.get();
@@ -113,7 +114,7 @@ public class Input extends LowLevelWidget<Input> {
 
     /**
      * <p>
-     * Validate input value.
+     * Validate the input value.
      * </p>
      * 
      * @param prerequisite A necessary condition of the input value.
@@ -157,33 +158,5 @@ public class Input extends LowLevelWidget<Input> {
     @Override
     protected void virtualizeStructure(ContainerDescriptor descriptor) {
         descriptor.〡ª("type", "text").〡ª("value", value.get());
-    }
-
-    /**
-     * @version 2014/10/06 9:35:44
-     */
-    private static class Validation {
-
-        /** The validation condition. */
-        private final Predicate<String> condition;
-
-        /** The validation message. */
-        private final String message;
-
-        /**
-         * @param validation
-         * @param message
-         */
-        private Validation(Predicate<String> validation, String message) {
-            this.condition = validation;
-            this.message = message;
-        }
-    }
-
-    /**
-     * @version 2014/10/09 16:17:26
-     */
-    public static class Builder {
-
     }
 }

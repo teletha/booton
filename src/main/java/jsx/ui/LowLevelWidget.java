@@ -28,7 +28,7 @@ import kiss.Events;
 import booton.reactive.css.StyleDefinition;
 
 /**
- * @version 2014/09/01 20:06:01
+ * @version 2014/10/10 9:24:46
  */
 public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
 
@@ -43,14 +43,22 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     private List<Disposable> disposables;
 
     /**
-     * @return
+     * <p>
+     * Describe the element name.
+     * </p>
+     * 
+     * @return A element name.
      */
     protected abstract String virtualizeName();
 
     /**
-     * @param descriptor
+     * <p>
+     * Describe the element structure.
+     * </p>
+     * 
+     * @param $〡 Domain Specific Language for virtual elements.
      */
-    protected abstract void virtualizeStructure(ContainerDescriptor descriptor);
+    protected abstract void virtualizeStructure(ContainerDescriptor $〡);
 
     /**
      * <p>
@@ -70,7 +78,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
      * @return
      */
     public T click(Runnable action) {
-        event().observe(UIAction.Click).filter(this::isValid).to(e -> action.run());
+        disposeLater(event().observe(UIAction.Click).filter(this::isValid).to(e -> action.run()));
 
         return (T) this;
     }
@@ -182,6 +190,14 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         disposables.add(disposable);
     }
 
+    /**
+     * <p>
+     * Check whether this {@link LowLevelWidget} is valid or not.
+     * </p>
+     * 
+     * @param e Ignore this value.
+     * @return A result.
+     */
     protected boolean isValid(UIEvent e) {
         return true;
     }
