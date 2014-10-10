@@ -7,24 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.samaple.todo;
+package jsx.ui;
 
-import jsx.ui.SkinBase;
+import kiss.I;
+import kiss.model.ClassUtil;
 
 /**
- * @version 2014/10/10 15:45:31
+ * @version 2014/10/10 22:37:09
  */
-public class TodoUISkin implements SkinBase<TodoUI> {
+public interface Skinnable<S extends SkinBase> {
 
-    public void footer() {
-
-    }
-
-    public void items() {
-
-    }
-
-    public void buttons() {
-
+    default S skin() {
+        return (S) I.make(ClassUtil.getParameter(getClass(), Skinnable.class)[0]);
     }
 }
