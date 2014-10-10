@@ -9,7 +9,7 @@
  */
 package jsx.ui.samaple.todo;
 
-import static booton.reactive.FunctionHelper.*;
+import static jsx.ui.FunctionHelper.*;
 
 import java.util.function.Predicate;
 

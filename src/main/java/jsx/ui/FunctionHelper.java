@@ -7,16 +7,35 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * @version 2014/09/01 16:57:43
+ * @version 2014/10/10 9:28:00
  */
 public class FunctionHelper {
 
+    /** The reusable function. */
+    public static final Predicate<String> Empty = value -> {
+        return value.isEmpty();
+    };
+
+    /** The reusable function. */
+    public static final Predicate<String> NotEmpty = value -> {
+        return !value.isEmpty();
+    };
+
+    /**
+     * <p>
+     * Partial apply.
+     * </p>
+     * 
+     * @param consumer
+     * @param param
+     * @return
+     */
     public static <P> Runnable $(Consumer<P> consumer, P param) {
         return () -> {
             consumer.accept(param);
