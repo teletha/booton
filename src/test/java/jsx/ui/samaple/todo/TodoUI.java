@@ -21,6 +21,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import jsx.ui.BindingHelper;
 import jsx.ui.Key;
+import jsx.ui.Skinnable;
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
 import jsx.ui.piece.Button;
@@ -28,15 +29,15 @@ import jsx.ui.piece.CheckBox;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.samaple.todo.TodoTasks.Task;
-import kiss.I;
 import booton.reactive.css.DynamicStyle;
 
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends Widget1<TodoTasks> {
+public class TodoUI extends Widget1<TodoTasks> implements Skinnable<TodoUISkin> {
 
-    private static final TodoUISkin $ = I.make(TodoUISkin.class);
+    /** The skin. */
+    private final TodoUISkin $ = skin();
 
     /** Reassign to meaningful name. */
     private final TodoTasks todos = model1;

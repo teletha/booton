@@ -7,24 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.samaple.todo;
+package jsx.ui;
 
-import jsx.ui.SkinBase;
+import kiss.Extensible;
 
 /**
- * @version 2014/10/10 15:45:31
+ * @version 2014/10/10 22:40:50
  */
-public class TodoUISkin implements SkinBase<TodoUI> {
+public interface SkinBase<W extends Widget> extends Extensible {
 
-    public void footer() {
-
-    }
-
-    public void items() {
-
-    }
-
-    public void buttons() {
-
-    }
 }
