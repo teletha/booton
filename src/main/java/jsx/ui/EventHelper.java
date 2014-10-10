@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.reactive;
+package jsx.ui;
 
 import java.util.function.Predicate;
 
