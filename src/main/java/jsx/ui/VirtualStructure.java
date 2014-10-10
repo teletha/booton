@@ -106,6 +106,33 @@ public final class VirtualStructure {
 
     /**
      * <p>
+     * Define horizontal container with local id.
+     * </p>
+     * 
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #hbox
+     */
+    public final ContainerDescriptor hbox(Runnable styleDefinition) {
+        return hbox(0, styleDefinition);
+    }
+
+    /**
+     * <p>
+     * Define horizontal container with local id.
+     * </p>
+     * 
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #hbox
+     */
+    public final ContainerDescriptor hbox(int localId, Runnable styleDefinition) {
+        hbox.localId = localId;
+        return hbox;
+    }
+
+    /**
+     * <p>
      * Define vertical container with local id.
      * </p>
      * 
@@ -114,6 +141,33 @@ public final class VirtualStructure {
      * @see #vbox
      */
     public final ContainerDescriptor vbox(int localId) {
+        vbox.localId = localId;
+        return vbox;
+    }
+
+    /**
+     * <p>
+     * Define vertical container with local id.
+     * </p>
+     * 
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #vbox
+     */
+    public final ContainerDescriptor vbox(Runnable styleDefinition) {
+        return vbox(0, styleDefinition);
+    }
+
+    /**
+     * <p>
+     * Define vertical container with local id.
+     * </p>
+     * 
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #vbox
+     */
+    public final ContainerDescriptor vbox(int localId, Runnable styleDefinition) {
         vbox.localId = localId;
         return vbox;
     }
@@ -286,6 +340,54 @@ public final class VirtualStructure {
             // leave from the child node
             if (name != null) parents.pollLast();
         }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child nodes.
+         */
+        public final void 〡(Runnable styleDefinition, Object... children) {
+            // store the current context
+            VirtualElement container = container(LocalId.findContextLineNumber());
+
+            // enter into the child node
+            if (name != null) parents.addLast(container);
+
+            // process into child nodes
+            for (Object child : children) {
+                if (child instanceof Widget) {
+                    Widget widget = (Widget) child;
+
+                    // create virtual element for this widget
+                    VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+
+                    // mount virtual element on virtual structure
+                    container.items.push(virtualize);
+
+                    // process child nodes
+                    widget.assemble(new VirtualStructure(virtualize));
+                } else if (child instanceof LowLevelWidget) {
+                    LowLevelWidget widget = (LowLevelWidget) child;
+
+                    // create descriptor
+                    ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
+                    descriptor.localId = widget.hashCode();
+
+                    // process child node
+                    widget.virtualizeStructure(descriptor);
+
+                    // pass event listners
+                    descriptor.container(0).events = widget.events;
+                } else {
+                    container.items.push(new VirtualText(child.toString()));
+                }
+            }
+
+            // leave from the child node
+            if (name != null) parents.pollLast();
+        }
     }
 
     /**
@@ -332,6 +434,28 @@ public final class VirtualStructure {
          * Define children.
          * </p>
          * 
+         * @param children A list of child nodes.
+         */
+        public final void 〡(Runnable styleDefinition, Runnable children) {
+            // store the current context
+            VirtualElement container = container(LocalId.findContextLineNumber());
+
+            // then, clean it for nested invocation
+            parents.addLast(container);
+            this.container = null;
+
+            // precess into child items
+            children.run();
+
+            // restore context environment
+            parents.pollLast();
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
          * @param children A list of child widget.
          */
         public final <T> void 〡(Class<? extends Widget1<T>> childType, T... children) {
@@ -345,7 +469,37 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
+        public final <T> void 〡(Runnable styleDefinition, Class<? extends Widget1<T>> childType, T... children) {
+            〡(childType, Arrays.asList(children));
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
         public final <T> void 〡(Class<? extends Widget1<T>> childType, Collection<T> children) {
+            // precess into child items
+            int index = 0;
+            Object[] childrenUI = new Object[children.size()];
+
+            for (T child : children) {
+                childrenUI[index++] = Widget.of(childType, child);
+            }
+
+            〡(childrenUI);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡(Runnable styleDefinition, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // precess into child items
             int index = 0;
             Object[] childrenUI = new Object[children.size()];

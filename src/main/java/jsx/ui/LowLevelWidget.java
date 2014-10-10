@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIAction;
@@ -25,16 +26,13 @@ import jsx.event.Publishable;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Disposable;
 import kiss.Events;
+import kiss.I;
 import booton.reactive.css.StyleDefinition;
 
 /**
  * @version 2014/10/10 9:24:46
  */
 public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
-
-    public BooleanProperty click;
-
-    public BooleanProperty hover;
 
     /** The holder of event listeners. */
     Publishable<?> events;
@@ -72,6 +70,18 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
             events = new Publishable();
         }
         return events;
+    }
+
+    private BooleanProperty hover;
+
+    public BooleanProperty hover() {
+        if (hover == null) {
+            hover = new SimpleBooleanProperty(false);
+
+            event().observe(MouseEnter).to(v -> hover.set(true));
+            event().observe(MouseLeave).to(v -> hover.set(false));
+        }
+        return hover;
     }
 
     /**
@@ -138,10 +148,6 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         return (T) this;
     }
 
-    public T enableIf(Events<Boolean> condition) {
-        return (T) this;
-    }
-
     public T disableIf(Supplier<Boolean> condition) {
         return (T) this;
     }
@@ -150,23 +156,14 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         return (T) this;
     }
 
-    public T disableIf(Events<Boolean> condition) {
-        return (T) this;
-    }
-
     public T showIf(ObservableValue<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T showIf(Events<Boolean> condition) {
+        I.observe(condition).to(v -> {
+            System.out.println("show  " + v);
+        });
         return (T) this;
     }
 
     public T hideIf(ObservableValue<Boolean> condition) {
-        return (T) this;
-    }
-
-    public T hideIf(Events<Boolean> condition) {
         return (T) this;
     }
 

@@ -33,6 +33,9 @@ import kiss.I;
  */
 public class Input extends LowLevelWidget<Input> {
 
+    /** The skin. */
+    private static final InputSkin skin = I.make(InputSkin.class);
+
     /** The current input value. */
     public final StringProperty value;
 
@@ -165,7 +168,7 @@ public class Input extends LowLevelWidget<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualizeStructure(ContainerDescriptor descriptor) {
-        descriptor.〡ª("type", "text").〡ª("value", value.get());
+    protected void virtualizeStructure(ContainerDescriptor $〡) {
+        $〡.〡ª("type", "text").〡ª("value", value.get());
     }
 }

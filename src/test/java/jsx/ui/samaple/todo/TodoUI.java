@@ -28,14 +28,15 @@ import jsx.ui.piece.CheckBox;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.samaple.todo.TodoTasks.Task;
-import jsx.ui.samaple.todo.TodoUIStyle.BUTTONS;
-import jsx.ui.samaple.todo.TodoUIStyle.FOOTER;
+import kiss.I;
 import booton.reactive.css.DynamicStyle;
 
 /**
  * @version 2014/09/01 15:14:06
  */
 public class TodoUI extends Widget1<TodoTasks> {
+
+    private static final TodoUISkin $ = I.make(TodoUISkin.class);
 
     /** Reassign to meaningful name. */
     private final TodoTasks todos = model1;
@@ -132,10 +133,10 @@ public class TodoUI extends Widget1<TodoTasks> {
         int imcompleted = incompletedSize.get();
 
         $〡.asis.〡(input);
-        $〡.vbox.〡(Item.class, todos.list);
-        $〡.hbox.〡(FOOTER.class).〡(() -> {
+        $〡.vbox.〡($::items, Item.class, todos.list);
+        $〡.hbox.〡($::footer, () -> {
             $〡.hbox.〡(imcompleted, imcompleted < 2 ? " item" : " items", " left");
-            $〡.hbox.〡(BUTTONS.class).〡(all, active, completed);
+            $〡.hbox.〡($::buttons, all, active, completed);
             $〡.asis.〡(clear);
         });
     }
@@ -155,7 +156,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         final Output text = new Output(model1.contents).hideIf(editing).dbclick(this::startEdit);
 
         /** The remove button. */
-        final Button delete = new Button().label("×").showIf(text.hover).click($(todos.list::remove, model1));
+        final Button delete = new Button().label("×").showIf(text.hover()).click($(todos.list::remove, model1));
 
         /** The editable todo text. */
         final Input edit = new Input(model1.contents.get()).showIf(editing).shortcut(Key.Enter, this::finishEdit);

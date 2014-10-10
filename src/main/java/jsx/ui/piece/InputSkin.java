@@ -9,20 +9,31 @@
  */
 package jsx.ui.piece;
 
-import booton.css.value.Color;
-
 /**
  * @version 2014/10/10 11:22:07
  */
-public class InputSkin extends Skin<Input> {
+public class InputSkin extends Snazz<Input> {
 
-    protected void define() {
-        when(widget.value).is(v -> v.length() < 5, css -> {
-            css.font.color(Color.rgb(40, 40, 250));
-        });
+    {
+        when(widget).style(this::widget);
+        when(widget.value).is(v -> v.length() < 5).style(this::invalid);
+    }
 
-        when(widget).isHover().style(css -> {
-            css.font.color(Color.rgb(240, 40, 0));
+    /**
+     * Widget appearance.
+     */
+    public void widget() {
+        font.color(rgb(240, 40, 0));
+
+        hover(() -> {
+            font.color(rgb(240, 240, 0));
         });
+    }
+
+    /**
+     * Invalid input value warning.
+     */
+    public void invalid() {
+        font.color(rgb(40, 40, 250));
     }
 }
