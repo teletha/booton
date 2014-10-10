@@ -53,6 +53,15 @@ public class Input extends LowLevelWidget<Input> {
      * Create {@link Input} form field with the specified value.
      * </p>
      */
+    public Input(String value) {
+        this(new SimpleStringProperty(value));
+    }
+
+    /**
+     * <p>
+     * Create {@link Input} form field with the specified value.
+     * </p>
+     */
     public Input(StringProperty value) {
         this.value = value;
 
