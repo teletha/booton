@@ -158,7 +158,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         final Button delete = new Button().label("×").showIf(text.hover).click($(todos.list::remove, model1));
 
         /** The editable todo text. */
-        final Input edit = new Input(model1.contents).showIf(editing).shortcut(Key.Enter, this::finishEdit);
+        final Input edit = new Input(model1.contents.get()).showIf(editing).shortcut(Key.Enter, this::finishEdit);
 
         /**
          * {@inheritDoc}
@@ -167,7 +167,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         protected void virtualize(VirtualStructure $〡) {
             if (filter.getValue().test(model1)) {
                 $〡.hbox.〡(complete, text, delete);
-                // $〡.asis.〡(edit);
+                $〡.asis.〡(edit);
             }
         }
 
@@ -175,6 +175,7 @@ public class TodoUI extends Widget1<TodoTasks> {
          * 
          */
         protected void startEdit() {
+            System.out.println("start edit");
             editing.set(true);
         }
 
@@ -182,6 +183,7 @@ public class TodoUI extends Widget1<TodoTasks> {
          * 
          */
         protected void finishEdit() {
+            System.out.println("end edit");
             editing.set(false);
             model1.contents.set(edit.value.get());
         }

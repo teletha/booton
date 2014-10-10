@@ -105,21 +105,27 @@ public enum UIAction implements Predicate<UIEvent> {
     KeyPress,
 
     /** The ui event type. */
+    @Deprecated
     MouseDown,
 
     /** The ui event type. */
+    @Deprecated
     MouseUp,
 
     /** The ui event type. */
+    @Deprecated
     MouseMove,
 
     /** The ui event type. */
+    @Deprecated
     MouseDoubleClick("dblclick"),
 
     /** The ui event type. */
+    @Deprecated
     MouseEnter,
 
     /** The ui event type. */
+    @Deprecated
     MouseLeave,
 
     /** The ui event type. */
