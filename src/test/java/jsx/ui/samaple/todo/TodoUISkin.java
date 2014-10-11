@@ -9,19 +9,31 @@
  */
 package jsx.ui.samaple.todo;
 
-import jsx.ui.SkinBase;
+import jsx.ui.AppearanceDescriptor;
 
 /**
  * @version 2014/10/10 15:45:31
  */
-public class TodoUISkin implements SkinBase<TodoUI> {
+public class TodoUISkin extends AppearanceDescriptor<TodoUI> {
 
-    public void footer() {
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void defineRuntimeCondition(TodoUI widget, StyleDescriptor $) {
+        $.apply(this::items).when(widget.todos.list.sizeProperty()).is(v -> v.intValue() == 0);
     }
 
     public void items() {
+        if (widget.todos.list.size() == 0) {
+            display.none();
+        } else {
+            display.flex();
+        }
+    }
 
+    public void footer() {
+        font.color(rgb(40, 40, 250));
     }
 
     public void buttons() {

@@ -33,9 +33,6 @@ import kiss.I;
  */
 public class Input extends LowLevelWidget<Input> {
 
-    /** The skin. */
-    private static final InputSkin skin = I.make(InputSkin.class);
-
     /** The current input value. */
     public final StringProperty value;
 

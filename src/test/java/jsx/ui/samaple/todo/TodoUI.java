@@ -19,9 +19,9 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import jsx.ui.Appearance;
 import jsx.ui.BindingHelper;
 import jsx.ui.Key;
-import jsx.ui.Skinnable;
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
 import jsx.ui.piece.Button;
@@ -34,16 +34,16 @@ import booton.reactive.css.DynamicStyle;
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends Widget1<TodoTasks> implements Skinnable<TodoUISkin> {
+public class TodoUI extends Widget1<TodoTasks> implements Appearance<TodoUISkin> {
 
     /** The skin. */
-    private final TodoUISkin $ = skin();
+    private final TodoUISkin $ = visualize();
 
     /** Reassign to meaningful name. */
-    private final TodoTasks todos = model1;
+    final TodoTasks todos = model1;
 
     /** The filter model. */
-    private final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
+    final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
 
     /** The completed tasks. */
     final IntegerExpression completedSize = BindingHelper.filter(todos.list, Task::isCompleted).sizeProperty();
