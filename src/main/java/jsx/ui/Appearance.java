@@ -9,11 +9,15 @@
  */
 package jsx.ui;
 
-import kiss.Extensible;
+import kiss.I;
+import kiss.model.ClassUtil;
 
 /**
- * @version 2014/10/10 22:40:50
+ * @version 2014/10/10 22:37:09
  */
-public interface SkinBase<W extends Widget> extends Extensible {
+public interface Appearance<S extends AppearanceDescriptor> {
 
+    default S visualize() {
+        return (S) I.find(AppearanceDescriptor.class, ClassUtil.getParameter(getClass(), Appearance.class)[0]);
+    }
 }
