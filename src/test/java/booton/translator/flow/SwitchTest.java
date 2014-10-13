@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/04/08 14:28:16
@@ -337,6 +338,46 @@ public class SwitchTest extends ScriptTester {
                 }
 
                 return result;
+            }
+        });
+    }
+
+    @Test
+    public void string() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(String value) {
+                switch (value) {
+                case "a":
+                    return 10;
+
+                case "some":
+                    return 100;
+
+                default:
+                    return 1000;
+                }
+            }
+        });
+    }
+
+    @Test
+    public void stringHashCode() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(String value) {
+                switch (value.hashCode()) {
+                case 97:
+                    return 10;
+
+                case 3536116:
+                    return 100;
+
+                default:
+                    return 1000;
+                }
             }
         });
     }

@@ -17,4 +17,11 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(java.util.EnumMap.class)
 class EnumMap<K extends Enum<K>, V> extends HashMap<K, V> {
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V put(K key, V value) {
+        return super.put(key, value);
+    }
 }

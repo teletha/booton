@@ -524,9 +524,10 @@ class Node {
      * @param defaults A default node.
      * @param keys A case key values.
      * @param cases A list of case nodes.
+     * @param isStringSwitch Whether this is string switch or not.
      */
-    final void createSwitch(Node defaults, int[] keys, List<Node> cases) {
-        switchy = new Switch(this, defaults, keys, cases);
+    final void createSwitch(Node defaults, int[] keys, List<Node> cases, boolean isStringSwitch) {
+        switchy = new Switch(this, defaults, keys, cases, isStringSwitch);
 
         // connect enter node with each case node
         for (Node node : cases) {
@@ -856,6 +857,7 @@ class Node {
      * @param buffer
      */
     private void writeIf(ScriptWriter buffer) {
+        Debugger.print(this);
         OperandCondition condition = (OperandCondition) stack.peekLast();
 
         Node then = null;
@@ -1038,6 +1040,8 @@ class Node {
             // normal process
             if (requiredCalls <= next.currentCalls) {
                 Node dominator = next.getDominator();
+                Debugger.print(dominator.id + "  " + this.id + "   ");
+
                 if (dominator == null || dominator == this || (loop != null && loop.exit == next)) {
                     // next node inherits the mode of dominator
                     if (next.continueOmittable == null) next.continueOmittable = continueOmittable;
@@ -1339,6 +1343,9 @@ class Node {
      */
     static class Switch extends Breakable {
 
+        /** Normal switch or String switch. */
+        private final boolean isStringSwitch;
+
         /** The entering node. */
         private final Node enter;
 
@@ -1366,8 +1373,9 @@ class Node {
          * @param defaults
          * @param keys
          * @param cases
+         * @param isStringSwitch
          */
-        private Switch(Node enter, Node defaults, int[] keys, List<Node> cases) {
+        private Switch(Node enter, Node defaults, int[] keys, List<Node> cases, boolean isStringSwitch) {
             super(enter);
 
             this.enter = enter;
@@ -1375,6 +1383,7 @@ class Node {
             this.value = enter.remove(0);
             this.defaults = defaults;
             this.cases = cases;
+            this.isStringSwitch = isStringSwitch;
 
             enter.disposable = defaults.disposable = false;
             for (Node node : cases) {
