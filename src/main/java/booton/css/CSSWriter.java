@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 
 import kiss.I;
 import booton.BootonConfiguration;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/07/23 22:25:05
@@ -214,6 +215,7 @@ public class CSSWriter {
      * @param params
      * @return Chainable API.
      */
+    @Debuggable
     public CSSWriter write(String... params) {
         for (String param : params) {
             if (param != null) {

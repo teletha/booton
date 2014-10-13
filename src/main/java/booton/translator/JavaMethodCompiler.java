@@ -1689,7 +1689,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (int i = 0; i < keys.length; i++) {
             keys[i] = min + i;
         }
-        current.createSwitch(getNode(defaults), keys, nodes);
+        current.createSwitch(getNode(defaults), keys, nodes, match(ASTORE, INVOKEVIRTUAL));
     }
 
     /**
@@ -1702,7 +1702,7 @@ class JavaMethodCompiler extends MethodVisitor {
         for (Label label : labels) {
             nodes.add(getNode(label));
         }
-        current.createSwitch(getNode(defaults), keys, nodes);
+        current.createSwitch(getNode(defaults), keys, nodes, match(ASTORE, INVOKEVIRTUAL));
     }
 
     /**

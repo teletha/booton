@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import kiss.I;
+import booton.translator.Translator;
 
 /**
  * @version 2013/07/21 18:15:42
@@ -31,36 +32,9 @@ public class Font {
      * @param uri
      */
     public Font(String uri) {
-        if (!uri.startsWith("http")) {
-            this.name = "icon";
-            this.uri = uri;
-        } else {
-            try {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                URLConnection connection = new URL(uri).openConnection();
-                connection.connect();
-                I.copy(connection.getInputStream(), out, true);
-
-                String contents = out.toString();
-                int start = contents.indexOf("font-family");
-                int end = contents.indexOf(";", start);
-
-                String name = contents.substring(start + 11, end).trim();
-
-                if (name.charAt(0) == ':') {
-                    name = name.substring(1).trim();
-                }
-
-                if (name.charAt(0) == '\'') {
-                    name = name.substring(1, name.length() - 1);
-                }
-
-                this.name = name;
-                this.uri = uri;
-            } catch (Exception e) {
-                throw I.quiet(e);
-            }
-        }
+        String[] info = FontInfo.parse(uri);
+        this.name = info[0];
+        this.uri = info[1];
     }
 
     /**
@@ -90,5 +64,74 @@ public class Font {
     @Override
     public String toString() {
         return "Font [name=" + name + ", uri=" + uri + "]";
+    }
+
+    /**
+     * @version 2014/10/13 17:49:39
+     */
+    private static class FontInfo {
+
+        /**
+         * <p>
+         * Locate font.
+         * </p>
+         * 
+         * @param uri
+         * @return
+         */
+        static String[] parse(String uri) {
+            String[] info = new String[2];
+
+            if (!uri.startsWith("hhtp")) {
+                info[0] = "icon";
+                info[1] = uri;
+            } else {
+                try {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    URLConnection connection = new URL(uri).openConnection();
+                    connection.connect();
+                    I.copy(connection.getInputStream(), out, true);
+
+                    String contents = out.toString();
+                    int start = contents.indexOf("font-family");
+                    int end = contents.indexOf(";", start);
+
+                    String name = contents.substring(start + 11, end).trim();
+
+                    if (name.charAt(0) == ':') {
+                        name = name.substring(1).trim();
+                    }
+
+                    if (name.charAt(0) == '\'') {
+                        name = name.substring(1, name.length() - 1);
+                    }
+
+                    info[0] = name;
+                    info[1] = uri;
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
+            }
+            return info;
+        }
+
+        /**
+         * @version 2014/10/13 17:55:12
+         */
+        @SuppressWarnings("unused")
+        private static class Coder extends Translator<FontInfo> {
+
+            /**
+             * <p>
+             * Locate font.
+             * </p>
+             * 
+             * @param uri
+             * @return
+             */
+            public String parse(String uri) {
+                return "['" + uri + "','" + uri + "']";
+            }
+        }
     }
 }

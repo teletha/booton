@@ -17,6 +17,7 @@ import java.util.Deque;
 import jsx.ui.VirtualStructureStyle.HBOX;
 import jsx.ui.VirtualStructureStyle.SBOX;
 import jsx.ui.VirtualStructureStyle.VBOX;
+import jsx.ui.style.Style;
 import booton.css.CSS;
 
 /**
@@ -436,7 +437,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Runnable styleDefinition, Runnable children) {
+        public final void 〡(Style styleDefinition, Runnable children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
 
@@ -469,7 +470,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Runnable styleDefinition, Class<? extends Widget1<T>> childType, T... children) {
+        public final <T> void 〡(Style styleDefinition, Class<? extends Widget1<T>> childType, T... children) {
             〡(childType, Arrays.asList(children));
         }
 
@@ -499,7 +500,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Runnable styleDefinition, Class<? extends Widget1<T>> childType, Collection<T> children) {
+        public final <T> void 〡(Style styleDefinition, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // precess into child items
             int index = 0;
             Object[] childrenUI = new Object[children.size()];
