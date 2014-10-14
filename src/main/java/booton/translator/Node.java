@@ -526,7 +526,7 @@ class Node {
      * @param cases A list of case nodes.
      * @param isStringSwitch Whether this is string switch or not.
      */
-    final void createSwitch(Node defaults, int[] keys, List<Node> cases, boolean isStringSwitch) {
+    final void createSwitch(Node defaults, int[] keys, CopyOnWriteArrayList<Node> cases, boolean isStringSwitch) {
         switchy = new Switch(this, defaults, keys, cases, isStringSwitch);
 
         // connect enter node with each case node
@@ -1040,7 +1040,6 @@ class Node {
             // normal process
             if (requiredCalls <= next.currentCalls) {
                 Node dominator = next.getDominator();
-                Debugger.print(dominator.id + "  " + this.id + "   ");
 
                 if (dominator == null || dominator == this || (loop != null && loop.exit == next)) {
                     // next node inherits the mode of dominator
@@ -1344,7 +1343,7 @@ class Node {
     static class Switch extends Breakable {
 
         /** Normal switch or String switch. */
-        private final boolean isStringSwitch;
+        final boolean isStringSwitch;
 
         /** The entering node. */
         private final Node enter;
@@ -1353,10 +1352,10 @@ class Node {
         private final Operand value;
 
         /** The default node of this switch statement. */
-        private final Node defaults;
+        final Node defaults;
 
         /** The case nodes of this switch statement. */
-        private final List<Node> cases;
+        final CopyOnWriteArrayList<Node> cases;
 
         /** The case value of this switch statement. */
         private final List<Integer> keys = new ArrayList();
@@ -1375,7 +1374,7 @@ class Node {
          * @param cases
          * @param isStringSwitch
          */
-        private Switch(Node enter, Node defaults, int[] keys, List<Node> cases, boolean isStringSwitch) {
+        private Switch(Node enter, Node defaults, int[] keys, CopyOnWriteArrayList<Node> cases, boolean isStringSwitch) {
             super(enter);
 
             this.enter = enter;
@@ -1488,6 +1487,38 @@ class Node {
                 }
             }
             return defaults;
+        }
+
+        /**
+         * <p>
+         * Preprocess.
+         * </p>
+         */
+        List<Node> process() {
+            List<Node> disposables = new ArrayList();
+
+            if (isStringSwitch) {
+                // skip the value equivalent node like the following:
+                //
+                // case 97:
+                // if (value.equals("a")) {
+                // goto actual case node
+                // } else {
+                // goto default or exit node
+                // }
+                // break;
+                for (int i = 0; i < cases.size(); i++) {
+                    Node equivalent = cases.get(i);
+                    Node actualCase = equivalent.outgoing.get(equivalent.outgoing.get(0) == defaults ? 1 : 0);
+
+                    // replace to actual case node
+                    cases.set(i, actualCase);
+
+                    // dispose equivalent node
+                    disposables.add(equivalent);
+                }
+            }
+            return disposables;
         }
 
         /**
