@@ -30,4 +30,39 @@ public class BitSetTest {
         set.set(0);
         assert set.get(0) == true;
     }
+
+    @Test
+    public void setByRange() throws Exception {
+        BitSet set = new BitSet();
+        set.set(0, 3);
+
+        assert set.get(0) == true;
+        assert set.get(1) == true;
+        assert set.get(2) == true;
+        assert set.get(3) == false;
+    }
+
+    @Test
+    public void cardinality() throws Exception {
+        BitSet set = new BitSet();
+        assert set.cardinality() == 0;
+
+        set.set(0);
+        assert set.cardinality() == 1;
+
+        set.set(2);
+        assert set.cardinality() == 2;
+    }
+
+    @Test
+    public void flip() throws Exception {
+        BitSet set = new BitSet();
+        assert set.get(0) == false;
+
+        set.flip(0);
+        assert set.get(0) == true;
+
+        set.flip(0);
+        assert set.get(0) == false;
+    }
 }
