@@ -339,6 +339,15 @@ class JavaMethodCompiler extends MethodVisitor {
         // Search all backedge nodes.
         searchBackEdge(nodes.get(0), new ArrayDeque());
 
+        // Resoleve all string switch blocks
+        for (Node node : nodes) {
+            if (node.switchy != null) {
+                for (Node disposable : node.switchy.process()) {
+                    dispose(disposable, true, false);
+                }
+            }
+        }
+
         // Build dominator tree
         for (Node node : nodes) {
             Node dominator = node.getDominator();
@@ -1678,7 +1687,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitTableSwitchInsn(int min, int max, Label defaults, Label... labels) {
-        List<Node> nodes = new ArrayList();
+        CopyOnWriteArrayList<Node> nodes = new CopyOnWriteArrayList();
 
         for (Label label : labels) {
             nodes.add(getNode(label));
@@ -1697,7 +1706,7 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     @Override
     public void visitLookupSwitchInsn(Label defaults, int[] keys, Label[] labels) {
-        List<Node> nodes = new ArrayList();
+        CopyOnWriteArrayList<Node> nodes = new CopyOnWriteArrayList();
 
         for (Label label : labels) {
             nodes.add(getNode(label));
