@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import kiss.I;
-import booton.BootonConfiguration;
 
 /**
  * @version 2013/07/23 22:25:05
@@ -26,7 +25,7 @@ import booton.BootonConfiguration;
 public class CSSWriter {
 
     /** The optimization flag. */
-    private final BootonConfiguration config = I.make(BootonConfiguration.class);
+    private final boolean compression = false;
 
     /** The actual builder. */
     private final StringBuilder builder = new StringBuilder();
@@ -40,7 +39,7 @@ public class CSSWriter {
      * @return Chainable API.
      */
     public CSSWriter comment(Object comment) {
-        if (!config.compression) {
+        if (!compression) {
             builder.append("/* ").append(comment).append(" */");
             line();
         }
@@ -55,7 +54,7 @@ public class CSSWriter {
      * @return Chainable API.
      */
     public CSSWriter line() {
-        if (!config.compression) {
+        if (!compression) {
             builder.append("\r\n");
         }
         return this;
@@ -69,7 +68,7 @@ public class CSSWriter {
      * @return Chainable API.
      */
     public CSSWriter indent() {
-        if (!config.compression) {
+        if (!compression) {
             builder.append("  ");
         }
         return this;
@@ -217,7 +216,7 @@ public class CSSWriter {
     public CSSWriter write(String... params) {
         for (String param : params) {
             if (param != null) {
-                if (!config.compression) {
+                if (!compression) {
                     switch (param) {
                     case "{":
                         builder.append(" ");
@@ -227,7 +226,7 @@ public class CSSWriter {
 
                 builder.append(param);
 
-                if (!config.compression) {
+                if (!compression) {
                     switch (param) {
                     case ":":
                         builder.append(" ");

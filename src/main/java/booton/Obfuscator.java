@@ -13,16 +13,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import kiss.I;
 import booton.translator.UnsafeWordCalculator;
 
 /**
  * @version 2013/01/21 0:40:53
  */
 public class Obfuscator {
-
-    /** The configuration. */
-    private static final BootonConfiguration config = I.make(BootonConfiguration.class);
 
     /**
      * The sorterd hash of unsafe words in ECMA Script. These values are calculated and hard-coded

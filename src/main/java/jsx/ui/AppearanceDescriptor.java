@@ -14,12 +14,11 @@ import java.util.function.Predicate;
 import javafx.beans.value.ObservableValue;
 
 import kiss.Extensible;
-import booton.css.CSS;
 
 /**
  * @version 2014/10/10 22:40:50
  */
-public class AppearanceDescriptor<W extends Widget> extends CSS implements Extensible {
+public class AppearanceDescriptor<W extends Widget> implements Extensible {
 
     /** The target widget. */
     protected W widget;

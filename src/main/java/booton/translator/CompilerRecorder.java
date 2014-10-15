@@ -166,7 +166,8 @@ class CompilerRecorder {
          */
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder(" at ").append(script.source.getName())
+            StringBuilder builder = new StringBuilder(" at ")
+                    .append(script.source.getName())
                     .append('.')
                     .append(method)
                     .append('(')
