@@ -14,7 +14,6 @@ import java.util.List;
 
 import js.dom.Element;
 import js.lang.NativeArray;
-import jsx.style.StyleDeclaration;
 import jsx.ui.Patch.AddAttribute;
 import jsx.ui.Patch.AddClass;
 import jsx.ui.Patch.ChangeAttribute;
@@ -86,11 +85,11 @@ class PatchDiff {
      * @param next A next state.
      * @return
      */
-    static List<Patch> diff(Element context, NativeArray<StyleDeclaration> prev, NativeArray<StyleDeclaration> next) {
+    static List<Patch> diff(Element context, NativeArray<String> prev, NativeArray<String> next) {
         List<Patch> patches = new ArrayList();
 
         for (int i = 0, length = next.length(); i < length; i++) {
-            StyleDeclaration nextClass = next.get(i);
+            String nextClass = next.get(i);
             int prevIndex = prev.indexOf(nextClass);
 
             if (prevIndex == -1) {
@@ -99,7 +98,7 @@ class PatchDiff {
         }
 
         for (int i = 0, length = prev.length(); i < length; i++) {
-            StyleDeclaration prevClass = prev.get(i);
+            String prevClass = prev.get(i);
 
             if (next.indexOf(prevClass) == -1) {
                 patches.add(new RemoveClass(context, prevClass));

@@ -1232,7 +1232,9 @@ class JavaMethodCompiler extends MethodVisitor {
         // detect style cass assignment
         if (StyleDeclaration.class.isAssignableFrom(interfaceClass)) {
             String styleClassName = StyleDeclaration.computeStyleClassName(lambdaClass, handle.getName());
-            System.out.println(styleClassName);
+            current.remove(0);
+            current.addOperand(new OperandString(styleClassName));
+            return;
         }
 
         // build parameter from local environment

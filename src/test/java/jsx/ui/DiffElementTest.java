@@ -283,7 +283,7 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, List<StyleDeclaration> classes, VirtualNode... children) {
+    private static VirtualElement e(String key, List<String> classes, VirtualNode... children) {
         return e(key, noAttr, classes, children);
     }
 
@@ -317,14 +317,14 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, Map<String, String> attributes, List<StyleDeclaration> classes, VirtualNode... children) {
+    private static VirtualElement e(String key, Map<String, String> attributes, List<String> classes, VirtualNode... children) {
         VirtualElement e = new VirtualElement(key.hashCode(), key);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
             e.attributes.set(attribute.getKey(), attribute.getValue());
         }
 
-        for (StyleDeclaration clazz : classes) {
+        for (String clazz : classes) {
             e.classList.push(clazz);
         }
 
@@ -360,11 +360,11 @@ public class DiffElementTest extends DiffTestBase {
      * @param classes
      * @return
      */
-    private static List<StyleDeclaration> clazz(StyleDeclaration... classes) {
-        List<StyleDeclaration> list = new ArrayList();
+    private static List<String> clazz(StyleDeclaration... classes) {
+        List<String> list = new ArrayList();
 
         for (int i = 0; i < classes.length; i++) {
-            list.add(classes[i]);
+            list.add(LocalId.generateClassName(classes[i]));
         }
         return list;
     }

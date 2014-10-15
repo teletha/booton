@@ -11,6 +11,7 @@ package jsx.ui;
 
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,11 @@ import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
+import jsx.style.StyleDeclaration;
 import kiss.I;
+
+import sun.reflect.ConstantPool;
+
 import booton.translator.Translator;
 
 /**
@@ -29,6 +34,19 @@ class LocalId {
 
     /** The class name. */
     private static final String CLASS = VirtualStructure.class.getName() + "$";
+
+    /** The accessible internal method for lambda info. */
+    private static final Method findConstants;
+
+    static {
+        try {
+            // reflect lambda info related methods
+            findConstants = Class.class.getDeclaredMethod("getConstantPool");
+            findConstants.setAccessible(true);
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
 
     /**
      * <p>
@@ -53,6 +71,34 @@ class LocalId {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
+    }
+
+    /**
+     * <p>
+     * Generate class name.
+     * </p>
+     * 
+     * @param style
+     * @return
+     */
+    static final String generateClassName(StyleDeclaration style) {
+        if (style == null) {
+            return "";
+        }
+
+        try {
+            ConstantPool constantPool = (ConstantPool) findConstants.invoke(style.getClass());
+
+            // MethodInfo
+            // [0] : Declared Class Name (internal qualified name)
+            // [1] : Method Name
+            // [2] : Method Descriptor (internal qualified signature)
+            String[] methodInfo = constantPool.getMemberRefInfoAt(25);
+            return StyleDeclaration
+                    .computeStyleClassName(Class.forName(methodInfo[0].replace('/', '.')), methodInfo[1]);
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
     }
 
     /**
@@ -219,6 +265,18 @@ class LocalId {
          */
         public String generate() {
             return "0";
+        }
+
+        /**
+         * <p>
+         * Generate class name.
+         * </p>
+         * 
+         * @param style
+         * @return
+         */
+        public String generateClassName(StyleDeclaration style) {
+            return param(0);
         }
 
         /**

@@ -11,7 +11,6 @@ package jsx.ui;
 
 import js.dom.Element;
 import js.dom.Node;
-import jsx.style.StyleDeclaration;
 
 /**
  * @version 2014/09/08 18:21:16
@@ -338,13 +337,13 @@ abstract class Patch {
     private static abstract class ClassPatch extends Patch {
 
         /** The class name. */
-        protected final StyleDeclaration className;
+        protected final String className;
 
         /**
          * @param parent
          * @param className
          */
-        private ClassPatch(Element parent, StyleDeclaration className) {
+        private ClassPatch(Element parent, String className) {
             super(parent);
 
             this.className = className;
@@ -364,7 +363,7 @@ abstract class Patch {
          * @param parent
          * @param name
          */
-        AddClass(Element parent, StyleDeclaration className) {
+        AddClass(Element parent, String className) {
             super(parent, className);
         }
 
@@ -390,7 +389,7 @@ abstract class Patch {
          * @param parent
          * @param name
          */
-        RemoveClass(Element parent, StyleDeclaration className) {
+        RemoveClass(Element parent, String className) {
             super(parent, className);
         }
 
@@ -399,7 +398,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.remove(className);
+            parent.removeClass(className);
         }
     }
 }
