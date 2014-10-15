@@ -222,7 +222,7 @@ public final class VirtualStructure {
         protected final String name;
 
         /** The built-in style. */
-        protected final StyleDeclaration builtin;
+        protected final String builtin;
 
         /** The container {@link VirtualElement}. */
         protected VirtualElement container;
@@ -239,7 +239,7 @@ public final class VirtualStructure {
          */
         private Descriptor(String name, StyleDeclaration builtin) {
             this.name = name;
-            this.builtin = builtin;
+            this.builtin = LocalId.generateClassName(builtin);
         }
 
         /**
