@@ -7,12 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.style;
+package jsx.style;
 
 /**
- * @version 2014/10/13 17:21:32
+ * @version 2014/10/15 14:31:26
  */
-public interface Style {
+public enum MediaQuery {
 
-    void define();
+    SmartPhone, Tablet, PC;
 }

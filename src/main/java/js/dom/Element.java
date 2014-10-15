@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import js.lang.NativeObject;
+import jsx.style.StyleDeclaration;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -30,6 +31,21 @@ import booton.translator.JavascriptNativePropertyAccessor;
  */
 @JavascriptAPIProvider
 public abstract class Element extends Node<Element> implements JavascriptNative {
+
+    /**
+     * <p>
+     * Adds the specified class to this elements.
+     * </p>
+     * 
+     * @param classNames A class name to be added to the class attribute of this element.
+     * @return Chainable API.
+     */
+    public Element add(StyleDeclaration className) {
+        classList().add(className);
+
+        // API definition
+        return this;
+    }
 
     /**
      * <p>
@@ -290,6 +306,21 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public Element remove(String name) {
         ((NativeObject) (Object) this).deleteProperty(name);
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Remove a class from this element.
+     * </p>
+     * 
+     * @param className A class name to be removed from the class attribute of this element.
+     * @return Chainable API.
+     */
+    public Element remove(StyleDeclaration className) {
+        classList().remove(className);
 
         // API definition
         return this;

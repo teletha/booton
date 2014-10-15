@@ -39,6 +39,7 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
+import jsx.style.StyleDeclaration;
 import jsx.ui.VirtualStructure;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import jsx.ui.VirtualStructure.Descriptor;
@@ -1221,11 +1222,18 @@ class JavaMethodCompiler extends MethodVisitor {
         boolean useContext = callerType.getArgumentTypes().length - Math.max(parameterDiff, 0) == 1;
 
         // detect functional interface
-        String interfaceClass = Javascript.computeClass(convert(callerType.getReturnType()));
+        Class interfaceClass = convert(callerType.getReturnType());
+        String interfaceClassName = Javascript.computeClass(interfaceClass);
 
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
         String lambdaMethodName = '"' + Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc()) + '"';
+
+        // detect style cass assignment
+        if (StyleDeclaration.class.isAssignableFrom(interfaceClass)) {
+            String styleClassName = StyleDeclaration.computeStyleClassName(lambdaClass, handle.getName());
+            System.out.println(styleClassName);
+        }
 
         // build parameter from local environment
         StringJoiner parameters = new StringJoiner(",", "[", "]");
@@ -1267,7 +1275,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // create lambda proxy class
         current
                 .addOperand(Javascript
-                        .writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClass, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters
+                        .writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters
                                 .toString()));
     }
 

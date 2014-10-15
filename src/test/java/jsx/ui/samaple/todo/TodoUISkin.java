@@ -9,12 +9,12 @@
  */
 package jsx.ui.samaple.todo;
 
-import jsx.ui.AppearanceDescriptor;
+import jsx.style.Style;
 
 /**
  * @version 2014/10/10 15:45:31
  */
-public class TodoUISkin extends AppearanceDescriptor<TodoUI> {
+public class TodoUISkin extends Style {
 
     // /**
     // * {@inheritDoc}

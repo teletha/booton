@@ -7,18 +7,14 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
-
-import jsx.style.Style;
-import kiss.I;
-import kiss.model.ClassUtil;
+package jsx.style;
 
 /**
- * @version 2014/10/10 22:37:09
+ * @version 2014/10/15 13:44:14
  */
-public interface Appearance<S extends Style> {
+public class StyleSample extends Style {
 
-    default S visualize() {
-        return (S) I.find(Style.class, ClassUtil.getParameter(getClass(), Appearance.class)[0]);
+    public void footer() {
+        // display.block();
     }
 }

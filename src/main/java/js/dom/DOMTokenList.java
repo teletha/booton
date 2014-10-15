@@ -9,6 +9,7 @@
  */
 package js.dom;
 
+import jsx.style.StyleDeclaration;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -35,6 +36,15 @@ public class DOMTokenList implements JavascriptNative {
      * 
      * @param className A class name to add.
      */
+    public native void add(StyleDeclaration className);
+
+    /**
+     * <p>
+     * Add class.
+     * </p>
+     * 
+     * @param className A class name to add.
+     */
     public native void add(Class<? extends CSS> className);
 
     /**
@@ -45,6 +55,15 @@ public class DOMTokenList implements JavascriptNative {
      * @param className A class name to remove.
      */
     public native void remove(String className);
+
+    /**
+     * <p>
+     * Remove class.
+     * </p>
+     * 
+     * @param className A class name to remove.
+     */
+    public native void remove(StyleDeclaration className);
 
     /**
      * <p>
