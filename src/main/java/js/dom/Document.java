@@ -9,6 +9,7 @@
  */
 package js.dom;
 
+import js.lang.NativeCSSStyleSheetList;
 import booton.css.CSS;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -152,4 +153,15 @@ public abstract class Document extends Node implements JavascriptNative {
      */
     @JavascriptNativeProperty
     public final native Element getElementById(String id);
+
+    /**
+     * <p>
+     * Returns {@link NativeCSSStyleSheetList} for stylesheets explicitly linked into or embedded in
+     * a document.
+     * </p>
+     * 
+     * @return
+     */
+    @JavascriptNativePropertyAccessor
+    public final native NativeCSSStyleSheetList styleSheets();
 }

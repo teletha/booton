@@ -10,16 +10,11 @@
 package jsx.ui.samaple.todo;
 
 import jsx.ui.AppearanceDescriptor;
-import jsx.ui.style.Style;
 
 /**
  * @version 2014/10/10 15:45:31
  */
 public class TodoUISkin extends AppearanceDescriptor<TodoUI> {
-
-    public Style items = () -> {
-
-    };
 
     // /**
     // * {@inheritDoc}
@@ -33,7 +28,7 @@ public class TodoUISkin extends AppearanceDescriptor<TodoUI> {
     }
 
     public void footer() {
-        font.color(rgb(40, 40, 250));
+        // font.color(rgb(40, 40, 250));
     }
 
     public void buttons() {

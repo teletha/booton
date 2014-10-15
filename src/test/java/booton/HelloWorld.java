@@ -10,6 +10,8 @@
 package booton;
 
 import js.lang.Global;
+import js.lang.NativeCSSRuleList;
+import js.lang.NativeCSSStyleSheetList;
 import jsx.ui.Widget;
 import jsx.ui.samaple.todo.TodoTasks;
 import jsx.ui.samaple.todo.TodoUI;
@@ -28,6 +30,16 @@ public class HelloWorld {
      */
     public static void main(String[] args) {
         System.out.println("Hello World!");
+
+        NativeCSSStyleSheetList styleSheets = Global.document.styleSheets();
+
+        for (int i = 0; i < styleSheets.length(); i++) {
+            NativeCSSRuleList rules = styleSheets.item(i).getRules();
+
+            for (int j = 0; j < rules.length(); j++) {
+                System.out.println(rules.item(j).getCSSText());
+            }
+        }
 
         TodoTasks tasks = new TodoTasks();
 

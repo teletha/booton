@@ -349,7 +349,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Runnable styleDefinition, Object... children) {
+        public final void 〡(Style styleDefinition, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
 
