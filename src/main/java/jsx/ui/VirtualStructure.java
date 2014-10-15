@@ -14,16 +14,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
-import jsx.ui.VirtualStructureStyle.HBOX;
-import jsx.ui.VirtualStructureStyle.SBOX;
-import jsx.ui.VirtualStructureStyle.VBOX;
-import jsx.ui.style.Style;
-import booton.css.CSS;
+import jsx.style.StyleDeclaration;
+import kiss.I;
 
 /**
  * @version 2014/09/13 1:52:02
  */
 public final class VirtualStructure {
+
+    private static final VirtualStructureStyle $ = I.make(VirtualStructureStyle.class);
 
     /**
      * <p>
@@ -42,7 +41,7 @@ public final class VirtualStructure {
      * 
      * @see #hbox(int)
      */
-    public final ContainerDescriptor hbox = new ContainerDescriptor("hbox", HBOX.class);
+    public final ContainerDescriptor hbox = new ContainerDescriptor("hbox", $::HBOX);
 
     /**
      * <p>
@@ -54,7 +53,7 @@ public final class VirtualStructure {
      * 
      * @see #vbox(int)
      */
-    public final ContainerDescriptor sbox = new ContainerDescriptor("sbox", SBOX.class);
+    public final ContainerDescriptor sbox = new ContainerDescriptor("sbox", $::SBOX);
 
     /**
      * <p>
@@ -66,7 +65,7 @@ public final class VirtualStructure {
      * 
      * @see #sbox(int)
      */
-    public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX.class);
+    public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", $::VBOX);
 
     /** The latest context line number. */
     protected int latestContextId;
@@ -223,7 +222,7 @@ public final class VirtualStructure {
         protected final String name;
 
         /** The built-in style. */
-        protected final Class<? extends CSS> builtin;
+        protected final StyleDeclaration builtin;
 
         /** The container {@link VirtualElement}. */
         protected VirtualElement container;
@@ -238,7 +237,7 @@ public final class VirtualStructure {
          * @param name
          * @param builtin
          */
-        private Descriptor(String name, Class<? extends CSS> builtin) {
+        private Descriptor(String name, StyleDeclaration builtin) {
             this.name = name;
             this.builtin = builtin;
         }
@@ -349,7 +348,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Style styleDefinition, Object... children) {
+        public final void 〡(StyleDeclaration style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
 
@@ -404,7 +403,7 @@ public final class VirtualStructure {
          * @param name A container element name.
          * @param style A element style.
          */
-        private ContainerDescriptor(String name, Class<? extends CSS> style) {
+        private ContainerDescriptor(String name, StyleDeclaration style) {
             super(name, style);
         }
 
@@ -437,7 +436,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Style styleDefinition, Runnable children) {
+        public final void 〡(StyleDeclaration style, Runnable children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
 
@@ -470,7 +469,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Style styleDefinition, Class<? extends Widget1<T>> childType, T... children) {
+        public final <T> void 〡(StyleDeclaration style, Class<? extends Widget1<T>> childType, T... children) {
             〡(childType, Arrays.asList(children));
         }
 
@@ -500,7 +499,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Style styleDefinition, Class<? extends Widget1<T>> childType, Collection<T> children) {
+        public final <T> void 〡(StyleDeclaration style, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // precess into child items
             int index = 0;
             Object[] childrenUI = new Object[children.size()];
@@ -510,19 +509,6 @@ public final class VirtualStructure {
             }
 
             〡(childrenUI);
-        }
-
-        /**
-         * <p>
-         * Append the specified items as child node.
-         * </p>
-         * 
-         * @param items Child nodes to append.
-         */
-        public final ContainerDescriptor 〡(Class<? extends CSS> className) {
-            container(LocalId.findContextLineNumber()).classList.push(className);
-
-            return this;
         }
 
         /**
