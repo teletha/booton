@@ -222,4 +222,11 @@ public class TodoUI extends Widget1<TodoTasks> {
             return predicate.test(t);
         }
     }
+
+    /**
+     * @version 2014/10/16 15:18:03
+     */
+    private static class InputAnimation {
+
+    }
 }

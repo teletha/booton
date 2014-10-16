@@ -17,7 +17,6 @@ import java.util.Deque;
 import jsx.ui.VirtualStructureStyle.HBOX;
 import jsx.ui.VirtualStructureStyle.SBOX;
 import jsx.ui.VirtualStructureStyle.VBOX;
-import kiss.I;
 import booton.css.CSS;
 import booton.css.StyleDeclaration;
 
@@ -25,8 +24,6 @@ import booton.css.StyleDeclaration;
  * @version 2014/09/13 1:52:02
  */
 public final class VirtualStructure {
-
-    private static final VirtualStructureStyle $ = I.make(VirtualStructureStyle.class);
 
     /**
      * <p>
