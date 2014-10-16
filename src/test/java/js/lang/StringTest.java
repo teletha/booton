@@ -285,6 +285,7 @@ public class StringTest {
     @Test
     public void replaceChar() throws Exception {
         assert "abcabc".replace('a', 'A').equals("AbcAbc");
+        assert "a.b.c".replace('.', '_').equals("a_b_c");
     }
 
     @Test

@@ -11,6 +11,7 @@ package jsx.ui;
 
 import js.dom.Element;
 import js.dom.Node;
+import booton.css.CSS;
 
 /**
  * @version 2014/09/08 18:21:16
@@ -337,13 +338,13 @@ abstract class Patch {
     private static abstract class ClassPatch extends Patch {
 
         /** The class name. */
-        protected final String className;
+        protected final Class<? extends CSS> className;
 
         /**
          * @param parent
          * @param className
          */
-        private ClassPatch(Element parent, String className) {
+        private ClassPatch(Element parent, Class<? extends CSS> className) {
             super(parent);
 
             this.className = className;
@@ -363,7 +364,7 @@ abstract class Patch {
          * @param parent
          * @param name
          */
-        AddClass(Element parent, String className) {
+        AddClass(Element parent, Class<? extends CSS> className) {
             super(parent, className);
         }
 
@@ -389,7 +390,7 @@ abstract class Patch {
          * @param parent
          * @param name
          */
-        RemoveClass(Element parent, String className) {
+        RemoveClass(Element parent, Class<? extends CSS> className) {
             super(parent, className);
         }
 
@@ -398,7 +399,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.removeClass(className);
+            parent.remove(className);
         }
     }
 }

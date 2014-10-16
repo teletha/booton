@@ -9,35 +9,44 @@
  */
 package jsx.ui;
 
-import jsx.style.Style;
+import booton.css.CSS;
 
 /**
  * @version 2014/09/12 11:00:18
  */
-class VirtualStructureStyle extends Style {
+class VirtualStructureStyle {
 
     /**
      * @version 2014/09/12 19:20:09
      */
-    void HBOX() {
-        // display.flex();
+    static class HBOX extends CSS {
+
+        {
+            display.flex();
+        }
     }
 
     /**
      * @version 2014/09/12 19:20:11
      */
-    void VBOX() {
-        // display.flex().direction.column();
+    static class VBOX extends CSS {
+
+        {
+            display.flex().direction.column();
+        }
     }
 
     /**
      * @version 2014/09/12 19:20:14
      */
-    void SBOX() {
-        // position.relative();
-        //
-        // children(() -> {
-        // position.absolute();
-        // });
+    static class SBOX extends CSS {
+
+        {
+            position.relative();
+
+            children(() -> {
+                position.absolute();
+            });
+        }
     }
 }

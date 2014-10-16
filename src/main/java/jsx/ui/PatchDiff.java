@@ -24,6 +24,7 @@ import jsx.ui.Patch.RemoveChild;
 import jsx.ui.Patch.RemoveClass;
 import jsx.ui.Patch.ReplaceChild;
 import jsx.ui.Patch.ReplaceText;
+import booton.css.CSS;
 
 /**
  * @version 2014/10/07 12:49:34
@@ -85,11 +86,11 @@ class PatchDiff {
      * @param next A next state.
      * @return
      */
-    static List<Patch> diff(Element context, NativeArray<String> prev, NativeArray<String> next) {
+    static List<Patch> diff(Element context, NativeArray<Class<? extends CSS>> prev, NativeArray<Class<? extends CSS>> next) {
         List<Patch> patches = new ArrayList();
 
         for (int i = 0, length = next.length(); i < length; i++) {
-            String nextClass = next.get(i);
+            Class<? extends CSS> nextClass = next.get(i);
             int prevIndex = prev.indexOf(nextClass);
 
             if (prevIndex == -1) {
@@ -98,7 +99,7 @@ class PatchDiff {
         }
 
         for (int i = 0, length = prev.length(); i < length; i++) {
-            String prevClass = prev.get(i);
+            Class<? extends CSS> prevClass = prev.get(i);
 
             if (next.indexOf(prevClass) == -1) {
                 patches.add(new RemoveClass(context, prevClass));

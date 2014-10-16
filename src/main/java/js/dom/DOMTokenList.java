@@ -9,7 +9,6 @@
  */
 package js.dom;
 
-import jsx.style.StyleDeclaration;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;

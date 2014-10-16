@@ -487,7 +487,7 @@ class JSString implements Comparable<String>, CharSequence {
      *         <code>oldChar</code> with <code>newChar</code>.
      */
     public String replace(char oldChar, char newChar) {
-        return (String) (Object) that.replace(oldChar, newChar);
+        return (String) (Object) that.replace(Pattern.quote(String.valueOf(oldChar)), String.valueOf(newChar));
     }
 
     /**

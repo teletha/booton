@@ -9,14 +9,9 @@
  */
 package js.dom;
 
-import java.lang.reflect.Method;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import jsx.style.StyleDeclaration;
 import kiss.I;
-
-import sun.reflect.ConstantPool;
-
 import booton.Obfuscator;
 import booton.css.CSS;
 

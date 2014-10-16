@@ -39,7 +39,6 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
-import jsx.style.StyleDeclaration;
 import jsx.ui.VirtualStructure;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import jsx.ui.VirtualStructure.Descriptor;
@@ -1228,14 +1227,6 @@ class JavaMethodCompiler extends MethodVisitor {
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
         String lambdaMethodName = '"' + Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc()) + '"';
-
-        // detect style cass assignment
-        if (StyleDeclaration.class.isAssignableFrom(interfaceClass)) {
-            String styleClassName = StyleDeclaration.computeStyleClassName(lambdaClass, handle.getName());
-            current.remove(0);
-            current.addOperand(new OperandString(styleClassName));
-            return;
-        }
 
         // build parameter from local environment
         StringJoiner parameters = new StringJoiner(",", "[", "]");

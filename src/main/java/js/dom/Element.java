@@ -39,21 +39,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classNames A class name to be added to the class attribute of this element.
      * @return Chainable API.
      */
-    public Element add(String className) {
-        classList().add(className);
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Adds the specified class to this elements.
-     * </p>
-     * 
-     * @param classNames A class name to be added to the class attribute of this element.
-     * @return Chainable API.
-     */
     public Element add(Class<? extends CSS> className) {
         classList().add(className);
 
@@ -305,21 +290,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public Element remove(String name) {
         ((NativeObject) (Object) this).deleteProperty(name);
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Remove a class from this element.
-     * </p>
-     * 
-     * @param className A class name to be removed from the class attribute of this element.
-     * @return Chainable API.
-     */
-    public Element removeClass(String className) {
-        classList().remove(className);
 
         // API definition
         return this;
