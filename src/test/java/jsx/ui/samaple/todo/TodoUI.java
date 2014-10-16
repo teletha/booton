@@ -19,7 +19,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import jsx.ui.Appearance;
 import jsx.ui.BindingHelper;
 import jsx.ui.Key;
 import jsx.ui.VirtualStructure;
@@ -29,15 +28,15 @@ import jsx.ui.piece.CheckBox;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.samaple.todo.TodoTasks.Task;
+import jsx.ui.samaple.todo.TodoUIStyle.BUTTONS;
+import jsx.ui.samaple.todo.TodoUIStyle.FOOTER;
+import jsx.ui.samaple.todo.TodoUIStyle.ITEMS;
 import booton.reactive.css.DynamicStyle;
 
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends Widget1<TodoTasks> implements Appearance<TodoUISkin> {
-
-    /** The skin. */
-    private final TodoUISkin $ = visualize();
+public class TodoUI extends Widget1<TodoTasks> {
 
     /** Reassign to meaningful name. */
     final TodoTasks todos = model1;
@@ -134,10 +133,10 @@ public class TodoUI extends Widget1<TodoTasks> implements Appearance<TodoUISkin>
         int imcompleted = incompletedSize.get();
 
         $〡.asis.〡(input);
-        $〡.vbox.〡($::items, Item.class, todos.list);
-        $〡.hbox.〡($::footer, () -> {
+        $〡.vbox.〡(ITEMS.class, Item.class, todos.list);
+        $〡.hbox.〡(FOOTER.class, () -> {
             $〡.hbox.〡(imcompleted, imcompleted < 2 ? " item" : " items", " left");
-            $〡.hbox.〡($::buttons, all, active, completed);
+            $〡.hbox.〡(BUTTONS.class, all, active, completed);
             $〡.asis.〡(clear);
         });
     }

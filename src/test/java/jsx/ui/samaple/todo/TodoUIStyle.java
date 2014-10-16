@@ -16,7 +16,7 @@ import booton.css.CSS;
  */
 class TodoUIStyle {
 
-    class LIST extends CSS {
+    class ITEMS extends CSS {
 
         {
 
