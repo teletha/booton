@@ -27,6 +27,7 @@ import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
+import booton.css.CSS;
 import booton.reactive.css.StyleDefinition;
 
 /**
@@ -164,6 +165,10 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     }
 
     public T hideIf(ObservableValue<Boolean> condition) {
+        return (T) this;
+    }
+
+    public T styleIf(ObservableValue<Boolean> condition, Class<? extends CSS> onStyle) {
         return (T) this;
     }
 

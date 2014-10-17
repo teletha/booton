@@ -302,44 +302,7 @@ public final class VirtualStructure {
          * @param children A list of child nodes.
          */
         public final void 〡(Object... children) {
-            // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
-
-            // enter into the child node
-            if (name != null) parents.addLast(container);
-
-            // process into child nodes
-            for (Object child : children) {
-                if (child instanceof Widget) {
-                    Widget widget = (Widget) child;
-
-                    // create virtual element for this widget
-                    VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
-
-                    // mount virtual element on virtual structure
-                    container.items.push(virtualize);
-
-                    // process child nodes
-                    widget.assemble(new VirtualStructure(virtualize));
-                } else if (child instanceof LowLevelWidget) {
-                    LowLevelWidget widget = (LowLevelWidget) child;
-
-                    // create descriptor
-                    ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
-                    descriptor.localId = widget.hashCode();
-
-                    // process child node
-                    widget.virtualizeStructure(descriptor);
-
-                    // pass event listners
-                    descriptor.container(0).events = widget.events;
-                } else {
-                    container.items.push(new VirtualText(child.toString()));
-                }
-            }
-
-            // leave from the child node
-            if (name != null) parents.pollLast();
+            〡(null, children);
         }
 
         /**

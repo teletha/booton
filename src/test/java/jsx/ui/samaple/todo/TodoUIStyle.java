@@ -43,4 +43,11 @@ class TodoUIStyle {
 
         }
     }
+
+    class SelectedFilter extends CSS {
+
+        {
+            font.weight.bold();
+        }
+    }
 }
