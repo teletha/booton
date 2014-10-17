@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 
 import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -31,6 +31,7 @@ import jsx.ui.samaple.todo.TodoTasks.Task;
 import jsx.ui.samaple.todo.TodoUIStyle.BUTTONS;
 import jsx.ui.samaple.todo.TodoUIStyle.FOOTER;
 import jsx.ui.samaple.todo.TodoUIStyle.ITEMS;
+import jsx.ui.samaple.todo.TodoUIStyle.SelectedFilter;
 import booton.reactive.css.DynamicStyle;
 
 /**
@@ -42,7 +43,7 @@ public class TodoUI extends Widget1<TodoTasks> {
     final TodoTasks todos = model1;
 
     /** The filter model. */
-    final Property<Filter> filter = new SimpleObjectProperty(Filter.All);
+    final ObjectProperty<Filter> filter = new SimpleObjectProperty(Filter.All);
 
     /** The completed tasks. */
     final IntegerExpression completedSize = BindingHelper.filter(todos.list, Task::isCompleted).sizeProperty();
@@ -67,15 +68,24 @@ public class TodoUI extends Widget1<TodoTasks> {
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
-    final Button all = new Button().label("all").click(this::showAll).style(selectedFileter.is(Filter.All));
+    final Button all = new Button()
+            .label("all")
+            .click(this::showAll)
+            .styleIf(filter.isEqualTo(Filter.All), SelectedFilter.class)
+            .style(selectedFileter.is(Filter.All));
 
     /** The filter button. */
-    final Button active = new Button().label("active").click(this::showActive).style(selectedFileter.is(Filter.Active));
+    final Button active = new Button()
+            .label("active")
+            .click(this::showActive)
+            .styleIf(filter.isEqualTo(Filter.Active), SelectedFilter.class)
+            .style(selectedFileter.is(Filter.Active));
 
     /** The filter button. */
     final Button completed = new Button()
             .label("completed")
             .click(this::showCompleted)
+            .styleIf(filter.isEqualTo(Filter.Completed), SelectedFilter.class)
             .style(selectedFileter.is(Filter.Completed));
 
     /** The clear button. */
@@ -221,12 +231,5 @@ public class TodoUI extends Widget1<TodoTasks> {
         public boolean test(Task t) {
             return predicate.test(t);
         }
-    }
-
-    /**
-     * @version 2014/10/16 15:18:03
-     */
-    private static class InputAnimation {
-
     }
 }
