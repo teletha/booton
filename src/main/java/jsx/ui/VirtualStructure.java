@@ -10,7 +10,6 @@
 package jsx.ui;
 
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 
@@ -18,7 +17,6 @@ import jsx.ui.VirtualStructureStyle.HBOX;
 import jsx.ui.VirtualStructureStyle.SBOX;
 import jsx.ui.VirtualStructureStyle.VBOX;
 import booton.css.CSS;
-import booton.css.StyleDeclaration;
 
 /**
  * @version 2014/09/13 1:52:02
@@ -302,7 +300,7 @@ public final class VirtualStructure {
          * @param children A list of child nodes.
          */
         public final void 〡(Object... children) {
-            〡(null, children);
+            〡((Class<? extends CSS>) null, children);
         }
 
         /**
@@ -312,7 +310,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(StyleDeclaration style, Object... children) {
+        public final void 〡(Class<? extends CSS> style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
 
@@ -345,7 +343,7 @@ public final class VirtualStructure {
                     // pass event listners
                     descriptor.container(0).events = widget.events;
                 } else {
-                    container.items.push(new VirtualText(child.toString()));
+                    container.items.push(new VirtualText(String.valueOf(child)));
                 }
             }
 
@@ -422,38 +420,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends Widget1<T>> childType, T... children) {
-            〡(childType, Arrays.asList(children));
-        }
-
-        /**
-         * <p>
-         * Define children.
-         * </p>
-         * 
-         * @param children A list of child widget.
-         */
-        public final <T> void 〡(Class<? extends CSS> style, Class<? extends Widget1<T>> childType, T... children) {
-            〡(childType, Arrays.asList(children));
-        }
-
-        /**
-         * <p>
-         * Define children.
-         * </p>
-         * 
-         * @param children A list of child widget.
-         */
         public final <T> void 〡(Class<? extends Widget1<T>> childType, Collection<T> children) {
-            // precess into child items
-            int index = 0;
-            Object[] childrenUI = new Object[children.size()];
-
-            for (T child : children) {
-                childrenUI[index++] = Widget.of(childType, child);
-            }
-
-            〡(childrenUI);
+            〡((Class<? extends CSS>) null, childType, children);
         }
 
         /**
