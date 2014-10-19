@@ -50,4 +50,5 @@ class TodoUIStyle {
             font.weight.bold();
         }
     }
+
 }

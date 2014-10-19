@@ -59,6 +59,9 @@ public class TodoUI extends Widget1<TodoTasks> {
         }
     };
 
+    /** The output field. */
+    final Output text = new Output(incompletedSize, v -> v + (v < 2 ? " item" : " items") + " left");
+
     /** The input field. */
     final Input input = new Input()
             .disableIf(this::isValidTaskSize)
@@ -140,12 +143,10 @@ public class TodoUI extends Widget1<TodoTasks> {
      */
     @Override
     protected void virtualize(VirtualStructure $〡) {
-        int imcompleted = incompletedSize.get();
-
         $〡.asis.〡(input);
         $〡.vbox.〡(ITEMS.class, Item.class, todos.list);
         $〡.hbox.〡(FOOTER.class, () -> {
-            $〡.hbox.〡(imcompleted, imcompleted < 2 ? " item" : " items", " left");
+            $〡.asis.〡(text);
             $〡.hbox.〡(BUTTONS.class, all, active, completed);
             $〡.asis.〡(clear);
         });

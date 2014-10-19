@@ -9,10 +9,15 @@
  */
 package jsx.ui.piece;
 
+import java.util.function.Function;
+
+import javafx.beans.binding.IntegerExpression;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import jsx.ui.LowLevelWidget;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
+import kiss.I;
 
 /**
  * @version 2014/08/22 11:27:22
@@ -21,6 +26,20 @@ public class Output extends LowLevelWidget<Output> {
 
     /** The text contents. */
     public final StringProperty text;
+
+    /**
+     * <p>
+     * Create text {@link Output} with the specified value.
+     * </p>
+     * 
+     * @param text
+     */
+    public Output(IntegerExpression value, Function<Integer, String> converter) {
+        this.text = new SimpleStringProperty(converter.apply(value.getValue()));
+
+        I.observe(value).as(Integer.class).map(converter).to(v -> text.set(v));
+
+    }
 
     /**
      * <p>
