@@ -11,7 +11,7 @@ package booton.css.property;
 
 import java.util.EnumMap;
 
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.value.Color;
 import booton.css.value.Numeric;
 
@@ -94,7 +94,7 @@ public class Borders extends BorderSet {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         if (match(widths) && match(styles) && match(colors)) {
             Numeric width = widths.get(Side.Top);
             BorderStyle style = styles.get(Side.Top);

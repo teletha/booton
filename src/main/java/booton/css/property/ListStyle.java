@@ -10,7 +10,7 @@
 package booton.css.property;
 
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 
 /**
  * @version 2012/12/14 23:53:43
@@ -41,7 +41,7 @@ public class ListStyle extends CSSProperty<ListStyle> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         writer.property("list-style", image, type, position);
     }
 

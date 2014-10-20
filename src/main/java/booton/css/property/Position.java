@@ -10,7 +10,7 @@
 package booton.css.property;
 
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.value.Numeric;
 
@@ -35,7 +35,7 @@ public class Position extends CSSProperty<Position> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         super.write(writer);
 
         writer.property("top", top);

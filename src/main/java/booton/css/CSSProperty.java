@@ -77,9 +77,9 @@ public class CSSProperty<T extends CSSProperty> {
      * Write properties automatically.
      * </p>
      * 
-     * @param writer
+     * @param style
      */
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable style) {
         if (value instanceof Property) {
             Property property = (Property) value;
             property.compactWebkit();
@@ -88,11 +88,11 @@ public class CSSProperty<T extends CSSProperty> {
                 String name = property.names.get(vendor);
 
                 if (name != null) {
-                    writer.property(name, property.values.get(vendor));
+                    style.property(name, property.values.get(vendor));
                 }
             }
         } else {
-            writer.property(name, value);
+            style.property(name, value);
         }
 
         try {
@@ -108,7 +108,7 @@ public class CSSProperty<T extends CSSProperty> {
                 Object value = field.get(this);
 
                 if (value instanceof CSSProperty) {
-                    ((CSSProperty) value).write(writer);
+                    ((CSSProperty) value).write(style);
                 }
             }
         } catch (Exception e) {

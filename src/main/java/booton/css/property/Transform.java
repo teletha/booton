@@ -17,7 +17,7 @@ import java.util.List;
 
 import booton.css.CSSProperty;
 import booton.css.CSSValue;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.Vendor;
 import booton.css.value.Numeric;
@@ -34,7 +34,7 @@ public class Transform extends CSSProperty<Transform> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         writer.property("transform", functions, Webkit);
     }
 

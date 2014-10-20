@@ -12,7 +12,7 @@ package booton.css.property;
 import java.util.ArrayList;
 import java.util.List;
 
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.value.Color;
 import booton.css.value.LinearGradient;
@@ -40,7 +40,7 @@ public class Background extends ColorableProperty<Background> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         super.write(writer);
 
         writer.property("background-color", color);

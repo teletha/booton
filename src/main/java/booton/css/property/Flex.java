@@ -11,7 +11,7 @@ package booton.css.property;
 
 import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 
 /**
  * @version 2014/09/04 9:56:18
@@ -81,7 +81,7 @@ public class Flex extends CSSProperty<Flex> {
          * {@inheritDoc}
          */
         @Override
-        protected void write(CSSWriter writer) {
+        protected void write(StyleDeclarable writer) {
             super.write(writer);
 
             writer.property("-webkit-box-orient", orient);
