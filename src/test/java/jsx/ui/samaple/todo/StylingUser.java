@@ -9,7 +9,6 @@
  */
 package jsx.ui.samaple.todo;
 
-import jsx.ui.piece.Input;
 import jsx.ui.samaple.todo.TodoUI.Item;
 
 /**
@@ -31,62 +30,23 @@ public class StylingUser {
 
     }
 
-    private void $(Object o, Object v, Runnable c) {
-
-    }
-
-    private TodoUI w;
-
-    private void nestVersion(Input intput) {
-        $(w.input, () -> {
-            // STYLE
-        });
-
-        $(Item.class, w.todos.list, () -> {
-            // STYLE
-        });
-
-        $(() -> {
-            $(w.text, () -> {
-                // STYLE
-            });
-
-            $(() -> {
-                $(w.all, () -> {
-                    // STYLE
-                });
-
-                $(w.active, () -> {
-                    // STYLE
-                });
-
-                $(w.completed, () -> {
-                    // STYLE
-                });
-
-                // STYLE
-            });
-
-            $(w.clear, () -> {
-                // STYLE
-            });
-        });
-    }
-
     private void $(Object... a) {
 
     }
 
-    private void flatVersion(TodoUI w) {
+    private void defineConditionalStyle(TodoUI w) {
+        $(w.input.value.length().lessThan(10), () -> {
+            // STYLE
+        });
+    }
+
+    private void layout(TodoUI w) {
         $(w.input);
         // STYLE
         // Invalid Style?
         // hover Style?
         // Invalid hover Style?
         // Focus Style?
-        $(w.input.value.length().lessThan(10), () -> {
-
-        });
 
         $(Item.class, w.todos.list);
         // STYLE

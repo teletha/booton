@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,59 +20,9 @@ import java.util.Map.Entry;
 import kiss.I;
 
 /**
- * @version 2013/07/23 22:25:05
+ * @version 2014/10/20 16:18:28
  */
-public class CSSWriter {
-
-    /** The optimization flag. */
-    private final boolean compression = false;
-
-    /** The actual builder. */
-    private final StringBuilder builder = new StringBuilder();
-
-    /**
-     * <p>
-     * Write comment for debug.
-     * </p>
-     * 
-     * @param comment A comment.
-     * @return Chainable API.
-     */
-    public CSSWriter comment(Object comment) {
-        if (!compression) {
-            builder.append("/* ").append(comment).append(" */");
-            line();
-        }
-        return this;
-    }
-
-    /**
-     * <p>
-     * Formt line for debug.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public CSSWriter line() {
-        if (!compression) {
-            builder.append("\r\n");
-        }
-        return this;
-    }
-
-    /**
-     * <p>
-     * Formt indent for debug.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public CSSWriter indent() {
-        if (!compression) {
-            builder.append("  ");
-        }
-        return this;
-    }
+public abstract class CSSWriter {
 
     /**
      * <p>
@@ -199,59 +149,11 @@ public class CSSWriter {
                     if (!prefixes.contains(vendor)) {
                         vendor = Standard;
                     }
-                    indent().write(vendor + name, ":", value, ";");
+                    write(vendor, name, value);
                 }
             }
         }
     }
 
-    /**
-     * <p>
-     * Helper method to write css.
-     * </p>
-     * 
-     * @param params
-     * @return Chainable API.
-     */
-    public CSSWriter write(String... params) {
-        for (String param : params) {
-            if (param != null) {
-                if (!compression) {
-                    switch (param) {
-                    case "{":
-                        builder.append(" ");
-                        break;
-                    }
-                }
-
-                builder.append(param);
-
-                if (!compression) {
-                    switch (param) {
-                    case ":":
-                        builder.append(" ");
-                        break;
-
-                    case ";":
-                    case "{":
-                        line();
-                        break;
-
-                    case "}":
-                        line().line();
-                        break;
-                    }
-                }
-            }
-        }
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return builder.toString();
-    }
+    protected abstract void write(Vendor vendor, String name, String value);
 }

@@ -24,7 +24,7 @@ import kiss.Singleton;
 import booton.css.value.Font;
 
 /**
- * @version 2013/07/21 15:09:13
+ * @version 2014/10/20 16:16:42
  */
 @Manageable(lifestyle = Singleton.class)
 public class Stylist {
@@ -40,7 +40,7 @@ public class Stylist {
     }
 
     public String write(RuleSet rule) {
-        CSSWriter writer = new CSSWriter();
+        CSSStringWriter writer = new CSSStringWriter();
 
         // count requested properties
         int counter = 0;
@@ -52,23 +52,24 @@ public class Stylist {
         }
 
         // write requested properties only.
-        writer.write(I.join(",", assigned), "{");
+        writer.writeDown(I.join(",", assigned), "{");
 
         for (CSSProperty property : rule.properties) {
             if (property.used) {
                 counter++;
-                writer.write(property.toString());
+
+                writer.property(property);
             }
         }
-        writer.write("}");
+        writer.writeDown("}");
 
         if (counter == 0) {
             // this class has no properties, so we can remove it
-            writer = new CSSWriter();
+            writer = new CSSStringWriter();
         }
 
         for (RuleSet child : rule.children) {
-            writer.write(write(child));
+            writer.writeDown(write(child));
         }
 
         return writer.toString();
@@ -82,11 +83,11 @@ public class Stylist {
      * @param file
      */
     public void write(Path file) throws Exception {
-        CSSWriter root = new CSSWriter();
+        CSSStringWriter root = new CSSStringWriter();
 
         // write font imports
         for (Font font : fonts) {
-            root.write("@import url(" + font.uri + ");").line();
+            root.writeDown("@import url(" + font.uri + ");").line();
         }
 
         // write require styles
@@ -97,7 +98,7 @@ public class Stylist {
 
             if (css.length() != 0) {
                 root.comment(style.getClass().getName());
-                root.write(css);
+                root.writeDown(css);
             }
         }
 
