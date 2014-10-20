@@ -9,151 +9,119 @@
  */
 package booton.css;
 
-import static booton.css.Vendor.*;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map.Entry;
-
 import kiss.I;
+import booton.BootonConfiguration;
 
 /**
- * @version 2014/10/20 16:18:28
+ * @version 2014/10/20 15:22:38
  */
-public abstract class CSSWriter {
+public class CSSWriter implements StyleDeclarable {
+
+    /** The optimization flag. */
+    private final boolean compression = I.make(BootonConfiguration.class).compression;
+
+    /** The actual builder. */
+    private final StringBuilder builder = new StringBuilder();
 
     /**
      * <p>
-     * Write property.
+     * Write comment for debug.
      * </p>
      * 
-     * @param name
-     * @param values
-     * @param vendors
+     * @param comment A comment.
+     * @return Chainable API.
      */
-    public void property(CSSProperty property) {
-        property.write(this);
+    public CSSWriter comment(Object comment) {
+        if (!compression) {
+            builder.append("/* ").append(comment).append(" */");
+            line();
+        }
+        return this;
     }
 
     /**
      * <p>
-     * Write property.
+     * Formt line for debug.
      * </p>
      * 
-     * @param name
-     * @param values
-     * @param vendors
+     * @return Chainable API.
      */
-    public void property(String name, List values, Vendor... vendors) {
-        property(EnumSet.of(Standard, vendors), " ", name, values.toArray());
+    public CSSWriter line() {
+        if (!compression) {
+            builder.append("\r\n");
+        }
+        return this;
     }
 
     /**
      * <p>
-     * Write property with separator.
+     * Formt indent for debug.
      * </p>
      * 
-     * @param name
-     * @param values
+     * @return Chainable API.
      */
-    public void propertyWithSeparator(String name, List values) {
-        propertyWithSeparator(name, values.toArray());
+    public CSSWriter indent() {
+        if (!compression) {
+            builder.append("  ");
+        }
+        return this;
     }
 
     /**
      * <p>
-     * Write property.
+     * Helper method to write css.
      * </p>
      * 
-     * @param name
-     * @param calcurated
+     * @param params
+     * @return Chainable API.
      */
-    public void property(String name, Object... values) {
-        property(EnumSet.of(Standard), " ", name, values);
-    }
-
-    /**
-     * <p>
-     * Write property.
-     * </p>
-     * 
-     * @param name
-     * @param calcurated
-     */
-    public void propertyWithSeparator(String name, Object... values) {
-        property(EnumSet.of(Standard), ",", name, values);
-    }
-
-    /**
-     * <p>
-     * Helper method to write property.
-     * </p>
-     * 
-     * @param prefixes A list of vendors for property name.
-     * @param separator A value separator.
-     * @param name A property name.
-     * @param values A list of property values.
-     */
-    private void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
-        if (name != null && name.length() != 0 && values != null) {
-            EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
-
-            // calculate dependent vendors
-            EnumSet<Vendor> vendors = EnumSet.copyOf(prefixes);
-
-            for (Object value : values) {
-                if (value instanceof CSSValue) {
-                    vendors.addAll(((CSSValue) value).vendors());
-                }
-            }
-
-            for (Vendor vendor : vendors) {
-                List<String> text = new ArrayList();
-
-                for (Object value : values) {
-                    if (value != null) {
-                        if (value instanceof CSSValue) {
-                            String vendered = ((CSSValue) value).valueFor(vendor);
-
-                            if (vendered != null && vendered.length() != 0) {
-                                text.add(vendered);
-                            }
-                        } else if (value instanceof Number) {
-                            Number number = (Number) value;
-
-                            if (number.intValue() == number.doubleValue()) {
-                                text.add(String.valueOf(number.intValue()));
-                            } else {
-                                text.add(number.toString());
-                            }
-                        } else {
-                            String decoded = value.toString();
-
-                            if (decoded != null && decoded.length() != 0) {
-                                text.add(decoded);
-                            }
-                        }
+    public CSSWriter writeDown(String... params) {
+        for (String param : params) {
+            if (param != null) {
+                if (!compression) {
+                    switch (param) {
+                    case "{":
+                        builder.append(" ");
+                        break;
                     }
                 }
-                properties.put(vendor, text);
-            }
 
-            for (Entry<Vendor, List<String>> property : properties.entrySet()) {
-                String value = I.join(separator, property.getValue());
+                builder.append(param);
 
-                if (value.length() != 0) {
-                    Vendor vendor = property.getKey();
+                if (!compression) {
+                    switch (param) {
+                    case ":":
+                        builder.append(" ");
+                        break;
 
-                    if (!prefixes.contains(vendor)) {
-                        vendor = Standard;
+                    case ";":
+                    case "{":
+                        line();
+                        break;
+
+                    case "}":
+                        line().line();
+                        break;
                     }
-                    write(vendor, name, value);
                 }
             }
         }
+        return this;
     }
 
-    protected abstract void write(Vendor vendor, String name, String value);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return builder.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setProperty(String name, String value) {
+        indent().writeDown(name, ":", value, ";");
+    }
 }

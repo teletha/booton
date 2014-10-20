@@ -10,7 +10,7 @@
 package booton.css.property;
 
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.value.Numeric;
 
@@ -26,7 +26,7 @@ public class Line extends CSSProperty<Line> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         writer.property("line-height", height);
     }
 

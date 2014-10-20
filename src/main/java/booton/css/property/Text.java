@@ -18,7 +18,7 @@ import java.util.List;
 import kiss.I;
 import booton.css.CSS;
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.value.Color;
 import booton.css.value.Numeric;
@@ -72,7 +72,7 @@ public class Text extends CSSProperty<Text> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         super.write(writer);
 
         writer.property("text-indent", indent);

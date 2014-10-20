@@ -14,7 +14,7 @@ import static booton.css.Vendor.*;
 import java.util.Arrays;
 
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.value.Numeric;
 
@@ -39,7 +39,7 @@ public class FlexItem extends CSSProperty<FlexItem> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         writer.property("flex-basis", Arrays.asList(basis), Webkit);
         if (grow != 0) writer.property("flex-grow", Arrays.asList(grow), Webkit);
         if (shrink != 1) writer.property("flex-shrink", Arrays.asList(shrink), Webkit);

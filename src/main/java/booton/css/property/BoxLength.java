@@ -12,7 +12,7 @@ package booton.css.property;
 import java.util.EnumSet;
 
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.Vendor;
 import booton.css.value.Numeric;
@@ -45,7 +45,7 @@ public class BoxLength extends CSSProperty<BoxLength> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         if (right.equals(left)) {
             if (top.equals(bottom)) {
                 if (top.equals(right)) {

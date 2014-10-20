@@ -12,6 +12,8 @@ package booton.css.value;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
+import java.util.Set;
 
 import kiss.I;
 import booton.translator.Translator;
@@ -20,6 +22,9 @@ import booton.translator.Translator;
  * @version 2013/07/21 18:15:42
  */
 public class Font {
+
+    /** The used fonts. */
+    public static final Set<Font> used = new HashSet();
 
     /** The font name. */
     public final String name;
@@ -35,6 +40,8 @@ public class Font {
         String[] info = FontInfo.parse(uri);
         this.name = info[0];
         this.uri = info[1];
+
+        used.add(this);
     }
 
     /**

@@ -11,7 +11,7 @@ package booton.css.property;
 
 import static booton.css.Vendor.*;
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
+import booton.css.StyleDeclarable;
 
 /**
  * @version 2013/06/13 16:03:10
@@ -25,7 +25,7 @@ public final class Display extends CSSProperty<Display> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         super.write(writer);
 
         if (flex != null) writer.property(flex);

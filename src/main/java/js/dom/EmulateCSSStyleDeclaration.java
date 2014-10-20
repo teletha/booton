@@ -32,7 +32,7 @@ class EmulateCSSStyleDeclaration extends CSSStyleDeclaration {
      * {@inheritDoc}
      */
     @Override
-    protected void setProperty(String name, String value) {
+    public void setProperty(String name, String value) {
         properties.put(name, value);
     }
 }

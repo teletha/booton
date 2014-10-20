@@ -14,9 +14,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import kiss.I;
 import kiss.Manageable;
@@ -29,9 +27,6 @@ import booton.css.value.Font;
 @Manageable(lifestyle = Singleton.class)
 public class Stylist {
 
-    /** The used web fonts. */
-    private final Set<Font> fonts = new HashSet();
-
     /** The style classes which javascript reference. */
     private final List<CSS> styles = new ArrayList();
 
@@ -40,7 +35,7 @@ public class Stylist {
     }
 
     public String write(RuleSet rule) {
-        CSSStringWriter writer = new CSSStringWriter();
+        CSSWriter writer = new CSSWriter();
 
         // count requested properties
         int counter = 0;
@@ -65,7 +60,7 @@ public class Stylist {
 
         if (counter == 0) {
             // this class has no properties, so we can remove it
-            writer = new CSSStringWriter();
+            writer = new CSSWriter();
         }
 
         for (RuleSet child : rule.children) {
@@ -83,10 +78,10 @@ public class Stylist {
      * @param file
      */
     public void write(Path file) throws Exception {
-        CSSStringWriter root = new CSSStringWriter();
+        CSSWriter root = new CSSWriter();
 
         // write font imports
-        for (Font font : fonts) {
+        for (Font font : Font.used) {
             root.writeDown("@import url(" + font.uri + ");").line();
         }
 
@@ -103,19 +98,6 @@ public class Stylist {
         }
 
         Files.write(file, root.toString().getBytes(I.$encoding));
-    }
-
-    /**
-     * <p>
-     * Register font definition.
-     * </p>
-     * 
-     * @param font
-     */
-    public void register(Font font) {
-        if (font != null) {
-            fonts.add(font);
-        }
     }
 
     /**

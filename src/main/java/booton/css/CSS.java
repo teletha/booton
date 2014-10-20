@@ -11,7 +11,9 @@ package booton.css;
 
 import static booton.css.value.Color.*;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import js.util.HashMap;
 import kiss.Extensible;
@@ -49,6 +51,9 @@ import booton.util.Strings;
  */
 @Manageable(lifestyle = Singleton.class)
 public abstract class CSS extends StyleDeclaration implements Extensible {
+
+    /** The used css class. */
+    static final Set<Class> used = new HashSet();
 
     /**
      * <p>
@@ -907,7 +912,7 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
 
             rules.dependencies.add(css.rules);
 
-            I.make(Stylist.class).register(clazz);
+            // I.make(Stylist.class).register(clazz);
         }
     }
 
@@ -916,6 +921,8 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
      */
     protected CSS() {
         load(rules);
+
+        used.add(getClass());
     }
 
     /**

@@ -14,8 +14,7 @@ import java.util.List;
 
 import kiss.I;
 import booton.css.CSSProperty;
-import booton.css.CSSWriter;
-import booton.css.Stylist;
+import booton.css.StyleDeclarable;
 import booton.css.Unit;
 import booton.css.value.Color;
 import booton.css.value.Numeric;
@@ -84,7 +83,7 @@ public final class Font extends ColorableProperty<Font> {
      * {@inheritDoc}
      */
     @Override
-    protected void write(CSSWriter writer) {
+    protected void write(StyleDeclarable writer) {
         super.write(writer);
 
         writer.property("color", color);
@@ -183,12 +182,8 @@ public final class Font extends ColorableProperty<Font> {
      * @return
      */
     public Family family(booton.css.value.Font... fonts) {
-        Stylist stylist = I.make(Stylist.class);
-
         for (booton.css.value.Font font : fonts) {
             family.add(font.name);
-
-            stylist.register(font);
         }
         return family;
     }
@@ -532,7 +527,7 @@ public final class Font extends ColorableProperty<Font> {
          * {@inheritDoc}
          */
         @Override
-        protected void write(CSSWriter writer) {
+        protected void write(StyleDeclarable writer) {
             writer.property(name, I.join(",", names));
         }
 
