@@ -18,7 +18,7 @@ import kiss.I;
 import booton.util.Strings;
 
 /**
- * @version 2013/07/23 13:22:58
+ * @version 2014/10/20 16:18:05
  */
 public class CSSProperty<T extends CSSProperty> {
 
@@ -114,17 +114,6 @@ public class CSSProperty<T extends CSSProperty> {
         } catch (Exception e) {
             throw I.quiet(e);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final String toString() {
-        CSSWriter writer = new CSSWriter();
-        write(writer);
-
-        return writer.toString();
     }
 
     /**

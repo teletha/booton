@@ -105,33 +105,6 @@ public final class VirtualStructure {
 
     /**
      * <p>
-     * Define horizontal container with local id.
-     * </p>
-     * 
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     * @see #hbox
-     */
-    public final ContainerDescriptor hbox(Runnable styleDefinition) {
-        return hbox(0, styleDefinition);
-    }
-
-    /**
-     * <p>
-     * Define horizontal container with local id.
-     * </p>
-     * 
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     * @see #hbox
-     */
-    public final ContainerDescriptor hbox(int localId, Runnable styleDefinition) {
-        hbox.localId = localId;
-        return hbox;
-    }
-
-    /**
-     * <p>
      * Define vertical container with local id.
      * </p>
      * 
@@ -140,33 +113,6 @@ public final class VirtualStructure {
      * @see #vbox
      */
     public final ContainerDescriptor vbox(int localId) {
-        vbox.localId = localId;
-        return vbox;
-    }
-
-    /**
-     * <p>
-     * Define vertical container with local id.
-     * </p>
-     * 
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     * @see #vbox
-     */
-    public final ContainerDescriptor vbox(Runnable styleDefinition) {
-        return vbox(0, styleDefinition);
-    }
-
-    /**
-     * <p>
-     * Define vertical container with local id.
-     * </p>
-     * 
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     * @see #vbox
-     */
-    public final ContainerDescriptor vbox(int localId, Runnable styleDefinition) {
         vbox.localId = localId;
         return vbox;
     }
