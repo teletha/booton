@@ -24,6 +24,7 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
+import jsx.ui.samaple.todo.Styling;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
@@ -173,6 +174,16 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     }
 
     public T style(ObservableValue<StyleDefinition> style) {
+        return (T) this;
+    }
+
+    /**
+     * @param style
+     * @return
+     */
+    public T style(Styling styling) {
+        System.out.println(styling);
+        styling.define();
         return (T) this;
     }
 

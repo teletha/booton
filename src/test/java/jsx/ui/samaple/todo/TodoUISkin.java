@@ -9,19 +9,16 @@
  */
 package jsx.ui.samaple.todo;
 
+import booton.css.StyleDeclaration;
+
 /**
  * @version 2014/10/19 2:09:20
  */
-public class TodoUISkin {
+public class TodoUISkin extends StyleDeclaration {
 
-    protected TodoUI ui;
+    public void input() {
+        font.color(255, 0, 0);
 
-    public Styling input = () -> {
-
-    };
-
-    public Styling inputFocus = () -> {
-
-    };
-
+        System.out.println("invoked");
+    }
 }
