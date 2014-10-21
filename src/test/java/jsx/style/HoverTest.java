@@ -22,15 +22,16 @@ public class HoverTest extends StyleDeclarationTestBase {
     @Test
     public void hover() {
         ParsedStyle parsed = parse(style::hover);
-        assert parsed.property("display", "flex");
-        assert parsed.property("flex-direction", "row");
-        assert parsed.property("align-content", "center");
+        assert parsed.property("color", "rgb(255,0,0)");
+
+        ParsedStyle hover = parsed.sub(0);
+        assert hover.property("color", "rgb(0,255,0)");
     }
 
     /**
      * @version 2014/10/21 13:43:25
      */
-    private static class Style extends StyleDeclaration {
+    private static class Style extends RuleSetDeclaration {
 
         private void hover() {
             font.color(255, 0, 0);

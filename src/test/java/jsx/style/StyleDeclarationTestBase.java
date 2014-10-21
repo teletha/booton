@@ -10,10 +10,6 @@
 package jsx.style;
 
 import static java.lang.Integer.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import booton.css.value.Color;
 
 /**
@@ -30,28 +26,13 @@ public class StyleDeclarationTestBase {
      * @return
      */
     protected ParsedStyle parse(Runnable style) {
-        PropertyHolder holder = new PropertyHolder();
-        PropertyDefinition.declarable = holder;
+        RuleSet rules = new RuleSet();
+        PropertyDefinition.declarable = rules;
 
         style.run();
 
         // API definition
-        return new ParsedStyle(holder);
-    }
-
-    /**
-     * @version 2014/10/21 14:07:49
-     */
-    @SuppressWarnings("serial")
-    private static class PropertyHolder extends HashMap<String, String> implements StyleDeclarable {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void setProperty(String name, String value) {
-            put(name, value);
-        }
+        return new ParsedStyle(rules);
     }
 
     /**
@@ -60,13 +41,13 @@ public class StyleDeclarationTestBase {
     public static class ParsedStyle {
 
         /** The parsed properties. */
-        private final Map<String, String> properties;
+        private final RuleSet rules;
 
         /**
-         * @param properties
+         * @param rules
          */
-        private ParsedStyle(Map<String, String> properties) {
-            this.properties = properties;
+        private ParsedStyle(RuleSet rules) {
+            this.rules = rules;
         }
 
         /**
@@ -82,8 +63,8 @@ public class StyleDeclarationTestBase {
                 value = convertRGB(value);
             }
 
-            assert properties.containsKey(name);
-            return properties.get(name).equals(value);
+            assert rules.properties.containsKey(name);
+            return rules.properties.get(name).equals(value);
         }
 
         /**
@@ -95,6 +76,18 @@ public class StyleDeclarationTestBase {
             String[] v = value.substring(4, value.length() - 1).split(",");
 
             return Color.rgb(parseInt(v[0].trim()), parseInt(v[1].trim()), parseInt(v[2].trim())).toString();
+        }
+
+        /**
+         * <p>
+         * Find sub rule.
+         * </p>
+         * 
+         * @param index
+         * @return
+         */
+        public ParsedStyle sub(int index) {
+            return new ParsedStyle(rules.children.get(index));
         }
     }
 }
