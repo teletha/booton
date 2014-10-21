@@ -7,13 +7,13 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package jsx.style;
 
-import booton.css.property.Display;
-import booton.css.property.Font;
+import jsx.style.property.Display;
+import jsx.style.property.FontProperty;
 
 /**
- * @version 2014/09/02 15:51:03
+ * @version 2014/10/21 13:39:48
  */
 public class StyleDeclaration {
 
@@ -29,7 +29,7 @@ public class StyleDeclaration {
      * off. The document is rendered as though the element doesn't exist in the document tree.
      * </p>
      */
-    public final Display display = new Display();
+    protected static final Display display = new Display();
 
     /**
      * <p>
@@ -38,5 +38,5 @@ public class StyleDeclaration {
      * system font, using specific keywords.
      * </p>
      */
-    public Font font = new Font();
+    protected static final FontProperty font = new FontProperty();
 }
