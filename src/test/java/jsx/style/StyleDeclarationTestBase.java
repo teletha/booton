@@ -26,7 +26,7 @@ public class StyleDeclarationTestBase {
      * @return
      */
     protected ParsedStyle parse(Runnable style) {
-        RuleSet rules = new RuleSet();
+        StyleRule rules = new StyleRule();
         PropertyDefinition.declarable = rules;
 
         style.run();
@@ -41,12 +41,12 @@ public class StyleDeclarationTestBase {
     public static class ParsedStyle {
 
         /** The parsed properties. */
-        private final RuleSet rules;
+        private final StyleRule rules;
 
         /**
          * @param rules
          */
-        private ParsedStyle(RuleSet rules) {
+        private ParsedStyle(StyleRule rules) {
             this.rules = rules;
         }
 
