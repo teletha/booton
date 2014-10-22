@@ -12,7 +12,7 @@ package jsx.style;
 /**
  * @version 2014/10/21 16:48:37
  */
-public class RuleSetDeclaration extends StyleDeclaration {
+public class StyleRuleDeclaration extends StyleDeclaration {
 
     /**
      * <p>
@@ -475,19 +475,19 @@ public class RuleSetDeclaration extends StyleDeclaration {
      * @return
      */
     private final void sub(String selector, Runnable sub) {
-        // store current rule set
-        StyleDeclarable declarable = PropertyDefinition.declarable;
+        // store parent rule
+        StyleDeclarable parent = PropertyDefinition.declarable;
 
-        if (declarable instanceof RuleSet) {
-            RuleSet rules = (RuleSet) declarable;
+        if (parent instanceof StyleRule) {
+            StyleRule rules = (StyleRule) parent;
 
-            // create new rule set for sub rule
-            RuleSet subRules = new RuleSet(rules, selector);
+            // create child rule
+            StyleRule child = new StyleRule(rules, selector);
 
-            // create sub rule set
-            PropertyDefinition.declarable = subRules;
+            // swap context rule and execute it
+            PropertyDefinition.declarable = child;
             sub.run();
-            PropertyDefinition.declarable = declarable;
+            PropertyDefinition.declarable = parent;
         }
     }
 }

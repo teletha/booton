@@ -31,7 +31,7 @@ public class HoverTest extends StyleDeclarationTestBase {
     /**
      * @version 2014/10/21 13:43:25
      */
-    private static class Style extends RuleSetDeclaration {
+    private static class Style extends StyleRuleDeclaration {
 
         private void hover() {
             font.color(255, 0, 0);

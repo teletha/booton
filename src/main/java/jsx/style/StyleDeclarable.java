@@ -22,7 +22,7 @@ import kiss.I;
 /**
  * @version 2014/10/20 16:18:28
  */
-public interface StyleDeclarable {
+public abstract class StyleDeclarable {
 
     /**
      * <p>
@@ -31,7 +31,7 @@ public interface StyleDeclarable {
      * 
      * @param property A property to declare.
      */
-    public default void property(PropertyDefinition property) {
+    public void property(PropertyDefinition property) {
         // property.write(this);
 
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
@@ -47,7 +47,7 @@ public interface StyleDeclarable {
      * @param name A property name.
      * @param values A list of whitespace-separated property values.
      */
-    public default void property(String name, Object... values) {
+    public void property(String name, Object... values) {
         property(EnumSet.of(Standard), " ", name, values);
     }
 
@@ -60,7 +60,7 @@ public interface StyleDeclarable {
      * @param values A list of whitespace-separated property values.
      * @param vendors A list of {@link Vendor} prefix if needed.
      */
-    public default void property(String name, List values, Vendor... vendors) {
+    public void property(String name, List values, Vendor... vendors) {
         property(EnumSet.of(Standard, vendors), " ", name, values.toArray());
     }
 
@@ -73,7 +73,7 @@ public interface StyleDeclarable {
      * @param values A list of comma-separated property values.
      * @param vendors A list of {@link Vendor} prefix if needed.
      */
-    public default void propertyWithSeparator(String name, List values) {
+    public void propertyWithSeparator(String name, List values) {
         propertyWithSeparator(name, values.toArray());
     }
 
@@ -86,7 +86,7 @@ public interface StyleDeclarable {
      * @param values A list of comma-separated property values.
      * @param vendors A list of {@link Vendor} prefix if needed.
      */
-    public default void propertyWithSeparator(String name, Object... values) {
+    public void propertyWithSeparator(String name, Object... values) {
         property(EnumSet.of(Standard), ",", name, values);
     }
 
@@ -100,7 +100,7 @@ public interface StyleDeclarable {
      * @param name A property name.
      * @param values A list of property values.
      */
-    public default void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
+    private void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
         if (name != null && name.length() != 0 && values != null) {
             EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
 
@@ -167,5 +167,5 @@ public interface StyleDeclarable {
      * @param name A property name.
      * @param values A property value.
      */
-    public void setProperty(String name, String value);
+    protected abstract void setProperty(String name, String value);
 }
