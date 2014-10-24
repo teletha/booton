@@ -16,12 +16,9 @@ import org.junit.Test;
  */
 public class FlexboxTest extends StyleDeclarationTestBase {
 
-    /** The style definition. */
-    private static final Style style = new Style();
-
     @Test
-    public void rgb() {
-        ParsedStyle parsed = parse(style::standard);
+    public void flex() {
+        ParsedStyle parsed = parse(MyStyle.standard);
         assert parsed.property("display", "flex");
         assert parsed.property("flex-direction", "row");
         assert parsed.property("align-content", "center");
@@ -30,10 +27,10 @@ public class FlexboxTest extends StyleDeclarationTestBase {
     /**
      * @version 2014/10/21 13:43:25
      */
-    private static class Style extends StyleDeclaration {
+    private static class MyStyle extends StyleDeclaration {
 
-        private void standard() {
+        private static Style standard = () -> {
             display.flex().direction.row().alignContent.center();
-        }
+        };
     }
 }

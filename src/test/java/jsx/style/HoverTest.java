@@ -16,12 +16,9 @@ import org.junit.Test;
  */
 public class HoverTest extends StyleDeclarationTestBase {
 
-    /** The style definition. */
-    private static final Style style = new Style();
-
     @Test
     public void hover() {
-        ParsedStyle parsed = parse(style::hover);
+        ParsedStyle parsed = parse(MyStyle.hover);
         assert parsed.property("color", "rgb(255,0,0)");
 
         ParsedStyle hover = parsed.sub(0);
@@ -31,14 +28,14 @@ public class HoverTest extends StyleDeclarationTestBase {
     /**
      * @version 2014/10/21 13:43:25
      */
-    private static class Style extends StyleRuleDeclaration {
+    private static class MyStyle extends StyleRuleDeclaration {
 
-        private void hover() {
+        private static Style hover = () -> {
             font.color(255, 0, 0);
 
             hover(() -> {
                 font.color(0, 255, 0);
             });
-        }
+        };
     }
 }
