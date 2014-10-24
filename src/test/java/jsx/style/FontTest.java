@@ -16,22 +16,19 @@ import org.junit.Test;
  */
 public class FontTest extends StyleDeclarationTestBase {
 
-    /** The style definition. */
-    private static final Style style = new Style();
-
     @Test
     public void rgb() {
-        ParsedStyle parsed = parse(style::rgb);
+        ParsedStyle parsed = parse(MyStyle.rgb);
         assert parsed.property("color", "rgb(255,0,0)");
     }
 
     /**
      * @version 2014/10/21 13:43:25
      */
-    private static class Style extends StyleDeclaration {
+    private static class MyStyle extends StyleDeclaration {
 
-        private void rgb() {
+        private static Style rgb = () -> {
             font.color(255, 0, 0);
-        }
+        };
     }
 }

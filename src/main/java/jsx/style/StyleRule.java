@@ -53,21 +53,6 @@ public class StyleRule extends StyleDeclarable {
 
     /**
      * <p>
-     * Define {@link StyleRule} with the specified properties.
-     * </p>
-     */
-    public StyleRule(Runnable definition) {
-        this(null, "", null);
-
-        StyleDeclarable declarable = PropertyDefinition.declarable;
-
-        PropertyDefinition.declarable = this;
-        definition.run();
-        PropertyDefinition.declarable = declarable;
-    }
-
-    /**
-     * <p>
      * Define empty rule with parent rule.
      * </p>
      * 

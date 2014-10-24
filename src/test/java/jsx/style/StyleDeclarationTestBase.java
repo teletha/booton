@@ -25,11 +25,11 @@ public class StyleDeclarationTestBase {
      * @param definition
      * @return
      */
-    protected ParsedStyle parse(Runnable style) {
+    protected ParsedStyle parse(Style style) {
         StyleRule rules = new StyleRule();
         PropertyDefinition.declarable = rules;
 
-        style.run();
+        style.declare();
 
         // API definition
         return new ParsedStyle(rules);
