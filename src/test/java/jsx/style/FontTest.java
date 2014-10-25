@@ -18,14 +18,14 @@ public class FontTest extends StyleDeclarationTestBase {
 
     @Test
     public void rgb() {
-        ParsedStyle parsed = parse(MyStyle.rgb);
+        ValidatableStyleRule parsed = parse(MyStyle.rgb).rule();
         assert parsed.property("color", "rgb(255,0,0)");
     }
 
     /**
      * @version 2014/10/21 13:43:25
      */
-    private static class MyStyle extends StyleDeclaration {
+    private static class MyStyle extends StyleDescriptor {
 
         private static Style rgb = () -> {
             font.color(255, 0, 0);

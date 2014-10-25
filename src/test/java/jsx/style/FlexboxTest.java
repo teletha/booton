@@ -18,7 +18,7 @@ public class FlexboxTest extends StyleDeclarationTestBase {
 
     @Test
     public void flex() {
-        ParsedStyle parsed = parse(MyStyle.standard);
+        ValidatableStyleRule parsed = parse(MyStyle.standard).rule();
         assert parsed.property("display", "flex");
         assert parsed.property("flex-direction", "row");
         assert parsed.property("align-content", "center");
@@ -27,7 +27,7 @@ public class FlexboxTest extends StyleDeclarationTestBase {
     /**
      * @version 2014/10/21 13:43:25
      */
-    private static class MyStyle extends StyleDeclaration {
+    private static class MyStyle extends StyleDescriptor {
 
         private static Style standard = () -> {
             display.flex().direction.row().alignContent.center();

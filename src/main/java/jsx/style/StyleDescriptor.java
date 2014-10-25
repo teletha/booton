@@ -10,12 +10,12 @@
 package jsx.style;
 
 import jsx.style.property.Display;
-import jsx.style.property.FontProperty;
+import jsx.style.property.Font;
 
 /**
- * @version 2014/10/21 13:39:48
+ * @version 2014/10/25 11:22:51
  */
-public class StyleDeclaration {
+public class StyleDescriptor {
 
     /**
      * <p>
@@ -38,5 +38,23 @@ public class StyleDeclaration {
      * system font, using specific keywords.
      * </p>
      */
-    protected static final FontProperty font = new FontProperty();
+    protected static final Font font = new Font();
+
+    // The "require" functionality is useless. Use normal method call and post processor instead.
+    //
+    // "require" method make:
+    // a{} a:hover{} b{require(a)} >>> a,b{} a:hover,b:hover{}
+    //
+    // post processor make:
+    // a{} a:hover{} b{} b:hover{} >>> a,b{} a:hover,b:hover{}
+    //
+    // /**
+    // * <p>
+    // * Import other styles.
+    // * </p>
+    // *
+    // * @param styles Styles to import.
+    // */
+    // protected final void require(Style... styles) {
+    // }
 }
