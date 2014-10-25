@@ -25,28 +25,69 @@ public class StyleDeclarationTestBase {
      * @param definition
      * @return
      */
-    protected ParsedStyle parse(Style style) {
-        StyleRule rules = new StyleRule();
-        PropertyDefinition.declarable = rules;
-
-        style.declare();
+    protected ValidatableStyleSheet parse(Style style) {
+        StyleSheet sheet = new StyleSheet();
+        sheet.add(style);
 
         // API definition
-        return new ParsedStyle(rules);
+        return new ValidatableStyleSheet(sheet);
     }
 
     /**
      * @version 2014/10/21 14:21:36
      */
-    public static class ParsedStyle {
+    public static class ValidatableStyleSheet {
 
-        /** The parsed properties. */
+        /** The parsed styles. */
+        private final StyleSheet sheet;
+
+        /**
+         * @param sheet
+         */
+        private ValidatableStyleSheet(StyleSheet sheet) {
+            this.sheet = sheet;
+        }
+
+        /**
+         * <p>
+         * Find main rule.
+         * </p>
+         * 
+         * @return
+         */
+        public ValidatableStyleRule rule() {
+            return rule(0);
+        }
+
+        /**
+         * <p>
+         * Find main rule.
+         * </p>
+         * 
+         * @param index A rule index.
+         * @return
+         */
+        public ValidatableStyleRule rule(int index) {
+            return new ValidatableStyleRule(sheet, sheet.rules.get(index));
+        }
+    }
+
+    /**
+     * @version 2014/10/25 15:55:53
+     */
+    public static class ValidatableStyleRule {
+
+        /** The target stylesheet. */
+        private final StyleSheet sheet;
+
+        /** The target to validate. */
         private final StyleRule rules;
 
         /**
          * @param rules
          */
-        private ParsedStyle(StyleRule rules) {
+        private ValidatableStyleRule(StyleSheet sheet, StyleRule rules) {
+            this.sheet = sheet;
             this.rules = rules;
         }
 
@@ -63,8 +104,8 @@ public class StyleDeclarationTestBase {
                 value = convertRGB(value);
             }
 
-            assert rules.properties.containsKey(name);
-            return rules.properties.get(name).equals(value);
+            assert rules.holder.containsKey(name);
+            return rules.holder.get(name).equals(value);
         }
 
         /**
@@ -79,15 +120,18 @@ public class StyleDeclarationTestBase {
         }
 
         /**
-         * <p>
-         * Find sub rule.
-         * </p>
-         * 
-         * @param index
+         * @param selector
          * @return
          */
-        public ParsedStyle sub(int index) {
-            return new ParsedStyle(rules.children.get(index));
+        public ValidatableStyleRule sub(String selector) {
+            selector = rules.name + ":" + selector;
+
+            for (StyleRule rule : sheet.rules) {
+                if (rule.name.equals(selector)) {
+                    return new ValidatableStyleRule(sheet, rule);
+                }
+            }
+            throw new AssertionError("The rule[" + selector + "] is not found.");
         }
     }
 }

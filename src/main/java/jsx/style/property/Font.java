@@ -15,7 +15,7 @@ import booton.css.value.Color;
 /**
  * @version 2014/10/21 13:40:43
  */
-public class FontProperty extends PropertyDefinition {
+public class Font extends PropertyDefinition {
 
     /**
      * <p>
@@ -31,7 +31,7 @@ public class FontProperty extends PropertyDefinition {
      * @param blue
      * @return Chainable API.
      */
-    public FontProperty color(int red, int green, int blue) {
+    public Font color(int red, int green, int blue) {
         return color(Color.rgb(red, green, blue));
     }
 
@@ -47,7 +47,7 @@ public class FontProperty extends PropertyDefinition {
      * @param color
      * @return Chainable API.
      */
-    public FontProperty color(Color color) {
+    public Font color(Color color) {
         declarable.property("color", color.toString());
 
         return this;

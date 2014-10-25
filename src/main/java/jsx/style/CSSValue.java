@@ -32,7 +32,7 @@ public abstract class CSSValue {
 
     /**
      * <p>
-     * Write vendor specific value. Returning <code>null</code> or empty string, {@link StyleDeclarable}
+     * Write vendor specific value. Returning <code>null</code> or empty string, {@link PropertyHolder}
      * will omit the target property.
      * </p>
      * 

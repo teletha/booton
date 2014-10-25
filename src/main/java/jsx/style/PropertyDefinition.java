@@ -23,7 +23,8 @@ public class PropertyDefinition<T> {
 
     protected static EnumSet<Vendor> vendors = EnumSet.allOf(Vendor.class);
 
-    protected static StyleDeclarable declarable;
+    /** The current processing property holder. */
+    protected static StyleRule declarable;
 
     /** The property name. */
     private final String name;

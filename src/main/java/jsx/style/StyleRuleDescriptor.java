@@ -12,7 +12,7 @@ package jsx.style;
 /**
  * @version 2014/10/21 16:48:37
  */
-public class StyleRuleDeclaration extends StyleDeclaration {
+public class StyleRuleDescriptor extends StyleDescriptor {
 
     /**
      * <p>
@@ -26,7 +26,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void link(Runnable sub) {
+    protected static final void link(Runnable sub) {
         sub("$:link", sub);
     }
 
@@ -41,7 +41,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void visited(Runnable sub) {
+    protected static final void visited(Runnable sub) {
         sub("$:visited", sub);
     }
 
@@ -57,7 +57,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void hover(Runnable sub) {
+    protected static final void hover(Runnable sub) {
         sub("$:hover", sub);
     }
 
@@ -73,7 +73,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void active(Runnable sub) {
+    protected static final void active(Runnable sub) {
         sub("$:active", sub);
     }
 
@@ -89,7 +89,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void focus(Runnable sub) {
+    protected static final void focus(Runnable sub) {
         sub("$:focus", sub);
     }
 
@@ -102,7 +102,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void enabled(Runnable sub) {
+    protected static final void enabled(Runnable sub) {
         sub("$:enabled", sub);
     }
 
@@ -115,7 +115,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void disabled(Runnable sub) {
+    protected static final void disabled(Runnable sub) {
         sub("$:disabled", sub);
     }
 
@@ -130,7 +130,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void checked(Runnable sub) {
+    protected static final void checked(Runnable sub) {
         sub("$:checked", sub);
     }
 
@@ -143,7 +143,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void indeterminate(Runnable sub) {
+    protected static final void indeterminate(Runnable sub) {
         sub("$:indeterminate", sub);
     }
 
@@ -156,7 +156,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void required(Runnable sub) {
+    protected static final void required(Runnable sub) {
         sub("$:required", sub);
     }
 
@@ -169,7 +169,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void optional(Runnable sub) {
+    protected static final void optional(Runnable sub) {
         sub("$:optional", sub);
     }
 
@@ -182,7 +182,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void valid(Runnable sub) {
+    protected static final void valid(Runnable sub) {
         sub("$:valid", sub);
     }
 
@@ -195,7 +195,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void invalid(Runnable sub) {
+    protected static final void invalid(Runnable sub) {
         sub("$:invalid", sub);
     }
 
@@ -207,7 +207,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void firstChild(Runnable sub) {
+    protected static final void firstChild(Runnable sub) {
         sub("$:first-child", sub);
     }
 
@@ -219,7 +219,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void firstOfType(Runnable sub) {
+    protected static final void firstOfType(Runnable sub) {
         sub("$:first-of-type", sub);
     }
 
@@ -231,7 +231,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void lastChild(Runnable sub) {
+    protected static final void lastChild(Runnable sub) {
         sub("$:last-child", sub);
     }
 
@@ -243,7 +243,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void lastOfType(Runnable sub) {
+    protected static final void lastOfType(Runnable sub) {
         sub("$:last-of-type", sub);
     }
 
@@ -256,7 +256,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void onlyChild(Runnable sub) {
+    protected static final void onlyChild(Runnable sub) {
         sub("$:only-child", sub);
     }
 
@@ -268,7 +268,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void onlyOfType(Runnable sub) {
+    protected static final void onlyOfType(Runnable sub) {
         sub("$:only-of-type", sub);
     }
 
@@ -280,7 +280,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void nthChild(String pattern, Runnable sub) {
+    protected static final void nthChild(String pattern, Runnable sub) {
         sub("$:nth-child(" + pattern + ")", sub);
     }
 
@@ -293,7 +293,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void nthLastChild(String pattern, Runnable sub) {
+    protected static final void nthLastChild(String pattern, Runnable sub) {
         sub("$:nth-last-child(" + pattern + ")", sub);
     }
 
@@ -309,7 +309,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void nthOfType(String pattern, Runnable sub) {
+    protected static final void nthOfType(String pattern, Runnable sub) {
         sub("$:nth-of-type(" + pattern + ")", sub);
     }
 
@@ -323,7 +323,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void nthLastOfType(String pattern, Runnable sub) {
+    protected static final void nthLastOfType(String pattern, Runnable sub) {
         sub("$:nth-last-of-type(" + pattern + ")", sub);
     }
 
@@ -336,7 +336,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void empty(Runnable sub) {
+    protected static final void empty(Runnable sub) {
         sub("$:empty", sub);
     }
 
@@ -349,7 +349,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void before(Runnable sub) {
+    protected static final void before(Runnable sub) {
         sub("$::before", sub);
     }
 
@@ -362,7 +362,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void after(Runnable sub) {
+    protected static final void after(Runnable sub) {
         sub("$::after", sub);
     }
 
@@ -374,7 +374,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void firstLetter(Runnable sub) {
+    protected static final void firstLetter(Runnable sub) {
         sub("$::first-letter", sub);
     }
 
@@ -388,7 +388,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void firstLine(Runnable sub) {
+    protected static final void firstLine(Runnable sub) {
         sub("$::first-line", sub);
     }
 
@@ -405,7 +405,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void selection(Runnable sub) {
+    protected static final void selection(Runnable sub) {
         // Gecko is the only engine requiring the prefix. Due to the fact that the CSS parsing rules
         // require dropping the whole rule when encountering an invalid pseudo-element, two separate
         // rules must be written: ::-moz-selection, ::selection {...}. The rule would be dropped on
@@ -414,7 +414,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
         sub("$::-moz-selection", sub);
     }
 
-    public static final void children(Runnable sub) {
+    protected static final void children(Runnable sub) {
         sub("$>*", sub);
     }
 
@@ -430,7 +430,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void parentHover(Runnable sub) {
+    protected static final void parentHover(Runnable sub) {
         sub("*:hover>$", sub);
     }
 
@@ -446,7 +446,7 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void adjacentHover(Runnable sub) {
+    protected static final void adjacentHover(Runnable sub) {
         sub("*:hover+$", sub);
     }
 
@@ -462,8 +462,60 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      * 
      * @return
      */
-    public static final void siblingHover(Runnable sub) {
+    protected static final void siblingHover(Runnable sub) {
         sub("*:hover~$", sub);
+    }
+
+    /**
+     * <p>
+     * The :empty pseudo-class represents any element that has no children at all. Only element
+     * nodes and text (including whitespace) are considered. Comments or processing instructions do
+     * not affect whether an element is considered empty or not.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void not(Style style, Runnable sub) {
+        sub("$:not(." + style + ")", sub);
+    }
+
+    /**
+     * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void inBackOf(Style style, Runnable sub) {
+        sub("." + style + "+$", sub);
+    }
+
+    /**
+     * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void insideOf(Style style, Runnable sub) {
+        sub("." + style + " $", sub);
+    }
+
+    /**
+     * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void with(Style style, Runnable sub) {
+        sub("." + style + "$", sub);
     }
 
     /**
@@ -476,18 +528,14 @@ public class StyleRuleDeclaration extends StyleDeclaration {
      */
     private static final void sub(String selector, Runnable sub) {
         // store parent rule
-        StyleDeclarable parent = PropertyDefinition.declarable;
+        StyleRule parent = PropertyDefinition.declarable;
 
-        if (parent instanceof StyleRule) {
-            StyleRule rules = (StyleRule) parent;
+        // create child rule
+        StyleRule child = new StyleRule(selector.replace("$", parent.name));
 
-            // create child rule
-            StyleRule child = new StyleRule(rules, selector);
-
-            // swap context rule and execute it
-            PropertyDefinition.declarable = child;
-            sub.run();
-            PropertyDefinition.declarable = parent;
-        }
+        // swap context rule and execute it
+        PropertyDefinition.declarable = child;
+        sub.run();
+        PropertyDefinition.declarable = parent;
     }
 }

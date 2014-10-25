@@ -9,38 +9,35 @@
  */
 package jsx.style;
 
+import static jsx.style.Vendor.*;
+
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
+
+import kiss.I;
+import booton.Obfuscator;
 
 /**
- * @version 2014/10/22 15:51:03
+ * @version 2014/10/25 9:34:01
  */
-public class StyleRule extends StyleDeclarable {
+public class StyleRule extends PropertyHolder {
+
+    /** The class id for css. */
+    private static final Map<Style, String> names = new HashMap();
 
     /** The list of declared rules. */
-    private static final List<StyleRule> rules = new ArrayList();
+    private static final List<StyleRule> enables = new ArrayList();
 
-    /** The parent rule. */
-    final StyleRule parent;
-
-    /** The template of this rule's selector. */
-    final String template;
-
-    /** The list of selectors. */
-    final List<String> selectors = new ArrayList();
-
-    /** The sub rules. */
-    final List<StyleRule> children = new ArrayList();
-
-    /** The rule that this rule depends on. */
-    final Set<StyleRule> dependencies = new HashSet();
+    /** The selector name. */
+    final String name;
 
     /** The property holder. */
-    final Map<String, String> properties = new HashMap();
+    final Map<String, String> holder = new HashMap();
 
     /**
      * <p>
@@ -48,19 +45,7 @@ public class StyleRule extends StyleDeclarable {
      * </p>
      */
     public StyleRule() {
-        this(null, "", null);
-    }
-
-    /**
-     * <p>
-     * Define empty rule with parent rule.
-     * </p>
-     * 
-     * @param parent A parent rule.
-     * @param template A selector template.
-     */
-    StyleRule(StyleRule parent, String template) {
-        this(parent, template.replace("$", parent.template), parent.selectors.get(0));
+        this(null);
     }
 
     /**
@@ -68,46 +53,106 @@ public class StyleRule extends StyleDeclarable {
      * Define style rule.
      * </p>
      * 
-     * @param template
-     * @param name
-     * @param parent
+     * @param parent A parent rule.
+     * @param template A name template.
+     * @param name An actual name.
      */
-    private StyleRule(StyleRule parent, String template, String name) {
-        this.template = template;
-        this.parent = parent;
-        this.selectors.add(name);
-
-        // store as child rule in parent rule
-        if (parent != null) {
-            parent.children.add(this);
-        }
+    public StyleRule(String name) {
+        this.name = name;
     }
 
     /**
      * <p>
-     * Import selectors.
+     * Declare the specified property.
      * </p>
      * 
-     * @param set
+     * @param name A property name.
+     * @param values A list of whitespace-separated property values.
      */
-    void importSelectorsFrom(StyleRule set) {
-        selectors.addAll(set.selectors);
-
-        for (StyleRule dependence : dependencies) {
-            dependence.importSelectorsFrom(set);
-        }
-
-        for (StyleRule child : children) {
-            child.importSelectorsFrom(set);
-        }
+    public void property(String name, Object... values) {
+        property(EnumSet.of(Standard), " ", name, values);
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Declare the specified property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param values A list of whitespace-separated property values.
+     * @param vendors A list of {@link Vendor} prefix if needed.
      */
-    @Override
-    protected void setProperty(String name, String value) {
-        properties.put(name, value);
+    public void property(String name, List values, Vendor... vendors) {
+        property(EnumSet.of(Standard, vendors), " ", name, values.toArray());
+    }
+
+    /**
+     * <p>
+     * Declare the specified property.
+     * </p>
+     * 
+     * @param prefixes A list of vendors for property name.
+     * @param separator A value separator.
+     * @param name A property name.
+     * @param values A list of property values.
+     */
+    private void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
+        if (name != null && name.length() != 0 && values != null) {
+            EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
+
+            // calculate dependent vendors
+            EnumSet<Vendor> vendors = EnumSet.copyOf(prefixes);
+
+            for (Object value : values) {
+                if (value instanceof CSSValue) {
+                    vendors.addAll(((CSSValue) value).vendors());
+                }
+            }
+
+            for (Vendor vendor : vendors) {
+                List<String> text = new ArrayList();
+
+                for (Object value : values) {
+                    if (value != null) {
+                        if (value instanceof CSSValue) {
+                            String vendered = ((CSSValue) value).valueFor(vendor);
+
+                            if (vendered != null && vendered.length() != 0) {
+                                text.add(vendered);
+                            }
+                        } else if (value instanceof Number) {
+                            Number number = (Number) value;
+
+                            if (number.intValue() == number.doubleValue()) {
+                                text.add(String.valueOf(number.intValue()));
+                            } else {
+                                text.add(number.toString());
+                            }
+                        } else {
+                            String decoded = value.toString();
+
+                            if (decoded != null && decoded.length() != 0) {
+                                text.add(decoded);
+                            }
+                        }
+                    }
+                }
+                properties.put(vendor, text);
+            }
+
+            for (Entry<Vendor, List<String>> property : properties.entrySet()) {
+                String value = I.join(separator, property.getValue());
+
+                if (value.length() != 0) {
+                    Vendor vendor = property.getKey();
+
+                    if (!prefixes.contains(vendor)) {
+                        vendor = Standard;
+                    }
+                    holder.put(vendor + name, value);
+                }
+            }
+        }
     }
 
     /**
@@ -116,8 +161,8 @@ public class StyleRule extends StyleDeclarable {
      * </p>
      */
     public void enable() {
-        if (!rules.contains(this)) {
-            rules.add(this);
+        if (!enables.contains(this)) {
+            enables.add(this);
         }
     }
 
@@ -127,8 +172,26 @@ public class StyleRule extends StyleDeclarable {
      * </p>
      */
     public void disable() {
-        if (rules.contains(this)) {
-            rules.remove(this);
+        if (enables.contains(this)) {
+            enables.remove(this);
         }
+    }
+
+    /**
+     * <p>
+     * Compute the identified qualified class name for CSS.
+     * </p>
+     * 
+     * @param clazz A class with fully qualified class name(e.g. java.lang.String).
+     * @return An identified class name for ECMAScript.
+     */
+    private static final String computeCSSName(Style style) {
+        String name = names.get(style);
+
+        if (name == null) {
+            name = Obfuscator.mung52(names.size());
+            names.put(style, name);
+        }
+        return name;
     }
 }
