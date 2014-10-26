@@ -20,33 +20,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import kiss.I;
-import booton.Obfuscator;
 
 /**
  * @version 2014/10/25 9:34:01
  */
-public class StyleRule extends PropertyHolder {
-
-    /** The class id for css. */
-    private static final Map<Style, String> names = new HashMap();
+public class StyleRule {
 
     /** The list of declared rules. */
     private static final List<StyleRule> enables = new ArrayList();
+
+    /** The parent sheet. */
+    final StyleSheet sheet;
 
     /** The selector name. */
     final String name;
 
     /** The property holder. */
     final Map<String, String> holder = new HashMap();
-
-    /**
-     * <p>
-     * Define empty rule.
-     * </p>
-     */
-    public StyleRule() {
-        this(null);
-    }
 
     /**
      * <p>
@@ -57,7 +47,8 @@ public class StyleRule extends PropertyHolder {
      * @param template A name template.
      * @param name An actual name.
      */
-    public StyleRule(String name) {
+    public StyleRule(StyleSheet sheet, String name) {
+        this.sheet = sheet;
         this.name = name;
     }
 
@@ -175,23 +166,5 @@ public class StyleRule extends PropertyHolder {
         if (enables.contains(this)) {
             enables.remove(this);
         }
-    }
-
-    /**
-     * <p>
-     * Compute the identified qualified class name for CSS.
-     * </p>
-     * 
-     * @param clazz A class with fully qualified class name(e.g. java.lang.String).
-     * @return An identified class name for ECMAScript.
-     */
-    private static final String computeCSSName(Style style) {
-        String name = names.get(style);
-
-        if (name == null) {
-            name = Obfuscator.mung52(names.size());
-            names.put(style, name);
-        }
-        return name;
     }
 }

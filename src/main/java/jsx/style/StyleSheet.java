@@ -32,8 +32,7 @@ public class StyleSheet {
      */
     public void add(Style style) {
         if (!styles.contains(style)) {
-            styles.add(style);
-            rules.add(createRuleFrom(style));
+            createRuleFrom("STYLE" + style.hashCode(), style);
         }
     }
 
@@ -54,18 +53,32 @@ public class StyleSheet {
     }
 
     /**
-     * @param style
-     * @return
+     * <p>
+     * Create {@link StyleRule} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
+     * )
+     * </p>
+     * 
+     * @param object A style description.
+     * @return A create new {@link StyleRule}.
      */
-    private StyleRule createRuleFrom(Style style) {
-        StyleRule rule = new StyleRule();
+    void createRuleFrom(String name, Object object) {
+        if (object instanceof Style) {
+            Style style = (Style) object;
 
-        StyleRule previous = PropertyDefinition.declarable;
+            // create next rule
+            StyleRule rule = new StyleRule(this, name);
 
-        PropertyDefinition.declarable = rule;
-        style.declare();
-        PropertyDefinition.declarable = previous;
+            // store previous rule
+            StyleRule previous = PropertyDefinition.declarable;
 
-        return rule;
+            // swap context rule and execute it
+            PropertyDefinition.declarable = rule;
+            style.declare();
+            PropertyDefinition.declarable = previous;
+
+            // assign rule
+            styles.add(style);
+            rules.add(rule);
+        }
     }
 }

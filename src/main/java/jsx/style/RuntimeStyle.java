@@ -9,21 +9,9 @@
  */
 package jsx.style;
 
-import static jsx.style.Vendor.*;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import kiss.I;
-
 /**
- * @version 2014/10/25 12:13:12
+ * @version 2014/10/24 13:58:28
  */
-public class PropertyHolder {
+public interface RuntimeStyle extends Style {
 
 }
