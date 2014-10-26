@@ -30,22 +30,26 @@ public class StyleDeclarationTestBase {
         sheet.add(style);
 
         // API definition
-        return new ValidatableStyleSheet(sheet);
+        return new ValidatableStyleSheet(sheet, style);
     }
 
     /**
-     * @version 2014/10/21 14:21:36
+     * @version 2014/10/26 21:43:52
      */
     public static class ValidatableStyleSheet {
 
         /** The parsed styles. */
         private final StyleSheet sheet;
 
+        /** The target style. */
+        private final Style style;
+
         /**
          * @param sheet
          */
-        private ValidatableStyleSheet(StyleSheet sheet) {
+        private ValidatableStyleSheet(StyleSheet sheet, Style style) {
             this.sheet = sheet;
+            this.style = style;
         }
 
         /**
@@ -56,7 +60,12 @@ public class StyleDeclarationTestBase {
          * @return
          */
         public ValidatableStyleRule rule() {
-            return rule(0);
+            for (StyleRule rule : sheet.rules) {
+                if (rule.name.endsWith(String.valueOf(style.hashCode()))) {
+                    return new ValidatableStyleRule(sheet, rule);
+                }
+            }
+            throw new AssertionError("The rule[STYLE" + style.hashCode() + "] is not found.");
         }
 
         /**
