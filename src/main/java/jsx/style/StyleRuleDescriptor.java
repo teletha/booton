@@ -526,7 +526,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * @param selector
      * @return
      */
-    static final void sub(String selector, Style sub) {
+    private static final void sub(String selector, Style sub) {
         StyleRule parent = PropertyDefinition.declarable;
 
         parent.sheet.createRuleFrom(selector.replace("$", parent.name), sub);
