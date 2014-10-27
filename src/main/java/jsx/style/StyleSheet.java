@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @version 2014/10/22 15:49:58
+ * @version 2014/10/27 13:21:37
  */
 public class StyleSheet {
 
@@ -21,7 +21,7 @@ public class StyleSheet {
     final List<Style> styles = new ArrayList();
 
     /** The list of rules. */
-    final List<StyleRule> rules = new ArrayList();
+    public final List<StyleRule> rules = new ArrayList();
 
     /**
      * <p>
@@ -32,7 +32,7 @@ public class StyleSheet {
      */
     public void add(Style style) {
         if (!styles.contains(style)) {
-            createRuleFrom("STYLE" + style.hashCode(), style);
+            createRuleFrom(style.intern(), style);
         }
     }
 

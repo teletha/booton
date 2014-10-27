@@ -39,6 +39,7 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
+import jsx.style.Style;
 import jsx.ui.VirtualStructure;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import jsx.ui.VirtualStructure.Descriptor;
@@ -64,6 +65,9 @@ class JavaMethodCompiler extends MethodVisitor {
 
     /** The description of {@link Debugger}. */
     private static final String DEBUGGER = Type.getType(Debuggable.class).getDescriptor();
+
+    /** The description of {@link Style}. */
+    private static final String STYLE = Type.getType(Style.class).getDescriptor();
 
     /**
      * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
@@ -522,7 +526,12 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETSTATIC:
-            current.addOperand(translator.translateStaticField(owner, name), type);
+            if (desc.equals(STYLE)) {
+                String cssClassName = I.make(Stylist.class).register(owner, name);
+                current.addOperand(new OperandString(cssClassName));
+            } else {
+                current.addOperand(translator.translateStaticField(owner, name), type);
+            }
             break;
         }
     }
@@ -1471,7 +1480,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 // support stylesheet class
                 I.make(Stylist.class).register(clazz);
 
-                current.addOperand('"' + Obfuscator.computeCSSName(clazz) + '"');
+                current.addOperand('"' + Obfuscator.computeCSSName(clazz.getName()) + '"');
             } else {
                 // support class literal in javascript runtime.
                 current.addOperand(Javascript.computeClass(clazz));

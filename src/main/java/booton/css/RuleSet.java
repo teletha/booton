@@ -50,7 +50,7 @@ class RuleSet {
      * </p>
      */
     protected RuleSet(Class clazz) {
-        this(null, "$", "." + Obfuscator.computeCSSName(clazz));
+        this(null, "$", "." + Obfuscator.computeCSSName(clazz.getName()));
     }
 
     RuleSet(RuleSet parent, String template) {

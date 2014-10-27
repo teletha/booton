@@ -51,7 +51,7 @@ public class Obfuscator {
     }
 
     /** The class id for css. */
-    private static final Map<Class, String> css = new HashMap();
+    private static final Map<String, String> css = new HashMap();
 
     /**
      * <p>
@@ -61,7 +61,7 @@ public class Obfuscator {
      * @param clazz A class with fully qualified class name(e.g. java.lang.String).
      * @return An identified class name for ECMAScript.
      */
-    public static final String computeCSSName(Class style) {
+    public static final String computeCSSName(String style) {
         String name = css.get(style);
 
         if (name == null) {

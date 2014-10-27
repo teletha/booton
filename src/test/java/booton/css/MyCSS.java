@@ -157,7 +157,7 @@ public class MyCSS extends CSS {
 
         for (Object fragment : fragments) {
             if (fragment instanceof Class) {
-                builder.append(".").append(Obfuscator.computeCSSName((Class) fragment));
+                builder.append(".").append(Obfuscator.computeCSSName(((Class) fragment).getName()));
             } else {
                 builder.append(fragment);
             }
