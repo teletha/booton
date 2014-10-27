@@ -32,15 +32,12 @@ import jsx.ui.samaple.todo.TodoUIStyle.BUTTONS;
 import jsx.ui.samaple.todo.TodoUIStyle.FOOTER;
 import jsx.ui.samaple.todo.TodoUIStyle.ITEMS;
 import jsx.ui.samaple.todo.TodoUIStyle.SelectedFilter;
-import kiss.I;
 import booton.reactive.css.DynamicStyle;
 
 /**
  * @version 2014/09/01 15:14:06
  */
 public class TodoUI extends Widget1<TodoTasks> {
-
-    private static final TodoUISkin skin = I.make(TodoUISkin.class);
 
     /** Reassign to meaningful name. */
     final TodoTasks todos = model1;
@@ -70,7 +67,6 @@ public class TodoUI extends Widget1<TodoTasks> {
             .disableIf(this::isValidTaskSize)
             .shortcut(Key.Enter, this::add)
             .require()
-            .style(skin::input)
             .validate(v -> v.length() <= 15, "15文字以内でお願いします")
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
