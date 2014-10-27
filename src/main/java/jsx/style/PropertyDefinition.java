@@ -67,10 +67,34 @@ public class PropertyDefinition<T> {
      * @param value
      * @return
      */
-    protected final T value(String value) {
+    protected final T value(Object value) {
+        return value(name, value);
+    }
+
+    /**
+     * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final T value(String name, Object value) {
         declarable.property(name, value);
 
         return context;
+    }
+
+    /**
+     * <p>
+     * Check the current value.
+     * </p>
+     * 
+     * @param value A property value you want.
+     * @return A result.
+     */
+    protected final boolean is(String value) {
+        return declarable.is(name, value);
     }
 
     /**

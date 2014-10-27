@@ -10,6 +10,7 @@
 package jsx.ui.samaple.todo;
 
 import static jsx.ui.FunctionHelper.*;
+import static jsx.ui.samaple.todo.TodoUISkin.*;
 
 import java.util.function.Predicate;
 
@@ -28,10 +29,6 @@ import jsx.ui.piece.CheckBox;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.samaple.todo.TodoTasks.Task;
-import jsx.ui.samaple.todo.TodoUIStyle.BUTTONS;
-import jsx.ui.samaple.todo.TodoUIStyle.FOOTER;
-import jsx.ui.samaple.todo.TodoUIStyle.ITEMS;
-import jsx.ui.samaple.todo.TodoUIStyle.SelectedFilter;
 import booton.reactive.css.DynamicStyle;
 
 /**
@@ -74,21 +71,21 @@ public class TodoUI extends Widget1<TodoTasks> {
     final Button all = new Button()
             .label("all")
             .click(this::showAll)
-            .styleIf(filter.isEqualTo(Filter.All), SelectedFilter.class)
+            .styleIf(filter.isEqualTo(Filter.All), TodoUISkin.SELECTED_FILTER)
             .style(selectedFileter.is(Filter.All));
 
     /** The filter button. */
     final Button active = new Button()
             .label("active")
             .click(this::showActive)
-            .styleIf(filter.isEqualTo(Filter.Active), SelectedFilter.class)
+            .styleIf(filter.isEqualTo(Filter.Active), SELECTED_FILTER)
             .style(selectedFileter.is(Filter.Active));
 
     /** The filter button. */
     final Button completed = new Button()
             .label("completed")
             .click(this::showCompleted)
-            .styleIf(filter.isEqualTo(Filter.Completed), SelectedFilter.class)
+            .styleIf(filter.isEqualTo(Filter.Completed), SELECTED_FILTER)
             .style(selectedFileter.is(Filter.Completed));
 
     /** The clear button. */
@@ -144,10 +141,10 @@ public class TodoUI extends Widget1<TodoTasks> {
     @Override
     protected void virtualize(VirtualStructure $〡) {
         $〡.asis.〡(input);
-        $〡.vbox.〡(ITEMS.class, Item.class, todos.list);
-        $〡.hbox.〡(FOOTER.class, () -> {
+        $〡.vbox.〡(ITEMS, Item.class, todos.list);
+        $〡.hbox.〡(FOTTER, () -> {
             $〡.asis.〡(text);
-            $〡.hbox.〡(BUTTONS.class, all, active, completed);
+            $〡.hbox.〡(BUTTONS, all, active, completed);
             $〡.asis.〡(clear);
         });
     }

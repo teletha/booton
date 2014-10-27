@@ -11,6 +11,7 @@ package jsx.style;
 
 import jsx.style.property.Display;
 import jsx.style.property.Font;
+import jsx.style.property.Position;
 
 /**
  * @version 2014/10/25 11:22:51
@@ -39,6 +40,14 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Font font = new Font();
+
+    /**
+     * <p>
+     * The position CSS property chooses alternative rules for positioning elements, designed to be
+     * useful for scripted animation effects.
+     * </p>
+     */
+    protected static final Position position = new Position();
 
     // The "require" functionality is useless. Use normal method call and post processor instead.
     //

@@ -20,4 +20,15 @@ public interface Style {
      * </p>
      */
     void declare();
+
+    /**
+     * <p>
+     * Compute internal class name.
+     * </p>
+     * 
+     * @return
+     */
+    public default String intern() {
+        return "STYLE" + hashCode();
+    }
 }

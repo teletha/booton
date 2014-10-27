@@ -9,46 +9,45 @@
  */
 package jsx.ui.samaple.todo;
 
-import booton.css.CSS;
 
 /**
  * @version 2014/09/04 15:19:35
  */
 class TodoUIStyle {
-
-    class ITEMS extends CSS {
-
-        {
-
-        }
-    }
-
-    class FOOTER extends CSS {
-
-        {
-
-        }
-    }
-
-    class BUTTONS extends CSS {
-
-        {
-
-        }
-    }
-
-    class CLEAR extends CSS {
-
-        {
-
-        }
-    }
-
-    class SelectedFilter extends CSS {
-
-        {
-            font.weight.bold();
-        }
-    }
+    //
+    // class ITEMS extends CSS {
+    //
+    // {
+    //
+    // }
+    // }
+    //
+    // class FOOTER extends CSS {
+    //
+    // {
+    //
+    // }
+    // }
+    //
+    // class BUTTONS extends CSS {
+    //
+    // {
+    //
+    // }
+    // }
+    //
+    // class CLEAR extends CSS {
+    //
+    // {
+    //
+    // }
+    // }
+    //
+    // class SelectedFilter extends CSS {
+    //
+    // {
+    // font.weight.bold();
+    // }
+    // }
 
 }
