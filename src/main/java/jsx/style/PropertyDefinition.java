@@ -14,6 +14,7 @@ import static jsx.style.Vendor.*;
 import java.util.EnumMap;
 import java.util.EnumSet;
 
+import booton.css.Unit;
 import booton.util.Strings;
 
 /**
@@ -95,6 +96,25 @@ public class PropertyDefinition<T> {
      */
     protected final boolean is(String value) {
         return declarable.is(name, value);
+    }
+
+    /**
+     * Helper method to compute size.
+     * 
+     * @param size
+     * @param unit
+     * @return
+     */
+    protected final String compute(double size, Unit unit) {
+        int i = (int) size;
+
+        if (size == 0) {
+            return "0";
+        } else if (i == size) {
+            return String.valueOf(i).concat(unit.toString());
+        } else {
+            return String.valueOf(size).concat(unit.toString());
+        }
     }
 
     /**

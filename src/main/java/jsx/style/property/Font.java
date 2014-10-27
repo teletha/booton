@@ -9,47 +9,10 @@
  */
 package jsx.style.property;
 
-import jsx.style.PropertyDefinition;
-import booton.css.value.Color;
 
 /**
  * @version 2014/10/21 13:40:43
  */
-public class Font extends PropertyDefinition {
+public class Font extends Colorable<Font> {
 
-    /**
-     * <p>
-     * The format of an RGB value in the functional notation is 'rgb(' followed by a comma-separated
-     * list of three numerical values (either three integer values or three percentage values)
-     * followed by ')'. The integer value 255 corresponds to 100%, and to F or FF in the hexadecimal
-     * notation: rgb(255,255,255) = rgb(100%,100%,100%) = #FFF. White space characters are allowed
-     * around the numerical values.
-     * </p>
-     * 
-     * @param red
-     * @param green
-     * @param blue
-     * @return Chainable API.
-     */
-    public Font color(int red, int green, int blue) {
-        return color(Color.rgb(red, green, blue));
-    }
-
-    /**
-     * <p>
-     * The format of an RGB value in the functional notation is 'rgb(' followed by a comma-separated
-     * list of three numerical values (either three integer values or three percentage values)
-     * followed by ')'. The integer value 255 corresponds to 100%, and to F or FF in the hexadecimal
-     * notation: rgb(255,255,255) = rgb(100%,100%,100%) = #FFF. White space characters are allowed
-     * around the numerical values.
-     * </p>
-     * 
-     * @param color
-     * @return Chainable API.
-     */
-    public Font color(Color color) {
-        declarable.property("color", color.toString());
-
-        return this;
-    }
 }
