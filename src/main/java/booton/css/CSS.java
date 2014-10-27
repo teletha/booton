@@ -729,7 +729,7 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
      * @return
      */
     public final void not(Class<? extends CSS> clazz, Runnable sub) {
-        rule("$:not(." + Obfuscator.computeCSSName(clazz) + ")", sub);
+        rule("$:not(." + Obfuscator.computeCSSName(clazz.getName()) + ")", sub);
     }
 
     /**
@@ -820,7 +820,7 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
      * @return
      */
     public final void inBackOf(Class<? extends CSS> clazz, Runnable sub) {
-        rule("." + Obfuscator.computeCSSName(clazz) + "+$", sub);
+        rule("." + Obfuscator.computeCSSName(clazz.getName()) + "+$", sub);
     }
 
     /**
@@ -833,7 +833,7 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
      * @return
      */
     public final void insideOf(Class<? extends CSS> clazz, Runnable sub) {
-        rule("." + Obfuscator.computeCSSName(clazz) + " $", sub);
+        rule("." + Obfuscator.computeCSSName(clazz.getName()) + " $", sub);
     }
 
     /**
@@ -846,7 +846,7 @@ public abstract class CSS extends StyleDeclaration implements Extensible {
      * @return
      */
     public final void with(Class<? extends CSS> clazz, Runnable sub) {
-        rule("." + Obfuscator.computeCSSName(clazz) + "$", sub);
+        rule("." + Obfuscator.computeCSSName(clazz.getName()) + "$", sub);
     }
 
     /**

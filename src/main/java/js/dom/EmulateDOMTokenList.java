@@ -39,7 +39,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             add((String) null);
         } else {
-            add(Obfuscator.computeCSSName(className));
+            add(Obfuscator.computeCSSName(className.getName()));
         }
     }
 
@@ -59,7 +59,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             remove((String) null);
         } else {
-            remove(Obfuscator.computeCSSName(className));
+            remove(Obfuscator.computeCSSName(className.getName()));
         }
     }
 
@@ -85,7 +85,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             return toggle((String) null);
         } else {
-            return toggle(Obfuscator.computeCSSName(className));
+            return toggle(Obfuscator.computeCSSName(className.getName()));
         }
     }
 
@@ -105,7 +105,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             return contains((String) null);
         } else {
-            return contains(Obfuscator.computeCSSName(className));
+            return contains(Obfuscator.computeCSSName(className.getName()));
         }
     }
 

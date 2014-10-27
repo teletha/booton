@@ -9,16 +9,22 @@
  */
 package booton.css;
 
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map.Entry;
 
+import jsx.style.Style;
+import jsx.style.StyleRule;
+import jsx.style.StyleSheet;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+import booton.Obfuscator;
 import booton.css.value.Font;
 
 /**
@@ -29,6 +35,9 @@ public class Stylist {
 
     /** The style classes which javascript reference. */
     private final List<CSS> styles = new ArrayList();
+
+    /** The style classes which any javascript refers. */
+    private final List<StyleWrapper> styles2 = new ArrayList();
 
     public String write(CSS style) {
         return write(style.rules);
@@ -97,7 +106,39 @@ public class Stylist {
             }
         }
 
+        StyleSheet sheet = new StyleSheet();
+
+        for (StyleWrapper item : styles2) {
+            sheet.add(item);
+        }
+
+        for (StyleRule rule : sheet.rules) {
+            root.writeDown(write(rule));
+        }
+
         Files.write(file, root.toString().getBytes(I.$encoding));
+    }
+
+    private String write(StyleRule rule) {
+        CSSWriter writer = new CSSWriter();
+
+        // count requested properties
+        int counter = 0;
+
+        // write requested properties only.
+        writer.writeDown("." + rule.name, "{");
+
+        for (Entry<String, String> entry : rule.holder.entrySet()) {
+            counter++;
+            writer.property(entry.getKey(), entry.getValue());
+        }
+        writer.writeDown("}");
+
+        if (counter == 0) {
+            // this class has no properties, so we can remove it
+            writer = new CSSWriter();
+        }
+        return writer.toString();
     }
 
     /**
@@ -114,6 +155,30 @@ public class Stylist {
             if (!styles.contains(css)) {
                 styles.add(css);
             }
+        }
+    }
+
+    /**
+     * <p>
+     * Register style definition.
+     * </p>
+     * 
+     * @param style
+     */
+    public String register(Class clazz, String fieldName) {
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+
+            Style style = (Style) field.get(null);
+            StyleWrapper wrapper = new StyleWrapper(style, Obfuscator.computeCSSName(clazz.getName() + "#" + fieldName));
+
+            if (!styles2.contains(wrapper)) {
+                styles2.add(wrapper);
+            }
+            return wrapper.name;
+        } catch (Exception e) {
+            throw I.quiet(e);
         }
     }
 
@@ -136,6 +201,64 @@ public class Stylist {
                 return 0;
             }
             return value1 < value2 ? -1 : 1;
+        }
+    }
+
+    /**
+     * @version 2014/10/27 15:24:12
+     */
+    private static class StyleWrapper implements Style {
+
+        /** The style delegation. */
+        private final Style delegater;
+
+        /** The obfuscated name. */
+        private final String name;
+
+        /**
+         * @param delegater
+         * @param name
+         */
+        private StyleWrapper(Style delegater, String name) {
+            this.delegater = delegater;
+            this.name = name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void declare() {
+            delegater.declare();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String intern() {
+            return name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            return name.hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof StyleWrapper) {
+                StyleWrapper other = (StyleWrapper) obj;
+
+                return name.equals(other.name);
+            }
+            return false;
         }
     }
 }

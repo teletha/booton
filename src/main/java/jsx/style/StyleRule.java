@@ -31,13 +31,13 @@ public class StyleRule {
     private static final List<StyleRule> enables = new ArrayList();
 
     /** The parent sheet. */
-    final StyleSheet sheet;
+    public final StyleSheet sheet;
 
     /** The selector name. */
-    final String name;
+    public final String name;
 
     /** The property holder. */
-    final Map<String, String> holder = new HashMap();
+    public final Map<String, String> holder = new HashMap();
 
     /**
      * <p>
