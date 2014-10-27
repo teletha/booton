@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import kiss.I;
 
@@ -50,6 +51,19 @@ public class StyleRule {
     public StyleRule(StyleSheet sheet, String name) {
         this.sheet = sheet;
         this.name = name;
+    }
+
+    /**
+     * <p>
+     * Check the current value.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param value A property value you want.
+     * @return
+     */
+    public boolean is(String name, String value) {
+        return Objects.equals(holder.get(name), value);
     }
 
     /**

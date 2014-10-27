@@ -15,10 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import jsx.style.Style;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import booton.css.CSS;
 import booton.soeur.ScriptRunner;
 
 /**
@@ -32,15 +33,15 @@ public class DiffElementTest extends DiffTestBase {
 
     @Test
     public void addClass() throws Exception {
-        assertDiff(rootClass(), rootClass(A.class), 1);
-        assertDiff(rootClass(A.class), rootClass(A.class, B.class), 1);
-        assertDiff(rootClass(A.class), rootClass(A.class, B.class, C.class), 2);
+        assertDiff(rootClass(), rootClass(A), 1);
+        assertDiff(rootClass(A), rootClass(A, B), 1);
+        assertDiff(rootClass(A), rootClass(A, B, C), 2);
     }
 
     @Test
     public void removeClass() throws Exception {
-        assertDiff(rootClass(A.class, B.class, C.class), rootClass(A.class, B.class), 1);
-        assertDiff(rootClass(A.class, B.class, C.class), rootClass(B.class), 2);
+        assertDiff(rootClass(A, B, C), rootClass(A, B), 1);
+        assertDiff(rootClass(A, B, C), rootClass(B), 2);
     }
 
     @Test
@@ -243,7 +244,7 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement rootClass(Class<? extends CSS>... classes) {
+    private static VirtualElement rootClass(Style... classes) {
         return e("root", clazz(classes));
     }
 
@@ -279,7 +280,7 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, List<Class<? extends CSS>> classes, VirtualNode... children) {
+    private static VirtualElement e(String key, List<Style> classes, VirtualNode... children) {
         return e(key, noAttr, classes, children);
     }
 
@@ -313,14 +314,14 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, Map<String, String> attributes, List<Class<? extends CSS>> classes, VirtualNode... children) {
+    private static VirtualElement e(String key, Map<String, String> attributes, List<Style> classes, VirtualNode... children) {
         VirtualElement e = new VirtualElement(key.hashCode(), key);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
             e.attributes.set(attribute.getKey(), attribute.getValue());
         }
 
-        for (Class<? extends CSS> clazz : classes) {
+        for (Style clazz : classes) {
             e.classList.push(clazz);
         }
 
@@ -356,8 +357,8 @@ public class DiffElementTest extends DiffTestBase {
      * @param classes
      * @return
      */
-    private static List<Class<? extends CSS>> clazz(Class<? extends CSS>... classes) {
-        List<Class<? extends CSS>> list = new ArrayList();
+    private static List<Style> clazz(Style... classes) {
+        List<Style> list = new ArrayList();
 
         for (int i = 0; i < classes.length; i++) {
             list.add(classes[i]);
@@ -380,18 +381,18 @@ public class DiffElementTest extends DiffTestBase {
     /**
      * @version 2014/09/12 11:17:24
      */
-    static class A extends CSS {
-    }
+    static Style A = () -> {
+    };
 
     /**
      * @version 2014/09/12 11:17:24
      */
-    static class B extends CSS {
-    }
+    static Style B = () -> {
+    };
 
     /**
      * @version 2014/09/12 11:17:24
      */
-    static class C extends CSS {
-    }
+    static Style C = () -> {
+    };
 }

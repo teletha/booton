@@ -23,11 +23,11 @@ import javafx.beans.value.ObservableValue;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;
+import jsx.style.Style;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
-import booton.css.CSS;
 import booton.reactive.css.StyleDefinition;
 
 /**
@@ -168,7 +168,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         return (T) this;
     }
 
-    public T styleIf(ObservableValue<Boolean> condition, Class<? extends CSS> onStyle) {
+    public T styleIf(ObservableValue<Boolean> condition, Style onStyle) {
         return (T) this;
     }
 

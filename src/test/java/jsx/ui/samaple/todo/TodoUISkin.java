@@ -7,29 +7,33 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.samaple.todo;
 
 import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
 
 /**
- * @version 2014/09/12 11:00:18
+ * @version 2014/10/27 9:49:27
  */
-class VirtualStructureStyle extends StyleRuleDescriptor {
+public class TodoUISkin extends StyleRuleDescriptor {
 
-    static Style HBOX = () -> {
-        display.flex();
+    static Style FOTTER = () -> {
+
     };
 
-    static Style VBOX = () -> {
-        display.flex().direction.column();
+    static Style ITEMS = () -> {
+
     };
 
-    static Style SBOX = () -> {
-        position.relative();
+    static Style BUTTONS = () -> {
 
-        children(() -> {
-            position.absolute();
-        });
+    };
+
+    static Style CLEAR = () -> {
+
+    };
+
+    static Style SELECTED_FILTER = () -> {
+
     };
 }
