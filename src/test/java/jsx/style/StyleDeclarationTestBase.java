@@ -10,6 +10,9 @@
 package jsx.style;
 
 import static java.lang.Integer.*;
+
+import java.util.Map;
+
 import booton.css.value.Color;
 
 /**
@@ -113,8 +116,10 @@ public class StyleDeclarationTestBase {
                 value = convertRGB(value);
             }
 
-            assert rules.holder.containsKey(name);
-            assert rules.holder.get(name).equals(value);
+            Map<String, String> properties = rules.holder;
+
+            assert properties.containsKey(name);
+            assert properties.get(name).equals(value);
             return true;
         }
 
