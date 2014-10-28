@@ -10,6 +10,7 @@
 package jsx.style;
 
 import jsx.style.property.Background;
+import jsx.style.property.BoxLength;
 import jsx.style.property.Display;
 import jsx.style.property.Font;
 import jsx.style.property.Position;
@@ -162,6 +163,31 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Font font = new Font();
+
+    /**
+     * <p>
+     * The margin CSS property sets the margin for all four sides. It is a shorthand to avoid
+     * setting each side separately with the other margin properties: margin-top, margin-right,
+     * margin-bottom and margin-left. Negative value are also allowed.
+     * </p>
+     * <p>
+     * One single value applies to all four sides.
+     * </p>
+     */
+    protected static final BoxLength margin = new BoxLength("margin");
+
+    /**
+     * <p>
+     * The padding CSS property sets the required padding space on all sides of an element. The
+     * padding area is the space between the content of the element and its border. Negative values
+     * are not allowed.
+     * </p>
+     * <p>
+     * The padding property is a shorthand to avoid setting each side separately (padding-top,
+     * padding-right, padding-bottom, padding-left).
+     * </p>
+     */
+    protected static final BoxLength padding = new BoxLength("padding");
 
     /**
      * <p>
