@@ -10,6 +10,7 @@
 package jsx.style;
 
 import jsx.style.property.Background;
+import jsx.style.property.Box;
 import jsx.style.property.BoxLength;
 import jsx.style.property.Cursor;
 import jsx.style.property.Display;
@@ -138,6 +139,13 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Unit percent = Unit.percent;
+
+    /**
+     * <p>
+     * The width, height and box-sizing property.
+     * </p>
+     */
+    protected static final Box box = new Box();
 
     /**
      * <p>
