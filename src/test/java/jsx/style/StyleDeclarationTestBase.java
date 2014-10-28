@@ -114,7 +114,8 @@ public class StyleDeclarationTestBase {
             }
 
             assert rules.holder.containsKey(name);
-            return rules.holder.get(name).equals(value);
+            assert rules.holder.get(name).equals(value);
+            return true;
         }
 
         /**
