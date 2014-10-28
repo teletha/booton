@@ -13,6 +13,8 @@ import static jsx.style.Vendor.*;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.StringJoiner;
+import java.util.function.Function;
 
 import booton.css.Unit;
 import booton.util.Strings;
@@ -99,13 +101,31 @@ public class PropertyDefinition<T> {
     }
 
     /**
+     * <p>
+     * Join all values.
+     * </p>
+     * 
+     * @param images
+     * @param index
+     * @return
+     */
+    protected static final <T> String join(T[] items, Function<T, String> conveter) {
+        StringJoiner joiner = new StringJoiner(",");
+
+        for (T item : items) {
+            joiner.add(conveter.apply(item));
+        }
+        return joiner.toString();
+    }
+
+    /**
      * Helper method to compute size.
      * 
      * @param size
      * @param unit
      * @return
      */
-    protected final String compute(double size, Unit unit) {
+    protected static final String compute(double size, Unit unit) {
         int i = (int) size;
 
         if (size == 0) {
