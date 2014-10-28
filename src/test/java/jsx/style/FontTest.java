@@ -9,8 +9,6 @@
  */
 package jsx.style;
 
-import jsx.style.value.FontFamily;
-
 import org.junit.Test;
 
 /**
@@ -27,10 +25,7 @@ public class FontTest extends StyleDeclarationTestBase {
     @Test
     public void family() {
         ValidatableStyleRule parsed = parse(MyStyle.family).rule();
-        assert parsed.property("font-family", "\"my font\",serif");
-
-        parsed = parse(MyStyle.fonts).rule();
-        assert parsed.property("font-family", "\"Source Sans Pro\",sans-serif");
+        assert parsed.property("font-family", "\"Source Sans Pro\",serif");
     }
 
     /**
@@ -43,12 +38,7 @@ public class FontTest extends StyleDeclarationTestBase {
         };
 
         private static Style family = () -> {
-            font.family("my font", "serif");
-        };
-
-        private static Style fonts = () -> {
-            font
-                    .family(new FontFamily("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600"), FontFamily.sansSerif);
+            font.family("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600").serif();
         };
     }
 }

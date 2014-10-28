@@ -9,11 +9,17 @@
  */
 package jsx.style.property;
 
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.StringJoiner;
+
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Color;
-import jsx.style.value.FontFamily;
 import jsx.style.value.Numeric;
+import kiss.I;
 import booton.css.Unit;
+import booton.translator.Translator;
 import booton.util.Strings;
 
 /**
@@ -128,44 +134,20 @@ public class Font extends Colorable<Font> {
      * font when needed.
      * </p>
      * 
-     * @param fonts
-     * @return
-     */
-    public Font family(FontFamily... fonts) {
-        String[] names = new String[fonts.length];
-
-        for (int i = 0; i < names.length; i++) {
-            names[i] = fonts[i].name;
-        }
-        return family(names);
-    }
-
-    /**
-     * <p>
-     * The font-family CSS property allows for a prioritized list of font family names and/or
-     * generic family names to be specified for the selected element. Unlike most other CSS
-     * properties, values are separated by a comma to indicate that they are alternatives. The
-     * browser will select the first font on the list that is installed on the computer, or that can
-     * be downloaded using the information provided by a @font-face at-rule.
-     * </p>
-     * <p>
-     * Web authors should always add at least one generic family in a font-family list, since
-     * there's no guarantee that a specific font is intalled on the computer or can be downloaded
-     * using a @font-face at-rule. The generic family lets the browser select an acceptable fallback
-     * font when needed.
-     * </p>
-     * 
      * @param persons
      * @return
      */
-    public Font family(String... fonts) {
+    public Family family(String... fonts) {
         for (int i = 0; i < fonts.length; i++) {
+            if (fonts[i].startsWith("http")) {
+                fonts[i] = FontInfo.parse(fonts[i]);
+            }
+
             if (Strings.hasSpace(fonts[i])) {
                 fonts[i] = "\"" + fonts[i] + "\"";
             }
         }
-
-        return value("font-family", join(fonts, v -> v));
+        return new Family(fonts);
     }
 
     /**
@@ -467,6 +449,157 @@ public class Font extends Colorable<Font> {
          */
         public Font normal() {
             return value("normal");
+        }
+    }
+
+    /**
+     * @version 2014/10/29 2:16:13
+     */
+    public class Family extends PropertyDefinition<Font> {
+
+        /** The user specified. */
+        private final String[] fonts;
+
+        /**
+         * Hide constructor.
+         */
+        private Family(String[] fonts) {
+            super("font-family", Font.this);
+
+            this.fonts = fonts;
+        }
+
+        /**
+         * <p>
+         * Glyphs have finishing strokes, flared or tapering ends, or have actual serifed endings.
+         * E.g. Palatino, "Palatino Linotype", Palladio, "URW Palladio", serif
+         * </p>
+         * 
+         * @return
+         */
+        public Font serif() {
+            return value(join("serif"));
+        }
+
+        /**
+         * <p>
+         * Glyphs have stroke endings that are plain. E.g. 'Trebuchet MS', 'Liberation Sans',
+         * 'Nimbus Sans L', sans-serif
+         * </p>
+         * 
+         * @return
+         */
+        public Font sansSerif() {
+            return value(join("sans-serif"));
+        }
+
+        /**
+         * <p>
+         * Glyphs in cursive fonts generally have either joining strokes or other cursive
+         * characteristics beyond those of italic typefaces. The glyphs are partially or completely
+         * connected, and the result looks more like handwritten pen or brush writing than printed
+         * letterwork.
+         * </p>
+         * 
+         * @return
+         */
+        public Font cursive() {
+            return value(join("cursive"));
+        }
+
+        /**
+         * <p>
+         * Fantasy fonts are primarily decorative fonts that contain playful representations of
+         * characters.
+         * </p>
+         * 
+         * @return
+         */
+        public Font fantasy() {
+            return value(join("fantasy"));
+        }
+
+        /**
+         * <p>
+         * All glyphs have the same fixed width. E.g. "DejaVu Sans Mono", Menlo, Consolas,
+         * "Liberation Mono", Monaco, "Lucida Console", monospace
+         * </p>
+         * 
+         * @return
+         */
+        public Font monospace() {
+            return value(join("monospace"));
+        }
+
+        private String join(String addition) {
+            StringJoiner joiner = new StringJoiner(",");
+
+            for (String font : fonts) {
+                joiner.add(font);
+            }
+            joiner.add(addition);
+
+            return joiner.toString();
+        }
+    }
+
+    /**
+     * @version 2014/10/29 0:40:24
+     */
+    private static class FontInfo {
+
+        /**
+         * <p>
+         * Locate font.
+         * </p>
+         * 
+         * @param uri
+         * @return
+         */
+        static String parse(String uri) {
+            try {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                URLConnection connection = new URL(uri).openConnection();
+                connection.connect();
+                I.copy(connection.getInputStream(), out, true);
+
+                String contents = out.toString();
+                int start = contents.indexOf("font-family");
+                int end = contents.indexOf(";", start);
+
+                String name = contents.substring(start + 11, end).trim();
+
+                if (name.charAt(0) == ':') {
+                    name = name.substring(1).trim();
+                }
+
+                if (name.charAt(0) == '\'') {
+                    name = name.substring(1, name.length() - 1);
+                }
+
+                return name;
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+        }
+
+        /**
+         * @version 2014/10/13 17:55:12
+         */
+        @SuppressWarnings("unused")
+        private static class Coder extends Translator<FontInfo> {
+
+            /**
+             * <p>
+             * Locate font.
+             * </p>
+             * 
+             * @param uri
+             * @return
+             */
+            public String parse(String uri) {
+                return "['" + uri + "','" + uri + "']";
+            }
         }
     }
 }
