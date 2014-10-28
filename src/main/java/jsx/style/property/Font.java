@@ -9,10 +9,20 @@
  */
 package jsx.style.property;
 
+import jsx.style.value.Color;
 
 /**
  * @version 2014/10/21 13:40:43
  */
 public class Font extends Colorable<Font> {
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Font color(Color color) {
+        value("color", color.toString());
+
+        return this;
+    }
 }

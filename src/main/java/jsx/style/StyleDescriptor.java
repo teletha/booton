@@ -11,9 +11,16 @@ package jsx.style;
 
 import jsx.style.property.Background;
 import jsx.style.property.BoxLength;
+import jsx.style.property.Cursor;
 import jsx.style.property.Display;
 import jsx.style.property.Font;
 import jsx.style.property.Position;
+import jsx.style.property.Text;
+import jsx.style.property.Visibility;
+import jsx.style.value.Color;
+import jsx.style.value.LinearGradient;
+import jsx.style.value.RadialGradient;
+import jsx.style.value.Shadow;
 import booton.css.Unit;
 
 /**
@@ -134,6 +141,14 @@ public class StyleDescriptor {
 
     /**
      * <p>
+     * The cursor CSS property specifies the mouse cursor displayed when the mouse pointer is over
+     * an element.
+     * </p>
+     */
+    protected static final Cursor cursor = new Cursor();
+
+    /**
+     * <p>
      * The background CSS property is a shorthand for setting the individual background values in a
      * single place in the style sheet. background can be used to set the values for one or more of:
      * background-color, background-image, background-position, background-repeat, background-size,
@@ -196,6 +211,150 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Position position = new Position();
+
+    /** The text related style. */
+    protected static final Text text = new Text();
+
+    /**
+     * <p>
+     * The visibility CSS property has two purposes:
+     * </p>
+     */
+    protected static final Visibility visibility = new Visibility();
+
+    /**
+     * <p>
+     * Create Color without alpha channel.
+     * </p>
+     * 
+     * @param red A red component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param green A green component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param blue A blue component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @return A new color.
+     */
+    protected static final Color rgb(int red, int green, int blue) {
+        return Color.rgb(red, green, blue);
+    }
+
+    /**
+     * <p>
+     * Create Color with alpha channel.
+     * </p>
+     * 
+     * @param red A red component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param green A green component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @param blue A blue component in the range 0-255. If the specified value is out of range, it
+     *            will be round up to 0 or 255.
+     * @return A new color.
+     */
+    protected static final Color rgba(int red, int green, int blue, double alpha) {
+        return Color.rgba(red, green, blue, alpha);
+    }
+
+    /**
+     * <p>
+     * Create Color without alpha channel.
+     * </p>
+     * 
+     * @param hue The attribute of a visual sensation according to which an area appears to be
+     *            similar to one of the perceived colors: red, yellow, green, and blue, or to a
+     *            combination of two of them .
+     * @param saturation The colorfulness of a stimulus relative to its own brightness.
+     * @param lightness The brightness relative to the brightness of a similarly illuminated white.
+     * @return A new color.
+     */
+    protected static final Color hsl(int hue, int saturation, int lightness) {
+        return hsla(hue, saturation, lightness, 1);
+    }
+
+    /**
+     * <p>
+     * Create Color without alpha channel.
+     * </p>
+     * 
+     * @param hue The attribute of a visual sensation according to which an area appears to be
+     *            similar to one of the perceived colors: red, yellow, green, and blue, or to a
+     *            combination of two of them .
+     * @param saturation The colorfulness of a stimulus relative to its own brightness.
+     * @param lightness The brightness relative to the brightness of a similarly illuminated white.
+     * @param alpha The transparency.
+     * @return A new color.
+     */
+    protected static final Color hsla(int hue, int saturation, int lightness, double alpha) {
+        return new Color(hue, saturation, lightness, alpha);
+    }
+
+    /**
+     * <p>
+     * The CSS linear-gradient() function creates an <image> which represents a linear gradient of
+     * colors. The result of this function is an object of the CSS <gradient> data type. Like any
+     * other gradient, a CSS linear gradient is not a CSS <color> but an image with no intrinsic
+     * dimensions; that is, it has no natural or preferred size, nor ratio. Its concrete size will
+     * match the one of the element it applies to.
+     * </p>
+     * 
+     * @return A new linear gradient image.
+     */
+    protected static final LinearGradient linear() {
+        return new LinearGradient();
+    }
+
+    /**
+     * <p>
+     * The CSS linear-gradient() function creates an <image> which represents a linear gradient of
+     * colors. The result of this function is an object of the CSS <gradient> data type. Like any
+     * other gradient, a CSS linear gradient is not a CSS <color> but an image with no intrinsic
+     * dimensions; that is, it has no natural or preferred size, nor ratio. Its concrete size will
+     * match the one of the element it applies to.
+     * </p>
+     * 
+     * @return A new linear gradient image.
+     */
+    protected static final LinearGradient linear(Color start, Color end) {
+        return new LinearGradient().color(start, end);
+    }
+
+    /**
+     * <p>
+     * The CSS radial-gradient() function creates an <image> which represents a gradient of colors
+     * radiating from an origin, the center of the gradient. The result of this function is an
+     * object of the CSS <gradient> data type.
+     * </p>
+     * 
+     * @return A new linear gradient image.
+     */
+    protected static final RadialGradient radial() {
+        return new RadialGradient();
+    }
+
+    /**
+     * <p>
+     * The CSS radial-gradient() function creates an <image> which represents a gradient of colors
+     * radiating from an origin, the center of the gradient. The result of this function is an
+     * object of the CSS <gradient> data type.
+     * </p>
+     * 
+     * @return A new linear gradient image.
+     */
+    protected static final RadialGradient radial(Color start, Color end) {
+        return new RadialGradient().color(start, end);
+    }
+
+    /**
+     * <p>
+     * The CSS shadow function creates an generic shadow representation.
+     * </p>
+     * 
+     * @return A new shadow.
+     */
+    protected static final Shadow shadow() {
+        return new Shadow();
+    }
 
     // The "require" functionality is useless. Use normal method call and post processor instead.
     //
