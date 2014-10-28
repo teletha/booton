@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@ package jsx.style;
 import java.util.EnumSet;
 
 /**
- * @version 2013/07/23 18:53:33
+ * @version 2014/10/28 20:38:28
  */
 public abstract class CSSValue {
 
@@ -32,8 +32,8 @@ public abstract class CSSValue {
 
     /**
      * <p>
-     * Write vendor specific value. Returning <code>null</code> or empty string, {@link PropertyHolder}
-     * will omit the target property.
+     * Write vendor specific value. Returning <code>null</code> or empty string,
+     * {@link PropertyHolder} will omit the target property.
      * </p>
      * 
      * @param vendor A target vendor.

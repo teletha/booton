@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,21 +10,17 @@
 package jsx.style.property;
 
 import jsx.style.PropertyDefinition;
-import booton.css.value.Color;
+import jsx.style.value.Color;
 
 /**
- * @version 2013/07/23 12:40:12
+ * @version 2014/10/28 20:39:42
  */
 public abstract class Colorable<T extends Colorable> extends PropertyDefinition<T> {
-
-    /** The stored color. */
-    protected Color color;
 
     /**
      * 
      */
     protected Colorable() {
-        super();
     }
 
     /**
@@ -33,15 +29,6 @@ public abstract class Colorable<T extends Colorable> extends PropertyDefinition<
      */
     protected Colorable(String name, T context) {
         super(name, context);
-    }
-
-    /**
-     * <p>
-     * Retrieve the configured color.
-     * </p>
-     */
-    public Color color() {
-        return color;
     }
 
     /**
@@ -56,11 +43,7 @@ public abstract class Colorable<T extends Colorable> extends PropertyDefinition<
      * @param color
      * @return Chainable API.
      */
-    public T color(Color color) {
-        declarable.property("color", color.toString());
-
-        return (T) this;
-    }
+    public abstract T color(Color color);
 
     /**
      * <p>

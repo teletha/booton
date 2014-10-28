@@ -13,7 +13,7 @@ import static java.lang.Integer.*;
 
 import java.util.Map;
 
-import booton.css.value.Color;
+import jsx.style.value.Color;
 
 /**
  * @version 2014/10/21 13:59:35
@@ -116,6 +116,10 @@ public class StyleDeclarationTestBase {
                 value = convertRGB(value);
             }
 
+            if (value.startsWith("transparent")) {
+                value = "hsla(0,0%,0%,0)";
+            }
+
             Map<String, String> properties = rules.holder;
 
             assert properties.containsKey(name);
@@ -139,14 +143,15 @@ public class StyleDeclarationTestBase {
          * @return
          */
         public ValidatableStyleRule sub(String selector) {
-            selector = rules.name + ":" + selector;
+            String combinator = rules.name + ":" + selector;
+            String pseudo = rules.name + "::" + selector;
 
             for (StyleRule rule : sheet.rules) {
-                if (rule.name.equals(selector)) {
+                if (rule.name.equals(combinator) || rule.name.equals(pseudo)) {
                     return new ValidatableStyleRule(sheet, rule);
                 }
             }
-            throw new AssertionError("The rule[" + selector + "] is not found.");
+            throw new AssertionError("The rule[" + combinator + "] or [" + pseudo + "] is not found.");
         }
     }
 }
