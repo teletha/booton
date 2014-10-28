@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css.value;
+package jsx.style.value;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
@@ -19,12 +19,54 @@ import kiss.I;
 import booton.translator.Translator;
 
 /**
- * @version 2013/07/21 18:15:42
+ * @version 2014/10/28 22:47:27
  */
-public class Font {
+public class FontFamily {
 
     /** The used fonts. */
-    public static final Set<Font> used = new HashSet();
+    public static final Set<FontFamily> used = new HashSet();
+
+    /**
+     * <p>
+     * Glyphs have finishing strokes, flared or tapering ends, or have actual serifed endings. E.g.
+     * Palatino, "Palatino Linotype", Palladio, "URW Palladio", serif
+     * </p>
+     */
+    public static final FontFamily serif = new FontFamily("serif");
+
+    /**
+     * <p>
+     * Glyphs have stroke endings that are plain. E.g. 'Trebuchet MS', 'Liberation Sans', 'Nimbus
+     * Sans L', sans-serif
+     * </p>
+     */
+    public static final FontFamily sansSerif = new FontFamily("sans-serif");
+
+    /**
+     * <p>
+     * Glyphs in cursive fonts generally have either joining strokes or other cursive
+     * characteristics beyond those of italic typefaces. The glyphs are partially or completely
+     * connected, and the result looks more like handwritten pen or brush writing than printed
+     * letterwork.
+     * </p>
+     */
+    public static final FontFamily cursive = new FontFamily("cursive");
+
+    /**
+     * <p>
+     * Fantasy fonts are primarily decorative fonts that contain playful representations of
+     * characters.
+     * </p>
+     */
+    public static final FontFamily fantasy = new FontFamily("fantasy");
+
+    /**
+     * <p>
+     * All glyphs have the same fixed width. E.g. "DejaVu Sans Mono", Menlo, Consolas,
+     * "Liberation Mono", Monaco, "Lucida Console", monospace
+     * </p>
+     */
+    public static final FontFamily monospace = new FontFamily("monospace");
 
     /** The font name. */
     public final String name;
@@ -36,7 +78,7 @@ public class Font {
      * @param Title
      * @param uri
      */
-    public Font(String uri) {
+    public FontFamily(String uri) {
         String[] info = FontInfo.parse(uri);
         this.name = info[0];
         this.uri = info[1];
@@ -57,8 +99,8 @@ public class Font {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Font) {
-            Font other = (Font) obj;
+        if (obj instanceof FontFamily) {
+            FontFamily other = (FontFamily) obj;
 
             return name.equals(other.name) && uri.equals(other.uri);
         }
