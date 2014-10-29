@@ -13,8 +13,10 @@ import jsx.style.property.Background;
 import jsx.style.property.Borders;
 import jsx.style.property.Box;
 import jsx.style.property.BoxLength;
+import jsx.style.property.Content;
 import jsx.style.property.Cursor;
 import jsx.style.property.Display;
+import jsx.style.property.FlexItem;
 import jsx.style.property.Font;
 import jsx.style.property.Position;
 import jsx.style.property.Text;
@@ -176,6 +178,15 @@ public class StyleDescriptor {
 
     /**
      * <p>
+     * The content CSS property is used with the ::before and ::after pseudo-elements to generate
+     * content in an element. Objects inserting using the content property are anonymous replaced
+     * elements.
+     * </p>
+     */
+    protected static final Content content = new Content();
+
+    /**
+     * <p>
      * The display CSS property specifies the type of rendering box used for an element. In HTML,
      * default display property values are taken from behaviors described in the HTML specifications
      * or from the browser/user default stylesheet. The default value in XML is inline.
@@ -187,6 +198,15 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Display display = new Display();
+
+    /**
+     * <p>
+     * The flex CSS property is a shorthand property specifying the ability of a flex item to alter
+     * its dimensions to fill available space. Flex items can be stretched to use available space
+     * proportional to their flex grow factor or their flex shrink factor to prevent overflow.
+     * </p>
+     */
+    protected static final FlexItem flexItem = new FlexItem();
 
     /**
      * <p>
