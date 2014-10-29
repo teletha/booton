@@ -18,6 +18,7 @@ import jsx.style.property.Cursor;
 import jsx.style.property.Display;
 import jsx.style.property.FlexItem;
 import jsx.style.property.Font;
+import jsx.style.property.Line;
 import jsx.style.property.Position;
 import jsx.style.property.Text;
 import jsx.style.property.Visibility;
@@ -216,6 +217,15 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Font font = new Font();
+
+    /**
+     * <p>
+     * On inline elements, the line-height CSS property specifies the height that is used in the
+     * calculation of the line box height. On block level elements, line-height specifies the
+     * minimal height of line boxes within the element.
+     * </p>
+     */
+    protected static final Line line = new Line();
 
     /**
      * <p>
