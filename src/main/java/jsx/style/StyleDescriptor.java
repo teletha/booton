@@ -10,6 +10,7 @@
 package jsx.style;
 
 import jsx.style.property.Background;
+import jsx.style.property.Borders;
 import jsx.style.property.Box;
 import jsx.style.property.BoxLength;
 import jsx.style.property.Cursor;
@@ -163,6 +164,15 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Background background = new Background();
+
+    /**
+     * <p>
+     * The border CSS property is a shorthand property for setting the individual border property
+     * values in a single place in the style sheet. border can be used to set the values for one or
+     * more of: border-width, border-style, border-color.
+     * </p>
+     */
+    protected static final Borders border = new Borders();
 
     /**
      * <p>

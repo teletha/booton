@@ -24,6 +24,13 @@ public abstract class Colorable<T extends Colorable> extends PropertyDefinition<
     }
 
     /**
+     * 
+     */
+    protected Colorable(String name) {
+        super(name);
+    }
+
+    /**
      * @param name
      * @param context
      */

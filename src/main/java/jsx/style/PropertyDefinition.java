@@ -49,6 +49,15 @@ public class PropertyDefinition<T> {
      * Property definition.
      * </p>
      */
+    protected PropertyDefinition(String name) {
+        this(name, null);
+    }
+
+    /**
+     * <p>
+     * Property definition.
+     * </p>
+     */
     protected PropertyDefinition(String name, T context) {
         if (name == null) {
             name = Strings.hyphenate(getClass().getSimpleName());
