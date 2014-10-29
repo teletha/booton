@@ -9,10 +9,70 @@
  */
 package jsx.style;
 
+import jsx.style.property.Transition;
+
 /**
  * @version 2014/10/21 16:48:37
  */
 public class StyleRuleDescriptor extends StyleDescriptor {
+
+    /**
+     * <p>
+     * The :active CSS pseudo-class matches when an element is being activated by the user. It
+     * allows the page to give a feedback that the activation has been detected by the browser. When
+     * interacting with a mouse, this is typically the time between the user presses the mouse
+     * button and releases it. The :active pseudo-class is also typically matched when using the
+     * keyboard tab key. It is frequently used on <a> and <button> HTML elements, but may not be
+     * limited to just those.
+     * </p>
+     * <p>
+     * This style may be overridden by any other link-related pseudo-classes, that is :link, :hover,
+     * and :visited, appearing in subsequent rules. In order to style appropriately links, you need
+     * to put the :active rule after all the other link-related rules, as defined by the LVHA-order:
+     * :link — :visited — :hover — :active.
+     * </p>
+     */
+    protected static final void active(Style sub) {
+        sub("$:active", sub);
+    }
+
+    /**
+     * <p>
+     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
+     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
+     * toggled to an on state. The user can change this state by clicking on the element, or
+     * selecting a different value, in which case the :checked pseudo-class no longer applies to
+     * this element, but will to the relevant one.
+     * </p>
+     */
+    protected static final void checked(Style sub) {
+        sub("$:checked", sub);
+    }
+
+    /**
+     * <p>
+     * The :focus CSS pseudo-class is applied when a element has received focus, either from the
+     * user selecting it with the use of a keyboard or by activating with the mouse (e.g. a form
+     * input).
+     * </p>
+     */
+    protected static final void focus(Style sub) {
+        sub("$:focus", sub);
+    }
+
+    /**
+     * <p>
+     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
+     * device, but does not necessarily activate it. This style may be overridden by any other
+     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
+     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
+     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
+     * — :hover — :active.
+     * </p>
+     */
+    protected static final void hover(Style sub) {
+        sub("$:hover", sub);
+    }
 
     /**
      * <p>
@@ -47,54 +107,6 @@ public class StyleRuleDescriptor extends StyleDescriptor {
 
     /**
      * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void hover(Style sub) {
-        sub("$:hover", sub);
-    }
-
-    /**
-     * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void active(Style sub) {
-        sub("$:active", sub);
-    }
-
-    /**
-     * <p>
-     * The :active CSS pseudo-class matches when an element is being activated by the user. It
-     * allows the page to give a feedback that the activation has been detected by the browser. When
-     * interacting with a mouse, this is typically the time between the user presses the mouse
-     * button and releases it. The :active pseudo-class is also typically matched when using the
-     * keyboard tab key. It is frequently used on <a> and <button> HTML elements, but may not be
-     * limited to just those.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void focus(Style sub) {
-        sub("$:focus", sub);
-    }
-
-    /**
-     * <p>
      * The :enabled CSS pseudo-class represents any enabled element. An element is enabled if it can
      * be activated (e.g. selected, clicked on or accept text input) or accept focus. The element
      * also has an disabled state, in which it can't be activated or accept focus.
@@ -117,21 +129,6 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      */
     protected static final void disabled(Style sub) {
         sub("$:disabled", sub);
-    }
-
-    /**
-     * <p>
-     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
-     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
-     * toggled to an on state. The user can change this state by clicking on the element, or
-     * selecting a different value, in which case the :checked pseudo-class no longer applies to
-     * this element, but will to the relevant one.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void checked(Style sub) {
-        sub("$:checked", sub);
     }
 
     /**
@@ -518,6 +515,10 @@ public class StyleRuleDescriptor extends StyleDescriptor {
         sub("." + style + "$", sub);
     }
 
+    protected static final Transition transit() {
+        return new Transition();
+    }
+
     /**
      * <p>
      * Create sub rule set.
@@ -526,7 +527,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * @param selector
      * @return
      */
-    private static final void sub(String selector, Style sub) {
+    static final void sub(String selector, Style sub) {
         StyleRule parent = PropertyDefinition.declarable;
 
         parent.sheet.createRuleFrom(selector.replace("$", parent.name), sub);

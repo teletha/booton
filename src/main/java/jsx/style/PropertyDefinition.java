@@ -137,11 +137,29 @@ public class PropertyDefinition<T> {
      * @param index
      * @return
      */
-    protected static final <T> String join(T[] items, Function<T, String> conveter) {
+    protected static final <T> String join(T[] items, Function<T, Object> conveter) {
         StringJoiner joiner = new StringJoiner(",");
 
         for (T item : items) {
-            joiner.add(conveter.apply(item));
+            joiner.add(conveter.apply(item).toString());
+        }
+        return joiner.toString();
+    }
+
+    /**
+     * <p>
+     * Join all values.
+     * </p>
+     * 
+     * @param images
+     * @param index
+     * @return
+     */
+    protected static final <T> String join(Iterable<T> items, Function<T, Object> conveter) {
+        StringJoiner joiner = new StringJoiner(",");
+
+        for (T item : items) {
+            joiner.add(conveter.apply(item).toString());
         }
         return joiner.toString();
     }

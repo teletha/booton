@@ -18,7 +18,7 @@ import java.util.List;
 public class StyleSheet {
 
     /** The list of styles. */
-    final List<Style> styles = new ArrayList();
+    public final List<Style> styles = new ArrayList();
 
     /** The list of rules. */
     public final List<StyleRule> rules = new ArrayList();

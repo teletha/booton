@@ -18,7 +18,7 @@ public class HoverTest extends StyleDeclarationTestBase {
 
     @Test
     public void hover() {
-        ValidatableStyleRule parsed = parse(MyStyle.hover).rule();
+        ValidatableStyleRule parsed = parse(MyStyle.hovers).rule();
         assert parsed.property("color", "rgb(255,0,0)");
 
         ValidatableStyleRule hover = parsed.sub("hover");
@@ -30,7 +30,7 @@ public class HoverTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleRuleDescriptor {
 
-        private static Style hover = () -> {
+        private static Style hovers = () -> {
             font.color(255, 0, 0);
 
             hover(() -> {
