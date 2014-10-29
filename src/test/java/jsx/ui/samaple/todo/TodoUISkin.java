@@ -26,7 +26,11 @@ public class TodoUISkin extends StyleRuleDescriptor {
     };
 
     static Style BUTTONS = () -> {
+        box.width(150, px);
 
+        transit().duration(1, s).easeInOut().whenHover(() -> {
+            box.width(300, px);
+        });
     };
 
     static Style CLEAR = () -> {
