@@ -24,6 +24,15 @@ public class FlexboxTest extends StyleDeclarationTestBase {
         assert parsed.property("align-content", "center");
     }
 
+    @Test
+    public void item() {
+        ValidatableStyleRule parsed = parse(MyStyle.item).rule();
+        assert parsed.property("flex-grow", "2");
+        assert parsed.property("flex-shrink", "2");
+        assert parsed.property("-webkit-flex-grow", "2");
+        assert parsed.property("-webkit-flex-shrink", "2");
+    }
+
     /**
      * @version 2014/10/21 13:43:25
      */
@@ -31,6 +40,10 @@ public class FlexboxTest extends StyleDeclarationTestBase {
 
         private static Style standard = () -> {
             display.flex().direction.row().alignContent.center();
+        };
+
+        private static Style item = () -> {
+            flexItem.grow(2).shrink(2);
         };
     }
 }
