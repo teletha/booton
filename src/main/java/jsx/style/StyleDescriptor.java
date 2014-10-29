@@ -24,6 +24,7 @@ import jsx.style.property.Overflows;
 import jsx.style.property.PointerEvents;
 import jsx.style.property.Position;
 import jsx.style.property.Text;
+import jsx.style.property.Transform;
 import jsx.style.property.Visibility;
 import jsx.style.value.Color;
 import jsx.style.value.LinearGradient;
@@ -298,6 +299,19 @@ public class StyleDescriptor {
 
     /** The text related style. */
     protected static final Text text = new Text();
+
+    /**
+     * <p>
+     * The CSS transform property lets you modify the coordinate space of the CSS visual formatting
+     * model. Using it, elements can be translated, rotated, scaled, and skewed according to the
+     * values set.
+     * </p>
+     * <p>
+     * If the property has a value different than none, a stacking context will be created. In that
+     * case the object will act as a containing block for position: fixed elements that it contains.
+     * </p>
+     */
+    protected static final Transform transform = new Transform();
 
     /**
      * <p>

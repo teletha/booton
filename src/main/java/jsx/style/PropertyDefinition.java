@@ -13,6 +13,7 @@ import static jsx.style.Vendor.*;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
@@ -95,6 +96,24 @@ public class PropertyDefinition<T> {
         declarable.property(name, value);
 
         return context;
+    }
+
+    /**
+     * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final T value(String name, List list) {
+        StringJoiner joiner = new StringJoiner(" ");
+
+        for (Object item : list) {
+            joiner.add(item.toString());
+        }
+
+        return value(name, joiner);
     }
 
     /**
