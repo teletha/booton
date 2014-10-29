@@ -19,6 +19,7 @@ import jsx.style.property.Display;
 import jsx.style.property.FlexItem;
 import jsx.style.property.Font;
 import jsx.style.property.Line;
+import jsx.style.property.ListStyle;
 import jsx.style.property.Position;
 import jsx.style.property.Text;
 import jsx.style.property.Visibility;
@@ -226,6 +227,14 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final Line line = new Line();
+
+    /**
+     * <p>
+     * The list-style CSS property is a shorthand property for setting list-style-type,
+     * list-style-image and list-style-position.
+     * </p>
+     */
+    protected static final ListStyle listStyle = new ListStyle();
 
     /**
      * <p>
