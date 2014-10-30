@@ -30,9 +30,6 @@ public class StyleRule {
     /** The list of declared rules. */
     private static final List<StyleRule> enables = new ArrayList();
 
-    /** The parent sheet. */
-    public final StyleSheet sheet;
-
     /** The selector name. */
     public final String name;
 
@@ -48,8 +45,7 @@ public class StyleRule {
      * @param template A name template.
      * @param name An actual name.
      */
-    public StyleRule(StyleSheet sheet, String name) {
-        this.sheet = sheet;
+    StyleRule(String name) {
         this.name = name;
     }
 
