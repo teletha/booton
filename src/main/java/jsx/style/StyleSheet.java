@@ -18,10 +18,10 @@ import java.util.List;
 public class StyleSheet {
 
     /** The list of styles. */
-    public final List<Style> styles = new ArrayList();
+    private static final List<Style> styles = new ArrayList();
 
     /** The list of rules. */
-    public final List<StyleRule> rules = new ArrayList();
+    public static final List<StyleRule> rules = new ArrayList();
 
     /**
      * <p>
@@ -30,9 +30,9 @@ public class StyleSheet {
      * 
      * @param style A {@link Style} to add.
      */
-    public void add(Style style) {
+    public static void add(Style style) {
         if (!styles.contains(style)) {
-            createRuleFrom(style.intern(), style);
+            createRule(style.intern(), style);
         }
     }
 
@@ -43,7 +43,7 @@ public class StyleSheet {
      * 
      * @param style A {@link Style} to remove.
      */
-    public void remove(Style style) {
+    public static void remove(Style style) {
         int index = styles.indexOf(style);
 
         if (index != -1) {
@@ -61,24 +61,26 @@ public class StyleSheet {
      * @param object A style description.
      * @return A create new {@link StyleRule}.
      */
-    void createRuleFrom(String name, Object object) {
-        if (object instanceof Style) {
-            Style style = (Style) object;
+    public static StyleRule createRule(String name, Style style) {
+        // store parent rule
+        StyleRule parent = PropertyDefinition.declarable;
 
-            // create next rule
-            StyleRule rule = new StyleRule(this, name);
-
-            // store previous rule
-            StyleRule previous = PropertyDefinition.declarable;
-
-            // swap context rule and execute it
-            PropertyDefinition.declarable = rule;
-            style.declare();
-            PropertyDefinition.declarable = previous;
-
-            // assign rule
-            styles.add(style);
-            rules.add(rule);
+        if (parent != null) {
+            name = name.replace("$", parent.name);
         }
+
+        // create child rule
+        StyleRule child = new StyleRule(name);
+
+        // swap context rule and execute it
+        PropertyDefinition.declarable = child;
+        style.declare();
+        PropertyDefinition.declarable = parent;
+
+        // assign rule
+        styles.add(style);
+        rules.add(child);
+
+        return child;
     }
 }

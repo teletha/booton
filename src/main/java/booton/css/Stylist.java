@@ -106,13 +106,11 @@ public class Stylist {
             }
         }
 
-        StyleSheet sheet = new StyleSheet();
-
         for (StyleWrapper item : styles2) {
-            sheet.add(item);
+            StyleSheet.add(item);
         }
 
-        for (StyleRule rule : sheet.rules) {
+        for (StyleRule rule : StyleSheet.rules) {
             root.writeDown(write(rule));
         }
 

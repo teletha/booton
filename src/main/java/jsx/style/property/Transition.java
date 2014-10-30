@@ -16,6 +16,7 @@ import java.util.Set;
 import jsx.style.PropertyDefinition;
 import jsx.style.Style;
 import jsx.style.StyleRule;
+import jsx.style.StyleSheet;
 import jsx.style.value.Numeric;
 import booton.css.Unit;
 
@@ -165,20 +166,90 @@ public class Transition extends PropertyDefinition<Transition> {
     }
 
     /**
-     * @param sub
+     * <p>
+     * Declare class change effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void when(Style other, Style sub) {
+        when("$." + other.intern(), sub);
+    }
+
+    /**
+     * <p>
+     * Declare hover effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
      */
     public void whenHover(Style sub) {
-        StyleRule previous = PropertyDefinition.declarable;
-        StyleRule next = new StyleRule(previous.sheet, previous.name + ":hover");
+        when("$:hover", sub);
+    }
 
-        PropertyDefinition.declarable = next;
-        sub.declare();
-        PropertyDefinition.declarable = previous;
+    /**
+     * <p>
+     * Declare active effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenActive(Style sub) {
+        when("$:active", sub);
+    }
 
-        previous.sheet.styles.add(sub);
-        previous.sheet.rules.add(next);
+    /**
+     * <p>
+     * Declare focus effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenFocus(Style sub) {
+        when("$:focus", sub);
+    }
 
-        Set<String> set = next.holder.keySet();
+    /**
+     * <p>
+     * Declare check effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenCheck(Style sub) {
+        when("$:checked", sub);
+    }
+
+    /**
+     * <p>
+     * Declare valid effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenValid(Style sub) {
+        when("$:valid", sub);
+    }
+
+    /**
+     * <p>
+     * Declare invalid effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenInvalid(Style sub) {
+        when("$:invalid", sub);
+    }
+
+    /**
+     * <p>
+     * Create transitable sub rule and parse it.
+     * </p>
+     */
+    private void when(String selector, Style sub) {
+        StyleRule rule = StyleSheet.createRule(selector, sub);
+        Set<String> set = rule.holder.keySet();
 
         value("transition-property", join(set, v -> v));
         value("transition-duration", join(set, v -> duration));
