@@ -9,41 +9,32 @@
  */
 package jsx.bwt.view;
 
-import booton.css.CSS;
+import jsx.style.Style;
+import jsx.style.StyleRuleDescriptor;
 
 /**
  * @version 2013/04/19 12:54:41
  */
-class SlidableViewStyle {
+class SlidableViewStyle extends StyleRuleDescriptor {
 
-    class ViewableArea extends CSS {
+    static Style ViewableArea = () -> {
+        // In firefox, "overflow : hidden" will render dirty, so don't use it.
+        overflow.y.hidden();
+        visibility.hidden();
+        box.width(100, percent).zIndex(1);
+        position.absolute().top(100, percent).left(0, px);
+    };
 
-        {
-            // In firefox, "overflow : hidden" will render dirty, so don't use it.
-            overflow.y.hidden();
-            visibility.hidden();
-            box.width(100, percent).zIndex(1);
-            position.absolute().top(100, percent).left(0, px);
-        }
-    }
+    static Style Shown = () -> {
+        visibility.visible();
+    };
 
-    class Slider extends CSS {
+    static Style Slider = () -> {
+        display.block();
+        transform.translateY(-100, percent);
 
-        {
-            display.block();
-            transform.translateY(-100, percent);
-            transition.property.all().timing.easeInOut().duration(200, ms);
-
-            insideOf(Shown.class, () -> {
-                transform.translateY(-1, px);
-            });
-        }
-    }
-
-    class Shown extends CSS {
-
-        {
-            visibility.visible();
-        }
-    }
+        transit().duration(200, ms).easeInOut().whenIn(Shown, () -> {
+            transform.translateY(-1, px);
+        });
+    };
 }

@@ -24,7 +24,6 @@ import jsx.style.StyleSheet;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.Obfuscator;
 import booton.css.value.Font;
 
 /**
@@ -169,7 +168,7 @@ public class Stylist {
             field.setAccessible(true);
 
             Style style = (Style) field.get(null);
-            StyleWrapper wrapper = new StyleWrapper(style, Obfuscator.computeCSSName(clazz.getName() + "#" + fieldName));
+            StyleWrapper wrapper = new StyleWrapper(style, style.intern());
 
             if (!styles2.contains(wrapper)) {
                 styles2.add(wrapper);

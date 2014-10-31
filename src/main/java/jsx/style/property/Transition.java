@@ -178,6 +178,17 @@ public class Transition extends PropertyDefinition<Transition> {
 
     /**
      * <p>
+     * Declare class change effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenIn(Style other, Style sub) {
+        when(other.intern() + " .$", sub);
+    }
+
+    /**
+     * <p>
      * Declare hover effect.
      * </p>
      * 

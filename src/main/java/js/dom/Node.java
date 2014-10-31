@@ -14,6 +14,7 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import jsx.style.Style;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -135,7 +136,31 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @param className A class name of the new child element.
      * @return A created child element.
      */
+    public Element child(Style className) {
+        return child("span", className);
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
     public Element child(String name, Class<? extends CSS> className) {
+        return child(name).add(className);
+    }
+
+    /**
+     * <p>
+     * Create a child element with the specified class.
+     * </p>
+     * 
+     * @param className A class name of the new child element.
+     * @return A created child element.
+     */
+    public Element child(String name, Style className) {
         return child(name).add(className);
     }
 
