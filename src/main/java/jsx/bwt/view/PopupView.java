@@ -10,8 +10,8 @@
 package jsx.bwt.view;
 
 import static js.lang.Global.*;
+import static jsx.bwt.view.SlidableViewStyle.*;
 import jsx.bwt.UI;
-import jsx.bwt.view.SlidableViewStyle.Shown;
 
 /**
  * @version 2013/10/10 13:42:34
@@ -49,7 +49,7 @@ public class PopupView extends UI {
                     .css("width", "calc(100% + " + right + " + " + left + ")");
 
             // show slide view
-            root.add(Shown.class);
+            root.add(Shown);
 
             // notify event
             publish(new Open());
@@ -68,7 +68,7 @@ public class PopupView extends UI {
         if (2 <= shown) {
             // hide slide view
             shown = 0;
-            root.remove(Shown.class);
+            root.remove(Shown);
 
             // notify event
             publish(new Close());
