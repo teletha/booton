@@ -71,31 +71,31 @@ public class TextTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static Style indent = () -> {
+        private static StyleClass indent = () -> {
             text.indent(3, em);
         };
 
-        private static Style align = () -> {
+        private static StyleClass align = () -> {
             text.align.center().verticalAlign.bottom();
         };
 
-        private static Style decoration = () -> {
+        private static StyleClass decoration = () -> {
             text.decoration.underline();
         };
 
-        private static Style overflow = () -> {
+        private static StyleClass overflow = () -> {
             text.overflow.ellipsis();
         };
 
-        private static Style unselectable = () -> {
+        private static StyleClass unselectable = () -> {
             text.unselectable();
         };
 
-        private static Style shadow = () -> {
+        private static StyleClass shadow = () -> {
             text.shadow(shadow().offset(2, 2, px).blurRadius(1, px).color(hsl(100, 100, 100)));
         };
 
-        private static Style shadows = () -> {
+        private static StyleClass shadows = () -> {
             text.shadow(shadow().offset(2, 2, px), shadow().offset(1, 1, px));
         };
     }

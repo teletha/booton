@@ -50,28 +50,28 @@ public class PositionTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static Style relative = () -> {
+        private static StyleClass relative = () -> {
             position.relative();
 
             assert position.isRelative() == true;
             assert position.isAbsolute() == false;
         };
 
-        private static Style absolute = () -> {
+        private static StyleClass absolute = () -> {
             position.absolute();
 
             assert position.isRelative() == false;
             assert position.isAbsolute() == true;
         };
 
-        private static Style fixed = () -> {
+        private static StyleClass fixed = () -> {
             position.fixed();
 
             assert position.isRelative() == false;
             assert position.isAbsolute() == false;
         };
 
-        private static Style location = () -> {
+        private static StyleClass location = () -> {
             position.top(1, px).right(2, px).bottom(3, px).left(4, px);
         };
     }

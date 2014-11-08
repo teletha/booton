@@ -15,7 +15,7 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
 
-import jsx.style.Style;
+import jsx.style.StyleClass;
 
 /**
  * @version 2014/09/13 1:52:02
@@ -166,7 +166,7 @@ public final class VirtualStructure {
         protected final String name;
 
         /** The built-in style. */
-        protected final Style builtin;
+        protected final StyleClass builtin;
 
         /** The container {@link VirtualElement}. */
         protected VirtualElement container;
@@ -181,7 +181,7 @@ public final class VirtualStructure {
          * @param name
          * @param builtin
          */
-        private Descriptor(String name, Style builtin) {
+        private Descriptor(String name, StyleClass builtin) {
             this.name = name;
             this.builtin = builtin;
         }
@@ -245,7 +245,7 @@ public final class VirtualStructure {
          * @param children A list of child nodes.
          */
         public final void 〡(Object... children) {
-            〡((Style) null, children);
+            〡((StyleClass) null, children);
         }
 
         /**
@@ -255,7 +255,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Style style, Object... children) {
+        public final void 〡(StyleClass style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) container.classList.push(style);
@@ -311,7 +311,7 @@ public final class VirtualStructure {
          * @param name A container element name.
          * @param style A element style.
          */
-        private ContainerDescriptor(String name, Style style) {
+        private ContainerDescriptor(String name, StyleClass style) {
             super(name, style);
         }
 
@@ -344,7 +344,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Style style, Runnable children) {
+        public final void 〡(StyleClass style, Runnable children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
 
@@ -367,7 +367,7 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public final <T> void 〡(Class<? extends Widget1<T>> childType, Collection<T> children) {
-            〡((Style) null, childType, children);
+            〡((StyleClass) null, childType, children);
         }
 
         /**
@@ -377,7 +377,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
+        public final <T> void 〡(StyleClass style, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // precess into child items
             int index = 0;
             Object[] childrenUI = new Object[children.size()];

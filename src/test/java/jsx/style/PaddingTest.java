@@ -56,26 +56,26 @@ public class PaddingTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static Style each = () -> {
+        private static StyleClass each = () -> {
             padding.top(10, em);
             padding.bottom(20, px);
             padding.left(30, percent);
             padding.right(new Numeric(10, ex));
         };
 
-        private static Style auto = () -> {
+        private static StyleClass auto = () -> {
             padding.auto();
         };
 
-        private static Style horizontal = () -> {
+        private static StyleClass horizontal = () -> {
             padding.horizontal(1, em);
         };
 
-        private static Style vertical = () -> {
+        private static StyleClass vertical = () -> {
             padding.vertical(1, em);
         };
 
-        private static Style size = () -> {
+        private static StyleClass size = () -> {
             padding.size(1, em);
         };
     }

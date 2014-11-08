@@ -9,7 +9,7 @@
  */
 package jsx.bwt.view;
 
-import jsx.style.Style;
+import jsx.style.StyleClass;
 import jsx.style.StyleRuleDescriptor;
 
 /**
@@ -17,17 +17,17 @@ import jsx.style.StyleRuleDescriptor;
  */
 class SlidableViewStyle extends StyleRuleDescriptor {
 
-    static Style ViewableArea = () -> {
+    static StyleClass ViewableArea = () -> {
         // In firefox, "overflow : hidden" will render dirty, so don't use it.
         overflow.y.hidden();
         box.width(100, percent).zIndex(1);
         position.absolute().top(100, percent).left(0, px);
     };
 
-    static Style Shown = () -> {
+    static StyleClass Shown = () -> {
     };
 
-    static Style Slider = () -> {
+    static StyleClass Slider = () -> {
         display.block();
         transform.translateY(-100, percent);
 

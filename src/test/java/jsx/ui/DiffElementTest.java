@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jsx.style.Style;
+import jsx.style.StyleClass;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -244,7 +244,7 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement rootClass(Style... classes) {
+    private static VirtualElement rootClass(StyleClass... classes) {
         return e("root", clazz(classes));
     }
 
@@ -280,7 +280,7 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, List<Style> classes, VirtualNode... children) {
+    private static VirtualElement e(String key, List<StyleClass> classes, VirtualNode... children) {
         return e(key, noAttr, classes, children);
     }
 
@@ -314,14 +314,14 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static VirtualElement e(String key, Map<String, String> attributes, List<Style> classes, VirtualNode... children) {
+    private static VirtualElement e(String key, Map<String, String> attributes, List<StyleClass> classes, VirtualNode... children) {
         VirtualElement e = new VirtualElement(key.hashCode(), key);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
             e.attributes.set(attribute.getKey(), attribute.getValue());
         }
 
-        for (Style clazz : classes) {
+        for (StyleClass clazz : classes) {
             e.classList.push(clazz);
         }
 
@@ -357,8 +357,8 @@ public class DiffElementTest extends DiffTestBase {
      * @param classes
      * @return
      */
-    private static List<Style> clazz(Style... classes) {
-        List<Style> list = new ArrayList();
+    private static List<StyleClass> clazz(StyleClass... classes) {
+        List<StyleClass> list = new ArrayList();
 
         for (int i = 0; i < classes.length; i++) {
             list.add(classes[i]);
@@ -381,18 +381,18 @@ public class DiffElementTest extends DiffTestBase {
     /**
      * @version 2014/09/12 11:17:24
      */
-    static Style A = () -> {
+    static StyleClass A = () -> {
     };
 
     /**
      * @version 2014/09/12 11:17:24
      */
-    static Style B = () -> {
+    static StyleClass B = () -> {
     };
 
     /**
      * @version 2014/09/12 11:17:24
      */
-    static Style C = () -> {
+    static StyleClass C = () -> {
     };
 }

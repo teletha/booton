@@ -18,32 +18,32 @@ import java.util.List;
 public class StyleSheet {
 
     /** The list of styles. */
-    private static final List<Style> styles = new ArrayList();
+    private static final List<StyleClass> styles = new ArrayList();
 
     /** The list of rules. */
     public static final List<StyleRule> rules = new ArrayList();
 
     /**
      * <p>
-     * Add the specified {@link Style} to this {@link StyleSheet}.
+     * Add the specified {@link StyleClass} to this {@link StyleSheet}.
      * </p>
      * 
-     * @param style A {@link Style} to add.
+     * @param style A {@link StyleClass} to add.
      */
-    public static void add(Style style) {
+    public static void add(StyleClass style) {
         if (!styles.contains(style)) {
-            createRule(style.intern(), style);
+            createRule(StyleName.name(style), style);
         }
     }
 
     /**
      * <p>
-     * Remove the specified {@link Style} from this {@link StyleSheet}.
+     * Remove the specified {@link StyleClass} from this {@link StyleSheet}.
      * </p>
      * 
-     * @param style A {@link Style} to remove.
+     * @param style A {@link StyleClass} to remove.
      */
-    public static void remove(Style style) {
+    public static void remove(StyleClass style) {
         int index = styles.indexOf(style);
 
         if (index != -1) {
@@ -54,14 +54,14 @@ public class StyleSheet {
 
     /**
      * <p>
-     * Create {@link StyleRule} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
-     * )
+     * Create {@link StyleRule} from the specified object. (e.g. {@link StyleClass},
+     * {@link RuntimeStyle} )
      * </p>
      * 
      * @param object A style description.
      * @return A create new {@link StyleRule}.
      */
-    public static StyleRule createRule(String name, Style style) {
+    public static StyleRule createRule(String name, StyleClass style) {
         // store parent rule
         StyleRule parent = PropertyDefinition.declarable;
 

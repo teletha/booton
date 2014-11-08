@@ -30,7 +30,7 @@ public class TransitionTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleRuleDescriptor {
 
-        private static Style rotate = () -> {
+        private static StyleClass rotate = () -> {
             box.width(10, px);
 
             transit().duration(1, s).whenHover(() -> {

@@ -9,7 +9,7 @@
  */
 package jsx.bwt.view;
 
-import jsx.style.Style;
+import jsx.style.StyleClass;
 import jsx.style.StyleRuleDescriptor;
 
 /**
@@ -17,23 +17,23 @@ import jsx.style.StyleRuleDescriptor;
  */
 class ScrollableListViewStyle extends StyleRuleDescriptor {
 
-    static Style ViewabletemView = () -> {
+    static StyleClass ViewabletemView = () -> {
         display.block();
         position.relative();
         overflow.y.scroll();
         text.unselectable();
     };
 
-    static Style RenderableItemView = () -> {
+    static StyleClass RenderableItemView = () -> {
         display.block();
         overflow.hidden();
     };
 
-    static Style Spacer = () -> {
+    static StyleClass Spacer = () -> {
         display.block();
     };
 
-    static Style ItemColumnView = () -> {
+    static StyleClass ItemColumnView = () -> {
         display.block();
     };
 }

@@ -39,7 +39,7 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
-import jsx.style.Style;
+import jsx.style.StyleClass;
 import jsx.ui.VirtualStructure;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import jsx.ui.VirtualStructure.Descriptor;
@@ -66,8 +66,8 @@ class JavaMethodCompiler extends MethodVisitor {
     /** The description of {@link Debugger}. */
     private static final String DEBUGGER = Type.getType(Debuggable.class).getDescriptor();
 
-    /** The description of {@link Style}. */
-    private static final String STYLE = Type.getType(Style.class).getDescriptor();
+    /** The description of {@link StyleClass}. */
+    private static final String STYLE = Type.getType(StyleClass.class).getDescriptor();
 
     /**
      * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.

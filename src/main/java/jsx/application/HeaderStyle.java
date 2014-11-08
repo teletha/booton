@@ -9,7 +9,7 @@
  */
 package jsx.application;
 
-import jsx.style.Style;
+import jsx.style.StyleClass;
 import jsx.style.StyleRuleDescriptor;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
@@ -28,14 +28,14 @@ class HeaderStyle extends StyleRuleDescriptor {
     /** The menu radius. */
     private static final int Radius = 3;
 
-    static Style TopMenuGroup = () -> {
+    static StyleClass TopMenuGroup = () -> {
         margin.vertical(30, px);
         box.shadow(shadow().offset(0, 1, px).blurRadius(1, px).color(hsla(0, 0, 0, 0.15)));
         border.width(1, px).solid().color(DarkBack).radius(6, px);
         background.image(BackgroundImage.of(linear(LightBack, DarkBack)));
     };
 
-    static Style TopMenu = () -> {
+    static StyleClass TopMenu = () -> {
         position.relative();
         display.inlineBlock();
         border.right.width(1, px).solid().color(DarkBack);
@@ -43,7 +43,7 @@ class HeaderStyle extends StyleRuleDescriptor {
         text.align.center();
     };
 
-    static Style MenuLink = () -> {
+    static StyleClass MenuLink = () -> {
         display.block();
         padding.vertical(12, px).horizontal(20, px);
         font.color(153, 153, 153).weight.bold().size(14, px);
@@ -54,7 +54,7 @@ class HeaderStyle extends StyleRuleDescriptor {
         });
     };
 
-    static Style SubMenuGroup = () -> {
+    static StyleClass SubMenuGroup = () -> {
         listStyle.none();
         margin.top(20, px);
         padding.size(0, px);
@@ -71,7 +71,7 @@ class HeaderStyle extends StyleRuleDescriptor {
         });
     };
 
-    static Style SubMenu = () -> {
+    static StyleClass SubMenu = () -> {
         display.block();
         border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
 

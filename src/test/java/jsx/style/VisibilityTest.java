@@ -33,15 +33,15 @@ public class VisibilityTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static Style collapse = () -> {
+        private static StyleClass collapse = () -> {
             visibility.collapse();
         };
 
-        private static Style hidden = () -> {
+        private static StyleClass hidden = () -> {
             visibility.hidden();
         };
 
-        private static Style visible = () -> {
+        private static StyleClass visible = () -> {
             visibility.visible();
         };
     }

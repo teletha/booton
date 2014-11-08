@@ -18,7 +18,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import jsx.style.Style;
+import jsx.style.StyleClass;
+import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.StyleSheet;
 import kiss.I;
@@ -36,7 +37,7 @@ public class Stylist {
     private final List<CSS> styles = new ArrayList();
 
     /** The style classes which any javascript refers. */
-    private final List<StyleWrapper> styles2 = new ArrayList();
+    private final List<StyleClass> styles2 = new ArrayList();
 
     public String write(CSS style) {
         return write(style.rules);
@@ -105,7 +106,7 @@ public class Stylist {
             }
         }
 
-        for (StyleWrapper item : styles2) {
+        for (StyleClass item : styles2) {
             StyleSheet.add(item);
         }
 
@@ -167,13 +168,12 @@ public class Stylist {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
 
-            Style style = (Style) field.get(null);
-            StyleWrapper wrapper = new StyleWrapper(style, style.intern());
+            StyleClass style = (StyleClass) field.get(null);
 
-            if (!styles2.contains(wrapper)) {
-                styles2.add(wrapper);
+            if (!styles2.contains(style)) {
+                styles2.add(style);
             }
-            return wrapper.name;
+            return StyleName.name(style);
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -200,62 +200,62 @@ public class Stylist {
             return value1 < value2 ? -1 : 1;
         }
     }
-
-    /**
-     * @version 2014/10/27 15:24:12
-     */
-    private static class StyleWrapper implements Style {
-
-        /** The style delegation. */
-        private final Style delegater;
-
-        /** The obfuscated name. */
-        private final String name;
-
-        /**
-         * @param delegater
-         * @param name
-         */
-        private StyleWrapper(Style delegater, String name) {
-            this.delegater = delegater;
-            this.name = name;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void declare() {
-            delegater.declare();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String intern() {
-            return name;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int hashCode() {
-            return name.hashCode();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof StyleWrapper) {
-                StyleWrapper other = (StyleWrapper) obj;
-
-                return name.equals(other.name);
-            }
-            return false;
-        }
-    }
+    //
+    // /**
+    // * @version 2014/10/27 15:24:12
+    // */
+    // private static class StyleWrapper implements StyleClass {
+    //
+    // /** The style delegation. */
+    // private final StyleClass delegater;
+    //
+    // /** The obfuscated name. */
+    // private final String name;
+    //
+    // /**
+    // * @param delegater
+    // * @param name
+    // */
+    // private StyleWrapper(StyleClass delegater, String name) {
+    // this.delegater = delegater;
+    // this.name = name;
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public void declare() {
+    // delegater.declare();
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public String intern() {
+    // return name;
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public int hashCode() {
+    // return name.hashCode();
+    // }
+    //
+    // /**
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public boolean equals(Object obj) {
+    // if (obj instanceof StyleWrapper) {
+    // StyleWrapper other = (StyleWrapper) obj;
+    //
+    // return name.equals(other.name);
+    // }
+    // return false;
+    // }
+    // }
 }

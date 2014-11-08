@@ -11,7 +11,7 @@ package jsx.ui;
 
 import js.dom.Element;
 import js.dom.Node;
-import jsx.style.Style;
+import jsx.style.StyleClass;
 
 /**
  * @version 2014/09/08 18:21:16
@@ -338,13 +338,13 @@ abstract class Patch {
     private static abstract class ClassPatch extends Patch {
 
         /** The class name. */
-        protected final Style className;
+        protected final StyleClass className;
 
         /**
          * @param parent
          * @param className
          */
-        private ClassPatch(Element parent, Style className) {
+        private ClassPatch(Element parent, StyleClass className) {
             super(parent);
 
             this.className = className;
@@ -364,7 +364,7 @@ abstract class Patch {
          * @param parent
          * @param name
          */
-        AddClass(Element parent, Style className) {
+        AddClass(Element parent, StyleClass className) {
             super(parent, className);
         }
 
@@ -390,7 +390,7 @@ abstract class Patch {
          * @param parent
          * @param name
          */
-        RemoveClass(Element parent, Style className) {
+        RemoveClass(Element parent, StyleClass className) {
             super(parent, className);
         }
 

@@ -28,7 +28,7 @@ public class StyleDeclarationTestBase {
      * @param definition
      * @return
      */
-    protected ValidatableStyleSheet parse(Style style) {
+    protected ValidatableStyleSheet parse(StyleClass style) {
         StyleSheet sheet = new StyleSheet();
         sheet.add(style);
 
@@ -45,12 +45,12 @@ public class StyleDeclarationTestBase {
         private final StyleSheet sheet;
 
         /** The target style. */
-        private final Style style;
+        private final StyleClass style;
 
         /**
          * @param sheet
          */
-        private ValidatableStyleSheet(StyleSheet sheet, Style style) {
+        private ValidatableStyleSheet(StyleSheet sheet, StyleClass style) {
             this.sheet = sheet;
             this.style = style;
         }
