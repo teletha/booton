@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,18 @@ import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
 
 /**
- * @version 2013/04/19 12:54:41
+ * @version 2014/11/08 10:49:26
  */
 class SlidableViewStyle extends StyleRuleDescriptor {
 
     static Style ViewableArea = () -> {
         // In firefox, "overflow : hidden" will render dirty, so don't use it.
         overflow.y.hidden();
-        visibility.hidden();
         box.width(100, percent).zIndex(1);
         position.absolute().top(100, percent).left(0, px);
     };
 
     static Style Shown = () -> {
-        visibility.visible();
     };
 
     static Style Slider = () -> {

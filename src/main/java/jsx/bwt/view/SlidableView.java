@@ -43,13 +43,13 @@ public class SlidableView extends UI {
     public void open() {
         if (shown++ == 0) {
             // fit to parent box
-            String left = root.parent().css("border-left-width");
-            String right = root.parent().css("border-right-width");
-            String bottom = root.parent().css("border-bottom-width");
-
-            root.css("top", "calc(100% + " + bottom + ")")
-                    .css("left", "-" + left)
-                    .css("width", "calc(100% + " + right + " + " + left + ")");
+            // String left = root.parent().css("border-left-width");
+            // String right = root.parent().css("border-right-width");
+            // String bottom = root.parent().css("border-bottom-width");
+            //
+            // root.css("top", "calc(100% + " + bottom + ")")
+            // .css("left", "-" + left)
+            // .css("width", "calc(100% + " + right + " + " + left + ")");
 
             // show slide view
             root.add(Shown);

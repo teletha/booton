@@ -10,6 +10,7 @@
 package jsx.style.property;
 
 import jsx.style.value.Color;
+import jsx.style.value.LinearGradient;
 import booton.css.Unit;
 
 /**
@@ -159,6 +160,25 @@ public class Background extends Colorable<Background> {
          * </ul>
          */
         private Object[] properties = {"none", "scroll", "0%", "0%", "repeat", "auto"};
+
+        /**
+         * <p>
+         * The CSS background-image property sets one or several background images for an element.
+         * The images are drawn on stacking context layers on top of each other. The first layer
+         * specified is drawn as if it is closest to the user. The borders of the element are then
+         * drawn on top of them, and the background-color is drawn beneath them.
+         * </p>
+         * <p>
+         * If a specified image cannot be drawn (for example, when the file denoted by the specified
+         * URI cannot be loaded), browsers handle it as they would a none value.
+         * </p>
+         */
+        public static BackgroundImage of(LinearGradient image) {
+            BackgroundImage created = new BackgroundImage();
+            created.properties[0] = image;
+
+            return created;
+        }
 
         /**
          * <p>

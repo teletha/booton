@@ -9,97 +9,84 @@
  */
 package jsx.application;
 
-import booton.css.CSS;
-import booton.css.value.Color;
+import jsx.style.Style;
+import jsx.style.StyleRuleDescriptor;
+import jsx.style.property.Background.BackgroundImage;
+import jsx.style.value.Color;
 
-class HeaderStyle {
+class HeaderStyle extends StyleRuleDescriptor {
 
     /** The background color. */
-    Color LightBack = new Color(0, 0, 27);
+    private static final Color LightBack = new Color(0, 0, 27);
 
     /** The background color. */
-    Color DarkBack = LightBack.lighten(-20);
+    private static final Color DarkBack = LightBack.lighten(-20);
 
     /** The minimum menu width. */
-    int MenuWidth = 120;
+    private static final int MenuWidth = 120;
 
     /** The menu radius. */
-    int Radius = 3;
+    private static final int Radius = 3;
 
-    class TopMenuGroup extends CSS {
+    static Style TopMenuGroup = () -> {
+        margin.vertical(30, px);
+        box.shadow(shadow().offset(0, 1, px).blurRadius(1, px).color(hsla(0, 0, 0, 0.15)));
+        border.width(1, px).solid().color(DarkBack).radius(6, px);
+        background.image(BackgroundImage.of(linear(LightBack, DarkBack)));
+    };
 
-        {
-            margin.vertical(30, px);
-            box.shadow(0, px, 1, px, 1, px, hsla(0, 0, 0, 0.15));
-            border.width(1, px).solid().color(DarkBack).radius(6, px);
-            background.image(linear(LightBack, DarkBack));
-        }
+    static Style TopMenu = () -> {
+        position.relative();
+        display.inlineBlock();
+        border.right.width(1, px).solid().color(DarkBack);
+        box.minWidth(MenuWidth, px).zIndex(1);
+        text.align.center();
+    };
 
-    }
+    static Style MenuLink = () -> {
+        display.block();
+        padding.vertical(12, px).horizontal(20, px);
+        font.color(153, 153, 153).weight.bold().size(14, px);
+        text.decoration.none().shadow();
 
-    class TopMenu extends CSS {
+        hover(() -> {
+            font.color(Color.Whity);
+        });
+    };
 
-        {
-            position.relative();
-            display.inlineBlock();
-            border.right.width(1, px).solid().color(DarkBack);
-            box.minWidth(MenuWidth, px).zIndex(1);
-            text.align.center();
-        }
-    }
+    static Style SubMenuGroup = () -> {
+        listStyle.none();
+        margin.top(20, px);
+        padding.size(0, px);
+        visibility.hidden();
+        position.absolute().top(42, px).left(0, px);
+        background.color(rgb(68, 68, 68)).image(BackgroundImage.of(linear(LightBack, DarkBack)));
+        box.width(MenuWidth, px).shadow(shadow().offset(0, -1, px).color(rgba(255, 255, 255, 0.3))).opacity(0);
+        border.radius(Radius, px);
 
-    class MenuLink extends CSS {
+        transit().duration(0.2, s).delay(80, ms).easeInOut().whenParentHover(() -> {
+            box.opacity(1);
+            visibility.visible();
+            margin.size(0, px);
+        });
+    };
 
-        {
-            display.block();
-            padding.vertical(12, px).horizontal(20, px);
-            font.color(153, 153, 153).weight.bold().size(14, px);
-            text.decoration.none().shadow();
+    static Style SubMenu = () -> {
+        display.block();
+        border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
 
-            hover(() -> {
-                font.color(Color.Whity);
+        hover(() -> {
+            background
+                    .color(rgb(1, 134, 186))
+                    .image(BackgroundImage.of(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1))));
+
+            firstChild(() -> {
+                border.top.radius(Radius, px);
             });
-        }
-    }
 
-    class SubMenuGroup extends CSS {
-
-        {
-            listStyle.none();
-            margin.top(20, px);
-            padding.size(0, px);
-            visibility.hidden();
-            position.absolute().top(42, px).left(0, px);
-            background.color(rgb(68, 68, 68)).image(linear(LightBack, DarkBack));
-            box.width(MenuWidth, px).shadow(0, px, -1, px, 0, px, rgba(255, 255, 255, 0.3)).opacity(0);
-            border.radius(Radius, px);
-            transition.property.all().duration(0.2, s).timing.easeInOut().delay(80, ms);
-
-            parentHover(() -> {
-                box.opacity(1);
-                visibility.visible();
-                margin.size(0, px);
+            lastChild(() -> {
+                border.bottom.radius(Radius, px);
             });
-        }
-    }
-
-    class SubMenu extends CSS {
-
-        {
-            display.block();
-            border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
-
-            hover(() -> {
-                background.color(rgb(1, 134, 186)).image(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1)));
-
-                firstChild(() -> {
-                    border.top.radius(Radius, px);
-                });
-
-                lastChild(() -> {
-                    border.bottom.radius(Radius, px);
-                });
-            });
-        }
-    }
+        });
+    };
 }

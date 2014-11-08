@@ -10,12 +10,8 @@
 package jsx.application;
 
 import static js.lang.Global.*;
+import static jsx.application.HeaderStyle.*;
 import js.dom.Element;
-import jsx.application.HeaderStyle.MenuLink;
-import jsx.application.HeaderStyle.SubMenu;
-import jsx.application.HeaderStyle.SubMenuGroup;
-import jsx.application.HeaderStyle.TopMenu;
-import jsx.application.HeaderStyle.TopMenuGroup;
 import jsx.bwt.Select;
 
 /**
@@ -30,7 +26,7 @@ public class Header {
      * @param root
      */
     public Header() {
-        container = document.getElementById("Header").add(TopMenuGroup.class);
+        container = document.getElementById("Header").add(TopMenuGroup);
     }
 
     /**
@@ -42,8 +38,8 @@ public class Header {
      * @param uri
      */
     public Menu add(String label, String uri) {
-        Element item = container.child("li").add(TopMenu.class);
-        item.child("a").add(MenuLink.class).attr("href", uri).text(label);
+        Element item = container.child("li").add(TopMenu);
+        item.child("a").add(MenuLink).attr("href", uri).text(label);
 
         return new Menu(item);
     }
@@ -64,7 +60,7 @@ public class Header {
      * 
      */
         private Menu(Element root) {
-            this.container = root.child("ul").add(SubMenuGroup.class);
+            this.container = root.child("ul").add(SubMenuGroup);
         }
 
         /**
@@ -76,8 +72,8 @@ public class Header {
          * @param uri
          */
         public Menu add(String label, String uri) {
-            Element item = container.child("li").add(SubMenu.class);
-            item.child("a").add(MenuLink.class).attr("href", uri).text(label);
+            Element item = container.child("li").add(SubMenu);
+            item.child("a").add(MenuLink).attr("href", uri).text(label);
 
             return new Menu(item);
         }
