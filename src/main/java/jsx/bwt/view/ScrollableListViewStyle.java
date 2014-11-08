@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,41 +9,31 @@
  */
 package jsx.bwt.view;
 
-import booton.css.CSS;
+import jsx.style.Style;
+import jsx.style.StyleRuleDescriptor;
 
 /**
- * @version 2013/04/05 11:40:35
+ * @version 2014/11/08 10:49:40
  */
-class ScrollableListViewStyle {
+class ScrollableListViewStyle extends StyleRuleDescriptor {
 
-    class ViewabletemView extends CSS {
+    static Style ViewabletemView = () -> {
+        display.block();
+        position.relative();
+        overflow.y.scroll();
+        text.unselectable();
+    };
 
-        {
-            display.block();
-            position.relative();
-            overflow.y.auto();
-        }
-    }
+    static Style RenderableItemView = () -> {
+        display.block();
+        overflow.hidden();
+    };
 
-    class RenderableItemView extends CSS {
+    static Style Spacer = () -> {
+        display.block();
+    };
 
-        {
-            display.block();
-            overflow.hidden();
-        }
-    }
-
-    class Spacer extends CSS {
-
-        {
-            display.block();
-        }
-    }
-
-    class ItemColumnView extends CSS {
-
-        {
-            display.block();
-        }
-    }
+    static Style ItemColumnView = () -> {
+        display.block();
+    };
 }

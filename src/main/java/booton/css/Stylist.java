@@ -123,7 +123,7 @@ public class Stylist {
         int counter = 0;
 
         // write requested properties only.
-        writer.writeDown("." + rule.name, "{");
+        writer.writeDown(rule.name.replaceAll("STYLE", ".STYLE"), "{");
 
         for (Entry<String, String> entry : rule.holder.entrySet()) {
             counter++;

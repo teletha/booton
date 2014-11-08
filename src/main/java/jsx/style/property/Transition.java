@@ -173,7 +173,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * @param sub A style of this effect.
      */
     public void when(Style other, Style sub) {
-        when("$." + other.intern(), sub);
+        when("$" + other.intern(), sub);
     }
 
     /**
@@ -184,7 +184,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * @param sub A style of this effect.
      */
     public void whenIn(Style other, Style sub) {
-        when(other.intern() + " .$", sub);
+        when(other.intern() + " $", sub);
     }
 
     /**
@@ -196,6 +196,17 @@ public class Transition extends PropertyDefinition<Transition> {
      */
     public void whenHover(Style sub) {
         when("$:hover", sub);
+    }
+
+    /**
+     * <p>
+     * Declare hover effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenParentHover(Style sub) {
+        when("*:hover>$", sub);
     }
 
     /**

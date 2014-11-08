@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,20 +9,18 @@
  */
 package jsx.bwt.view;
 
+import static jsx.bwt.view.ScrollableListViewStyle.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import js.dom.Element;
 import js.dom.UIAction;
 import jsx.bwt.UI;
-import jsx.bwt.view.ScrollableListViewStyle.ItemColumnView;
-import jsx.bwt.view.ScrollableListViewStyle.RenderableItemView;
-import jsx.bwt.view.ScrollableListViewStyle.Spacer;
-import jsx.bwt.view.ScrollableListViewStyle.ViewabletemView;
 import jsx.event.SubscribeUI;
 
 /**
- * @version 2013/07/29 2:00:26
+ * @version 2014/11/08 10:51:49
  */
 public class ScrollableListView extends UI {
 
@@ -71,9 +69,9 @@ public class ScrollableListView extends UI {
         this.itemHeight = itemHeight;
         this.viewableItemSize = viewableItemSize;
 
-        this.viewableItemView = root.add(ViewabletemView.class).subscribe(this);
-        this.renderableItemView = viewableItemView.child(RenderableItemView.class);
-        this.spacer = renderableItemView.child(Spacer.class);
+        this.viewableItemView = root.add(ViewabletemView).subscribe(this);
+        this.renderableItemView = viewableItemView.child(RenderableItemView);
+        this.spacer = renderableItemView.child(Spacer);
     }
 
     /**
@@ -91,7 +89,8 @@ public class ScrollableListView extends UI {
         int size = provider.countItem();
         this.extraBottomRenderableItemSize = 25;
         this.extraTopRenderableItemSize = extraBottomRenderableItemSize + viewableItemSize;
-        this.renderableItemSize = Math.min(size, extraBottomRenderableItemSize + viewableItemSize + extraTopRenderableItemSize);
+        this.renderableItemSize = Math
+                .min(size, extraBottomRenderableItemSize + viewableItemSize + extraTopRenderableItemSize);
 
         // Add or remove item elements for new item provider.
         int diff = items.size() - renderableItemSize;
@@ -99,7 +98,7 @@ public class ScrollableListView extends UI {
         if (diff < 0) {
             // increase items
             for (int i = diff; i < 0; i++) {
-                items.add(renderableItemView.child(ItemColumnView.class).css("height", itemHeight + "px"));
+                items.add(renderableItemView.child(ItemColumnView).css("height", itemHeight + "px"));
             }
         } else if (0 < diff) {
             // decrease items
