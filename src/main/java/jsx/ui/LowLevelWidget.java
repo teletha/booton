@@ -23,7 +23,7 @@ import javafx.beans.value.ObservableValue;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;
-import jsx.style.Style;
+import jsx.style.StyleClass;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Disposable;
 import kiss.Events;
@@ -168,7 +168,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         return (T) this;
     }
 
-    public T styleIf(ObservableValue<Boolean> condition, Style onStyle) {
+    public T styleIf(ObservableValue<Boolean> condition, StyleClass onStyle) {
         return (T) this;
     }
 

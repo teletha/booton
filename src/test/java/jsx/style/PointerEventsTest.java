@@ -27,7 +27,7 @@ public class PointerEventsTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static Style none = () -> {
+        private static StyleClass none = () -> {
             pointerEvents.none();
         };
     }

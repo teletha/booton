@@ -12,7 +12,7 @@ package jsx.ui;
 import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
-import jsx.style.Style;
+import jsx.style.StyleClass;
 
 /**
  * @version 2014/10/07 12:49:29
@@ -26,7 +26,7 @@ class VirtualElement extends VirtualFragment<Element> {
     final VirtualKVS<String, String> attributes = new VirtualKVS();
 
     /** The class attributes. */
-    final NativeArray<Style> classList = new NativeArray();
+    final NativeArray<StyleClass> classList = new NativeArray();
 
     /**
      * @param string

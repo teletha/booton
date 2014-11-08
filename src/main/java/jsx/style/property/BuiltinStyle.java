@@ -10,7 +10,7 @@
 package jsx.style.property;
 
 import static jsx.style.value.Color.*;
-import jsx.style.Style;
+import jsx.style.StyleClass;
 import jsx.style.StyleRuleDescriptor;
 
 /**
@@ -21,7 +21,7 @@ class BuiltinStyle extends StyleRuleDescriptor {
     /**
      * Make text unselectable.
      */
-    static final Style unselectable = () -> {
+    static final StyleClass unselectable = () -> {
         cursor.defaults();
 
         selection(() -> {

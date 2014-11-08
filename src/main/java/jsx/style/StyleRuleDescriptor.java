@@ -32,7 +32,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * :link — :visited — :hover — :active.
      * </p>
      */
-    protected static final void active(Style sub) {
+    protected static final void active(StyleClass sub) {
         StyleSheet.createRule("$:active", sub);
     }
 
@@ -45,7 +45,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * this element, but will to the relevant one.
      * </p>
      */
-    protected static final void checked(Style sub) {
+    protected static final void checked(StyleClass sub) {
         StyleSheet.createRule("$:checked", sub);
     }
 
@@ -56,7 +56,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * input).
      * </p>
      */
-    protected static final void focus(Style sub) {
+    protected static final void focus(StyleClass sub) {
         StyleSheet.createRule("$:focus", sub);
     }
 
@@ -70,7 +70,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * — :hover — :active.
      * </p>
      */
-    protected static final void hover(Style sub) {
+    protected static final void hover(StyleClass sub) {
         StyleSheet.createRule("$:hover", sub);
     }
 
@@ -86,7 +86,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void link(Style sub) {
+    protected static final void link(StyleClass sub) {
         StyleSheet.createRule("$:link", sub);
     }
 
@@ -101,7 +101,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void visited(Style sub) {
+    protected static final void visited(StyleClass sub) {
         StyleSheet.createRule("$:visited", sub);
     }
 
@@ -114,7 +114,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void enabled(Style sub) {
+    protected static final void enabled(StyleClass sub) {
         StyleSheet.createRule("$:enabled", sub);
     }
 
@@ -127,7 +127,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void disabled(Style sub) {
+    protected static final void disabled(StyleClass sub) {
         StyleSheet.createRule("$:disabled", sub);
     }
 
@@ -140,7 +140,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void indeterminate(Style sub) {
+    protected static final void indeterminate(StyleClass sub) {
         StyleSheet.createRule("$:indeterminate", sub);
     }
 
@@ -153,7 +153,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void required(Style sub) {
+    protected static final void required(StyleClass sub) {
         StyleSheet.createRule("$:required", sub);
     }
 
@@ -166,7 +166,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void optional(Style sub) {
+    protected static final void optional(StyleClass sub) {
         StyleSheet.createRule("$:optional", sub);
     }
 
@@ -179,7 +179,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void valid(Style sub) {
+    protected static final void valid(StyleClass sub) {
         StyleSheet.createRule("$:valid", sub);
     }
 
@@ -192,7 +192,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void invalid(Style sub) {
+    protected static final void invalid(StyleClass sub) {
         StyleSheet.createRule("$:invalid", sub);
     }
 
@@ -204,7 +204,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void firstChild(Style sub) {
+    protected static final void firstChild(StyleClass sub) {
         StyleSheet.createRule("$:first-child", sub);
     }
 
@@ -216,7 +216,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void firstOfType(Style sub) {
+    protected static final void firstOfType(StyleClass sub) {
         StyleSheet.createRule("$:first-of-type", sub);
     }
 
@@ -228,7 +228,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void lastChild(Style sub) {
+    protected static final void lastChild(StyleClass sub) {
         StyleSheet.createRule("$:last-child", sub);
     }
 
@@ -240,7 +240,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void lastOfType(Style sub) {
+    protected static final void lastOfType(StyleClass sub) {
         StyleSheet.createRule("$:last-of-type", sub);
     }
 
@@ -253,7 +253,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void onlyChild(Style sub) {
+    protected static final void onlyChild(StyleClass sub) {
         StyleSheet.createRule("$:only-child", sub);
     }
 
@@ -265,7 +265,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void onlyOfType(Style sub) {
+    protected static final void onlyOfType(StyleClass sub) {
         StyleSheet.createRule("$:only-of-type", sub);
     }
 
@@ -277,7 +277,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void nthChild(String pattern, Style sub) {
+    protected static final void nthChild(String pattern, StyleClass sub) {
         StyleSheet.createRule("$:nth-child(" + pattern + ")", sub);
     }
 
@@ -290,7 +290,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void nthLastChild(String pattern, Style sub) {
+    protected static final void nthLastChild(String pattern, StyleClass sub) {
         StyleSheet.createRule("$:nth-last-child(" + pattern + ")", sub);
     }
 
@@ -306,7 +306,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void nthOfType(String pattern, Style sub) {
+    protected static final void nthOfType(String pattern, StyleClass sub) {
         StyleSheet.createRule("$:nth-of-type(" + pattern + ")", sub);
     }
 
@@ -320,7 +320,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void nthLastOfType(String pattern, Style sub) {
+    protected static final void nthLastOfType(String pattern, StyleClass sub) {
         StyleSheet.createRule("$:nth-last-of-type(" + pattern + ")", sub);
     }
 
@@ -333,7 +333,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void empty(Style sub) {
+    protected static final void empty(StyleClass sub) {
         StyleSheet.createRule("$:empty", sub);
     }
 
@@ -346,7 +346,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void before(Style sub) {
+    protected static final void before(StyleClass sub) {
         StyleSheet.createRule("$::before", sub);
     }
 
@@ -359,7 +359,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void after(Style sub) {
+    protected static final void after(StyleClass sub) {
         StyleSheet.createRule("$::after", sub);
     }
 
@@ -371,7 +371,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void firstLetter(Style sub) {
+    protected static final void firstLetter(StyleClass sub) {
         StyleSheet.createRule("$::first-letter", sub);
     }
 
@@ -385,7 +385,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void firstLine(Style sub) {
+    protected static final void firstLine(StyleClass sub) {
         StyleSheet.createRule("$::first-line", sub);
     }
 
@@ -402,7 +402,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void selection(Style sub) {
+    protected static final void selection(StyleClass sub) {
         // Gecko is the only engine requiring the prefix. Due to the fact that the CSS parsing rules
         // require dropping the whole rule when encountering an invalid pseudo-element, two separate
         // rules must be written: ::-moz-selection, ::selection {...}. The rule would be dropped on
@@ -411,7 +411,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
         StyleSheet.createRule("$::-moz-selection", sub);
     }
 
-    protected static final void children(Style sub) {
+    protected static final void children(StyleClass sub) {
         StyleSheet.createRule("$>*", sub);
     }
 
@@ -427,7 +427,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void parentHover(Style sub) {
+    protected static final void parentHover(StyleClass sub) {
         StyleSheet.createRule("*:hover>$", sub);
     }
 
@@ -443,7 +443,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void adjacentHover(Style sub) {
+    protected static final void adjacentHover(StyleClass sub) {
         StyleSheet.createRule("*:hover+$", sub);
     }
 
@@ -459,7 +459,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void siblingHover(Style sub) {
+    protected static final void siblingHover(StyleClass sub) {
         StyleSheet.createRule("*:hover~$", sub);
     }
 
@@ -472,7 +472,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void not(Style style, Style sub) {
+    protected static final void not(StyleClass style, StyleClass sub) {
         StyleSheet.createRule("$:not(." + style + ")", sub);
     }
 
@@ -485,7 +485,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void inBackOf(Style style, Style sub) {
+    protected static final void inBackOf(StyleClass style, StyleClass sub) {
         StyleSheet.createRule("." + style + "+$", sub);
     }
 
@@ -498,7 +498,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void insideOf(Style style, Style sub) {
+    protected static final void insideOf(StyleClass style, StyleClass sub) {
         StyleSheet.createRule("." + style + " $", sub);
     }
 
@@ -511,7 +511,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * 
      * @return
      */
-    protected static final void with(Style style, Style sub) {
+    protected static final void with(StyleClass style, StyleClass sub) {
         StyleSheet.createRule("." + style + "$", sub);
     }
 
