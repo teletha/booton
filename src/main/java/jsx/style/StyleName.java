@@ -9,10 +9,15 @@
  */
 package jsx.style;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import booton.Obfuscator;
+import kiss.I;
+import booton.BootonConfiguration;
 import booton.translator.Javascript;
 import booton.translator.Translator;
 
@@ -20,6 +25,12 @@ import booton.translator.Translator;
  * @version 2014/10/31 9:51:37
  */
 public class StyleName {
+
+    /** The configuration. */
+    private static final BootonConfiguration config = I.make(BootonConfiguration.class);
+
+    /** The style classes. */
+    private static final Set<String> classes = new HashSet();
 
     /** The class id for css. */
     private static final Map<StyleClass, String> css = new HashMap();
@@ -33,13 +44,40 @@ public class StyleName {
      * @return A computed style name.
      */
     public static String name(StyleClass style) {
-        String name = css.get(style);
+        String className = style.getClass().getName();
+        int index = className.indexOf("$$");
 
-        if (name == null) {
-            name = "STYLE" + Obfuscator.mung52(css.size());
-            css.put(style, name);
+        if (index != -1) {
+            className = className.substring(0, index);
         }
-        return name;
+
+        if (classes.add(className)) {
+            try {
+                Class clazz = Class.forName(className);
+
+                for (Field field : clazz.getDeclaredFields()) {
+                    if (field.getType() == StyleClass.class && Modifier.isStatic(field.getModifiers())) {
+                        field.setAccessible(true);
+
+                        String styleName;
+
+                        if (config.compression) {
+                            // If this exception will be thrown, it is bug of this program. So we
+                            // must
+                            // rethrow the wrapped error in here.
+                            throw new Error();
+                        } else {
+                            styleName = field.getDeclaringClass().getName() + "___" + field.getName();
+                            styleName = styleName.replaceAll("\\.", "_");
+                        }
+                        css.put((StyleClass) field.get(null), styleName);
+                    }
+                }
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+        }
+        return css.get(style);
     }
 
     /**

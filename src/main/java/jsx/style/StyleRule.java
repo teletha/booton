@@ -33,6 +33,9 @@ public class StyleRule {
     /** The selector name. */
     public final String name;
 
+    /** The selector name template. */
+    public final String template;
+
     /** The property holder. */
     public final Map<String, String> holder = new HashMap();
 
@@ -45,7 +48,8 @@ public class StyleRule {
      * @param template A name template.
      * @param name An actual name.
      */
-    StyleRule(String name) {
+    StyleRule(String template, String name) {
+        this.template = template;
         this.name = name;
     }
 

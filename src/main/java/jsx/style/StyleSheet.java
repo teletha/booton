@@ -32,7 +32,7 @@ public class StyleSheet {
      */
     public static void add(StyleClass style) {
         if (!styles.contains(style)) {
-            createRule(StyleName.name(style), style);
+            createRule("$", style);
         }
     }
 
@@ -61,16 +61,21 @@ public class StyleSheet {
      * @param object A style description.
      * @return A create new {@link StyleRule}.
      */
-    public static StyleRule createRule(String name, StyleClass style) {
+    public static StyleRule createRule(String template, StyleClass style) {
         // store parent rule
         StyleRule parent = PropertyDefinition.declarable;
 
-        if (parent != null) {
-            name = name.replace("$", parent.name);
+        String name;
+
+        if (parent == null) {
+            name = StyleName.name(style);
+        } else {
+            name = parent.name;
+            template = template.replace("$", parent.template);
         }
 
         // create child rule
-        StyleRule child = new StyleRule(name);
+        StyleRule child = new StyleRule(template, name);
 
         // swap context rule and execute it
         PropertyDefinition.declarable = child;
