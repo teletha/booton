@@ -174,7 +174,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * @param sub A style of this effect.
      */
     public void when(StyleClass other, StyleClass sub) {
-        when("$" + StyleName.name(other), sub);
+        when("$." + StyleName.name(other), sub);
     }
 
     /**
@@ -185,7 +185,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * @param sub A style of this effect.
      */
     public void whenIn(StyleClass other, StyleClass sub) {
-        when(StyleName.name(other) + " $", sub);
+        when("." + StyleName.name(other) + " $", sub);
     }
 
     /**
