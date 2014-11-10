@@ -63,12 +63,14 @@ public class StyleDeclarationTestBase {
          * @return
          */
         public ValidatableStyleRule rule() {
+            String name = StyleName.name(style);
+
             for (StyleRule rule : sheet.rules) {
-                if (rule.name.endsWith(String.valueOf(style.hashCode()))) {
+                if (rule.selector().endsWith(name)) {
                     return new ValidatableStyleRule(sheet, rule);
                 }
             }
-            throw new AssertionError("The rule[STYLE" + style.hashCode() + "] is not found.");
+            throw new AssertionError("The rule[" + name + "] is not found.");
         }
 
         /**
@@ -147,7 +149,9 @@ public class StyleDeclarationTestBase {
             String pseudo = rules.name + "::" + selector;
 
             for (StyleRule rule : sheet.rules) {
-                if (rule.name.equals(combinator) || rule.name.equals(pseudo)) {
+                selector = rule.selector();
+
+                if (selector.endsWith(combinator) || selector.endsWith(pseudo)) {
                     return new ValidatableStyleRule(sheet, rule);
                 }
             }

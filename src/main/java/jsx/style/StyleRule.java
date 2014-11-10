@@ -55,6 +55,17 @@ public class StyleRule {
 
     /**
      * <p>
+     * Compute selector.
+     * </p>
+     * 
+     * @return
+     */
+    public String selector() {
+        return template.replace("$", "." + name);
+    }
+
+    /**
+     * <p>
      * Check the current value.
      * </p>
      * 
