@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import static jsx.bwt.FormUIStyle2.*;
+import static jsx.bwt.FormUIStyle.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -15,7 +15,7 @@ import jsx.style.value.Color;
 /**
  * @version 2013/04/06 0:04:01
  */
-class SelectStyle2 extends FormUIStyle2 {
+class SelectStyle extends FormUIStyle {
 
     static Style SelectForm = () -> {
         baseInputForm();
