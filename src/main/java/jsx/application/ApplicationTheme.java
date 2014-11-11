@@ -9,13 +9,12 @@
  */
 package jsx.application;
 
-import booton.css.CSS;
 import booton.css.value.Color;
 
 /**
  * @version 2012/12/15 22:06:17
  */
-public abstract class ApplicationTheme extends CSS {
+public abstract class ApplicationTheme {
 
     /** The base color. */
     private Color baseColor;
