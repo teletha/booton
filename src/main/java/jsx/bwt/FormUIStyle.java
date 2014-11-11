@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import jsx.style.value.Shadow;
 import booton.css.value.Font;
 
 /**
- * @version 2013/03/28 1:34:10
+ * @version 2014/11/11 21:54:39
  */
 class FormUIStyle extends StyleRuleDescriptor {
 
@@ -115,7 +115,7 @@ class FormUIStyle extends StyleRuleDescriptor {
         text.verticalAlign.middle();
 
         // Required property for single line form.
-        // outline.none();
+        outline.none();
 
         // Customizable properties.
         display.inlineBlock();

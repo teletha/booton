@@ -9,6 +9,8 @@
  */
 package jsx.bwt;
 
+import static jsx.bwt.ImageGridStyle2.*;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +19,6 @@ import java.util.Map.Entry;
 import js.dom.Element;
 import js.dom.UIAction;
 import jsx.bwt.ImageGridStyle.Container;
-import jsx.bwt.ImageGridStyle.IconImage;
 import jsx.bwt.ImageGridStyle.ImageSet;
 import jsx.bwt.ImageGridStyle.InputStyle;
 import jsx.bwt.ImageGridStyle.Root;
@@ -69,7 +70,7 @@ public abstract class ImageGrid<T> extends UI {
 
         for (final T source : sources) {
             Element container = set.child(Container.class);
-            Element image = container.child(IconImage.class);
+            Element image = container.child(IconImage);
 
             apply(source, image);
 
