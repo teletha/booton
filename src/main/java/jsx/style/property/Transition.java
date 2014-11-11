@@ -189,6 +189,17 @@ public class Transition extends PropertyDefinition<Transition> {
 
     /**
      * <p>
+     * Declare class change effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenWith(Style other, Style sub) {
+        when("." + StyleName.name(other) + "$", sub);
+    }
+
+    /**
+     * <p>
      * Declare hover effect.
      * </p>
      * 

@@ -9,6 +9,7 @@
  */
 package jsx.bwt;
 
+import static jsx.bwt.FormUIStyle.*;
 import booton.css.CSS;
 import booton.css.Priority;
 import booton.css.value.Color;
