@@ -9,15 +9,10 @@
  */
 package jsx.bwt;
 
+import static jsx.bwt.SelectStyle2.*;
 import js.dom.Element;
 import js.dom.UIAction;
 import js.dom.UIEvent;
-import jsx.bwt.FormUIStyle.Focus;
-import jsx.bwt.SelectStyle.SelectArrow;
-import jsx.bwt.SelectStyle.SelectForm;
-import jsx.bwt.SelectStyle.SelectItem;
-import jsx.bwt.SelectStyle.SelectItemList;
-import jsx.bwt.SelectStyle.SelectedItem;
 import jsx.bwt.view.ScrollableListView;
 import jsx.bwt.view.ScrollableListView.ItemRenderer;
 import jsx.bwt.view.SlidableView;
@@ -70,17 +65,17 @@ public class Select<M> extends FormUI<Select> {
         model = selectable;
         model.subscribe(binder);
 
-        form.add(SelectForm.class).attr("type", "input").attr("placeholder", "Mastery Set Name");
+        form.add(SelectForm).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
         view = new ScrollableListView(10, 28).provide(binder);
-        view.root.add(SelectItemList.class).subscribe(binder);
+        view.root.add(SelectItemList).subscribe(binder);
 
         options = root.child(new SlidableView(view));
 
         arrow = root.child(new Button(Icon.BottomArrow, event -> {
             options.toggle();
         }));
-        arrow.root.add(SelectArrow.class);
+        arrow.root.add(SelectArrow);
 
         // options.bind(binder);q
 
@@ -99,14 +94,16 @@ public class Select<M> extends FormUI<Select> {
         model.selectNext();
     }
 
+    @Override
     @SubscribeUI(type = UIAction.Focus)
-    private void startInput() {
-        root.add(Focus.class);
+    protected void startInput() {
+        root.add(FormUIStyle2.Focus);
     }
 
+    @Override
     @SubscribeUI(type = UIAction.Blur)
-    private void endInput() {
-        root.remove(Focus.class);
+    protected void endInput() {
+        root.remove(FormUIStyle2.Focus);
     }
 
     /**
@@ -132,12 +129,12 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void renderItem(int itemIndex, Element element) {
-            element.add(SelectItem.class).attr("index", itemIndex).text(model.get(itemIndex));
+            element.add(SelectItem).attr("index", itemIndex).text(model.get(itemIndex));
 
             if (itemIndex == model.getSelectionIndex()) {
-                element.add(SelectedItem.class);
+                element.add(SelectedItem);
             } else {
-                element.remove(SelectedItem.class);
+                element.remove(SelectedItem);
             }
         }
 

@@ -9,11 +9,12 @@
  */
 package jsx.bwt;
 
+import static jsx.bwt.FormUIStyle2.*;
+
 import java.util.function.Consumer;
 
 import js.dom.UIAction;
 import js.dom.UIEvent;
-import jsx.bwt.FormUIStyle.ButtonForm;
 import jsx.bwt.FormUIStyle.Icons;
 
 /**
@@ -44,7 +45,7 @@ public class Button extends FormUI<Button> {
     public Button(String label, Consumer<UIEvent> action) {
         super("span");
 
-        form.add(ButtonForm.class).text(label).observe(UIAction.Click).to(action);
+        form.add(ButtonForm).text(label).observe(UIAction.Click).to(action);
 
         this.label = label;
     }

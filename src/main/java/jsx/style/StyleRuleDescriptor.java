@@ -473,7 +473,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * @return
      */
     protected static final void not(Style style, Style sub) {
-        PropertyDefinition.createSubRule("$:not(." + style + ")", sub);
+        PropertyDefinition.createSubRule("$:not(." + StyleName.name(style) + ")", sub);
     }
 
     /**
@@ -486,7 +486,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * @return
      */
     protected static final void inBackOf(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style + "+$", sub);
+        PropertyDefinition.createSubRule("." + StyleName.name(style) + "+$", sub);
     }
 
     /**
@@ -499,7 +499,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * @return
      */
     protected static final void insideOf(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style + " $", sub);
+        PropertyDefinition.createSubRule("." + StyleName.name(style) + " $", sub);
     }
 
     /**
@@ -512,7 +512,7 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      * @return
      */
     protected static final void with(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style + "$", sub);
+        PropertyDefinition.createSubRule("." + StyleName.name(style) + "$", sub);
     }
 
     /**
