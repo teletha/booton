@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @version 2014/10/27 13:21:37
+ * @version 2014/11/11 10:54:00
  */
 public class StyleSheet {
 
     /** The list of rules. */
-    public static final List<StyleRule> rules = new ArrayList();
+    public final List<StyleRule> rules = new ArrayList();
 
     /**
      * <p>
@@ -29,7 +29,7 @@ public class StyleSheet {
      * @param object A style description.
      * @return A create new {@link StyleRule}.
      */
-    public static StyleRule createRule(String template, Style style) {
+    public StyleRule createRule(String template, Style style) {
         // store parent rule
         StyleRule parent = PropertyDefinition.declarable;
 
@@ -43,7 +43,7 @@ public class StyleSheet {
         }
 
         // create child rule
-        StyleRule child = new StyleRule(selector);
+        StyleRule child = new StyleRule(selector, this);
 
         // swap context rule and execute it
         PropertyDefinition.declarable = child;

@@ -184,6 +184,20 @@ public class PropertyDefinition<T> {
     }
 
     /**
+     * <p>
+     * Create sub rule.
+     * </p>
+     * 
+     * @param template A selector template.
+     * @param sub A sub style descriptor.
+     */
+    protected static final void createSubRule(String template, Style sub) {
+        if (declarable != null) {
+            declarable.sheet.createRule(template, sub);
+        }
+    }
+
+    /**
      * @version 2014/10/21 15:02:11
      */
     protected static class PrefixAwareProperty {
