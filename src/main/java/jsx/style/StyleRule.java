@@ -33,6 +33,9 @@ public class StyleRule {
     /** The selector. */
     public final String selector;
 
+    /** The parent style sheet. */
+    public final StyleSheet sheet;
+
     /** The property holder. */
     public final Map<String, String> holder = new HashMap();
 
@@ -42,9 +45,11 @@ public class StyleRule {
      * </p>
      * 
      * @param name An actual selector.
+     * @param sheet A parent style sheet.
      */
-    StyleRule(String selector) {
+    StyleRule(String selector, StyleSheet sheet) {
         this.selector = selector;
+        this.sheet = sheet;
     }
 
     /**

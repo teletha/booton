@@ -30,8 +30,7 @@ public class StyleDeclarationTestBase {
      */
     protected ValidatableStyleSheet parse(Style style) {
         StyleSheet sheet = new StyleSheet();
-
-        StyleSheet.createRule("$", style);
+        sheet.createRule("$", style);
 
         // API definition
         return new ValidatableStyleSheet(sheet, style);

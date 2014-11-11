@@ -108,11 +108,13 @@ public class Stylist {
             }
         }
 
+        StyleSheet sheet = I.make(StyleSheet.class);
+
         for (Style style : styles) {
-            StyleSheet.createRule("$", style);
+            sheet.createRule("$", style);
         }
 
-        for (StyleRule rule : StyleSheet.rules) {
+        for (StyleRule rule : sheet.rules) {
             root.writeDown(write(rule));
         }
 
