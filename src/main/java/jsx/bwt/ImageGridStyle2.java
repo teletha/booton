@@ -12,6 +12,7 @@ package jsx.bwt;
 import static jsx.style.value.Color.*;
 import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
+import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 import jsx.style.value.Shadow;
@@ -68,32 +69,32 @@ class ImageGridStyle2 extends StyleRuleDescriptor {
         });
     };
 
-    // static Style Title = () -> {
-    //
-    // Numeric boxWidth = ImageSize.add(40);
-    //
-    // Color color = new Color(0, 98, 97, 1);
-    // font.weight.bold().size(18, px);
-    // text.align.center().shadow(1, px, 1, px, 1, px, rgba(0, 0, 0, 0.1));
-    // line.height(20, px);
-    // padding.size(5, px);
-    // background.image(linear(color.opacify(-0.4), color));
-    // position.absolute().left(50, percent).bottom(ImageSize.add(20));
-    // margin.left(boxWidth.divide(-2));
-    // box.minWidth(boxWidth).zIndex(1).opacity(0);
-    // border.width(4, px).solid().color(color.lighten(-100)).radius(5, px);
-    // visibility.hidden();
-    // pointerEvents.none();
-    // transition.property.all().duration(0.2, s).timing.easeInOut().delay(100, ms);
-    //
-    // createBottomBubble(7);
-    //
-    // siblingHover(() -> {
-    // box.opacity(1);
-    // position.bottom(ImageSize);
-    // visibility.visible();
-    // });
-    // };
+    static Style Title = () -> {
+
+        Numeric boxWidth = ImageSize.add(40);
+
+        Color color = new Color(0, 98, 97, 1);
+        font.weight.bold().size(18, px);
+        text.align.center().shadow(shadow().offset(1, 1, px).blurRadius(1, px).color(rgba(0, 0, 0, 0.1)));
+        line.height(20, px);
+        padding.size(5, px);
+        background.image(BackgroundImage.of(linear(color.opacify(-0.4), color)));
+        position.absolute().left(50, percent).bottom(ImageSize.add(20));
+        margin.left(boxWidth.divide(-2));
+        box.minWidth(boxWidth).zIndex(1).opacity(0);
+        border.width(4, px).solid().color(color.lighten(-100)).radius(5, px);
+        visibility.hidden();
+        pointerEvents.none();
+        // transition.property.all().duration(0.2, s).timing.easeInOut().delay(100, ms);
+
+        // createBottomBubble(7);
+
+        siblingHover(() -> {
+            box.opacity(1);
+            position.bottom(ImageSize);
+            visibility.visible();
+        });
+    };
 
     // @Priority(100)
     static Style Unselected = () -> {

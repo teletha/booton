@@ -19,11 +19,8 @@ import java.util.Map.Entry;
 import js.dom.Element;
 import js.dom.UIAction;
 import jsx.bwt.ImageGridStyle.Container;
-import jsx.bwt.ImageGridStyle.ImageSet;
 import jsx.bwt.ImageGridStyle.InputStyle;
-import jsx.bwt.ImageGridStyle.Root;
 import jsx.bwt.ImageGridStyle.Title;
-import jsx.bwt.ImageGridStyle.Unselected;
 import jsx.event.SubscribeUI;
 
 /**
@@ -50,9 +47,9 @@ public abstract class ImageGrid<T> extends UI {
 
         for (Entry<T, Element> entry : images.entrySet()) {
             if (getTitle(entry.getKey()).toLowerCase().contains(name)) {
-                entry.getValue().remove(Unselected.class);
+                entry.getValue().remove(Unselected);
             } else {
-                entry.getValue().add(Unselected.class);
+                entry.getValue().add(Unselected);
             }
         }
     }
@@ -64,9 +61,9 @@ public abstract class ImageGrid<T> extends UI {
      */
     public ImageGrid() {
         sources = sources();
-        root.add(Root.class);
+        root.add(Root);
 
-        Element set = root.child(ImageSet.class);
+        Element set = root.child(ImageSet);
 
         for (final T source : sources) {
             Element container = set.child(Container.class);
