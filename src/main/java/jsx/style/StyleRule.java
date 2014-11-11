@@ -23,18 +23,15 @@ import java.util.Objects;
 import kiss.I;
 
 /**
- * @version 2014/10/25 9:34:01
+ * @version 2014/11/11 9:47:11
  */
 public class StyleRule {
 
     /** The list of declared rules. */
     private static final List<StyleRule> enables = new ArrayList();
 
-    /** The selector name. */
-    public final String name;
-
-    /** The selector name template. */
-    public final String template;
+    /** The selector. */
+    public final String selector;
 
     /** The property holder. */
     public final Map<String, String> holder = new HashMap();
@@ -44,24 +41,10 @@ public class StyleRule {
      * Define style rule.
      * </p>
      * 
-     * @param parent A parent rule.
-     * @param template A name template.
-     * @param name An actual name.
+     * @param name An actual selector.
      */
-    StyleRule(String template, String name) {
-        this.template = template;
-        this.name = name;
-    }
-
-    /**
-     * <p>
-     * Compute selector.
-     * </p>
-     * 
-     * @return
-     */
-    public String selector() {
-        return template.replace("$", "." + name);
+    StyleRule(String selector) {
+        this.selector = selector;
     }
 
     /**

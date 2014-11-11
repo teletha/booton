@@ -33,11 +33,11 @@ public class FontTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass rgb = () -> {
+        private static Style rgb = () -> {
             font.color(255, 0, 0);
         };
 
-        private static StyleClass family = () -> {
+        private static Style family = () -> {
             font.family("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600").serif();
         };
     }

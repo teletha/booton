@@ -9,7 +9,7 @@
  */
 package jsx.ui.samaple.todo;
 
-import jsx.style.StyleClass;
+import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
 
 /**
@@ -17,15 +17,15 @@ import jsx.style.StyleRuleDescriptor;
  */
 public class TodoUISkin extends StyleRuleDescriptor {
 
-    static StyleClass FOTTER = () -> {
+    static Style FOTTER = () -> {
 
     };
 
-    static StyleClass ITEMS = () -> {
+    static Style ITEMS = () -> {
 
     };
 
-    static StyleClass BUTTONS = () -> {
+    static Style BUTTONS = () -> {
         box.width(150, px);
 
         transit().duration(1, s).easeInOut().whenHover(() -> {
@@ -33,11 +33,11 @@ public class TodoUISkin extends StyleRuleDescriptor {
         });
     };
 
-    static StyleClass CLEAR = () -> {
+    static Style CLEAR = () -> {
 
     };
 
-    static StyleClass SELECTED_FILTER = () -> {
+    static Style SELECTED_FILTER = () -> {
 
     };
 }

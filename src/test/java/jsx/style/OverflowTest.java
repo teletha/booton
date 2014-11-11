@@ -31,11 +31,11 @@ public class OverflowTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass both = () -> {
+        private static Style both = () -> {
             overflow.hidden();
         };
 
-        private static StyleClass each = () -> {
+        private static Style each = () -> {
             overflow.x.scroll();
             overflow.y.auto();
         };

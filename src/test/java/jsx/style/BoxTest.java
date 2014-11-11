@@ -68,31 +68,31 @@ public class BoxTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass width = () -> {
+        private static Style width = () -> {
             box.width(7, px).minWidth(5, px).maxWidth(10, px);
         };
 
-        private static StyleClass height = () -> {
+        private static Style height = () -> {
             box.height(7, px).minHeight(5, px).maxHeight(10, px);
         };
 
-        private static StyleClass size = () -> {
+        private static Style size = () -> {
             box.size(10, px);
         };
 
-        private static StyleClass opacity = () -> {
+        private static Style opacity = () -> {
             box.opacity(0.5);
         };
 
-        private static StyleClass zIndex = () -> {
+        private static Style zIndex = () -> {
             box.zIndex(2);
         };
 
-        private static StyleClass shadow = () -> {
+        private static Style shadow = () -> {
             box.shadow(shadow().offset(2, 2, px).blurRadius(1, px).color(hsl(100, 100, 100)));
         };
 
-        private static StyleClass shadows = () -> {
+        private static Style shadows = () -> {
             box.shadow(shadow().offset(2, 2, px), shadow().offset(1, 1, px));
         };
     }

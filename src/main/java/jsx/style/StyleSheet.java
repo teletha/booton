@@ -17,65 +17,33 @@ import java.util.List;
  */
 public class StyleSheet {
 
-    /** The list of styles. */
-    private static final List<StyleClass> styles = new ArrayList();
-
     /** The list of rules. */
     public static final List<StyleRule> rules = new ArrayList();
 
     /**
      * <p>
-     * Add the specified {@link StyleClass} to this {@link StyleSheet}.
-     * </p>
-     * 
-     * @param style A {@link StyleClass} to add.
-     */
-    public static void add(StyleClass style) {
-        if (!styles.contains(style)) {
-            createRule("$", style);
-        }
-    }
-
-    /**
-     * <p>
-     * Remove the specified {@link StyleClass} from this {@link StyleSheet}.
-     * </p>
-     * 
-     * @param style A {@link StyleClass} to remove.
-     */
-    public static void remove(StyleClass style) {
-        int index = styles.indexOf(style);
-
-        if (index != -1) {
-            styles.remove(index);
-            rules.remove(index);
-        }
-    }
-
-    /**
-     * <p>
-     * Create {@link StyleRule} from the specified object. (e.g. {@link StyleClass},
-     * {@link RuntimeStyle} )
+     * Create {@link StyleRule} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
+     * )
      * </p>
      * 
      * @param object A style description.
      * @return A create new {@link StyleRule}.
      */
-    public static StyleRule createRule(String template, StyleClass style) {
+    public static StyleRule createRule(String template, Style style) {
         // store parent rule
         StyleRule parent = PropertyDefinition.declarable;
 
-        String name;
+        // compute selector
+        String selector;
 
         if (parent == null) {
-            name = StyleName.name(style);
+            selector = "." + StyleName.name(style);
         } else {
-            name = parent.name;
-            template = template.replace("$", parent.template);
+            selector = template.replace("$", parent.selector);
         }
 
         // create child rule
-        StyleRule child = new StyleRule(template, name);
+        StyleRule child = new StyleRule(selector);
 
         // swap context rule and execute it
         PropertyDefinition.declarable = child;
@@ -83,7 +51,6 @@ public class StyleSheet {
         PropertyDefinition.declarable = parent;
 
         // assign rule
-        styles.add(style);
         rules.add(child);
 
         return child;

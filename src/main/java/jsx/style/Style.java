@@ -12,7 +12,7 @@ package jsx.style;
 /**
  * @version 2014/10/24 13:58:41
  */
-public interface StyleClass {
+public interface Style {
 
     /**
      * <p>

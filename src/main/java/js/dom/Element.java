@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import js.lang.NativeObject;
-import jsx.style.StyleClass;
+import jsx.style.Style;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -55,7 +55,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classNames A class name to be added to the class attribute of this element.
      * @return Chainable API.
      */
-    public Element add(StyleClass className) {
+    public Element add(Style className) {
         classList().add(className.intern());
 
         // API definition
@@ -208,7 +208,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param className The class name to search for.
      * @return A result
      */
-    public boolean has(StyleClass className) {
+    public boolean has(Style className) {
         return classList().contains(className.intern());
     }
 
@@ -237,8 +237,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to check.
      * @return A result.
      */
-    public boolean has(StyleClass... classes) {
-        for (StyleClass clazz : classes) {
+    public boolean has(Style... classes) {
+        for (Style clazz : classes) {
             if (!has(clazz)) {
                 return false;
             }
@@ -363,7 +363,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param className A class name to be removed from the class attribute of this element.
      * @return Chainable API.
      */
-    public Element remove(StyleClass className) {
+    public Element remove(Style className) {
         classList().remove(className.intern());
 
         // API definition
@@ -395,8 +395,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to remove.
      * @return Chainable API.
      */
-    public Element remove(StyleClass... classes) {
-        for (StyleClass clazz : classes) {
+    public Element remove(Style... classes) {
+        for (Style clazz : classes) {
             remove(clazz);
         }
 
@@ -429,7 +429,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param className A class name to be toggled for this element.
      * @return Chainable API.
      */
-    public Element toggle(StyleClass className) {
+    public Element toggle(Style className) {
         classList().toggle(className.intern());
 
         // API definition
@@ -463,8 +463,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to add or remove.
      * @return Chainable API.
      */
-    public Element toggle(StyleClass... classes) {
-        for (StyleClass clazz : classes) {
+    public Element toggle(Style... classes) {
+        for (Style clazz : classes) {
             classList().toggle(clazz.intern());
         }
 

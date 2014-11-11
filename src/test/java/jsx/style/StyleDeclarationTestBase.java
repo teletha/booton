@@ -28,9 +28,10 @@ public class StyleDeclarationTestBase {
      * @param definition
      * @return
      */
-    protected ValidatableStyleSheet parse(StyleClass style) {
+    protected ValidatableStyleSheet parse(Style style) {
         StyleSheet sheet = new StyleSheet();
-        sheet.add(style);
+
+        StyleSheet.createRule("$", style);
 
         // API definition
         return new ValidatableStyleSheet(sheet, style);
@@ -45,12 +46,12 @@ public class StyleDeclarationTestBase {
         private final StyleSheet sheet;
 
         /** The target style. */
-        private final StyleClass style;
+        private final Style style;
 
         /**
          * @param sheet
          */
-        private ValidatableStyleSheet(StyleSheet sheet, StyleClass style) {
+        private ValidatableStyleSheet(StyleSheet sheet, Style style) {
             this.sheet = sheet;
             this.style = style;
         }
@@ -63,10 +64,10 @@ public class StyleDeclarationTestBase {
          * @return
          */
         public ValidatableStyleRule rule() {
-            String name = StyleName.name(style);
+            String name = "." + StyleName.name(style);
 
             for (StyleRule rule : sheet.rules) {
-                if (rule.selector().endsWith(name)) {
+                if (rule.selector.equals(name)) {
                     return new ValidatableStyleRule(sheet, rule);
                 }
             }
@@ -145,13 +146,13 @@ public class StyleDeclarationTestBase {
          * @return
          */
         public ValidatableStyleRule sub(String selector) {
-            String combinator = rules.name + ":" + selector;
-            String pseudo = rules.name + "::" + selector;
+            String combinator = rules.selector + ":" + selector;
+            String pseudo = rules.selector + "::" + selector;
 
             for (StyleRule rule : sheet.rules) {
-                selector = rule.selector();
+                selector = rule.selector;
 
-                if (selector.endsWith(combinator) || selector.endsWith(pseudo)) {
+                if (selector.equals(combinator) || selector.equals(pseudo)) {
                     return new ValidatableStyleRule(sheet, rule);
                 }
             }

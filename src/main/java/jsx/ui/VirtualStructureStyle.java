@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import jsx.style.StyleClass;
+import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
 
 /**
@@ -17,15 +17,15 @@ import jsx.style.StyleRuleDescriptor;
  */
 class VirtualStructureStyle extends StyleRuleDescriptor {
 
-    static StyleClass HBOX = () -> {
+    static Style HBOX = () -> {
         display.flex();
     };
 
-    static StyleClass VBOX = () -> {
+    static Style VBOX = () -> {
         display.flex().direction.column();
     };
 
-    static StyleClass SBOX = () -> {
+    static Style SBOX = () -> {
         position.relative();
 
         children(() -> {

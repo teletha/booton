@@ -38,11 +38,11 @@ public class FlexboxTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass standard = () -> {
+        private static Style standard = () -> {
             display.flex().direction.row().alignContent.center();
         };
 
-        private static StyleClass item = () -> {
+        private static Style item = () -> {
             flexItem.grow(2).shrink(2);
         };
     }
