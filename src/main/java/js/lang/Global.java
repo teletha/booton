@@ -23,7 +23,6 @@ import js.dom.Location;
 import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
-import jsx.jQuery;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -112,66 +111,6 @@ public class Global {
             throw I.quiet(e);
         }
     }
-
-    /**
-     * <p>
-     * Provide JQuery support.
-     * </p>
-     * 
-     * @param expression
-     * @return A empty {@link jQuery} instance.
-     */
-    public static native jQuery $();
-
-    /**
-     * <p>
-     * Provide JQuery support.
-     * </p>
-     * 
-     * @param expression
-     * @return
-     */
-    public static native jQuery $(String expression);
-
-    /**
-     * <p>
-     * Provide JQuery support.
-     * </p>
-     * 
-     * @param expression
-     * @return
-     */
-    public static native jQuery $(Element element);
-
-    /**
-     * <p>
-     * Provide JQuery support.
-     * </p>
-     * 
-     * @param document
-     * @return
-     */
-    public static native jQuery $(Document document);
-
-    /**
-     * <p>
-     * Provide JQuery support.
-     * </p>
-     * 
-     * @param document
-     * @return
-     */
-    public static native jQuery $(DocumentFragment document);
-
-    /**
-     * <p>
-     * Provide JQuery support.
-     * </p>
-     * 
-     * @param window
-     * @return
-     */
-    public static native jQuery $(Window window);
 
     /**
      * <p>
