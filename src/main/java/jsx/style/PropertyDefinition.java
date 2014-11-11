@@ -191,10 +191,8 @@ public class PropertyDefinition<T> {
      * @param template A selector template.
      * @param sub A sub style descriptor.
      */
-    protected static final void createSubRule(String template, Style sub) {
-        if (declarable != null) {
-            declarable.sheet.createRule(template, sub);
-        }
+    protected static final StyleRule createSubRule(String template, Style sub) {
+        return declarable.sheet.createRule(template, sub);
     }
 
     /**
