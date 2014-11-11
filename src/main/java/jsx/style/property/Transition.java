@@ -17,9 +17,7 @@ import jsx.style.PropertyDefinition;
 import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
-import jsx.style.StyleSheet;
 import jsx.style.value.Numeric;
-import kiss.I;
 import booton.css.Unit;
 
 /**
@@ -272,7 +270,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * </p>
      */
     private void when(String selector, Style sub) {
-        StyleRule rule = I.make(StyleSheet.class).createRule(selector, sub);
+        StyleRule rule = createSubRule(selector, sub);
         Set<String> set = rule.holder.keySet();
 
         value("transition-property", join(set, v -> v));
