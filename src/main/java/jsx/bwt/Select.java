@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import static jsx.bwt.SelectStyle2.*;
+import static jsx.bwt.SelectStyle.*;
 import js.dom.Element;
 import js.dom.UIAction;
 import js.dom.UIEvent;
@@ -97,13 +97,13 @@ public class Select<M> extends FormUI<Select> {
     @Override
     @SubscribeUI(type = UIAction.Focus)
     protected void startInput() {
-        root.add(FormUIStyle2.Focus);
+        root.add(FormUIStyle.Focus);
     }
 
     @Override
     @SubscribeUI(type = UIAction.Blur)
     protected void endInput() {
-        root.remove(FormUIStyle2.Focus);
+        root.remove(FormUIStyle.Focus);
     }
 
     /**

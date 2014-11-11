@@ -20,7 +20,7 @@ import booton.css.value.Font;
 /**
  * @version 2013/03/28 1:34:10
  */
-class FormUIStyle2 extends StyleRuleDescriptor {
+class FormUIStyle extends StyleRuleDescriptor {
 
     // ===========================================
     // Form Related Style
