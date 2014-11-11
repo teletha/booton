@@ -25,6 +25,18 @@ public class HoverTest extends StyleDeclarationTestBase {
         assert hover.property("color", "rgb(0,255,0)");
     }
 
+    @Test
+    public void after() {
+        ValidatableStyleRule parsed = parse(MyStyle.after).rule();
+        assert parsed.property("color", "rgb(255,255,0)");
+
+        ValidatableStyleRule after = parsed.sub("after");
+        assert after.property("color", "rgb(0,255,0)");
+
+        ValidatableStyleRule afterHover = parsed.sub("hover::after");
+        assert afterHover.property("color", "rgb(0,0,0)");
+    }
+
     /**
      * @version 2014/10/21 13:43:25
      */
@@ -35,6 +47,18 @@ public class HoverTest extends StyleDeclarationTestBase {
 
             hover(() -> {
                 font.color(0, 255, 0);
+            });
+        };
+
+        private static Style after = () -> {
+            font.color(255, 255, 0);
+
+            after(() -> {
+                font.color(0, 255, 0);
+
+                hover(() -> {
+                    font.color(0, 0, 0);
+                });
             });
         };
     }

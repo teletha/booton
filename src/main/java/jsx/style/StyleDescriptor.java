@@ -20,6 +20,7 @@ import jsx.style.property.FlexItem;
 import jsx.style.property.Font;
 import jsx.style.property.Line;
 import jsx.style.property.ListStyle;
+import jsx.style.property.Outline;
 import jsx.style.property.Overflows;
 import jsx.style.property.PointerEvents;
 import jsx.style.property.Position;
@@ -250,6 +251,23 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final BoxLength margin = new BoxLength("margin");
+
+    /**
+     * <p>
+     * The CSS outline property is a shorthand property for setting one or more of the individual
+     * outline properties outline-style, outline-width and outline-color in a single rule. In most
+     * cases the use of this shortcut is preferable and more convenient.
+     * </p>
+     * <p>
+     * Outlines differ from borders in the following ways:
+     * </p>
+     * <ul>
+     * <li>Outlines do not take up space, they are drawn above the content.</li>
+     * <li>Outlines may be non-rectangular. They are rectangular in Gecko/Firefox. But e.g. Opera
+     * draws a non-rectangular shape around a construct like this:</li>
+     * </ul>
+     */
+    protected static final Outline outline = new Outline();
 
     /**
      * <p>

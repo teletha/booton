@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@ import jsx.style.Style;
 import jsx.style.value.Color;
 
 /**
- * @version 2013/04/06 0:04:01
+ * @version 2014/11/11 21:54:51
  */
 class SelectStyle extends FormUIStyle {
 

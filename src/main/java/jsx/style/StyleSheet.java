@@ -39,7 +39,18 @@ public class StyleSheet {
         if (parent == null) {
             selector = "." + StyleName.name(style);
         } else {
-            selector = template.replace("$", parent.selector);
+            // check pseudo element
+            String pseudo;
+            int index = parent.selector.indexOf("::");
+
+            if (index == -1) {
+                selector = parent.selector;
+                pseudo = "";
+            } else {
+                selector = parent.selector.substring(0, index);
+                pseudo = parent.selector.substring(index);
+            }
+            selector = template.replace("$", selector) + pseudo;
         }
 
         // create child rule
