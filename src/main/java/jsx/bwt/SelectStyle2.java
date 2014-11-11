@@ -17,7 +17,6 @@ import jsx.style.value.Color;
  */
 class SelectStyle2 extends FormUIStyle2 {
 
-    // @Priority(10)
     static Style SelectForm = () -> {
         baseInputForm();
         padding.right(IconSize.add(FormHorizontalPadding));
@@ -45,7 +44,6 @@ class SelectStyle2 extends FormUIStyle2 {
         background.color(SelectColor);
     };
 
-    // @Priority(10)
     static Style SelectArrow = () -> {
         position.absolute().top(0, px).right(0, px);
     };

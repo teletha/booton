@@ -14,11 +14,11 @@ import static jsx.style.Vendor.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import kiss.I;
 
@@ -37,7 +37,7 @@ public class StyleRule {
     public final StyleSheet sheet;
 
     /** The property holder. */
-    public final Map<String, String> holder = new HashMap();
+    public final Map<String, String> holder = new TreeMap();
 
     /**
      * <p>
