@@ -217,25 +217,22 @@ class FormUIStyle2 extends StyleRuleDescriptor {
             position.absolute().top(0, px).left(0, px);
         });
     };
-    //
-    // class Icons extends CSS {
-    //
-    // {
-    // padding.vertical(0, px).horizontal(8, px);
-    // line.height(IconSize);
-    // box.size(IconSize);
-    //
-    // after(() -> {
-    // font.color(BorderColor.lighten(-20)).family(IconFont);
-    // text.verticalAlign.middle();
-    // content.attr("icon");
-    // });
-    //
-    // hover(() -> {
-    // after(() -> {
-    // font.color(BorderColor.lighten(-40));
-    // });
-    // });
-    // }
-    // }
+
+    static Style Icons = () -> {
+        padding.vertical(0, px).horizontal(8, px);
+        line.height(IconSize);
+        box.size(IconSize);
+
+        after(() -> {
+            font.color(BorderColor.lighten(-20));
+            text.verticalAlign.middle();
+            content.attr("icon");
+        });
+
+        hover(() -> {
+            after(() -> {
+                font.color(BorderColor.lighten(-40));
+            });
+        });
+    };
 }

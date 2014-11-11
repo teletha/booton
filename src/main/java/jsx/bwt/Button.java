@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 
 import js.dom.UIAction;
 import js.dom.UIEvent;
-import jsx.bwt.FormUIStyle.Icons;
 
 /**
  * @version 2013/04/17 16:09:04
@@ -56,7 +55,7 @@ public class Button extends FormUI<Button> {
     public Button(Icon icon, Consumer<UIEvent> action) {
         this("", action);
 
-        form.add(Icons.class).attr("icon", icon.code);
+        form.add(Icons).attr("icon", icon.code);
     }
 
     public void label(String label) {

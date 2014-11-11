@@ -20,7 +20,6 @@ import js.dom.UIAction;
 import js.lang.NativeObject;
 import js.lang.NativeObject.PropertyDescriptor;
 import js.util.Converter;
-import jsx.bwt.FormUIStyle.AbstractBorderForm;
 import jsx.event.SubscribeUI;
 import jsx.model.validator.IntegerValidator;
 import jsx.model.validator.Invalid;
@@ -80,7 +79,7 @@ public class Input<T> extends FormUI {
         add(builtins.get(type));
 
         // create UI
-        form.attr("type", "input").add(InputForm).add(AbstractBorderForm.class);
+        form.attr("type", "input").add(InputForm);
         form.subscribe(this);
 
         // initial binding

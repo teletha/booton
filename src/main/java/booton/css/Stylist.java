@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class Stylist {
     private final List<CSS> csses = new ArrayList();
 
     /** The style classes which any javascript refers. */
-    private final Set<Style> styles = new HashSet();
+    private final Set<Style> styles = new LinkedHashSet();
 
     public String write(CSS style) {
         return write(style.rules);
