@@ -10,11 +10,9 @@
 package jsx.bwt;
 
 import static js.dom.UIAction.*;
+import static jsx.bwt.FormUIStyle2.*;
 import js.dom.Element;
 import js.dom.UIAction;
-import jsx.bwt.FormUIStyle.Disable;
-import jsx.bwt.FormUIStyle.Focus;
-import jsx.bwt.FormUIStyle.FormRoot;
 import jsx.event.SubscribeUI;
 import kiss.Disposable;
 
@@ -43,7 +41,7 @@ public class FormUI<T extends FormUI> extends UI<T> {
      * 
      */
     public FormUI(String elementName) {
-        root.add(FormRoot.class);
+        root.add(FormRoot);
 
         form = root.child(elementName);
         form.subscribe(this);
@@ -59,9 +57,10 @@ public class FormUI<T extends FormUI> extends UI<T> {
     public T disable() {
         if (enable) {
             enable = false;
-            root.add(Disable.class);
+            root.add(Disable);
             form.attr("disabled", "true");
-            disabler = root.observe(Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut, PointerMove)
+            disabler = root
+                    .observe(Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut, PointerMove)
                     .to(event -> {
                         event.stopImmediatePropagation();
                     });
@@ -80,7 +79,7 @@ public class FormUI<T extends FormUI> extends UI<T> {
     public T enable() {
         if (!enable) {
             enable = true;
-            root.remove(Disable.class);
+            root.remove(Disable);
             form.remove("disabled");
             disabler.dispose();
             disabler = null;
@@ -90,13 +89,13 @@ public class FormUI<T extends FormUI> extends UI<T> {
     }
 
     @SubscribeUI(type = UIAction.Focus)
-    private void startInput() {
-        root.add(Focus.class);
+    protected void startInput() {
+        root.add(FormUIStyle2.Focus);
     }
 
     @SubscribeUI(type = UIAction.Blur)
-    private void endInput() {
-        root.remove(Focus.class);
+    protected void endInput() {
+        root.remove(FormUIStyle2.Focus);
     }
 
     /**

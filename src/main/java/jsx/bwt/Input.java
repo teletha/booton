@@ -9,6 +9,8 @@
  */
 package jsx.bwt;
 
+import static jsx.bwt.FormUIStyle2.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +21,6 @@ import js.lang.NativeObject;
 import js.lang.NativeObject.PropertyDescriptor;
 import js.util.Converter;
 import jsx.bwt.FormUIStyle.AbstractBorderForm;
-import jsx.bwt.FormUIStyle.InputForm;
-import jsx.bwt.FormUIStyle.InvalidInputForm;
 import jsx.event.SubscribeUI;
 import jsx.model.validator.IntegerValidator;
 import jsx.model.validator.Invalid;
@@ -80,7 +80,7 @@ public class Input<T> extends FormUI {
         add(builtins.get(type));
 
         // create UI
-        form.attr("type", "input").add(InputForm.class, AbstractBorderForm.class);
+        form.attr("type", "input").add(InputForm).add(AbstractBorderForm.class);
         form.subscribe(this);
 
         // initial binding
@@ -98,7 +98,7 @@ public class Input<T> extends FormUI {
 
         if (input.length() == 0) {
             if (required) {
-                form.add(InvalidInputForm.class);
+                form.add(InvalidInputForm);
             }
             return;
         }
@@ -112,9 +112,9 @@ public class Input<T> extends FormUI {
             }
             model.set(value);
 
-            form.remove(InvalidInputForm.class);
+            form.remove(InvalidInputForm);
         } catch (Invalid e) {
-            form.add(InvalidInputForm.class);
+            form.add(InvalidInputForm);
         }
     }
 
