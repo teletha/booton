@@ -14,7 +14,7 @@ import static booton.css.Unit.*;
 import java.util.Set;
 
 import jsx.style.PropertyDefinition;
-import jsx.style.StyleClass;
+import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.StyleSheet;
@@ -173,7 +173,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void when(StyleClass other, StyleClass sub) {
+    public void when(Style other, Style sub) {
         when("$." + StyleName.name(other), sub);
     }
 
@@ -184,7 +184,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenIn(StyleClass other, StyleClass sub) {
+    public void whenIn(Style other, Style sub) {
         when("." + StyleName.name(other) + " $", sub);
     }
 
@@ -195,7 +195,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenHover(StyleClass sub) {
+    public void whenHover(Style sub) {
         when("$:hover", sub);
     }
 
@@ -206,7 +206,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenParentHover(StyleClass sub) {
+    public void whenParentHover(Style sub) {
         when("*:hover>$", sub);
     }
 
@@ -217,7 +217,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenActive(StyleClass sub) {
+    public void whenActive(Style sub) {
         when("$:active", sub);
     }
 
@@ -228,7 +228,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenFocus(StyleClass sub) {
+    public void whenFocus(Style sub) {
         when("$:focus", sub);
     }
 
@@ -239,7 +239,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenCheck(StyleClass sub) {
+    public void whenCheck(Style sub) {
         when("$:checked", sub);
     }
 
@@ -250,7 +250,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenValid(StyleClass sub) {
+    public void whenValid(Style sub) {
         when("$:valid", sub);
     }
 
@@ -261,7 +261,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void whenInvalid(StyleClass sub) {
+    public void whenInvalid(Style sub) {
         when("$:invalid", sub);
     }
 
@@ -270,7 +270,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * Create transitable sub rule and parse it.
      * </p>
      */
-    private void when(String selector, StyleClass sub) {
+    private void when(String selector, Style sub) {
         StyleRule rule = StyleSheet.createRule(selector, sub);
         Set<String> set = rule.holder.keySet();
 

@@ -61,27 +61,27 @@ public class BackgroundTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass color = () -> {
+        private static Style color = () -> {
             background.color(255, 0, 0);
         };
 
-        private static StyleClass contentBox = () -> {
+        private static Style contentBox = () -> {
             background.contentBox();
         };
 
-        private static StyleClass paddingBox = () -> {
+        private static Style paddingBox = () -> {
             background.paddingBox();
         };
 
-        private static StyleClass borderBox = () -> {
+        private static Style borderBox = () -> {
             background.borderBox();
         };
 
-        private static StyleClass image = () -> {
+        private static Style image = () -> {
             background.image(BackgroundImage.url("test").top().left().fixed().repeat().cover());
         };
 
-        private static StyleClass images = () -> {
+        private static Style images = () -> {
             BackgroundImage one = BackgroundImage.url("one").bottom().right();
             BackgroundImage two = BackgroundImage
                     .url("two")

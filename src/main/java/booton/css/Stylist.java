@@ -15,10 +15,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import jsx.style.StyleClass;
+import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.StyleSheet;
@@ -34,10 +36,10 @@ import booton.css.value.Font;
 public class Stylist {
 
     /** The style classes which javascript reference. */
-    private final List<CSS> styles = new ArrayList();
+    private final List<CSS> csses = new ArrayList();
 
     /** The style classes which any javascript refers. */
-    private final List<StyleClass> styles2 = new ArrayList();
+    private final Set<Style> styles = new HashSet();
 
     public String write(CSS style) {
         return write(style.rules);
@@ -95,9 +97,9 @@ public class Stylist {
         }
 
         // write require styles
-        Collections.sort(styles, new Sorter());
+        Collections.sort(csses, new Sorter());
 
-        for (CSS style : styles) {
+        for (CSS style : csses) {
             String css = write(style.rules);
 
             if (css.length() != 0) {
@@ -106,8 +108,8 @@ public class Stylist {
             }
         }
 
-        for (StyleClass item : styles2) {
-            StyleSheet.add(item);
+        for (Style style : styles) {
+            StyleSheet.createRule("$", style);
         }
 
         for (StyleRule rule : StyleSheet.rules) {
@@ -124,7 +126,7 @@ public class Stylist {
         int counter = 0;
 
         // write requested properties only.
-        writer.writeDown(rule.selector(), "{");
+        writer.writeDown(rule.selector, "{");
 
         for (Entry<String, String> entry : rule.holder.entrySet()) {
             counter++;
@@ -150,8 +152,8 @@ public class Stylist {
         if (style != null) {
             CSS css = I.make(style);
 
-            if (!styles.contains(css)) {
-                styles.add(css);
+            if (!csses.contains(css)) {
+                csses.add(css);
             }
         }
     }
@@ -168,10 +170,10 @@ public class Stylist {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
 
-            StyleClass style = (StyleClass) field.get(null);
+            Style style = (Style) field.get(null);
 
-            if (!styles2.contains(style)) {
-                styles2.add(style);
+            if (!styles.contains(style)) {
+                styles.add(style);
             }
             return StyleName.name(style);
         } catch (Exception e) {

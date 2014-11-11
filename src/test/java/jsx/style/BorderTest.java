@@ -57,27 +57,27 @@ public class BorderTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass top = () -> {
+        private static Style top = () -> {
             border.top.width(1, px).solid().color(rgb(0, 0, 0));
         };
 
-        private static StyleClass bottom = () -> {
+        private static Style bottom = () -> {
             border.bottom.width(1, px).doubles();
         };
 
-        private static StyleClass left = () -> {
+        private static Style left = () -> {
             border.left.width(1, px).dashed();
         };
 
-        private static StyleClass right = () -> {
+        private static Style right = () -> {
             border.right.width(1, px).groove();
         };
 
-        private static StyleClass all = () -> {
+        private static Style all = () -> {
             border.width(2, px);
         };
 
-        private static StyleClass radius = () -> {
+        private static Style radius = () -> {
             border.top.radius(1, px);
         };
     }

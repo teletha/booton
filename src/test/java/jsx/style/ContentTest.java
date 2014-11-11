@@ -30,11 +30,11 @@ public class ContentTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass text = () -> {
+        private static Style text = () -> {
             content.text("test");
         };
 
-        private static StyleClass attr = () -> {
+        private static Style attr = () -> {
             content.attr("href");
         };
     }

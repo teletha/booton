@@ -33,7 +33,7 @@ public class StyleName {
     private static final Set<String> classes = new HashSet();
 
     /** The class id for css. */
-    private static final Map<StyleClass, String> css = new HashMap();
+    private static final Map<Style, String> css = new HashMap();
 
     /**
      * <p>
@@ -43,7 +43,7 @@ public class StyleName {
      * @param style A target style class.
      * @return A computed style name.
      */
-    public static String name(StyleClass style) {
+    public static String name(Style style) {
         String className = style.getClass().getName();
         int index = className.indexOf("$$");
 
@@ -56,7 +56,7 @@ public class StyleName {
                 Class clazz = Class.forName(className);
 
                 for (Field field : clazz.getDeclaredFields()) {
-                    if (field.getType() == StyleClass.class && Modifier.isStatic(field.getModifiers())) {
+                    if (field.getType() == Style.class && Modifier.isStatic(field.getModifiers())) {
                         field.setAccessible(true);
 
                         String styleName;
@@ -70,7 +70,7 @@ public class StyleName {
                             styleName = field.getDeclaringClass().getName() + "___" + field.getName();
                             styleName = styleName.replaceAll("\\.", "_");
                         }
-                        css.put((StyleClass) field.get(null), styleName);
+                        css.put((Style) field.get(null), styleName);
                     }
                 }
             } catch (Exception e) {
@@ -94,8 +94,8 @@ public class StyleName {
          * @param style A target style class.
          * @return A computed style name.
          */
-        public String name(StyleClass style) {
-            return Javascript.writeMethodCode(StyleClass.class, "intern", param(0));
+        public String name(Style style) {
+            return Javascript.writeMethodCode(Style.class, "intern", param(0));
         }
     }
 }

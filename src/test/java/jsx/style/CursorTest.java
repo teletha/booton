@@ -33,15 +33,15 @@ public class CursorTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass help = () -> {
+        private static Style help = () -> {
             cursor.help();
         };
 
-        private static StyleClass alias = () -> {
+        private static Style alias = () -> {
             cursor.alias();
         };
 
-        private static StyleClass copy = () -> {
+        private static Style copy = () -> {
             cursor.copy();
         };
     }

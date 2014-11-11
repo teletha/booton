@@ -44,16 +44,16 @@ public class TransformTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass rotate = () -> {
+        private static Style rotate = () -> {
             transform.rotate(10, deg);
         };
 
-        private static StyleClass translate = () -> {
+        private static Style translate = () -> {
             Numeric numeric = new Numeric(10, px).add(new Numeric(1, em));
             transform.translate(numeric);
         };
 
-        private static StyleClass multi = () -> {
+        private static Style multi = () -> {
             transform.scale(1).skew(2, px);
         };
     }

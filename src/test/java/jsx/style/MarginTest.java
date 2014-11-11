@@ -56,26 +56,26 @@ public class MarginTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleDescriptor {
 
-        private static StyleClass each = () -> {
+        private static Style each = () -> {
             margin.top(10, em);
             margin.bottom(20, px);
             margin.left(30, percent);
             margin.right(new Numeric(10, ex));
         };
 
-        private static StyleClass auto = () -> {
+        private static Style auto = () -> {
             margin.auto();
         };
 
-        private static StyleClass horizontal = () -> {
+        private static Style horizontal = () -> {
             margin.horizontal(1, em);
         };
 
-        private static StyleClass vertical = () -> {
+        private static Style vertical = () -> {
             margin.vertical(1, em);
         };
 
-        private static StyleClass size = () -> {
+        private static Style size = () -> {
             margin.size(1, em);
         };
     }

@@ -30,7 +30,7 @@ public class HoverTest extends StyleDeclarationTestBase {
      */
     private static class MyStyle extends StyleRuleDescriptor {
 
-        private static StyleClass hovers = () -> {
+        private static Style hovers = () -> {
             font.color(255, 0, 0);
 
             hover(() -> {
