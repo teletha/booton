@@ -162,6 +162,16 @@ public class Background extends Colorable<Background> {
         private Object[] properties = {"none", "scroll", "0%", "0%", "repeat", "auto"};
 
         /**
+         * @return
+         */
+        public static BackgroundImage none() {
+            BackgroundImage created = new BackgroundImage();
+            created.properties[0] = "none";
+
+            return created;
+        }
+
+        /**
          * <p>
          * The CSS background-image property sets one or several background images for an element.
          * The images are drawn on stacking context layers on top of each other. The first layer
