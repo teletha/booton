@@ -38,7 +38,7 @@ class ImageGridStyle2 extends StyleRuleDescriptor {
     };
 
     static Style ImageSet = () -> {
-        display.inlineBlock();
+        display.inlineFlex().direction.row().wrap.enable();
         border.top.solid().width(2, px).color(backColor);
         border.left.solid().width(2, px).color(backColor);
     };
@@ -46,7 +46,6 @@ class ImageGridStyle2 extends StyleRuleDescriptor {
     static Style Container = () -> {
         position.relative();
         display.block();
-        // box.floating.left();
     };
 
     static Style IconImage = () -> {
@@ -70,12 +69,11 @@ class ImageGridStyle2 extends StyleRuleDescriptor {
     };
 
     static Style Title = () -> {
-
         Numeric boxWidth = ImageSize.add(40);
-
         Color color = new Color(0, 98, 97, 1);
+
         font.weight.bold().size(18, px);
-        text.align.center().shadow(shadow().offset(1, 1, px).blurRadius(1, px).color(rgba(0, 0, 0, 0.1)));
+        text.align.center();
         line.height(20, px);
         padding.size(5, px);
         background.image(BackgroundImage.of(linear(color.opacify(-0.4), color)));
@@ -83,16 +81,14 @@ class ImageGridStyle2 extends StyleRuleDescriptor {
         margin.left(boxWidth.divide(-2));
         box.minWidth(boxWidth).zIndex(1).opacity(0);
         border.width(4, px).solid().color(color.lighten(-100)).radius(5, px);
-        visibility.hidden();
         pointerEvents.none();
-        // transition.property.all().duration(0.2, s).timing.easeInOut().delay(100, ms);
 
         // createBottomBubble(7);
+        createBottomBubble(7, new Numeric(4, px), color.lighten(-100), color);
 
-        siblingHover(() -> {
+        transit().duration(0.2, s).delay(100, ms).easeInOut().whenSiblingHover(() -> {
             box.opacity(1);
             position.bottom(ImageSize);
-            visibility.visible();
         });
     };
 

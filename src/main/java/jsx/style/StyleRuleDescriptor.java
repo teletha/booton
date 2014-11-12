@@ -9,7 +9,10 @@
  */
 package jsx.style;
 
+import static jsx.style.value.Color.*;
 import jsx.style.property.Transition;
+import jsx.style.value.Color;
+import jsx.style.value.Numeric;
 
 /**
  * @version 2014/10/21 16:48:37
@@ -524,5 +527,46 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      */
     protected static final Transition transit() {
         return new Transition();
+    }
+
+    /**
+     * <p>
+     * Apply bubble border box style.
+     * </p>
+     * 
+     * @param bubbleHeight
+     */
+    protected static final void createBottomBubble(int bubbleHeight, Numeric borderWidth, Color borderColor, Color boxBackColor) {
+        if (!position.isAbsolute() && !position.isRelative()) {
+            position.relative();
+        }
+
+        Numeric width = borderWidth.add(bubbleHeight);
+
+        // write bubble border color
+        before(() -> {
+            display.block();
+            box.size(0, px);
+            content.text("");
+            position.absolute().left(50, percent).top(100, percent);
+            margin.left(width.opposite());
+            border.solid().color(Transparent).width(width);
+            border.top.color(borderColor);
+        });
+
+        // write bubble background color
+        if (borderWidth.size != 0) {
+            Numeric width2 = width.subtract(borderWidth.multiply(1.5));
+
+            after(() -> {
+                display.block();
+                box.size(0, px);
+                content.text("");
+                position.absolute().left(50, percent).top(100, percent);
+                margin.left(width2.opposite());
+                border.solid().color(Transparent).width(width2);
+                border.top.color(boxBackColor.opacify(1));
+            });
+        }
     }
 }

@@ -222,6 +222,28 @@ public class Transition extends PropertyDefinition<Transition> {
 
     /**
      * <p>
+     * Declare hover effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenSiblingHover(Style sub) {
+        when("*:hover~$", sub);
+    }
+
+    /**
+     * <p>
+     * Declare hover effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenAdjacentHover(Style sub) {
+        when("*:hover+$", sub);
+    }
+
+    /**
+     * <p>
      * Declare active effect.
      * </p>
      * 
