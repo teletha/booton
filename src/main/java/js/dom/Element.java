@@ -88,7 +88,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return The specified attribute value.
      */
     public String attr(String name) {
-        return ((NativeObject) (Object) this).getPropertyAs(String.class, name);
+        return getAttribute(name);
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A chainable API.
      */
     public Element attr(String name, Object value) {
-        ((NativeObject) (Object) this).setProperty(name, value);
+        setAttribute(name, value.toString());
 
         return this;
     }
@@ -255,6 +255,18 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A created image.
      */
     public Image image(Class<? extends CSS> className) {
+        return new Image(this, className);
+    }
+
+    /**
+     * <p>
+     * Create child {@link Image} element.
+     * </p>
+     * 
+     * @param classNames A class name to be added to the class attribute of each matched element.
+     * @return A created image.
+     */
+    public Image image(Style className) {
         return new Image(this, className);
     }
 

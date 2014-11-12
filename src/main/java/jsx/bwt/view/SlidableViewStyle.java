@@ -20,6 +20,10 @@ class SlidableViewStyle extends StyleRuleDescriptor {
     static Style ViewableArea = () -> {
         // In firefox, "overflow : hidden" will render dirty, so don't use it.
         overflow.y.hidden();
+
+        // Hide viewable area to avoid blocking other background element.
+        visibility.hidden();
+
         box.width(100, percent).zIndex(1);
         position.absolute().top(100, percent).left(0, px);
     };
@@ -33,6 +37,7 @@ class SlidableViewStyle extends StyleRuleDescriptor {
 
         transit().duration(200, ms).easeInOut().whenIn(Shown, () -> {
             transform.translateY(-1, px);
+            visibility.visible();
         });
     };
 }
