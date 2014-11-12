@@ -569,4 +569,45 @@ public class StyleRuleDescriptor extends StyleDescriptor {
             });
         }
     }
+
+    /**
+     * <p>
+     * Apply bubble border box style.
+     * </p>
+     * 
+     * @param bubbleHeight
+     */
+    protected static final void createTopBubble(int bubbleHeight, Numeric borderWidth, Color borderColor, Color boxBackColor) {
+        if (!position.isAbsolute() && !position.isRelative()) {
+            position.relative();
+        }
+
+        Numeric width = borderWidth.add(bubbleHeight);
+
+        // write bubble border color
+        before(() -> {
+            display.block();
+            box.size(0, px);
+            content.text("");
+            position.absolute().left(50, percent).bottom(100, percent);
+            margin.left(width.opposite());
+            border.solid().color(Transparent).width(width);
+            border.bottom.color(borderColor);
+        });
+
+        // write bubble background color
+        if (borderWidth.size != 0) {
+            Numeric borderWitdh = width.subtract(borderWidth.multiply(1.5));
+
+            after(() -> {
+                display.block();
+                box.size(0, px);
+                content.text("");
+                position.absolute().left(50, percent).bottom(100, percent);
+                margin.left(borderWitdh.opposite());
+                border.solid().color(Transparent).width(borderWitdh);
+                border.bottom.color(boxBackColor.opacify(1));
+            });
+        }
+    }
 }
