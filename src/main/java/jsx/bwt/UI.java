@@ -16,7 +16,7 @@ import js.dom.Element;
 import js.dom.Elemental;
 import js.dom.UIAction;
 import jsx.application.PageUnload;
-import jsx.bwt.view.PopupViewStyle2;
+import jsx.bwt.view.PopupViewStyle;
 import jsx.event.Publishable;
 import jsx.event.Subscribe;
 import jsx.event.SubscribeUI;
@@ -141,7 +141,7 @@ public abstract class UI<T extends UI> extends Publishable implements Elemental 
          */
         private Tooltip() {
             if (popup == null) {
-                popup = document.createElement("div").add(PopupViewStyle2.Bottom);
+                popup = document.createElement("div").add(PopupViewStyle.Bottom);
                 document.getElementsByTagName("body").item(0).append(popup);
             }
         }
@@ -152,7 +152,7 @@ public abstract class UI<T extends UI> extends Publishable implements Elemental 
         @SubscribeUI(type = PointerEnter)
         private void show() {
             popup.append(content);
-            popup.add(PopupViewStyle2.Show);
+            popup.add(PopupViewStyle.Show);
 
             ClientRect popupArea = popup.position();
             ClientRect targetArea = root.position();
@@ -166,7 +166,7 @@ public abstract class UI<T extends UI> extends Publishable implements Elemental 
          */
         @SubscribeUI(type = PointerLeave)
         private void hide() {
-            popup.remove(PopupViewStyle2.Show);
+            popup.remove(PopupViewStyle.Show);
             content.root.remove();
         }
 

@@ -18,7 +18,7 @@ import jsx.style.value.Numeric;
 /**
  * @version 2013/06/09 18:48:17
  */
-public class PopupViewStyle2 extends StyleRuleDescriptor {
+public class PopupViewStyle extends StyleRuleDescriptor {
 
     public static Style Show = () -> {
         box.opacity(1);
