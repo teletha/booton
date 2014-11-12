@@ -20,7 +20,7 @@ import jsx.style.value.Shadow;
 /**
  * @version 2013/03/24 10:50:33
  */
-class ImageGridStyle2 extends StyleRuleDescriptor {
+class ImageGridStyle extends StyleRuleDescriptor {
 
     private static final Color backColor = new Color(0, 10, 10);
 

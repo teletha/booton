@@ -9,7 +9,7 @@
  */
 package jsx.bwt;
 
-import static jsx.bwt.ImageGridStyle2.*;
+import static jsx.bwt.ImageGridStyle.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 
 import js.dom.Element;
 import js.dom.UIAction;
-import jsx.bwt.ImageGridStyle.InputStyle;
 import jsx.event.SubscribeUI;
 
 /**
@@ -34,7 +33,7 @@ public abstract class ImageGrid<T> extends UI {
 
     private Input input;
 
-    private Element search = root.child("input", InputStyle.class).attr("type", "text").subscribe(this);
+    private Element search = root.child("input", InputStyle).attr("type", "text").subscribe(this);
 
     /**
      * Filter image by user input.
