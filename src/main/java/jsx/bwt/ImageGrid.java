@@ -18,9 +18,7 @@ import java.util.Map.Entry;
 
 import js.dom.Element;
 import js.dom.UIAction;
-import jsx.bwt.ImageGridStyle.Container;
 import jsx.bwt.ImageGridStyle.InputStyle;
-import jsx.bwt.ImageGridStyle.Title;
 import jsx.event.SubscribeUI;
 
 /**
@@ -66,12 +64,12 @@ public abstract class ImageGrid<T> extends UI {
         Element set = root.child(ImageSet);
 
         for (final T source : sources) {
-            Element container = set.child(Container.class);
+            Element container = set.child(Container);
             Element image = container.child(IconImage);
 
             apply(source, image);
 
-            container.child(Title.class).text(getTitle(source));
+            container.child(Title).text(getTitle(source));
 
             image.observe(UIAction.Click).to(value -> {
                 select(source);
