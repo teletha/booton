@@ -9,9 +9,9 @@
  */
 package js.dom;
 
-import org.junit.Test;
+import jsx.style.Style;
 
-import booton.css.CSS;
+import org.junit.Test;
 
 /**
  * @version 2013/07/11 16:24:56
@@ -117,60 +117,54 @@ public class EnhancedElementTest {
     @Test
     public void addClass() throws Exception {
         Element element = new EmulateElement();
-        assert !element.has(CSS1.class);
+        assert !element.has(CSS1);
 
-        element.add(CSS1.class);
-        assert element.has(CSS1.class);
+        element.add(CSS1);
+        assert element.has(CSS1);
     }
 
     @Test
     public void addClasses() throws Exception {
         Element element = new EmulateElement();
-        assert !element.has(CSS1.class);
+        assert !element.has(CSS1);
 
-        element.add(CSS1.class, CSS2.class);
-        assert element.has(CSS1.class);
-        assert element.has(CSS2.class);
+        element.add(CSS1, CSS2);
+        assert element.has(CSS1);
+        assert element.has(CSS2);
     }
 
     @Test
     public void removeClass() throws Exception {
         Element element = new EmulateElement();
-        element.add(CSS1.class);
-        assert element.has(CSS1.class);
+        element.add(CSS1);
+        assert element.has(CSS1);
 
-        element.remove(CSS1.class);
-        assert !element.has(CSS1.class);
+        element.remove(CSS1);
+        assert !element.has(CSS1);
     }
 
     @Test
     public void toggleClass() throws Exception {
         Element element = new EmulateElement();
-        element.toggle(CSS1.class);
-        assert element.has(CSS1.class);
+        element.toggle(CSS1);
+        assert element.has(CSS1);
 
-        element.toggle(CSS1.class);
-        assert !element.has(CSS1.class);
+        element.toggle(CSS1);
+        assert !element.has(CSS1);
     }
 
     @Test
     public void hasClass() throws Exception {
         Element element = new EmulateElement();
-        element.add(CSS1.class);
-        assert element.has(CSS1.class);
-        assert !element.has(CSS1.class, CSS2.class);
-        assert !element.has(CSS2.class);
+        element.add(CSS1);
+        assert element.has(CSS1);
+        assert !element.has(CSS1, CSS2);
+        assert !element.has(CSS2);
     }
 
-    /**
-     * sion 2013/07/11 11:54:32
-     */
-    private static class CSS1 extends CSS {
-    }
+    private static Style CSS1 = () -> {
+    };
 
-    /**
-     * @version 2013/07/11 16:24:48
-     */
-    private static class CSS2 extends CSS {
-    }
+    private static Style CSS2 = () -> {
+    };
 }

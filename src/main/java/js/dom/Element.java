@@ -80,6 +80,23 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
 
     /**
      * <p>
+     * Adds the specified class(es) to this elements.
+     * </p>
+     * 
+     * @param classes A list of class names to assign.
+     * @return Chainable API.
+     */
+    public Element add(Style... classes) {
+        for (Style clazz : classes) {
+            add(clazz);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
      * Get the value of the specified attribute.
      * </p>
      * 
