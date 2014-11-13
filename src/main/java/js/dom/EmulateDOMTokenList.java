@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,12 +11,14 @@ package js.dom;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import jsx.style.Style;
+import jsx.style.StyleName;
 import kiss.I;
 import booton.Obfuscator;
 import booton.css.CSS;
 
 /**
- * @version 2013/07/11 16:14:29
+ * @version 2014/11/13 9:44:22
  */
 class EmulateDOMTokenList extends DOMTokenList {
 
@@ -47,6 +49,18 @@ class EmulateDOMTokenList extends DOMTokenList {
      * {@inheritDoc}
      */
     @Override
+    public void add(Style className) {
+        if (className == null) {
+            add((String) null);
+        } else {
+            add(StyleName.name(className));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void remove(String className) {
         classes.remove(normalize(className));
     }
@@ -60,6 +74,18 @@ class EmulateDOMTokenList extends DOMTokenList {
             remove((String) null);
         } else {
             remove(Obfuscator.computeCSSName(className.getName()));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void remove(Style className) {
+        if (className == null) {
+            remove((String) null);
+        } else {
+            remove(StyleName.name(className));
         }
     }
 
@@ -93,6 +119,18 @@ class EmulateDOMTokenList extends DOMTokenList {
      * {@inheritDoc}
      */
     @Override
+    public boolean toggle(Style className) {
+        if (className == null) {
+            return toggle((String) null);
+        } else {
+            return toggle(StyleName.name(className));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean contains(String className) {
         return classes.contains(normalize(className));
     }
@@ -106,6 +144,18 @@ class EmulateDOMTokenList extends DOMTokenList {
             return contains((String) null);
         } else {
             return contains(Obfuscator.computeCSSName(className.getName()));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean contains(Style className) {
+        if (className == null) {
+            return contains((String) null);
+        } else {
+            return contains(StyleName.name(className));
         }
     }
 

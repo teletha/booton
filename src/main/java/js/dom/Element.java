@@ -14,7 +14,6 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.lang.NativeObject;
 import jsx.style.Style;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
@@ -346,7 +345,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A chainable API.
      */
     public Element remove(String name) {
-        ((NativeObject) (Object) this).deleteProperty(name);
+        removeAttribute(name);
 
         // API definition
         return this;

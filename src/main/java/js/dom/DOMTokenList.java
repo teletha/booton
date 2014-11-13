@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,12 +9,13 @@
  */
 package js.dom;
 
+import jsx.style.Style;
 import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 
 /**
- * @version 2013/03/22 16:42:04
+ * @version 2014/11/13 9:44:11
  */
 @JavascriptAPIProvider
 public class DOMTokenList implements JavascriptNative {
@@ -39,6 +40,15 @@ public class DOMTokenList implements JavascriptNative {
 
     /**
      * <p>
+     * Add class.
+     * </p>
+     * 
+     * @param className A class name to add.
+     */
+    public native void add(Style className);
+
+    /**
+     * <p>
      * Remove class.
      * </p>
      * 
@@ -54,6 +64,15 @@ public class DOMTokenList implements JavascriptNative {
      * @param className A class name to remove.
      */
     public native void remove(Class<? extends CSS> className);
+
+    /**
+     * <p>
+     * Remove class.
+     * </p>
+     * 
+     * @param className A class name to remove.
+     */
+    public native void remove(Style className);
 
     /**
      * <p>
@@ -77,6 +96,16 @@ public class DOMTokenList implements JavascriptNative {
 
     /**
      * <p>
+     * Removes class from string and returns false. If class doesn't exist it's added and the
+     * function returns true.
+     * </p>
+     * 
+     * @param className A class name to toggle.
+     */
+    public native boolean toggle(Style className);
+
+    /**
+     * <p>
      * Test class.
      * </p>
      * 
@@ -92,6 +121,15 @@ public class DOMTokenList implements JavascriptNative {
      * @param className A class name to test.
      */
     public native boolean contains(Class<? extends CSS> className);
+
+    /**
+     * <p>
+     * Test class.
+     * </p>
+     * 
+     * @param className A class name to test.
+     */
+    public native boolean contains(Style className);
 
     /**
      * <p>
