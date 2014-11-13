@@ -14,13 +14,18 @@ import jsx.style.value.Numeric;
 import org.junit.Test;
 
 /**
- * @version 2014/10/28 15:25:05
+ * @version 2014/11/13 14:28:51
  */
-public class MarginTest extends StyleDeclarationTestBase {
+public class MarginTest extends StyleTester {
 
     @Test
     public void each() {
-        ValidatableStyleRule parsed = parse(MyStyle.each).rule();
+        ValidatableStyle parsed = style(() -> {
+            margin.top(10, em);
+            margin.bottom(20, px);
+            margin.left(30, percent);
+            margin.right(new Numeric(10, ex));
+        });
         assert parsed.property("margin-top", "10em");
         assert parsed.property("margin-bottom", "20px");
         assert parsed.property("margin-left", "30%");
@@ -29,54 +34,47 @@ public class MarginTest extends StyleDeclarationTestBase {
 
     @Test
     public void auto() {
-        ValidatableStyleRule parsed = parse(MyStyle.auto).rule();
+        ValidatableStyle parsed = style(() -> {
+            margin.auto();
+        });
         assert parsed.property("margin-left", "auto");
         assert parsed.property("margin-right", "auto");
     }
 
     @Test
     public void shorthand() {
-        ValidatableStyleRule parsed = parse(MyStyle.horizontal).rule();
+        ValidatableStyle parsed = style(() -> {
+            margin.horizontal(1, em);
+        });
         assert parsed.property("margin-left", "1em");
         assert parsed.property("margin-right", "1em");
 
-        parsed = parse(MyStyle.vertical).rule();
+        parsed = style(() -> {
+            margin.vertical(1, em);
+        });
         assert parsed.property("margin-top", "1em");
         assert parsed.property("margin-bottom", "1em");
 
-        parsed = parse(MyStyle.size).rule();
+        parsed = style(() -> {
+            margin.size(1, em);
+        });
         assert parsed.property("margin-left", "1em");
         assert parsed.property("margin-right", "1em");
         assert parsed.property("margin-top", "1em");
         assert parsed.property("margin-bottom", "1em");
     }
 
-    /**
-     * @version 2014/10/28 15:33:34
-     */
-    private static class MyStyle extends StyleDescriptor {
+    @Test
+    public void calc() {
+        Numeric one = new Numeric(1, em);
+        Numeric two = new Numeric(2, px);
 
-        private static Style each = () -> {
-            margin.top(10, em);
-            margin.bottom(20, px);
-            margin.left(30, percent);
-            margin.right(new Numeric(10, ex));
-        };
-
-        private static Style auto = () -> {
-            margin.auto();
-        };
-
-        private static Style horizontal = () -> {
-            margin.horizontal(1, em);
-        };
-
-        private static Style vertical = () -> {
-            margin.vertical(1, em);
-        };
-
-        private static Style size = () -> {
-            margin.size(1, em);
-        };
+        ValidatableStyle parsed = style(() -> {
+            margin.size(one.add(two));
+        });
+        assert parsed.property("margin-left", "calc(1em + 2px)", "-webkit-calc(1em + 2px)");
+        assert parsed.property("margin-right", "calc(1em + 2px)", "-webkit-calc(1em + 2px)");
+        assert parsed.property("margin-top", "calc(1em + 2px)", "-webkit-calc(1em + 2px)");
+        assert parsed.property("margin-bottom", "calc(1em + 2px)", "-webkit-calc(1em + 2px)");
     }
 }

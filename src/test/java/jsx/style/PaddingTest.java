@@ -14,13 +14,18 @@ import jsx.style.value.Numeric;
 import org.junit.Test;
 
 /**
- * @version 2014/10/28 15:25:05
+ * @version 2014/11/13 14:36:39
  */
-public class PaddingTest extends StyleDeclarationTestBase {
+public class PaddingTest extends StyleTester {
 
     @Test
     public void each() {
-        ValidatableStyleRule parsed = parse(MyStyle.each).rule();
+        ValidatableStyle parsed = style(() -> {
+            padding.top(10, em);
+            padding.bottom(20, px);
+            padding.left(30, percent);
+            padding.right(new Numeric(10, ex));
+        });
         assert parsed.property("padding-top", "10em");
         assert parsed.property("padding-bottom", "20px");
         assert parsed.property("padding-left", "30%");
@@ -29,54 +34,33 @@ public class PaddingTest extends StyleDeclarationTestBase {
 
     @Test
     public void auto() {
-        ValidatableStyleRule parsed = parse(MyStyle.auto).rule();
+        ValidatableStyle parsed = style(() -> {
+            padding.auto();
+        });
         assert parsed.property("padding-left", "auto");
         assert parsed.property("padding-right", "auto");
     }
 
     @Test
     public void shorthand() {
-        ValidatableStyleRule parsed = parse(MyStyle.horizontal).rule();
-        assert parsed.property("padding-left", "1em");
-        assert parsed.property("padding-right", "1em");
-
-        parsed = parse(MyStyle.vertical).rule();
-        assert parsed.property("padding-top", "1em");
-        assert parsed.property("padding-bottom", "1em");
-
-        parsed = parse(MyStyle.size).rule();
-        assert parsed.property("padding-left", "1em");
-        assert parsed.property("padding-right", "1em");
-        assert parsed.property("padding-top", "1em");
-        assert parsed.property("padding-bottom", "1em");
-    }
-
-    /**
-     * @version 2014/10/28 15:33:28
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style each = () -> {
-            padding.top(10, em);
-            padding.bottom(20, px);
-            padding.left(30, percent);
-            padding.right(new Numeric(10, ex));
-        };
-
-        private static Style auto = () -> {
-            padding.auto();
-        };
-
-        private static Style horizontal = () -> {
+        ValidatableStyle parsed = style(() -> {
             padding.horizontal(1, em);
-        };
+        });
+        assert parsed.property("padding-left", "1em");
+        assert parsed.property("padding-right", "1em");
 
-        private static Style vertical = () -> {
+        parsed = style(() -> {
             padding.vertical(1, em);
-        };
+        });
+        assert parsed.property("padding-top", "1em");
+        assert parsed.property("padding-bottom", "1em");
 
-        private static Style size = () -> {
+        parsed = style(() -> {
             padding.size(1, em);
-        };
+        });
+        assert parsed.property("padding-left", "1em");
+        assert parsed.property("padding-right", "1em");
+        assert parsed.property("padding-top", "1em");
+        assert parsed.property("padding-bottom", "1em");
     }
 }

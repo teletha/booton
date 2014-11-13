@@ -16,7 +16,7 @@ import org.junit.Test;
 /**
  * @version 2014/11/13 14:08:05
  */
-public class CalcTest2 extends StyleTester {
+public class CalcTest extends StyleTester {
 
     private static final Numeric one = new Numeric(1, px);
 

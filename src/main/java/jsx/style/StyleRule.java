@@ -12,11 +12,11 @@ package jsx.style;
 import static jsx.style.Vendor.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 import kiss.I;
 import kiss.Table;
@@ -61,7 +61,12 @@ public class StyleRule {
      * @return
      */
     public boolean is(String name, String value) {
-        return Objects.equals(holder.get(name), value);
+        List<String> values = holder.get(name);
+
+        if (values.size() == 0) {
+            return false;
+        }
+        return values.contains(value);
     }
 
     /**
@@ -73,7 +78,7 @@ public class StyleRule {
      * @param values A list of whitespace-separated property values.
      */
     public void property(String name, Object... values) {
-        property(EnumSet.of(Standard), " ", name, values);
+        property(EnumSet.of(Standard), " ", false, name, values);
     }
 
     /**
@@ -86,7 +91,7 @@ public class StyleRule {
      * @param vendors A list of {@link Vendor} prefix if needed.
      */
     public void property(String name, List values, Vendor... vendors) {
-        property(EnumSet.of(Standard, vendors), " ", name, values.toArray());
+        property(EnumSet.of(Standard, vendors), " ", false, name, values.toArray());
     }
 
     /**
@@ -96,10 +101,11 @@ public class StyleRule {
      * 
      * @param prefixes A list of vendors for property name.
      * @param separator A value separator.
+     * @param override A flag for property override.
      * @param name A property name.
      * @param values A list of property values.
      */
-    void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
+    void property(EnumSet<Vendor> prefixes, String separator, boolean override, String name, Object... values) {
         if (name != null && name.length() != 0 && values != null) {
             EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
 
@@ -152,7 +158,12 @@ public class StyleRule {
                     if (!prefixes.contains(vendor)) {
                         vendor = Standard;
                     }
-                    holder.push(vendor + name, value);
+
+                    if (override) {
+                        holder.put(vendor + name, Arrays.asList(value));
+                    } else {
+                        holder.push(vendor + name, value);
+                    }
                 }
             }
         }

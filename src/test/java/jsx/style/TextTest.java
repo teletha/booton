@@ -14,89 +14,69 @@ import org.junit.Test;
 /**
  * @version 2014/10/28 18:02:01
  */
-public class TextTest extends StyleDeclarationTestBase {
+public class TextTest extends StyleTester {
 
     @Test
     public void indent() {
-        ValidatableStyleRule parsed = parse(MyStyle.indent).rule();
+        ValidatableStyle parsed = style(() -> {
+            text.indent(3, em);
+        });
         assert parsed.property("text-indent", "3em");
     }
 
     @Test
     public void align() {
-        ValidatableStyleRule parsed = parse(MyStyle.align).rule();
+        ValidatableStyle parsed = style(() -> {
+            text.align.center().verticalAlign.bottom();
+        });
         assert parsed.property("text-align", "center");
         assert parsed.property("vertical-align", "bottom");
     }
 
     @Test
     public void decoration() {
-        ValidatableStyleRule parsed = parse(MyStyle.decoration).rule();
+        ValidatableStyle parsed = style(() -> {
+            text.decoration.underline();
+        });
         assert parsed.property("text-decoration", "underline");
     }
 
     @Test
     public void overflow() {
-        ValidatableStyleRule parsed = parse(MyStyle.overflow).rule();
+        ValidatableStyle parsed = style(() -> {
+            text.overflow.ellipsis();
+        });
         assert parsed.property("text-overflow", "ellipsis");
     }
 
     @Test
     public void unselectable() {
-        ValidatableStyleRule parsed = parse(MyStyle.unselectable).rule();
+        ValidatableStyle parsed = style(() -> {
+            text.unselectable();
+        });
         assert parsed.property("user-select", "none");
         assert parsed.property("-moz-user-select", "none");
         assert parsed.property("-ms-user-select", "none");
         assert parsed.property("-webkit-user-select", "none");
         assert parsed.property("cursor", "default");
 
-        ValidatableStyleRule selection = parsed.sub("selection");
+        ValidatableStyle selection = parsed.sub("selection");
         assert selection.property("background-color", "transparent");
     }
 
     @Test
-    public void shadow() {
-        ValidatableStyleRule parsed = parse(MyStyle.shadow).rule();
+    public void shadowSingle() {
+        ValidatableStyle parsed = style(() -> {
+            text.shadow(shadow().offset(2, 2, px).blurRadius(1, px).color(hsl(100, 100, 100)));
+        });
         assert parsed.property("text-shadow", "2px 2px 1px hsl(100,100%,100%)");
     }
 
     @Test
-    public void shadows() {
-        ValidatableStyleRule parsed = parse(MyStyle.shadows).rule();
-        assert parsed.property("text-shadow", "2px 2px,1px 1px");
-    }
-
-    /**
-     * @version 2014/10/28 18:01:53
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style indent = () -> {
-            text.indent(3, em);
-        };
-
-        private static Style align = () -> {
-            text.align.center().verticalAlign.bottom();
-        };
-
-        private static Style decoration = () -> {
-            text.decoration.underline();
-        };
-
-        private static Style overflow = () -> {
-            text.overflow.ellipsis();
-        };
-
-        private static Style unselectable = () -> {
-            text.unselectable();
-        };
-
-        private static Style shadow = () -> {
-            text.shadow(shadow().offset(2, 2, px).blurRadius(1, px).color(hsl(100, 100, 100)));
-        };
-
-        private static Style shadows = () -> {
+    public void shadowMultiple() {
+        ValidatableStyle parsed = style(() -> {
             text.shadow(shadow().offset(2, 2, px), shadow().offset(1, 1, px));
-        };
+        });
+        assert parsed.property("text-shadow", "2px 2px,1px 1px");
     }
 }

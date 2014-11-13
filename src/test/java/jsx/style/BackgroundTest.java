@@ -16,31 +16,41 @@ import jsx.style.value.LinearGradient;
 import org.junit.Test;
 
 /**
- * @version 2014/10/28 13:40:00
+ * @version 2014/11/13 14:19:22
  */
-public class BackgroundTest extends StyleDeclarationTestBase {
+public class BackgroundTest extends StyleTester {
 
     @Test
     public void color() {
-        ValidatableStyleRule parsed = parse(MyStyle.color).rule();
+        ValidatableStyle parsed = style(() -> {
+            background.color(255, 0, 0);
+        });
         assert parsed.property("background-color", "rgb(255,0,0)");
     }
 
     @Test
     public void origin() {
-        ValidatableStyleRule parsed = parse(MyStyle.contentBox).rule();
+        ValidatableStyle parsed = style(() -> {
+            background.contentBox();
+        });
         assert parsed.property("background-origin", "content-box");
 
-        parsed = parse(MyStyle.paddingBox).rule();
+        parsed = style(() -> {
+            background.paddingBox();
+        });
         assert parsed.property("background-origin", "padding-box");
 
-        parsed = parse(MyStyle.borderBox).rule();
+        parsed = style(() -> {
+            background.borderBox();
+        });
         assert parsed.property("background-origin", "border-box");
     }
 
     @Test
     public void image() {
-        ValidatableStyleRule parsed = parse(MyStyle.image).rule();
+        ValidatableStyle parsed = style(() -> {
+            background.image(BackgroundImage.url("test").top().left().fixed().repeat().cover());
+        });
         assert parsed.property("background-image", "url(test)");
         assert parsed.property("background-position", "0% 0%");
         assert parsed.property("background-attachment", "fixed");
@@ -50,57 +60,7 @@ public class BackgroundTest extends StyleDeclarationTestBase {
 
     @Test
     public void images() {
-        ValidatableStyleRule parsed = parse(MyStyle.images).rule();
-        assert parsed.property("background-image", "url(one),url(two)");
-        assert parsed.property("background-position", "100% 100%,1em 2%");
-        assert parsed.property("background-attachment", "scroll,local");
-        assert parsed.property("background-repeat", "repeat,no-repeat");
-        assert parsed.property("background-size", "auto,contain");
-    }
-
-    @Test
-    public void imageGradient() throws Exception {
-        ValidatableStyleRule parsed = parse(MyStyle.imageGradient).rule();
-        assert parsed.size("background-image") == 2;
-        assert parsed.property("background-image", "-webkit-linear-gradient(black,white)");
-        assert parsed.property("background-image", "linear-gradient(black,white)");
-    }
-
-    @Test
-    public void imageGradients() throws Exception {
-        ValidatableStyleRule parsed = parse(MyStyle.imageGradients).rule();
-        assert parsed.size("background-image") == 2;
-        assert parsed.property("background-image", "linear-gradient(black,white),linear-gradient(white,black)");
-        assert parsed
-                .property("background-image", "-webkit-linear-gradient(black,white),-webkit-linear-gradient(white,black)");
-    }
-
-    /**
-     * @version 2014/10/28 13:39:57
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style color = () -> {
-            background.color(255, 0, 0);
-        };
-
-        private static Style contentBox = () -> {
-            background.contentBox();
-        };
-
-        private static Style paddingBox = () -> {
-            background.paddingBox();
-        };
-
-        private static Style borderBox = () -> {
-            background.borderBox();
-        };
-
-        private static Style image = () -> {
-            background.image(BackgroundImage.url("test").top().left().fixed().repeat().cover());
-        };
-
-        private static Style images = () -> {
+        ValidatableStyle parsed = style(() -> {
             BackgroundImage one = BackgroundImage.url("one").bottom().right();
             BackgroundImage two = BackgroundImage
                     .url("two")
@@ -111,15 +71,30 @@ public class BackgroundTest extends StyleDeclarationTestBase {
                     .local();
 
             background.image(one, two);
-        };
+        });
+        assert parsed.property("background-image", "url(one),url(two)");
+        assert parsed.property("background-position", "100% 100%,1em 2%");
+        assert parsed.property("background-attachment", "scroll,local");
+        assert parsed.property("background-repeat", "repeat,no-repeat");
+        assert parsed.property("background-size", "auto,contain");
+    }
 
-        private static Style imageGradient = () -> {
+    @Test
+    public void imageGradient() throws Exception {
+        ValidatableStyle parsed = style(() -> {
             background.image(BackgroundImage.of(new LinearGradient().color(Black, White)));
-        };
+        });
+        assert parsed
+                .property("background-image", "linear-gradient(black,white)", "-webkit-linear-gradient(black,white)");
+    }
 
-        private static Style imageGradients = () -> {
+    @Test
+    public void imageGradients() throws Exception {
+        ValidatableStyle parsed = style(() -> {
             background.image(BackgroundImage.of(new LinearGradient().color(Black, White)), BackgroundImage
                     .of(new LinearGradient().color(White, Black)));
-        };
+        });
+        assert parsed
+                .property("background-image", "linear-gradient(black,white),linear-gradient(white,black)", "-webkit-linear-gradient(black,white),-webkit-linear-gradient(white,black)");
     }
 }

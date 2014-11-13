@@ -16,45 +16,33 @@ import org.junit.Test;
 /**
  * @version 2014/10/29 13:36:41
  */
-public class TransformTest extends StyleDeclarationTestBase {
+public class TransformTest extends StyleTester {
 
     @Test
     public void rotate() {
-        ValidatableStyleRule parsed = parse(MyStyle.rotate).rule();
+        ValidatableStyle parsed = style(() -> {
+            transform.rotate(10, deg);
+        });
         assert parsed.property("-webkit-transform", "rotate(10deg)");
         assert parsed.property("transform", "rotate(10deg)");
     }
 
     @Test
     public void translate() {
-        ValidatableStyleRule parsed = parse(MyStyle.translate).rule();
-        assert parsed.property("-webkit-transform", "translate(calc(10px + 1em))");
+        ValidatableStyle parsed = style(() -> {
+            Numeric numeric = new Numeric(10, px).add(new Numeric(1, em));
+            transform.translate(numeric);
+        });
+        assert parsed.property("-webkit-transform", "translate(-webkit-calc(10px + 1em))");
         assert parsed.property("transform", "translate(calc(10px + 1em))");
     }
 
     @Test
     public void multi() {
-        ValidatableStyleRule parsed = parse(MyStyle.multi).rule();
+        ValidatableStyle parsed = style(() -> {
+            transform.scale(1).skew(2, px);
+        });
         assert parsed.property("-webkit-transform", "scale(1) skew(2px)");
         assert parsed.property("transform", "scale(1) skew(2px)");
-    }
-
-    /**
-     * @version 2014/10/29 13:37:58
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style rotate = () -> {
-            transform.rotate(10, deg);
-        };
-
-        private static Style translate = () -> {
-            Numeric numeric = new Numeric(10, px).add(new Numeric(1, em));
-            transform.translate(numeric);
-        };
-
-        private static Style multi = () -> {
-            transform.scale(1).skew(2, px);
-        };
     }
 }

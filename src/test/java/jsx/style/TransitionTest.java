@@ -12,30 +12,22 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/29 13:36:41
+ * @version 2014/11/13 15:24:12
  */
-public class TransitionTest extends StyleDeclarationTestBase {
+public class TransitionTest extends StyleTester {
 
     @Test
     public void rotate() {
-        ValidatableStyleRule parsed = parse(MyStyle.rotate).rule();
-        assert parsed.property("transition-property", "width");
-        assert parsed.property("transition-duration", "1s");
-        assert parsed.property("transition-delay", "0");
-        assert parsed.property("transition-timing-function", "ease");
-    }
-
-    /**
-     * @version 2014/10/29 14:38:37
-     */
-    private static class MyStyle extends StyleRuleDescriptor {
-
-        private static Style rotate = () -> {
+        ValidatableStyle parsed = style(() -> {
             box.width(10, px);
 
             transit().duration(1, s).whenHover(() -> {
                 box.width(20, px);
             });
-        };
+        });
+        assert parsed.property("transition-property", "width");
+        assert parsed.property("transition-duration", "1s");
+        assert parsed.property("transition-delay", "0");
+        assert parsed.property("transition-timing-function", "ease");
     }
 }

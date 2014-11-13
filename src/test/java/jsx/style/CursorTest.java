@@ -12,37 +12,25 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/28 16:18:03
+ * @version 2014/11/13 14:24:48
  */
-public class CursorTest extends StyleDeclarationTestBase {
+public class CursorTest extends StyleTester {
 
     @Test
     public void rgb() {
-        ValidatableStyleRule parsed = parse(MyStyle.help).rule();
+        ValidatableStyle parsed = style(() -> {
+            cursor.help();
+        });
         assert parsed.property("cursor", "help");
 
-        parsed = parse(MyStyle.alias).rule();
+        parsed = style(() -> {
+            cursor.alias();
+        });
         assert parsed.property("cursor", "alias");
 
-        parsed = parse(MyStyle.copy).rule();
-        assert parsed.property("cursor", "copy");
-    }
-
-    /**
-     * @version 2014/10/28 16:18:06
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style help = () -> {
-            cursor.help();
-        };
-
-        private static Style alias = () -> {
-            cursor.alias();
-        };
-
-        private static Style copy = () -> {
+        parsed = style(() -> {
             cursor.copy();
-        };
+        });
+        assert parsed.property("cursor", "copy");
     }
 }

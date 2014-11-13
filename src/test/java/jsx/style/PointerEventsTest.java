@@ -12,23 +12,15 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/29 12:52:17
+ * @version 2014/11/13 14:37:14
  */
-public class PointerEventsTest extends StyleDeclarationTestBase {
+public class PointerEventsTest extends StyleTester {
 
     @Test
     public void none() {
-        ValidatableStyleRule parsed = parse(MyStyle.none).rule();
-        assert parsed.property("pointer-events", "none");
-    }
-
-    /**
-     * @version 2014/10/29 10:59:51
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style none = () -> {
+        ValidatableStyle parsed = style(() -> {
             pointerEvents.none();
-        };
+        });
+        assert parsed.property("pointer-events", "none");
     }
 }

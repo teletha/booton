@@ -125,7 +125,21 @@ public class PropertyDefinition<T> {
      * @return
      */
     protected final T value(String name, List values, String separator, Vendor... vendors) {
-        declarable.property(EnumSet.of(Standard, vendors), separator, name, values.toArray());
+        declarable.property(EnumSet.of(Standard, vendors), separator, false, name, values.toArray());
+
+        return context;
+    }
+
+    /**
+     * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final T valueOverride(String name, List values, String separator, Vendor... vendors) {
+        declarable.property(EnumSet.of(Standard, vendors), separator, true, name, values.toArray());
 
         return context;
     }
@@ -139,7 +153,7 @@ public class PropertyDefinition<T> {
      * @return
      */
     protected final T value(String name, Object[] values, String separator) {
-        declarable.property(EnumSet.of(Standard), separator, name, values);
+        declarable.property(EnumSet.of(Standard), separator, false, name, values);
 
         return context;
     }

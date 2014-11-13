@@ -12,32 +12,22 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/29 12:52:17
+ * @version 2014/11/13 14:35:29
  */
-public class OverflowTest extends StyleDeclarationTestBase {
+public class OverflowTest extends StyleTester {
 
     @Test
     public void main() {
-        ValidatableStyleRule parsed = parse(MyStyle.both).rule();
+        ValidatableStyle parsed = style(() -> {
+            overflow.hidden();
+        });
         assert parsed.property("overflow", "hidden");
 
-        parsed = parse(MyStyle.each).rule();
-        assert parsed.property("overflow-x", "scroll");
-        assert parsed.property("overflow-y", "auto");
-    }
-
-    /**
-     * @version 2014/10/29 10:59:51
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style both = () -> {
-            overflow.hidden();
-        };
-
-        private static Style each = () -> {
+        parsed = style(() -> {
             overflow.x.scroll();
             overflow.y.auto();
-        };
+        });
+        assert parsed.property("overflow-x", "scroll");
+        assert parsed.property("overflow-y", "auto");
     }
 }

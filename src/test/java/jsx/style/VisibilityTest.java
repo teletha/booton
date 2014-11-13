@@ -12,37 +12,25 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/28 16:24:43
+ * @version 2014/11/13 15:24:30
  */
-public class VisibilityTest extends StyleDeclarationTestBase {
+public class VisibilityTest extends StyleTester {
 
     @Test
     public void visibility() {
-        ValidatableStyleRule parsed = parse(MyStyle.collapse).rule();
+        ValidatableStyle parsed = style(() -> {
+            visibility.collapse();
+        });
         assert parsed.property("visibility", "collapse");
 
-        parsed = parse(MyStyle.hidden).rule();
+        parsed = style(() -> {
+            visibility.hidden();
+        });
         assert parsed.property("visibility", "hidden");
 
-        parsed = parse(MyStyle.visible).rule();
-        assert parsed.property("visibility", "visible");
-    }
-
-    /**
-     * @version 2014/10/28 16:24:49
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style collapse = () -> {
-            visibility.collapse();
-        };
-
-        private static Style hidden = () -> {
-            visibility.hidden();
-        };
-
-        private static Style visible = () -> {
+        parsed = style(() -> {
             visibility.visible();
-        };
+        });
+        assert parsed.property("visibility", "visible");
     }
 }

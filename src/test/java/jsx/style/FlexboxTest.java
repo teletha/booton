@@ -12,13 +12,15 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/21 14:44:20
+ * @version 2014/11/13 14:25:26
  */
-public class FlexboxTest extends StyleDeclarationTestBase {
+public class FlexboxTest extends StyleTester {
 
     @Test
     public void flex() {
-        ValidatableStyleRule parsed = parse(MyStyle.standard).rule();
+        ValidatableStyle parsed = style(() -> {
+            display.flex().direction.row().alignContent.center();
+        });
         assert parsed.property("display", "flex");
         assert parsed.property("flex-direction", "row");
         assert parsed.property("align-content", "center");
@@ -26,24 +28,12 @@ public class FlexboxTest extends StyleDeclarationTestBase {
 
     @Test
     public void item() {
-        ValidatableStyleRule parsed = parse(MyStyle.item).rule();
+        ValidatableStyle parsed = style(() -> {
+            flexItem.grow(2).shrink(2);
+        });
         assert parsed.property("flex-grow", "2");
         assert parsed.property("flex-shrink", "2");
         assert parsed.property("-webkit-flex-grow", "2");
         assert parsed.property("-webkit-flex-shrink", "2");
-    }
-
-    /**
-     * @version 2014/10/21 13:43:25
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style standard = () -> {
-            display.flex().direction.row().alignContent.center();
-        };
-
-        private static Style item = () -> {
-            flexItem.grow(2).shrink(2);
-        };
     }
 }
