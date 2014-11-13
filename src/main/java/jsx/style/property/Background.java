@@ -9,6 +9,9 @@
  */
 package jsx.style.property;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jsx.style.value.Color;
 import jsx.style.value.LinearGradient;
 import booton.css.Unit;
@@ -79,10 +82,10 @@ public class Background extends Colorable<Background> {
      */
     public Background image(BackgroundImage... images) {
         value("background-image", collect(images, 0), ",");
-        value("background-attachment", join(images, 1));
+        value("background-attachment", collect(images, 1), ",");
         value("background-position", join(images, image -> image.properties[2] + " " + image.properties[3]));
-        value("background-repeat", join(images, 4));
-        value("background-size", join(images, 5));
+        value("background-repeat", collect(images, 4), ",");
+        value("background-size", collect(images, 5), ",");
 
         return this;
     }
@@ -92,20 +95,11 @@ public class Background extends Colorable<Background> {
      * Join all values.
      * </p>
      */
-    private String join(BackgroundImage[] images, int index) {
-        return join(images, image -> image.properties[index].toString());
-    }
+    private List collect(BackgroundImage[] images, int index) {
+        List values = new ArrayList();
 
-    /**
-     * <p>
-     * Join all values.
-     * </p>
-     */
-    private Object[] collect(BackgroundImage[] images, int index) {
-        Object[] values = new Object[images.length];
-
-        for (int i = 0; i < values.length; i++) {
-            values[i] = images[i].properties[index];
+        for (int i = 0; i < images.length; i++) {
+            values.add(images[i].properties[index]);
         }
         return values;
     }

@@ -11,6 +11,7 @@ package jsx.style;
 
 import static jsx.style.Vendor.*;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
@@ -21,7 +22,7 @@ import booton.css.Unit;
 import booton.util.Strings;
 
 /**
- * @version 2014/10/21 13:47:52
+ * @version 2014/11/13 15:49:09
  */
 public class PropertyDefinition<T> {
 
@@ -74,11 +75,12 @@ public class PropertyDefinition<T> {
 
     /**
      * <p>
-     * Make chainable API.
+     * Set property.
      * </p>
      * 
-     * @param value
-     * @return
+     * @param name A property name.
+     * @param value A property value.
+     * @return Chainable API.
      */
     protected final T value(Object value) {
         return value(name, value);
@@ -86,74 +88,73 @@ public class PropertyDefinition<T> {
 
     /**
      * <p>
-     * Make chainable API.
+     * Set property.
      * </p>
      * 
-     * @param value
-     * @return
+     * @param name A property name.
+     * @param value A property value.
+     * @return Chainable API.
      */
     protected final T value(String name, Object value) {
-        declarable.property(name, value);
-
-        return context;
+        return value(name, Arrays.asList(value));
     }
 
     /**
      * <p>
-     * Make chainable API.
+     * Set property.
      * </p>
      * 
-     * @param value
-     * @return
+     * @param name A property name.
+     * @param values A list of property values.
+     * @return Chainable API.
      */
-    protected final T value(String name, List list) {
-        StringJoiner joiner = new StringJoiner(" ");
-
-        for (Object item : list) {
-            joiner.add(item.toString());
-        }
-
-        return value(name, joiner);
+    protected final T value(String name, List values) {
+        return value(name, values, " ");
     }
 
     /**
      * <p>
-     * Make chainable API.
+     * Set property.
      * </p>
      * 
-     * @param value
-     * @return
+     * @param name A property name.
+     * @param values A list of property values.
+     * @param separator A value separator.
+     * @return Chainable API.
      */
-    protected final T value(String name, List values, String separator, Vendor... vendors) {
-        declarable.property(EnumSet.of(Standard, vendors), separator, false, name, values.toArray());
-
-        return context;
+    protected final T value(String name, List values, String separator) {
+        return value(name, values, separator, false);
     }
 
     /**
      * <p>
-     * Make chainable API.
+     * Set property.
      * </p>
      * 
-     * @param value
-     * @return
+     * @param name A property name.
+     * @param values A list of property values.
+     * @param separator A value separator.
+     * @param override A value override mechanism.
+     * @return Chainable API.
      */
-    protected final T valueOverride(String name, List values, String separator, Vendor... vendors) {
-        declarable.property(EnumSet.of(Standard, vendors), separator, true, name, values.toArray());
-
-        return context;
+    protected final T value(String name, List values, String separator, boolean override) {
+        return value(name, values, separator, override, Standard);
     }
 
     /**
      * <p>
-     * Make chainable API.
+     * Set property.
      * </p>
      * 
-     * @param value
-     * @return
+     * @param name A property name.
+     * @param values A list of property values.
+     * @param separator A value separator.
+     * @param override A value override mechanism.
+     * @param vendors A list of {@link Vendor} for the specified property name or values.
+     * @return Chainable API.
      */
-    protected final T value(String name, Object[] values, String separator) {
-        declarable.property(EnumSet.of(Standard), separator, false, name, values);
+    protected final T value(String name, List values, String separator, boolean override, Vendor... vendors) {
+        declarable.property(name, values, separator, override, EnumSet.of(Standard, vendors));
 
         return context;
     }
