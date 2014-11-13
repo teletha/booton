@@ -118,6 +118,20 @@ public class PropertyDefinition<T> {
 
     /**
      * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    protected final T value(String name, Object[] values, String separator) {
+        declarable.property(EnumSet.of(Standard), separator, name, values);
+
+        return context;
+    }
+
+    /**
+     * <p>
      * Check the current value.
      * </p>
      * 

@@ -11,6 +11,7 @@ package jsx.style;
 
 import static java.lang.Integer.*;
 
+import java.util.List;
 import java.util.Map;
 
 import jsx.style.value.Color;
@@ -122,10 +123,10 @@ public class StyleDeclarationTestBase {
                 value = "hsla(0,0%,0%,0)";
             }
 
-            Map<String, String> properties = rules.holder;
+            Map<String, List<String>> properties = rules.holder;
 
             assert properties.containsKey(name);
-            assert properties.get(name).equals(value);
+            assert properties.get(name).contains(value);
             return true;
         }
 

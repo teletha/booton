@@ -78,7 +78,7 @@ public class Background extends Colorable<Background> {
      * @param images
      */
     public Background image(BackgroundImage... images) {
-        value("background-image", join(images, 0));
+        value("background-image", collect(images, 0), ",");
         value("background-attachment", join(images, 1));
         value("background-position", join(images, image -> image.properties[2] + " " + image.properties[3]));
         value("background-repeat", join(images, 4));
@@ -94,6 +94,20 @@ public class Background extends Colorable<Background> {
      */
     private String join(BackgroundImage[] images, int index) {
         return join(images, image -> image.properties[index].toString());
+    }
+
+    /**
+     * <p>
+     * Join all values.
+     * </p>
+     */
+    private Object[] collect(BackgroundImage[] images, int index) {
+        Object[] values = new Object[images.length];
+
+        for (int i = 0; i < values.length; i++) {
+            values[i] = images[i].properties[index];
+        }
+        return values;
     }
 
     /**
