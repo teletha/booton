@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2014 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,12 +9,12 @@
  */
 package js.dom;
 
+import jsx.style.Style;
+
 import org.junit.Test;
 
-import booton.css.CSS;
-
 /**
- * @version 2013/07/11 15:50:53
+ * @version 2014/11/13 9:36:37
  */
 public class DOMTokenListTest {
 
@@ -22,27 +22,27 @@ public class DOMTokenListTest {
     public void add() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        assert !list.contains(CSS1.class);
+        assert !list.contains(CSS1);
 
-        list.add(CSS1.class);
-        assert list.contains(CSS1.class);
+        list.add(CSS1);
+        assert list.contains(CSS1);
     }
 
     @Test
     public void addMultiple() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        assert !list.contains(CSS1.class);
-        assert !list.contains(CSS2.class);
+        assert !list.contains(CSS1);
+        assert !list.contains(CSS2);
 
-        list.add(CSS1.class);
-        assert list.contains(CSS1.class);
-        assert !list.contains(CSS2.class);
+        list.add(CSS1);
+        assert list.contains(CSS1);
+        assert !list.contains(CSS2);
         assert list.length() == 1;
 
-        list.add(CSS2.class);
-        assert list.contains(CSS1.class);
-        assert list.contains(CSS2.class);
+        list.add(CSS2);
+        assert list.contains(CSS1);
+        assert list.contains(CSS2);
         assert list.length() == 2;
     }
 
@@ -50,14 +50,14 @@ public class DOMTokenListTest {
     public void addDuplicated() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        assert !list.contains(CSS1.class);
+        assert !list.contains(CSS1);
 
-        list.add(CSS1.class);
-        assert list.contains(CSS1.class);
+        list.add(CSS1);
+        assert list.contains(CSS1);
         assert list.length() == 1;
 
-        list.add(CSS1.class);
-        assert list.contains(CSS1.class);
+        list.add(CSS1);
+        assert list.contains(CSS1);
         assert list.length() == 1;
     }
 
@@ -88,11 +88,11 @@ public class DOMTokenListTest {
     public void remove() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        list.add(CSS1.class);
-        assert list.contains(CSS1.class);
+        list.add(CSS1);
+        assert list.contains(CSS1);
 
-        list.remove(CSS1.class);
-        assert !list.contains(CSS1.class);
+        list.remove(CSS1);
+        assert !list.contains(CSS1);
         assert list.length() == 0;
     }
 
@@ -121,11 +121,11 @@ public class DOMTokenListTest {
     public void toggle() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        list.toggle(CSS1.class);
-        assert list.contains(CSS1.class);
+        list.toggle(CSS1);
+        assert list.contains(CSS1);
 
-        list.toggle(CSS1.class);
-        assert !list.contains(CSS1.class);
+        list.toggle(CSS1);
+        assert !list.contains(CSS1);
         assert list.length() == 0;
     }
 
@@ -153,15 +153,9 @@ public class DOMTokenListTest {
         list.contains("space ");
     }
 
-    /**
-     * @version 2013/07/11 11:54:32
-     */
-    private static class CSS1 extends CSS {
-    }
+    private static Style CSS1 = () -> {
+    };
 
-    /**
-     * @version 2013/07/11 11:54:32
-     */
-    private static class CSS2 extends CSS {
-    }
+    private static Style CSS2 = () -> {
+    };
 }
