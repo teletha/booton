@@ -92,6 +92,19 @@ public class PropertyDefinition<T> {
      * </p>
      * 
      * @param name A property name.
+     * @param value A list of property values.
+     * @return Chainable API.
+     */
+    protected final T value(List values) {
+        return value(name, values);
+    }
+
+    /**
+     * <p>
+     * Set property.
+     * </p>
+     * 
+     * @param name A property name.
      * @param value A property value.
      * @return Chainable API.
      */
