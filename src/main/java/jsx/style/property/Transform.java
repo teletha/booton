@@ -9,6 +9,8 @@
  */
 package jsx.style.property;
 
+import static jsx.style.Vendor.*;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -60,8 +62,7 @@ public class Transform extends PropertyDefinition<Transform> {
         functions.addAll(transform.functions);
         functions.add(function);
 
-        value("transform", functions);
-        value("-webkit-transform", functions);
+        value("transform", functions, " ", Webkit);
     }
 
     /**

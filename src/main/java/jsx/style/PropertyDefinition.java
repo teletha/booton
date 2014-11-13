@@ -124,6 +124,20 @@ public class PropertyDefinition<T> {
      * @param value
      * @return
      */
+    protected final T value(String name, List values, String separator, Vendor... vendors) {
+        declarable.property(EnumSet.of(Standard, vendors), separator, name, values.toArray());
+
+        return context;
+    }
+
+    /**
+     * <p>
+     * Make chainable API.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
     protected final T value(String name, Object[] values, String separator) {
         declarable.property(EnumSet.of(Standard), separator, name, values);
 
