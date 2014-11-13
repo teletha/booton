@@ -9,7 +9,9 @@
  */
 package jsx.style;
 
+import static jsx.style.value.Color.*;
 import jsx.style.property.Background.BackgroundImage;
+import jsx.style.value.LinearGradient;
 
 import org.junit.Test;
 
@@ -56,6 +58,23 @@ public class BackgroundTest extends StyleDeclarationTestBase {
         assert parsed.property("background-size", "auto,contain");
     }
 
+    @Test
+    public void imageGradient() throws Exception {
+        ValidatableStyleRule parsed = parse(MyStyle.imageGradient).rule();
+        assert parsed.size("background-image") == 2;
+        assert parsed.property("background-image", "-webkit-linear-gradient(black,white)");
+        assert parsed.property("background-image", "linear-gradient(black,white)");
+    }
+
+    @Test
+    public void imageGradients() throws Exception {
+        ValidatableStyleRule parsed = parse(MyStyle.imageGradients).rule();
+        assert parsed.size("background-image") == 2;
+        assert parsed.property("background-image", "linear-gradient(black,white),linear-gradient(white,black)");
+        assert parsed
+                .property("background-image", "-webkit-linear-gradient(black,white),-webkit-linear-gradient(white,black)");
+    }
+
     /**
      * @version 2014/10/28 13:39:57
      */
@@ -92,6 +111,15 @@ public class BackgroundTest extends StyleDeclarationTestBase {
                     .local();
 
             background.image(one, two);
+        };
+
+        private static Style imageGradient = () -> {
+            background.image(BackgroundImage.of(new LinearGradient().color(Black, White)));
+        };
+
+        private static Style imageGradients = () -> {
+            background.image(BackgroundImage.of(new LinearGradient().color(Black, White)), BackgroundImage
+                    .of(new LinearGradient().color(White, Black)));
         };
     }
 }
