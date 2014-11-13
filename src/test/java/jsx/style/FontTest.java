@@ -12,33 +12,23 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/21 13:41:48
+ * @version 2014/11/13 14:26:07
  */
-public class FontTest extends StyleDeclarationTestBase {
+public class FontTest extends StyleTester {
 
     @Test
     public void rgb() {
-        ValidatableStyleRule parsed = parse(MyStyle.rgb).rule();
+        ValidatableStyle parsed = style(() -> {
+            font.color(255, 0, 0);
+        });
         assert parsed.property("color", "rgb(255,0,0)");
     }
 
     @Test
     public void family() {
-        ValidatableStyleRule parsed = parse(MyStyle.family).rule();
-        assert parsed.property("font-family", "\"Source Sans Pro\",serif");
-    }
-
-    /**
-     * @version 2014/10/21 13:43:25
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style rgb = () -> {
-            font.color(255, 0, 0);
-        };
-
-        private static Style family = () -> {
+        ValidatableStyle parsed = style(() -> {
             font.family("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600").serif();
-        };
+        });
+        assert parsed.property("font-family", "\"Source Sans Pro\",serif");
     }
 }

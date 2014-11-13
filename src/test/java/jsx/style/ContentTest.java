@@ -12,30 +12,20 @@ package jsx.style;
 import org.junit.Test;
 
 /**
- * @version 2014/10/29 10:59:54
+ * @version 2014/11/13 14:23:53
  */
-public class ContentTest extends StyleDeclarationTestBase {
+public class ContentTest extends StyleTester {
 
     @Test
     public void rgb() {
-        ValidatableStyleRule parsed = parse(MyStyle.text).rule();
+        ValidatableStyle parsed = style(() -> {
+            content.text("test");
+        });
         assert parsed.property("content", "'test'");
 
-        parsed = parse(MyStyle.attr).rule();
-        assert parsed.property("content", "attr(href)");
-    }
-
-    /**
-     * @version 2014/10/29 10:59:51
-     */
-    private static class MyStyle extends StyleDescriptor {
-
-        private static Style text = () -> {
-            content.text("test");
-        };
-
-        private static Style attr = () -> {
+        parsed = style(() -> {
             content.attr("href");
-        };
+        });
+        assert parsed.property("content", "attr(href)");
     }
 }
