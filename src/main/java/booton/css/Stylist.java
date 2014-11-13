@@ -130,9 +130,11 @@ public class Stylist {
         // write requested properties only.
         writer.writeDown(rule.selector, "{");
 
-        for (Entry<String, String> entry : rule.holder.entrySet()) {
-            counter++;
-            writer.property(entry.getKey(), entry.getValue());
+        for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
+            for (String value : entry.getValue()) {
+                counter++;
+                writer.property(entry.getKey(), value);
+            }
         }
         writer.writeDown("}");
 

@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.TreeMap;
 
 import kiss.I;
+import kiss.Table;
 
 /**
  * @version 2014/11/11 9:47:11
@@ -37,7 +36,7 @@ public class StyleRule {
     public final StyleSheet sheet;
 
     /** The property holder. */
-    public final Map<String, String> holder = new TreeMap();
+    public final Table<String, String> holder = new Table();
 
     /**
      * <p>
@@ -100,7 +99,7 @@ public class StyleRule {
      * @param name A property name.
      * @param values A list of property values.
      */
-    private void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
+    void property(EnumSet<Vendor> prefixes, String separator, String name, Object... values) {
         if (name != null && name.length() != 0 && values != null) {
             EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
 
@@ -153,7 +152,7 @@ public class StyleRule {
                     if (!prefixes.contains(vendor)) {
                         vendor = Standard;
                     }
-                    holder.put(vendor + name, value);
+                    holder.push(vendor + name, value);
                 }
             }
         }
