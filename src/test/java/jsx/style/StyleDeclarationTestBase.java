@@ -108,6 +108,16 @@ public class StyleDeclarationTestBase {
 
         /**
          * @param name
+         * @return
+         */
+        public int size(String name) {
+            assert name != null;
+
+            return rules.holder.get(name).size();
+        }
+
+        /**
+         * @param name
          * @param value
          * @return
          */
