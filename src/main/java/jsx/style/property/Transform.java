@@ -62,7 +62,7 @@ public class Transform extends PropertyDefinition<Transform> {
         functions.addAll(transform.functions);
         functions.add(function);
 
-        valueOverride("transform", functions, " ", Webkit);
+        value("transform", functions, " ", true, Webkit);
     }
 
     /**

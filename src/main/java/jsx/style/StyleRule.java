@@ -22,7 +22,7 @@ import kiss.I;
 import kiss.Table;
 
 /**
- * @version 2014/11/11 9:47:11
+ * @version 2014/11/13 15:49:15
  */
 public class StyleRule {
 
@@ -75,37 +75,12 @@ public class StyleRule {
      * </p>
      * 
      * @param name A property name.
-     * @param values A list of whitespace-separated property values.
-     */
-    public void property(String name, Object... values) {
-        property(EnumSet.of(Standard), " ", false, name, values);
-    }
-
-    /**
-     * <p>
-     * Declare the specified property.
-     * </p>
-     * 
-     * @param name A property name.
-     * @param values A list of whitespace-separated property values.
-     * @param vendors A list of {@link Vendor} prefix if needed.
-     */
-    public void property(String name, List values, Vendor... vendors) {
-        property(EnumSet.of(Standard, vendors), " ", false, name, values.toArray());
-    }
-
-    /**
-     * <p>
-     * Declare the specified property.
-     * </p>
-     * 
-     * @param prefixes A list of vendors for property name.
+     * @param values A list of property values.
      * @param separator A value separator.
      * @param override A flag for property override.
-     * @param name A property name.
-     * @param values A list of property values.
+     * @param prefixes A list of vendors for property name.
      */
-    void property(EnumSet<Vendor> prefixes, String separator, boolean override, String name, Object... values) {
+    void property(String name, List values, String separator, boolean override, EnumSet<Vendor> prefixes) {
         if (name != null && name.length() != 0 && values != null) {
             EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
 
