@@ -68,7 +68,7 @@ public class DOMTokenListTest {
         list.add((String) null);
         assert list.contains("null");
 
-        list.add((Class) null);
+        list.add((Style) null);
         assert list.contains("null");
     }
 
@@ -100,7 +100,7 @@ public class DOMTokenListTest {
     public void removeNull() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
         list.remove((String) null);
-        list.remove((Class) null);
+        list.remove((Style) null);
 
         // no error
     }

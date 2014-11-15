@@ -36,15 +36,6 @@ public class DOMTokenList implements JavascriptNative {
      * 
      * @param className A class name to add.
      */
-    public native void add(Class<? extends CSS> className);
-
-    /**
-     * <p>
-     * Add class.
-     * </p>
-     * 
-     * @param className A class name to add.
-     */
     public native void add(Style className);
 
     /**
@@ -55,15 +46,6 @@ public class DOMTokenList implements JavascriptNative {
      * @param className A class name to remove.
      */
     public native void remove(String className);
-
-    /**
-     * <p>
-     * Remove class.
-     * </p>
-     * 
-     * @param className A class name to remove.
-     */
-    public native void remove(Class<? extends CSS> className);
 
     /**
      * <p>
@@ -92,16 +74,6 @@ public class DOMTokenList implements JavascriptNative {
      * 
      * @param className A class name to toggle.
      */
-    public native boolean toggle(Class<? extends CSS> className);
-
-    /**
-     * <p>
-     * Removes class from string and returns false. If class doesn't exist it's added and the
-     * function returns true.
-     * </p>
-     * 
-     * @param className A class name to toggle.
-     */
     public native boolean toggle(Style className);
 
     /**
@@ -112,15 +84,6 @@ public class DOMTokenList implements JavascriptNative {
      * @param className A class name to test.
      */
     public native boolean contains(String className);
-
-    /**
-     * <p>
-     * Test class.
-     * </p>
-     * 
-     * @param className A class name to test.
-     */
-    public native boolean contains(Class<? extends CSS> className);
 
     /**
      * <p>

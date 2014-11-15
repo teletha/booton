@@ -14,9 +14,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import js.lang.NativeFunction;
+import jsx.style.Style;
 import kiss.I;
 import kiss.XML;
-import booton.css.CSS;
 
 /**
  * @version 2014/08/31 13:35:05
@@ -525,7 +525,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public NodeList<Element> getElementsByClassName(Class<? extends CSS> className) {
+    public NodeList<Element> getElementsByClassName(Style className) {
         return new ByClassNameCollection(className);
     }
 
@@ -816,12 +816,12 @@ class EmulateElement extends Element implements EmulateNodable {
      */
     private class ByClassNameCollection extends NodeList<Element> {
 
-        private Class<? extends CSS> className;
+        private Style className;
 
         /**
          * @param className
          */
-        private ByClassNameCollection(Class<? extends CSS> className) {
+        private ByClassNameCollection(Style className) {
             this.className = className;
         }
 

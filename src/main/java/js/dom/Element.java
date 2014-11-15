@@ -9,6 +9,7 @@
  */
 package js.dom;
 
+import static js.dom.ElementStyle.*;
 import static js.lang.Global.*;
 
 import java.util.ArrayList;
@@ -39,40 +40,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classNames A class name to be added to the class attribute of this element.
      * @return Chainable API.
      */
-    public Element add(Class<? extends CSS> className) {
-        classList().add(className);
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Adds the specified class to this elements.
-     * </p>
-     * 
-     * @param classNames A class name to be added to the class attribute of this element.
-     * @return Chainable API.
-     */
     public Element add(Style className) {
         classList().add(className.intern());
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Adds the specified class(es) to this elements.
-     * </p>
-     * 
-     * @param classes A list of class names to assign.
-     * @return Chainable API.
-     */
-    public Element add(Class<? extends CSS>... classes) {
-        for (Class<? extends CSS> clazz : classes) {
-            add(clazz);
-        }
 
         // API definition
         return this;
@@ -194,7 +163,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return Chainable API.
      */
     public Element empty() {
-        for (Element child : getElementsByClassName(EventListenable.class)) {
+        for (Element child : getElementsByClassName(EventListenable)) {
             child.unsubscribe();
         }
 
@@ -202,18 +171,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
 
         // API definition
         return this;
-    }
-
-    /**
-     * <p>
-     * Determine whether any of this element is assigned the given class.
-     * </p>
-     * 
-     * @param className The class name to search for.
-     * @return A result
-     */
-    public boolean has(Class<? extends CSS> className) {
-        return classList().contains(className);
     }
 
     /**
@@ -236,23 +193,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to check.
      * @return A result.
      */
-    public boolean has(Class<? extends CSS>... classes) {
-        for (Class<? extends CSS> clazz : classes) {
-            if (!has(clazz)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * <p>
-     * Determine whether any of this element is assigned the given class.
-     * </p>
-     * 
-     * @param classes A list of class names to check.
-     * @return A result.
-     */
     public boolean has(Style... classes) {
         for (Style clazz : classes) {
             if (!has(clazz)) {
@@ -260,18 +200,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
             }
         }
         return true;
-    }
-
-    /**
-     * <p>
-     * Create child {@link Image} element.
-     * </p>
-     * 
-     * @param classNames A class name to be added to the class attribute of each matched element.
-     * @return A created image.
-     */
-    public Image image(Class<? extends CSS> className) {
-        return new Image(this, className);
     }
 
     /**
@@ -337,7 +265,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return
      */
     public Element remove() {
-        for (Element child : getElementsByClassName(EventListenable.class)) {
+        for (Element child : getElementsByClassName(EventListenable)) {
             child.unsubscribe();
         }
         unsubscribe();
@@ -376,40 +304,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param className A class name to be removed from the class attribute of this element.
      * @return Chainable API.
      */
-    public Element remove(Class<? extends CSS> className) {
-        classList().remove(className);
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Remove a class from this element.
-     * </p>
-     * 
-     * @param className A class name to be removed from the class attribute of this element.
-     * @return Chainable API.
-     */
     public Element remove(Style className) {
         classList().remove(className.intern());
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Remove a single class, multiple classes, or all classes from this element.
-     * </p>
-     * 
-     * @param classes A list of class names to remove.
-     * @return Chainable API.
-     */
-    public Element remove(Class<? extends CSS>... classes) {
-        for (Class<? extends CSS> clazz : classes) {
-            remove(clazz);
-        }
 
         // API definition
         return this;
@@ -441,42 +337,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param className A class name to be toggled for this element.
      * @return Chainable API.
      */
-    public Element toggle(Class<? extends CSS> className) {
-        classList().toggle(className);
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Add or remove class from this element, depending on either the class's presence or the value
-     * of the switch argument.
-     * </p>
-     * 
-     * @param className A class name to be toggled for this element.
-     * @return Chainable API.
-     */
     public Element toggle(Style className) {
         classList().toggle(className.intern());
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Add or remove one or more classes from this element, depending on either the class's presence
-     * or the value of the switch argument.
-     * </p>
-     * 
-     * @param classes A list of class names to add or remove.
-     * @return Chainable API.
-     */
-    public Element toggle(Class<? extends CSS>... classes) {
-        for (Class<? extends CSS> clazz : classes) {
-            classList().toggle(clazz);
-        }
 
         // API definition
         return this;
@@ -545,7 +407,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         super.startListening(type);
 
         if (type == Object.class) {
-            add(EventListenable.class);
+            add(EventListenable);
         }
     }
 
@@ -557,7 +419,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         super.stopListening(type);
 
         if (type == Object.class) {
-            remove(EventListenable.class);
+            remove(EventListenable);
         }
     }
 
@@ -841,7 +703,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A HTMLCollection of found elements.
      */
     @JavascriptNativeProperty
-    public abstract NodeList<Element> getElementsByClassName(Class<? extends CSS> className);
+    public abstract NodeList<Element> getElementsByClassName(Style className);
 
     /**
      * <p>
@@ -878,14 +740,4 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     @JavascriptNativeProperty
     public final native void scrollIntoView();
-
-    /**
-     * <p>
-     * Marker class.
-     * </p>
-     * 
-     * @version 2013/07/28 18:15:38
-     */
-    private static class EventListenable extends CSS {
-    }
 }

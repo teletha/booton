@@ -37,18 +37,6 @@ class EmulateDOMTokenList extends DOMTokenList {
      * {@inheritDoc}
      */
     @Override
-    public void add(Class<? extends CSS> className) {
-        if (className == null) {
-            add((String) null);
-        } else {
-            add(Obfuscator.computeCSSName(className.getName()));
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void add(Style className) {
         if (className == null) {
             add((String) null);
@@ -63,18 +51,6 @@ class EmulateDOMTokenList extends DOMTokenList {
     @Override
     public void remove(String className) {
         classes.remove(normalize(className));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void remove(Class<? extends CSS> className) {
-        if (className == null) {
-            remove((String) null);
-        } else {
-            remove(Obfuscator.computeCSSName(className.getName()));
-        }
     }
 
     /**
@@ -107,18 +83,6 @@ class EmulateDOMTokenList extends DOMTokenList {
      * {@inheritDoc}
      */
     @Override
-    public boolean toggle(Class<? extends CSS> className) {
-        if (className == null) {
-            return toggle((String) null);
-        } else {
-            return toggle(Obfuscator.computeCSSName(className.getName()));
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean toggle(Style className) {
         if (className == null) {
             return toggle((String) null);
@@ -133,18 +97,6 @@ class EmulateDOMTokenList extends DOMTokenList {
     @Override
     public boolean contains(String className) {
         return classes.contains(normalize(className));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean contains(Class<? extends CSS> className) {
-        if (className == null) {
-            return contains((String) null);
-        } else {
-            return contains(Obfuscator.computeCSSName(className.getName()));
-        }
     }
 
     /**
