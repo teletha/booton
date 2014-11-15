@@ -10,7 +10,7 @@
 package js.dom;
 
 import js.lang.NativeCSSStyleSheetList;
-import booton.css.CSS;
+import jsx.style.Style;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
@@ -124,7 +124,7 @@ public abstract class Document extends Node implements JavascriptNative {
      * @return A HTMLCollection of found elements.
      */
     @JavascriptNativeProperty
-    public final native NodeList<Element> getElementsByClassName(Class<? extends CSS> className);
+    public final native NodeList<Element> getElementsByClassName(Style className);
 
     /**
      * <p>

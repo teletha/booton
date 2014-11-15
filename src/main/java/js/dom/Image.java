@@ -36,24 +36,6 @@ public class Image {
     /**
      * 
      */
-    public Image(Element parent, Class<? extends CSS> className) {
-        image = document.createElementNS(SVG, "image");
-        image.attr("width", "100%");
-        image.attr("height", "100%");
-        filters = document.createElementNS(SVG, "filter");
-        filters.attr("id", "filter" + hashCode());
-
-        svg = document.createElementNS(SVG, "svg");
-        svg.append(filters);
-        svg.append(image);
-        svg.attr("class", className.toString());
-
-        parent.append(svg);
-    }
-
-    /**
-     * 
-     */
     public Image(Element parent, Style className) {
         image = document.createElementNS(SVG, "image");
         image.attr("width", "100%");

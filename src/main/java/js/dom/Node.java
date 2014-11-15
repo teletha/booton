@@ -124,32 +124,8 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @param className A class name of the new child element.
      * @return A created child element.
      */
-    public Element child(Class<? extends CSS> className) {
-        return child("span", className);
-    }
-
-    /**
-     * <p>
-     * Create a child element with the specified class.
-     * </p>
-     * 
-     * @param className A class name of the new child element.
-     * @return A created child element.
-     */
     public Element child(Style className) {
         return child("span", className);
-    }
-
-    /**
-     * <p>
-     * Create a child element with the specified class.
-     * </p>
-     * 
-     * @param className A class name of the new child element.
-     * @return A created child element.
-     */
-    public Element child(String name, Class<? extends CSS> className) {
-        return child(name).add(className);
     }
 
     /**
