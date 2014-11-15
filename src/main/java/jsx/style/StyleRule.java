@@ -9,7 +9,7 @@
  */
 package jsx.style;
 
-import static jsx.style.Vendor.*;
+import static jsx.style.value.Vendor.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +18,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
 
+import jsx.style.value.Vendor;
 import kiss.I;
 import kiss.Table;
 

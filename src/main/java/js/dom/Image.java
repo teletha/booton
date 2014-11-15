@@ -11,7 +11,6 @@ package js.dom;
 
 import static js.lang.Global.*;
 import jsx.style.Style;
-import booton.css.CSS;
 
 /**
  * @version 2013/07/01 2:12:00

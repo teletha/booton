@@ -9,7 +9,7 @@
  */
 package jsx.style.value;
 
-import static booton.css.Unit.*;
+import static jsx.style.value.Unit.*;
 
 import org.junit.Test;
 

@@ -17,8 +17,8 @@ import java.util.StringJoiner;
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
+import jsx.style.value.Unit;
 import kiss.I;
-import booton.css.Unit;
 import booton.translator.Translator;
 import booton.util.Strings;
 

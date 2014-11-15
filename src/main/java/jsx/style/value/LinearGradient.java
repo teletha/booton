@@ -9,16 +9,14 @@
  */
 package jsx.style.value;
 
-import static booton.css.Unit.*;
-import static jsx.style.Vendor.*;
+import static jsx.style.value.Unit.*;
+import static jsx.style.value.Vendor.*;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import jsx.style.CSSValue;
-import jsx.style.Vendor;
-import booton.css.Unit;
 
 /**
  * @version 2014/10/28 20:36:39

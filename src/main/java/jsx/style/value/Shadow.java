@@ -9,7 +9,6 @@
  */
 package jsx.style.value;
 
-import booton.css.Unit;
 
 /**
  * @version 2014/10/28 18:40:17

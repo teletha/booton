@@ -13,9 +13,9 @@ import kiss.I;
 import booton.BootonConfiguration;
 
 /**
- * @version 2014/10/20 15:22:38
+ * @version 2014/11/15 14:43:40
  */
-public class CSSWriter implements StyleDeclarable {
+public class CSSWriter {
 
     /** The optimization flag. */
     private final boolean compression = I.make(BootonConfiguration.class).compression;
@@ -110,18 +110,22 @@ public class CSSWriter implements StyleDeclarable {
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Declare the specified property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param value A property value.
      */
-    @Override
-    public String toString() {
-        return builder.toString();
+    public void prop(String name, String value) {
+        indent().writeDown(name, ":", value, ";");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setProperty(String name, String value) {
-        indent().writeDown(name, ":", value, ";");
+    public String toString() {
+        return builder.toString();
     }
 }

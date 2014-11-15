@@ -12,7 +12,6 @@ package jsx.style.value;
 import java.util.EnumSet;
 
 import jsx.style.CSSValue;
-import jsx.style.Vendor;
 
 /**
  * @version 2014/10/28 20:37:51
