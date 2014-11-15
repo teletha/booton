@@ -46,7 +46,7 @@ import jsx.ui.VirtualStructure.Descriptor;
 import kiss.I;
 import kiss.model.ClassUtil;
 import booton.Obfuscator;
-import booton.css.Stylist;
+import booton.css.CascadingStyleSheet;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
 
@@ -526,7 +526,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case GETSTATIC:
             if (desc.equals(STYLE)) {
-                String cssClassName = I.make(Stylist.class).register(owner, name);
+                String cssClassName = I.make(CascadingStyleSheet.class).register(owner, name);
                 current.addOperand(new OperandString(cssClassName));
             } else {
                 current.addOperand(translator.translateStaticField(owner, name), type);

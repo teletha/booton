@@ -23,7 +23,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import booton.css.Stylist;
+import booton.css.CascadingStyleSheet;
 import booton.live.LiveCoding;
 import booton.live.LiveCodingServlet;
 import booton.live.ResourceServlet;
@@ -167,7 +167,7 @@ public class Booton {
             System.out.println("Complete compilation of Live Coding Server.");
 
             // build css file
-            I.make(Stylist.class).write(css);
+            I.make(CascadingStyleSheet.class).write(css);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } finally {
