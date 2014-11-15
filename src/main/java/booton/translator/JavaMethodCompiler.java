@@ -46,7 +46,6 @@ import jsx.ui.VirtualStructure.Descriptor;
 import kiss.I;
 import kiss.model.ClassUtil;
 import booton.Obfuscator;
-import booton.css.CSS;
 import booton.css.Stylist;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
@@ -1476,17 +1475,10 @@ class JavaMethodCompiler extends MethodVisitor {
             // add class operand
             Class clazz = convert(className);
 
-            if (CSS.class.isAssignableFrom(clazz)) {
-                // support stylesheet class
-                I.make(Stylist.class).register(clazz);
+            // support class literal in javascript runtime.
+            current.addOperand(Javascript.computeClass(clazz));
 
-                current.addOperand('"' + Obfuscator.computeCSSName(clazz.getName()) + '"');
-            } else {
-                // support class literal in javascript runtime.
-                current.addOperand(Javascript.computeClass(clazz));
-
-                Javascript.require(clazz);
-            }
+            Javascript.require(clazz);
         } else {
             current.addOperand(constant);
         }
