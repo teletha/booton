@@ -13,8 +13,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -35,15 +33,8 @@ import booton.css.value.Font;
 @Manageable(lifestyle = Singleton.class)
 public class Stylist {
 
-    /** The style classes which javascript reference. */
-    private final List<CSS> csses = new ArrayList();
-
     /** The style classes which any javascript refers. */
     private final Set<Style> styles = new LinkedHashSet();
-
-    public String write(CSS style) {
-        return write(style.rules);
-    }
 
     public String write(RuleSet rule) {
         CSSWriter writer = new CSSWriter();
@@ -96,18 +87,6 @@ public class Stylist {
             root.writeDown("@import url(" + font.uri + ");").line();
         }
 
-        // write require styles
-        Collections.sort(csses, new Sorter());
-
-        for (CSS style : csses) {
-            String css = write(style.rules);
-
-            if (css.length() != 0) {
-                root.comment(style.getClass().getName());
-                root.writeDown(css);
-            }
-        }
-
         StyleSheet sheet = I.make(StyleSheet.class);
 
         for (Style style : styles) {
@@ -152,23 +131,6 @@ public class Stylist {
      * 
      * @param style
      */
-    public void register(Class<? extends CSS> style) {
-        if (style != null) {
-            CSS css = I.make(style);
-
-            if (!csses.contains(css)) {
-                csses.add(css);
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Register style definition.
-     * </p>
-     * 
-     * @param style
-     */
     public String register(Class clazz, String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
@@ -185,27 +147,6 @@ public class Stylist {
         }
     }
 
-    /**
-     * @version 2013/07/21 14:42:48
-     */
-    private static class Sorter implements Comparator<CSS> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int compare(CSS o1, CSS o2) {
-            Priority priority1 = o1.getClass().getAnnotation(Priority.class);
-            Priority priority2 = o2.getClass().getAnnotation(Priority.class);
-            int value1 = priority1 == null ? 0 : priority1.value();
-            int value2 = priority2 == null ? 0 : priority2.value();
-
-            if (value1 == value2) {
-                return 0;
-            }
-            return value1 < value2 ? -1 : 1;
-        }
-    }
     //
     // /**
     // * @version 2014/10/27 15:24:12
