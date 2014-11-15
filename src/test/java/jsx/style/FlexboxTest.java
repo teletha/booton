@@ -21,9 +21,11 @@ public class FlexboxTest extends StyleTester {
         ValidatableStyle parsed = style(() -> {
             display.flex().direction.row().alignContent.center();
         });
-        assert parsed.property("display", "flex");
+        assert parsed.property("display", "flex", "-webkit-flex");
         assert parsed.property("flex-direction", "row");
         assert parsed.property("align-content", "center");
+        assert parsed.property("-webkit-flex-direction", "row");
+        assert parsed.property("-webkit-align-content", "center");
     }
 
     @Test
