@@ -14,11 +14,6 @@ import static java.lang.Integer.*;
 import java.util.List;
 import java.util.Map;
 
-import jsx.style.Style;
-import jsx.style.StyleName;
-import jsx.style.StyleRule;
-import jsx.style.StyleRuleDescriptor;
-import jsx.style.StyleSheet;
 import jsx.style.value.Color;
 
 /**
