@@ -9,8 +9,11 @@
  */
 package jsx.style.property;
 
-import jsx.style.PropertyDefinition;
+import static jsx.style.Vendor.*;
 
+import java.util.EnumSet;
+
+import jsx.style.PropertyDefinition;
 
 /**
  * @version 2014/10/21 16:21:07
@@ -82,7 +85,7 @@ public class Flex extends PropertyDefinition<Flex> {
          * @return
          */
         public Flex row() {
-            return value("row");
+            return value(EnumSet.of(Webkit), "row");
         }
 
         /**

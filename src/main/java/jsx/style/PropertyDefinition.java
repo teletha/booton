@@ -92,11 +92,11 @@ public class PropertyDefinition<T> {
      * </p>
      * 
      * @param name A property name.
-     * @param value A list of property values.
+     * @param value A property value.
      * @return Chainable API.
      */
-    protected final T value(List values) {
-        return value(name, values);
+    protected final T value(EnumSet<Vendor> vendors, Object value) {
+        return value(vendors, name, Arrays.asList(value), " ", false);
     }
 
     /**
@@ -151,7 +151,7 @@ public class PropertyDefinition<T> {
      * @return Chainable API.
      */
     protected final T value(String name, List values, String separator, boolean override) {
-        return value(name, values, separator, override, Standard);
+        return value(EnumSet.noneOf(Vendor.class), name, values, separator, override);
     }
 
     /**
@@ -159,15 +159,16 @@ public class PropertyDefinition<T> {
      * Set property.
      * </p>
      * 
+     * @param vendors A list of {@link Vendor} for the specified property name.
      * @param name A property name.
      * @param values A list of property values.
      * @param separator A value separator.
-     * @param override A value override mechanism.
-     * @param vendors A list of {@link Vendor} for the specified property name or values.
-     * @return Chainable API.
+     * @param override A value override mechanism. @return Chainable API.
      */
-    protected final T value(String name, List values, String separator, boolean override, Vendor... vendors) {
-        declarable.property(name, values, separator, override, EnumSet.of(Standard, vendors));
+    protected final T value(EnumSet<Vendor> vendors, String name, List values, String separator, boolean override) {
+        vendors.add(Standard);
+
+        declarable.property(name, values, separator, override, vendors);
 
         return context;
     }

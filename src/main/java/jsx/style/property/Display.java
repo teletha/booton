@@ -9,8 +9,6 @@
  */
 package jsx.style.property;
 
-import java.util.Arrays;
-
 import jsx.style.PropertyDefinition;
 
 /**
@@ -84,7 +82,8 @@ public final class Display extends PropertyDefinition<Display> {
      * model.
      */
     public Flex flex() {
-        value(Arrays.asList("flex", "-webkit-flex"));
+        value("flex");
+        value("-webkit-flex");
 
         return new Flex();
     }
@@ -94,7 +93,8 @@ public final class Display extends PropertyDefinition<Display> {
      * model.
      */
     public Flex inlineFlex() {
-        value(Arrays.asList("inline-flex", "-webkit-inline-flex"));
+        value("inline-flex");
+        value("-webkit-inline-flex");
 
         return new Flex();
     }
