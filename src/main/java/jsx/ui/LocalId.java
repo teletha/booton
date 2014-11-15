@@ -20,10 +20,6 @@ import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import kiss.I;
-
-import sun.reflect.ConstantPool;
-
-import booton.css.StyleDeclaration;
 import booton.translator.Translator;
 
 /**
