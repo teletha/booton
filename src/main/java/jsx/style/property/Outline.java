@@ -11,7 +11,7 @@ package jsx.style.property;
 
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
-import booton.css.Unit;
+import jsx.style.value.Unit;
 
 /**
  * @version 2014/11/11 21:45:28

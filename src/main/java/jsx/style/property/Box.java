@@ -12,7 +12,7 @@ package jsx.style.property;
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Numeric;
 import jsx.style.value.Shadow;
-import booton.css.Unit;
+import jsx.style.value.Unit;
 
 /**
  * @version 2014/10/28 22:02:51

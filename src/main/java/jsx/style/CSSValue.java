@@ -11,6 +11,8 @@ package jsx.style;
 
 import java.util.EnumSet;
 
+import jsx.style.value.Vendor;
+
 /**
  * @version 2014/10/28 20:38:28
  */

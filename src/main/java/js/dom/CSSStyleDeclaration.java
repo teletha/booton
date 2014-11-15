@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import js.lang.NativeObject;
-import booton.css.StyleDeclarable;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 
@@ -26,7 +25,7 @@ import booton.translator.JavascriptNative;
  * @version 2013/07/29 13:31:25
  */
 @JavascriptAPIProvider
-public abstract class CSSStyleDeclaration implements JavascriptNative, StyleDeclarable {
+public abstract class CSSStyleDeclaration implements JavascriptNative {
 
     /** The property name mapping. */
     private static final Map<String, String> names = new HashMap();
@@ -126,6 +125,5 @@ public abstract class CSSStyleDeclaration implements JavascriptNative, StyleDecl
      * @param name A property name to set.
      * @param value A property value to set.
      */
-    @Override
-    public native void setProperty(String name, String value);
+    protected native void setProperty(String name, String value);
 }

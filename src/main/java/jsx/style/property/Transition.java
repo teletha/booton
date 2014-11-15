@@ -9,7 +9,7 @@
  */
 package jsx.style.property;
 
-import static booton.css.Unit.*;
+import static jsx.style.value.Unit.*;
 
 import java.util.Set;
 
@@ -18,7 +18,7 @@ import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
-import booton.css.Unit;
+import jsx.style.value.Unit;
 
 /**
  * @version 2014/10/29 23:29:19

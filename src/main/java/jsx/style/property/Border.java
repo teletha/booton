@@ -10,7 +10,7 @@
 package jsx.style.property;
 
 import jsx.style.value.Numeric;
-import booton.css.Unit;
+import jsx.style.value.Unit;
 
 /**
  * @version 2014/10/29 9:57:18

@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton.css;
+package jsx.style.value;
 
 /**
  * @version 2013/07/20 4:48:36

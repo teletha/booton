@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jsx.style.Style;
-import booton.css.CSS;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;

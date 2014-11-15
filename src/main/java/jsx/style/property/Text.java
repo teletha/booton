@@ -9,11 +9,11 @@
  */
 package jsx.style.property;
 
-import static booton.css.Unit.*;
+import static jsx.style.value.Unit.*;
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Color;
 import jsx.style.value.Shadow;
-import booton.css.Unit;
+import jsx.style.value.Unit;
 
 /**
  * @version 2014/10/28 17:56:14

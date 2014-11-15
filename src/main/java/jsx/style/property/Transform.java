@@ -9,7 +9,7 @@
  */
 package jsx.style.property;
 
-import static jsx.style.Vendor.*;
+import static jsx.style.value.Vendor.*;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -17,9 +17,9 @@ import java.util.List;
 
 import jsx.style.CSSValue;
 import jsx.style.PropertyDefinition;
-import jsx.style.Vendor;
 import jsx.style.value.Numeric;
-import booton.css.Unit;
+import jsx.style.value.Unit;
+import jsx.style.value.Vendor;
 
 /**
  * @version 2014/10/29 12:59:12

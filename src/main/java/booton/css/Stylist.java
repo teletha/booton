@@ -12,7 +12,6 @@ package booton.css;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
@@ -35,42 +34,6 @@ public class Stylist {
 
     /** The style classes which any javascript refers. */
     private final Set<Style> styles = new LinkedHashSet();
-
-    public String write(RuleSet rule) {
-        CSSWriter writer = new CSSWriter();
-
-        // count requested properties
-        int counter = 0;
-
-        List<String> assigned = new ArrayList();
-
-        for (String selector : rule.selectors) {
-            assigned.add(rule.template.replace("$", selector));
-        }
-
-        // write requested properties only.
-        writer.writeDown(I.join(",", assigned), "{");
-
-        for (CSSProperty property : rule.properties) {
-            if (property.used) {
-                counter++;
-
-                writer.property(property);
-            }
-        }
-        writer.writeDown("}");
-
-        if (counter == 0) {
-            // this class has no properties, so we can remove it
-            writer = new CSSWriter();
-        }
-
-        for (RuleSet child : rule.children) {
-            writer.writeDown(write(child));
-        }
-
-        return writer.toString();
-    }
 
     /**
      * <p>
@@ -112,7 +75,7 @@ public class Stylist {
         for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
             for (String value : entry.getValue()) {
                 counter++;
-                writer.property(entry.getKey(), value);
+                writer.prop(entry.getKey(), value);
             }
         }
         writer.writeDown("}");

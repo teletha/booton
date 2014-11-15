@@ -12,9 +12,9 @@ package jsx.style.property;
 import java.util.EnumSet;
 
 import jsx.style.PropertyDefinition;
-import jsx.style.Vendor;
 import jsx.style.value.Numeric;
-import booton.css.Unit;
+import jsx.style.value.Unit;
+import jsx.style.value.Vendor;
 
 /**
  * @version 2014/10/28 15:16:39
