@@ -9,7 +9,7 @@
  */
 package jsx.style;
 
-import static jsx.style.value.Vendor.*;
+import static jsx.style.Vendor.*;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -19,7 +19,6 @@ import java.util.StringJoiner;
 import java.util.function.Function;
 
 import jsx.style.value.Unit;
-import jsx.style.value.Vendor;
 import booton.util.Strings;
 
 /**

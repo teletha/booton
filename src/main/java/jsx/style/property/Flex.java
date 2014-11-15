@@ -9,7 +9,7 @@
  */
 package jsx.style.property;
 
-import static jsx.style.value.Vendor.*;
+import static jsx.style.Vendor.*;
 import jsx.style.PropertyDefinition;
 
 /**

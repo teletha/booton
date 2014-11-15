@@ -9,12 +9,13 @@
  */
 package jsx.style.value;
 
+import static jsx.style.Vendor.*;
 import static jsx.style.value.Unit.*;
-import static jsx.style.value.Vendor.*;
 
 import java.util.EnumSet;
 
 import jsx.style.CSSValue;
+import jsx.style.Vendor;
 
 /**
  * @version 2014/10/28 15:23:14

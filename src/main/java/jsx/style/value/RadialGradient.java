@@ -9,7 +9,8 @@
  */
 package jsx.style.value;
 
-import static jsx.style.value.Vendor.*;
+import static jsx.style.Vendor.*;
+import jsx.style.Vendor;
 
 /**
  * @version 2014/10/28 20:37:35

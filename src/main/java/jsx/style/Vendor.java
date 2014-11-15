@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style.value;
+package jsx.style;
 
 /**
  * @version 2013/07/23 23:12:12
