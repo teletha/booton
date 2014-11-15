@@ -26,8 +26,6 @@ import booton.util.Strings;
  */
 public class PropertyDefinition<T> {
 
-    protected static EnumSet<Vendor> vendors = EnumSet.allOf(Vendor.class);
-
     /** The current processing property holder. */
     protected static StyleRule declarable;
 
@@ -36,6 +34,8 @@ public class PropertyDefinition<T> {
 
     /** The context property. */
     private final T context;
+
+    private final EnumSet<Vendor> vendors;
 
     /**
      * <p>
@@ -61,6 +61,15 @@ public class PropertyDefinition<T> {
      * </p>
      */
     protected PropertyDefinition(String name, T context) {
+        this(name, context, Standard);
+    }
+
+    /**
+     * <p>
+     * Property definition.
+     * </p>
+     */
+    protected PropertyDefinition(String name, T context, Vendor... vendors) {
         if (name == null) {
             name = Strings.hyphenate(getClass().getSimpleName());
         }
@@ -71,6 +80,7 @@ public class PropertyDefinition<T> {
 
         this.name = name;
         this.context = context;
+        this.vendors = EnumSet.of(Standard, vendors);
     }
 
     /**
@@ -166,7 +176,7 @@ public class PropertyDefinition<T> {
      * @param override A value override mechanism. @return Chainable API.
      */
     protected final T value(EnumSet<Vendor> vendors, String name, List values, String separator, boolean override) {
-        vendors.add(Standard);
+        vendors.addAll(this.vendors);
 
         declarable.property(name, values, separator, override, vendors);
 
