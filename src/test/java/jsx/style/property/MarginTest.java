@@ -7,8 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style;
+package jsx.style.property;
 
+import jsx.style.StyleTester;
 import jsx.style.value.Numeric;
 
 import org.junit.Test;

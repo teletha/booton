@@ -10,13 +10,10 @@
 package jsx.style.property;
 
 import static jsx.style.Vendor.*;
-
-import java.util.EnumSet;
-
 import jsx.style.PropertyDefinition;
 
 /**
- * @version 2014/10/21 16:21:07
+ * @version 2014/11/15 10:08:19
  */
 public class Flex extends PropertyDefinition<Flex> {
 
@@ -73,7 +70,7 @@ public class Flex extends PropertyDefinition<Flex> {
          * 
          */
         private Direction() {
-            super("flex-direction", Flex.this);
+            super("flex-direction", Flex.this, Webkit);
         }
 
         /**
@@ -85,7 +82,7 @@ public class Flex extends PropertyDefinition<Flex> {
          * @return
          */
         public Flex row() {
-            return value(EnumSet.of(Webkit), "row");
+            return value("row");
         }
 
         /**
@@ -134,7 +131,7 @@ public class Flex extends PropertyDefinition<Flex> {
          * 
          */
         private Wrap() {
-            super("flex-wrap", Flex.this);
+            super("flex-wrap", Flex.this, Webkit);
         }
 
         /**
@@ -184,7 +181,7 @@ public class Flex extends PropertyDefinition<Flex> {
          * 
          */
         private JustifyContent() {
-            super("justify-content", Flex.this);
+            super("justify-content", Flex.this, Webkit);
         }
 
         /**
@@ -262,7 +259,7 @@ public class Flex extends PropertyDefinition<Flex> {
          * 
          */
         private AlignContent() {
-            super("align-content", Flex.this);
+            super("align-content", Flex.this, Webkit);
         }
 
         /**
@@ -353,7 +350,7 @@ public class Flex extends PropertyDefinition<Flex> {
          * 
          */
         private AlignItems() {
-            super("align-items", Flex.this);
+            super("align-items", Flex.this, Webkit);
         }
 
         /**

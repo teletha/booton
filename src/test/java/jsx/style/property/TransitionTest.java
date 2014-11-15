@@ -7,7 +7,9 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style;
+package jsx.style.property;
+
+import jsx.style.StyleTester;
 
 import org.junit.Test;
 
@@ -17,7 +19,7 @@ import org.junit.Test;
 public class TransitionTest extends StyleTester {
 
     @Test
-    public void rotate() {
+    public void transition() {
         ValidatableStyle parsed = style(() -> {
             box.width(10, px);
 

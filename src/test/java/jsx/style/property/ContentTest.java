@@ -7,30 +7,27 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style;
+package jsx.style.property;
+
+import jsx.style.StyleTester;
 
 import org.junit.Test;
 
 /**
- * @version 2014/11/13 15:24:30
+ * @version 2014/11/13 14:23:53
  */
-public class VisibilityTest extends StyleTester {
+public class ContentTest extends StyleTester {
 
     @Test
-    public void visibility() {
+    public void rgb() {
         ValidatableStyle parsed = style(() -> {
-            visibility.collapse();
+            content.text("test");
         });
-        assert parsed.property("visibility", "collapse");
+        assert parsed.property("content", "'test'");
 
         parsed = style(() -> {
-            visibility.hidden();
+            content.attr("href");
         });
-        assert parsed.property("visibility", "hidden");
-
-        parsed = style(() -> {
-            visibility.visible();
-        });
-        assert parsed.property("visibility", "visible");
+        assert parsed.property("content", "attr(href)");
     }
 }

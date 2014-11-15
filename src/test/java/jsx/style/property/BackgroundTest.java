@@ -7,9 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style;
+package jsx.style.property;
 
 import static jsx.style.value.Color.*;
+import jsx.style.StyleTester;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.LinearGradient;
 

@@ -7,25 +7,32 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style;
+package jsx.style.property;
+
+import jsx.style.StyleTester;
 
 import org.junit.Test;
 
 /**
- * @version 2014/11/13 14:23:53
+ * @version 2014/11/13 14:24:48
  */
-public class ContentTest extends StyleTester {
+public class CursorTest extends StyleTester {
 
     @Test
     public void rgb() {
         ValidatableStyle parsed = style(() -> {
-            content.text("test");
+            cursor.help();
         });
-        assert parsed.property("content", "'test'");
+        assert parsed.property("cursor", "help");
 
         parsed = style(() -> {
-            content.attr("href");
+            cursor.alias();
         });
-        assert parsed.property("content", "attr(href)");
+        assert parsed.property("cursor", "alias");
+
+        parsed = style(() -> {
+            cursor.copy();
+        });
+        assert parsed.property("cursor", "copy");
     }
 }
