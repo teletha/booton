@@ -22,10 +22,10 @@ import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.StyleSheet;
+import jsx.style.value.Font;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.css.value.Font;
 
 /**
  * @version 2014/10/20 16:16:42

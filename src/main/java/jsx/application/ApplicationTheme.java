@@ -9,7 +9,7 @@
  */
 package jsx.application;
 
-import booton.css.value.Color;
+import jsx.style.value.Color;
 
 /**
  * @version 2012/12/15 22:06:17
