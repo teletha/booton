@@ -15,6 +15,7 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import js.lang.NativeObject;
 import jsx.style.Style;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
@@ -253,6 +254,33 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public Element prev() {
         return nextElementSibling();
+    }
+
+    /**
+     * <p>
+     * Get property for this element.
+     * </p>
+     * 
+     * @param name An property name.
+     * @return A chainable API.
+     */
+    public String prop(String name) {
+        return String.valueOf(((NativeObject) (Object) this).getProperty(name));
+    }
+
+    /**
+     * <p>
+     * Set property for this element.
+     * </p>
+     * 
+     * @param name An property name.
+     * @param value An property value.
+     * @return A chainable API.
+     */
+    public Element prop(String name, Object value) {
+        ((NativeObject) (Object) this).setProperty(name, value);
+
+        return this;
     }
 
     /**
