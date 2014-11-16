@@ -46,7 +46,7 @@ class VirtualElement extends VirtualFragment<Element> {
 
         // assign attributes
         for (int i = 0; i < attributes.names.length(); i++) {
-            dom.attr(attributes.names.get(i), attributes.values.get(i));
+            dom.prop(attributes.names.get(i), attributes.values.get(i));
         }
 
         // assign classes

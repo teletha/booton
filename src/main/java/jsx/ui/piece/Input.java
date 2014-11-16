@@ -45,7 +45,7 @@ public class Input extends LowLevelWidget<Input> {
      * </p>
      */
     public Input() {
-        this(new SimpleStringProperty(""));
+        this("");
     }
 
     /**
@@ -83,6 +83,8 @@ public class Input extends LowLevelWidget<Input> {
 
         // clear value
         value.setValue("");
+
+        System.out.println("clear input");
 
         // API definition
         return current;
@@ -166,6 +168,7 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected void virtualizeStructure(ContainerDescriptor $〡) {
+        System.out.println("virtualize input " + value);
         $〡.〡ª("type", "text").〡ª("value", value.get());
     }
 }
