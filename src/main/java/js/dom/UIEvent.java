@@ -169,6 +169,6 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
      * @return A value property.
      */
     public String value() {
-        return target.prop("value");
+        return target.attr("value");
     }
 }
