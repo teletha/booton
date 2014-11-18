@@ -65,6 +65,11 @@ public abstract class Document extends Node implements JavascriptNative {
     public native Element createElementNS(String namespaceURI, String qualifiedName);
 
     /**
+     * {@inheritDoc}
+     */
+    public native SVGElement createSVGElement(String name);
+
+    /**
      * <p>
      * Creates an event of the type specified. The returned object should be first initialized and
      * can then be passed to element.dispatchEvent.

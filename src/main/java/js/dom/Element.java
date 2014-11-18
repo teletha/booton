@@ -73,7 +73,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return The specified attribute value.
      */
     public String attr(String name) {
-        return getAttribute(name);
+        return String.valueOf(((NativeObject) (Object) this).getProperty(name));
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return A chainable API.
      */
     public Element attr(String name, Object value) {
-        setAttribute(name, value.toString());
+        ((NativeObject) (Object) this).setProperty(name, value);
 
         return this;
     }
@@ -254,33 +254,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public Element prev() {
         return nextElementSibling();
-    }
-
-    /**
-     * <p>
-     * Get property for this element.
-     * </p>
-     * 
-     * @param name An property name.
-     * @return A chainable API.
-     */
-    public String prop(String name) {
-        return String.valueOf(((NativeObject) (Object) this).getProperty(name));
-    }
-
-    /**
-     * <p>
-     * Set property for this element.
-     * </p>
-     * 
-     * @param name An property name.
-     * @param value An property value.
-     * @return A chainable API.
-     */
-    public Element prop(String name, Object value) {
-        ((NativeObject) (Object) this).setProperty(name, value);
-
-        return this;
     }
 
     /**

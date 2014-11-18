@@ -46,7 +46,7 @@ class VirtualElement extends VirtualFragment<Element> {
 
         // assign attributes
         for (int i = 0; i < attributes.names.length(); i++) {
-            dom.prop(attributes.names.get(i), attributes.values.get(i));
+            dom.attr(attributes.names.get(i), attributes.values.get(i));
         }
 
         // assign classes
@@ -102,15 +102,15 @@ class VirtualElement extends VirtualFragment<Element> {
      * @param indentSize A size of indent.
      * @return A string expression of human-readable element structure.
      */
-    private String format(VirtualElement element, int indentSize) {
+    private static String format(VirtualElement element, int indentSize) {
         StringBuilder builder = new StringBuilder();
         builder.append("<").append(element.name);
 
-        for (int i = 0; i < attributes.names.length(); i++) {
+        for (int i = 0; i < element.attributes.names.length(); i++) {
             builder.append(" ")
-                    .append(attributes.names.get(i))
+                    .append(element.attributes.names.get(i))
                     .append("=\"")
-                    .append(attributes.values.get(i))
+                    .append(element.attributes.values.get(i))
                     .append("\"");
         }
 
@@ -148,7 +148,7 @@ class VirtualElement extends VirtualFragment<Element> {
      * @param size A size of indent.
      * @return A space expression for indent.
      */
-    private String indent(int size) {
+    private static String indent(int size) {
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < size; i++) {
