@@ -12,6 +12,7 @@ package jsx.ui.piece;
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
 import static jsx.ui.FunctionHelper.*;
+import static jsx.ui.piece.PieceStyle.*;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -166,6 +167,6 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected void virtualizeStructure(ContainerDescriptor $〡) {
-        $〡.〡ª("type", "text").〡ª("value", value.get());
+        $〡.〡ª("type", "text").〡ª("value", value.get()).〡(InputForm);
     }
 }
