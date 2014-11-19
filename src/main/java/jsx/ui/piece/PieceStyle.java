@@ -83,7 +83,7 @@ public class PieceStyle extends StyleRuleDescriptor {
      * 
      * @version 2013/04/22 9:42:41
      */
-    private static final void baseForm() {
+    static Style FormBase = () -> {
         // Required property for single line form.
         box.height(SingleLineFormHeight);
 
@@ -96,7 +96,7 @@ public class PieceStyle extends StyleRuleDescriptor {
         // Customizable properties.
         display.inlineBlock();
         padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
-    }
+    };
 
     /**
      * <p>
@@ -105,14 +105,14 @@ public class PieceStyle extends StyleRuleDescriptor {
      * 
      * @version 2013/04/22 9:42:41
      */
-    private static final void baseBorderedForm() {
-        baseForm();
+    static Style BorderedFormBase = () -> {
+        FormBase.declare();
         border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
         focus(() -> {
             border(BorderFocusColor);
         });
-    }
+    };
 
     /**
      * <p>
@@ -121,12 +121,12 @@ public class PieceStyle extends StyleRuleDescriptor {
      * 
      * @version 2013/04/22 9:42:41
      */
-    protected static final void baseInputForm() {
-        baseBorderedForm();
+    static Style InputBase = () -> {
+        BorderedFormBase.declare();
         box.width(SingleLineFormWidth);
-    }
+    };
 
     static Style InputForm = () -> {
-        baseInputForm();
+        InputBase.declare();
     };
 }

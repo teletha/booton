@@ -48,7 +48,7 @@ public class Output extends LowLevelWidget<Output> {
      * 
      * @param text
      */
-    public Output(StringProperty text) {
+    Output(StringProperty text) {
         this.text = text;
     }
 

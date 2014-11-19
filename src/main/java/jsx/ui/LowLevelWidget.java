@@ -27,7 +27,6 @@ import jsx.style.Style;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Disposable;
 import kiss.Events;
-import kiss.I;
 import booton.reactive.css.StyleDefinition;
 
 /**
@@ -98,6 +97,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
      * @return
      */
     public T dbclick(Runnable action) {
+        disposeLater(event().observe(UIAction.DoubleClick).filter(this::isValid).to(e -> action.run()));
+
         return (T) this;
     }
 
@@ -158,9 +159,6 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     }
 
     public T showIf(ObservableValue<Boolean> condition) {
-        I.observe(condition).to(v -> {
-            System.out.println("show  " + v);
-        });
         return (T) this;
     }
 

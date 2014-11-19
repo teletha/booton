@@ -28,6 +28,7 @@ import jsx.ui.piece.Button;
 import jsx.ui.piece.CheckBox;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
+import jsx.ui.piece.UI;
 import jsx.ui.samaple.todo.TodoTasks.Task;
 import booton.reactive.css.DynamicStyle;
 
@@ -56,11 +57,8 @@ public class TodoUI extends Widget1<TodoTasks> {
         }
     };
 
-    /** The output field. */
-    final Output text = new Output(incompletedSize, v -> v + (v < 2 ? " item" : " items") + " left");
-
     /** The input field. */
-    final Input input = new Input()
+    final Input input = UI.input()
             .disableIf(this::isValidTaskSize)
             .shortcut(Key.Enter, this::add)
             .require()
@@ -68,28 +66,28 @@ public class TodoUI extends Widget1<TodoTasks> {
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
-    final Button all = new Button()
+    final Button all = UI.button()
             .label("all")
             .click(this::showAll)
             .styleIf(filter.isEqualTo(Filter.All), TodoUISkin.SELECTED_FILTER)
             .style(selectedFileter.is(Filter.All));
 
     /** The filter button. */
-    final Button active = new Button()
+    final Button active = UI.button()
             .label("active")
             .click(this::showActive)
             .styleIf(filter.isEqualTo(Filter.Active), SELECTED_FILTER)
             .style(selectedFileter.is(Filter.Active));
 
     /** The filter button. */
-    final Button completed = new Button()
+    final Button completed = UI.button()
             .label("completed")
             .click(this::showCompleted)
             .styleIf(filter.isEqualTo(Filter.Completed), SELECTED_FILTER)
             .style(selectedFileter.is(Filter.Completed));
 
     /** The clear button. */
-    final Button clear = new Button()
+    final Button clear = UI.button()
             .label("clear completed (", completedSize, ")")
             .showIf(completedSize.greaterThan(0))
             .click(todos::removeCompleted);
@@ -140,10 +138,12 @@ public class TodoUI extends Widget1<TodoTasks> {
      */
     @Override
     protected void virtualize(VirtualStructure $〡) {
+        int size = incompletedSize.get();
+
         $〡.asis.〡(input);
         $〡.vbox.〡(ITEMS, Item.class, todos.list);
         $〡.hbox.〡(FOTTER, () -> {
-            $〡.asis.〡(text);
+            $〡.asis.〡(size + " " + (size < 2 ? "item" : "items") + " left");
             $〡.hbox.〡(BUTTONS, all, active, completed);
             $〡.asis.〡(clear);
         });
@@ -155,19 +155,19 @@ public class TodoUI extends Widget1<TodoTasks> {
     class Item extends Widget1<Task> {
 
         /** The edit mode. */
-        private BooleanProperty editing = new SimpleBooleanProperty();
+        final BooleanProperty editing = new SimpleBooleanProperty();
 
         /** The completion box. */
         final CheckBox complete = new CheckBox(model1.completed);
 
         /** The todo text. */
-        final Output text = new Output(model1.contents).hideIf(editing).dbclick(this::startEdit);
+        final Output text = UI.output(model1.contents).dbclick(this::startEdit);
 
         /** The remove button. */
-        final Button delete = new Button().label("×").showIf(text.hover()).click($(todos.list::remove, model1));
+        final Button delete = UI.button().label("×").click($(todos.list::remove, model1));
 
         /** The editable todo text. */
-        final Input edit = new Input(model1.contents.get()).showIf(editing).shortcut(Key.Enter, this::finishEdit);
+        final Input edit = UI.input(model1.contents.get()).shortcut(Key.Enter, this::finishEdit);
 
         /**
          * {@inheritDoc}
@@ -175,8 +175,11 @@ public class TodoUI extends Widget1<TodoTasks> {
         @Override
         protected void virtualize(VirtualStructure $〡) {
             if (filter.getValue().test(model1)) {
-                $〡.hbox.〡(complete, text, delete);
-                $〡.asis.〡(edit);
+                if (editing.get()) {
+                    $〡.asis.〡(edit);
+                } else {
+                    $〡.hbox.〡(complete, text, delete);
+                }
             }
         }
 
@@ -186,6 +189,16 @@ public class TodoUI extends Widget1<TodoTasks> {
         protected void startEdit() {
             System.out.println("start edit");
             editing.set(true);
+
+            // ideal code
+            // FadeTransition out = new FadeTransition(1sec);
+            // out.setFromValue(1);
+            // out.setToValue(0);
+            // FadeTransition in = new FadeTransition(1sec);
+            // in.setFromValue(0);
+            // in.setToValue(1);
+            // ParallelTransition pt = new ParallelTransition(rect, in, out);
+            // pt.play();
         }
 
         /**
