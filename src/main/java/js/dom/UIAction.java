@@ -90,6 +90,9 @@ public enum UIAction implements Predicate<UIEvent> {
     Click,
 
     /** The ui event type. */
+    DoubleClick("dblclick"),
+
+    /** The ui event type. */
     ClickRight("contextmenu"),
 
     /** The ui event type. */

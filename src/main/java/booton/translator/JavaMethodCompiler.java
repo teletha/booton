@@ -448,29 +448,25 @@ class JavaMethodCompiler extends MethodVisitor {
                 // The pattenr of post-increment field is like above.
                 current.remove(0);
 
-                current
-                        .addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, true));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, true));
             } else if (match(DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
                 // The pattenr of post-decrement field is like above.
                 current.remove(0);
 
-                current
-                        .addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, true));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, true));
             } else if (match(DUP, GETFIELD, CONSTANT_1, ADD, DUPLICATE_X1, PUTFIELD)) {
                 // The pattenr of pre-increment field is like above.
                 current.remove(0);
 
-                current
-                        .addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, false));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, false));
             } else if (match(DUP, GETFIELD, CONSTANT_1, SUB, DUPLICATE_X1, PUTFIELD)) {
                 // The pattenr of pre-decrement field is like above.
                 current.remove(0);
 
-                current
-                        .addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, false));
+                current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, false));
             } else {
-                OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current
-                        .remove(1)) + "=" + current.remove(0).cast(type), type);
+                OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current.remove(1)) + "=" + current.remove(0)
+                        .cast(type), type);
 
                 if (match(DUPLICATE_X1, PUTFIELD)) {
                     // multiple assignment (i.e. this.a = this.b = 0;)
@@ -487,8 +483,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 ArrayList<Operand> context = new ArrayList();
                 context.add(current.remove(0)); // "this" context
                 context.add(new OperandNumber(virtualStructureLocalId++)); // local id parameter
-                current
-                        .addOperand(translator.translateMethod(owner, name, "(I)".concat(desc), new Class[] {int.class}, context), type);
+                current.addOperand(translator.translateMethod(owner, name, "(I)".concat(desc), new Class[] {int.class}, context), type);
             } else {
                 current.addOperand(translator.translateField(owner, name, current.remove(0)), type);
             }
@@ -517,10 +512,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(increment(translator.translateStaticField(owner, name), type, false, false));
             } else {
-                current
-                        .addExpression(new OperandExpression(translator.translateStaticField(owner, name) + "=" + current
-                                .remove(0)
-                                .cast(type), type));
+                current.addExpression(new OperandExpression(translator.translateStaticField(owner, name) + "=" + current.remove(0)
+                        .cast(type), type));
             }
             break;
 
@@ -624,8 +617,7 @@ class JavaMethodCompiler extends MethodVisitor {
             boolean values = condition != left && right.hasDominator(left);
 
             if (transition && dominator && !values) {
-                Debugger
-                        .print("Create ternary operator. condition[" + third + "]  left[" + second + "]  right[" + first + "]");
+                Debugger.print("Create ternary operator. condition[" + third + "]  left[" + second + "]  right[" + first + "]");
                 Debugger.print(nodes);
 
                 if (first == ONE && second == ZERO) {
@@ -642,12 +634,9 @@ class JavaMethodCompiler extends MethodVisitor {
                     current.remove(0);
 
                     if (first instanceof OperandCondition && second instanceof OperandCondition) {
-                        condition
-                                .addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
+                        condition.addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
                     } else {
-                        condition
-                                .addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second
-                                        .disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                        condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
                     }
                 }
 
@@ -1274,10 +1263,7 @@ class JavaMethodCompiler extends MethodVisitor {
         }
 
         // create lambda proxy class
-        current
-                .addOperand(Javascript
-                        .writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters
-                                .toString()));
+        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters.toString()));
     }
 
     /**
@@ -1558,12 +1544,10 @@ class JavaMethodCompiler extends MethodVisitor {
             if (!methodName.equals("<init>")) {
                 if (owner == script.source) {
                     // private method invocation
-                    current
-                            .addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts), returnType);
+                    current.addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts), returnType);
                 } else {
                     // super method invocation
-                    current
-                            .addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
+                    current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
                 }
             } else {
                 // constructor
@@ -1581,10 +1565,8 @@ class JavaMethodCompiler extends MethodVisitor {
                         contexts.add(new OperandExpression(model));
                         contexts.add(new OperandString(path));
 
-                        current
-                                .addOperand(translator
-                                        .translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
-                                                Class.class, Object.class, String.class}, contexts), owner);
+                        current.addOperand(translator.translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
+                                Class.class, Object.class, String.class}, contexts), owner);
                     } else {
                         // instance initialization method invocation
                         current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts), owner);
@@ -1598,8 +1580,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     if (className.equals("java/lang/Object")) {
                         // ignore
                     } else {
-                        current.addOperand(translator
-                                .translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
+                        current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
                     }
                 }
             }
@@ -1627,8 +1608,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
 
                 // translate
-                current
-                        .addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts), returnType);
+                current.addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts), returnType);
             }
             break;
         }
@@ -1772,9 +1752,7 @@ class JavaMethodCompiler extends MethodVisitor {
             } else if (clazz == String.class) {
                 code = "boot.isString(" + current.remove(0) + ")";
             } else if (clazz.isInterface() || clazz.isArray()) {
-                code = Javascript
-                        .writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current
-                                .remove(0));
+                code = Javascript.writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current.remove(0));
             } else {
                 code = current.remove(0) + " instanceof " + Javascript.computeClassName(clazz);
             }

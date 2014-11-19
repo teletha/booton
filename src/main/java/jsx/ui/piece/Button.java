@@ -26,7 +26,7 @@ public class Button extends LowLevelWidget<Button> {
     /**
      * @param name
      */
-    public Button() {
+    Button() {
     }
 
     /**

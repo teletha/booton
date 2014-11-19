@@ -18,6 +18,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import jsx.ui.piece.Input;
+import jsx.ui.piece.UI;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -122,7 +123,7 @@ public class VirtualStructureReferenceCheckTest {
      */
     private static class SingleWidget extends Widget {
 
-        private final Input input = new Input();
+        private final Input input = UI.input();
 
         /**
          * {@inheritDoc}
