@@ -347,6 +347,7 @@ public final class VirtualStructure {
         public final void 〡(Style style, Runnable children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
+            if (style != null) container.classList.push(style);
 
             // then, clean it for nested invocation
             parents.addLast(container);

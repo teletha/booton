@@ -86,6 +86,7 @@ public class Background extends Colorable<Background> {
         value("background-position", join(images, image -> image.properties[2] + " " + image.properties[3]));
         value("background-repeat", collect(images, 4), ",");
         value("background-size", collect(images, 5), ",");
+        value("background-origin", collect(images, 6), ",");
 
         return this;
     }
@@ -164,10 +165,11 @@ public class Background extends Colorable<Background> {
          * <li>[2] Horizontal Position</li>
          * <li>[3] Vertical Position</li>
          * <li>[4] Repeat</li>
-         * <li>[5] Size</li>
+         * <li>[5] Size</li> *
+         * <li>[6] Origin</li>
          * </ul>
          */
-        private Object[] properties = {"none", "scroll", "0%", "0%", "repeat", "auto"};
+        private Object[] properties = {"none", "scroll", "0%", "0%", "repeat", "auto", "padding-box"};
 
         /**
          * @return
@@ -497,6 +499,41 @@ public class Background extends Colorable<Background> {
          */
         public BackgroundImage noRepeat() {
             properties[4] = "no-repeat";
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * The background extends to the outside edge of the border (but underneath the border in
+         * z-ordering).
+         * </p>
+         */
+        public BackgroundImage borderBox() {
+            properties[6] = "border-box";
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * No background is drawn below the border (background extends to the outside edge of the
+         * padding).
+         * </p>
+         */
+        public BackgroundImage paddingBox() {
+            properties[6] = "padding-box";
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * The background is painted within (clipped to) the content box.
+         * </p>
+         */
+        public BackgroundImage contentBox() {
+            properties[6] = "content-box";
 
             return this;
         }
