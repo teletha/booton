@@ -14,6 +14,7 @@ import static jsx.ui.VirtualStructureStyle.*;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.function.IntConsumer;
 
 import jsx.style.Style;
 
@@ -39,7 +40,7 @@ public final class VirtualStructure {
      * 
      * @see #hbox(int)
      */
-    public final ContainerDescriptor hbox = new ContainerDescriptor("hbox", HBOX);
+    public final ContainerDescriptor hbox = new ContainerDescriptor("span", HBOX);
 
     /**
      * <p>
@@ -51,7 +52,7 @@ public final class VirtualStructure {
      * 
      * @see #vbox(int)
      */
-    public final ContainerDescriptor sbox = new ContainerDescriptor("sbox", SBOX);
+    public final ContainerDescriptor sbox = new ContainerDescriptor("span", SBOX);
 
     /**
      * <p>
@@ -63,7 +64,7 @@ public final class VirtualStructure {
      * 
      * @see #sbox(int)
      */
-    public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX);
+    public final ContainerDescriptor vbox = new ContainerDescriptor("span", VBOX);
 
     /** The latest context line number. */
     protected int latestContextId;
@@ -388,6 +389,32 @@ public final class VirtualStructure {
             }
 
             〡(childrenUI);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡(Style style, int size, IntConsumer child) {
+            // store the current context
+            VirtualElement container = container(LocalId.findContextLineNumber());
+            if (style != null) container.classList.push(style);
+
+            // then, clean it for nested invocation
+            parents.addLast(container);
+            this.container = null;
+
+            // precess into child items
+            for (int i = 0; i < size; i++) {
+                child.accept(i);
+            }
+
+            // restore context environment
+            parents.pollLast();
+
         }
 
         /**
