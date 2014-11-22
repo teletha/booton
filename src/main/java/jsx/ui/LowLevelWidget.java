@@ -37,6 +37,9 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     /** The holder of event listeners. */
     Publishable<?> events;
 
+    /** The holder of styles. */
+    Style[] styles;
+
     /** The disposable list. */
     private List<Disposable> disposables;
 
@@ -163,6 +166,16 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     }
 
     public T hideIf(ObservableValue<Boolean> condition) {
+        return (T) this;
+    }
+
+    /**
+     * @param championIconBox
+     * @return
+     */
+    public T style(Style... styles) {
+        this.styles = styles;
+
         return (T) this;
     }
 

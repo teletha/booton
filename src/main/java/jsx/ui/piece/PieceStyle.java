@@ -11,6 +11,7 @@ package jsx.ui.piece;
 
 import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
+import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Font;
 import jsx.style.value.Numeric;
@@ -128,5 +129,10 @@ public class PieceStyle extends StyleRuleDescriptor {
 
     static Style InputForm = () -> {
         InputBase.declare();
+    };
+
+    static Style SpriteBackground = () -> {
+        background.image(BackgroundImage.none().cover().borderBox().noRepeat());
+        display.block();
     };
 }
