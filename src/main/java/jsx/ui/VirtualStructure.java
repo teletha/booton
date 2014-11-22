@@ -287,8 +287,14 @@ public final class VirtualStructure {
                     // process child node
                     widget.virtualizeStructure(descriptor);
 
-                    // pass event listners
+                    // pass event listners and styles
                     descriptor.container(0).events = widget.events;
+
+                    if (widget.styles != null) {
+                        for (Style s : widget.styles) {
+                            descriptor.container(0).classList.push(s);
+                        }
+                    }
                 } else {
                     container.items.push(new VirtualText(String.valueOf(child)));
                 }
