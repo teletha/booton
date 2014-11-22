@@ -40,7 +40,7 @@ public final class VirtualStructure {
      * 
      * @see #hbox(int)
      */
-    public final ContainerDescriptor hbox = new ContainerDescriptor("span", HBOX);
+    public final ContainerDescriptor hbox = new ContainerDescriptor("hbox", HBOX);
 
     /**
      * <p>
@@ -52,7 +52,7 @@ public final class VirtualStructure {
      * 
      * @see #vbox(int)
      */
-    public final ContainerDescriptor sbox = new ContainerDescriptor("span", SBOX);
+    public final ContainerDescriptor sbox = new ContainerDescriptor("sbox", SBOX);
 
     /**
      * <p>
@@ -64,7 +64,7 @@ public final class VirtualStructure {
      * 
      * @see #sbox(int)
      */
-    public final ContainerDescriptor vbox = new ContainerDescriptor("span", VBOX);
+    public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX);
 
     /** The latest context line number. */
     protected int latestContextId;
@@ -398,6 +398,17 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
+        public final <T> void 〡(int size, IntConsumer child) {
+            〡((Style) null, size, child);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
         public final <T> void 〡(Style style, int size, IntConsumer child) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
@@ -414,7 +425,6 @@ public final class VirtualStructure {
 
             // restore context environment
             parents.pollLast();
-
         }
 
         /**
