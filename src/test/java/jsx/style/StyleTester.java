@@ -23,15 +23,14 @@ public class StyleTester extends StyleRuleDescriptor {
 
     protected ValidatableStyle style(Style style) {
         // empty style sheet
-        StyleSheet sheet = new StyleSheet();
-        sheet.createRule("$", style);
+        StyleRule.create("$", style);
 
         // search specified rule
         String name = "." + StyleName.name(style);
 
-        for (StyleRule rule : sheet.rules) {
+        for (StyleRule rule : StyleRule.rules) {
             if (rule.selector.equals(name)) {
-                return new ValidatableStyle(sheet, rule);
+                return new ValidatableStyle(rule);
             }
         }
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
@@ -44,17 +43,13 @@ public class StyleTester extends StyleRuleDescriptor {
      */
     public static class ValidatableStyle {
 
-        /** The target stylesheet. */
-        private final StyleSheet sheet;
-
         /** The target to validate. */
         private final StyleRule rules;
 
         /**
          * @param rules
          */
-        private ValidatableStyle(StyleSheet sheet, StyleRule rules) {
-            this.sheet = sheet;
+        private ValidatableStyle(StyleRule rules) {
             this.rules = rules;
         }
 
@@ -105,11 +100,11 @@ public class StyleTester extends StyleRuleDescriptor {
             String combinator = rules.selector + ":" + selector;
             String pseudo = rules.selector + "::" + selector;
 
-            for (StyleRule rule : sheet.rules) {
+            for (StyleRule rule : StyleRule.rules) {
                 selector = rule.selector;
 
                 if (selector.equals(combinator) || selector.equals(pseudo)) {
-                    return new ValidatableStyle(sheet, rule);
+                    return new ValidatableStyle(rule);
                 }
             }
             throw new AssertionError("The rule[" + combinator + "] or [" + pseudo + "] is not found.");

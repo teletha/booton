@@ -259,7 +259,7 @@ public class PropertyDefinition<T> {
      * @param sub A sub style descriptor.
      */
     protected static final StyleRule createSubRule(String template, Style sub) {
-        return declarable.sheet.createRule(template, sub);
+        return StyleRule.create(template, sub);
     }
 
     /**
