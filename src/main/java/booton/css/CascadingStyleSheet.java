@@ -17,15 +17,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import booton.BootonConfiguration;
 import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
-import jsx.style.StyleSheet;
 import jsx.style.value.Font;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+import booton.BootonConfiguration;
 
 /**
  * @version 2014/11/15 16:05:39
@@ -51,16 +50,13 @@ public class CascadingStyleSheet {
             root.write("@import url(" + font.uri + ");").line();
         }
 
-        // create new style sheet
-        StyleSheet sheet = I.make(StyleSheet.class);
-
         // parse all styles and create rules.
         for (Style style : styles) {
-            sheet.createRule("$", style);
+            StyleRule.create("$", style);
         }
 
         // write rules
-        for (StyleRule rule : sheet.rules) {
+        for (StyleRule rule : StyleRule.rules) {
             if (!rule.holder.isEmpty()) {
                 // write requested properties only.
                 root.write(rule.selector, "{");

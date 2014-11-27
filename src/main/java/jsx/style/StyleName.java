@@ -63,8 +63,7 @@ public class StyleName {
 
                         if (config.compression) {
                             // If this exception will be thrown, it is bug of this program. So we
-                            // must
-                            // rethrow the wrapped error in here.
+                            // must rethrow the wrapped error in here.
                             throw new Error();
                         } else {
                             styleName = field.getDeclaringClass().getName() + "___" + field.getName();
@@ -77,7 +76,13 @@ public class StyleName {
                 throw I.quiet(e);
             }
         }
-        return css.get(style);
+
+        String name = css.get(style);
+
+        if (name == null) {
+            name = style.intern();
+        }
+        return name;
     }
 
     /**

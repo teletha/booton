@@ -26,14 +26,11 @@ import kiss.Table;
  */
 public class StyleRule {
 
-    /** The list of declared rules. */
-    private static final List<StyleRule> enables = new ArrayList();
+    /** The list of rules. */
+    public static final List<StyleRule> rules = new ArrayList();
 
     /** The selector. */
     public final String selector;
-
-    /** The parent style sheet. */
-    public final StyleSheet sheet;
 
     /** The property holder. */
     public final Table<String, String> holder = new Table();
@@ -44,11 +41,20 @@ public class StyleRule {
      * </p>
      * 
      * @param name An actual selector.
-     * @param sheet A parent style sheet.
      */
-    StyleRule(String selector, StyleSheet sheet) {
+    public StyleRule() {
+        this("");
+    }
+
+    /**
+     * <p>
+     * Define style rule.
+     * </p>
+     * 
+     * @param name An actual selector.
+     */
+    StyleRule(String selector) {
         this.selector = selector;
-        this.sheet = sheet;
     }
 
     /**
@@ -146,23 +152,48 @@ public class StyleRule {
 
     /**
      * <p>
-     * Enable this rule.
+     * Create {@link StyleRule} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
+     * )
      * </p>
+     * 
+     * @param object A style description.
+     * @return A create new {@link StyleRule}.
      */
-    public void enable() {
-        if (!enables.contains(this)) {
-            enables.add(this);
-        }
-    }
+    public static StyleRule create(String template, Style style) {
+        // store parent rule
+        StyleRule parent = PropertyDefinition.declarable;
 
-    /**
-     * <p>
-     * Disable this rule.
-     * </p>
-     */
-    public void disable() {
-        if (enables.contains(this)) {
-            enables.remove(this);
+        // compute selector
+        String selector;
+
+        if (parent == null) {
+            selector = "." + StyleName.name(style);
+        } else {
+            // check pseudo element
+            String pseudo;
+            int index = parent.selector.indexOf("::");
+
+            if (index == -1) {
+                selector = parent.selector;
+                pseudo = "";
+            } else {
+                selector = parent.selector.substring(0, index);
+                pseudo = parent.selector.substring(index);
+            }
+            selector = template.replace("$", selector) + pseudo;
         }
+
+        // create child rule
+        StyleRule child = new StyleRule(selector);
+
+        // swap context rule and execute it
+        PropertyDefinition.declarable = child;
+        style.declare();
+        PropertyDefinition.declarable = parent;
+
+        // assign rule
+        rules.add(child);
+
+        return child;
     }
 }
