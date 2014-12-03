@@ -14,9 +14,11 @@ import static js.lang.Global.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import js.lang.NativeObject;
 import jsx.style.Style;
+import jsx.style.StyleRule;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -322,6 +324,24 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     public Element remove(Style... classes) {
         for (Style clazz : classes) {
             remove(clazz);
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * @param rule
+     */
+    public Element style(StyleRule rule) {
+        CSSStyleDeclaration style = style();
+
+        for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
+            String name = entry.getKey();
+
+            for (String value : entry.getValue()) {
+                style.set(name, value);
+            }
         }
 
         // API definition
@@ -740,4 +760,5 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     @JavascriptNativeProperty
     public final native void scrollIntoView();
+
 }

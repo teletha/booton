@@ -13,6 +13,7 @@ import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.style.Style;
+import jsx.style.StyleRule;
 
 /**
  * @version 2014/10/07 12:49:29
@@ -51,7 +52,14 @@ class VirtualElement extends VirtualFragment<Element> {
 
         // assign classes
         for (int i = 0; i < classList.length(); i++) {
-            dom.add(classList.get(i));
+            Style style = classList.get(i);
+
+            if (style instanceof Style) {
+                StyleRule rule = StyleRule.create("", style);
+                dom.style(rule);
+            } else {
+                dom.add(style);
+            }
         }
 
         // assign event listeners

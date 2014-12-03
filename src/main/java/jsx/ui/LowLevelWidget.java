@@ -38,7 +38,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     Publishable<?> events;
 
     /** The holder of styles. */
-    Style[] styles;
+    List<Style> styles;
 
     /** The disposable list. */
     private List<Disposable> disposables;
@@ -174,7 +174,13 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
      * @return
      */
     public T style(Style... styles) {
-        this.styles = styles;
+        if (this.styles == null) {
+            this.styles = new ArrayList();
+        }
+
+        for (Style style : styles) {
+            this.styles.add(style);
+        }
 
         return (T) this;
     }

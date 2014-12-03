@@ -9,11 +9,13 @@
  */
 package jsx.ui.piece;
 
+import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.piece.PieceStyle.*;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import jsx.style.property.Background.BackgroundImage;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 
@@ -35,8 +37,12 @@ public class SpriteImage extends LowLevelWidget<SpriteImage> {
      * 
      */
     SpriteImage(String uri, int size) {
-        this.uri = "background-image:url(" + uri + ");";
+        this.uri = uri;
         this.size = size - 1;
+
+        style(() -> {
+            background.image(BackgroundImage.url(uri).horizontal(index.get() / size * 100, percent));
+        });
     }
 
     /**
@@ -52,6 +58,6 @@ public class SpriteImage extends LowLevelWidget<SpriteImage> {
      */
     @Override
     protected void virtualizeStructure(ContainerDescriptor $〡) {
-        $〡.〡ª("style", uri + "background-position:" + index.get() / size * 100 + "% 0%").〡(SpriteBackground);
+        $〡.〡(SpriteBackground);
     }
 }

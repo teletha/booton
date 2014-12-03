@@ -278,7 +278,7 @@ public final class VirtualStructure {
                     // process child nodes
                     widget.assemble(new VirtualStructure(virtualize));
                 } else if (child instanceof LowLevelWidget) {
-                    LowLevelWidget widget = (LowLevelWidget) child;
+                    LowLevelWidget<?> widget = (LowLevelWidget) child;
 
                     // create descriptor
                     ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
