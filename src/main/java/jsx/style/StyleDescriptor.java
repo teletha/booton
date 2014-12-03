@@ -47,7 +47,7 @@ public class StyleDescriptor {
      * typographic texts.)
      * </p>
      */
-    protected static final Unit em = Unit.em;
+    public static final Unit em = Unit.em;
 
     /**
      * <p>
@@ -56,7 +56,7 @@ public class StyleDescriptor {
      * even for fonts that don't contain an "x".
      * </p>
      */
-    protected static final Unit ex = Unit.ex;
+    public static final Unit ex = Unit.ex;
 
     /**
      * <p>
@@ -68,7 +68,7 @@ public class StyleDescriptor {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit px = Unit.px;
+    public static final Unit px = Unit.px;
 
     /**
      * <p>
@@ -80,33 +80,33 @@ public class StyleDescriptor {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit in = Unit.in;
+    public static final Unit in = Unit.in;
 
     /**
      * 1/100th of the width of the viewport.
      */
-    protected static final Unit vh = Unit.vh;
+    public static final Unit vh = Unit.vh;
 
     /**
      * 1/100th of the width of the viewport.
      */
-    protected static final Unit vw = Unit.vw;
+    public static final Unit vw = Unit.vw;
 
     /**
      * 1/100th of the minimum value between the height and the width of the viewport.
      */
-    protected static final Unit vmin = Unit.vmin;
+    public static final Unit vmin = Unit.vmin;
 
     /**
      * 1/100th of the maximum value between the height and the width of the viewport.
      */
-    protected static final Unit vmax = Unit.vmax;
+    public static final Unit vmax = Unit.vmax;
 
     /**
      * deg which represents an angle in degrees. One full circle is 360deg. E.g. 0deg, 90deg,
      * 360deg.
      */
-    protected static final Unit deg = Unit.deg;
+    public static final Unit deg = Unit.deg;
 
     /**
      * <p>
@@ -118,7 +118,7 @@ public class StyleDescriptor {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit s = Unit.s;
+    public static final Unit s = Unit.s;
 
     /**
      * <p>
@@ -130,7 +130,7 @@ public class StyleDescriptor {
      * value of 0.5em should be used.
      * </p>
      */
-    protected static final Unit ms = Unit.ms;
+    public static final Unit ms = Unit.ms;
 
     /**
      * <p>
@@ -147,14 +147,14 @@ public class StyleDescriptor {
      * value of that property.
      * </p>
      */
-    protected static final Unit percent = Unit.percent;
+    public static final Unit percent = Unit.percent;
 
     /**
      * <p>
      * The width, height and box-sizing property.
      * </p>
      */
-    protected static final Box box = new Box();
+    public static final Box box = new Box();
 
     /**
      * <p>
@@ -162,7 +162,7 @@ public class StyleDescriptor {
      * an element.
      * </p>
      */
-    protected static final Cursor cursor = new Cursor();
+    public static final Cursor cursor = new Cursor();
 
     /**
      * <p>
@@ -171,7 +171,7 @@ public class StyleDescriptor {
      * background-color, background-image, background-position, background-repeat, background-size,
      * </p>
      */
-    protected static final Background background = new Background();
+    public static final Background background = new Background();
 
     /**
      * <p>
@@ -180,7 +180,7 @@ public class StyleDescriptor {
      * more of: border-width, border-style, border-color.
      * </p>
      */
-    protected static final Borders border = new Borders();
+    public static final Borders border = new Borders();
 
     /**
      * <p>
@@ -189,7 +189,7 @@ public class StyleDescriptor {
      * elements.
      * </p>
      */
-    protected static final Content content = new Content();
+    public static final Content content = new Content();
 
     /**
      * <p>
@@ -203,7 +203,7 @@ public class StyleDescriptor {
      * off. The document is rendered as though the element doesn't exist in the document tree.
      * </p>
      */
-    protected static final Display display = new Display();
+    public static final Display display = new Display();
 
     /**
      * <p>
@@ -212,7 +212,7 @@ public class StyleDescriptor {
      * proportional to their flex grow factor or their flex shrink factor to prevent overflow.
      * </p>
      */
-    protected static final FlexItem flexItem = new FlexItem();
+    public static final FlexItem flexItem = new FlexItem();
 
     /**
      * <p>
@@ -221,7 +221,7 @@ public class StyleDescriptor {
      * system font, using specific keywords.
      * </p>
      */
-    protected static final Font font = new Font();
+    public static final Font font = new Font();
 
     /**
      * <p>
@@ -230,7 +230,7 @@ public class StyleDescriptor {
      * minimal height of line boxes within the element.
      * </p>
      */
-    protected static final Line line = new Line();
+    public static final Line line = new Line();
 
     /**
      * <p>
@@ -238,7 +238,7 @@ public class StyleDescriptor {
      * list-style-image and list-style-position.
      * </p>
      */
-    protected static final ListStyle listStyle = new ListStyle();
+    public static final ListStyle listStyle = new ListStyle();
 
     /**
      * <p>
@@ -250,7 +250,7 @@ public class StyleDescriptor {
      * One single value applies to all four sides.
      * </p>
      */
-    protected static final BoxLength margin = new BoxLength("margin");
+    public static final BoxLength margin = new BoxLength("margin");
 
     /**
      * <p>
@@ -267,7 +267,7 @@ public class StyleDescriptor {
      * draws a non-rectangular shape around a construct like this:</li>
      * </ul>
      */
-    protected static final Outline outline = new Outline();
+    public static final Outline outline = new Outline();
 
     /**
      * <p>
@@ -283,7 +283,7 @@ public class StyleDescriptor {
      * relevant HTML element, even when overflow has the hidden value an element may need to scroll.
      * </p>
      */
-    protected static final Overflows overflow = new Overflows();
+    public static final Overflows overflow = new Overflows();
 
     /**
      * <p>
@@ -296,7 +296,7 @@ public class StyleDescriptor {
      * padding-right, padding-bottom, padding-left).
      * </p>
      */
-    protected static final BoxLength padding = new BoxLength("padding");
+    public static final BoxLength padding = new BoxLength("padding");
 
     /**
      * <p>
@@ -305,7 +305,7 @@ public class StyleDescriptor {
      * unspecified, the same characteristics of the visiblePainted value apply to SVG content.
      * </p>
      */
-    protected static final PointerEvents pointerEvents = new PointerEvents();
+    public static final PointerEvents pointerEvents = new PointerEvents();
 
     /**
      * <p>
@@ -313,10 +313,10 @@ public class StyleDescriptor {
      * useful for scripted animation effects.
      * </p>
      */
-    protected static final Position position = new Position();
+    public static final Position position = new Position();
 
     /** The text related style. */
-    protected static final Text text = new Text();
+    public static final Text text = new Text();
 
     /**
      * <p>
@@ -329,14 +329,14 @@ public class StyleDescriptor {
      * case the object will act as a containing block for position: fixed elements that it contains.
      * </p>
      */
-    protected static final Transform transform = new Transform();
+    public static final Transform transform = new Transform();
 
     /**
      * <p>
      * The visibility CSS property has two purposes:
      * </p>
      */
-    protected static final Visibility visibility = new Visibility();
+    public static final Visibility visibility = new Visibility();
 
     /**
      * <p>
@@ -351,7 +351,7 @@ public class StyleDescriptor {
      *            will be round up to 0 or 255.
      * @return A new color.
      */
-    protected static final Color rgb(int red, int green, int blue) {
+    public static final Color rgb(int red, int green, int blue) {
         return Color.rgb(red, green, blue);
     }
 
@@ -368,7 +368,7 @@ public class StyleDescriptor {
      *            will be round up to 0 or 255.
      * @return A new color.
      */
-    protected static final Color rgba(int red, int green, int blue, double alpha) {
+    public static final Color rgba(int red, int green, int blue, double alpha) {
         return Color.rgba(red, green, blue, alpha);
     }
 
@@ -384,7 +384,7 @@ public class StyleDescriptor {
      * @param lightness The brightness relative to the brightness of a similarly illuminated white.
      * @return A new color.
      */
-    protected static final Color hsl(int hue, int saturation, int lightness) {
+    public static final Color hsl(int hue, int saturation, int lightness) {
         return hsla(hue, saturation, lightness, 1);
     }
 
@@ -401,7 +401,7 @@ public class StyleDescriptor {
      * @param alpha The transparency.
      * @return A new color.
      */
-    protected static final Color hsla(int hue, int saturation, int lightness, double alpha) {
+    public static final Color hsla(int hue, int saturation, int lightness, double alpha) {
         return new Color(hue, saturation, lightness, alpha);
     }
 
@@ -416,7 +416,7 @@ public class StyleDescriptor {
      * 
      * @return A new linear gradient image.
      */
-    protected static final LinearGradient linear() {
+    public static final LinearGradient linear() {
         return new LinearGradient();
     }
 
@@ -431,7 +431,7 @@ public class StyleDescriptor {
      * 
      * @return A new linear gradient image.
      */
-    protected static final LinearGradient linear(Color start, Color end) {
+    public static final LinearGradient linear(Color start, Color end) {
         return new LinearGradient().color(start, end);
     }
 
@@ -444,7 +444,7 @@ public class StyleDescriptor {
      * 
      * @return A new linear gradient image.
      */
-    protected static final RadialGradient radial() {
+    public static final RadialGradient radial() {
         return new RadialGradient();
     }
 
@@ -457,7 +457,7 @@ public class StyleDescriptor {
      * 
      * @return A new linear gradient image.
      */
-    protected static final RadialGradient radial(Color start, Color end) {
+    public static final RadialGradient radial(Color start, Color end) {
         return new RadialGradient().color(start, end);
     }
 
@@ -468,7 +468,7 @@ public class StyleDescriptor {
      * 
      * @return A new shadow.
      */
-    protected static final Shadow shadow() {
+    public static final Shadow shadow() {
         return new Shadow();
     }
 
@@ -487,6 +487,6 @@ public class StyleDescriptor {
     // *
     // * @param styles Styles to import.
     // */
-    // protected final void require(Style... styles) {
+    // public final void require(Style... styles) {
     // }
 }

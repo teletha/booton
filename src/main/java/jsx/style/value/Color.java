@@ -243,12 +243,14 @@ public class Color {
         float satuation = 0;
         float lightness = (max + min) / 2;
 
-        if (max == red) {
-            hue = 60 * (green - blue) / diff;
-        } else if (max == green) {
-            hue = 60 * (blue - red) / diff + 120;
-        } else if (max == blue) {
-            hue = 60 * (red - green) / diff + 240;
+        if (diff != 0) {
+            if (max == red) {
+                hue = 60 * (green - blue) / diff;
+            } else if (max == green) {
+                hue = 60 * (blue - red) / diff + 120;
+            } else if (max == blue) {
+                hue = 60 * (red - green) / diff + 240;
+            }
         }
 
         if (hue < 0) {
