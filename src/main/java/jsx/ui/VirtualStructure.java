@@ -258,6 +258,7 @@ public final class VirtualStructure {
          */
         public final void 〡(Style style, Object... children) {
             // store the current context
+            System.out.println(LocalId.findContextLineNumber());
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) container.classList.push(style);
 

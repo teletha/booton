@@ -193,6 +193,58 @@ public class VirtualStructureTest {
         });
     }
 
+    @Test
+    public void loop() {
+        VirtualStructure root〡 = new VirtualStructure();
+        root〡.hbox.〡(() -> {
+            for (int i = 0; i < 3; i++) {
+                root〡.vbox.〡("text" + i);
+            }
+        });
+
+        VirtualElement root = root〡.getRoot();
+        assert root.items.length() == 1;
+        assertAsElement(root, 0, "hbox", e -> {
+            assert e.items.length() == 3;
+
+            assertAsElement(e, 0, "vbox", child -> {
+                assertAsText(child, "text0");
+            });
+            assertAsElement(e, 1, "vbox", child -> {
+                assertAsText(child, "text1");
+            });
+            assertAsElement(e, 2, "vbox", child -> {
+                assertAsText(child, "text2");
+            });
+        });
+    }
+
+    @Test
+    public void loop2() {
+        VirtualStructure root〡 = new VirtualStructure();
+        root〡.hbox.〡(() -> {
+            root〡.vbox.〡("text0");
+            root〡.vbox.〡("text1");
+            root〡.vbox.〡("text2");
+        });
+
+        VirtualElement root = root〡.getRoot();
+        assert root.items.length() == 1;
+        assertAsElement(root, 0, "hbox", e -> {
+            assert e.items.length() == 3;
+
+            assertAsElement(e, 0, "vbox", child -> {
+                assertAsText(child, "text0");
+            });
+            assertAsElement(e, 1, "vbox", child -> {
+                assertAsText(child, "text1");
+            });
+            assertAsElement(e, 2, "vbox", child -> {
+                assertAsText(child, "text2");
+            });
+        });
+    }
+
     /**
      * @version 2014/09/13 12:18:58
      */

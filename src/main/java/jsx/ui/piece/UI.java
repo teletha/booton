@@ -76,17 +76,4 @@ public class UI {
     public static final Output output(StringProperty text) {
         return new Output(text);
     }
-
-    /**
-     * <p>
-     * Create {@link SpriteImage} with the specified value.
-     * </p>
-     * 
-     * @param uri
-     * @param size
-     * @return
-     */
-    public static final SpriteImage image(String uri, int size) {
-        return new SpriteImage(uri, size);
-    }
 }
