@@ -28,7 +28,7 @@ import booton.translator.Translator;
 class LocalId {
 
     /** The class name. */
-    private static final String CLASS = VirtualStructure.class.getName() + "$";
+    private static final String CLASS = VirtualStructure2.class.getName();
 
     /**
      * <p>
