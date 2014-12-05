@@ -10,101 +10,75 @@
 package jsx.ui;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/13 2:05:34
  */
-@RunWith(ScriptRunner.class)
-public class VirtualStructureDiffTest extends DiffTestBase {
+// @RunWith(ScriptRunner.class)
+public class VirtualStructureDiffTest extends DiffTestBase2 {
 
     @Test
     public void textChange() {
-        VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis.〡("text");
+        VirtualStructure2 prev = new VirtualStructure2();
+        prev.e("text");
 
-        VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis.〡("change");
+        VirtualStructure2 next = new VirtualStructure2();
+        next.e("change");
 
-        assertDiff(prev〡, next〡, 1);
+        assertDiff(prev, next, 1);
     }
 
     @Test
     public void textChangeSequentially() {
-        VirtualStructure fisrt〡 = new VirtualStructure();
-        fisrt〡.asis.〡("text1", "text2");
+        VirtualStructure2 fisrt = new VirtualStructure2();
+        fisrt.asis("text1", "text2");
 
-        VirtualStructure second〡 = new VirtualStructure();
-        second〡.asis.〡("second", "text2");
+        VirtualStructure2 second = new VirtualStructure2();
+        second.asis("second", "text2");
 
-        assertDiff(fisrt〡, second〡, 1);
+        assertDiff(fisrt, second, 1);
 
-        VirtualStructure third〡 = new VirtualStructure();
-        third〡.asis.〡("third", "text2");
+        VirtualStructure2 third = new VirtualStructure2();
+        third.asis("third", "text2");
 
-        assertDiff(second〡, third〡, 1);
+        assertDiff(second, third, 1);
 
-        VirtualStructure last〡 = new VirtualStructure();
-        last〡.asis.〡("third", "last");
+        VirtualStructure2 last = new VirtualStructure2();
+        last.asis("third", "last");
 
-        assertDiff(third〡, last〡, 1);
+        assertDiff(third, last, 1);
     }
 
     @Test
     public void textsChange() {
-        VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis.〡("text1", "text2", "text3");
+        VirtualStructure2 prev = new VirtualStructure2();
+        prev.asis("text1", "text2", "text3");
 
-        VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis.〡("text4", "text2", "text3");
+        VirtualStructure2 next = new VirtualStructure2();
+        next.asis("text4", "text2", "text3");
 
-        assertDiff(prev〡, next〡, 1);
+        assertDiff(prev, next, 1);
     }
 
     @Test
     public void textNoChange() {
-        VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis.〡("text");
+        VirtualStructure2 prev = new VirtualStructure2();
+        prev.e("text");
 
-        VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis.〡("text");
+        VirtualStructure2 next = new VirtualStructure2();
+        next.e("text");
 
-        assertDiff(prev〡, next〡, 0);
+        assertDiff(prev, next, 0);
     }
 
     @Test
     public void hboxTextChange() {
-        VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.hbox(1).〡("text");
+        VirtualStructure2 prev = new VirtualStructure2();
+        prev.element(1, "div", VirtualStructureStyle.HBOX, "text");
 
-        VirtualStructure next〡 = new VirtualStructure();
-        next〡.hbox(1).〡("change");
+        VirtualStructure2 next = new VirtualStructure2();
+        next.element(1, "div", VirtualStructureStyle.HBOX, "change");
 
-        assertDiff(prev〡, next〡, 1);
-    }
-
-    @Test
-    public void boxTypeChange() {
-        assertDiff(change(true), change(false), 1);
-    }
-
-    /**
-     * <p>
-     * Create structure for multi box list.
-     * </p>
-     * 
-     * @param items A list items.
-     * @return A created structure.
-     */
-    private <T> VirtualStructure change(boolean condition) {
-        VirtualStructure $〡 = new VirtualStructure();
-        if (condition) {
-            $〡.vbox.〡("text");
-        } else {
-            $〡.hbox.〡("text");
-        }
-        return $〡;
+        assertDiff(prev, next, 1);
     }
 }
