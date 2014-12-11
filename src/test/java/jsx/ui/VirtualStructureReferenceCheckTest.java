@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import jsx.style.Style;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.UI;
 
@@ -30,6 +31,10 @@ import booton.soeur.ScriptRunner;
  */
 @RunWith(ScriptRunner.class)
 public class VirtualStructureReferenceCheckTest {
+
+    /** Empty style. */
+    private static final Style style = () -> {
+    };
 
     @Test
     public void text() throws Exception {
@@ -93,7 +98,7 @@ public class VirtualStructureReferenceCheckTest {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(() -> {
+            $〡.hbox.〡(style, () -> {
                 for (int i = 1; i <= property.get(); i++) {
                     $〡.vbox(i).〡("Text" + i);
                 }

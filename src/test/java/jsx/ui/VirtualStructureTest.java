@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import jsx.style.Style;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,6 +25,10 @@ import booton.soeur.ScriptRunner;
  */
 @RunWith(ScriptRunner.class)
 public class VirtualStructureTest {
+
+    /** Empty style. */
+    private static final Style style = () -> {
+    };
 
     @Test
     public void text() throws Exception {
@@ -102,7 +108,7 @@ public class VirtualStructureTest {
     @Test
     public void boxTextNestedCall() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(() -> {
+        root〡.hbox.〡(style, () -> {
             root〡.hbox.〡("nested text");
         });
 
@@ -138,7 +144,7 @@ public class VirtualStructureTest {
         List<String> items = Arrays.asList("first", "second", "third");
 
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(StringWidget.class, items);
+        root〡.hbox.〡(style, StringWidget.class, items);
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
@@ -175,7 +181,7 @@ public class VirtualStructureTest {
     @Test
     public void range() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(3, i -> {
+        root〡.hbox.〡(style, 3, i -> {
             root〡.vbox.〡("text" + i);
         });
 
