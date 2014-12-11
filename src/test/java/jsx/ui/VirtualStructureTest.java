@@ -14,11 +14,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/11 14:57:41
  */
-// @RunWith(ScriptRunner.class)
+@RunWith(ScriptRunner.class)
 public class VirtualStructureTest {
 
     @Test
@@ -182,65 +185,13 @@ public class VirtualStructureTest {
             assert e.items.length() == 3;
 
             assertAsElement(e, 0, "vbox", child -> {
-                assertAsText(child, "text0");
+                assertAsText(child.items.get(0), "text0");
             });
             assertAsElement(e, 1, "vbox", child -> {
-                assertAsText(child, "text1");
+                assertAsText(child.items.get(0), "text1");
             });
             assertAsElement(e, 2, "vbox", child -> {
-                assertAsText(child, "text2");
-            });
-        });
-    }
-
-    @Test
-    public void loop() {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(() -> {
-            for (int i = 0; i < 3; i++) {
-                root〡.vbox.〡("text" + i);
-            }
-        });
-
-        VirtualElement root = root〡.getRoot();
-        assert root.items.length() == 1;
-        assertAsElement(root, 0, "hbox", e -> {
-            assert e.items.length() == 3;
-
-            assertAsElement(e, 0, "vbox", child -> {
-                assertAsText(child, "text0");
-            });
-            assertAsElement(e, 1, "vbox", child -> {
-                assertAsText(child, "text1");
-            });
-            assertAsElement(e, 2, "vbox", child -> {
-                assertAsText(child, "text2");
-            });
-        });
-    }
-
-    @Test
-    public void loop2() {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(() -> {
-            root〡.vbox.〡("text0");
-            root〡.vbox.〡("text1");
-            root〡.vbox.〡("text2");
-        });
-
-        VirtualElement root = root〡.getRoot();
-        assert root.items.length() == 1;
-        assertAsElement(root, 0, "hbox", e -> {
-            assert e.items.length() == 3;
-
-            assertAsElement(e, 0, "vbox", child -> {
-                assertAsText(child, "text0");
-            });
-            assertAsElement(e, 1, "vbox", child -> {
-                assertAsText(child, "text1");
-            });
-            assertAsElement(e, 2, "vbox", child -> {
-                assertAsText(child, "text2");
+                assertAsText(child.items.get(0), "text2");
             });
         });
     }

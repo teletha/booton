@@ -219,11 +219,11 @@ public final class VirtualStructure {
                     int id = localId;
 
                     if (id == 0) {
-                        id = LocalId.generate();
+                        localId = id = LocalId.generate();
                     }
 
                     if (modifier != 0) {
-                        id = id ^ modifier;
+                        latestLocalId = id = id ^ modifier;
                     }
 
                     // built-in container
@@ -258,7 +258,6 @@ public final class VirtualStructure {
          */
         public final void 〡(Style style, Object... children) {
             // store the current context
-            System.out.println(LocalId.findContextLineNumber());
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) container.classList.push(style);
 
@@ -427,6 +426,7 @@ public final class VirtualStructure {
 
             // precess into child items
             for (int i = 0; i < size; i++) {
+                modifier = i + size;
                 child.accept(i);
             }
 

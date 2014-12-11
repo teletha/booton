@@ -333,14 +333,15 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     /**
      * @param rule
      */
-    public Element style(StyleRule rule) {
-        CSSStyleDeclaration style = style();
+    public Element style(Style style) {
+        StyleRule rule = StyleRule.create("", style);
+        CSSStyleDeclaration dec = style();
 
         for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
             String name = entry.getKey();
 
             for (String value : entry.getValue()) {
-                style.set(name, value);
+                dec.set(name, value);
             }
         }
 
