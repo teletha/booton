@@ -13,14 +13,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import booton.sample.Person;
+import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/13 14:10:28
  */
-// @RunWith(ScriptRunner.class)
-public class VirtualStructureListDiffTest extends DiffTestBase2 {
+@RunWith(ScriptRunner.class)
+public class VirtualStructureListDiffTest extends DiffTestBase {
 
     @Test
     public void add() {
@@ -52,11 +54,11 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
 
         person.setName("Yukina");
         person.setAge(14);
-        VirtualStructure2 prev = bean(person);
+        VirtualStructure prev = bean(person);
 
         person.setName("Asagi");
         person.setAge(15);
-        VirtualStructure2 next = bean(person);
+        VirtualStructure next = bean(person);
 
         assertDiff(prev, next, 2);
     }
@@ -66,12 +68,12 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
         Person person = new Person();
         person.setName("Yukina");
         person.setAge(14);
-        VirtualStructure2 prev = bean(person);
+        VirtualStructure prev = bean(person);
 
         person = new Person();
         person.setName("Asagi");
         person.setAge(15);
-        VirtualStructure2 next = bean(person);
+        VirtualStructure next = bean(person);
 
         assertDiff(prev, next, 1);
     }
@@ -84,11 +86,11 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure2 single(List<String> items) {
-        VirtualStructure2 $ = new VirtualStructure2();
-        $.e(VirtualStructureStyle.HBOX, SingleBox.class, items);
+    private <T> VirtualStructure single(List<String> items) {
+        VirtualStructure $〡 = new VirtualStructure();
+        $〡.hbox.〡(SingleBox.class, items);
 
-        return $;
+        return $〡;
     }
 
     /**
@@ -103,14 +105,6 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
         protected void virtualize(VirtualStructure $〡) {
             $〡.hbox.〡(model1);
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize(VirtualStructure2 $) {
-            $.e(VirtualStructureStyle.HBOX, model1);
-        }
     }
 
     /**
@@ -121,11 +115,11 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure2 multi(List<String> items) {
-        VirtualStructure2 $ = new VirtualStructure2();
-        $.e(VirtualStructureStyle.HBOX, MultiBox.class, items);
+    private <T> VirtualStructure multi(List<String> items) {
+        VirtualStructure $〡 = new VirtualStructure();
+        $〡.hbox.〡(MultiBox.class, items);
 
-        return $;
+        return $〡;
     }
 
     /**
@@ -141,16 +135,6 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
             $〡.hbox.〡(model1 + "1");
             $〡.hbox.〡(model1 + "2");
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize(VirtualStructure2 $) {
-            $.e(VirtualStructureStyle.HBOX, model1 + "1");
-            $.e(VirtualStructureStyle.HBOX, model1 + "2");
-        }
-
     }
 
     /**
@@ -161,11 +145,11 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure2 nest(List<String> items) {
-        VirtualStructure2 $ = new VirtualStructure2();
-        $.e(VirtualStructureStyle.HBOX, NestBox.class, items);
+    private <T> VirtualStructure nest(List<String> items) {
+        VirtualStructure $〡 = new VirtualStructure();
+        $〡.hbox.〡(NestBox.class, items);
 
-        return $;
+        return $〡;
     }
 
     /**
@@ -183,17 +167,6 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
             $〡.hbox.〡(SingleBox.class, items);
             $〡.vbox.〡(SingleBox.class, items);
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize(VirtualStructure2 $) {
-            List<String> items = Arrays.asList(model1 + "A", model1 + "B");
-
-            $.e(VirtualStructureStyle.HBOX, SingleBox.class, items);
-            $.e(VirtualStructureStyle.VBOX, SingleBox.class, items);
-        }
     }
 
     /**
@@ -204,7 +177,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
      * @param item A bean item.
      * @return A created structure.
      */
-    private <T> VirtualStructure2 bean(Person item) {
+    private <T> VirtualStructure bean(Person item) {
         return bean(Arrays.asList(item));
     }
 
@@ -216,11 +189,11 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure2 bean(List<Person> items) {
-        VirtualStructure2 $ = new VirtualStructure2();
-        $.e(VirtualStructureStyle.HBOX, PersonBox.class, items);
+    private <T> VirtualStructure bean(List<Person> items) {
+        VirtualStructure $〡 = new VirtualStructure();
+        $〡.hbox.〡(PersonBox.class, items);
 
-        return $;
+        return $〡;
     }
 
     /**
@@ -234,14 +207,6 @@ public class VirtualStructureListDiffTest extends DiffTestBase2 {
         @Override
         protected void virtualize(VirtualStructure $〡) {
             $〡.hbox.〡(model1.getName(), " is ", model1.getAge(), " years old.");
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize(VirtualStructure2 $) {
-            $.e(VirtualStructureStyle.HBOX, model1.getName(), " is ", model1.getAge(), " years old.");
         }
     }
 }

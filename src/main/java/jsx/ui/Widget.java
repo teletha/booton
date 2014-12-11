@@ -77,15 +77,6 @@ public abstract class Widget {
 
     /**
      * <p>
-     * Create virtual elements of this {@link Widget}.
-     * </p>
-     * 
-     * @param $〡 Domain Specific Language for virtual elements.
-     */
-    protected abstract void virtualize(VirtualStructure2 $);
-
-    /**
-     * <p>
      * This is internal API.
      * </p>
      * <p>

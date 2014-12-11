@@ -13,7 +13,6 @@ import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.style.Style;
-import jsx.style.StyleRule;
 
 /**
  * @version 2014/10/07 12:49:29
@@ -55,8 +54,7 @@ class VirtualElement extends VirtualFragment<Element> {
             Style style = classList.get(i);
 
             if (style instanceof Style) {
-                StyleRule rule = StyleRule.create("", style);
-                dom.style(rule);
+                dom.style(style);
             } else {
                 dom.add(style);
             }
@@ -120,6 +118,15 @@ class VirtualElement extends VirtualFragment<Element> {
                     .append("=\"")
                     .append(element.attributes.values.get(i))
                     .append("\"");
+        }
+
+        if (element.classList.length() != 0) {
+            builder.append(" class=\"");
+
+            for (int i = 0; i < element.classList.length(); i++) {
+                builder.append(element.classList.get(i).intern()).append(" ");
+            }
+            builder.append("\"");
         }
 
         boolean hasChild = element.items.length() != 0;
