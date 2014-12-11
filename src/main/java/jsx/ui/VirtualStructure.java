@@ -12,8 +12,10 @@ package jsx.ui;
 import static jsx.ui.VirtualStructureStyle.*;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import jsx.style.Style;
@@ -327,21 +329,18 @@ public final class VirtualStructure {
          * Define children.
          * </p>
          * 
-         * @param children A list of child nodes.
+         * @param children A list of child widget.
          */
-        public final void 〡(Runnable children) {
-            // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
-
-            // then, clean it for nested invocation
-            parents.addLast(container);
-            this.container = null;
-
+        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // precess into child items
-            children.run();
+            int index = 0;
+            Object[] childrenUI = new Object[children.size()];
 
-            // restore context environment
-            parents.pollLast();
+            for (T child : children) {
+                childrenUI[index++] = Widget.of(childType, child);
+            }
+
+            〡(style, childrenUI);
         }
 
         /**
@@ -374,8 +373,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Class<? extends Widget1<T>> childType, Collection<T> children) {
-            〡((Style) null, childType, children);
+        public final <T> void 〡(Style style, T[] items, Consumer<T> child) {
+            〡(style, Arrays.asList(items), child);
         }
 
         /**
@@ -385,27 +384,23 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
-            // precess into child items
-            int index = 0;
-            Object[] childrenUI = new Object[children.size()];
+        public final <T> void 〡(Style style, Collection<T> items, Consumer<T> child) {
+            // store the current context
+            VirtualElement container = container(LocalId.findContextLineNumber());
+            if (style != null) container.classList.push(style);
 
-            for (T child : children) {
-                childrenUI[index++] = Widget.of(childType, child);
+            // then, clean it for nested invocation
+            parents.addLast(container);
+            this.container = null;
+
+            // precess into child items
+            for (T item : items) {
+                modifier = item.hashCode();
+                child.accept(item);
             }
 
-            〡(childrenUI);
-        }
-
-        /**
-         * <p>
-         * Define children.
-         * </p>
-         * 
-         * @param children A list of child widget.
-         */
-        public final <T> void 〡(int size, IntConsumer child) {
-            〡((Style) null, size, child);
+            // restore context environment
+            parents.pollLast();
         }
 
         /**
@@ -419,17 +414,17 @@ public final class VirtualStructure {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) container.classList.push(style);
-
+        
             // then, clean it for nested invocation
             parents.addLast(container);
             this.container = null;
-
+        
             // precess into child items
             for (int i = 0; i < size; i++) {
                 modifier = i + size;
                 child.accept(i);
             }
-
+        
             // restore context environment
             parents.pollLast();
         }
