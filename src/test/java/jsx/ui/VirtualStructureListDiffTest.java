@@ -109,7 +109,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model1);
+            $〡.hbox.〡$(model1);
         }
     }
 
@@ -138,8 +138,8 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model1 + "1");
-            $〡.hbox.〡(model1 + "2");
+            $〡.hbox.〡$(model1 + "1");
+            $〡.hbox.〡$(model1 + "2");
         }
     }
 
@@ -212,7 +212,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.〡(model1.getName(), " is ", model1.getAge(), " years old.");
+            $〡.hbox.〡$(model1.getName(), " is ", model1.getAge(), " years old.");
         }
     }
 }

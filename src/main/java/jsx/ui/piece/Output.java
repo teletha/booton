@@ -65,7 +65,7 @@ public class Output extends LowLevelWidget<Output> {
      */
     @Override
     protected void virtualizeStructure(ContainerDescriptor descriptor) {
-        descriptor.〡(text.get());
+        descriptor.〡$(text.get());
     }
 
 }
