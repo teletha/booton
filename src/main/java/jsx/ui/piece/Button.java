@@ -65,6 +65,6 @@ public class Button extends LowLevelWidget<Button> {
      */
     @Override
     protected void virtualizeStructure(ContainerDescriptor descriptor) {
-        descriptor.〡(label.get());
+        descriptor.〡$(label.get());
     }
 }

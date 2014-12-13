@@ -247,7 +247,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Object... children) {
+        public final void 〡$(Object... children) {
             〡((Style) null, children);
         }
 
@@ -322,6 +322,17 @@ public final class VirtualStructure {
          */
         private ContainerDescriptor(String name, Style style) {
             super(name, style);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T[] children) {
+            〡(style, childType, Arrays.asList(children));
         }
 
         /**
@@ -414,17 +425,17 @@ public final class VirtualStructure {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) container.classList.push(style);
-        
+
             // then, clean it for nested invocation
             parents.addLast(container);
             this.container = null;
-        
+
             // precess into child items
             for (int i = 0; i < size; i++) {
                 modifier = i + size;
                 child.accept(i);
             }
-        
+
             // restore context environment
             parents.pollLast();
         }
