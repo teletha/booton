@@ -119,7 +119,7 @@ public class EnhancedElementTest {
         Element element = new EmulateElement();
         assert !element.has(CSS1);
 
-        element.add(CSS1);
+        element.addClass(CSS1);
         assert element.has(CSS1);
     }
 
@@ -128,7 +128,7 @@ public class EnhancedElementTest {
         Element element = new EmulateElement();
         assert !element.has(CSS1);
 
-        element.add(CSS1, CSS2);
+        element.addClass(CSS1, CSS2);
         assert element.has(CSS1);
         assert element.has(CSS2);
     }
@@ -136,27 +136,27 @@ public class EnhancedElementTest {
     @Test
     public void removeClass() throws Exception {
         Element element = new EmulateElement();
-        element.add(CSS1);
+        element.addClass(CSS1);
         assert element.has(CSS1);
 
-        element.remove(CSS1);
+        element.removeClass(CSS1);
         assert !element.has(CSS1);
     }
 
-    @Test
-    public void toggleClass() throws Exception {
-        Element element = new EmulateElement();
-        element.toggle(CSS1);
-        assert element.has(CSS1);
-
-        element.toggle(CSS1);
-        assert !element.has(CSS1);
-    }
+    // @Test
+    // public void toggleClass() throws Exception {
+    // Element element = new EmulateElement();
+    // element.toggle(CSS1);
+    // assert element.has(CSS1);
+    //
+    // element.toggle(CSS1);
+    // assert !element.has(CSS1);
+    // }
 
     @Test
     public void hasClass() throws Exception {
         Element element = new EmulateElement();
-        element.add(CSS1);
+        element.addClass(CSS1);
         assert element.has(CSS1);
         assert !element.has(CSS1, CSS2);
         assert !element.has(CSS2);

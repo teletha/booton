@@ -80,6 +80,32 @@ public class Background extends Colorable<Background> {
      * 
      * @param images
      */
+    public Background image(BackgroundImage image) {
+        if (!image.properties[0].equals("none")) value("background-image", image.properties[0]);
+        if (!image.properties[1].equals("scroll")) value("background-attachment", image.properties[1]);
+        if (!image.properties[2].equals("0%") || !image.properties[3].equals("0%"))
+            value("background-position", image.properties[2] + " " + image.properties[3]);
+        if (!image.properties[4].equals("repeat")) value("background-repeat", image.properties[4]);
+        if (!image.properties[5].equals("auto")) value("background-size", image.properties[5]);
+        if (!image.properties[6].equals("padding-box")) value("background-origin", image.properties[6]);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * The CSS background-image property sets one or several background images for an element. The
+     * images are drawn on stacking context layers on top of each other. The first layer specified
+     * is drawn as if it is closest to the user. The borders of the element are then drawn on top of
+     * them, and the background-color is drawn beneath them.
+     * </p>
+     * <p>
+     * If a specified image cannot be drawn (for example, when the file denoted by the specified URI
+     * cannot be loaded), browsers handle it as they would a none value.
+     * </p>
+     * 
+     * @param images
+     */
     public Background image(BackgroundImage... images) {
         value("background-image", collect(images, 0), ",");
         value("background-attachment", collect(images, 1), ",");

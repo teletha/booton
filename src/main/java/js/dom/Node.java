@@ -136,7 +136,7 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
      * @return A created child element.
      */
     public Element child(String name, Style className) {
-        return child(name).add(className);
+        return child(name).addClass(className);
     }
 
     /**

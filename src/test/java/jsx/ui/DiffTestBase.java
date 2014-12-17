@@ -44,7 +44,6 @@ public class DiffTestBase {
     protected void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
         Node prevNode = prev.dom != null ? prev.dom : prev.materialize();
         Node nextNode = next.dom != null ? next.dom : next.materialize();
-
         clean(next);
 
         List<Patch> ops = PatchDiff.diff(prev, next);

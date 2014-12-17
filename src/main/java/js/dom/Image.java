@@ -35,7 +35,7 @@ public class Image {
     /**
      * 
      */
-    public Image(Element parent, Style className) {
+    public Image(Element parent, Style style) {
         image = document.createElementNS(SVG, "image");
         image.attr("width", "100%");
         image.attr("height", "100%");
@@ -45,7 +45,7 @@ public class Image {
         svg = document.createElementNS(SVG, "svg");
         svg.append(filters);
         svg.append(image);
-        svg.attr("class", className.intern());
+        style.applyTo(svg);
 
         parent.append(svg);
     }
@@ -93,8 +93,7 @@ public class Image {
      * @return
      */
     public Image grayscale(double amount) {
-        return applyFilter(document
-                .createElementNS(SVG, "feColorMatrix")
+        return applyFilter(document.createElementNS(SVG, "feColorMatrix")
                 .attr("type", "matrix")
                 .attr("values", amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 " + amount + " " + amount + " " + amount + " 0 0 0 0 0 1 0"));
     }
@@ -108,8 +107,7 @@ public class Image {
      * @return
      */
     public Image saturate(double amount) {
-        return applyFilter(document
-                .createElementNS(SVG, "feColorMatrix")
+        return applyFilter(document.createElementNS(SVG, "feColorMatrix")
                 .attr("type", "saturate")
                 .attr("values", amount));
     }

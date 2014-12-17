@@ -373,7 +373,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.add(className);
+            parent.addClass(className);
         }
     }
 
@@ -399,7 +399,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.remove(className);
+            parent.removeClass(className);
         }
     }
 }

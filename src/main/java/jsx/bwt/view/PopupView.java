@@ -49,7 +49,7 @@ public class PopupView extends UI {
                     .css("width", "calc(100% + " + right + " + " + left + ")");
 
             // show slide view
-            root.add(Shown);
+            root.addClass(Shown);
 
             // notify event
             publish(new Open());
@@ -68,7 +68,7 @@ public class PopupView extends UI {
         if (2 <= shown) {
             // hide slide view
             shown = 0;
-            root.remove(Shown);
+            root.removeClass(Shown);
 
             // notify event
             publish(new Close());

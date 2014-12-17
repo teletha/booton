@@ -69,7 +69,7 @@ public class ScrollableListView extends UI {
         this.itemHeight = itemHeight;
         this.viewableItemSize = viewableItemSize;
 
-        this.viewableItemView = root.add(ViewabletemView).subscribe(this);
+        this.viewableItemView = root.addClass(ViewabletemView).subscribe(this);
         this.renderableItemView = viewableItemView.child(RenderableItemView);
         this.spacer = renderableItemView.child(Spacer);
     }

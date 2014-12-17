@@ -65,17 +65,17 @@ public class Select<M> extends FormUI<Select> {
         model = selectable;
         model.subscribe(binder);
 
-        form.add(SelectForm).attr("type", "input").attr("placeholder", "Mastery Set Name");
+        form.addClass(SelectForm).attr("type", "input").attr("placeholder", "Mastery Set Name");
 
         view = new ScrollableListView(10, 28).provide(binder);
-        view.root.add(SelectItemList).subscribe(binder);
+        view.root.addClass(SelectItemList).subscribe(binder);
 
         options = root.child(new SlidableView(view));
 
         arrow = root.child(new Button(Icon.BottomArrow, event -> {
             options.toggle();
         }));
-        arrow.root.add(SelectArrow);
+        arrow.root.addClass(SelectArrow);
 
         // options.bind(binder);q
 
@@ -97,13 +97,13 @@ public class Select<M> extends FormUI<Select> {
     @Override
     @SubscribeUI(type = UIAction.Focus)
     protected void startInput() {
-        root.add(FormUIStyle.Focus);
+        root.addClass(FormUIStyle.Focus);
     }
 
     @Override
     @SubscribeUI(type = UIAction.Blur)
     protected void endInput() {
-        root.remove(FormUIStyle.Focus);
+        root.removeClass(FormUIStyle.Focus);
     }
 
     /**
@@ -129,12 +129,12 @@ public class Select<M> extends FormUI<Select> {
          */
         @Override
         public void renderItem(int itemIndex, Element element) {
-            element.add(SelectItem).attr("index", itemIndex).text(model.get(itemIndex));
+            element.addClass(SelectItem).attr("index", itemIndex).text(model.get(itemIndex));
 
             if (itemIndex == model.getSelectionIndex()) {
-                element.add(SelectedItem);
+                element.addClass(SelectedItem);
             } else {
-                element.remove(SelectedItem);
+                element.removeClass(SelectedItem);
             }
         }
 
