@@ -329,6 +329,17 @@ public final class VirtualStructure {
          * Define children.
          * </p>
          * 
+         * @param children A list of child nodes.
+         */
+        public final void 〡(Runnable children) {
+            〡((Style) null, children);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
          * @param children A list of child widget.
          */
         public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T[] children) {
