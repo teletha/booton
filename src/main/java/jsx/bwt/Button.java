@@ -44,7 +44,7 @@ public class Button extends FormUI<Button> {
     public Button(String label, Consumer<UIEvent> action) {
         super("span");
 
-        form.add(ButtonForm).text(label).observe(UIAction.Click).to(action);
+        form.addClass(ButtonForm).text(label).observe(UIAction.Click).to(action);
 
         this.label = label;
     }
@@ -55,7 +55,7 @@ public class Button extends FormUI<Button> {
     public Button(Icon icon, Consumer<UIEvent> action) {
         this("", action);
 
-        form.add(Icons).attr("icon", icon.code);
+        form.addClass(Icons).attr("icon", icon.code);
     }
 
     public void label(String label) {

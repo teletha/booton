@@ -141,7 +141,7 @@ public abstract class UI<T extends UI> extends Publishable implements Elemental 
          */
         private Tooltip() {
             if (popup == null) {
-                popup = document.createElement("div").add(PopupViewStyle.Bottom);
+                popup = document.createElement("div").addClass(PopupViewStyle.Bottom);
                 document.getElementsByTagName("body").item(0).append(popup);
             }
         }
@@ -152,7 +152,7 @@ public abstract class UI<T extends UI> extends Publishable implements Elemental 
         @SubscribeUI(type = PointerEnter)
         private void show() {
             popup.append(content);
-            popup.add(PopupViewStyle.Show);
+            popup.addClass(PopupViewStyle.Show);
 
             ClientRect popupArea = popup.position();
             ClientRect targetArea = root.position();
@@ -166,7 +166,7 @@ public abstract class UI<T extends UI> extends Publishable implements Elemental 
          */
         @SubscribeUI(type = PointerLeave)
         private void hide() {
-            popup.remove(PopupViewStyle.Show);
+            popup.removeClass(PopupViewStyle.Show);
             content.root.remove();
         }
 

@@ -7,18 +7,17 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui.style;
+package jsx.style;
 
 import js.dom.Element;
-import jsx.style.Style;
 
 /**
- * @version 2014/12/13 15:08:55
+ * @version 2014/12/17 13:06:39
  */
-public class DynamicStyle implements RuntimeStyle, Style {
+public class MultipleStyle implements Style {
 
     /** The base style. */
-    private final RuntimeStyle base;
+    private final Style base;
 
     /** The runtime declared style. */
     private final Style dynamic;
@@ -27,27 +26,9 @@ public class DynamicStyle implements RuntimeStyle, Style {
      * @param base
      * @param dynamic
      */
-    private DynamicStyle(RuntimeStyle base, Style dynamic) {
+    public MultipleStyle(Style base, Style dynamic) {
         this.base = base;
         this.dynamic = dynamic;
-    }
-
-    /**
-     * @param base
-     * @param dynamic
-     */
-    public DynamicStyle(Style base, Style dynamic) {
-        this.base = new CompiledStyle(base);
-        this.dynamic = dynamic;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void apply(Element dom) {
-        base.apply(dom);
-        dom.style(dynamic);
     }
 
     /**
@@ -55,5 +36,15 @@ public class DynamicStyle implements RuntimeStyle, Style {
      */
     @Override
     public void declare() {
+        // do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void applyTo(Element dom) {
+        base.applyTo(dom);
+        dynamic.applyTo(dom);
     }
 }

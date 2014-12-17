@@ -51,13 +51,7 @@ class VirtualElement extends VirtualFragment<Element> {
 
         // assign classes
         for (int i = 0; i < classList.length(); i++) {
-            Style style = classList.get(i);
-
-            if (style instanceof Style) {
-                dom.style(style);
-            } else {
-                dom.add(style);
-            }
+            classList.get(i).applyTo(dom);
         }
 
         // assign event listeners

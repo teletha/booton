@@ -77,10 +77,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void hboxTextChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.hbox(1).〡$("text");
+        prev〡.hbox.〡$("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.hbox(1).〡$("change");
+        next〡.hbox.〡$("change");
 
         assertDiff(prev〡, next〡, 1);
     }

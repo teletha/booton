@@ -9,6 +9,8 @@
  */
 package jsx.style;
 
+import js.dom.Element;
+
 /**
  * @version 2014/10/24 13:58:41
  */
@@ -30,5 +32,26 @@ public interface Style {
      */
     public default String intern() {
         return "STYLE" + hashCode();
+    }
+
+    /**
+     * <p>
+     * Apply this style to the specified element.
+     * </p>
+     * 
+     * @param dom A element to apply this style.
+     */
+    public default void applyTo(Element dom) {
+        dom.style(this);
+    }
+
+    /**
+     * @param className
+     * @return
+     */
+    public static Style getByName(String className) {
+        return StaticStyle.pool.computeIfAbsent(className, name -> {
+            return new StaticStyle(name);
+        });
     }
 }

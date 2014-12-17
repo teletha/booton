@@ -41,7 +41,7 @@ public class FormUI<T extends FormUI> extends UI<T> {
      * 
      */
     public FormUI(String elementName) {
-        root.add(FormRoot);
+        root.addClass(FormRoot);
 
         form = root.child(elementName);
         form.subscribe(this);
@@ -57,7 +57,7 @@ public class FormUI<T extends FormUI> extends UI<T> {
     public T disable() {
         if (enable) {
             enable = false;
-            root.add(Disable);
+            root.addClass(Disable);
             form.attr("disabled", "true");
             disabler = root
                     .observe(Click, ClickRight, MouseDoubleClick, PointerOver, PointerOut, PointerMove)
@@ -79,7 +79,7 @@ public class FormUI<T extends FormUI> extends UI<T> {
     public T enable() {
         if (!enable) {
             enable = true;
-            root.remove(Disable);
+            root.removeClass(Disable);
             form.remove("disabled");
             disabler.dispose();
             disabler = null;
@@ -90,12 +90,12 @@ public class FormUI<T extends FormUI> extends UI<T> {
 
     @SubscribeUI(type = UIAction.Focus)
     protected void startInput() {
-        root.add(FormUIStyle.Focus);
+        root.addClass(FormUIStyle.Focus);
     }
 
     @SubscribeUI(type = UIAction.Blur)
     protected void endInput() {
-        root.remove(FormUIStyle.Focus);
+        root.removeClass(FormUIStyle.Focus);
     }
 
     /**

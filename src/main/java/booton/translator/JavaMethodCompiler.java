@@ -519,8 +519,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
         case GETSTATIC:
             if (desc.equals(STYLE)) {
-                String cssClassName = I.make(CascadingStyleSheet.class).register(owner, name);
-                current.addOperand(new OperandString(cssClassName));
+                String cssClassName = "\"" + I.make(CascadingStyleSheet.class).register(owner, name) + "\"";
+                current.addOperand(new OperandExpression(Javascript.writeMethodCode(Style.class, "getByName", String.class, cssClassName)));
             } else {
                 current.addOperand(translator.translateStaticField(owner, name), type);
             }

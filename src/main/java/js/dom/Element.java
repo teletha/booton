@@ -42,7 +42,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classNames A class name to be added to the class attribute of this element.
      * @return Chainable API.
      */
-    public Element add(Style className) {
+    public Element addClass(String className) {
         classList().add(className.intern());
 
         // API definition
@@ -57,9 +57,9 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to assign.
      * @return Chainable API.
      */
-    public Element add(Style... classes) {
+    public Element addClass(Style... classes) {
         for (Style clazz : classes) {
-            add(clazz);
+            addClass(clazz.intern());
         }
 
         // API definition
@@ -183,7 +183,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param className The class name to search for.
      * @return A result
      */
-    public boolean has(Style className) {
+    public boolean has(String className) {
         return classList().contains(className.intern());
     }
 
@@ -197,7 +197,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      */
     public boolean has(Style... classes) {
         for (Style clazz : classes) {
-            if (!has(clazz)) {
+            if (!has(clazz.intern())) {
                 return false;
             }
         }
@@ -302,11 +302,11 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * <p>
      * Remove a class from this element.
      * </p>
-     * 
+     *
      * @param className A class name to be removed from the class attribute of this element.
      * @return Chainable API.
      */
-    public Element remove(Style className) {
+    public Element removeClass(String className) {
         classList().remove(className.intern());
 
         // API definition
@@ -321,9 +321,9 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to remove.
      * @return Chainable API.
      */
-    public Element remove(Style... classes) {
+    public Element removeClass(Style... classes) {
         for (Style clazz : classes) {
-            remove(clazz);
+            removeClass(clazz.intern());
         }
 
         // API definition
@@ -358,26 +358,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param className A class name to be toggled for this element.
      * @return Chainable API.
      */
-    public Element toggle(Style className) {
+    public Element toggleClass(String className) {
         classList().toggle(className.intern());
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * <p>
-     * Add or remove one or more classes from this element, depending on either the class's presence
-     * or the value of the switch argument.
-     * </p>
-     * 
-     * @param classes A list of class names to add or remove.
-     * @return Chainable API.
-     */
-    public Element toggle(Style... classes) {
-        for (Style clazz : classes) {
-            classList().toggle(clazz.intern());
-        }
 
         // API definition
         return this;
@@ -428,7 +410,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         super.startListening(type);
 
         if (type == Object.class) {
-            add(EventListenable);
+            addClass(EventListenable);
         }
     }
 
@@ -440,7 +422,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         super.stopListening(type);
 
         if (type == Object.class) {
-            remove(EventListenable);
+            removeClass(EventListenable);
         }
     }
 
