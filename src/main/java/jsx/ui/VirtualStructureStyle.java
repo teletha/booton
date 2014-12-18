@@ -17,6 +17,9 @@ import jsx.style.StyleRuleDescriptor;
  */
 class VirtualStructureStyle extends StyleRuleDescriptor {
 
+    static Style NBOX = () -> {
+    };
+
     static Style HBOX = () -> {
         display.flex();
     };

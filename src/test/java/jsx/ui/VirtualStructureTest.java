@@ -16,19 +16,28 @@ import java.util.function.Consumer;
 import jsx.style.Style;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import booton.soeur.ScriptRunner;
 
 /**
  * @version 2014/09/11 14:57:41
  */
-@RunWith(ScriptRunner.class)
+// @RunWith(ScriptRunner.class)
 public class VirtualStructureTest {
 
     /** Empty style. */
     private static final Style style = () -> {
     };
+
+    @Test
+    public void asis() throws Exception {
+        VirtualStructure root〡 = new VirtualStructure();
+        root〡.hbox.〡(style, () -> {
+            root〡.〡("t");
+        });
+
+        VirtualElement root = root〡.getRoot();
+        assert root.items.length() == 1;
+        assertAsText(root.items.get(0), "text");
+    }
 
     @Test
     public void text() throws Exception {

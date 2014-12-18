@@ -68,6 +68,18 @@ public final class VirtualStructure {
      */
     public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX);
 
+    /**
+     * <p>
+     * Define stackable container and get the descriptor of the container element.
+     * </p>
+     * <p>
+     * This field is equivalent to the method call <code>sbox(auto-assignment-id)</code>.
+     * </p>
+     * 
+     * @see #sbox(int)
+     */
+    public final ContainerDescriptor nbox = new ContainerDescriptor("nbox", NBOX);
+
     /** The latest context line number. */
     protected int latestContextId;
 
@@ -89,6 +101,17 @@ public final class VirtualStructure {
      */
     public VirtualStructure(VirtualElement root) {
         parents.add(root);
+    }
+
+    /**
+     * @param string
+     */
+    public void 〡(Object... texts) {
+        VirtualElement latest = parents.peekLast();
+
+        for (Object text : texts) {
+            latest.items.push(new VirtualText(String.valueOf(text)));
+        }
     }
 
     /**
@@ -131,6 +154,20 @@ public final class VirtualStructure {
     public final ContainerDescriptor sbox(int localId) {
         sbox.localId = localId;
         return sbox;
+    }
+
+    /**
+     * <p>
+     * Define stackable container with local id.
+     * </p>
+     * 
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     * @see #sbox
+     */
+    public final ContainerDescriptor nbox(int localId) {
+        nbox.localId = localId;
+        return nbox;
     }
 
     /**
