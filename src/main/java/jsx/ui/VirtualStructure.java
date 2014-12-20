@@ -106,6 +106,22 @@ public final class VirtualStructure {
     /**
      * @param string
      */
+    public <W extends Widget1<M>, M> void 〡(Class<W> widgetType, M model) {
+        Widget widget = Widget.of(widgetType, model);
+
+        // create virtual element for this widget
+        VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+
+        // mount virtual element on virtual structure
+        parents.peekLast().items.push(virtualize);
+
+        // process child nodes
+        widget.assemble(new VirtualStructure(virtualize));
+    }
+
+    /**
+     * @param string
+     */
     public void 〡(Object... texts) {
         VirtualElement latest = parents.peekLast();
 
@@ -286,6 +302,19 @@ public final class VirtualStructure {
          */
         public final void 〡$(Object... children) {
             〡((Style) null, children);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child nodes.
+         */
+        public final void 〡(Style style, String text) {
+            if (text != null && text.length() != 0) {
+                〡(style, new Object[] {text});
+            }
         }
 
         /**
