@@ -530,5 +530,17 @@ public final class VirtualStructure {
 
             return this;
         }
+
+        /**
+         * Define title attribute.
+         * 
+         * @param title A title value.
+         */
+        public final ContainerDescriptor title(String title) {
+            if (title != null && !title.isEmpty()) {
+                container(LocalId.findContextLineNumber()).attribute("title", title);
+            }
+            return this;
+        }
     }
 }
