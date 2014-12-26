@@ -45,6 +45,20 @@ public interface Style {
         dom.style(this);
     }
 
+    public default Style when(boolean condition, Style style) {
+        if (condition == false) {
+            return this;
+        }
+        return new MultipleStyle(this, style);
+    }
+
+    public default Style when(String atrributeName, String attributeValue, Style style) {
+        if (atrributeName == null || atrributeName.isEmpty() || attributeValue == null || attributeValue.isEmpty()) {
+            return this;
+        }
+        return new MultipleStyle(this, style);
+    }
+
     /**
      * @param className
      * @return
