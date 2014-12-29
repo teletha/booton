@@ -18,6 +18,7 @@ import java.util.Deque;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
+import js.lang.NativeArray;
 import jsx.style.Style;
 
 /**
@@ -31,6 +32,8 @@ public final class VirtualStructure {
      * </p>
      */
     public final Descriptor asis = new Descriptor(null, null);
+
+    public final OptionalStyleDescriptor style = new OptionalStyleDescriptor();
 
     /**
      * <p>
@@ -126,7 +129,11 @@ public final class VirtualStructure {
         VirtualElement latest = parents.peekLast();
 
         for (Object text : texts) {
-            latest.items.push(new VirtualText(String.valueOf(text)));
+            if (text.equals("\r\n")) {
+                latest.items.push(new VirtualElement(0, "br"));
+            } else {
+                latest.items.push(new VirtualText(String.valueOf(text)));
+            }
         }
     }
 
@@ -278,7 +285,7 @@ public final class VirtualStructure {
                     }
 
                     if (modifier != 0) {
-                        latestLocalId = id = id ^ modifier;
+                        latestLocalId = id = (31 + id) ^ modifier;
                     }
 
                     // built-in container
@@ -287,6 +294,8 @@ public final class VirtualStructure {
                     if (builtin != null) {
                         container.classList.push(builtin);
                     }
+                    style.apply(container);
+
                     parents.peekLast().items.push(container);
                 }
             }
@@ -530,17 +539,72 @@ public final class VirtualStructure {
 
             return this;
         }
+    }
+
+    /**
+     * @version 2014/12/29 10:39:30
+     */
+    public class OptionalStyleDescriptor {
+
+        /** The style manager. */
+        private final NativeArray<Style> styles = new NativeArray();
+
+        /** The attribute name manager. */
+        private final NativeArray<String> names = new NativeArray();
+
+        /** The attribute value manager. */
+        private final NativeArray<String> values = new NativeArray();
 
         /**
-         * Define title attribute.
+         * <p>
+         * Add {@link Style} if the given codition is true.
+         * </p>
          * 
-         * @param title A title value.
+         * @param condition A style condition.
+         * @param style A target style to apply.
          */
-        public final ContainerDescriptor title(String title) {
-            if (title != null && !title.isEmpty()) {
-                container(LocalId.findContextLineNumber()).attribute("title", title);
+        public void 〡(boolean condition, Style style) {
+            if (condition) {
+                styles.push(style);
             }
-            return this;
+        }
+
+        /**
+         * <p>
+         * Add {@link Style} if the given attribute is valid.
+         * < /p>
+         * 
+         * @param attributeName An attribute name.
+         * @param attributeValue An attribute value.
+         * @param style A target style to apply.
+         */
+        public void 〡(String attributeName, String attributeValue, Style style) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
+                styles.push(style);
+                names.push(attributeName);
+                values.push(attributeValue);
+            }
+        }
+
+        /**
+         * <p>
+         * Apply optional properties(attribute, style, etc).
+         * </p>
+         * 
+         * @param element
+         */
+        private void apply(VirtualElement element) {
+            if (styles.length() != 0) {
+                // assign
+                element.classList.push(styles);
+                element.attributes.names.push(names);
+                element.attributes.values.push(values);
+
+                // clear
+                styles.clear();
+                names.clear();
+                values.clear();
+            }
         }
     }
 }

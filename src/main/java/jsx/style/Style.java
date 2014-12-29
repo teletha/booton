@@ -45,6 +45,14 @@ public interface Style {
         dom.style(this);
     }
 
+    public default void applyIf(boolean condition) {
+
+    }
+
+    public default void applyIf(String attributename, String attributeValue) {
+
+    }
+
     public default Style when(boolean condition, Style style) {
         if (condition == false) {
             return this;
