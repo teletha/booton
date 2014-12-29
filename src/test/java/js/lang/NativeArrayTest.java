@@ -9,8 +9,6 @@
  */
 package js.lang;
 
-import js.lang.NativeArray;
-
 import org.junit.Test;
 
 import booton.soeur.ScriptTester;
@@ -34,6 +32,25 @@ public class NativeArrayTest extends ScriptTester {
                 assert array.length() == 1;
 
                 return array.length();
+            }
+        });
+    }
+
+    @Test
+    public void pushArray() throws Exception {
+        test(new Scriptable() {
+
+            public int act() {
+                NativeArray<String> array1 = new NativeArray(new String[] {"a", "b"});
+                assert array1.length() == 2;
+
+                NativeArray<String> array2 = new NativeArray(new String[] {"c", "d"});
+                assert array1.length() == 2;
+
+                array1.push(array2);
+                assert array1.length() == 4;
+
+                return array1.length();
             }
         });
     }
@@ -72,6 +89,22 @@ public class NativeArrayTest extends ScriptTester {
                 assert index == 0;
 
                 array.remove(index);
+                assert array.length() == 0;
+
+                return array.length();
+            }
+        });
+    }
+
+    @Test
+    public void clear() throws Exception {
+        test(new Scriptable() {
+
+            public int act() {
+                NativeArray<String> array = new NativeArray(new String[] {"a", "b"});
+                assert array.length() == 2;
+
+                array.clear();
                 assert array.length() == 0;
 
                 return array.length();

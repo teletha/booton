@@ -9,6 +9,7 @@
  */
 package jsx.ui.piece;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -64,6 +65,17 @@ public class UI {
      */
     public static final Output output(String text) {
         return output(new SimpleStringProperty(text));
+    }
+
+    /**
+     * <p>
+     * Create text {@link Output} with the specified value.
+     * </p>
+     * 
+     * @param text
+     */
+    public static final Output output(IntegerProperty value) {
+        return new Output(value);
     }
 
     /**

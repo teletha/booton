@@ -406,6 +406,20 @@ public class NativeArray<T> extends NativeObject {
 
     /**
      * <p>
+     * Adds one or more elements to the end of an array and returns the new length of the array.
+     * </p>
+     * 
+     * @param item The elements to add to the end of the array.
+     * @return The new length property of the object upon which the method was called.
+     */
+    public int push(NativeArray<T> items) {
+        list.addAll(items.list);
+
+        return list.size();
+    }
+
+    /**
+     * <p>
      * The pop method removes the last element from an array and returns that value to the caller.
      * </p>
      * 
@@ -601,6 +615,15 @@ public class NativeArray<T> extends NativeObject {
         Collections.sort(list, comparator.type);
 
         return this;
+    }
+
+    /**
+     * <p>
+     * Clear all contents of an array.
+     * </p>
+     */
+    public void clear() {
+        list.clear();
     }
 
     /**
@@ -952,6 +975,18 @@ public class NativeArray<T> extends NativeObject {
 
         /**
          * <p>
+         * Adds one or more elements to the end of an array and returns the new length of the array.
+         * </p>
+         * 
+         * @param item The elements to add to the end of the array.
+         * @return The new length property of the object upon which the method was called.
+         */
+        public String push(NativeArray<T> items) {
+            return "Array.prototype.push.apply(" + that + "," + param(0) + ")";
+        }
+
+        /**
+         * <p>
          * Returns the first (least) index of an element within the array equal to the specified
          * value, or -1 if none is found.
          * </p>
@@ -1143,6 +1178,15 @@ public class NativeArray<T> extends NativeObject {
          */
         public String unshift(T item) {
             return that + ".unshift(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Clear all contents of an array.
+         * </p>
+         */
+        public String clear() {
+            return that + ".length=0";
         }
     }
 }
