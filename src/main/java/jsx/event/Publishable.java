@@ -318,6 +318,7 @@ public class Publishable<P extends Publishable<P>> {
             } else {
                 types = cache.computeIfAbsent(event.getClass(), type -> ClassUtil.getTypes(type));
             }
+            System.out.println("Event publish " + types);
 
             for (Object type : types) {
                 if (holder != null) {
