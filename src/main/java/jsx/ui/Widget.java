@@ -16,6 +16,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -26,9 +27,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 
 import js.dom.Element;
+import js.dom.UIAction;
+import js.dom.UIEvent;
+import js.lang.NativeArray;
+import js.lang.NativeFunction;
 import jsx.ui.piece.Input;
+import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
+import kiss.Observer;
 
 /**
  * @version 2014/08/21 13:31:25
@@ -64,6 +71,80 @@ public abstract class Widget {
 
         rendering = new Rendering(this, root);
         rendering.willExecute();
+    }
+
+    NativeArray<Listener> listeners;
+
+    protected final Events<UIEvent> listen(UIAction type) {
+        return new Events<UIEvent>(observer -> {
+            if (listeners == null) {
+                listeners = new NativeArray();
+            }
+
+            Listener listener = null;
+
+            for (int i = 0, length = listeners.length(); i < length; i++) {
+                Listener candidate = listeners.get(i);
+
+                if (candidate.type == type) {
+                    listener = candidate;
+                    break;
+                }
+            }
+
+            if (listener == null) {
+                listener = new Listener(type);
+                listeners.push(listener);
+            }
+
+            listener.listeners.push(observer);
+
+            return () -> {
+                for (int i = 0, length = listeners.length(); i < length; i++) {
+                    Listener remover = listeners.get(i);
+
+                    if (remover.type == type) {
+                        remover.listeners.remove(remover.listeners.indexOf(observer));
+                    }
+                }
+            };
+        });
+    }
+
+    /**
+     * <p>
+     * Native event listener.
+     * </p>
+     * 
+     * @version 2015/01/02 23:09:06
+     */
+    static class Listener implements Consumer<UIEvent> {
+
+        /** The event type. */
+        final UIAction type;
+
+        /** The cache for native event listener. */
+        final NativeFunction dom = new NativeFunction(this).bind(this);
+
+        /** The list of actual event listeners. */
+        final NativeArray<Observer<? super UIEvent>> listeners = new NativeArray();
+
+        /**
+         * @param type
+         */
+        private Listener(UIAction type) {
+            this.type = type;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(UIEvent event) {
+            for (int i = 0, size = listeners.length(); i < size; i++) {
+                listeners.get(i).onNext(event);
+            }
+        }
     }
 
     /**

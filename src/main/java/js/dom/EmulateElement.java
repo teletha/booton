@@ -152,7 +152,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected void addEventListener(String type, NativeFunction listener) {
+    public void addEventListener(String type, NativeFunction listener) {
         events.addEventListener(type, listener);
     }
 
@@ -160,7 +160,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected void removeEventListener(String type, NativeFunction listener) {
+    public void removeEventListener(String type, NativeFunction listener) {
         events.removeEventListener(type, listener);
     }
 

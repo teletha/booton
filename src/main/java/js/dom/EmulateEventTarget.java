@@ -24,7 +24,7 @@ class EmulateEventTarget<T extends EmulateEventTarget<T>> extends EventTarget<T>
      * {@inheritDoc}
      */
     @Override
-    protected void addEventListener(String type, NativeFunction listener) {
+    public void addEventListener(String type, NativeFunction listener) {
         if (type != null && listener != null) {
             listeners.push(type, listener);
         }
@@ -34,7 +34,7 @@ class EmulateEventTarget<T extends EmulateEventTarget<T>> extends EventTarget<T>
      * {@inheritDoc}
      */
     @Override
-    protected void removeEventListener(String type, NativeFunction listener) {
+    public void removeEventListener(String type, NativeFunction listener) {
         if (type != null && listener != null) {
             listeners.pull(type, listener);
         }

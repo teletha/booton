@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import js.lang.NativeFunction;
 import jsx.event.Publishable;
+import kiss.Events;
 import booton.translator.JavascriptNative;
 
 /**
@@ -69,6 +70,21 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         }
     }
 
+    public Events<UIEvent> listen(UIAction type) {
+        return new Events<UIEvent>(observer -> {
+            // create native event listener and delegete event to the given event observer.
+            NativeFunction nativeListener = new NativeFunction<UIEvent>(observer::onNext);
+
+            // register
+            addEventListener(type.name, nativeListener);
+
+            return () -> {
+                // unregister
+                removeEventListener(type.name, nativeListener);
+            };
+        });
+    }
+
     /**
      * <p>
      * Registers the specified listener on the EventTarget it's called on.
@@ -78,7 +94,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
      * @param listener The object that receives a notification when an event of the specified type
      *            occurs.
      */
-    protected native void addEventListener(String type, NativeFunction listener);
+    public native void addEventListener(String type, NativeFunction listener);
 
     /**
      * <p>
@@ -88,7 +104,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
      * @param type A string representing the event type being removed.
      * @param listener The listener to be removed.
      */
-    protected native void removeEventListener(String type, NativeFunction listener);
+    public native void removeEventListener(String type, NativeFunction listener);
 
     /**
      * <p>
@@ -157,6 +173,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         /**
          * {@inheritDoc}
          */
+        @Override
         public void initEvent(String type, boolean bubbles, boolean cancelable) {
             event.initEvent(type, bubbles, cancelable);
         }
@@ -164,6 +181,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         /**
          * {@inheritDoc}
          */
+        @Override
         public boolean isDefaultPrevented() {
             return event.isDefaultPrevented();
         }
@@ -171,6 +189,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         /**
          * {@inheritDoc}
          */
+        @Override
         public boolean isImmediatePropagationStopped() {
             return event.isImmediatePropagationStopped();
         }
@@ -178,6 +197,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         /**
          * {@inheritDoc}
          */
+        @Override
         public boolean isPropagationStopped() {
             return event.isPropagationStopped();
         }
@@ -185,6 +205,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         /**
          * {@inheritDoc}
          */
+        @Override
         public void preventDefault() {
             event.preventDefault();
         }
@@ -192,6 +213,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         /**
          * {@inheritDoc}
          */
+        @Override
         public void stopPropagation() {
             event.stopPropagation();
         }
@@ -199,6 +221,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
         /**
          * {@inheritDoc}
          */
+        @Override
         public void stopImmediatePropagation() {
             event.stopImmediatePropagation();
         }
