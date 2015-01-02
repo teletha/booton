@@ -445,6 +445,17 @@ public final class VirtualStructure {
          * Define children.
          * </p>
          * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T child) {
+            〡(style, Widget.of(childType, child));
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
          * @param children A list of child nodes.
          */
         public final void 〡(Style style, Runnable children) {
@@ -579,7 +590,8 @@ public final class VirtualStructure {
          * @param style A target style to apply.
          */
         public void 〡(String attributeName, String attributeValue, Style style) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
+                    .length() != 0) {
                 styles.push(style);
                 names.push(attributeName);
                 values.push(attributeValue);
