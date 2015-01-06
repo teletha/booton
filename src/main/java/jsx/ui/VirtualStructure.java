@@ -81,7 +81,7 @@ public final class VirtualStructure {
      * 
      * @see #sbox(int)
      */
-    public final ContainerDescriptor nbox = new ContainerDescriptor("nbox", NBOX);
+    public final ContainerDescriptor nbox = new ContainerDescriptor("span", NBOX);
 
     /** The latest context line number. */
     protected int latestContextId;
@@ -590,8 +590,7 @@ public final class VirtualStructure {
          * @param style A target style to apply.
          */
         public void 〡(String attributeName, String attributeValue, Style style) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
-                    .length() != 0) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
                 styles.push(style);
                 names.push(attributeName);
                 values.push(attributeValue);
