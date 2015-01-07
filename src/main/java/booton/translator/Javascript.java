@@ -336,6 +336,7 @@ public class Javascript {
         } finally {
             // record compile route
             CompilerRecorder.finishCompiling(this);
+
         }
     }
 

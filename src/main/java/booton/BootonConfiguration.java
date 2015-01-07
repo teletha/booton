@@ -35,6 +35,9 @@ public class BootonConfiguration {
     /** The port of live coding server. */
     public int port = 10021;
 
+    /** The build process profiling. */
+    public boolean profile = true;
+
     /**
      * <p>
      * Validate this configuration.
