@@ -139,11 +139,9 @@ public class Booton {
         this.css = root.resolve("application.css");
 
         // load booton extensions
-        BuildProcessProfiler.start("Load Booton Code");
         I.load(Booton.class, false);
 
         // load application extensions
-        BuildProcessProfiler.start("Load Application Code");
         I.load(application, true);
 
         Path mutex = root.resolve(BuildPhase);
@@ -155,10 +153,8 @@ public class Booton {
             }
 
             // build html file
-            BuildProcessProfiler.start("Build HTML");
             buildHTML();
 
-            BuildProcessProfiler.start("Build Application JavaScript");
             Set set = new HashSet();
 
             // build js file
@@ -167,12 +163,10 @@ public class Booton {
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
-            BuildProcessProfiler.start("Build Live-Coding Javascript");
             Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
             System.out.println("Complete compilation of Live Coding Server.");
 
             // build css file
-            BuildProcessProfiler.start("Build CSS");
             I.make(CascadingStyleSheet.class).write(css);
 
             BuildProcessProfiler.showResult();
@@ -218,7 +212,6 @@ public class Booton {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        Thread.sleep(20000);
         launch(HelloWorld.class);
     }
 

@@ -13,9 +13,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import kiss.I;
 import kiss.model.ClassUtil;
@@ -38,8 +44,7 @@ public final class BuildProcessProfiler {
     /** The configuration. */
     private static final BootonConfiguration config = I.make(BootonConfiguration.class);
 
-    /** The phase container. */
-    private static final Deque<Phase> phases = new ArrayDeque();
+    private static Deque<Context> contexts = new ArrayDeque();
 
     /**
      * <p>
@@ -48,26 +53,38 @@ public final class BuildProcessProfiler {
      * 
      * @param title A title of new phase.
      */
-    public static void start(String title) {
+    public static void start(String title, Class target) {
         if (config.profile) {
-            finish();
+            Context latest = contexts.peekLast();
 
-            phases.addLast(new Phase(title));
+            if (latest != null) {
+                latest.stop();
+            }
+
+            latest = Context.get(title, target);
+            contexts.addLast(latest);
+            latest.start();
         }
     }
 
     /**
-     * @param source
+     * <p>
+     * Start new phase.
+     * </p>
+     * 
+     * @param title A title of new phase.
      */
-    public static void compileStart(Class source) {
-        phases.peekLast().compileStart(source);
-    }
+    public static void end(String title, Class target) {
+        if (config.profile) {
+            Context latest = contexts.pollLast();
+            latest.stop();
 
-    /**
-     * @param source
-     */
-    public static void compileEnd() {
-        phases.peekLast().compileEnd();
+            latest = contexts.peekLast();
+
+            if (latest != null) {
+                latest.start();
+            }
+        }
     }
 
     /**
@@ -77,130 +94,85 @@ public final class BuildProcessProfiler {
      */
     public static void showResult() {
         if (config.profile) {
-            finish();
+            if (!Context.from.isEmpty()) {
+                List<Context> list = new ArrayList(Context.from.values());
+                Collections.sort(list, Comparator.<Context> comparingDouble(item -> item.elapsed).reversed());
 
-            if (!phases.isEmpty()) {
                 double total = 0;
 
-                for (Phase phase : phases) {
-                    total += phase.time;
+                for (Context context : list) {
+                    total += context.elapsed;
                 }
 
-                for (Phase phase : phases) {
-                    System.out.println(phase.title + ": " + phase.time() + " (" + formatter.format((phase.time / total) * 100) + "%)");
-
-                    for (Group group : phase.compiles.values()) {
-                        System.out.println("\t" + group.path + ": " + group.time() + " (" + group.count + " sources)");
-                    }
+                for (Context context : list) {
+                    System.out.println(context + "   " + formatter.format(context.elapsed / total * 100) + "%");
                 }
             }
         }
     }
 
     /**
-     * <p>
-     * End the current processing phase.
-     * </p>
+     * @version 2015/01/08 15:06:53
      */
-    private static void finish() {
-        long now = System.nanoTime();
+    private static class Context {
 
-        Phase latest = phases.peekLast();
+        private static final Map<String, Context> from = new HashMap();
 
-        if (latest != null) {
-            latest.time = now - latest.time;
-        }
-    }
-
-    /**
-     * @version 2015/01/07 12:17:42
-     */
-    private static class Phase {
+        private final Path path;
 
         private final String title;
 
-        /** The process time. */
-        private double time;
+        private long start;
 
-        /** The latest compiled owner. */
-        private Path latest;
+        private double elapsed;
 
-        /** The compiling group. */
-        private Map<Path, Group> compiles = new HashMap();
+        private Set<Class> classes = new HashSet();
 
         /**
-         * @param title
+         * @param target
          */
-        private Phase(String title) {
-            this.title = title;
-            this.time = System.nanoTime();
-        }
-
-        /**
-         * @param source
-         */
-        private void compileStart(Class source) {
-            latest = ClassUtil.getArchive(source);
-
-            if (latest == null) {
-                latest = JDK;
+        private Context(Path path, String title) {
+            if (path == null) {
+                path = JDK;
             }
-
-            Group group = compiles.computeIfAbsent(latest, s -> new Group(s));
-            group.count++;
-            group.time = System.nanoTime();
-        }
-
-        /**
-         * @param source
-         */
-        private void compileEnd() {
-            Group group = compiles.get(latest);
-            group.time = System.nanoTime() - group.time;
-        }
-
-        /**
-         * <p>
-         * Print processing time as text.
-         * </p>
-         * 
-         * @return
-         */
-        private String time() {
-            return formatter.format(time / 1000000) + "ms";
-        }
-    }
-
-    /**
-     * @version 2015/01/07 14:01:04
-     */
-    private static class Group {
-
-        /** The source path. */
-        private Path path;
-
-        /** The compiling process time. */
-        private double time;
-
-        /** The compiled source size. */
-        private int count;
-
-        /**
-         * @param s
-         */
-        private Group(Path path) {
             this.path = path;
+            this.title = title;
         }
 
         /**
-         * <p>
-         * Print processing time as text.
-         * </p>
          * 
-         * @return
          */
-        private String time() {
-            return formatter.format(time / 1000000) + "ms";
+        private void stop() {
+            elapsed += (System.nanoTime() - start) / 1000000;
+        }
+
+        /**
+         * 
+         */
+        private void start() {
+            start = System.nanoTime();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return title + "  " + path + ": " + formatter.format(elapsed) + "ms (" + classes.size() + ")";
+        }
+
+        private static Context get(String title, Class target) {
+            Path path = ClassUtil.getArchive(target);
+
+            Context context = from.get(path + title);
+
+            if (context == null) {
+                context = new Context(path, title);
+                from.put(path + title, context);
+            }
+            context.classes.add(target);
+
+            return context;
         }
     }
 }

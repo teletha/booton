@@ -38,6 +38,7 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+import booton.BuildProcessProfiler;
 import booton.Necessary;
 import booton.Unnecessary;
 
@@ -134,6 +135,7 @@ public class Javascript {
      * @param source A Java class as source.
      */
     private Javascript(Class source) {
+        BuildProcessProfiler.start("Constructor", source);
         this.source = source;
 
         Class reverted = JavaAPIProviders.revert(source);
@@ -171,6 +173,7 @@ public class Javascript {
                 }
             }
         }
+        BuildProcessProfiler.end("Constructor", source);
     }
 
     /**
@@ -293,6 +296,7 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set<Class> defined) {
+        BuildProcessProfiler.start("Write", source);
         // record compile route
         CompilerRecorder.startCompiling(this);
 
@@ -336,7 +340,7 @@ public class Javascript {
         } finally {
             // record compile route
             CompilerRecorder.finishCompiling(this);
-
+            BuildProcessProfiler.end("Write", source);
         }
     }
 
@@ -372,6 +376,7 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
+            BuildProcessProfiler.start("Compile", source);
             ScriptWriter code = new ScriptWriter();
 
             // compute related class names
@@ -395,7 +400,9 @@ public class Javascript {
                         compileAnnotation(code);
                     }
                 } else {
+                    BuildProcessProfiler.start("ParseCode", source);
                     new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+                    BuildProcessProfiler.end("ParseCode", source);
                 }
             } catch (TranslationError e) {
                 e.write("\r\n");
@@ -428,6 +435,7 @@ public class Javascript {
 
             // create cache
             this.code = code.toString();
+            BuildProcessProfiler.end("Compile", source);
         }
     }
 
@@ -439,6 +447,7 @@ public class Javascript {
      * @param code
      */
     private void compileAnnotation(ScriptWriter code) {
+        BuildProcessProfiler.start("Compile Annotations", source);
         Method[] methods = source.getDeclaredMethods();
 
         for (int i = 0; i < methods.length; i++) {
@@ -457,6 +466,7 @@ public class Javascript {
                 code.separator();
             }
         }
+        BuildProcessProfiler.end("Compile Annotations", source);
     }
 
     /**
