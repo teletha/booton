@@ -63,6 +63,17 @@ public abstract class CSSStyleDeclaration implements JavascriptNative {
 
     /**
      * <p>
+     * Remove the property value.
+     * </p>
+     * 
+     * @param name A property name to remove.
+     */
+    public void remove(String name) {
+        removeProperty(convert(name));
+    }
+
+    /**
+     * <p>
      * Helper method to convert property name for css.
      * </p>
      * 
@@ -126,4 +137,13 @@ public abstract class CSSStyleDeclaration implements JavascriptNative {
      * @param value A property value to set.
      */
     protected native void setProperty(String name, String value);
+
+    /**
+     * <p>
+     * Remove the property value.
+     * </p>
+     * 
+     * @param name A property name to retrieve.
+     */
+    protected native void removeProperty(String name);
 }

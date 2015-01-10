@@ -17,10 +17,10 @@ import js.dom.Element;
 public class MultipleStyle implements Style {
 
     /** The base style. */
-    private final Style base;
+    public final Style base;
 
     /** The runtime declared style. */
-    private final Style dynamic;
+    public final Style dynamic;
 
     /**
      * @param base

@@ -405,7 +405,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected DOMTokenList classList() {
+    public DOMTokenList classList() {
         return attributes.classes;
     }
 

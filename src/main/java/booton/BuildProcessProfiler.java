@@ -105,7 +105,9 @@ public final class BuildProcessProfiler {
                 }
 
                 for (Context context : list) {
-                    System.out.println(context + "   " + formatter.format(context.elapsed / total * 100) + "%");
+                    if (context.elapsed != 0) {
+                        System.out.println(context + "   " + formatter.format(context.elapsed / total * 100) + "%");
+                    }
                 }
             }
         }

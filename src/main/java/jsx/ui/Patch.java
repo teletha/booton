@@ -338,16 +338,16 @@ abstract class Patch {
     private static abstract class ClassPatch extends Patch {
 
         /** The class name. */
-        protected final Style className;
+        protected final Style style;
 
         /**
          * @param parent
-         * @param className
+         * @param style
          */
-        private ClassPatch(Element parent, Style className) {
+        private ClassPatch(Element parent, Style style) {
             super(parent);
 
-            this.className = className;
+            this.style = style;
         }
     }
 
@@ -364,8 +364,8 @@ abstract class Patch {
          * @param parent
          * @param name
          */
-        AddClass(Element parent, Style className) {
-            super(parent, className);
+        AddClass(Element parent, Style style) {
+            super(parent, style);
         }
 
         /**
@@ -373,7 +373,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.addClass(className);
+            style.applyTo(parent);
         }
     }
 
@@ -399,7 +399,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            parent.removeClass(className);
+            style.unapplyFrom(parent);
         }
     }
 }
