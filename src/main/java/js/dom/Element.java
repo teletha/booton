@@ -13,6 +13,7 @@ import static js.dom.ElementStyle.*;
 import static js.lang.Global.*;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -350,6 +351,22 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     }
 
     /**
+     * @param rule
+     */
+    public Element remove(Style style) {
+        StyleRule rule = StyleRule.create("", style);
+        CSSStyleDeclaration dec = style();
+        Enumeration<String> names = rule.holder.keys();
+
+        while (names.hasMoreElements()) {
+            dec.remove(names.nextElement());
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
      * <p>
      * Add or remove class from this element, depending on either the class's presence or the value
      * of the switch argument.
@@ -488,7 +505,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return
      */
     @JavascriptNativePropertyAccessor()
-    protected abstract DOMTokenList classList();
+    public abstract DOMTokenList classList();
 
     /**
      * <p>

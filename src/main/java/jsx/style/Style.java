@@ -10,6 +10,7 @@
 package jsx.style;
 
 import js.dom.Element;
+import js.lang.NativeArray;
 
 /**
  * @version 2014/10/24 13:58:41
@@ -43,6 +44,21 @@ public interface Style {
      */
     public default void applyTo(Element dom) {
         dom.style(this);
+    }
+
+    /**
+     * <p>
+     * Unapply this style from the specified element.
+     * </p>
+     * 
+     * @param dom A element to unapply this style.
+     */
+    public default void unapplyFrom(Element dom) {
+        dom.remove(this);
+    }
+
+    public default void assignTo(NativeArray<Style> styles) {
+        styles.push(this);
     }
 
     public default void applyIf(boolean condition) {

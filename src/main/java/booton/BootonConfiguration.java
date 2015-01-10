@@ -36,7 +36,7 @@ public class BootonConfiguration {
     public int port = 10021;
 
     /** The build process profiling. */
-    public boolean profile = true;
+    public boolean profile = false;
 
     /**
      * <p>

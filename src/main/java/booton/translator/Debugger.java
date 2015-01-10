@@ -108,7 +108,7 @@ public class Debugger extends AnnotationVisitor {
      * Register current processing target.
      * </p>
      * 
-     * @param className A class name regex.
+     * @param style A class name regex.
      * @param methodName A method name regex.
      */
     public static void enable() {

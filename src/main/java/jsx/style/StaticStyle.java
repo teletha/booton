@@ -60,6 +60,14 @@ class StaticStyle implements Style {
      */
     @Override
     public void applyTo(Element dom) {
-        dom.addClass(name);
+        dom.classList().add(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unapplyFrom(Element dom) {
+        dom.classList().remove(name);
     }
 }
