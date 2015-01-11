@@ -401,6 +401,98 @@ public final class VirtualStructure {
 
         /**
          * <p>
+         * Apply the given {@link Style} to this container.
+         * </p>
+         * 
+         * @param style A style to apply.
+         */
+        public final ContainerDescriptor 〡title(String title, Style optionalStyle) {
+            if (title != null && title.length() != 0) {
+                style.styles.push(optionalStyle);
+                style.names.push("title");
+                style.values.push(title);
+            }
+            return this;
+        }
+
+        /**
+         * <p>
+         * Apply the given {@link Style} to this container.
+         * </p>
+         * 
+         * @param style A style to apply.
+         */
+        public final ContainerDescriptor 〡style(Style optionalStyle) {
+            if (optionalStyle != null) {
+                style.styles.push(optionalStyle);
+            }
+            return this;
+        }
+
+        /**
+         * <p>
+         * Apply the given {@link Style} to this container.
+         * </p>
+         * 
+         * @param style A style to apply.
+         */
+        public final ContainerDescriptor 〡style(Style optionalStyle, boolean condition) {
+            if (condition) {
+                〡style(optionalStyle);
+            }
+            return this;
+        }
+
+        /**
+         * <p>
+         * Apply the given {@link Style} to this container.
+         * </p>
+         * 
+         * @param style A style to apply.
+         */
+        public final ContainerDescriptor 〡style〡(Style... styles) {
+            if (styles != null) {
+                for (Style target : styles) {
+                    style.styles.push(target);
+                }
+            }
+            return this;
+        }
+
+        /**
+         * <p>
+         * Apply the given {@link Style} to this container.
+         * </p>
+         * 
+         * @param style A style to apply.
+         */
+        public final ContainerDescriptor 〡style〡(Style style, boolean condition) {
+            if (condition && style != null) {
+                VirtualStructure.this.style.styles.push(style);
+            }
+            return this;
+        }
+
+        /**
+         * <p>
+         * Add {@link Style} if the given attribute is valid.
+         * < /p>
+         * 
+         * @param style A target style to apply.
+         * @param attributeName An attribute name.
+         * @param attributeValue An attribute value.
+         */
+        public final ContainerDescriptor 〡style〡(Style style, String attributeName, String attributeValue) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
+                VirtualStructure.this.style.styles.push(style);
+                VirtualStructure.this.style.names.push(attributeName);
+                VirtualStructure.this.style.values.push(attributeValue);
+            }
+            return this;
+        }
+
+        /**
+         * <p>
          * Define children.
          * </p>
          * 
