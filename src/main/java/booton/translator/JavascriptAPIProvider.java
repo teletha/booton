@@ -43,4 +43,6 @@ public @interface JavascriptAPIProvider {
     String value() default "";
 
     boolean polyfill() default false;
+
+    boolean omitCode() default false;
 }
