@@ -31,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.Global;
-import js.lang.NativeArray;
 import js.lang.NativeString;
 import js.util.concurrent.CopyOnWriteArraySet;
 import kiss.ClassListener;
@@ -598,12 +597,9 @@ public class Javascript {
     public static final Javascript getScript(Class source) {
         source = JavaAPIProviders.convert(source);
 
-        if (source == NativeArray.class) {
-            return new Javascript(NativeArray.class);
-        }
-
         // check Native Class
-        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source)) {
+        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !JavascriptAPIProviders
+                .shouldOmitCode(source)) {
             return null;
         }
 
