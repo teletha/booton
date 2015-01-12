@@ -16,11 +16,13 @@ import java.util.List;
 import java.util.Set;
 
 import kiss.I;
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.Translator;
 
 /**
  * @version 2013/08/31 23:26:44
  */
+@JavascriptAPIProvider(omitCode = true)
 public class NativeArray<T> extends NativeObject {
 
     /** The java emulation. */

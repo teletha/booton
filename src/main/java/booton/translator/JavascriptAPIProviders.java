@@ -10,7 +10,9 @@
 package booton.translator;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import kiss.ClassListener;
 import kiss.Manageable;
@@ -22,8 +24,15 @@ import kiss.Singleton;
 @Manageable(lifestyle = Singleton.class)
 class JavascriptAPIProviders implements ClassListener<JavascriptAPIProvider> {
 
+    /** The provider classes. */
+    private static final Set<Class> providers = new HashSet();
+
     /** The class name mapping. */
     private static final Map<String, Class> definitions = new HashMap();
+
+    static boolean shouldOmitCode(Class clazz) {
+        return providers.contains(clazz);
+    }
 
     /**
      * <p>
@@ -49,6 +58,10 @@ class JavascriptAPIProviders implements ClassListener<JavascriptAPIProvider> {
             type = clazz.getSimpleName();
         }
         definitions.put(type, clazz);
+
+        if (provider.omitCode()) {
+            providers.add(clazz);
+        }
     }
 
     /**
@@ -56,5 +69,6 @@ class JavascriptAPIProviders implements ClassListener<JavascriptAPIProvider> {
      */
     @Override
     public void unload(Class<JavascriptAPIProvider> clazz) {
+        providers.remove(clazz);
     }
 }

@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.Global;
+import js.lang.NativeArray;
 import js.lang.NativeString;
 import js.util.concurrent.CopyOnWriteArraySet;
 import kiss.ClassListener;
@@ -77,7 +78,8 @@ public class Javascript {
     private static final Constructor primitiveLongConstructor;
 
     /** The primitive types. */
-    private static final List<Class<?>> primitives = Arrays.asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
+    private static final List<Class<?>> primitives = Arrays
+            .asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
 
     /** The fixed id for primitives. */
     private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);
@@ -399,6 +401,8 @@ public class Javascript {
                     if (source.isAnnotation()) {
                         compileAnnotation(code);
                     }
+                } else if (JavascriptAPIProviders.shouldOmitCode(source)) {
+                    // do nothing
                 } else {
                     BuildProcessProfiler.start("ParseCode", source);
                     new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
@@ -593,6 +597,10 @@ public class Javascript {
      */
     public static final Javascript getScript(Class source) {
         source = JavaAPIProviders.convert(source);
+
+        if (source == NativeArray.class) {
+            return new Javascript(NativeArray.class);
+        }
 
         // check Native Class
         if (source == null || source.isArray() || TranslatorManager.hasTranslator(source)) {
