@@ -144,6 +144,16 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
+    public Element remove(Style style) {
+        classList().remove(style.intern());
+
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setParent(EmulateElement parent) {
         this.parent = parent;
     }
