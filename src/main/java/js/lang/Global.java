@@ -92,7 +92,7 @@ public class Global {
      * and for converting JSON to values.
      * </p>
      */
-    public static final JSON JSON = new JSON();
+    public static final JSON JSON = emulate(JSON.class);
 
     /**
      * <p>

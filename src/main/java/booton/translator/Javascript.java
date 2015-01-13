@@ -77,8 +77,7 @@ public class Javascript {
     private static final Constructor primitiveLongConstructor;
 
     /** The primitive types. */
-    private static final List<Class<?>> primitives = Arrays
-            .asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
+    private static final List<Class<?>> primitives = Arrays.asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
 
     /** The fixed id for primitives. */
     private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);
@@ -598,8 +597,7 @@ public class Javascript {
         source = JavaAPIProviders.convert(source);
 
         // check Native Class
-        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !JavascriptAPIProviders
-                .shouldOmitCode(source)) {
+        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !JavascriptAPIProviders.shouldOmitCode(source)) {
             return null;
         }
 
@@ -655,7 +653,7 @@ public class Javascript {
         if (!clazz.isAnnotationPresent(JavaAPIProvider.class)) {
             JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
 
-            if (provider != null && clazz != Object.class) {
+            if (provider != null && clazz != Object.class && !provider.omitCode()) {
                 String name = provider.value();
 
                 if (name.length() == 0) {

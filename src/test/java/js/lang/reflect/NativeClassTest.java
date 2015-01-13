@@ -9,6 +9,8 @@
  */
 package js.lang.reflect;
 
+import js.lang.NativeArray;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,8 +23,8 @@ import booton.soeur.ScriptRunner;
 public class NativeClassTest {
 
     @Test
-    public void NativeArray() throws Exception {
+    public void loadNativeArray() throws Exception {
         Class clazz = Class.forName("js.lang.NativeArray");
-        assert clazz != null;
+        assert clazz == NativeArray.class;
     }
 }
