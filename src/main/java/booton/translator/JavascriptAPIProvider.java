@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * Annotated class provides the specified Java class API in Javascript runtime.
+ * Annotated class provides the specified JavaScript class API in Java runtime.
  * </p>
  * <p>
  * Normaly, the annotated class provides the simplified implementation of API and it is not used by
  * booton user. So it is recommended that the class has package private modifier.
  * </p>
  * 
- * @version 2013/04/14 14:02:55
+ * @version 2015/01/13 10:37:56
  */
 @Documented
 @Target(ElementType.TYPE)
@@ -33,14 +33,10 @@ public @interface JavascriptAPIProvider {
 
     /**
      * <p>
-     * Specify the class to provide API.
+     * Specify the JavaScript class name to provide API.
      * </p>
      * 
-     * @return A target class.
+     * @return A target JavaScript class name.
      */
     String value() default "";
-
-    boolean polyfill() default false;
-
-    boolean omitCode() default false;
 }
