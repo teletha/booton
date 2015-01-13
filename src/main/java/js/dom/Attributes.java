@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,51 +9,56 @@
  */
 package js.dom;
 
-import booton.translator.JavascriptNative;
-import booton.translator.JavascriptNativeProperty;
-import booton.translator.JavascriptNativePropertyAccessor;
 import booton.translator.Translator;
 
 /**
- * @version 2014/08/31 12:11:27
+ * @version 2015/01/13 12:33:49
  */
-public abstract class Attributes implements JavascriptNative {
+public abstract class Attributes {
 
     /**
      * <p>
+     * Returns the amount of values in this Attributes.
      * </p>
      * 
-     * @return
+     * @return Value size.
      */
-    @JavascriptNativePropertyAccessor
     protected abstract int length();
 
     /**
-     * @param index
-     * @return
+     * <p>
+     * Retrieve the {@link Attribute} by numerical indexing.
+     * </p>
+     * 
+     * @param index A index number.
+     * @return A indexed {@link Attribute}.
      */
-    @JavascriptNativeProperty
     protected abstract Attribute get(int index);
 
     /**
-     * @version 2014/09/14 2:27:03
+     * @version 2015/01/13 12:42:05
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<Attributes> {
 
         /**
          * <p>
+         * Returns the amount of values in this Attributes.
          * </p>
          * 
-         * @return
+         * @return Value size.
          */
         public String length() {
             return that + ".length";
         }
 
         /**
-         * @param index
-         * @return
+         * <p>
+         * Retrieve the {@link Attribute} by numerical indexing.
+         * </p>
+         * 
+         * @param index A index number.
+         * @return A indexed {@link Attribute}.
          */
         public String get(int index) {
             return that + "[" + param(0) + "]";
