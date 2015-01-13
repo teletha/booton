@@ -336,7 +336,7 @@ public final class VirtualStructure {
         public final void 〡(Style style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) container.classList.push(style);
+            if (style != null) style.assignTo(container.classList);
 
             // enter into the child node
             if (name != null) parents.addLast(container);

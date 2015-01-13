@@ -10,6 +10,8 @@
 package js.util.concurrent;
 
 import java.util.AbstractSet;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
@@ -73,6 +75,16 @@ class ConcurrentHashMap<K, V> extends HashMap<K, V> implements ConcurrentMap<K, 
     }
 
     /**
+     * Returns an enumeration of the keys in this table.
+     *
+     * @return an enumeration of the keys in this table
+     * @see #keySet()
+     */
+    public Enumeration<K> keys() {
+        return Collections.enumeration(super.keySet());
+    }
+
+    /**
      * Returns a {@link Set} view of the keys contained in this map. The set is backed by the map,
      * so changes to the map are reflected in the set, and vice-versa. The set supports element
      * removal, which removes the corresponding mapping from this map, via the
@@ -89,7 +101,7 @@ class ConcurrentHashMap<K, V> extends HashMap<K, V> implements ConcurrentMap<K, 
      */
     @Override
     public java.util.concurrent.ConcurrentHashMap.KeySetView<K, V> keySet() {
-        return (java.util.concurrent.ConcurrentHashMap.KeySetView<K, V>) (Object) super.keySet();
+        return (java.util.concurrent.ConcurrentHashMap.KeySetView<K, V>) super.keySet();
     }
 
     /**

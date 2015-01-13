@@ -13,7 +13,6 @@ import static js.dom.ElementStyle.*;
 import static js.lang.Global.*;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -356,10 +355,10 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     public Element remove(Style style) {
         StyleRule rule = StyleRule.create("", style);
         CSSStyleDeclaration dec = style();
-        Enumeration<String> names = rule.holder.keys();
 
-        while (names.hasMoreElements()) {
-            dec.remove(names.nextElement());
+        for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
+            String name = entry.getKey();
+            dec.remove(name);
         }
 
         // API definition

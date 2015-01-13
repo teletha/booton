@@ -10,6 +10,7 @@
 package jsx.style;
 
 import js.dom.Element;
+import js.lang.NativeArray;
 
 /**
  * @version 2014/10/24 13:58:41
@@ -56,9 +57,9 @@ public interface Style {
         dom.remove(this);
     }
 
-    // public default void assignTo(NativeArray<Style> styles) {
-    // styles.push(this);
-    // }
+    public default void assignTo(NativeArray<Style> styles) {
+        styles.push(this);
+    }
 
     public default Style when(boolean condition, Style style) {
         if (condition == false) {
