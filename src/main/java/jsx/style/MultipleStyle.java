@@ -10,6 +10,7 @@
 package jsx.style;
 
 import js.dom.Element;
+import js.lang.NativeArray;
 
 /**
  * @version 2014/12/17 13:06:39
@@ -46,5 +47,23 @@ public class MultipleStyle implements Style {
     public void applyTo(Element dom) {
         base.applyTo(dom);
         dynamic.applyTo(dom);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unapplyFrom(Element dom) {
+        base.unapplyFrom(dom);
+        dynamic.unapplyFrom(dom);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void assignTo(NativeArray<Style> styles) {
+        base.assignTo(styles);
+        dynamic.assignTo(styles);
     }
 }
