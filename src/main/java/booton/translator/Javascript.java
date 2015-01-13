@@ -399,7 +399,7 @@ public class Javascript {
                     if (source.isAnnotation()) {
                         compileAnnotation(code);
                     }
-                } else if (JavascriptAPIProviders.shouldOmitCode(source)) {
+                } else if (TranslatorManager.hasTranslator(source)) {
                     // do nothing
                 } else {
                     BuildProcessProfiler.start("ParseCode", source);
@@ -597,7 +597,7 @@ public class Javascript {
         source = JavaAPIProviders.convert(source);
 
         // check Native Class
-        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !JavascriptAPIProviders.shouldOmitCode(source)) {
+        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !source.isAnnotationPresent(JavascriptAPIProvider.class)) {
             return null;
         }
 
@@ -650,19 +650,19 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class<?> clazz) {
-        if (!clazz.isAnnotationPresent(JavaAPIProvider.class)) {
-            JavascriptAPIProvider provider = clazz.getAnnotation(JavascriptAPIProvider.class);
+        JavascriptAPIProvider js = clazz.getAnnotation(JavascriptAPIProvider.class);
 
-            if (provider != null && clazz != Object.class && !provider.omitCode()) {
-                String name = provider.value();
-
-                if (name.length() == 0) {
-                    name = clazz.getSimpleName();
-                }
-                return name;
-            }
+        if (js == null || TranslatorManager.hasTranslator(clazz)) {
+            return "boot." + computeSimpleClassName(clazz);
         }
-        return "boot." + computeSimpleClassName(clazz);
+
+        String name = js.value();
+
+        if (name.length() != 0) {
+            return name;
+        } else {
+            return clazz.getSimpleName();
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import booton.translator.JavascriptAPIProvider;
 import booton.translator.Translator;
 
 /**
- * @version 2013/08/31 23:26:44
+ * @version 2015/01/13 10:48:46
  */
-@JavascriptAPIProvider(omitCode = true)
+@JavascriptAPIProvider
 public class NativeArray<T> extends NativeObject {
 
     /** The java emulation. */
