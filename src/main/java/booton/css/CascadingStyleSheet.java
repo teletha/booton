@@ -13,8 +13,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import jsx.style.Style;
@@ -57,15 +55,15 @@ public class CascadingStyleSheet {
 
         // write rules
         for (StyleRule rule : StyleRule.rules) {
-            if (!rule.holder.isEmpty()) {
+            if (rule.names.length() != 0) {
                 // write requested properties only.
                 root.write(rule.selector, "{");
 
-                for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
-                    String name = entry.getKey();
+                for (int i = 0; i < rule.names.length(); i++) {
+                    String name = rule.names.get(i);
 
-                    for (String value : entry.getValue()) {
-                        root.property(name, value);
+                    for (int j = 0; j < rule.values.length(); j++) {
+                        root.property(name, rule.values.get(i).get(j));
                     }
                 }
                 root.write("}");

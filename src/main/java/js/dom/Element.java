@@ -14,7 +14,6 @@ import static js.lang.Global.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import js.lang.NativeObject;
 import jsx.style.Style;
@@ -337,11 +336,11 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         StyleRule rule = StyleRule.create("", style);
         CSSStyleDeclaration dec = style();
 
-        for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
-            String name = entry.getKey();
+        for (int i = 0; i < rule.names.length(); i++) {
+            String name = rule.names.get(i);
 
-            for (String value : entry.getValue()) {
-                dec.set(name, value);
+            for (int j = 0; j < rule.values.length(); j++) {
+                dec.set(name, rule.values.get(i).get(j));
             }
         }
 
@@ -356,8 +355,9 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         StyleRule rule = StyleRule.create("", style);
         CSSStyleDeclaration dec = style();
 
-        for (Entry<String, List<String>> entry : rule.holder.entrySet()) {
-            String name = entry.getKey();
+        for (int i = 0; i < rule.names.length(); i++) {
+            String name = rule.names.get(i);
+
             dec.remove(name);
         }
 

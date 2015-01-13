@@ -629,6 +629,14 @@ public class NativeArray<T> extends NativeObject {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return list.toString();
+    }
+
+    /**
      * @version 2013/08/31 23:26:39
      */
     @SuppressWarnings("unused")

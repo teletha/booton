@@ -10,10 +10,7 @@
 package jsx.style;
 
 import static java.lang.Integer.*;
-
-import java.util.List;
-import java.util.Map;
-
+import js.lang.NativeArray;
 import jsx.style.value.Color;
 
 /**
@@ -63,10 +60,11 @@ public class StyleTester extends StyleRuleDescriptor {
             assert values != null;
             assert values.length != 0;
 
-            Map<String, List<String>> properties = rules.holder;
-            List<String> list = properties.get(name);
+            int index = rules.names.indexOf(name);
+
+            NativeArray<String> list = rules.values.get(index);
             assert list != null;
-            assert list.size() == values.length;
+            assert list.length() == values.length;
 
             for (String value : values) {
                 if (value.startsWith("rgb(")) {
@@ -76,7 +74,7 @@ public class StyleTester extends StyleRuleDescriptor {
                 if (value.startsWith("transparent")) {
                     value = "hsla(0,0%,0%,0)";
                 }
-                assert list.contains(value);
+                assert list.indexOf(value) != -1;
             }
             return true;
         }
