@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
+import js.lang.NativeArray;
 import jsx.style.value.Unit;
 import booton.util.Strings;
 
@@ -209,6 +210,24 @@ public class PropertyDefinition<T> {
 
         for (T item : items) {
             joiner.add(conveter.apply(item).toString());
+        }
+        return joiner.toString();
+    }
+
+    /**
+     * <p>
+     * Join all values.
+     * </p>
+     * 
+     * @param images
+     * @param index
+     * @return
+     */
+    protected static final <T> String join(NativeArray<T> items, Function<T, Object> conveter) {
+        StringJoiner joiner = new StringJoiner(",");
+
+        for (int i = 0; i < items.length(); i++) {
+            joiner.add(conveter.apply(items.get(i)).toString());
         }
         return joiner.toString();
     }

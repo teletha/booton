@@ -10,9 +10,6 @@
 package jsx.style.property;
 
 import static jsx.style.value.Unit.*;
-
-import java.util.Set;
-
 import jsx.style.PropertyDefinition;
 import jsx.style.Style;
 import jsx.style.StyleName;
@@ -304,11 +301,10 @@ public class Transition extends PropertyDefinition<Transition> {
      */
     private void when(String selector, Style sub) {
         StyleRule rule = createSubRule(selector, sub);
-        Set<String> set = rule.holder.keySet();
 
-        value("transition-property", join(set, v -> v));
-        value("transition-duration", join(set, v -> duration));
-        value("transition-delay", join(set, v -> delay));
-        value("transition-timing-function", join(set, v -> timing));
+        value("transition-property", join(rule.names, v -> v));
+        value("transition-duration", join(rule.names, v -> duration));
+        value("transition-delay", join(rule.names, v -> delay));
+        value("transition-timing-function", join(rule.names, v -> timing));
     }
 }

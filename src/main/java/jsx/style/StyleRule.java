@@ -12,14 +12,13 @@ package jsx.style;
 import static jsx.style.Vendor.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
 
+import js.lang.NativeArray;
 import kiss.I;
-import kiss.Table;
 
 /**
  * @version 2014/11/13 15:49:15
@@ -32,8 +31,11 @@ public class StyleRule {
     /** The selector. */
     public final String selector;
 
-    /** The property holder. */
-    public final Table<String, String> holder = new Table();
+    /** The property names. */
+    public final NativeArray<String> names = new NativeArray();
+
+    /** The property values. */
+    public final NativeArray<NativeArray<String>> values = new NativeArray();
 
     /**
      * <p>
@@ -67,12 +69,18 @@ public class StyleRule {
      * @return
      */
     public boolean is(String name, String value) {
-        List<String> values = holder.get(name);
+        int index = names.indexOf(name);
 
-        if (values.size() == 0) {
+        if (index == -1) {
             return false;
         }
-        return values.contains(value);
+
+        for (int i = 0; i < values.get(index).length(); i++) {
+            if (values.get(index).get(i).equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -140,10 +148,18 @@ public class StyleRule {
                         vendor = Standard;
                     }
 
-                    if (override) {
-                        holder.put(vendor + name, Arrays.asList(value));
+                    String resolvedName = vendor + name;
+                    int index = names.indexOf(resolvedName);
+
+                    if (index == -1) {
+                        this.names.push(resolvedName);
+                        this.values.push((NativeArray<String>) new NativeArray(new String[] {value}));
                     } else {
-                        holder.push(vendor + name, value);
+                        if (override) {
+                            this.values.set(index, new NativeArray(new String[] {value}));
+                        } else {
+                            this.values.get(index).push(value);
+                        }
                     }
                 }
             }
