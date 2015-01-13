@@ -70,7 +70,6 @@ class TranslatorManager {
      */
     private static void register(Class nativeClass) {
         if (natives.add(nativeClass)) {
-            System.out.println(nativeClass);
             for (Class type : ClassUtil.getTypes(nativeClass)) {
                 for (Class interfaceType : type.getInterfaces()) {
                     if (interfaceType == JavascriptNative.class) {
