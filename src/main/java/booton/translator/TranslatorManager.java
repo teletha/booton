@@ -70,6 +70,7 @@ class TranslatorManager {
      */
     private static void register(Class nativeClass) {
         if (natives.add(nativeClass)) {
+            System.out.println(nativeClass);
             for (Class type : ClassUtil.getTypes(nativeClass)) {
                 for (Class interfaceType : type.getInterfaces()) {
                     if (interfaceType == JavascriptNative.class) {
@@ -77,14 +78,11 @@ class TranslatorManager {
                         for (Method method : type.getDeclaredMethods()) {
                             // Methods defined in interface are as native.
                             // Methods defined in class are as native if these have native modifier.
-                            if (type.isInterface() || Modifier.isNative(method.getModifiers()) || method
-                                    .isAnnotationPresent(JavascriptNativeProperty.class)) {
-                                nativeMethods
-                                        .push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                            if (type.isInterface() || Modifier.isNative(method.getModifiers()) || method.isAnnotationPresent(JavascriptNativeProperty.class)) {
+                                nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
                             }
 
-                            JavascriptNativePropertyAccessor accessor = method
-                                    .getAnnotation(JavascriptNativePropertyAccessor.class);
+                            JavascriptNativePropertyAccessor accessor = method.getAnnotation(JavascriptNativePropertyAccessor.class);
 
                             if (accessor != null) {
                                 Integer hash = hash(method.getName(), Type.getMethodDescriptor(method));
@@ -257,8 +255,7 @@ class TranslatorManager {
             return true;
         }
 
-        if (name.equals("$deserializeLambda$") && description
-                .equals("(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;")) {
+        if (name.equals("$deserializeLambda$") && description.equals("(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;")) {
             return true;
         }
 
@@ -282,8 +279,7 @@ class TranslatorManager {
         @Override
         protected String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
             // append identifier of constructor method
-            context.add(new OperandNumber(Integer.valueOf(Javascript
-                    .computeMethodName(owner, "<init>", desc)
+            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
                     .substring(1))));
 
             return "new " + Javascript.computeClassName(owner) + writeParameter(types, context);

@@ -32,7 +32,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * 
  * @version 2013/07/30 19:05:51
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "Element")
 public abstract class Element extends Node<Element> implements JavascriptNative {
 
     /**

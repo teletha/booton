@@ -22,7 +22,7 @@ import booton.translator.JavascriptNativeProperty;
  * 
  * @version 2015/01/13 10:04:00
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "JSON")
 public class JSON implements JavascriptNative {
 
     /**

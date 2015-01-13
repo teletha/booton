@@ -24,7 +24,7 @@ import booton.translator.JavascriptAPIProvider;
  * @version 2013/09/24 16:25:46
  */
 @JavaAPIProvider(String.class)
-@JavascriptAPIProvider("String")
+@JavascriptAPIProvider(targetJavaScriptClassName = "String")
 class JSString implements Comparable<String>, CharSequence {
 
     /** The cache for hash. */

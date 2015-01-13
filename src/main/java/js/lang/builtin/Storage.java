@@ -26,7 +26,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * 
  * @version 2013/10/04 11:24:39
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "Storage")
 public abstract class Storage extends NativeObject implements JavascriptNative {
 
     /**
