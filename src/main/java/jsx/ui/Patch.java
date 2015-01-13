@@ -402,4 +402,62 @@ abstract class Patch {
             style.unapplyFrom(parent);
         }
     }
+
+    /**
+     * @version 2015/01/13 16:28:58
+     */
+    static class AddProperty extends Patch {
+
+        /** The property name. */
+        private final String name;
+
+        /** The property value. */
+        private final String value;
+
+        /**
+         * @param parent
+         * @param style
+         */
+        AddProperty(Element parent, String name, String value) {
+            super(parent);
+
+            this.name = name;
+            this.value = value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void apply() {
+            parent.style().set(name, value);
+        }
+    }
+
+    /**
+     * @version 2015/01/13 16:31:55
+     */
+    static class RemoveProperty extends Patch {
+
+        /** The property name. */
+        private final String name;
+
+        /**
+         * @param parent
+         * @param style
+         */
+        RemoveProperty(Element parent, String name) {
+            super(parent);
+
+            this.name = name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void apply() {
+            parent.style().remove(name);
+        }
+    }
 }

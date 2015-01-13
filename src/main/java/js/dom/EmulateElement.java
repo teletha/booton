@@ -594,7 +594,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected CSSStyleDeclaration style() {
+    public CSSStyleDeclaration style() {
         return css;
     }
 

@@ -472,7 +472,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return
      */
     @JavascriptNativePropertyAccessor
-    protected native CSSStyleDeclaration style();
+    public native CSSStyleDeclaration style();
 
     @JavascriptNativePropertyAccessor
     protected abstract String value();
