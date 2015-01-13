@@ -24,7 +24,7 @@ import booton.translator.JavascriptNative;
  * 
  * @version 2013/07/29 13:31:25
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "CSSStyleDeclaration")
 public abstract class CSSStyleDeclaration implements JavascriptNative {
 
     /** The property name mapping. */

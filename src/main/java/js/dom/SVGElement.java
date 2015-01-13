@@ -15,7 +15,7 @@ import booton.translator.JavascriptNative;
 /**
  * @version 2014/11/18 12:57:59
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "SVGElement")
 public abstract class SVGElement extends Element implements JavascriptNative {
 
     /**

@@ -16,7 +16,7 @@ import booton.translator.JavascriptAPIProvider;
  * @version 2014/03/08 11:26:06
  */
 @Necessary
-@JavascriptAPIProvider("Array")
+@JavascriptAPIProvider(targetJavaScriptClassName = "Array")
 class NativeArrayExtension {
 
     /** The cached type. */

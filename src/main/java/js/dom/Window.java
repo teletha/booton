@@ -16,7 +16,7 @@ import booton.translator.JavascriptNativeProperty;
 /**
  * @version 2013/12/29 0:44:51
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "Window")
 public abstract class Window extends EventTarget<Window> implements JavascriptNative {
 
     /**

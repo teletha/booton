@@ -16,7 +16,7 @@ import booton.translator.JavascriptNative;
 /**
  * @version 2014/11/13 9:44:11
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "DOMTokenList")
 public class DOMTokenList implements JavascriptNative {
 
     /**

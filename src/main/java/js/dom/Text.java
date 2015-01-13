@@ -14,7 +14,7 @@ import booton.translator.JavascriptAPIProvider;
 /**
  * @version 2013/07/01 12:01:48
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "Text")
 public abstract class Text extends Node<Text> {
 
     /**

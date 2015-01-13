@@ -15,6 +15,6 @@ import booton.translator.JavascriptNative;
 /**
  * @version 2013/07/27 15:57:10
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "HTMLCollection")
 public abstract class HTMLCollection extends NodeList<Element> implements JavascriptNative {
 }

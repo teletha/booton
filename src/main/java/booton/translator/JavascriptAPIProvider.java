@@ -38,5 +38,5 @@ public @interface JavascriptAPIProvider {
      * 
      * @return A target JavaScript class name.
      */
-    String value() default "";
+    String targetJavaScriptClassName() default "";
 }

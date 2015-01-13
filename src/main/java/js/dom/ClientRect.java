@@ -16,7 +16,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
 /**
  * @version 2013/07/29 17:06:12
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "ClientRect")
 public class ClientRect implements JavascriptNative {
 
     /**

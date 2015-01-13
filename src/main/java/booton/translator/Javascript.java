@@ -424,7 +424,11 @@ public class Javascript {
             JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
 
             if (provider != null) {
-                code.append(",").string(provider.value().length() != 0 ? provider.value() : source.getSimpleName());
+                String JSClassName = provider.targetJavaScriptClassName();
+
+                if (JSClassName.length() != 0) {
+                    code.append(",").string(JSClassName);
+                }
             }
 
             if (Extensible.class.isAssignableFrom(source)) {
@@ -652,16 +656,10 @@ public class Javascript {
     public static final String computeClassName(Class<?> clazz) {
         JavascriptAPIProvider js = clazz.getAnnotation(JavascriptAPIProvider.class);
 
-        if (js == null || TranslatorManager.hasTranslator(clazz)) {
+        if (js == null || js.targetJavaScriptClassName().isEmpty() || TranslatorManager.hasTranslator(clazz)) {
             return "boot." + computeSimpleClassName(clazz);
-        }
-
-        String name = js.value();
-
-        if (name.length() != 0) {
-            return name;
         } else {
-            return clazz.getSimpleName();
+            return js.targetJavaScriptClassName();
         }
     }
 

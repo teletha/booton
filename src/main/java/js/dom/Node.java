@@ -23,7 +23,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
 /**
  * @version 2013/07/04 20:41:55
  */
-@JavascriptAPIProvider
+@JavascriptAPIProvider(targetJavaScriptClassName = "Node")
 public abstract class Node<T extends Node<T>> extends EventTarget<T> implements JavascriptNative {
 
     /**
