@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import jsx.style.value.LinearGradient;
 import jsx.style.value.Unit;
 
 /**
- * @version 2014/10/27 16:28:21
+ * @version 2015/01/14 12:54:10
  */
 public class Background extends Colorable<Background> {
 
@@ -64,6 +64,21 @@ public class Background extends Colorable<Background> {
      */
     public Background none() {
         return value("background-image", "none");
+    }
+
+    /**
+     * <p>
+     * The CSS background-image property sets the background images for an element. The images are
+     * drawn on successive stacking context layers, with the first specified being drawn as if it is
+     * the closest to the user. The borders of the element are then drawn on top of them, and the
+     * background-color is drawn beneath them.
+     * </p>
+     * 
+     * @param uri
+     * @return
+     */
+    public Background image(String imageURL) {
+        return value("background-image", normalizeURL(imageURL));
     }
 
     /**
@@ -179,6 +194,230 @@ public class Background extends Colorable<Background> {
     }
 
     /**
+     * <p>
+     * If a background-image is specified, the background-attachment CSS property determines whether
+     * that image's position is fixed within the viewport, or scrolls along with its containing
+     * block.
+     * </p>
+     * <p>
+     * The background image will scroll within the viewport along with the block the image is
+     * contained within.
+     * </p>
+     */
+    public Background scroll() {
+        return value("background-attachment", "scroll");
+    }
+
+    /**
+     * <p>
+     * If a background-image is specified, the background-attachment CSS property determines whether
+     * that image's position is fixed within the viewport, or scrolls along with its containing
+     * block.
+     * </p>
+     * <p>
+     * The background image will not scroll with its containing element, instead remaining
+     * stationary within the viewport.
+     * </p>
+     */
+    public Background fixed() {
+        return value("background-attachment", "fixed");
+    }
+
+    /**
+     * <p>
+     * If a background-image is specified, the background-attachment CSS property determines whether
+     * that image's position is fixed within the viewport, or scrolls along with its containing
+     * block.
+     * </p>
+     * <p>
+     * The background image will not scroll with its containing element, but will scroll when the
+     * element's content scrolls: it is fixed regarding the element's content.
+     * </p>
+     */
+    public Background local() {
+        return value("background-attachment", "local");
+    }
+
+    /**
+     * <p>
+     * The background-size CSS property specifies the size of the background images. The size of the
+     * image can be fully constrained or only partially in order to preserve its intrinsic ratio.
+     * </p>
+     * <p>
+     * A value that scales the background image to the specified length in the corresponding
+     * dimension. Negative lengths are not allowed.
+     * </p>
+     * 
+     * @return
+     */
+    public Background size(double size, Unit unit) {
+        return value("background-size", compute(size, unit));
+    }
+
+    /**
+     * <p>
+     * The background-size CSS property specifies the size of the background images. The size of the
+     * image can be fully constrained or only partially in order to preserve its intrinsic ratio.
+     * </p>
+     * <p>
+     * This keyword specifies that the background image should be scaled to be as small as possible
+     * while ensuring both its dimensions are greater than or equal to the corresponding dimensions
+     * of the background positioning area.
+     * </p>
+     * 
+     * @return
+     */
+    public Background cover() {
+        return value("background-size", "cover");
+    }
+
+    /**
+     * <p>
+     * The background-size CSS property specifies the size of the background images. The size of the
+     * image can be fully constrained or only partially in order to preserve its intrinsic ratio.
+     * </p>
+     * <p>
+     * This keyword specifies that the background image should be scaled to be as large as possible
+     * while ensuring both its dimensions are less than or equal to the corresponding dimensions of
+     * the background positioning area.
+     * </p>
+     * 
+     * @return
+     */
+    public Background contain() {
+        return value("background-size", "contain");
+    }
+
+    /**
+     * <p>
+     * The background-position CSS property sets the initial position, relative to the background
+     * position layer defined by background-origin for each defined background image.
+     * </p>
+     */
+    public Background position(double horizontalSize, Unit horizontalUnit, double verticalSize, Unit verticalUnit) {
+        return value("background-position", compute(horizontalSize, horizontalUnit) + " " + compute(verticalSize, verticalUnit));
+    }
+
+    /**
+     * <p>
+     * The background-position CSS property sets the initial position, relative to the background
+     * position layer defined by background-origin for each defined background image.
+     * </p>
+     */
+    public Background horizontal(double horizontalSize, Unit horizontalUnit) {
+        return value("background-position", compute(horizontalSize, horizontalUnit) + " 0%");
+    }
+
+    /**
+     * <p>
+     * The background-position CSS property sets the initial position, relative to the background
+     * position layer defined by background-origin for each defined background image.
+     * </p>
+     */
+    public Background vertical(double verticalSize, Unit verticalUnit) {
+        return value("background-position", "0% " + compute(verticalSize, verticalUnit));
+    }
+
+    /**
+     * <p>
+     * The background-repeat CSS property defines how background images are repeated. A background
+     * image can be repeated along the horizontal axis, the vertical axis, both, or not repeated at
+     * all. When the repetition of the image tiles doesn't let them exactly cover the background,
+     * the way adjustments are done can be controlled by the author: by default, the last image is
+     * clipped, but the different tiles can instead be re-sized, or space can be inserted between
+     * the tiles.
+     * </p>
+     */
+    public Background repeatX() {
+        return value("background-repeat", "repeat-x");
+    }
+
+    /**
+     * <p>
+     * The background-repeat CSS property defines how background images are repeated. A background
+     * image can be repeated along the horizontal axis, the vertical axis, both, or not repeated at
+     * all. When the repetition of the image tiles doesn't let them exactly cover the background,
+     * the way adjustments are done can be controlled by the author: by default, the last image is
+     * clipped, but the different tiles can instead be re-sized, or space can be inserted between
+     * the tiles.
+     * </p>
+     */
+    public Background repeatY() {
+        return value("background-repeat", "repeat-y");
+    }
+
+    /**
+     * <p>
+     * The background-repeat CSS property defines how background images are repeated. A background
+     * image can be repeated along the horizontal axis, the vertical axis, both, or not repeated at
+     * all. When the repetition of the image tiles doesn't let them exactly cover the background,
+     * the way adjustments are done can be controlled by the author: by default, the last image is
+     * clipped, but the different tiles can instead be re-sized, or space can be inserted between
+     * the tiles.
+     * </p>
+     */
+    public Background repeat() {
+        return value("background-repeat", "repeat");
+    }
+
+    /**
+     * <p>
+     * The background-repeat CSS property defines how background images are repeated. A background
+     * image can be repeated along the horizontal axis, the vertical axis, both, or not repeated at
+     * all. When the repetition of the image tiles doesn't let them exactly cover the background,
+     * the way adjustments are done can be controlled by the author: by default, the last image is
+     * clipped, but the different tiles can instead be re-sized, or space can be inserted between
+     * the tiles.
+     * </p>
+     */
+    public Background space() {
+        return value("background-repeat", "space");
+    }
+
+    /**
+     * <p>
+     * The background-repeat CSS property defines how background images are repeated. A background
+     * image can be repeated along the horizontal axis, the vertical axis, both, or not repeated at
+     * all. When the repetition of the image tiles doesn't let them exactly cover the background,
+     * the way adjustments are done can be controlled by the author: by default, the last image is
+     * clipped, but the different tiles can instead be re-sized, or space can be inserted between
+     * the tiles.
+     * </p>
+     */
+    public Background round() {
+        return value("background-repeat", "round");
+    }
+
+    /**
+     * <p>
+     * The background-repeat CSS property defines how background images are repeated. A background
+     * image can be repeated along the horizontal axis, the vertical axis, both, or not repeated at
+     * all. When the repetition of the image tiles doesn't let them exactly cover the background,
+     * the way adjustments are done can be controlled by the author: by default, the last image is
+     * clipped, but the different tiles can instead be re-sized, or space can be inserted between
+     * the tiles.
+     * </p>
+     */
+    public Background noRepeat() {
+        return value("background-repeat", "no-repeat");
+    }
+
+    /**
+     * <p>
+     * Normalize the specified image URL.
+     * </p>
+     * 
+     * @param imageURL A target URL to normalize.
+     * @return A normalized URL.
+     */
+    private static String normalizeURL(String imageURL) {
+        if (!imageURL.startsWith("url(")) {
+            imageURL = "url(" + imageURL + ")";
+        }
+        return imageURL;
+    }
+
+    /**
      * @version 2014/10/27 22:43:16
      */
     public static class BackgroundImage {
@@ -241,12 +480,8 @@ public class Background extends Colorable<Background> {
          * @param image
          */
         public static final BackgroundImage url(String image) {
-            if (!image.startsWith("url(")) {
-                image = "url(" + image + ")";
-            }
-
             BackgroundImage created = new BackgroundImage();
-            created.properties[0] = image;
+            created.properties[0] = normalizeURL(image);
 
             return created;
         }
