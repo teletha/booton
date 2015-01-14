@@ -55,12 +55,12 @@ public class CascadingStyleSheet {
 
         // write rules
         for (StyleRule rule : StyleRule.rules) {
-            if (rule.names.length() != 0) {
+            if (rule.properties.size() != 0) {
                 // write requested properties only.
                 root.write(rule.selector, "{");
 
-                for (int i = 0; i < rule.names.length(); i++) {
-                    root.property(rule.names.get(i), rule.values.get(i));
+                for (int i = 0; i < rule.properties.size(); i++) {
+                    root.property(rule.properties.key(i), rule.properties.value(i));
                 }
                 root.write("}");
             }

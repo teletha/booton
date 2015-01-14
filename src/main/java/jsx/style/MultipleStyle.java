@@ -15,7 +15,7 @@ import js.lang.NativeArray;
 /**
  * @version 2014/12/17 13:06:39
  */
-public class MultipleStyle implements Style {
+class MultipleStyle implements Style {
 
     /** The base style. */
     public final Style base;
