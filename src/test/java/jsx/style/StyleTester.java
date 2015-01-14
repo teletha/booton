@@ -11,7 +11,6 @@ package jsx.style;
 
 import static java.lang.Integer.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jsx.style.value.Color;
@@ -63,14 +62,7 @@ public class StyleTester extends StyleRuleDescriptor {
             assert values != null;
             assert values.length != 0;
 
-            List<String> matches = new ArrayList();
-
-            for (int i = 0; i < rules.names.length(); i++) {
-                if (rules.names.get(i).equals(name)) {
-                    matches.add(rules.values.get(i));
-                }
-            }
-
+            List<String> matches = rules.properties.getAll(name);
             assert matches.size() == values.length;
 
             for (String value : values) {

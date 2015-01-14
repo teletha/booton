@@ -336,8 +336,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         StyleRule rule = StyleRule.create("", style);
         CSSStyleDeclaration dec = style();
 
-        for (int i = 0; i < rule.names.length(); i++) {
-            dec.set(rule.names.get(i), rule.values.get(i));
+        for (int i = 0; i < rule.properties.size(); i++) {
+            dec.set(rule.properties.key(i), rule.properties.value(i));
         }
 
         // API definition
@@ -351,10 +351,8 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         StyleRule rule = StyleRule.create("", style);
         CSSStyleDeclaration dec = style();
 
-        for (int i = 0; i < rule.names.length(); i++) {
-            String name = rule.names.get(i);
-
-            dec.remove(name);
+        for (int i = 0; i < rule.properties.size(); i++) {
+            dec.remove(rule.properties.key(i));
         }
 
         // API definition

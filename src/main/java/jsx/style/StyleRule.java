@@ -17,7 +17,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
 
-import js.lang.NativeArray;
+import jsx.collection.DualList;
 import kiss.I;
 
 /**
@@ -31,11 +31,8 @@ public class StyleRule {
     /** The selector. */
     public final String selector;
 
-    /** The property names. */
-    public final NativeArray<String> names;
-
-    /** The property values. */
-    public final NativeArray<String> values;
+    /** The property list. */
+    public final DualList<String, String> properties;
 
     /**
      * <p>
@@ -57,8 +54,7 @@ public class StyleRule {
      */
     StyleRule(String selector) {
         this.selector = selector;
-        this.names = new NativeArray();
-        this.values = new NativeArray();
+        this.properties = new DualList();
     }
 
     /**
@@ -68,10 +64,9 @@ public class StyleRule {
      *
      * @param name An actual selector.
      */
-    StyleRule(NativeArray<String> names, NativeArray<String> values) {
+    StyleRule(DualList<String, String> properties) {
         this.selector = "";
-        this.names = names;
-        this.values = values;
+        this.properties = properties;
     }
 
     /**
@@ -84,13 +79,7 @@ public class StyleRule {
      * @return
      */
     public boolean is(String name, String value) {
-        int index = names.indexOf(name);
-
-        if (index == -1) {
-            return false;
-        }
-
-        return values.get(index).equals(value);
+        return properties.get(name).isPresent();
     }
 
     /**
@@ -159,18 +148,11 @@ public class StyleRule {
                     }
 
                     String resolvedName = vendor + name;
-                    int index = names.indexOf(resolvedName);
 
-                    if (index == -1) {
-                        this.names.push(resolvedName);
-                        this.values.push(value);
+                    if (override) {
+                        this.properties.set(resolvedName, value);
                     } else {
-                        if (override) {
-                            this.values.set(index, value);
-                        } else {
-                            this.names.push(resolvedName);
-                            this.values.push(value);
-                        }
+                        this.properties.add(resolvedName, value);
                     }
                 }
             }
