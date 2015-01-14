@@ -62,8 +62,9 @@ public class MultipleStyle implements Style {
      * {@inheritDoc}
      */
     @Override
-    public void assignTo(NativeArray<Style> styles) {
-        base.assignTo(styles);
-        dynamic.assignTo(styles);
+    public void assignTo(NativeArray<Style> styles, NativeArray<String> names, NativeArray<String> values) {
+        base.assignTo(styles, names, values);
+        dynamic.assignTo(styles, names, values);
     }
+
 }

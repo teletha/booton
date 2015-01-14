@@ -17,16 +17,16 @@ import js.lang.NativeArray;
 import jsx.style.Style;
 import jsx.ui.Patch.AddAttribute;
 import jsx.ui.Patch.AddClass;
-import jsx.ui.Patch.AddProperty;
 import jsx.ui.Patch.ChangeAttribute;
 import jsx.ui.Patch.InsertChild;
 import jsx.ui.Patch.MoveChild;
 import jsx.ui.Patch.RemoveAttribute;
 import jsx.ui.Patch.RemoveChild;
 import jsx.ui.Patch.RemoveClass;
-import jsx.ui.Patch.RemoveProperty;
+import jsx.ui.Patch.RemoveInlineStyle;
 import jsx.ui.Patch.ReplaceChild;
 import jsx.ui.Patch.ReplaceText;
+import jsx.ui.Patch.SetInlineStyle;
 
 /**
  * @version 2014/10/07 12:49:34
@@ -73,40 +73,9 @@ class PatchDiff {
         List<Patch> patches = new ArrayList();
         patches.addAll(diff(next.dom, prev.attributes, next.attributes));
         patches.addAll(diff(next.dom, prev.classList, next.classList));
+        patches.addAll(diffInlineStyle(next.dom, prev.inlines, next.inlines));
         patches.addAll(diff(next.dom, prev, next));
 
-        return patches;
-    }
-
-    /**
-     * <p>
-     * Diff class list.
-     * </p>
-     * 
-     * @param context
-     * @param prev A previouse state.
-     * @param next A next state.
-     * @return
-     */
-    static List<Patch> diff(Element context, NativeArray<String> prevNames, NativeArray<String> prevValues, NativeArray<String> nextNames, NativeArray<String> nextValues) {
-        List<Patch> patches = new ArrayList();
-
-        for (int i = 0, length = nextNames.length(); i < length; i++) {
-            String nextName = nextNames.get(i);
-            int prevIndex = prevNames.indexOf(nextName);
-
-            if (prevIndex == -1) {
-                patches.add(new AddProperty(context, nextName, nextValues.get(i)));
-            }
-        }
-
-        for (int i = 0, length = prevNames.length(); i < length; i++) {
-            String prevName = prevNames.get(i);
-
-            if (nextNames.indexOf(prevName) == -1) {
-                patches.add(new RemoveProperty(context, prevName));
-            }
-        }
         return patches;
     }
 
@@ -176,6 +145,45 @@ class PatchDiff {
 
             if (next.names.indexOf(key) == -1) {
                 patches.add(new RemoveAttribute(context, key));
+            }
+        }
+        return patches;
+    }
+
+    /**
+     * <p>
+     * Diff attributes.
+     * </p>
+     * 
+     * @param context
+     * @param prev A previouse state.
+     * @param next A next state.
+     * @return
+     */
+    static List<Patch> diffInlineStyle(Element context, VirtualKVS<String, String> prev, VirtualKVS<String, String> next) {
+        List<Patch> patches = new ArrayList();
+
+        for (int nextIndex = 0; nextIndex < next.names.length(); nextIndex++) {
+            String key = next.names.get(nextIndex);
+            int prevIndex = prev.names.indexOf(key);
+
+            if (prevIndex == -1) {
+                patches.add(new SetInlineStyle(context, key, next.values.get(nextIndex)));
+            } else {
+                String prevValue = prev.values.get(prevIndex);
+                String nextValue = next.values.get(nextIndex);
+
+                if (!prevValue.equals(nextValue)) {
+                    patches.add(new SetInlineStyle(context, key, nextValue));
+                }
+            }
+        }
+
+        for (int i = 0; i < prev.names.length(); i++) {
+            String key = prev.names.get(i);
+
+            if (next.names.indexOf(key) == -1) {
+                patches.add(new RemoveInlineStyle(context, key));
             }
         }
         return patches;

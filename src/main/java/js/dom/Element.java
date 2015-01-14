@@ -337,11 +337,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         CSSStyleDeclaration dec = style();
 
         for (int i = 0; i < rule.names.length(); i++) {
-            String name = rule.names.get(i);
-
-            for (int j = 0; j < rule.values.length(); j++) {
-                dec.set(name, rule.values.get(i).get(j));
-            }
+            dec.set(rule.names.get(i), rule.values.get(i));
         }
 
         // API definition

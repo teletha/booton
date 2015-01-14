@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import js.dom.Element;
+import js.lang.NativeArray;
 
 /**
  * @version 2014/12/17 12:03:37
@@ -69,5 +70,13 @@ class StaticStyle implements Style {
     @Override
     public void unapplyFrom(Element dom) {
         dom.classList().remove(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void assignTo(NativeArray<Style> styles, NativeArray<String> names, NativeArray<String> values) {
+        styles.push(this);
     }
 }
