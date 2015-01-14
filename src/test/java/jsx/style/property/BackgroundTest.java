@@ -48,6 +48,17 @@ public class BackgroundTest extends StyleTester {
     }
 
     @Test
+    public void imageSingle() {
+        ValidatableStyle parsed = style(() -> {
+            background.image("test").fixed().cover().repeatX();
+        });
+        assert parsed.property("background-image", "url(test)");
+        assert parsed.property("background-attachment", "fixed");
+        assert parsed.property("background-size", "cover");
+        assert parsed.property("background-repeat", "repeat-x");
+    }
+
+    @Test
     public void image() {
         ValidatableStyle parsed = style(() -> {
             background.image(BackgroundImage.url("test").top().left().fixed().repeat().cover());

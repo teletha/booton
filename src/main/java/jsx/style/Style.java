@@ -82,4 +82,12 @@ public interface Style {
             return new StaticStyle(name);
         });
     }
+
+    /**
+     * @param object
+     * @return
+     */
+    public default Style with(Style other) {
+        return new MultipleStyle(this, other);
+    }
 }
