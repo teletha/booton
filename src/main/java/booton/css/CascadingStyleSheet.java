@@ -60,11 +60,7 @@ public class CascadingStyleSheet {
                 root.write(rule.selector, "{");
 
                 for (int i = 0; i < rule.names.length(); i++) {
-                    String name = rule.names.get(i);
-
-                    for (int j = 0; j < rule.values.length(); j++) {
-                        root.property(name, rule.values.get(i).get(j));
-                    }
+                    root.property(rule.names.get(i), rule.values.get(i));
                 }
                 root.write("}");
             }

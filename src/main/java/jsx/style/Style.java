@@ -57,8 +57,13 @@ public interface Style {
         dom.remove(this);
     }
 
-    public default void assignTo(NativeArray<Style> styles) {
-        styles.push(this);
+    public default void assignTo(NativeArray<Style> styles, NativeArray<String> names, NativeArray<String> values) {
+        StyleRule style = new StyleRule(names, values);
+
+        // swap context rule and execute it
+        PropertyDefinition.declarable = style;
+        declare();
+        PropertyDefinition.declarable = null;
     }
 
     public default Style when(boolean condition, Style style) {

@@ -406,7 +406,7 @@ abstract class Patch {
     /**
      * @version 2015/01/13 16:28:58
      */
-    static class AddProperty extends Patch {
+    static class SetInlineStyle extends Patch {
 
         /** The property name. */
         private final String name;
@@ -418,7 +418,7 @@ abstract class Patch {
          * @param parent
          * @param style
          */
-        AddProperty(Element parent, String name, String value) {
+        SetInlineStyle(Element parent, String name, String value) {
             super(parent);
 
             this.name = name;
@@ -437,7 +437,7 @@ abstract class Patch {
     /**
      * @version 2015/01/13 16:31:55
      */
-    static class RemoveProperty extends Patch {
+    static class RemoveInlineStyle extends Patch {
 
         /** The property name. */
         private final String name;
@@ -446,7 +446,7 @@ abstract class Patch {
          * @param parent
          * @param style
          */
-        RemoveProperty(Element parent, String name) {
+        RemoveInlineStyle(Element parent, String name) {
             super(parent);
 
             this.name = name;

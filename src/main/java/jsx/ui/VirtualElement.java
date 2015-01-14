@@ -10,6 +10,7 @@
 package jsx.ui;
 
 import static js.lang.Global.*;
+import js.dom.CSSStyleDeclaration;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.style.Style;
@@ -27,6 +28,9 @@ class VirtualElement extends VirtualFragment<Element> {
 
     /** The class attributes. */
     final NativeArray<Style> classList = new NativeArray();
+
+    /** The The inline styles. */
+    final VirtualKVS<String, String> inlines = new VirtualKVS();
 
     /**
      * @param string
@@ -52,6 +56,17 @@ class VirtualElement extends VirtualFragment<Element> {
         // assign classes
         for (int i = 0; i < classList.length(); i++) {
             classList.get(i).applyTo(dom);
+        }
+
+        // assign inline style
+        int length = inlines.names.length();
+
+        if (length != 0) {
+            CSSStyleDeclaration style = dom.style();
+
+            for (int i = 0; i < length; i++) {
+                style.set(inlines.names.get(i), inlines.values.get(i));
+            }
         }
 
         // assign event listeners

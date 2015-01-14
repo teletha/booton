@@ -32,10 +32,10 @@ public class StyleRule {
     public final String selector;
 
     /** The property names. */
-    public final NativeArray<String> names = new NativeArray();
+    public final NativeArray<String> names;
 
     /** The property values. */
-    public final NativeArray<NativeArray<String>> values = new NativeArray();
+    public final NativeArray<String> values;
 
     /**
      * <p>
@@ -57,6 +57,21 @@ public class StyleRule {
      */
     StyleRule(String selector) {
         this.selector = selector;
+        this.names = new NativeArray();
+        this.values = new NativeArray();
+    }
+
+    /**
+     * <p>
+     * Define style rule.
+     * </p>
+     *
+     * @param name An actual selector.
+     */
+    StyleRule(NativeArray<String> names, NativeArray<String> values) {
+        this.selector = "";
+        this.names = names;
+        this.values = values;
     }
 
     /**
@@ -75,12 +90,7 @@ public class StyleRule {
             return false;
         }
 
-        for (int i = 0; i < values.get(index).length(); i++) {
-            if (values.get(index).get(i).equals(value)) {
-                return true;
-            }
-        }
-        return false;
+        return values.get(index).equals(value);
     }
 
     /**
@@ -153,12 +163,13 @@ public class StyleRule {
 
                     if (index == -1) {
                         this.names.push(resolvedName);
-                        this.values.push((NativeArray<String>) new NativeArray(new String[] {value}));
+                        this.values.push(value);
                     } else {
                         if (override) {
-                            this.values.set(index, new NativeArray(new String[] {value}));
+                            this.values.set(index, value);
                         } else {
-                            this.values.get(index).push(value);
+                            this.names.push(resolvedName);
+                            this.values.push(value);
                         }
                     }
                 }
