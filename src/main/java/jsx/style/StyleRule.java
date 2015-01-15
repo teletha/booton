@@ -79,7 +79,7 @@ public class StyleRule {
      * @return
      */
     public boolean is(String name, String value) {
-        return properties.get(name).isPresent();
+        return properties.contains(name, value);
     }
 
     /**

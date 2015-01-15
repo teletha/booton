@@ -11,6 +11,7 @@ package jsx.style;
 
 import js.dom.Element;
 import js.lang.NativeArray;
+import jsx.collection.DualList;
 
 /**
  * @version 2014/10/24 13:58:41
@@ -57,8 +58,8 @@ public interface Style {
         dom.remove(this);
     }
 
-    public default void assignTo(NativeArray<Style> styles, NativeArray<String> names, NativeArray<String> values) {
-        StyleRule style = new StyleRule(names, values);
+    public default void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
+        StyleRule style = new StyleRule(inlines);
 
         // swap context rule and execute it
         PropertyDefinition.declarable = style;

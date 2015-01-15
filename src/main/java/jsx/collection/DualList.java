@@ -161,6 +161,29 @@ public class DualList<K, V> {
 
     /**
      * <p>
+     * Retrieve the index by the specified key.
+     * </p>
+     * 
+     * @param key A key to find.
+     * @return A index for the specified key.
+     */
+    public int key(K key) {
+        return keys.indexOf(key);
+    }
+
+    /**
+     * <p>
+     * Retrieve key list.
+     * </p>
+     * 
+     * @return
+     */
+    public NativeArray<K> keys() {
+        return keys;
+    }
+
+    /**
+     * <p>
      * Retrieve the value by the specified index.
      * </p>
      * 
@@ -169,5 +192,65 @@ public class DualList<K, V> {
      */
     public V value(int index) {
         return values.get(index);
+    }
+
+    /**
+     * <p>
+     * Retrieve the index by the specified value.
+     * </p>
+     * 
+     * @param value A value to find.
+     * @return A index for the specified value.
+     */
+    public int value(V value) {
+        return values.indexOf(value);
+    }
+
+    /**
+     * <p>
+     * Retrieve value list.
+     * </p>
+     * 
+     * @return
+     */
+    public NativeArray<V> values() {
+        return values;
+    }
+
+    /**
+     * <p>
+     * Test whether the specified key and value are stored or not
+     * </p>
+     * 
+     * @param key
+     * @param value
+     * @return
+     */
+    public boolean contains(String key, String value) {
+        int index = keys.indexOf(key);
+
+        if (index == -1) {
+            return false;
+        }
+        return values.get(index).equals(value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("DualList[");
+
+        for (int i = 0; i < keys.length(); i++) {
+            builder.append(keys.get(i)).append("=").append(values.get(i));
+
+            if (i != keys.length() - 1) {
+                builder.append(", ");
+            }
+        }
+        builder.append("]");
+
+        return builder.toString();
     }
 }

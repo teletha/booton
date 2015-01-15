@@ -272,9 +272,9 @@ public class VirtualStructureTest {
         assert node instanceof VirtualElement;
 
         VirtualElement virtual = (VirtualElement) node;
-        int index = virtual.attributes.names.indexOf(name);
+        int index = virtual.attributes.key(name);
         assert index != -1;
-        assert virtual.attributes.values.get(index).equals(value);
+        assert virtual.attributes.value(index).equals(value);
     }
 
     /**

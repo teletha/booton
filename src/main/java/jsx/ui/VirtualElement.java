@@ -13,6 +13,7 @@ import static js.lang.Global.*;
 import js.dom.CSSStyleDeclaration;
 import js.dom.Element;
 import js.lang.NativeArray;
+import jsx.collection.DualList;
 import jsx.style.Style;
 
 /**
@@ -24,13 +25,13 @@ class VirtualElement extends VirtualFragment<Element> {
     final String name;
 
     /** The attributes. */
-    final VirtualKVS<String, String> attributes = new VirtualKVS();
+    final DualList<String, String> attributes = new DualList();
 
     /** The class attributes. */
     final NativeArray<Style> classList = new NativeArray();
 
     /** The The inline styles. */
-    final VirtualKVS<String, String> inlines = new VirtualKVS();
+    final DualList<String, String> inlines = new DualList();
 
     /**
      * @param string
@@ -49,8 +50,8 @@ class VirtualElement extends VirtualFragment<Element> {
         dom = document.createElement(name);
 
         // assign attributes
-        for (int i = 0; i < attributes.names.length(); i++) {
-            dom.attr(attributes.names.get(i), attributes.values.get(i));
+        for (int i = 0; i < attributes.size(); i++) {
+            dom.attr(attributes.key(i), attributes.value(i));
         }
 
         // assign classes
@@ -59,13 +60,13 @@ class VirtualElement extends VirtualFragment<Element> {
         }
 
         // assign inline style
-        int length = inlines.names.length();
+        int size = inlines.size();
 
-        if (length != 0) {
+        if (size != 0) {
             CSSStyleDeclaration style = dom.style();
 
-            for (int i = 0; i < length; i++) {
-                style.set(inlines.names.get(i), inlines.values.get(i));
+            for (int i = 0; i < size; i++) {
+                style.set(inlines.key(i), inlines.value(i));
             }
         }
 
@@ -84,10 +85,9 @@ class VirtualElement extends VirtualFragment<Element> {
      * @param value An attribute value;
      */
     int attribute(String name, String value) {
-        this.attributes.names.push(name);
-        this.attributes.values.push(value);
+        this.attributes.add(name, value);
 
-        return attributes.values.length() - 1;
+        return attributes.size() - 1;
     }
 
     /**
@@ -121,11 +121,11 @@ class VirtualElement extends VirtualFragment<Element> {
         StringBuilder builder = new StringBuilder();
         builder.append("<").append(element.name);
 
-        for (int i = 0; i < element.attributes.names.length(); i++) {
+        for (int i = 0; i < element.attributes.size(); i++) {
             builder.append(" ")
-                    .append(element.attributes.names.get(i))
+                    .append(element.attributes.key(i))
                     .append("=\"")
-                    .append(element.attributes.values.get(i))
+                    .append(element.attributes.value(i))
                     .append("\"");
         }
 

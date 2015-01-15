@@ -11,6 +11,7 @@ package jsx.style;
 
 import js.dom.Element;
 import js.lang.NativeArray;
+import jsx.collection.DualList;
 
 /**
  * @version 2014/12/17 13:06:39
@@ -62,9 +63,9 @@ class MultipleStyle implements Style {
      * {@inheritDoc}
      */
     @Override
-    public void assignTo(NativeArray<Style> styles, NativeArray<String> names, NativeArray<String> values) {
-        base.assignTo(styles, names, values);
-        dynamic.assignTo(styles, names, values);
+    public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
+        base.assignTo(styles, inlines);
+        dynamic.assignTo(styles, inlines);
     }
 
 }
