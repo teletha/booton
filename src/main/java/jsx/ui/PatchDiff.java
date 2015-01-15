@@ -14,6 +14,7 @@ import java.util.List;
 
 import js.dom.Element;
 import js.lang.NativeArray;
+import jsx.collection.DualList;
 import jsx.style.Style;
 import jsx.ui.Patch.AddAttribute;
 import jsx.ui.Patch.AddClass;
@@ -121,18 +122,18 @@ class PatchDiff {
      * @param next A next state.
      * @return
      */
-    static List<Patch> diff(Element context, VirtualKVS<String, String> prev, VirtualKVS<String, String> next) {
+    static List<Patch> diff(Element context, DualList<String, String> prev, DualList<String, String> next) {
         List<Patch> patches = new ArrayList();
 
-        for (int nextIndex = 0; nextIndex < next.names.length(); nextIndex++) {
-            String key = next.names.get(nextIndex);
-            int prevIndex = prev.names.indexOf(key);
+        for (int nextIndex = 0; nextIndex < next.size(); nextIndex++) {
+            String key = next.key(nextIndex);
+            int prevIndex = prev.key(key);
 
             if (prevIndex == -1) {
-                patches.add(new AddAttribute(context, key, next.values.get(nextIndex)));
+                patches.add(new AddAttribute(context, key, next.value(nextIndex)));
             } else {
-                String prevValue = prev.values.get(prevIndex);
-                String nextValue = next.values.get(nextIndex);
+                String prevValue = prev.value(prevIndex);
+                String nextValue = next.value(nextIndex);
 
                 if (!prevValue.equals(nextValue)) {
                     patches.add(new ChangeAttribute(context, key, nextValue));
@@ -140,10 +141,10 @@ class PatchDiff {
             }
         }
 
-        for (int i = 0; i < prev.names.length(); i++) {
-            String key = prev.names.get(i);
+        for (int i = 0; i < prev.size(); i++) {
+            String key = prev.key(i);
 
-            if (next.names.indexOf(key) == -1) {
+            if (next.key(key) == -1) {
                 patches.add(new RemoveAttribute(context, key));
             }
         }
@@ -160,18 +161,18 @@ class PatchDiff {
      * @param next A next state.
      * @return
      */
-    static List<Patch> diffInlineStyle(Element context, VirtualKVS<String, String> prev, VirtualKVS<String, String> next) {
+    static List<Patch> diffInlineStyle(Element context, DualList<String, String> prev, DualList<String, String> next) {
         List<Patch> patches = new ArrayList();
 
-        for (int nextIndex = 0; nextIndex < next.names.length(); nextIndex++) {
-            String key = next.names.get(nextIndex);
-            int prevIndex = prev.names.indexOf(key);
+        for (int nextIndex = 0; nextIndex < next.size(); nextIndex++) {
+            String key = next.key(nextIndex);
+            int prevIndex = prev.key(key);
 
             if (prevIndex == -1) {
-                patches.add(new SetInlineStyle(context, key, next.values.get(nextIndex)));
+                patches.add(new SetInlineStyle(context, key, next.value(nextIndex)));
             } else {
-                String prevValue = prev.values.get(prevIndex);
-                String nextValue = next.values.get(nextIndex);
+                String prevValue = prev.value(prevIndex);
+                String nextValue = next.value(nextIndex);
 
                 if (!prevValue.equals(nextValue)) {
                     patches.add(new SetInlineStyle(context, key, nextValue));
@@ -179,10 +180,10 @@ class PatchDiff {
             }
         }
 
-        for (int i = 0; i < prev.names.length(); i++) {
-            String key = prev.names.get(i);
+        for (int i = 0; i < prev.size(); i++) {
+            String key = prev.key(i);
 
-            if (next.names.indexOf(key) == -1) {
+            if (next.key(key) == -1) {
                 patches.add(new RemoveInlineStyle(context, key));
             }
         }

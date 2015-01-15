@@ -336,7 +336,7 @@ public final class VirtualStructure {
         public final void 〡(Style style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines.names, container.inlines.values);
+            if (style != null) style.assignTo(container.classList, container.inlines);
 
             // enter into the child node
             if (name != null) parents.addLast(container);
@@ -483,7 +483,8 @@ public final class VirtualStructure {
          * @param attributeValue An attribute value.
          */
         public final ContainerDescriptor 〡style〡(Style style, String attributeName, String attributeValue) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
+                    .length() != 0) {
                 VirtualStructure.this.style.styles.push(style);
                 VirtualStructure.this.style.names.push(attributeName);
                 VirtualStructure.this.style.values.push(attributeValue);
@@ -553,7 +554,7 @@ public final class VirtualStructure {
         public final void 〡(Style style, Runnable children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines.names, container.inlines.values);
+            if (style != null) style.assignTo(container.classList, container.inlines);
 
             // then, clean it for nested invocation
             parents.addLast(container);
@@ -587,7 +588,7 @@ public final class VirtualStructure {
         public final <T> void 〡(Style style, Collection<T> items, Consumer<T> child) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines.names, container.inlines.values);
+            if (style != null) style.assignTo(container.classList, container.inlines);
 
             // then, clean it for nested invocation
             parents.addLast(container);
@@ -613,7 +614,7 @@ public final class VirtualStructure {
         public final <T> void 〡(Style style, int size, IntConsumer child) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines.names, container.inlines.values);
+            if (style != null) style.assignTo(container.classList, container.inlines);
 
             // then, clean it for nested invocation
             parents.addLast(container);
@@ -682,7 +683,8 @@ public final class VirtualStructure {
          * @param style A target style to apply.
          */
         public void 〡(String attributeName, String attributeValue, Style style) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
+                    .length() != 0) {
                 styles.push(style);
                 names.push(attributeName);
                 values.push(attributeValue);
@@ -700,8 +702,10 @@ public final class VirtualStructure {
             if (styles.length() != 0) {
                 // assign
                 element.classList.push(styles);
-                element.attributes.names.push(names);
-                element.attributes.values.push(values);
+
+                for (int i = 0; i < names.length(); i++) {
+                    element.attributes.add(names.get(i), values.get(i));
+                }
 
                 // clear
                 styles.clear();

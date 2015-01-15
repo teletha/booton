@@ -302,9 +302,9 @@ public class Transition extends PropertyDefinition<Transition> {
     private void when(String selector, Style sub) {
         StyleRule rule = createSubRule(selector, sub);
 
-        value("transition-property", join(rule.names, v -> v));
-        value("transition-duration", join(rule.names, v -> duration));
-        value("transition-delay", join(rule.names, v -> delay));
-        value("transition-timing-function", join(rule.names, v -> timing));
+        value("transition-property", join(rule.properties.keys(), v -> v));
+        value("transition-duration", join(rule.properties.keys(), v -> duration));
+        value("transition-delay", join(rule.properties.keys(), v -> delay));
+        value("transition-timing-function", join(rule.properties.keys(), v -> timing));
     }
 }
