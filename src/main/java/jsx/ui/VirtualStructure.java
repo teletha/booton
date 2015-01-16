@@ -15,6 +15,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
@@ -333,52 +334,65 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Style style, Object... children) {
+        public final void 〡(Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines);
 
             // enter into the child node
             if (name != null) parents.addLast(container);
 
             // process into child nodes
             for (Object child : children) {
-                if (child instanceof Widget) {
-                    Widget widget = (Widget) child;
-
-                    // create virtual element for this widget
-                    VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
-
-                    // mount virtual element on virtual structure
-                    container.items.push(virtualize);
-
-                    // process child nodes
-                    widget.assemble(new VirtualStructure(virtualize));
-                } else if (child instanceof LowLevelWidget) {
-                    LowLevelWidget<?> widget = (LowLevelWidget) child;
-
-                    // create descriptor
-                    ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
-                    descriptor.localId = widget.hashCode();
-
-                    // process child node
-                    widget.virtualizeStructure(descriptor);
-
-                    // pass event listners and styles
-                    descriptor.container(0).events = widget.events;
-
-                    if (widget.styles != null) {
-                        for (Style s : widget.styles) {
-                            descriptor.container(0).classList.push(s);
-                        }
-                    }
-                } else {
-                    container.items.push(new VirtualText(String.valueOf(child)));
-                }
+                process(container, child);
             }
 
             // leave from the child node
             if (name != null) parents.pollLast();
+        }
+
+        private void process(VirtualElement container, Object child) {
+            if (child instanceof Widget) {
+                Widget widget = (Widget) child;
+
+                // create virtual element for this widget
+                VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+
+                // mount virtual element on virtual structure
+                container.items.push(virtualize);
+
+                // process child nodes
+                widget.assemble(new VirtualStructure(virtualize));
+            } else if (child instanceof LowLevelWidget) {
+                LowLevelWidget<?> widget = (LowLevelWidget) child;
+
+                // create descriptor
+                ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
+                descriptor.localId = widget.hashCode();
+
+                // process child node
+                widget.virtualizeStructure(descriptor);
+
+                // pass event listners and styles
+                descriptor.container(0).events = widget.events;
+
+                if (widget.styles != null) {
+                    for (Style s : widget.styles) {
+                        descriptor.container(0).classList.push(s);
+                    }
+                }
+            } else if (child instanceof Optional) {
+                Optional optional = (Optional) child;
+
+                if (optional.isPresent()) {
+                    process(container, optional.get());
+                }
+            } else if (child instanceof Style) {
+                Style style = (Style) child;
+
+                style.assignTo(container.classList, container.inlines);
+            } else {
+                container.items.push(new VirtualText(String.valueOf(child)));
+            }
         }
     }
 
@@ -483,8 +497,7 @@ public final class VirtualStructure {
          * @param attributeValue An attribute value.
          */
         public final ContainerDescriptor 〡style〡(Style style, String attributeName, String attributeValue) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
-                    .length() != 0) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
                 VirtualStructure.this.style.styles.push(style);
                 VirtualStructure.this.style.names.push(attributeName);
                 VirtualStructure.this.style.values.push(attributeValue);
@@ -683,8 +696,7 @@ public final class VirtualStructure {
          * @param style A target style to apply.
          */
         public void 〡(String attributeName, String attributeValue, Style style) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
-                    .length() != 0) {
+            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
                 styles.push(style);
                 names.push(attributeName);
                 values.push(attributeValue);
