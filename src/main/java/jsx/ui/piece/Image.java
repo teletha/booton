@@ -10,7 +10,7 @@
 package jsx.ui.piece;
 
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure.ContainerDescriptor;
+import jsx.ui.VirtualStructure;
 
 /**
  * @version 2014/09/11 8:59:42
@@ -35,7 +35,7 @@ public class Image extends LowLevelWidget<Image> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualizeStructure(ContainerDescriptor descriptor) {
+    protected void virtualizeStructure(VirtualStructure descriptor) {
     }
 
 }

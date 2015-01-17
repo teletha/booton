@@ -19,7 +19,7 @@ import jsx.collection.DualList;
 /**
  * @version 2014/12/17 12:03:37
  */
-class StaticStyle implements Style {
+public class StaticStyle implements Style {
 
     /** The static style pool. */
     static final Map<String, Style> pool = new HashMap();

@@ -16,7 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure.ContainerDescriptor;
+import jsx.ui.VirtualStructure;
 import kiss.I;
 
 /**
@@ -74,8 +74,8 @@ public class Output extends LowLevelWidget<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualizeStructure(ContainerDescriptor descriptor) {
-        descriptor.〡$(text.get());
+    protected void virtualizeStructure(VirtualStructure descriptor) {
+        descriptor.〡(text.get());
     }
 
 }

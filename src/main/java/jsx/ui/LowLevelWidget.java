@@ -24,7 +24,6 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;
 import jsx.style.Style;
-import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.Disposable;
 import kiss.Events;
 import booton.reactive.css.StyleDefinition;
@@ -59,7 +58,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
      * 
      * @param $〡 Domain Specific Language for virtual elements.
      */
-    protected abstract void virtualizeStructure(ContainerDescriptor $〡);
+    protected abstract void virtualizeStructure(VirtualStructure $〡);
 
     /**
      * <p>

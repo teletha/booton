@@ -20,12 +20,11 @@ import java.util.function.Supplier;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure.ContainerDescriptor;
+import jsx.ui.VirtualStructure;
 import kiss.Events;
 import kiss.I;
 
@@ -148,7 +147,8 @@ public class Input extends LowLevelWidget<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualizeStructure(ContainerDescriptor $〡) {
-        $〡.〡ª("type", "text").〡ª("value", value.get()).〡(InputForm);
+    protected void virtualizeStructure(VirtualStructure $〡) {
+        $〡.style.〡(InputForm);
+        $〡.style.〡("type", "text").〡("value", value.get());
     }
 }
