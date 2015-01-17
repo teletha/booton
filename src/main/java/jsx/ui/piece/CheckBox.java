@@ -14,7 +14,7 @@ import static js.dom.UIAction.*;
 import javafx.beans.property.BooleanProperty;
 
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure.ContainerDescriptor;
+import jsx.ui.VirtualStructure;
 
 /**
  * @version 2014/10/04 10:26:04
@@ -45,7 +45,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualizeStructure(ContainerDescriptor descriptor) {
-        descriptor.〡ª("type", "checkbox").〡ª("checked", check.get() ? "checked" : "");
+    protected void virtualizeStructure(VirtualStructure descriptor) {
+        descriptor.style.〡("type", "checkbox").〡("checked", check.get() ? "checked" : "");
     }
 }

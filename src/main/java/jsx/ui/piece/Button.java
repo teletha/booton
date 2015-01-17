@@ -13,7 +13,7 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure.ContainerDescriptor;
+import jsx.ui.VirtualStructure;
 
 /**
  * @version 2014/08/21 17:09:43
@@ -64,7 +64,7 @@ public class Button extends LowLevelWidget<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualizeStructure(ContainerDescriptor descriptor) {
-        descriptor.〡$(label.get());
+    protected void virtualizeStructure(VirtualStructure descriptor) {
+        descriptor.text(label.get());
     }
 }

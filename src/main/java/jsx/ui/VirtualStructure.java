@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
-import js.lang.NativeArray;
 import jsx.style.Style;
 
 /**
@@ -105,6 +104,13 @@ public final class VirtualStructure {
      */
     public VirtualStructure(VirtualElement root) {
         parents.add(root);
+    }
+
+    /**
+     * @param text
+     */
+    public void text(String text) {
+        parents.peekLast().items.push(new VirtualText(text));
     }
 
     /**
@@ -295,7 +301,6 @@ public final class VirtualStructure {
                     if (builtin != null) {
                         container.classList.push(builtin);
                     }
-                    style.apply(container);
 
                     parents.peekLast().items.push(container);
                 }
@@ -334,9 +339,10 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡(Object... children) {
+        public final void 〡(Style style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
+            if (style != null) style.assignTo(container.classList, container.inlines);
 
             // enter into the child node
             if (name != null) parents.addLast(container);
@@ -370,7 +376,7 @@ public final class VirtualStructure {
                 descriptor.localId = widget.hashCode();
 
                 // process child node
-                widget.virtualizeStructure(descriptor);
+                widget.virtualizeStructure(VirtualStructure.this);
 
                 // pass event listners and styles
                 descriptor.container(0).events = widget.events;
@@ -411,98 +417,6 @@ public final class VirtualStructure {
          */
         private ContainerDescriptor(String name, Style style) {
             super(name, style);
-        }
-
-        /**
-         * <p>
-         * Apply the given {@link Style} to this container.
-         * </p>
-         * 
-         * @param style A style to apply.
-         */
-        public final ContainerDescriptor 〡title(String title, Style optionalStyle) {
-            if (title != null && title.length() != 0) {
-                style.styles.push(optionalStyle);
-                style.names.push("title");
-                style.values.push(title);
-            }
-            return this;
-        }
-
-        /**
-         * <p>
-         * Apply the given {@link Style} to this container.
-         * </p>
-         * 
-         * @param style A style to apply.
-         */
-        public final ContainerDescriptor 〡style(Style optionalStyle) {
-            if (optionalStyle != null) {
-                style.styles.push(optionalStyle);
-            }
-            return this;
-        }
-
-        /**
-         * <p>
-         * Apply the given {@link Style} to this container.
-         * </p>
-         * 
-         * @param style A style to apply.
-         */
-        public final ContainerDescriptor 〡style(Style optionalStyle, boolean condition) {
-            if (condition) {
-                〡style(optionalStyle);
-            }
-            return this;
-        }
-
-        /**
-         * <p>
-         * Apply the given {@link Style} to this container.
-         * </p>
-         * 
-         * @param style A style to apply.
-         */
-        public final ContainerDescriptor 〡style〡(Style... styles) {
-            if (styles != null) {
-                for (Style target : styles) {
-                    style.styles.push(target);
-                }
-            }
-            return this;
-        }
-
-        /**
-         * <p>
-         * Apply the given {@link Style} to this container.
-         * </p>
-         * 
-         * @param style A style to apply.
-         */
-        public final ContainerDescriptor 〡style〡(Style style, boolean condition) {
-            if (condition && style != null) {
-                VirtualStructure.this.style.styles.push(style);
-            }
-            return this;
-        }
-
-        /**
-         * <p>
-         * Add {@link Style} if the given attribute is valid.
-         * < /p>
-         * 
-         * @param style A target style to apply.
-         * @param attributeName An attribute name.
-         * @param attributeValue An attribute value.
-         */
-        public final ContainerDescriptor 〡style〡(Style style, String attributeName, String attributeValue) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
-                VirtualStructure.this.style.styles.push(style);
-                VirtualStructure.this.style.names.push(attributeName);
-                VirtualStructure.this.style.values.push(attributeValue);
-            }
-            return this;
         }
 
         /**
@@ -642,20 +556,6 @@ public final class VirtualStructure {
             // restore context environment
             parents.pollLast();
         }
-
-        /**
-         * <p>
-         * Define attribute or property of this container.
-         * </p>
-         * 
-         * @param name An attribute or property name.
-         * @param value An attribute or property value.
-         */
-        public final ContainerDescriptor 〡ª(String name, String value) {
-            container(LocalId.findContextLineNumber()).attribute(name, value);
-
-            return this;
-        }
     }
 
     /**
@@ -663,14 +563,19 @@ public final class VirtualStructure {
      */
     public class OptionalStyleDescriptor {
 
-        /** The style manager. */
-        private final NativeArray<Style> styles = new NativeArray();
+        public void 〡(Style style) {
+            VirtualElement e = parents.peekLast();
 
-        /** The attribute name manager. */
-        private final NativeArray<String> names = new NativeArray();
+            style.assignTo(e.classList, e.inlines);
+        }
 
-        /** The attribute value manager. */
-        private final NativeArray<String> values = new NativeArray();
+        public OptionalStyleDescriptor 〡(String attributeName, String attributeValue) {
+            VirtualElement e = parents.peekLast();
+
+            e.attributes.add(attributeName, attributeValue);
+
+            return this;
+        }
 
         /**
          * <p>
@@ -680,9 +585,11 @@ public final class VirtualStructure {
          * @param condition A style condition.
          * @param style A target style to apply.
          */
-        public void 〡(boolean condition, Style style) {
+        public void 〡(Style style, boolean condition) {
             if (condition) {
-                styles.push(style);
+                VirtualElement e = parents.peekLast();
+
+                style.assignTo(e.classList, e.inlines);
             }
         }
 
@@ -695,34 +602,12 @@ public final class VirtualStructure {
          * @param attributeValue An attribute value.
          * @param style A target style to apply.
          */
-        public void 〡(String attributeName, String attributeValue, Style style) {
+        public void 〡(Style style, String attributeName, String attributeValue) {
             if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
-                styles.push(style);
-                names.push(attributeName);
-                values.push(attributeValue);
-            }
-        }
+                VirtualElement e = parents.peekLast();
 
-        /**
-         * <p>
-         * Apply optional properties(attribute, style, etc).
-         * </p>
-         * 
-         * @param element
-         */
-        private void apply(VirtualElement element) {
-            if (styles.length() != 0) {
-                // assign
-                element.classList.push(styles);
-
-                for (int i = 0; i < names.length(); i++) {
-                    element.attributes.add(names.get(i), values.get(i));
-                }
-
-                // clear
-                styles.clear();
-                names.clear();
-                values.clear();
+                style.assignTo(e.classList, e.inlines);
+                e.attributes.add(attributeName, attributeValue);
             }
         }
     }
