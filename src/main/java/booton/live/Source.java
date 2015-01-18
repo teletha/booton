@@ -90,6 +90,8 @@ public class Source {
         String method = matcher.group(2);
         int index = fqcn.lastIndexOf(".");
         String className = index == -1 ? fqcn : fqcn.substring(index + 1);
+        index = className.indexOf("$");
+        className = index == -1 ? className : className.substring(0, index);
 
         return new StackTraceElement(fqcn, method, className + ".java", Integer.parseInt(number));
     }
