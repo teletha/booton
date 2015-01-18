@@ -12,12 +12,14 @@ package js.dom;
 import java.util.function.Supplier;
 
 import kiss.Disposable;
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2013/12/28 11:51:03
  */
+@JavascriptAPIProvider(targetJavaScriptClassName = "Event")
 public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative {
 
     /** The DOM element that initiated the event. */

@@ -530,7 +530,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return The first child that is an element, and null otherwise.
      */
     @JavascriptNativePropertyAccessor
-    protected abstract Element firstElementChild();
+    public abstract Element firstElementChild();
 
     /**
      * <p>
@@ -540,7 +540,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @return The last child that is an element, and null otherwise.
      */
     @JavascriptNativePropertyAccessor
-    protected abstract Element lastElementChild();
+    public abstract Element lastElementChild();
 
     /**
      * <p>

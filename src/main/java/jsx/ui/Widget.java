@@ -56,6 +56,9 @@ public abstract class Widget {
     /** The identifier of this {@link Widget}. */
     int id = loophole == null ? hashCode() : Objects.hash(loophole);
 
+    /** The managed native event listeners. */
+    NativeArray<Listener> listeners;
+
     /** The {@link Widget} rendering machine. */
     private Rendering rendering;
 
@@ -73,8 +76,35 @@ public abstract class Widget {
         rendering.willExecute();
     }
 
-    NativeArray<Listener> listeners;
+    /**
+     * <p>
+     * Listen the specified events.
+     * </p>
+     * 
+     * @param types A list of event types to listen.
+     * @return An event stream.
+     */
+    protected final Events<UIEvent> listen(UIAction... types) {
+        Events<UIEvent> events = null;
 
+        for (int i = 0; i < types.length; i++) {
+            if (events == null) {
+                events = listen(types[i]);
+            } else {
+                events = events.merge(listen(types[i]));
+            }
+        }
+        return events;
+    }
+
+    /**
+     * <p>
+     * Listen the specified event.
+     * </p>
+     * 
+     * @param types An event type to listen.
+     * @return An event stream.
+     */
     protected final Events<UIEvent> listen(UIAction type) {
         return new Events<UIEvent>(observer -> {
             if (listeners == null) {
@@ -109,42 +139,6 @@ public abstract class Widget {
                 }
             };
         });
-    }
-
-    /**
-     * <p>
-     * Native event listener.
-     * </p>
-     * 
-     * @version 2015/01/02 23:09:06
-     */
-    static class Listener implements Consumer<UIEvent> {
-
-        /** The event type. */
-        final UIAction type;
-
-        /** The cache for native event listener. */
-        final NativeFunction dom = new NativeFunction(this).bind(this);
-
-        /** The list of actual event listeners. */
-        final NativeArray<Observer<? super UIEvent>> listeners = new NativeArray();
-
-        /**
-         * @param type
-         */
-        private Listener(UIAction type) {
-            this.type = type;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(UIEvent event) {
-            for (int i = 0, size = listeners.length(); i < size; i++) {
-                listeners.get(i).onNext(event);
-            }
-        }
     }
 
     /**
@@ -463,6 +457,42 @@ public abstract class Widget {
 
             // update to new virtual element
             virtual = next;
+        }
+    }
+
+    /**
+     * <p>
+     * Native event listener.
+     * </p>
+     * 
+     * @version 2015/01/02 23:09:06
+     */
+    static class Listener implements Consumer<UIEvent> {
+    
+        /** The event type. */
+        final UIAction type;
+    
+        /** The cache for native event listener. */
+        final NativeFunction dom = new NativeFunction(this).bind(this);
+    
+        /** The list of actual event listeners. */
+        final NativeArray<Observer<? super UIEvent>> listeners = new NativeArray();
+    
+        /**
+         * @param type
+         */
+        private Listener(UIAction type) {
+            this.type = type;
+        }
+    
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(UIEvent event) {
+            for (int i = 0, size = listeners.length(); i < size; i++) {
+                listeners.get(i).onNext(event);
+            }
         }
     }
 }

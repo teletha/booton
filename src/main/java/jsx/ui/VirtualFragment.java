@@ -48,7 +48,7 @@ abstract class VirtualFragment<N extends Node> extends VirtualNode<N> {
      * {@inheritDoc}
      */
     @Override
-    final N materialize() {
+    N materialize() {
         N root = materializeRoot();
 
         for (int i = 0, length = items.length(); i < length; i++) {
