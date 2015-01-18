@@ -204,15 +204,6 @@ public abstract class Node<T extends Node<T>> extends EventTarget<T> implements 
         return (T) this;
     }
 
-    public boolean hasChild() {
-        return firstChild() != null;
-    }
-
-    public boolean hasOnlyChild() {
-        Node first = firstChild();
-        return first != null && first == lastChild();
-    }
-
     /**
      * <p>
      * Get the combined text contents of this element, including its descendants.

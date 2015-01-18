@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,39 +20,13 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/03/09 11:53:04
+ * @version 2015/01/18 15:03:41
  */
 @RunWith(ScriptRunner.class)
 public class EventTargetTest {
 
     static {
         I.load(Publishable.class, true);
-    }
-
-    private UIEvent event(UIAction action) {
-        UIEvent event = new UIEvent();
-        event.action = action;
-
-        return event;
-    }
-
-    @Test
-    public void fromAPI() throws Exception {
-        Listener listener = new Listener();
-        assert listener.invoked == 0;
-
-        Element element = document.createElement("div");
-        element.subscribe(listener);
-
-        element.publish(event(UIAction.Click));
-        assert listener.invoked == 1;
-
-        element.publish(event(UIAction.MouseMove));
-        assert listener.invoked == 1;
-
-        element.unsubscribe(listener);
-        element.publish(event(UIAction.Click));
-        assert listener.invoked == 1;
     }
 
     @Test
