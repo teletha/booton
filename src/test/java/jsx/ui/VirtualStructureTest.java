@@ -172,22 +172,6 @@ public class VirtualStructureTest {
     }
 
     @Test
-    public void attributeOnly() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡ª("name1", "value1").〡ª("name2", "value2");
-        root〡.hbox.〡ª("name3", "value3");
-
-        VirtualElement root = root〡.getRoot();
-        assert root.items.length() == 2;
-        assertAsElement(root, 0, "hbox", e -> {
-            assertAttribute(e, "name1", "value1");
-        });
-        assertAsElement(root, 1, "hbox", e -> {
-            assertAttribute(e, "name3", "value3");
-        });
-    }
-
-    @Test
     public void range() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
         root〡.hbox.〡(style, 3, i -> {

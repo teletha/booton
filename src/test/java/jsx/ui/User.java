@@ -70,7 +70,7 @@ public class User {
             event.action = action;
             event.which = key.code;
 
-            input.event().publish(event);
+            input.publish(event);
         }
     }
 
@@ -87,7 +87,7 @@ public class User {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.event().publish(event);
+        button.publish(event);
     }
 
     /**
@@ -103,7 +103,7 @@ public class User {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.event().publish(event);
+        button.publish(event);
     }
 
     /**

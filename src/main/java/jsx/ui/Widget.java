@@ -142,6 +142,22 @@ public abstract class Widget {
     }
 
     /**
+     * @param type
+     */
+    public void publish(UIEvent event) {
+        if (listeners != null) {
+            for (int i = 0, size = listeners.length(); i < size; i++) {
+                Listener listener = listeners.get(i);
+
+                if (listener.type == event.action) {
+                    listener.accept(event);
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
      * <p>
      * Create virtual elements of this {@link Widget}.
      * </p>
@@ -468,23 +484,23 @@ public abstract class Widget {
      * @version 2015/01/02 23:09:06
      */
     static class Listener implements Consumer<UIEvent> {
-    
+
         /** The event type. */
         final UIAction type;
-    
+
         /** The cache for native event listener. */
         final NativeFunction dom = new NativeFunction(this).bind(this);
-    
+
         /** The list of actual event listeners. */
         final NativeArray<Observer<? super UIEvent>> listeners = new NativeArray();
-    
+
         /**
          * @param type
          */
         private Listener(UIAction type) {
             this.type = type;
         }
-    
+
         /**
          * {@inheritDoc}
          */
