@@ -439,7 +439,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected Element firstElementChild() {
+    public Element firstElementChild() {
         for (int i = 0; i < nodes.size(); i++) {
             Node node = nodes.getNode(i);
 
@@ -454,7 +454,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    protected Element lastElementChild() {
+    public Element lastElementChild() {
         for (int i = nodes.size() - 1; 0 <= i; i--) {
             Node node = nodes.getNode(i);
 

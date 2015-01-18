@@ -27,15 +27,8 @@ public class Image extends LowLevelWidget<Image> {
      * {@inheritDoc}
      */
     @Override
-    protected String virtualizeName() {
-        return "img";
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.e("img", 0).〡(() -> {
+        });
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualizeStructure(VirtualStructure descriptor) {
-    }
-
 }

@@ -22,7 +22,6 @@ import javafx.beans.value.ObservableValue;
 
 import js.dom.UIAction;
 import js.dom.UIEvent;
-import jsx.event.Publishable;
 import jsx.style.Style;
 import kiss.Disposable;
 import kiss.Events;
@@ -31,48 +30,10 @@ import booton.reactive.css.StyleDefinition;
 /**
  * @version 2014/10/10 9:24:46
  */
-public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
-
-    /** The holder of event listeners. */
-    Publishable<?> events;
-
-    /** The holder of styles. */
-    List<Style> styles;
+public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget {
 
     /** The disposable list. */
     private List<Disposable> disposables;
-
-    /**
-     * <p>
-     * Describe the element name.
-     * </p>
-     * 
-     * @return A element name.
-     */
-    protected abstract String virtualizeName();
-
-    /**
-     * <p>
-     * Describe the element structure.
-     * </p>
-     * 
-     * @param $〡 Domain Specific Language for virtual elements.
-     */
-    protected abstract void virtualizeStructure(VirtualStructure $〡);
-
-    /**
-     * <p>
-     * Retrieve the event publisher.
-     * </p>
-     * 
-     * @return
-     */
-    protected final Publishable<?> event() {
-        if (events == null) {
-            events = new Publishable();
-        }
-        return events;
-    }
 
     private BooleanProperty hover;
 
@@ -80,8 +41,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         if (hover == null) {
             hover = new SimpleBooleanProperty(false);
 
-            event().observe(MouseEnter).to(v -> hover.set(true));
-            event().observe(MouseLeave).to(v -> hover.set(false));
+            listen(MouseEnter).to(v -> hover.set(true));
+            listen(MouseLeave).to(v -> hover.set(false));
         }
         return hover;
     }
@@ -90,7 +51,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
      * @return
      */
     public T click(Runnable action) {
-        disposeLater(event().observe(UIAction.Click).filter(this::isValid).to(e -> action.run()));
+        disposeLater(listen(UIAction.Click).filter(this::isValid).to(e -> action.run()));
 
         return (T) this;
     }
@@ -99,7 +60,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
      * @return
      */
     public T dbclick(Runnable action) {
-        disposeLater(event().observe(UIAction.DoubleClick).filter(this::isValid).to(e -> action.run()));
+        disposeLater(listen(UIAction.DoubleClick).filter(this::isValid).to(e -> action.run()));
 
         return (T) this;
     }
@@ -135,8 +96,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = event().observe(KeyPress).filter(byKey);
-            Events<UIEvent> keyUp = event().observe(KeyUp).filter(byKey);
+            Events<UIEvent> keyPress = listen(KeyPress).filter(byKey);
+            Events<UIEvent> keyUp = listen(KeyUp).filter(byKey);
             // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
@@ -165,22 +126,6 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> {
     }
 
     public T hideIf(ObservableValue<Boolean> condition) {
-        return (T) this;
-    }
-
-    /**
-     * @param championIconBox
-     * @return
-     */
-    public T style(Style... styles) {
-        if (this.styles == null) {
-            this.styles = new ArrayList();
-        }
-
-        for (Style style : styles) {
-            this.styles.add(style);
-        }
-
         return (T) this;
     }
 

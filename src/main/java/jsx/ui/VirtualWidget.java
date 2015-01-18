@@ -34,10 +34,15 @@ class VirtualWidget extends VirtualElement {
      * {@inheritDoc}
      */
     @Override
-    protected Element materializeRoot() {
-        Element e = super.materializeRoot();
+    Element materialize() {
+        Element e = super.materialize();
 
         if (widget.listeners != null) {
+            // search only child
+            if (items.length() == 1) {
+                e = e.firstElementChild();
+            }
+
             for (int i = 0, length = widget.listeners.length(); i < length; i++) {
                 Listener listener = widget.listeners.get(i);
                 e.addEventListener(listener.type.name, listener.dom);

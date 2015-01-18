@@ -66,16 +66,7 @@ public class Output extends LowLevelWidget<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected String virtualizeName() {
-        return "div";
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.nbox.〡$(text.get());
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualizeStructure(VirtualStructure descriptor) {
-        descriptor.〡(text.get());
-    }
-
 }

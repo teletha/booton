@@ -48,8 +48,8 @@ public class Input extends LowLevelWidget<Input> {
         this.value = value;
 
         // user input functionality
-        Events<UIEvent> functionInput = event().observe(Paste, Cut);
-        Events<UIEvent> keybordInput = event().observe(KeyUp);
+        Events<UIEvent> functionInput = listen(Paste, Cut);
+        Events<UIEvent> keybordInput = listen(KeyUp);
         functionInput.merge(keybordInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
     }
 
@@ -139,16 +139,9 @@ public class Input extends LowLevelWidget<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected String virtualizeName() {
-        return "input";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualizeStructure(VirtualStructure $〡) {
-        $〡.style.〡(InputForm);
-        $〡.style.〡("type", "text").〡("value", value.get());
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.e("input", 0).〡(InputForm, () -> {
+            $〡.style.〡("type", "text").〡("value", value.get());
+        });
     }
 }

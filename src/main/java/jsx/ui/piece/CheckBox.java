@@ -30,22 +30,16 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
     public CheckBox(BooleanProperty property) {
         this.check = property;
 
-        event().observe(Change).to(e -> check.set(!check.get()));
+        listen(Change).to(e -> check.set(!check.get()));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected String virtualizeName() {
-        return "input";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualizeStructure(VirtualStructure descriptor) {
-        descriptor.style.〡("type", "checkbox").〡("checked", check.get() ? "checked" : "");
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.e("input", 0).〡(() -> {
+            $〡.style.〡("type", "checkbox").〡("checked", check.get() ? "checked" : "");
+        });
     }
 }

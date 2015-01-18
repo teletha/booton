@@ -368,24 +368,6 @@ public final class VirtualStructure {
 
                 // process child nodes
                 widget.assemble(new VirtualStructure(virtualize));
-            } else if (child instanceof LowLevelWidget) {
-                LowLevelWidget<?> widget = (LowLevelWidget) child;
-
-                // create descriptor
-                ContainerDescriptor descriptor = new ContainerDescriptor(widget.virtualizeName(), null);
-                descriptor.localId = widget.hashCode();
-
-                // process child node
-                widget.virtualizeStructure(VirtualStructure.this);
-
-                // pass event listners and styles
-                descriptor.container(0).events = widget.events;
-
-                if (widget.styles != null) {
-                    for (Style s : widget.styles) {
-                        descriptor.container(0).classList.push(s);
-                    }
-                }
             } else if (child instanceof Optional) {
                 Optional optional = (Optional) child;
 

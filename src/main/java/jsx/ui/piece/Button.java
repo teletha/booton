@@ -56,15 +56,7 @@ public class Button extends LowLevelWidget<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected String virtualizeName() {
-        return "button";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualizeStructure(VirtualStructure descriptor) {
-        descriptor.text(label.get());
+    protected void virtualize(VirtualStructure $〡) {
+        $〡.e("button", 0).〡$(label.get());
     }
 }
