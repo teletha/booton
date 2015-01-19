@@ -401,23 +401,6 @@ public class PublishableTest {
         assert reciever.value == 1;
     }
 
-    /**
-     * <p>
-     * Helper method to create ui event.
-     * </p>
-     * 
-     * @param action
-     * @return
-     */
-    private static UIEvent event(UIAction action) {
-        UIEvent event = new UIEvent();
-        event.type = action.name;
-        event.action = action;
-        event.which = action.code;
-
-        return event;
-    }
-
     @Test
     public void internalEvent() throws Exception {
         InternalEvent internal = new InternalEvent();
@@ -639,5 +622,28 @@ public class PublishableTest {
         publishable.publish("1");
         assert reciever.retrieve() == "1";
         assert reciever.retrieve() == null;
+    }
+
+    /**
+     * <p>
+     * Helper method to create ui event.
+     * </p>
+     * 
+     * @param action
+     * @return
+     */
+    private static UIEvent event(UIAction action) {
+        UIEvent event = new Event();
+        event.type = action.name;
+        event.action = action;
+        event.which = action.code;
+
+        return event;
+    }
+
+    /**
+     * @version 2015/01/19 9:45:34
+     */
+    private static class Event extends UIEvent {
     }
 }
