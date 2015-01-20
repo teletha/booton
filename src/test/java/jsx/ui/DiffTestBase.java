@@ -75,8 +75,8 @@ public class DiffTestBase {
     private void clean(VirtualNode node) {
         node.dom = null;
 
-        if (node instanceof VirtualFragment) {
-            VirtualFragment<Node> element = (VirtualFragment) node;
+        if (node instanceof VirtualElement) {
+            VirtualElement element = (VirtualElement) node;
 
             for (int i = 0; i < element.items.length(); i++) {
                 clean(element.items.get(i));

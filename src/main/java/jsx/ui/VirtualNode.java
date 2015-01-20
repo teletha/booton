@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,15 +10,15 @@
 package jsx.ui;
 
 import js.dom.Node;
-import jsx.event.Publishable;
+import js.lang.NativeArray;
+import jsx.ui.Widget.Listener;
 import kiss.Disposable;
 
-/**
- * <p>
+/** <p>
  * {@link VirtualNode} is a snapshot of the {@link Widget} state which includes its tree structure.
  * </p>
  * 
- * @version 2014/09/04 23:21:40
+ * @version 2015/01/20 11:00:49
  */
 abstract class VirtualNode<N extends Node> implements Disposable {
 
@@ -50,7 +50,7 @@ abstract class VirtualNode<N extends Node> implements Disposable {
      * reference immediately.
      * </p>
      */
-    Publishable events;
+    NativeArray<Listener> listeners;
 
     /**
      * 
@@ -74,5 +74,6 @@ abstract class VirtualNode<N extends Node> implements Disposable {
     @Override
     public void dispose() {
         dom = null;
+        listeners = null;
     }
 }

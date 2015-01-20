@@ -200,7 +200,7 @@ class PatchDiff {
      * @param next A next state.
      * @return
      */
-    static List<Patch> diff(Element context, VirtualFragment<Element> prev, VirtualFragment<Element> next) {
+    static List<Patch> diff(Element context, VirtualElement prev, VirtualElement next) {
         List<Patch> patches = new ArrayList();
 
         int prevSize = prev.items.length();
