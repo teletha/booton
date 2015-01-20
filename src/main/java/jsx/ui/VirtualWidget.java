@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -10,10 +10,9 @@
 package jsx.ui;
 
 import js.dom.Element;
-import jsx.ui.Widget.Listener;
 
 /**
- * @version 2014/09/10 13:10:45
+ * @version 2015/01/20 11:11:42
  */
 class VirtualWidget extends VirtualElement {
 
@@ -35,21 +34,9 @@ class VirtualWidget extends VirtualElement {
      */
     @Override
     Element materialize() {
-        Element e = super.materialize();
-
-        if (widget.listeners != null) {
-            // search only child
-            if (items.length() == 1) {
-                e = e.firstElementChild();
-            }
-
-            for (int i = 0, length = widget.listeners.length(); i < length; i++) {
-                Listener listener = widget.listeners.get(i);
-                e.addEventListener(listener.type.name, listener.dom);
-            }
+        if (items.length() == 1) {
+            items.get(0).listeners = widget.listeners;
         }
-
-        return e;
+        return super.materialize();
     }
-
 }

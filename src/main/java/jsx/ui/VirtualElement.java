@@ -15,11 +15,12 @@ import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.style.Style;
+import jsx.ui.Widget.Listener;
 
 /**
  * @version 2014/10/07 12:49:29
  */
-class VirtualElement extends VirtualFragment<Element> {
+class VirtualElement extends VirtualNode<Element> {
 
     /** The node name. */
     final String name;
@@ -32,6 +33,9 @@ class VirtualElement extends VirtualFragment<Element> {
 
     /** The The inline styles. */
     final DualList<String, String> inlines = new DualList();
+
+    /** The items nodes. */
+    final NativeArray<VirtualNode> items = new NativeArray();
 
     /**
      * @param string
@@ -46,7 +50,7 @@ class VirtualElement extends VirtualFragment<Element> {
      * {@inheritDoc}
      */
     @Override
-    protected Element materializeRoot() {
+    Element materialize() {
         dom = document.createElement(name);
 
         // assign attributes
@@ -71,23 +75,37 @@ class VirtualElement extends VirtualFragment<Element> {
         }
 
         // assign event listeners
-        dom.delegateTo(events);
+        if (listeners != null) {
+            for (int i = 0, length = listeners.length(); i < length; i++) {
+                Listener listener = listeners.get(i);
+                dom.addEventListener(listener.type.name, listener.dom);
+            }
+        }
+
+        // assign children nodes
+        for (int i = 0, length = items.length(); i < length; i++) {
+            dom.append(items.get(i).materialize());
+        }
 
         // API definition
         return dom;
     }
 
     /**
-     * Helper method to create attribute. For the sake of speed, this method does no checking for
-     * name conflicts or well-formedness: such checks are the responsibility of the application.
+     * <p>
+     * Find index for the specified node.
+     * </p>
      * 
-     * @param name An attribute name.
-     * @param value An attribute value;
+     * @param node A target node to search.
+     * @return A index of the specified node.
      */
-    int attribute(String name, String value) {
-        this.attributes.add(name, value);
-
-        return attributes.size() - 1;
+    final int indexOf(VirtualNode node) {
+        for (int index = 0, length = items.length(); index < length; index++) {
+            if (items.get(index).id == node.id) {
+                return index;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -97,7 +115,10 @@ class VirtualElement extends VirtualFragment<Element> {
     public void dispose() {
         super.dispose();
 
-        events = null;
+        // discard children reference
+        for (int i = items.length() - 1; 0 <= i; i--) {
+            items.remove(i).dispose();
+        }
     }
 
     /**

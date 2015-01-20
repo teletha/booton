@@ -208,11 +208,11 @@ public class VirtualStructureReferenceCheckTest {
         private void collect(VirtualNode node) {
             nodes.add(node);
 
-            if (node instanceof VirtualFragment) {
-                VirtualFragment<?> fragment = (VirtualFragment) node;
+            if (node instanceof VirtualElement) {
+                VirtualElement element = (VirtualElement) node;
 
-                for (int i = 0; i < fragment.items.length(); i++) {
-                    collect(fragment.items.get(i));
+                for (int i = 0; i < element.items.length(); i++) {
+                    collect(element.items.get(i));
                 }
             }
         }
@@ -236,10 +236,7 @@ public class VirtualStructureReferenceCheckTest {
         private void hasNoReference() {
             for (VirtualNode node : nodes) {
                 assert node.dom == null;
-
-                if (node instanceof VirtualElement) {
-                    assert ((VirtualElement) node).events == null;
-                }
+                assert node.listeners == null;
             }
         }
     }
