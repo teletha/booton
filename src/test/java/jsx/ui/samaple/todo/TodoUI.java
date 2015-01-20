@@ -137,15 +137,15 @@ public class TodoUI extends Widget1<TodoTasks> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
+    protected void virtualize(VirtualStructure 〡) {
         int size = incompletedSize.get();
 
-        $〡.asis.〡$(input);
-        $〡.vbox.〡(ITEMS, Item.class, todos.list);
-        $〡.hbox.〡(FOTTER, () -> {
-            $〡.asis.〡$(size + " " + (size < 2 ? "item" : "items") + " left");
-            $〡.hbox.〡(BUTTONS, all, active, completed);
-            $〡.asis.〡$(clear);
+        〡.〡(input);
+        〡.vbox.〡(ITEMS, Item.class, todos.list);
+        〡.hbox.〡(FOTTER, () -> {
+            〡.〡(size + " " + (size < 2 ? "item" : "items") + " left");
+            〡.hbox.〡(BUTTONS, all, active, completed);
+            〡.〡(clear);
         });
     }
 
@@ -176,7 +176,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         protected void virtualize(VirtualStructure $〡) {
             if (filter.getValue().test(model1)) {
                 if (editing.get()) {
-                    $〡.asis.〡$(edit);
+                    $〡.〡(edit);
                 } else {
                     $〡.hbox.〡(null, complete, text, delete);
                 }

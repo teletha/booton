@@ -139,9 +139,9 @@ public class Input extends LowLevelWidget<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
-        $〡.e("input", 0).〡(InputForm, () -> {
-            $〡.style.〡("type", "text").〡("value", value.get());
+    protected void virtualize(VirtualStructure 〡) {
+        〡.e("input", 0).〡(InputForm, () -> {
+            〡.style.〡("type", "text").〡("value", value.get());
         });
     }
 }

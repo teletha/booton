@@ -132,16 +132,16 @@ public final class VirtualStructure {
     /**
      * @param string
      */
-    public void 〡(Object... texts) {
-        VirtualElement latest = parents.peekLast();
+    public void 〡(Object... items) {
+        VirtualElement e = parents.peekLast();
 
-        for (Object text : texts) {
-            if (text.equals("\r\n")) {
-                latest.items.push(new VirtualElement(0, "br"));
-            } else {
-                latest.items.push(new VirtualText(String.valueOf(text)));
-            }
+        for (Object item : items) {
+            process(e, item);
         }
+    }
+
+    public void 〡(Object item) {
+        process(parents.peekLast(), item);
     }
 
     /**
@@ -225,6 +225,35 @@ public final class VirtualStructure {
      */
     protected final VirtualElement getRoot() {
         return parents.peekFirst();
+    }
+
+    private void process(VirtualElement container, Object child) {
+        if (child instanceof Widget) {
+            Widget widget = (Widget) child;
+
+            // create virtual element for this widget
+            VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+
+            // mount virtual element on virtual structure
+            container.items.push(virtualize);
+
+            // process child nodes
+            widget.assemble(new VirtualStructure(virtualize));
+        } else if (child instanceof Optional) {
+            Optional optional = (Optional) child;
+
+            if (optional.isPresent()) {
+                process(container, optional.get());
+            }
+        } else if (child instanceof Style) {
+            Style style = (Style) child;
+
+            style.assignTo(container.classList, container.inlines);
+        } else if (child.equals("\r\n")) {
+            container.items.push(new VirtualElement(0, "br"));
+        } else {
+            container.items.push(new VirtualText(String.valueOf(child)));
+        }
     }
 
     /**
@@ -315,17 +344,6 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void 〡$(Object... children) {
-            〡((Style) null, children);
-        }
-
-        /**
-         * <p>
-         * Define children.
-         * </p>
-         * 
-         * @param children A list of child nodes.
-         */
         public final void 〡(Style style, String text) {
             if (text != null && text.length() != 0) {
                 〡(style, new Object[] {text});
@@ -354,33 +372,6 @@ public final class VirtualStructure {
 
             // leave from the child node
             if (name != null) parents.pollLast();
-        }
-
-        private void process(VirtualElement container, Object child) {
-            if (child instanceof Widget) {
-                Widget widget = (Widget) child;
-
-                // create virtual element for this widget
-                VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
-
-                // mount virtual element on virtual structure
-                container.items.push(virtualize);
-
-                // process child nodes
-                widget.assemble(new VirtualStructure(virtualize));
-            } else if (child instanceof Optional) {
-                Optional optional = (Optional) child;
-
-                if (optional.isPresent()) {
-                    process(container, optional.get());
-                }
-            } else if (child instanceof Style) {
-                Style style = (Style) child;
-
-                style.assignTo(container.classList, container.inlines);
-            } else {
-                container.items.push(new VirtualText(String.valueOf(child)));
-            }
         }
     }
 

@@ -23,10 +23,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void textChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis.〡$("text");
+        prev〡.〡("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis.〡$("change");
+        next〡.〡("change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -34,20 +34,20 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void textChangeSequentially() {
         VirtualStructure fisrt〡 = new VirtualStructure();
-        fisrt〡.asis.〡$("text1", "text2");
+        fisrt〡.〡("text1", "text2");
 
         VirtualStructure second〡 = new VirtualStructure();
-        second〡.asis.〡$("second", "text2");
+        second〡.〡("second", "text2");
 
         assertDiff(fisrt〡, second〡, 1);
 
         VirtualStructure third〡 = new VirtualStructure();
-        third〡.asis.〡$("third", "text2");
+        third〡.〡("third", "text2");
 
         assertDiff(second〡, third〡, 1);
 
         VirtualStructure last〡 = new VirtualStructure();
-        last〡.asis.〡$("third", "last");
+        last〡.〡("third", "last");
 
         assertDiff(third〡, last〡, 1);
     }
@@ -55,10 +55,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void textsChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis.〡$("text1", "text2", "text3");
+        prev〡.〡("text1", "text2", "text3");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis.〡$("text4", "text2", "text3");
+        next〡.〡("text4", "text2", "text3");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -66,10 +66,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void textNoChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.asis.〡$("text");
+        prev〡.〡("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.asis.〡$("text");
+        next〡.〡("text");
 
         assertDiff(prev〡, next〡, 0);
     }
@@ -77,10 +77,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void hboxTextChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.hbox.〡$("text");
+        prev〡.hbox.〡(null, "text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.hbox.〡$("change");
+        next〡.hbox.〡(null, "change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -101,9 +101,9 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     private <T> VirtualStructure change(boolean condition) {
         VirtualStructure $〡 = new VirtualStructure();
         if (condition) {
-            $〡.vbox.〡$("text");
+            $〡.vbox.〡(null, "text");
         } else {
-            $〡.hbox.〡$("text");
+            $〡.hbox.〡(null, "text");
         }
         return $〡;
     }
