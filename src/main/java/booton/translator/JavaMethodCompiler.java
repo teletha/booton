@@ -42,7 +42,6 @@ import jsx.bwt.Input;
 import jsx.style.Style;
 import jsx.ui.VirtualStructure;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
-import jsx.ui.VirtualStructure.Descriptor;
 import kiss.I;
 import kiss.model.ClassUtil;
 import booton.Obfuscator;
@@ -479,7 +478,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETFIELD:
-            if (owner == VirtualStructure.class && !name.equals("asis") && !name.equals("style") && script.source != VirtualStructure.class && script.source != Descriptor.class && script.source != ContainerDescriptor.class) {
+            if (owner == VirtualStructure.class && name.endsWith("box") && script.source != VirtualStructure.class && script.source != ContainerDescriptor.class) {
                 ArrayList<Operand> context = new ArrayList();
                 context.add(current.remove(0)); // "this" context
                 context.add(new OperandNumber(virtualStructureLocalId++)); // local id parameter
