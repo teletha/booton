@@ -37,9 +37,10 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
-        $〡.e("input", 0).〡(() -> {
-            $〡.style.〡("type", "checkbox").〡("checked", check.get() ? "checked" : "");
+    protected void virtualize(VirtualStructure 〡) {
+        〡.e("input", 0).〡(() -> {
+            〡.attr.〡("type", "checkbox");
+            〡.attr.〡("checked", check.get() ? "checked" : "");
         });
     }
 }

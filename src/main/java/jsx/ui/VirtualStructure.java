@@ -28,15 +28,6 @@ public final class VirtualStructure {
 
     /**
      * <p>
-     * Define anonymous-transparent container and get the descriptor of the container element.
-     * </p>
-     */
-    public final Descriptor asis = new Descriptor(null, null);
-
-    public final OptionalStyleDescriptor style = new OptionalStyleDescriptor();
-
-    /**
-     * <p>
      * Define horizontal container and get the descriptor of the container element.
      * </p>
      * <p>
@@ -83,6 +74,12 @@ public final class VirtualStructure {
      */
     public final ContainerDescriptor nbox = new ContainerDescriptor("span", NBOX);
 
+    /** The descriptor of properties. */
+    public final AttributeDescriptor attr = new AttributeDescriptor();
+
+    /** The descriptor of properties. */
+    public final StyleDescriptor style = new StyleDescriptor();
+
     /** The latest context line number. */
     protected int latestContextId;
 
@@ -107,30 +104,11 @@ public final class VirtualStructure {
     }
 
     /**
-     * @param text
-     */
-    public void text(String text) {
-        parents.peekLast().items.push(new VirtualText(text));
-    }
-
-    /**
-     * @param string
-     */
-    public <W extends Widget1<M>, M> void 〡(Class<W> widgetType, M model) {
-        Widget widget = Widget.of(widgetType, model);
-
-        // create virtual element for this widget
-        VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
-
-        // mount virtual element on virtual structure
-        parents.peekLast().items.push(virtualize);
-
-        // process child nodes
-        widget.assemble(new VirtualStructure(virtualize));
-    }
-
-    /**
-     * @param string
+     * <p>
+     * Define children of the current processing element.
+     * </p>
+     * 
+     * @param item A list of children items.
      */
     public void 〡(Object... items) {
         VirtualElement e = parents.peekLast();
@@ -140,6 +118,13 @@ public final class VirtualStructure {
         }
     }
 
+    /**
+     * <p>
+     * Define the child of the current processing element.
+     * </p>
+     * 
+     * @param item A child item.
+     */
     public void 〡(Object item) {
         process(parents.peekLast(), item);
     }
@@ -257,30 +242,34 @@ public final class VirtualStructure {
     }
 
     /**
-     * @version 2014/09/12 13:08:06
+     * @version 2015/01/21 14:20:59
      */
-    public class Descriptor {
+    public class ContainerDescriptor {
 
         /** The container element name. */
-        protected final String name;
+        private final String name;
 
         /** The built-in style. */
-        protected final Style builtin;
+        private final Style builtin;
 
         /** The container {@link VirtualElement}. */
-        protected VirtualElement container;
+        private VirtualElement container;
 
         /** The local id. */
-        protected int localId;
+        private int localId;
 
         /** The latest local id. */
         private int latestLocalId;
 
         /**
-         * @param name
-         * @param builtin
+         * <p>
+         * DSL to define element.
+         * </p>
+         * 
+         * @param name A container element name.
+         * @param style A element style.
          */
-        private Descriptor(String name, Style builtin) {
+        private ContainerDescriptor(String name, Style builtin) {
             this.name = name;
             this.builtin = builtin;
         }
@@ -292,7 +281,7 @@ public final class VirtualStructure {
          * 
          * @return The current container element.
          */
-        protected final VirtualElement container(int contextId) {
+        private final VirtualElement container(int contextId) {
             // This process is used in java environment only. (because js implementation of
             // LocalId always return 0)
             if (contextId != 0 && latestContextId != contextId) {
@@ -373,34 +362,16 @@ public final class VirtualStructure {
             // leave from the child node
             if (name != null) parents.pollLast();
         }
-    }
-
-    /**
-     * @version 2014/09/12 19:03:27
-     */
-    public class ContainerDescriptor extends Descriptor {
-
-        /**
-         * <p>
-         * DSL to define element.
-         * </p>
-         * 
-         * @param name A container element name.
-         * @param style A element style.
-         */
-        private ContainerDescriptor(String name, Style style) {
-            super(name, style);
-        }
 
         /**
          * <p>
          * Define children.
          * </p>
          * 
-         * @param children A list of child nodes.
+         * @param children A list of child widget.
          */
-        public final void 〡(Runnable children) {
-            〡((Style) null, children);
+        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T child) {
+            〡(style, Widget.of(childType, child));
         }
 
         /**
@@ -424,13 +395,13 @@ public final class VirtualStructure {
         public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // precess into child items
             int index = 0;
-            Object[] childrenUI = new Object[children.size()];
+            Object[] widgets = new Object[children.size()];
 
             for (T child : children) {
-                childrenUI[index++] = Widget.of(childType, child);
+                widgets[index++] = Widget.of(childType, child);
             }
 
-            〡(style, childrenUI);
+            〡(style, widgets);
         }
 
         /**
@@ -438,10 +409,10 @@ public final class VirtualStructure {
          * Define children.
          * </p>
          * 
-         * @param children A list of child widget.
+         * @param children A list of child nodes.
          */
-        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T child) {
-            〡(style, Widget.of(childType, child));
+        public final void 〡(Runnable children) {
+            〡((Style) null, children);
         }
 
         /**
@@ -486,22 +457,12 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public final <T> void 〡(Style style, Collection<T> items, Consumer<T> child) {
-            // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines);
-
-            // then, clean it for nested invocation
-            parents.addLast(container);
-            this.container = null;
-
-            // precess into child items
-            for (T item : items) {
-                modifier = item.hashCode();
-                child.accept(item);
-            }
-
-            // restore context environment
-            parents.pollLast();
+            〡(style, () -> {
+                for (T item : items) {
+                    modifier = item.hashCode();
+                    child.accept(item);
+                }
+            });
         }
 
         /**
@@ -512,40 +473,45 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public final <T> void 〡(Style style, int size, IntConsumer child) {
-            // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines);
-
-            // then, clean it for nested invocation
-            parents.addLast(container);
-            this.container = null;
-
-            // precess into child items
-            for (int i = 0; i < size; i++) {
-                modifier = i + size;
-                child.accept(i);
-            }
-
-            // restore context environment
-            parents.pollLast();
+            〡(style, () -> {
+                for (int i = 0; i < size; i++) {
+                    modifier = i * 31;
+                    child.accept(i);
+                }
+            });
         }
     }
 
     /**
-     * @version 2014/12/29 10:39:30
+     * @version 2015/01/21 13:18:17
      */
-    public class OptionalStyleDescriptor {
+    public class AttributeDescriptor {
 
-        public void 〡(Style style) {
+        /**
+         * <p>
+         * Define attribute of the latest element.
+         * </p>
+         * 
+         * @param name An attribute name.
+         * @param value An attribute value.
+         * @return A descriptor for property.
+         */
+        public AttributeDescriptor 〡(String name, String value) {
             VirtualElement e = parents.peekLast();
+            e.attributes.add(name, value);
 
-            style.assignTo(e.classList, e.inlines);
+            return this;
         }
+    }
 
-        public OptionalStyleDescriptor 〡(String attributeName, String attributeValue) {
+    /**
+     * @version 2015/01/21 13:18:17
+     */
+    public class StyleDescriptor {
+
+        public StyleDescriptor 〡(Style style) {
             VirtualElement e = parents.peekLast();
-
-            e.attributes.add(attributeName, attributeValue);
+            style.assignTo(e.classList, e.inlines);
 
             return this;
         }
