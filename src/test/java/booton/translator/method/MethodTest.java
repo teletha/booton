@@ -105,6 +105,51 @@ public class MethodTest extends ScriptTester {
     }
 
     @Test
+    public void AssignLocalParam() {
+        test(new AssignLocalParam());
+    }
+
+    /**
+     * @version 2015/01/21 14:52:47
+     */
+    private static class AssignLocalParam implements Scriptable {
+
+        public int act(int value) {
+            int local = 0;
+            int result = compute(local = value);
+
+            return local + result;
+        }
+
+        private int compute(int value) {
+            return 100 + value;
+        }
+    }
+
+    @Test
+    public void AssignFieldParam() {
+        test(new AssignFieldParam());
+    }
+
+    /**
+     * @version 2015/01/21 14:52:47
+     */
+    private static class AssignFieldParam implements Scriptable {
+
+        private int local;
+
+        public int act(int value) {
+            int result = compute(local = value);
+
+            return local + result;
+        }
+
+        private int compute(int value) {
+            return 100 + value;
+        }
+    }
+
+    @Test
     public void VariableParam() {
         test(new VariableParam());
     }
