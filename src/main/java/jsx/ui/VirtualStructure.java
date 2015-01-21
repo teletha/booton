@@ -299,29 +299,24 @@ public final class VirtualStructure {
             }
 
             if (container == null) {
-                if (name == null) {
-                    // as-is
-                    container = parents.peekLast();
-                } else {
-                    int id = localId;
+                int id = localId;
 
-                    if (id == 0) {
-                        localId = id = LocalId.generate();
-                    }
-
-                    if (modifier != 0) {
-                        latestLocalId = id = (31 + id) ^ modifier;
-                    }
-
-                    // built-in container
-                    container = new VirtualElement(id, name);
-
-                    if (builtin != null) {
-                        container.classList.push(builtin);
-                    }
-
-                    parents.peekLast().items.push(container);
+                if (id == 0) {
+                    localId = id = LocalId.generate();
                 }
+
+                if (modifier != 0) {
+                    latestLocalId = id = (31 + id) ^ modifier;
+                }
+
+                // built-in container
+                container = new VirtualElement(id, name);
+
+                if (builtin != null) {
+                    container.classList.push(builtin);
+                }
+
+                parents.peekLast().items.push(container);
             }
             return container;
         }
@@ -352,7 +347,7 @@ public final class VirtualStructure {
             if (style != null) style.assignTo(container.classList, container.inlines);
 
             // enter into the child node
-            if (name != null) parents.addLast(container);
+            parents.addLast(container);
 
             // process into child nodes
             for (Object child : children) {
@@ -360,7 +355,7 @@ public final class VirtualStructure {
             }
 
             // leave from the child node
-            if (name != null) parents.pollLast();
+            parents.pollLast();
         }
 
         /**
