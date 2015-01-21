@@ -89,6 +89,9 @@ public final class VirtualStructure {
     /** The node route. */
     private final Deque<VirtualElement> parents = new ArrayDeque();
 
+    /** The latest element. */
+    private VirtualElement latest;
+
     /**
      * 
      */
