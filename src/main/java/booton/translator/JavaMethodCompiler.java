@@ -48,6 +48,7 @@ import booton.Obfuscator;
 import booton.css.CascadingStyleSheet;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
+import booton.translator.method.MethodParameterWithSuperFieldAssignTest;
 
 /**
  * <p>
@@ -1528,6 +1529,10 @@ class JavaMethodCompiler extends MethodVisitor {
         // write mode
         Class returnType = convert(Type.getReturnType(desc));
         boolean immediately = returnType == void.class;
+
+        if (JavaMethodInliner.isInlinable(methodName, returnType) && owner == MethodParameterWithSuperFieldAssignTest.class) {
+            JavaMethodInliner.inline(owner, methodName, desc);
+        }
 
         // retrieve translator for this method owner
         Translator translator = TranslatorManager.getTranslator(owner);
