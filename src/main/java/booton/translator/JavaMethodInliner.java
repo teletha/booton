@@ -13,11 +13,14 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
+import jdk.internal.org.objectweb.asm.Type;
 import kiss.I;
 
 /**
@@ -26,7 +29,7 @@ import kiss.I;
 class JavaMethodInliner {
 
     /** The code manager. */
-    private static final Map<String, InlineCode> inlines = new HashMap();
+    private static final Map<String, BiFunction<List<Operand>, Node, String>> inlines = new HashMap();
 
     /**
      * @param name
@@ -38,59 +41,42 @@ class JavaMethodInliner {
     }
 
     /**
+     * <p>
+     * Create inline translator.
+     * </p>
+     * 
      * @param owner
-     * @param methodName
+     * @param name
      * @param desc
-     */
-    public static void inline(Class owner, String methodName, String desc) {
-        InlineCode inlined = inlines.computeIfAbsent(owner + "#" + methodName + desc, key -> {
-            return new InlineCode(owner, methodName, desc);
-        });
-    }
-
-    /**
-     * @param owner
-     * @param methodName
-     * @param returnType
-     * @param types
      * @return
      */
-    public static boolean tryInline(Class owner, String methodName, String methodDescription, Class returnType, Class[] types) {
-        // exclude non compiler generated methods
-        if (!methodName.startsWith("access$")) {
-            return false;
-        }
+    public static BiFunction<List<Operand>, Node, String> inline(Class owner, String name, String desc) {
+        String id = id(owner, name, desc);
+        BiFunction<List<Operand>, Node, String> translator = inlines.get(id);
 
-        // exclude methods with return value
-        if (returnType != void.class) {
-            return false;
-        }
-
-        InlineCode inlined = inlines.computeIfAbsent(owner + "#" + methodName + methodDescription, key -> {
-            return new InlineCode(owner, methodName, methodDescription);
-        });
-
-        return false;
-    }
-
-    /**
-     * @version 2015/01/22 11:45:26
-     */
-    private static class InlineCode {
-
-        /**
-         * @param owner
-         * @param methodName
-         * @param methodDescription
-         */
-        public InlineCode(Class source, String methodName, String methodDescription) {
+        if (translator == null) {
             try {
-                new ClassReader(source.getName()).accept(new InlineClassParser(this, methodName, methodDescription), 0);
+                new ClassReader(owner.getName()).accept(new InlineClassParser(owner), 0);
             } catch (IOException e) {
                 throw I.quiet(e);
             }
-
+            translator = inlines.get(id);
         }
+        return translator;
+    }
+
+    /**
+     * <p>
+     * Create the identical key for the specified method.
+     * </p>
+     * 
+     * @param owner A method owner class.
+     * @param method A method name.
+     * @param desc A method description.
+     * @return A created key.
+     */
+    private static String id(Class owner, String method, String desc) {
+        return owner + "#" + method + desc;
     }
 
     /**
@@ -98,25 +84,16 @@ class JavaMethodInliner {
      */
     private static class InlineClassParser extends ClassVisitor {
 
-        /** The code holder. */
-        private final InlineCode inline;
-
         /** The method name. */
-        private final String name;
-
-        /** The method description. */
-        private final String desc;
+        private final Class owner;
 
         /**
-         * @param name
-         * @throws IOException
+         * @param owner
          */
-        private InlineClassParser(InlineCode inline, String name, String desc) throws IOException {
+        private InlineClassParser(Class owner) throws IOException {
             super(ASM5);
 
-            this.inline = inline;
-            this.name = name;
-            this.desc = desc;
+            this.owner = owner;
         }
 
         /**
@@ -124,40 +101,96 @@ class JavaMethodInliner {
          */
         @Override
         public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-            if (this.name.equals(name) && this.desc.equals(desc)) {
-                return new InlineMethodParser(inline);
+            if ((access & ACC_SYNTHETIC) != 0 && name.startsWith("access$") && desc.endsWith("V")) {
+                return new InlineMethodParser(id(owner, name, desc));
             }
             return null;
         }
-    }
-
-    /**
-     * @version 2015/01/22 12:22:21
-     */
-    private static class InlineMethodParser extends MethodVisitor {
 
         /**
-         * @param name
-         * @throws IOException
+         * @version 2015/01/22 12:22:21
          */
-        private InlineMethodParser(InlineCode inline) {
-            super(ASM5);
-        }
+        private class InlineMethodParser extends MethodVisitor {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
-            System.out.println("visit field " + ownerClassName + " " + name + "  " + desc);
-        }
+            /** The method identifier. */
+            private final String id;
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void visitVarInsn(int opcode, int position) {
-            System.out.println("visit var " + position);
+            /**
+             * <p>
+             * Parse method to write inline code.
+             * </p>
+             * 
+             * @param id A method identifier.
+             */
+            private InlineMethodParser(String id) {
+                super(ASM5);
+
+                this.id = id;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void visitFieldInsn(int opcode, String ownerClassName, String name, String desc) {
+                Class owner = JavaMethodCompiler.convert(ownerClassName);
+                Translator translator = TranslatorManager.getTranslator(owner);
+
+                switch (opcode) {
+                case PUTSTATIC:
+                    inlines.put(id, (contexts, current) -> {
+                        current.remove(0);
+                        return translator.translateStaticField(owner, name) + "=" + contexts.get(0);
+                    });
+                    break;
+
+                case PUTFIELD:
+                    inlines.put(id, (contexts, current) -> {
+                        return translator.translateField(owner, name, contexts.remove(0)) + "=" + contexts.remove(0);
+                    });
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void visitMethodInsn(int opcode, String className, String methodName, String desc, boolean access) {
+                Class owner = JavaMethodCompiler.convert(className);
+
+                // compute parameter types
+                Type[] types = Type.getArgumentTypes(desc);
+                Class[] parameters = new Class[types.length];
+
+                for (int i = 0; i < types.length; i++) {
+                    parameters[i] = JavaMethodCompiler.convert(types[i]);
+                }
+
+                // retrieve translator for this method owner
+                Translator translator = TranslatorManager.getTranslator(owner);
+
+                switch (opcode) {
+                case INVOKESTATIC:
+                    inlines.put(id, (contexts, current) -> {
+                        return translator.translateStaticMethod(owner, methodName, desc, parameters, contexts);
+                    });
+                    break;
+
+                case INVOKESPECIAL:
+                case INVOKEVIRTUAL:
+                    inlines.put(id, (contexts, current) -> {
+                        return translator.translateMethod(owner, methodName, desc, parameters, contexts);
+                    });
+                    break;
+
+                default:
+                    break;
+                }
+            }
         }
     }
 }

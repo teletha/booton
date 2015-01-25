@@ -103,7 +103,7 @@ public final class VirtualStructure {
      * 
      */
     public VirtualStructure(VirtualElement root) {
-        parents.add(root);
+        parents.add(latest = root);
     }
 
     /**
@@ -114,10 +114,8 @@ public final class VirtualStructure {
      * @param item A list of children items.
      */
     public void 〡(Object... items) {
-        VirtualElement e = parents.peekLast();
-
         for (Object item : items) {
-            process(e, item);
+            process(latest, item);
         }
     }
 
@@ -129,7 +127,7 @@ public final class VirtualStructure {
      * @param item A child item.
      */
     public void 〡(Object item) {
-        process(parents.peekLast(), item);
+        process(latest, item);
     }
 
     /**
@@ -212,7 +210,7 @@ public final class VirtualStructure {
      * @return A single root element.
      */
     protected final VirtualElement getRoot() {
-        return parents.peekFirst();
+        return latest;
     }
 
     private void process(VirtualElement container, Object child) {
@@ -318,8 +316,7 @@ public final class VirtualStructure {
                 if (builtin != null) {
                     container.classList.push(builtin);
                 }
-
-                parents.peekLast().items.push(container);
+                latest.items.push(container);
             }
             return container;
         }
@@ -350,7 +347,7 @@ public final class VirtualStructure {
             if (style != null) style.assignTo(container.classList, container.inlines);
 
             // enter into the child node
-            parents.addLast(container);
+            parents.addLast(latest = container);
 
             // process into child nodes
             for (Object child : children) {
@@ -359,6 +356,7 @@ public final class VirtualStructure {
 
             // leave from the child node
             parents.pollLast();
+            latest = parents.peekLast();
         }
 
         /**
@@ -426,7 +424,7 @@ public final class VirtualStructure {
             if (style != null) style.assignTo(container.classList, container.inlines);
 
             // then, clean it for nested invocation
-            parents.addLast(container);
+            parents.addLast(latest = container);
             this.container = null;
 
             // precess into child items
@@ -434,6 +432,7 @@ public final class VirtualStructure {
 
             // restore context environment
             parents.pollLast();
+            latest = parents.peekLast();
         }
 
         /**
@@ -508,9 +507,7 @@ public final class VirtualStructure {
     public class StyleDescriptor {
 
         public StyleDescriptor 〡(Style style) {
-            VirtualElement e = parents.peekLast();
-            style.assignTo(e.classList, e.inlines);
-
+            style.assignTo(latest.classList, latest.inlines);
             return this;
         }
 
@@ -524,9 +521,7 @@ public final class VirtualStructure {
          */
         public void 〡(Style style, boolean condition) {
             if (condition) {
-                VirtualElement e = parents.peekLast();
-
-                style.assignTo(e.classList, e.inlines);
+                style.assignTo(latest.classList, latest.inlines);
             }
         }
 
@@ -535,16 +530,14 @@ public final class VirtualStructure {
          * Add {@link Style} if the given attribute is valid.
          * < /p>
          * 
-         * @param attributeName An attribute name.
-         * @param attributeValue An attribute value.
+         * @param name An attribute name.
+         * @param value An attribute value.
          * @param style A target style to apply.
          */
-        public void 〡(Style style, String attributeName, String attributeValue) {
-            if (attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0) {
-                VirtualElement e = parents.peekLast();
-
-                style.assignTo(e.classList, e.inlines);
-                e.attributes.add(attributeName, attributeValue);
+        public void 〡(Style style, String name, String value) {
+            if (name != null && name.length() != 0 && value != null && value.length() != 0) {
+                style.assignTo(latest.classList, latest.inlines);
+                latest.attributes.add(name, value);
             }
         }
     }

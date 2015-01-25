@@ -77,11 +77,14 @@ class TranslatorManager {
                         for (Method method : type.getDeclaredMethods()) {
                             // Methods defined in interface are as native.
                             // Methods defined in class are as native if these have native modifier.
-                            if (type.isInterface() || Modifier.isNative(method.getModifiers()) || method.isAnnotationPresent(JavascriptNativeProperty.class)) {
-                                nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                            if (type.isInterface() || Modifier.isNative(method.getModifiers()) || method
+                                    .isAnnotationPresent(JavascriptNativeProperty.class)) {
+                                nativeMethods
+                                        .push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
                             }
 
-                            JavascriptNativePropertyAccessor accessor = method.getAnnotation(JavascriptNativePropertyAccessor.class);
+                            JavascriptNativePropertyAccessor accessor = method
+                                    .getAnnotation(JavascriptNativePropertyAccessor.class);
 
                             if (accessor != null) {
                                 Integer hash = hash(method.getName(), Type.getMethodDescriptor(method));
@@ -254,7 +257,8 @@ class TranslatorManager {
             return true;
         }
 
-        if (name.equals("$deserializeLambda$") && description.equals("(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;")) {
+        if (name.equals("$deserializeLambda$") && description
+                .equals("(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;")) {
             return true;
         }
 
@@ -326,7 +330,7 @@ class TranslatorManager {
          * {@inheritDoc}
          */
         @Override
-        protected Object translateField(Class ownerClass, String name, Operand context) {
+        protected String translateField(Class ownerClass, String name, Operand context) {
             return context + "." + Javascript.computeFieldName(ownerClass, name);
         }
 
