@@ -118,7 +118,7 @@ public class Translator<T> implements Extensible {
      * @param context A operand stack.
      * @return A translated expression.
      */
-    Object translateField(Class ownerClass, String name, Operand context) {
+    String translateField(Class ownerClass, String name, Operand context) {
         return writeFieldAccess(name);
     }
 
