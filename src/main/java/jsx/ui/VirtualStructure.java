@@ -472,7 +472,7 @@ public final class VirtualStructure {
         public final <T> void 〡(Style style, int size, IntConsumer child) {
             〡(style, () -> {
                 for (int i = 0; i < size; i++) {
-                    modifier = i * 31;
+                    modifier = (i + 117 + latestContextId) * 31;
                     child.accept(i);
                 }
             });
