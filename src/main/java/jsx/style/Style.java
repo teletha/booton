@@ -34,7 +34,7 @@ public interface Style {
      * 
      * @return
      */
-    public default String intern() {
+    public default String id() {
         return "STYLE" + hashCode();
     }
 

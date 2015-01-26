@@ -80,7 +80,7 @@ public class StyleName {
         String name = css.get(style);
 
         if (name == null) {
-            name = style.intern();
+            name = style.id();
         }
         return name;
     }
@@ -100,7 +100,7 @@ public class StyleName {
          * @return A computed style name.
          */
         public String name(Style style) {
-            return Javascript.writeMethodCode(Style.class, "intern", param(0));
+            return Javascript.writeMethodCode(Style.class, "id", param(0));
         }
     }
 }
