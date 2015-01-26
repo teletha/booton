@@ -33,9 +33,11 @@ public class DOMTokenList implements JavascriptNative {
      * Add class.
      * </p>
      * 
-     * @param className A class name to add.
+     * @param style A class name to add.
      */
-    public native void add(Style className);
+    public void add(Style style) {
+        add(style.intern());
+    }
 
     /**
      * <p>
@@ -51,9 +53,11 @@ public class DOMTokenList implements JavascriptNative {
      * Remove class.
      * </p>
      * 
-     * @param className A class name to remove.
+     * @param style A class name to remove.
      */
-    public native void remove(Style className);
+    public void remove(Style style) {
+        remove(style.intern());
+    }
 
     /**
      * <p>
@@ -71,9 +75,11 @@ public class DOMTokenList implements JavascriptNative {
      * function returns true.
      * </p>
      * 
-     * @param className A class name to toggle.
+     * @param style A class name to toggle.
      */
-    public native boolean toggle(Style className);
+    public boolean toggle(Style style) {
+        return toggle(style.intern());
+    }
 
     /**
      * <p>
@@ -89,9 +95,11 @@ public class DOMTokenList implements JavascriptNative {
      * Test class.
      * </p>
      * 
-     * @param className A class name to test.
+     * @param style A class name to test.
      */
-    public native boolean contains(Style className);
+    public boolean contains(Style style) {
+        return contains(style.intern());
+    }
 
     /**
      * <p>
