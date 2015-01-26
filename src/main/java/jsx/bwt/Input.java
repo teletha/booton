@@ -79,7 +79,7 @@ public class Input<T> extends FormUI {
         add(builtins.get(type));
 
         // create UI
-        form.attr("type", "input").addClass(InputForm);
+        form.attr("type", "input").add(InputForm);
         form.subscribe(this);
 
         // initial binding
@@ -97,7 +97,7 @@ public class Input<T> extends FormUI {
 
         if (input.length() == 0) {
             if (required) {
-                form.addClass(InvalidInputForm);
+                form.add(InvalidInputForm);
             }
             return;
         }
@@ -111,9 +111,9 @@ public class Input<T> extends FormUI {
             }
             model.set(value);
 
-            form.removeClass(InvalidInputForm);
+            form.remove(InvalidInputForm);
         } catch (Invalid e) {
-            form.addClass(InvalidInputForm);
+            form.add(InvalidInputForm);
         }
     }
 

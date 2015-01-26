@@ -44,9 +44,9 @@ public abstract class ImageGrid<T> extends UI {
 
         for (Entry<T, Element> entry : images.entrySet()) {
             if (getTitle(entry.getKey()).toLowerCase().contains(name)) {
-                entry.getValue().removeClass(Unselected);
+                entry.getValue().remove(Unselected);
             } else {
-                entry.getValue().addClass(Unselected);
+                entry.getValue().add(Unselected);
             }
         }
     }
@@ -58,7 +58,7 @@ public abstract class ImageGrid<T> extends UI {
      */
     public ImageGrid() {
         sources = sources();
-        root.addClass(Root);
+        root.add(Root);
 
         Element set = root.child(ImageSet);
 

@@ -31,7 +31,7 @@ public class SlidableView extends UI {
      * @param content
      */
     public SlidableView(UI content) {
-        root.addClass(ViewableArea);
+        root.add(ViewableArea);
         root.child(Slider).append(content);
     }
 
@@ -52,7 +52,7 @@ public class SlidableView extends UI {
             // .css("width", "calc(100% + " + right + " + " + left + ")");
 
             // show slide view
-            root.addClass(Shown);
+            root.add(Shown);
 
             // notify event
             publish(new Open());
@@ -71,7 +71,7 @@ public class SlidableView extends UI {
         if (2 <= shown) {
             // hide slide view
             shown = 0;
-            root.removeClass(Shown);
+            root.remove(Shown);
 
             // notify event
             publish(new Close());

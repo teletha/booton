@@ -41,7 +41,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to assign.
      * @return Chainable API.
      */
-    public Element addClass(Style... classes) {
+    public Element add(Style... classes) {
         for (Style clazz : classes) {
             classList().add(clazz);
         }
@@ -278,7 +278,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param classes A list of class names to remove.
      * @return Chainable API.
      */
-    public Element removeClass(Style... classes) {
+    public Element remove(Style... classes) {
         for (Style clazz : classes) {
             classList().remove(clazz);
         }
@@ -290,7 +290,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     /**
      * @param rule
      */
-    public Element style(Style style) {
+    public Element addInline(Style style) {
         StyleRule rule = StyleRule.create("", style);
         CSSStyleDeclaration dec = style();
 
@@ -305,7 +305,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     /**
      * @param rule
      */
-    public Element remove(Style style) {
+    public Element removeInline(Style style) {
         StyleRule rule = StyleRule.create("", style);
         CSSStyleDeclaration dec = style();
 
@@ -326,7 +326,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
      * @param style A class name to be toggled for this element.
      * @return Chainable API.
      */
-    public Element toggleClass(Style style) {
+    public Element toggle(Style style) {
         classList().toggle(style);
 
         // API definition
@@ -378,7 +378,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         super.startListening(type);
 
         if (type == Object.class) {
-            addClass(EventListenable);
+            add(EventListenable);
         }
     }
 
@@ -390,7 +390,7 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
         super.stopListening(type);
 
         if (type == Object.class) {
-            removeClass(EventListenable);
+            remove(EventListenable);
         }
     }
 

@@ -134,7 +134,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public Element style(Style style) {
+    public Element addInline(Style style) {
         classList().add(style.intern());
 
         return this;
@@ -144,7 +144,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public Element remove(Style style) {
+    public Element removeInline(Style style) {
         classList().remove(style.intern());
 
         return this;
