@@ -288,36 +288,6 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
     }
 
     /**
-     * @param rule
-     */
-    public Element addInline(Style style) {
-        StyleRule rule = StyleRule.create("", style);
-        CSSStyleDeclaration dec = style();
-
-        for (int i = 0; i < rule.properties.size(); i++) {
-            dec.set(rule.properties.key(i), rule.properties.value(i));
-        }
-
-        // API definition
-        return this;
-    }
-
-    /**
-     * @param rule
-     */
-    public Element removeInline(Style style) {
-        StyleRule rule = StyleRule.create("", style);
-        CSSStyleDeclaration dec = style();
-
-        for (int i = 0; i < rule.properties.size(); i++) {
-            dec.remove(rule.properties.key(i));
-        }
-
-        // API definition
-        return this;
-    }
-
-    /**
      * <p>
      * Add or remove class from this element, depending on either the class's presence or the value
      * of the switch argument.
