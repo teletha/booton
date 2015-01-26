@@ -140,7 +140,7 @@ class JavaMethodCompiler extends MethodVisitor {
     /**
      * Represents a duplicate instruction. DUP_X1 and DUP2_X2.
      */
-    private static final int DUPLICATE_X1 = 441;
+    private static final int DUPLICATE_AWAY = 441;
 
     /**
      * Represents a return instruction.
@@ -166,6 +166,11 @@ class JavaMethodCompiler extends MethodVisitor {
      * Represents a compare instruction. DCMPL and DCMPG
      */
     private static final int CMP = 472;
+
+    /**
+     * Represents a invoke method instruction. INVOKESTATIC, INVOKEVIRTUAL etc
+     */
+    private static final int INVOKE = 480;
 
     /** The extra opcode for byte code parsing. */
     private static final int LABEL = 300;
@@ -443,22 +448,22 @@ class JavaMethodCompiler extends MethodVisitor {
         case PUTFIELD:
             // Increment (decrement) of field doesn't use increment instruction, so we must
             // distinguish increment (decrement) from addition by pattern matching.
-            if (match(DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, ADD, PUTFIELD)) {
+            if (match(DUP, GETFIELD, DUPLICATE_AWAY, CONSTANT_1, ADD, PUTFIELD)) {
                 // The pattenr of post-increment field is like above.
                 current.remove(0);
 
                 current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, true));
-            } else if (match(DUP, GETFIELD, DUPLICATE_X1, CONSTANT_1, SUB, PUTFIELD)) {
+            } else if (match(DUP, GETFIELD, DUPLICATE_AWAY, CONSTANT_1, SUB, PUTFIELD)) {
                 // The pattenr of post-decrement field is like above.
                 current.remove(0);
 
                 current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, true));
-            } else if (match(DUP, GETFIELD, CONSTANT_1, ADD, DUPLICATE_X1, PUTFIELD)) {
+            } else if (match(DUP, GETFIELD, CONSTANT_1, ADD, DUPLICATE_AWAY, PUTFIELD)) {
                 // The pattenr of pre-increment field is like above.
                 current.remove(0);
 
                 current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, true, false));
-            } else if (match(DUP, GETFIELD, CONSTANT_1, SUB, DUPLICATE_X1, PUTFIELD)) {
+            } else if (match(DUP, GETFIELD, CONSTANT_1, SUB, DUPLICATE_AWAY, PUTFIELD)) {
                 // The pattenr of pre-decrement field is like above.
                 current.remove(0);
 
@@ -467,7 +472,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current.remove(1)) + "=" + current.remove(0)
                         .cast(type), type);
 
-                if (match(DUPLICATE_X1, PUTFIELD)) {
+                if (match(DUPLICATE_AWAY, PUTFIELD)) {
                     // multiple assignment (i.e. this.a = this.b = 0;)
                     current.addOperand(assignment.encolose());
                 } else {
@@ -1530,7 +1535,16 @@ class JavaMethodCompiler extends MethodVisitor {
         boolean immediately = returnType == void.class;
 
         if (JavaMethodInliner.isInlinable(methodName, returnType)) {
-            current.addOperand(JavaMethodInliner.inline(owner, methodName, desc).apply(contexts, current));
+            String expression = JavaMethodInliner.inline(owner, methodName, desc).apply(contexts, current);
+
+            if (match(DUPLICATE, INVOKE)) {
+                current.remove(0);
+                current.addOperand(expression);
+            } else if (match(DUPLICATE_AWAY, INVOKE)) {
+                current.addOperand(expression);
+            } else {
+                current.addExpression(expression);
+            }
             return;
         }
 
@@ -1608,10 +1622,12 @@ class JavaMethodCompiler extends MethodVisitor {
                 while (!hasStaticMethod(owner, methodName, parameters)) {
                     owner = owner.getSuperclass();
                 }
+
                 // push class operand
                 contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
 
                 // translate
+                Debugger.print(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts));
                 current.addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts), returnType);
             }
             break;
@@ -2241,7 +2257,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     return false;
                 }
 
-            case DUPLICATE_X1:
+            case DUPLICATE_AWAY:
                 switch (record) {
                 case DUP_X1:
                 case DUP2_X1:
@@ -2342,6 +2358,18 @@ class JavaMethodCompiler extends MethodVisitor {
                 case FRAME_NEW:
                 case FRAME_SAME:
                 case FRAME_SAME1:
+                    continue root;
+
+                default:
+                    return false;
+                }
+
+            case INVOKE:
+                switch (record) {
+                case INVOKEINTERFACE:
+                case INVOKESPECIAL:
+                case INVOKESTATIC:
+                case INVOKEVIRTUAL:
                     continue root;
 
                 default:

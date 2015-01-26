@@ -139,7 +139,6 @@ class JavaMethodInliner {
                 switch (opcode) {
                 case PUTSTATIC:
                     inlines.put(id, (contexts, current) -> {
-                        current.remove(0);
                         return translator.translateStaticField(owner, name) + "=" + contexts.get(0);
                     });
                     break;
