@@ -46,7 +46,7 @@ public interface Style {
      * @param dom A element to apply this style.
      */
     public default void applyTo(Element dom) {
-        dom.style(this);
+        dom.addInline(this);
     }
 
     /**
@@ -57,7 +57,7 @@ public interface Style {
      * @param dom A element to unapply this style.
      */
     public default void unapplyFrom(Element dom) {
-        dom.remove(this);
+        dom.removeInline(this);
     }
 
     public default void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {

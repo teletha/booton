@@ -69,7 +69,7 @@ public class ScrollableListView extends UI {
         this.itemHeight = itemHeight;
         this.viewableItemSize = viewableItemSize;
 
-        this.viewableItemView = root.addClass(ViewabletemView).subscribe(this);
+        this.viewableItemView = root.add(ViewabletemView).subscribe(this);
         this.renderableItemView = viewableItemView.child(RenderableItemView);
         this.spacer = renderableItemView.child(Spacer);
     }
@@ -89,8 +89,7 @@ public class ScrollableListView extends UI {
         int size = provider.countItem();
         this.extraBottomRenderableItemSize = 25;
         this.extraTopRenderableItemSize = extraBottomRenderableItemSize + viewableItemSize;
-        this.renderableItemSize = Math
-                .min(size, extraBottomRenderableItemSize + viewableItemSize + extraTopRenderableItemSize);
+        this.renderableItemSize = Math.min(size, extraBottomRenderableItemSize + viewableItemSize + extraTopRenderableItemSize);
 
         // Add or remove item elements for new item provider.
         int diff = items.size() - renderableItemSize;
