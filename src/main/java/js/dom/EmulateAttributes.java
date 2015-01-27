@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @version 2014/08/31 13:34:53
  */
-public class EmulateAttributes extends Attributes {
+class EmulateAttributes extends Attributes {
 
     /** The manager. */
     final List<Attribute> entries = new ArrayList();

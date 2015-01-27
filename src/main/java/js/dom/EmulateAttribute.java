@@ -12,7 +12,7 @@ package js.dom;
 /**
  * @version 2014/08/31 12:44:42
  */
-public class EmulateAttribute extends Attribute {
+class EmulateAttribute extends Attribute {
 
     /** The name. */
     private String uri;
