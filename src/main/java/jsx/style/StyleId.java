@@ -24,7 +24,7 @@ import booton.translator.Translator;
 /**
  * @version 2014/10/31 9:51:37
  */
-public class StyleName {
+public class StyleId {
 
     /** The configuration. */
     private static final BootonConfiguration config = I.make(BootonConfiguration.class);
@@ -43,7 +43,7 @@ public class StyleName {
      * @param style A target style class.
      * @return A computed style name.
      */
-    public static String name(Style style) {
+    public static String of(Style style) {
         String className = style.getClass().getName();
         int index = className.indexOf("$$");
 
@@ -89,7 +89,7 @@ public class StyleName {
      * @version 2014/10/31 9:54:35
      */
     @SuppressWarnings("unused")
-    private static class Coder extends Translator<StyleName> {
+    private static class Coder extends Translator<StyleId> {
 
         /**
          * <p>
@@ -99,7 +99,7 @@ public class StyleName {
          * @param style A target style class.
          * @return A computed style name.
          */
-        public String name(Style style) {
+        public String of(Style style) {
             return Javascript.writeMethodCode(Style.class, "id", param(0));
         }
     }
