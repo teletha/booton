@@ -17,7 +17,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2014/03/11 16:08:36
  */
 @JavaAPIProvider(Math.class)
-public class JSMath {
+class JSMath {
 
     /**
      * The {@code double} value that is closer than any other to <i>e</i>, the base of the natural

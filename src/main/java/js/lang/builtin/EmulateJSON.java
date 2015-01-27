@@ -25,7 +25,7 @@ import booton.translator.JavascriptNativeProperty;
 /**
  * @version 2015/01/13 10:02:50
  */
-public class EmulateJSON extends JSON {
+class EmulateJSON extends JSON {
 
     /** The javascript engine for reuse. */
     private static final ScriptEngine script;

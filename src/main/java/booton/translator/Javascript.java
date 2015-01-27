@@ -27,12 +27,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.Global;
 import js.lang.NativeString;
-import js.util.concurrent.CopyOnWriteArraySet;
 import kiss.ClassListener;
 import kiss.Extensible;
 import kiss.I;

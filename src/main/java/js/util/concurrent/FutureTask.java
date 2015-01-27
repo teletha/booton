@@ -25,7 +25,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2014/01/06 14:52:28
  */
 @JavaAPIProvider(java.util.concurrent.FutureTask.class)
-public class FutureTask<V> implements RunnableFuture<V> {
+class FutureTask<V> implements RunnableFuture<V> {
 
     /** The actual task. */
     private final Callable<V> callable;

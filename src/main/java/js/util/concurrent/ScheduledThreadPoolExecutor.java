@@ -29,7 +29,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2014/01/05 23:04:19
  */
 @JavaAPIProvider(java.util.concurrent.ScheduledThreadPoolExecutor.class)
-public class ScheduledThreadPoolExecutor implements ScheduledExecutorService {
+class ScheduledThreadPoolExecutor implements ScheduledExecutorService {
 
     /**
      * {@inheritDoc}

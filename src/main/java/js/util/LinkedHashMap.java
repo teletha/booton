@@ -15,5 +15,5 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/10/23 14:59:32
  */
 @JavaAPIProvider(java.util.LinkedHashMap.class)
-public class LinkedHashMap<K, V> extends HashMap<K, V> {
+class LinkedHashMap<K, V> extends HashMap<K, V> {
 }

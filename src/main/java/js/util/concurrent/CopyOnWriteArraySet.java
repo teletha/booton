@@ -20,7 +20,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/10/11 10:30:48
  */
 @JavaAPIProvider(java.util.concurrent.CopyOnWriteArraySet.class)
-public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
+class CopyOnWriteArraySet<E> extends AbstractSet<E> {
 
     private final CopyOnWriteArrayList<E> list;
 
@@ -55,6 +55,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * 
      * @return <tt>true</tt> if this set contains no elements
      */
+    @Override
     public boolean isEmpty() {
         return list.isEmpty();
     }
@@ -67,6 +68,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * @param o element whose presence in this set is to be tested
      * @return <tt>true</tt> if this set contains the specified element
      */
+    @Override
     public boolean contains(Object o) {
         return list.contains(o);
     }
@@ -84,6 +86,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * 
      * @return an array containing all the elements in this set
      */
+    @Override
     public Object[] toArray() {
         return list.toArray();
     }
@@ -120,6 +123,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      *             the runtime type of every element in this set
      * @throws NullPointerException if the specified array is null
      */
+    @Override
     public <T> T[] toArray(T[] a) {
         return list.toArray(a);
     }
@@ -127,6 +131,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
     /**
      * Removes all of the elements from this set. The set will be empty after this call returns.
      */
+    @Override
     public void clear() {
         list.clear();
     }
@@ -141,6 +146,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * @param o object to be removed from this set, if present
      * @return <tt>true</tt> if this set contained the specified element
      */
+    @Override
     public boolean remove(Object o) {
         return list.remove(o);
     }
@@ -154,6 +160,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * @param e element to be added to this set
      * @return <tt>true</tt> if this set did not already contain the specified element
      */
+    @Override
     public boolean add(E e) {
         return list.addIfAbsent(e);
     }
@@ -168,6 +175,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * @throws NullPointerException if the specified collection is null
      * @see #contains(Object)
      */
+    @Override
     public boolean containsAll(Collection<?> c) {
         return list.containsAll(c);
     }
@@ -184,6 +192,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * @throws NullPointerException if the specified collection is null
      * @see #add(Object)
      */
+    @Override
     public boolean addAll(Collection<? extends E> c) {
         return list.addAllAbsent(c) > 0;
     }
@@ -201,6 +210,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      *             does not permit null elements (optional), or if the specified collection is null
      * @see #remove(Object)
      */
+    @Override
     public boolean removeAll(Collection<?> c) {
         return list.removeAll(c);
     }
@@ -219,6 +229,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      *             does not permit null elements (optional), or if the specified collection is null
      * @see #remove(Object)
      */
+    @Override
     public boolean retainAll(Collection<?> c) {
         return list.retainAll(c);
     }
@@ -233,6 +244,7 @@ public class CopyOnWriteArraySet<E> extends AbstractSet<E> {
      * 
      * @return an iterator over the elements in this set
      */
+    @Override
     public Iterator<E> iterator() {
         return list.iterator();
     }

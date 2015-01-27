@@ -15,7 +15,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2013/12/30 12:31:01
  */
 @JavaAPIProvider(Package.class)
-public class JSPackage {
+class JSPackage {
 
     /** The package name. */
     private final String name;
