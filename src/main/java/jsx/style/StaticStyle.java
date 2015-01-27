@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,28 @@ import java.util.Map;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import booton.Necessary;
 
 /**
- * @version 2014/12/17 12:03:37
+ * @version 2015/01/28 2:25:04
  */
+@Necessary
 public class StaticStyle implements Style {
 
     /** The static style pool. */
-    static final Map<String, Style> pool = new HashMap();
+    static final Map<String, StaticStyle> pool = new HashMap();
 
-    /** The style name. */
+    /** The class name of this style. */
     private final String name;
 
     /**
-     * @param name
-     */
-    StaticStyle(Style style) {
-        this.name = StyleName.name(style);
-    }
-
-    /**
+     * <p>
+     * A named static style.
+     * </p>
+     * 
      * @param className
      */
-    StaticStyle(String className) {
+    private StaticStyle(String className) {
         this.name = className;
     }
 
@@ -79,5 +78,20 @@ public class StaticStyle implements Style {
     @Override
     public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
         styles.push(this);
+    }
+
+    /**
+     * <p>
+     * Find the {@link StaticStyle} of the specified class name in cache.
+     * </p>
+     * 
+     * @param className A class name you want.
+     * @return A cached {@link StaticStyle}.
+     */
+    @SuppressWarnings("unused")
+    private static StaticStyle of(String className) {
+        return pool.computeIfAbsent(className, name -> {
+            return new StaticStyle(name);
+        });
     }
 }

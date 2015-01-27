@@ -25,7 +25,7 @@ public class StyleTester extends StyleRuleDescriptor {
         StyleRule.create("$", style);
 
         // search specified rule
-        String name = "." + StyleName.name(style);
+        String name = "." + StyleId.of(style);
 
         for (StyleRule rule : StyleRule.rules) {
             if (rule.selector.equals(name)) {

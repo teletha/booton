@@ -16,7 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import jsx.style.Style;
-import jsx.style.StyleName;
+import jsx.style.StyleId;
 import jsx.style.StyleRule;
 import jsx.style.value.Font;
 import kiss.I;
@@ -87,7 +87,7 @@ public class CascadingStyleSheet {
             if (!styles.contains(style)) {
                 styles.add(style);
             }
-            return StyleName.name(style);
+            return StyleId.of(style);
         } catch (Exception e) {
             throw I.quiet(e);
         }

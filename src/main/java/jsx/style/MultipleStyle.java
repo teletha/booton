@@ -18,19 +18,16 @@ import jsx.collection.DualList;
  */
 class MultipleStyle implements Style {
 
-    /** The base style. */
-    public final Style base;
-
-    /** The runtime declared style. */
-    public final Style dynamic;
+    /** The style contianer. */
+    private final NativeArray<Style> styles = new NativeArray();
 
     /**
      * @param base
      * @param dynamic
      */
     public MultipleStyle(Style base, Style dynamic) {
-        this.base = base;
-        this.dynamic = dynamic;
+        this.styles.push(base);
+        this.styles.push(dynamic);
     }
 
     /**
@@ -46,8 +43,9 @@ class MultipleStyle implements Style {
      */
     @Override
     public void applyTo(Element dom) {
-        base.applyTo(dom);
-        dynamic.applyTo(dom);
+        for (int i = 0, size = this.styles.length(); i < size; i++) {
+            this.styles.get(i).applyTo(dom);
+        }
     }
 
     /**
@@ -55,8 +53,9 @@ class MultipleStyle implements Style {
      */
     @Override
     public void unapplyFrom(Element dom) {
-        base.unapplyFrom(dom);
-        dynamic.unapplyFrom(dom);
+        for (int i = 0, size = this.styles.length(); i < size; i++) {
+            this.styles.get(i).unapplyFrom(dom);
+        }
     }
 
     /**
@@ -64,8 +63,19 @@ class MultipleStyle implements Style {
      */
     @Override
     public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
-        base.assignTo(styles, inlines);
-        dynamic.assignTo(styles, inlines);
+        for (int i = 0, size = this.styles.length(); i < size; i++) {
+            this.styles.get(i).assignTo(styles, inlines);
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Style with(Style other) {
+        if (other != null) {
+            this.styles.push(other);
+        }
+        return this;
+    }
 }

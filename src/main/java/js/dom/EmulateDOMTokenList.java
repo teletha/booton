@@ -12,7 +12,7 @@ package js.dom;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import jsx.style.Style;
-import jsx.style.StyleName;
+import jsx.style.StyleId;
 import kiss.I;
 
 /**
@@ -39,7 +39,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             add((String) null);
         } else {
-            add(StyleName.name(className));
+            add(StyleId.of(className));
         }
     }
 
@@ -59,7 +59,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             remove((String) null);
         } else {
-            remove(StyleName.name(className));
+            remove(StyleId.of(className));
         }
     }
 
@@ -85,7 +85,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             return toggle((String) null);
         } else {
-            return toggle(StyleName.name(className));
+            return toggle(StyleId.of(className));
         }
     }
 
@@ -105,7 +105,7 @@ class EmulateDOMTokenList extends DOMTokenList {
         if (className == null) {
             return contains((String) null);
         } else {
-            return contains(StyleName.name(className));
+            return contains(StyleId.of(className));
         }
     }
 

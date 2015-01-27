@@ -82,7 +82,8 @@ public interface Style {
      * @return
      */
     public default Optional<Style> when(String attributeName, String attributeValue) {
-        return when(attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0);
+        return when(attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
+                .length() != 0);
     }
 
     /**
@@ -95,16 +96,6 @@ public interface Style {
         } else {
             return Optional.empty();
         }
-    }
-
-    /**
-     * @param className
-     * @return
-     */
-    public static Style getByName(String className) {
-        return StaticStyle.pool.computeIfAbsent(className, name -> {
-            return new StaticStyle(name);
-        });
     }
 
     /**

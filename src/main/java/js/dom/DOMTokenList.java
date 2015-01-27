@@ -10,7 +10,7 @@
 package js.dom;
 
 import jsx.style.Style;
-import jsx.style.StyleName;
+import jsx.style.StyleId;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 
@@ -37,7 +37,7 @@ public class DOMTokenList implements JavascriptNative {
      * @param style A class name to add.
      */
     public void add(Style style) {
-        add(StyleName.name(style));
+        add(StyleId.of(style));
     }
 
     /**
@@ -57,7 +57,7 @@ public class DOMTokenList implements JavascriptNative {
      * @param style A class name to remove.
      */
     public void remove(Style style) {
-        remove(StyleName.name(style));
+        remove(StyleId.of(style));
     }
 
     /**
@@ -79,7 +79,7 @@ public class DOMTokenList implements JavascriptNative {
      * @param style A class name to toggle.
      */
     public boolean toggle(Style style) {
-        return toggle(StyleName.name(style));
+        return toggle(StyleId.of(style));
     }
 
     /**
@@ -99,7 +99,7 @@ public class DOMTokenList implements JavascriptNative {
      * @param style A class name to test.
      */
     public boolean contains(Style style) {
-        return contains(StyleName.name(style));
+        return contains(StyleId.of(style));
     }
 
     /**
