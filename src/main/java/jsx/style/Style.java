@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@ import js.lang.NativeArray;
 import jsx.collection.DualList;
 
 /**
- * @version 2014/10/24 13:58:41
+ * @version 2015/01/29 10:00:25
  */
 public interface Style {
 
@@ -62,9 +62,10 @@ public interface Style {
      * </p>
      * 
      * @param condition A condition.
-     * @param other An other style to compose. @return A composed style.
+     * @param other An other style to compose.
+     * @return A composed style.
      */
     public default Style withIf(boolean condition, Style other) {
-        return condition ? new MultipleStyle(this, other) : this;
+        return condition ? with(other) : this;
     }
 }
