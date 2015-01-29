@@ -26,12 +26,12 @@ public interface Style {
 
     /**
      * <p>
-     * Compute internal class name.
+     * Compute style class name.
      * </p>
      * 
-     * @return
+     * @return A style class name.
      */
-    public default String id() {
+    public default String className() {
         return "STYLE" + hashCode();
     }
 

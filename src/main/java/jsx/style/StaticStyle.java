@@ -51,7 +51,7 @@ public class StaticStyle implements Style {
      * {@inheritDoc}
      */
     @Override
-    public String id() {
+    public String className() {
         return name;
     }
 
