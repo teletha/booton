@@ -15,7 +15,6 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
@@ -225,16 +224,6 @@ public final class VirtualStructure {
 
             // process child nodes
             widget.assemble(new VirtualStructure(virtualize));
-        } else if (child instanceof Optional) {
-            Optional optional = (Optional) child;
-
-            if (optional.isPresent()) {
-                process(container, optional.get());
-            }
-        } else if (child instanceof Style) {
-            Style style = (Style) child;
-
-            style.assignTo(container.classList, container.inlines);
         } else if (child.equals("\r\n")) {
             container.items.push(new VirtualElement(0, "br"));
         } else {
