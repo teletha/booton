@@ -12,7 +12,6 @@ package jsx.style;
 import java.util.HashMap;
 import java.util.Map;
 
-import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 import booton.Necessary;
@@ -54,22 +53,6 @@ public class StaticStyle implements Style {
     @Override
     public String id() {
         return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void applyTo(Element dom) {
-        dom.classList().add(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unapplyFrom(Element dom) {
-        dom.classList().remove(name);
     }
 
     /**

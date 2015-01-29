@@ -373,7 +373,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            style.applyTo(parent);
+            parent.add(style);
         }
     }
 
@@ -399,7 +399,7 @@ abstract class Patch {
          */
         @Override
         public void apply() {
-            style.unapplyFrom(parent);
+            parent.remove(style);
         }
     }
 

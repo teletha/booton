@@ -45,7 +45,7 @@ public class Image {
         svg = document.createElementNS(SVG, "svg");
         svg.append(filters);
         svg.append(image);
-        style.applyTo(svg);
+        svg.add(style);
 
         parent.append(svg);
     }

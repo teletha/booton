@@ -11,7 +11,6 @@ package jsx.style;
 
 import java.util.Optional;
 
-import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 
@@ -38,28 +37,6 @@ public interface Style {
         return "STYLE" + hashCode();
     }
 
-    /**
-     * <p>
-     * Apply this style to the specified element.
-     * </p>
-     * 
-     * @param dom A element to apply this style.
-     */
-    public default void applyTo(Element dom) {
-        // do nothing
-    }
-
-    /**
-     * <p>
-     * Unapply this style from the specified element.
-     * </p>
-     * 
-     * @param dom A element to unapply this style.
-     */
-    public default void unapplyFrom(Element dom) {
-        // do nothing
-    }
-
     public default void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
         StyleRule style = new StyleRule(inlines);
 
@@ -82,8 +59,7 @@ public interface Style {
      * @return
      */
     public default Optional<Style> when(String attributeName, String attributeValue) {
-        return when(attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue
-                .length() != 0);
+        return when(attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0);
     }
 
     /**
