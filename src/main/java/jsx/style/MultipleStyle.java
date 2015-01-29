@@ -9,7 +9,6 @@
  */
 package jsx.style;
 
-import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 
@@ -36,26 +35,6 @@ class MultipleStyle implements Style {
     @Override
     public void declare() {
         // do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void applyTo(Element dom) {
-        for (int i = 0, size = this.styles.length(); i < size; i++) {
-            this.styles.get(i).applyTo(dom);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unapplyFrom(Element dom) {
-        for (int i = 0, size = this.styles.length(); i < size; i++) {
-            this.styles.get(i).unapplyFrom(dom);
-        }
     }
 
     /**

@@ -60,9 +60,7 @@ class VirtualElement extends VirtualNode<Element> {
         }
 
         // assign classes
-        for (int i = 0; i < classList.length(); i++) {
-            classList.get(i).applyTo(dom);
-        }
+        dom.add(classList.toArray(new Style[classList.length()]));
 
         // assign inline style
         int size = inlines.size();
