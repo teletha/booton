@@ -9,8 +9,6 @@
  */
 package jsx.style;
 
-import java.util.Optional;
-
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 
@@ -46,39 +44,27 @@ public interface Style {
         PropertyDefinition.declarable = null;
     }
 
-    public default Style when(Style style, boolean condition) {
-        if (condition == false) {
-            return this;
-        }
-        return new MultipleStyle(this, style);
-    }
-
     /**
-     * @param string
-     * @param levelDescription
-     * @return
-     */
-    public default Optional<Style> when(String attributeName, String attributeValue) {
-        return when(attributeName != null && attributeName.length() != 0 && attributeValue != null && attributeValue.length() != 0);
-    }
-
-    /**
-     * @param b
-     * @return
-     */
-    public default Optional<Style> when(boolean condition) {
-        if (condition) {
-            return Optional.of(this);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    /**
-     * @param object
-     * @return
+     * <p>
+     * Compose this style and the specified style.
+     * </p>
+     * 
+     * @param other An other style to compose.
+     * @return A composed style.
      */
     public default Style with(Style other) {
         return new MultipleStyle(this, other);
+    }
+
+    /**
+     * <p>
+     * If the specified condition is true, compose this style and the specified style.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @param other An other style to compose. @return A composed style.
+     */
+    public default Style withIf(boolean condition, Style other) {
+        return condition ? new MultipleStyle(this, other) : this;
     }
 }
