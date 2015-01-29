@@ -80,7 +80,7 @@ public class StyleId {
         String name = css.get(style);
 
         if (name == null) {
-            name = style.id();
+            name = style.className();
         }
         return name;
     }
