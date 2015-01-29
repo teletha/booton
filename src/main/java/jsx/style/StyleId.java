@@ -100,7 +100,7 @@ public class StyleId {
          * @return A computed style name.
          */
         public String of(Style style) {
-            return Javascript.writeMethodCode(Style.class, "id", param(0));
+            return Javascript.writeMethodCode(Style.class, "className", param(0));
         }
     }
 }
