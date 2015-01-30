@@ -394,6 +394,41 @@ public final class VirtualStructure {
          * Define children.
          * </p>
          * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡s(Style style, Class<? extends Widget1> childType, Collection<T> children) {
+            // precess into child items
+            int index = 0;
+            Object[] widgets = new Object[children.size()];
+
+            for (T child : children) {
+                widgets[index++] = Widget.of(childType, child);
+            }
+
+            〡(style, widgets);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void 〡s(Style style, Consumer<T> click, Collection<T> children, Consumer<T> a) {
+            〡(style, () -> {
+                for (T item : children) {
+                    modifier = item.hashCode();
+                    a.accept(item);
+                }
+            });
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
          * @param children A list of child nodes.
          */
         public final void 〡(Runnable children) {

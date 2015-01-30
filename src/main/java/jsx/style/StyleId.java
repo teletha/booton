@@ -67,7 +67,7 @@ public class StyleId {
                             throw new Error();
                         } else {
                             styleName = field.getDeclaringClass().getName() + "___" + field.getName();
-                            styleName = styleName.replaceAll("\\.", "_");
+                            styleName = styleName.replaceAll("[\\.\\$]", "_");
                         }
                         css.put((Style) field.get(null), styleName);
                     }
