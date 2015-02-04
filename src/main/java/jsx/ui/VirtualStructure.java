@@ -17,6 +17,9 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
+import java.util.function.Supplier;
+
+import javafx.beans.value.ObservableValue;
 
 import jsx.style.Style;
 
@@ -522,6 +525,40 @@ public final class VirtualStructure {
             e.attributes.add(name, value);
 
             return this;
+        }
+
+        /**
+         * <p>
+         * Define attribute of the latest element.
+         * </p>
+         * 
+         * @param name An attribute name.
+         * @param value An attribute value.
+         * @return A descriptor for property.
+         */
+        public AttributeDescriptor 〡(String name, Supplier value) {
+            if (value == null) {
+                return this;
+            } else {
+                return 〡(name, String.valueOf(value.get()));
+            }
+        }
+
+        /**
+         * <p>
+         * Define attribute of the latest element.
+         * </p>
+         * 
+         * @param name An attribute name.
+         * @param value An attribute value.
+         * @return A descriptor for property.
+         */
+        public AttributeDescriptor 〡(String name, ObservableValue value) {
+            if (value == null) {
+                return this;
+            } else {
+                return 〡(name, String.valueOf(value.getValue()));
+            }
         }
     }
 

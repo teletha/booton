@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
@@ -38,6 +39,9 @@ public class Input extends LowLevelWidget<Input> {
 
     /** The input value validity. */
     public final ReadOnlySetProperty<String> invalid = I.make(SetProperty.class);
+
+    /** The placeholder value. */
+    private Supplier<String> placeholder;
 
     /**
      * <p>
@@ -71,24 +75,31 @@ public class Input extends LowLevelWidget<Input> {
     }
 
     /**
-     * Configure placeholder string.
+     * Configure placeholder message.
      * 
-     * @param string
+     * @param message
      */
-    public Input placeholder(String string) {
-        return this;
+    public Input placeholder(String message) {
+        return placeholder(new SimpleStringProperty(message));
     }
 
     /**
-     * Configure placeholder string.
+     * Configure placeholder message.
      * 
-     * @param string
+     * @param message
      */
-    public Input placeholder(Supplier<String> string) {
-        return this;
+    public Input placeholder(StringExpression message) {
+        return placeholder(() -> message.get());
     }
 
-    public Input placeholder(StringExpression value) {
+    /**
+     * Configure placeholder message.
+     * 
+     * @param message
+     */
+    public Input placeholder(Supplier<String> message) {
+        this.placeholder = message;
+
         return this;
     }
 
@@ -141,7 +152,7 @@ public class Input extends LowLevelWidget<Input> {
     @Override
     protected void virtualize(VirtualStructure 〡) {
         〡.e("input", 0).〡(InputForm, () -> {
-            〡.attr.〡("type", "text").〡("value", value.get());
+            〡.attr.〡("type", "text").〡("value", value).〡("placeholder", placeholder);
         });
     }
 }
