@@ -501,6 +501,13 @@ class JSKiss {
 
             observable.addListener(listener); // register listener
 
+            // notify the current value
+            E value = observable.getValue();
+
+            if (value != null) {
+                listener.changed(observable, null, value);
+            }
+
             return () -> {
                 observable.removeListener(listener); // unregister listener
             };
@@ -692,8 +699,7 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles
-                            .lookup()
+                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
                             .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
                     prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
                 }
