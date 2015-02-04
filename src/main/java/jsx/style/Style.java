@@ -9,9 +9,10 @@
  */
 package jsx.style;
 
+import javafx.beans.property.Property;
+
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import kiss.Events;
 
 /**
  * @version 2015/01/29 10:00:25
@@ -79,7 +80,12 @@ public interface Style {
      * @param other An other style to compose.
      * @return A composed style.
      */
-    public default Style withIf(Events<Boolean> condition, Style other) {
-        return withIf(condition.value(), other);
+    public default Style withIf(Property<Boolean> condition, Style other) {
+        Boolean state = condition.getValue();
+
+        if (state == null) {
+            return this;
+        }
+        return withIf(state.booleanValue(), other);
     }
 }
