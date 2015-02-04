@@ -157,6 +157,10 @@ public abstract class Widget {
         }
     }
 
+    protected boolean shouldUpdate() {
+        return true;
+    }
+
     /**
      * <p>
      * Create virtual elements of this {@link Widget}.

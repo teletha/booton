@@ -11,6 +11,7 @@ package jsx.style;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import kiss.Events;
 
 /**
  * @version 2015/01/29 10:00:25
@@ -67,5 +68,18 @@ public interface Style {
      */
     public default Style withIf(boolean condition, Style other) {
         return condition ? with(other) : this;
+    }
+
+    /**
+     * <p>
+     * If the specified condition is true, compose this style and the specified style.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @param other An other style to compose.
+     * @return A composed style.
+     */
+    public default Style withIf(Events<Boolean> condition, Style other) {
+        return withIf(condition.value(), other);
     }
 }
