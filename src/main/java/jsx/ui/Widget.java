@@ -13,7 +13,9 @@ import static js.lang.Global.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -238,6 +240,8 @@ public abstract class Widget {
         return create(widgetType, new Object[0]);
     }
 
+    private static Map<Integer, Widget> widgets = new HashMap();
+
     /**
      * <p>
      * Create widget which is associated with the specified models.
@@ -248,7 +252,7 @@ public abstract class Widget {
      * @return A widget with the specified models.
      */
     public static final <W extends Widget1<First>, First> W of(Class<W> widgetType, First model1) {
-        return create(widgetType, new Object[] {model1});
+        return (W) widgets.computeIfAbsent(Objects.hash(widgetType, model1), key -> create(widgetType, new Object[] {model1}));
     }
 
     /**
@@ -453,14 +457,11 @@ public abstract class Widget {
          */
         @Override
         public void run() {
-            try {
-                for (Rendering rendering : update) {
-                    rendering.execute();
-                }
-                update.clear();
-            } catch (Throwable e) {
-                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+            for (Rendering rendering : update) {
+                rendering.execute();
             }
+            update.clear();
+            System.out.println("Run Rendering on RAF timing.");
         }
 
         /**

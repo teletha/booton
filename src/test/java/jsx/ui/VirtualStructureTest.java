@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import jsx.style.Style;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -61,6 +62,7 @@ public class VirtualStructureTest {
     }
 
     @Test
+    @Ignore
     public void widgetText() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
         root〡.〡(widget(sub〡 -> {
