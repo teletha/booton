@@ -216,18 +216,7 @@ public final class VirtualStructure {
     }
 
     private void process(VirtualElement container, Object child) {
-        if (child instanceof Widget) {
-            Widget widget = (Widget) child;
-
-            // create virtual element for this widget
-            VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
-
-            // mount virtual element on virtual structure
-            container.items.push(virtualize);
-
-            // process child nodes
-            widget.assemble(new VirtualStructure(virtualize));
-        } else if (child.equals("\r\n")) {
+        if (child.equals("\r\n")) {
             container.items.push(new VirtualElement(0, "br"));
         } else {
             container.items.push(new VirtualText(String.valueOf(child)));
@@ -326,6 +315,29 @@ public final class VirtualStructure {
             }
         }
 
+        public final void 〡(Style style, Widget widget) {
+            // store the current context
+            VirtualElement container = container(LocalId.findContextLineNumber());
+            if (style != null) style.assignTo(container.classList, container.inlines);
+
+            // enter into the child node
+            parents.addLast(latest = container);
+
+            // process into child nodes
+            // create virtual element for this widget
+            VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+
+            // mount virtual element on virtual structure
+            container.items.push(virtualize);
+
+            // process child nodes
+            widget.assemble(new VirtualStructure(virtualize));
+
+            // leave from the child node
+            parents.pollLast();
+            latest = parents.peekLast();
+        }
+
         /**
          * <p>
          * Define children.
@@ -359,7 +371,7 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T child) {
-            〡(style, Widget.of(childType, child));
+            〡(style, childType, Arrays.asList(child));
         }
 
         /**
@@ -381,15 +393,30 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
-            // precess into child items
-            int index = 0;
-            Object[] widgets = new Object[children.size()];
+            // store the current context
+            VirtualElement container = container(LocalId.findContextLineNumber());
+            if (style != null) style.assignTo(container.classList, container.inlines);
 
+            // enter into the child node
+            parents.addLast(latest = container);
+
+            // process into child nodes
             for (T child : children) {
-                widgets[index++] = Widget.of(childType, child);
+                Widget widget = Widget.of(childType, child);
+
+                // create virtual element for this widget
+                VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+
+                // mount virtual element on virtual structure
+                container.items.push(virtualize);
+
+                // process child nodes
+                widget.assemble(VirtualStructure.this);
             }
 
-            〡(style, widgets);
+            // leave from the child node
+            parents.pollLast();
+            latest = parents.peekLast();
         }
 
         /**

@@ -62,7 +62,7 @@ class EmulateJSON extends JSON {
      * </p>
      * 
      * @param <M> A current model type.
-     * @param model A java object model.
+     * @param widgetModel A java object model.
      * @param java A java value.
      * @param js A javascript value.
      * @return A restored java object.
