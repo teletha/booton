@@ -471,10 +471,16 @@ public abstract class Widget {
          */
         private void execute() {
             // create new virtual element
+            WidgetLog.start("Virtualize");
             VirtualElement next = widget.virtualize();
+            WidgetLog.end();
 
             // create patch to manipulate DOM and apply it
+            WidgetLog.start("Diff");
             PatchDiff.apply(virtual, next);
+            WidgetLog.end();
+
+            WidgetLog.show();
 
             // update to new virtual element
             virtual = next;

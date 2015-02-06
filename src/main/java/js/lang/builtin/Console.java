@@ -89,6 +89,17 @@ public class Console {
     public static native void clear();
 
     /**
+     * <p>
+     * Displays tabular data as a table.
+     * </p>
+     * 
+     * @param value
+     */
+    public static void table(Object value) {
+
+    }
+
+    /**
      * @version 2013/05/16 19:08:55
      */
     @SuppressWarnings("unused")
@@ -172,6 +183,17 @@ public class Console {
          */
         public String clear() {
             return "console.clear()";
+        }
+
+        /**
+         * <p>
+         * Displays tabular data as a table.
+         * </p>
+         * 
+         * @param value
+         */
+        public String table(Object value) {
+            return "console.table(" + param(0) + ")";
         }
     }
 }
