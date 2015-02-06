@@ -411,7 +411,7 @@ public final class VirtualStructure {
                 container.items.push(virtualize);
 
                 // process child nodes
-                widget.assemble(VirtualStructure.this);
+                widget.assemble(new VirtualStructure(virtualize));
             }
 
             // leave from the child node

@@ -807,7 +807,7 @@ public class NativeString {
          */
         @Override
         public String toString() {
-            return that;
+            return that + ".toString()";
         }
 
         /**

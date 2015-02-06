@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import booton.translator.Debuggable;
 
 /**
  * @version 2015/01/21 14:59:25
@@ -69,7 +68,6 @@ public class MethodParameterWithSuperFieldAssignTest {
 
         private static int staticValue;
 
-        @Debuggable
         private int computeStatic(int value) {
             return computeActually(staticValue = value);
         }
