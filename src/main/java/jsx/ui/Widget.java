@@ -237,7 +237,7 @@ public abstract class Widget {
      * @return A widget with the specified models.
      */
     public static final <W extends Widget> W of(Class<W> widgetType) {
-        return create(widgetType, new Object[0]);
+        return (W) widgets.computeIfAbsent(Objects.hash(widgetType), key -> create(widgetType, new Object[0]));
     }
 
     private static Map<Integer, Widget> widgets = new HashMap();
