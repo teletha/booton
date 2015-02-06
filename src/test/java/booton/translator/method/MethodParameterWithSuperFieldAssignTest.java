@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import booton.translator.Debuggable;
 
 /**
  * @version 2015/01/21 14:59:25
@@ -36,6 +37,12 @@ public class MethodParameterWithSuperFieldAssignTest {
         assert accessor.computeNormal(10) == 110;
     }
 
+    @Test
+    public void innerStaticField() {
+        InnerAccessor accessor = new InnerAccessor();
+        assert accessor.computeStatic(10) + InnerAccessor.staticValue == 110;
+    }
+
     /**
      * @version 2015/01/21 15:00:28
      */
@@ -50,6 +57,24 @@ public class MethodParameterWithSuperFieldAssignTest {
         }
 
         private int computeActually(int value) {
+            return value * 10;
+        }
+
+    }
+
+    /**
+     * @version 2015/02/06 10:01:28
+     */
+    private static class InnerAccessor {
+
+        private static int staticValue;
+
+        @Debuggable
+        private int computeStatic(int value) {
+            return computeActually(staticValue = value);
+        }
+
+        private static int computeActually(int value) {
             return value * 10;
         }
     }
