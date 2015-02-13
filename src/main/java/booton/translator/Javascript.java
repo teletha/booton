@@ -38,8 +38,8 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.BuildProcessProfiler;
 import booton.Necessary;
+import booton.BootonProfile;
 import booton.Unnecessary;
 
 /**
@@ -77,8 +77,7 @@ public class Javascript {
     private static final Constructor primitiveLongConstructor;
 
     /** The primitive types. */
-    private static final List<Class<?>> primitives = Arrays
-            .asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
+    private static final List<Class<?>> primitives = Arrays.asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
 
     /** The fixed id for primitives. */
     private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);
@@ -136,7 +135,7 @@ public class Javascript {
      * @param source A Java class as source.
      */
     private Javascript(Class source) {
-        BuildProcessProfiler.start("Constructor", source);
+        BootonProfile.Construct.start(source);
         this.source = source;
 
         Class reverted = JavaAPIProviders.revert(source);
@@ -174,7 +173,7 @@ public class Javascript {
                 }
             }
         }
-        BuildProcessProfiler.end("Constructor", source);
+        BootonProfile.Construct.end();
     }
 
     /**
@@ -298,7 +297,8 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set<Class> defined) {
-        BuildProcessProfiler.start("Write", source);
+        BootonProfile.WriteJS.start(source);
+
         // record compile route
         CompilerRecorder.startCompiling(this);
 
@@ -342,7 +342,8 @@ public class Javascript {
         } finally {
             // record compile route
             CompilerRecorder.finishCompiling(this);
-            BuildProcessProfiler.end("Write", source);
+
+            BootonProfile.WriteJS.end();
         }
     }
 
@@ -378,7 +379,8 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            BuildProcessProfiler.start("Compile", source);
+            BootonProfile.Compile.start(source);
+
             ScriptWriter code = new ScriptWriter();
 
             // compute related class names
@@ -404,9 +406,9 @@ public class Javascript {
                 } else if (TranslatorManager.hasTranslator(source)) {
                     // do nothing
                 } else {
-                    BuildProcessProfiler.start("ParseCode", source);
+                    BootonProfile.ParseCode.start(source);
                     new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
-                    BuildProcessProfiler.end("ParseCode", source);
+                    BootonProfile.ParseCode.end();
                 }
             } catch (TranslationError e) {
                 e.write("\r\n");
@@ -443,7 +445,8 @@ public class Javascript {
 
             // create cache
             this.code = code.toString();
-            BuildProcessProfiler.end("Compile", source);
+
+            BootonProfile.Compile.end();
         }
     }
 
@@ -455,7 +458,8 @@ public class Javascript {
      * @param code
      */
     private void compileAnnotation(ScriptWriter code) {
-        BuildProcessProfiler.start("Compile Annotations", source);
+        BootonProfile.Annotation.start(source);
+
         Method[] methods = source.getDeclaredMethods();
 
         for (int i = 0; i < methods.length; i++) {
@@ -474,7 +478,7 @@ public class Javascript {
                 code.separator();
             }
         }
-        BuildProcessProfiler.end("Compile Annotations", source);
+        BootonProfile.Annotation.end();
     }
 
     /**
@@ -603,8 +607,7 @@ public class Javascript {
         source = JavaAPIProviders.convert(source);
 
         // check Native Class
-        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !source
-                .isAnnotationPresent(JavascriptAPIProvider.class)) {
+        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !source.isAnnotationPresent(JavascriptAPIProvider.class)) {
             return null;
         }
 

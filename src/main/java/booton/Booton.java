@@ -81,19 +81,21 @@ public class Booton {
      * @param port
      */
     public void launch() {
-        if (requireServer()) {
-            try {
-                ServletContextHandler servletHandler = new ServletContextHandler();
-                servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(config.root)), "/live/*");
-                servletHandler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
+        BootonProfile.ServerLaunch.start(() -> {
+            if (requireServer()) {
+                try {
+                    ServletContextHandler servletHandler = new ServletContextHandler();
+                    servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(config.root)), "/live/*");
+                    servletHandler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
 
-                Server server = new Server(config.port);
-                server.setHandler(servletHandler);
-                server.start();
-            } catch (Exception e) {
-                throw I.quiet(e);
+                    Server server = new Server(config.port);
+                    server.setHandler(servletHandler);
+                    server.start();
+                } catch (Exception e) {
+                    throw I.quiet(e);
+                }
             }
-        }
+        });
     }
 
     /**
@@ -138,11 +140,13 @@ public class Booton {
         this.js = root.resolve("application.js");
         this.css = root.resolve("application.css");
 
-        // load booton extensions
-        I.load(Booton.class, false);
+        BootonProfile.Loading.start(() -> {
+            // load booton extensions
+            I.load(Booton.class, false);
 
-        // load application extensions
-        I.load(application, true);
+            // load application extensions
+            I.load(application, true);
+        });
 
         Path mutex = root.resolve(BuildPhase);
 
@@ -153,23 +157,27 @@ public class Booton {
             }
 
             // build html file
-            buildHTML();
+            BootonProfile.WriteHTML.start(() -> {
+                buildHTML();
+            });
 
             Set set = new HashSet();
 
             // build js file
-            Javascript.getScript(application).writeTo(js, set);
-            System.out.println("Complete compilation of " + application.getSimpleName() + ".");
+            BootonProfile.BuildApplication.start(() -> {
+                Javascript.getScript(application).writeTo(js, set);
+            });
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
-            Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
-            System.out.println("Complete compilation of Live Coding Server.");
+            BootonProfile.BuildLiveCoding.start(() -> {
+                Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
+            });
 
             // build css file
-            I.make(CascadingStyleSheet.class).write(css);
-
-            BuildProcessProfiler.showResult();
+            BootonProfile.WriteCSS.start(() -> {
+                I.make(CascadingStyleSheet.class).write(css);
+            });
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } finally {
@@ -185,7 +193,7 @@ public class Booton {
      * 
      * @param file
      */
-    private void buildHTML() throws Exception {
+    private void buildHTML() {
         XML html = I.xml("html");
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
@@ -201,7 +209,11 @@ public class Booton {
         body.child("script").attr("type", "text/javascript").attr("src", "boot.js");
         body.child("script").attr("type", "text/javascript").attr("src", config.root.relativize(js));
 
-        html.to(new HTMLWriter(Files.newBufferedWriter(this.html, I.$encoding)));
+        try {
+            html.to(new HTMLWriter(Files.newBufferedWriter(this.html, I.$encoding)));
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
     }
 
     /**
@@ -221,8 +233,15 @@ public class Booton {
      * @param applicationClass A target application.
      */
     public static void launch(Class applicationClass) {
-        Booton booton = new Booton(applicationClass);
-        booton.launch();
-        booton.build();
+        long start = System.currentTimeMillis();
+        BootonProfile.Others.start(() -> {
+            Booton booton = new Booton(applicationClass);
+            booton.launch();
+            booton.build();
+        });
+        long end = System.currentTimeMillis();
+
+        System.out.println("Total Time: " + (end - start) + "ms");
+        BootonProfile.show();
     }
 }

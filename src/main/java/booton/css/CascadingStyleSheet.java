@@ -9,6 +9,7 @@
  */
 package booton.css;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,7 +41,7 @@ public class CascadingStyleSheet {
      * 
      * @param file
      */
-    public void write(Path file) throws Exception {
+    public void write(Path file) {
         Writer root = new Writer();
 
         // write font imports
@@ -67,7 +68,11 @@ public class CascadingStyleSheet {
         }
 
         // make css file actually
-        Files.write(file, root.toString().getBytes(I.$encoding));
+        try {
+            Files.write(file, root.toString().getBytes(I.$encoding));
+        } catch (IOException e) {
+            throw I.quiet(e);
+        }
     }
 
     /**
