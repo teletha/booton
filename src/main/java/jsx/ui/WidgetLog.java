@@ -11,6 +11,8 @@ package jsx.ui;
 
 import js.lang.NativeArray;
 import js.lang.builtin.Console;
+import booton.translator.JavascriptNative;
+import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2015/02/06 9:21:47
@@ -54,19 +56,21 @@ public class WidgetLog {
     /**
      * @version 2015/02/06 9:25:15
      */
-    private static class Measurement {
+    private static class Measurement implements JavascriptNative {
 
         /** The name. */
-        private final String name;
+        @JavascriptNativeProperty
+        private final String phase;
 
         /** The process time. */
+        @JavascriptNativeProperty
         private double time;
 
         /**
          * @param name
          */
         private Measurement(String name) {
-            this.name = name;
+            this.phase = name;
         }
     }
 }

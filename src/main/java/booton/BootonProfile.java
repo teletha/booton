@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,7 +11,6 @@ package booton;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.NumberFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,33 +26,36 @@ import kiss.I;
 import kiss.model.ClassUtil;
 
 /**
- * @version 2015/01/07 12:13:34
+ * @version 2015/02/13 16:10:25
  */
-public final class BuildProcessProfiler {
-
-    /** The time format. */
-    private static final NumberFormat formatter = NumberFormat.getNumberInstance();
+public enum BootonProfile {
+    Others, ParseCode, Loading, Compile, BuildApplication, BuildLiveCoding, WriteHTML, WriteJS, WriteCSS, Construct, Annotation, ServerLaunch;
 
     private static final Path JDK = Paths.get("rt.jar");
-
-    static {
-        formatter.setMaximumFractionDigits(2);
-        formatter.setMinimumFractionDigits(2);
-    }
 
     /** The configuration. */
     private static final BootonConfiguration config = I.make(BootonConfiguration.class);
 
-    private static Deque<Context> contexts = new ArrayDeque();
+    /** The context manager. */
+    private static final Deque<Context> contexts = new ArrayDeque();
 
     /**
      * <p>
      * Start new phase.
      * </p>
-     * 
-     * @param title A title of new phase.
      */
-    public static void start(String title, Class target) {
+    public void start(Runnable execution) {
+        start(Booton.class);
+        execution.run();
+        end();
+    }
+
+    /**
+     * <p>
+     * Start new phase.
+     * </p>
+     */
+    public void start(Class source) {
         if (config.profile) {
             Context latest = contexts.peekLast();
 
@@ -61,20 +63,17 @@ public final class BuildProcessProfiler {
                 latest.stop();
             }
 
-            latest = Context.get(title, target);
-            contexts.addLast(latest);
+            contexts.addLast(latest = Context.get(this, source));
             latest.start();
         }
     }
 
     /**
      * <p>
-     * Start new phase.
+     * End current phase.
      * </p>
-     * 
-     * @param title A title of new phase.
      */
-    public static void end(String title, Class target) {
+    public void end() {
         if (config.profile) {
             Context latest = contexts.pollLast();
             latest.stop();
@@ -92,7 +91,7 @@ public final class BuildProcessProfiler {
      * Display result.
      * </p>
      */
-    public static void showResult() {
+    public static void show() {
         if (config.profile) {
             if (!Context.from.isEmpty()) {
                 List<Context> list = new ArrayList(Context.from.values());
@@ -104,9 +103,11 @@ public final class BuildProcessProfiler {
                     total += context.elapsed;
                 }
 
+                System.out.format("Total Profiled Time: %5.0fms%n", total);
+
                 for (Context context : list) {
                     if (context.elapsed != 0) {
-                        System.out.println(context + "   " + formatter.format(context.elapsed / total * 100) + "%");
+                        System.out.format("%-15s\t%5dms\t%2.0f%%\t%s(%d)%n", context.title, context.elapsed, context.elapsed / total * 100, context.path, context.classes.size());
                     }
                 }
             }
@@ -122,18 +123,18 @@ public final class BuildProcessProfiler {
 
         private final Path path;
 
-        private final String title;
+        private final BootonProfile title;
 
         private long start;
 
-        private double elapsed;
+        private long elapsed;
 
         private Set<Class> classes = new HashSet();
 
         /**
          * @param target
          */
-        private Context(Path path, String title) {
+        private Context(Path path, BootonProfile title) {
             if (path == null) {
                 path = JDK;
             }
@@ -145,32 +146,24 @@ public final class BuildProcessProfiler {
          * 
          */
         private void stop() {
-            elapsed += (System.nanoTime() - start) / 1000000;
+            elapsed += System.currentTimeMillis() - start;
         }
 
         /**
          * 
          */
         private void start() {
-            start = System.nanoTime();
+            start = System.currentTimeMillis();
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return title + "  " + path + ": " + formatter.format(elapsed) + "ms (" + classes.size() + ")";
-        }
+        private static Context get(BootonProfile title, Class target) {
+            Path path = target == null ? JDK : ClassUtil.getArchive(target);
 
-        private static Context get(String title, Class target) {
-            Path path = ClassUtil.getArchive(target);
-
-            Context context = from.get(path + title);
+            Context context = from.get(path + title.toString());
 
             if (context == null) {
                 context = new Context(path, title);
-                from.put(path + title, context);
+                from.put(path + title.toString(), context);
             }
             context.classes.add(target);
 
