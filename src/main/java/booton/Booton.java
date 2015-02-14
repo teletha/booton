@@ -233,15 +233,12 @@ public class Booton {
      * @param applicationClass A target application.
      */
     public static void launch(Class applicationClass) {
-        long start = System.currentTimeMillis();
         BootonProfile.Others.start(() -> {
             Booton booton = new Booton(applicationClass);
             booton.launch();
             booton.build();
         });
-        long end = System.currentTimeMillis();
 
-        System.out.println("Total Time: " + (end - start) + "ms");
         BootonProfile.show();
     }
 }
