@@ -103,11 +103,14 @@ public enum BootonProfile {
                     total += context.elapsed;
                 }
 
+                Context root = Context.get(Others, Booton.class);
+
+                System.out.format("Total Time: %5dms%n", root.end - root.start);
                 System.out.format("Total Profiled Time: %5.0fms%n", total);
 
                 for (Context context : list) {
                     if (context.elapsed != 0) {
-                        System.out.format("%-15s\t%5dms\t%2.0f%%\t%s(%d)%n", context.title, context.elapsed, context.elapsed / total * 100, context.path, context.classes.size());
+                        System.out.format("%-15s\t%5dms\t%2.0f%%\t%s(%d)%n", context.profile, context.elapsed, context.elapsed / total * 100, context.path, context.sources.size());
                     }
                 }
             }
@@ -119,17 +122,29 @@ public enum BootonProfile {
      */
     private static class Context {
 
+        /** The context manager. */
         private static final Map<String, Context> from = new HashMap();
 
+        /** The source path. */
         private final Path path;
 
-        private final BootonProfile title;
+        /** The sources. */
+        private Set<Class> sources = new HashSet();
 
-        private long start;
+        /** The profile phase. */
+        private final BootonProfile profile;
 
+        /** The latest recorded time. */
+        private long latest;
+
+        /** The elapsed time of the specified phase. */
         private long elapsed;
 
-        private Set<Class> classes = new HashSet();
+        /** The start time of the specified phase. */
+        private long start;
+
+        /** The end time of the specified phase. */
+        private long end;
 
         /**
          * @param target
@@ -139,21 +154,27 @@ public enum BootonProfile {
                 path = JDK;
             }
             this.path = path;
-            this.title = title;
+            this.profile = title;
         }
 
         /**
          * 
          */
         private void stop() {
-            elapsed += System.currentTimeMillis() - start;
+            end = System.currentTimeMillis();
+            elapsed += end - latest;
         }
 
         /**
          * 
          */
         private void start() {
-            start = System.currentTimeMillis();
+            long now = System.currentTimeMillis();
+
+            if (start == 0) {
+                start = now;
+            }
+            latest = now;
         }
 
         private static Context get(BootonProfile title, Class target) {
@@ -165,7 +186,7 @@ public enum BootonProfile {
                 context = new Context(path, title);
                 from.put(path + title.toString(), context);
             }
-            context.classes.add(target);
+            context.sources.add(target);
 
             return context;
         }
