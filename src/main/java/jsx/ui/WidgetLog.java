@@ -9,68 +9,135 @@
  */
 package jsx.ui;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import js.lang.NativeArray;
-import js.lang.builtin.Console;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2015/02/06 9:21:47
  */
-public class WidgetLog {
+public enum WidgetLog implements JavascriptNative {
+    Others, Virtualize, Hierarchy, New, Diff, Container, Process, SubWidget, Make, VirtualizeWidgetCollection;
 
-    /** The records. */
-    private static final NativeArray<Measurement> measurements = new NativeArray();
+    /** The context manager. */
+    private static final NativeArray<WidgetLog> contexts = new NativeArray();
 
-    /** The current record. */
-    private static Measurement current;
+    /** The latest recorded time. */
+    private long latest;
+
+    /** The elapsed time of the specified phase. */
+    @JavascriptNativeProperty
+    private long elapsed;
+
+    /** The start time of the specified phase. */
+    private long start;
+
+    /** The end time of the specified phase. */
+    private long end;
+
+    private int count;
 
     /**
      * <p>
-     * Measure process time.
+     * Start new phase.
      * </p>
-     * 
-     * @param title
      */
-    public static void start(String title) {
-        measurements.push(current = new Measurement(title));
-
-        current.time = System.currentTimeMillis();
+    public void start(Runnable execution) {
+        start();
+        execution.run();
+        end();
     }
 
     /**
      * <p>
-     * Stop measurement.
+     * Start new phase.
      * </p>
      */
-    public static void end() {
-        current.time = System.currentTimeMillis() - current.time;
-    }
+    public void start() {
+        WidgetLog latest = contexts.get(contexts.length() - 1);
 
-    public static void show() {
-        Console.table(measurements.copy());
-
-        measurements.clear();
-    }
-
-    /**
-     * @version 2015/02/06 9:25:15
-     */
-    private static class Measurement implements JavascriptNative {
-
-        /** The name. */
-        @JavascriptNativeProperty
-        private final String phase;
-
-        /** The process time. */
-        @JavascriptNativeProperty
-        private double time;
-
-        /**
-         * @param name
-         */
-        private Measurement(String name) {
-            this.phase = name;
+        if (latest != null) {
+            latest.stop();
         }
+
+        contexts.push(latest = this);
+        latest.start2();
+        latest.count++;
+    }
+
+    /**
+     * <p>
+     * End current phase.
+     * </p>
+     */
+    public void end() {
+        WidgetLog latest = contexts.pop();
+        latest.stop();
+
+        latest = contexts.get(contexts.length() - 1);
+
+        if (latest != null) {
+            latest.start2();
+        }
+    }
+
+    /**
+     * 
+     */
+    private void stop() {
+        end = System.currentTimeMillis();
+        elapsed += end - latest;
+    }
+
+    /**
+     * 
+     */
+    private void start2() {
+        long now = System.currentTimeMillis();
+
+        if (start == 0) {
+            start = now;
+        }
+        latest = now;
+    }
+
+    /**
+     * <p>
+     * Display result.
+     * </p>
+     */
+    public static void show() {
+        List<WidgetLog> list = Arrays.asList(WidgetLog.values());
+        Collections.sort(list, Comparator.<WidgetLog> comparingDouble(item -> item.elapsed).reversed());
+
+        double total = 0;
+
+        for (WidgetLog context : list) {
+            total += context.elapsed;
+        }
+
+        WidgetLog root = Others;
+
+        System.out.println("Total Time: " + (root.end - root.start) + "ms");
+        System.out.println("Total Profiled Time: " + total + "ms");
+
+        for (WidgetLog context : list) {
+            if (context.elapsed != 0) {
+                System.out.println(context.name() + " " + context.elapsed + "ms    " + context.elapsed / total * 100 + "%  " + context.count + "calls");
+            }
+            context.reset();
+        }
+    }
+
+    /**
+     * 
+     */
+    private void reset() {
+        latest = elapsed = start = elapsed = count = 0;
     }
 }
