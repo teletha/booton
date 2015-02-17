@@ -182,7 +182,9 @@ public abstract class Widget {
      * </p>
      */
     final VirtualElement virtualize() {
+        WidgetLog.New.start();
         VirtualStructure structure = new VirtualStructure();
+        WidgetLog.New.end();
 
         // assemble the virtual structure
         assemble(structure);
@@ -202,6 +204,7 @@ public abstract class Widget {
      * @param structure A current processing structure which has the parent container.
      */
     final void assemble(VirtualStructure structure) {
+        WidgetLog.Hierarchy.start();
         Class clazz = getClass();
 
         /**
@@ -214,18 +217,23 @@ public abstract class Widget {
         if (previous != null) {
             throw new IllegalStateException(clazz + " is a nest in virtual structure.");
         }
+        WidgetLog.Hierarchy.end();
 
         /**
          * Assemble {@link VirtualStructure} actually.
          */
+        WidgetLog.Virtualize.start();
         virtualize(structure);
+        WidgetLog.Virtualize.end();
 
         /**
          * <p>
          * Leave the hierarchy of {@link VirtualStructure}.
          * </p>
          */
+        WidgetLog.Hierarchy.start();
         VirtualStructureHierarchy.hierarchy.remove(clazz);
+        WidgetLog.Hierarchy.end();
     }
 
     /**
@@ -330,7 +338,9 @@ public abstract class Widget {
         W widget;
 
         loophole = models;
+        WidgetLog.Make.start();
         widget = I.make(widgetType);
+        WidgetLog.Make.end();
         loophole = null;
 
         return widget;
@@ -471,14 +481,12 @@ public abstract class Widget {
          */
         private void execute() {
             // create new virtual element
-            WidgetLog.start("Virtualize");
             VirtualElement next = widget.virtualize();
-            WidgetLog.end();
 
             // create patch to manipulate DOM and apply it
-            WidgetLog.start("Diff");
+            WidgetLog.Diff.start();
             PatchDiff.apply(virtual, next);
-            WidgetLog.end();
+            WidgetLog.Diff.end();
 
             WidgetLog.show();
 
