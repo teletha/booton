@@ -33,6 +33,7 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
+import jsx.debug.Profile;
 import jsx.ui.piece.Input;
 import kiss.Events;
 import kiss.I;
@@ -488,7 +489,7 @@ public abstract class Widget {
             PatchDiff.apply(virtual, next);
             WidgetLog.Diff.end();
 
-            WidgetLog.show();
+            Profile.show();
 
             // update to new virtual element
             virtual = next;
