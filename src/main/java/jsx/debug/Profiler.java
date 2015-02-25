@@ -60,9 +60,19 @@ class Profiler extends Interceptor<Profilable> {
 
         if (latest != null) {
             latest.stop();
+        } else {
+            Info.count = 0;
+            Info.elapsed = 0;
         }
 
-        stack.push(latest = measurements.computeIfAbsent(phase, pp -> new Measurement(pp)));
+        Measurement measurement = measurements.get(phase);
+
+        if (measurement == null) {
+            measurement = new Measurement(phase);
+            measurements.put(phase, measurement);
+        }
+
+        stack.push(latest = measurement);
         latest.start2();
         latest.count++;
     }
@@ -91,6 +101,7 @@ class Profiler extends Interceptor<Profilable> {
      * </p>
      */
     static void show() {
+        System.out.println("Proxy calls " + Info.count + "   " + Info.elapsed + "ms");
         List<Measurement> list = new ArrayList(measurements.values());
         Collections.sort(list, Comparator.<Measurement> comparingDouble(item -> item.elapsed).reversed());
 
