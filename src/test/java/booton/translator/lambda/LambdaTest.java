@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import booton.translator.Debuggable;
 
 /**
- * @version 2014/06/07 10:52:50
+ * @version 2015/02/24 11:23:21
  */
 @RunWith(ScriptRunner.class)
 public class LambdaTest {
@@ -59,5 +60,28 @@ public class LambdaTest {
         private void lambda(Consumer<Integer> consumer) {
             consumer.accept(10);
         }
+    }
+
+    @Test
+    public void clazz() {
+        Runnable lambda = () -> {
+        };
+
+        Class clazz = lambda.getClass();
+        assert clazz != Runnable.class;
+        assert lambda instanceof Runnable;
+        assert Runnable.class.isAssignableFrom(clazz);
+    }
+
+    @Test
+    @Debuggable
+    public void localVariable() {
+        int local = 10;
+
+        IntSupplier supplier = () -> {
+            return local;
+        };
+
+        assert supplier.getAsInt() == 10;
     }
 }
