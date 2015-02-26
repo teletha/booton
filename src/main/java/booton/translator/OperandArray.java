@@ -127,7 +127,7 @@ class OperandArray extends Operand {
         }
 
         ScriptWriter writer = new ScriptWriter();
-        writer.append("boot.array(").string(Javascript.computeSimpleClassName(component)).append(",");
+        writer.append("Φ(").string(Javascript.computeSimpleClassName(component)).append(",");
 
         if (items.size() == 0) {
             // new array with the specified size
