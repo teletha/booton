@@ -205,6 +205,29 @@ public class NativeFunction<T> extends NativeObject {
      *            invoking the target function.
      * @return A new function.
      */
+    public NativeFunction<T> bind(Object[] contextAndParams) {
+        NativeFunction<T> function = new NativeFunction(type, method, contextAndParams[0], this.parameters);
+        function.setContext((T) contextAndParams[0]);
+        for (int i = 1; i < contextAndParams.length; i++) {
+            function.parameters.add(contextAndParams[i]);
+        }
+
+        return function;
+    }
+
+    /**
+     * <p>
+     * Creates a new function that, when called, has its this keyword set to the provided value,
+     * with a given sequence of arguments preceding any provided when the new function is called.
+     * </p>
+     * 
+     * @param context The value to be passed as the this parameter to the target function when the
+     *            bound function is called. The value is ignored if the bound function is
+     *            constructed using the new operator.
+     * @param parameter Arguments to prepend to arguments provided to the bound function when
+     *            invoking the target function.
+     * @return A new function.
+     */
     public NativeFunction<T> bind(T context, Object[] params) {
         NativeFunction<T> function = new NativeFunction(type, method, context, this.parameters);
         function.setContext(context);
@@ -605,6 +628,24 @@ public class NativeFunction<T> extends NativeObject {
          */
         public String bind(Object context) {
             return that + ".bind(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Creates a new function that, when called, has its this keyword set to the provided value,
+         * with a given sequence of arguments preceding any provided when the new function is
+         * called.
+         * </p>
+         * 
+         * @param context The value to be passed as the this parameter to the target function when
+         *            the bound function is called. The value is ignored if the bound function is
+         *            constructed using the new operator.
+         * @param parameter Arguments to prepend to arguments provided to the bound function when
+         *            invoking the target function.
+         * @return A new function.
+         */
+        public String bind(Object[] contextAndParams) {
+            return "Function.prototype.bind.apply(" + that + "," + param(0) + ")";
         }
 
         /**
