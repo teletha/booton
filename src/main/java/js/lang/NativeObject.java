@@ -483,6 +483,10 @@ public class NativeObject {
         return this instanceof NativeArray;
     }
 
+    public static NativeObject create(NativeObject prototype) {
+        return prototype;
+    }
+
     /**
      * <p>
      * Helper method to cast to {@link NativeObject}.
@@ -974,6 +978,7 @@ public class NativeObject {
         /**
          * {@inheritDoc}
          */
+        @Override
         public String toString() {
             return that + ".toString()";
         }
@@ -1009,6 +1014,10 @@ public class NativeObject {
          */
         public String isArray() {
             return "Array.isArray(" + that + ")";
+        }
+
+        public String create(NativeObject prototype) {
+            return "Object.create(" + param(0) + ")";
         }
 
         /**

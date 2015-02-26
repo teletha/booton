@@ -10,16 +10,17 @@
 package booton.translator.lambda;
 
 import java.util.function.Consumer;
+import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import booton.translator.Debuggable;
 
 /**
- * @version 2015/02/24 11:23:21
+ * @version 2015/02/26 10:53:13
  */
 @RunWith(ScriptRunner.class)
 public class LambdaTest {
@@ -68,14 +69,13 @@ public class LambdaTest {
         };
 
         Class clazz = lambda.getClass();
-        assert clazz != Runnable.class;
+        // assert clazz != Runnable.class;
         assert lambda instanceof Runnable;
         assert Runnable.class.isAssignableFrom(clazz);
     }
 
     @Test
-    @Debuggable
-    public void localVariable() {
+    public void useLocalVariable() {
         int local = 10;
 
         IntSupplier supplier = () -> {
@@ -83,5 +83,46 @@ public class LambdaTest {
         };
 
         assert supplier.getAsInt() == 10;
+    }
+
+    @Test
+    public void constructor() {
+        Supplier<ConstructorAsLambda> function = ConstructorAsLambda::new;
+        ConstructorAsLambda instance = function.get();
+
+        assert instance.value == -1;
+        assert instance instanceof ConstructorAsLambda;
+        assert instance.getClass() == ConstructorAsLambda.class;
+        assert ConstructorAsLambda.class.isAssignableFrom(instance.getClass());
+    }
+
+    @Test
+    public void constructorWithParam() {
+        IntFunction<ConstructorAsLambda> function = ConstructorAsLambda::new;
+        ConstructorAsLambda instance = function.apply(10);
+
+        assert instance.value == 10;
+        assert instance instanceof ConstructorAsLambda;
+        assert instance.getClass() == ConstructorAsLambda.class;
+        assert ConstructorAsLambda.class.isAssignableFrom(instance.getClass());
+    }
+
+    /**
+     * @version 2015/02/26 11:34:52
+     */
+    private static class ConstructorAsLambda {
+
+        private final int value;
+
+        private ConstructorAsLambda() {
+            this.value = -1;
+        }
+
+        /**
+         * @param value
+         */
+        private ConstructorAsLambda(int value) {
+            this.value = value;
+        }
     }
 }
