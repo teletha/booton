@@ -12,12 +12,35 @@
  * @param {Array} params A list of context object and parameters.
  * @return {Object} A created instance of the specified functional interface.
  */
-function λ(clazz, name, method, params) {
+function λ(clazz, name, method, context, params) {
   // create instance from interface definition
   var o = Object.create(clazz.prototype);
-  
+
+
+  if (context === null) {
+    if (params.length === 0) {
+      o[name] = function() {
+        var args = Array.prototype.slice.call(arguments);
+        
+        return method.apply(args.shift(), params.concat(args));
+      };
+    } else {
+      var context = params.shift();
+      var p = params;
+    
+      o[name] = function() {
+        var args = Array.prototype.slice.call(arguments);
+        
+        return method.apply(context, p.concat(args));
+      };
+    }
+  } else {
+    o[name] = Function.prototype.bind.apply(method, [context].concat(params));
+  }
   // assign lambda method with partial application (context and parameters)
-  o[name] = Function.prototype.bind.apply(method, params);
+  // o[name] = Function.prototype.bind.apply(method, params);
+  
+
   
   // API definition
   return o;
