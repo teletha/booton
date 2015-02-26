@@ -9,16 +9,24 @@
  */
 package booton.translator.lambda;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+
+import kiss.I;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import booton.translator.Debuggable;
 
 /**
  * @version 2015/02/26 10:53:13
@@ -87,10 +95,11 @@ public class LambdaTest {
     }
 
     @Test
+    @Debuggable
     public void arrayReference() {
         IntFunction<String[]> function = String[]::new;
         String[] array = function.apply(4);
-    
+
         assert array.length == 4;
         assert array instanceof String[];
         assert array.getClass() == String[].class;
@@ -148,11 +157,12 @@ public class LambdaTest {
         assert IntFunction.class.isAssignableFrom(function.getClass());
     }
 
+    @Test
     public void staticMethodReference() {
         LongSupplier supplier = MethodReference::staticLongSupplier;
         long result = supplier.getAsLong();
 
-        assert result == 10L;
+        assert result == 20L;
         assert supplier instanceof LongSupplier;
         assert LongSupplier.class.isAssignableFrom(supplier.getClass());
     }
@@ -169,5 +179,14 @@ public class LambdaTest {
         public static long staticLongSupplier() {
             return 20L;
         }
+    }
+
+    @Test
+    @Debuggable
+    public void function() throws Exception {
+        Property<List> property = new SimpleObjectProperty(new ArrayList());
+        Property<Integer> result = I.observe(property).map(List::size).to();
+
+        assert result.getValue() == 0;
     }
 }
