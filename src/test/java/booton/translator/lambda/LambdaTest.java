@@ -12,6 +12,7 @@ package booton.translator.lambda;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 import org.junit.Test;
@@ -86,43 +87,87 @@ public class LambdaTest {
     }
 
     @Test
-    public void constructor() {
-        Supplier<ConstructorAsLambda> function = ConstructorAsLambda::new;
-        ConstructorAsLambda instance = function.get();
-
-        assert instance.value == -1;
-        assert instance instanceof ConstructorAsLambda;
-        assert instance.getClass() == ConstructorAsLambda.class;
-        assert ConstructorAsLambda.class.isAssignableFrom(instance.getClass());
+    public void arrayReference() {
+        IntFunction<String[]> function = String[]::new;
+        String[] array = function.apply(4);
+    
+        assert array.length == 4;
+        assert array instanceof String[];
+        assert array.getClass() == String[].class;
     }
 
     @Test
-    public void constructorWithParam() {
-        IntFunction<ConstructorAsLambda> function = ConstructorAsLambda::new;
-        ConstructorAsLambda instance = function.apply(10);
+    public void constructorReference() {
+        Supplier<ConstructorReference> function = ConstructorReference::new;
+        ConstructorReference instance = function.get();
+
+        assert instance.value == -1;
+        assert instance instanceof ConstructorReference;
+        assert instance.getClass() == ConstructorReference.class;
+        assert ConstructorReference.class.isAssignableFrom(instance.getClass());
+    }
+
+    @Test
+    public void constructorReferenceWithParam() {
+        IntFunction<ConstructorReference> function = ConstructorReference::new;
+        ConstructorReference instance = function.apply(10);
 
         assert instance.value == 10;
-        assert instance instanceof ConstructorAsLambda;
-        assert instance.getClass() == ConstructorAsLambda.class;
-        assert ConstructorAsLambda.class.isAssignableFrom(instance.getClass());
+        assert instance instanceof ConstructorReference;
+        assert instance.getClass() == ConstructorReference.class;
+        assert ConstructorReference.class.isAssignableFrom(instance.getClass());
     }
 
     /**
      * @version 2015/02/26 11:34:52
      */
-    private static class ConstructorAsLambda {
+    private static class ConstructorReference {
 
         private final int value;
 
-        private ConstructorAsLambda() {
+        private ConstructorReference() {
             this.value = -1;
         }
 
         /**
          * @param value
          */
-        private ConstructorAsLambda(int value) {
+        private ConstructorReference(int value) {
             this.value = value;
+        }
+    }
+
+    @Test
+    public void methodReference() {
+        MethodReference ref = new MethodReference();
+        IntFunction<String> function = ref::intFunction;
+        String result = function.apply(10);
+
+        assert result.equals("10");
+        assert function instanceof IntFunction;
+        assert IntFunction.class.isAssignableFrom(function.getClass());
+    }
+
+    public void staticMethodReference() {
+        LongSupplier supplier = MethodReference::staticLongSupplier;
+        long result = supplier.getAsLong();
+
+        assert result == 10L;
+        assert supplier instanceof LongSupplier;
+        assert LongSupplier.class.isAssignableFrom(supplier.getClass());
+    }
+
+    /**
+     * @version 2015/02/26 13:42:06
+     */
+    private static class MethodReference {
+
+        public String intFunction(int value) {
+            return String.valueOf(value);
+        }
+
+        public static long staticLongSupplier() {
+            return 20L;
         }
     }
 }
