@@ -42,7 +42,9 @@ class VirtualStructureHierarchy extends Prototype<Widget> {
         Widget widget = hierarchy.get(widgetClass);
 
         if (widget == null) {
+            WidgetLog.GetWidget.start();
             widget = super.get();
+            WidgetLog.GetWidget.end();
         }
         return widget;
     }

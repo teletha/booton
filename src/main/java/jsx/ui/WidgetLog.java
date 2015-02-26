@@ -15,5 +15,5 @@ import jsx.debug.Profile;
  * @version 2015/02/06 9:21:47
  */
 public enum WidgetLog implements Profile {
-    Others, Virtualize, Hierarchy, New, Diff, Container, Process, SubWidget, Make, VirtualizeWidgetCollection, CreateProxy;
+    Others, Virtualize, Hierarchy, New, Diff, Container, Process, SubWidget, Make, VirtualizeWidgetCollection, CreateProxy, CreateMakeCache, GetWidget;
 }
