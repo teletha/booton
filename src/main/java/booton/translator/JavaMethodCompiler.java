@@ -1224,7 +1224,7 @@ class JavaMethodCompiler extends MethodVisitor {
         record(INVOKEDYNAMIC);
 
         Handle handle = (Handle) bsmArgs[1];
-        Type functionalInterfaceType = (Type) bsmArgs[2];
+        Type functionalInterfaceType = (Type) bsmArgs[0];
         Type lambdaType = Type.getMethodType(handle.getDesc());
         Type callerType = Type.getMethodType(description);
         int parameterDiff = lambdaType.getArgumentTypes().length - functionalInterfaceType.getArgumentTypes().length;
@@ -1233,6 +1233,7 @@ class JavaMethodCompiler extends MethodVisitor {
         // detect functional interface
         Class interfaceClass = convert(callerType.getReturnType());
         String interfaceClassName = Javascript.computeClass(interfaceClass);
+        String interfaceMethodName = '"' + Javascript.computeMethodName(interfaceClass, name, functionalInterfaceType.getDescriptor()) + '"';
 
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
@@ -1275,8 +1276,12 @@ class JavaMethodCompiler extends MethodVisitor {
             throw new Error();
         }
 
+        if (holder.equals("null")) {
+            holder = Javascript.computeClassName(lambdaClass) + ".prototype";
+        }
+
         // create lambda proxy class
-        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters.toString()));
+        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, String.class, interfaceMethodName, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters.toString()));
     }
 
     /**

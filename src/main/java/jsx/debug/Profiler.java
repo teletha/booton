@@ -56,7 +56,7 @@ class Profiler extends Interceptor<Profilable> {
      * @param phase A profiling phase to start.
      */
     static final void start(Profile phase) {
-        Measurement latest = stack.get(stack.length() - 1);
+        Measurement latest = stack.last();
 
         if (latest != null) {
             latest.stop();

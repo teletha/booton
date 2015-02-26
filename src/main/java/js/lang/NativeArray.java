@@ -433,6 +433,17 @@ public class NativeArray<T> extends NativeObject {
 
     /**
      * <p>
+     * The peek method get the last element from an array and returns that value to the caller.
+     * </p>
+     * 
+     * @return The last item.
+     */
+    public T last() {
+        return list.isEmpty() ? null : list.get(list.size() - 1);
+    }
+
+    /**
+     * <p>
      * Removes the first element from an array and returns that element. This method changes the
      * length of the array.
      * </p>
@@ -969,6 +980,17 @@ public class NativeArray<T> extends NativeObject {
          */
         public String pop() {
             return that + ".pop()";
+        }
+
+        /**
+         * <p>
+         * The peek method get the last element from an array and returns that value to the caller.
+         * </p>
+         * 
+         * @return The last item.
+         */
+        public String last() {
+            return that + "[" + that + ".length-1]";
         }
 
         /**

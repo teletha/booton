@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import jsx.debug.Info;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/12/12 15:53:40
+ * @version 2015/02/26 11:44:22
  */
 @JavaAPIProvider(Proxy.class)
 class JSProxy {
@@ -132,118 +132,18 @@ class JSProxy {
      * @param parameters A list of parameters from local environment.
      * @return
      */
-    static Object newLambdaInstance(Class interfaceClass, NativeObject lambdaMethodHolder, String lambdaMethodName, Object context, Object[] parameters) {
-        // if (lambdaMethodName.charAt(0) != '$') {
-        // // find proxy class
-        // Integer hash = Math.abs(interfaceClass.hashCode());
-        // Class clazz = classes.get(hash);
-        //
-        // if (clazz == null) {
-        // clazz = (Class) (Object) new LambdaClass(hash, interfaceClass);
-        // classes.put(hash, clazz);
-        // }
-        //
-        // return new LambdaBase(clazz, lambdaMethodHolder);
-        // }
+    static Object newLambdaInstance(Class interfaceClass, String interfaceMethodName, NativeObject lambdaMethodHolder, String lambdaMethodName, Object context, Object[] parameters) {
+        long start = System.currentTimeMillis();
 
-        return newProxyInstance(null, new Class[] {interfaceClass}, new InvocationHandler() {
+        NativeObject instance = NativeObject.create(Reflections.getPrototype(interfaceClass));
+        NativeFunction lambdaFunction = lambdaMethodHolder.getPropertyAs(NativeFunction.class, lambdaMethodName)
+                .bind(context, parameters);
+        instance.setProperty(interfaceMethodName, lambdaFunction);
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                if (lambdaMethodName.charAt(0) == '$') {
-                    // constructor
-                    // create new instance
-                    Object instance = lambdaMethodHolder.create();
-
-                    // invoke constructor
-                    lambdaMethodHolder.getPropertyAs(NativeFunction.class, lambdaMethodName).apply(instance, args);
-
-                    // API definition
-                    return instance;
-                } else if (method.isDefault()) {
-                    // default method
-                    return method.invoke(proxy, args);
-                } else {
-                    // method
-                    Object currentContext = context;
-                    NativeObject currentHolder = lambdaMethodHolder;
-
-                    if (currentHolder == null) {
-                        currentContext = ((NativeArray) (Object) args).shift();
-                        currentHolder = (NativeObject) currentContext;
-                    }
-
-                    return currentHolder.getPropertyAs(NativeFunction.class, lambdaMethodName)
-                            .apply(currentContext, ((NativeArray) (Object) parameters).concat(args).toArray());
-                }
-            }
-        });
-    }
-
-    /**
-     * @version 2015/02/24 10:07:58
-     */
-    private static class LambdaBase {
-
-        /** The type of this proxy. */
-        private final Class type;
-
-        /**
-         * 
-         */
-        private LambdaBase(Class type) {
-            this.type = type;
-        }
-
-        /**
-         * Returns the runtime class of this {@code Object}. The returned {@code Class} object is
-         * the object that is locked by {@code static synchronized} methods of the represented
-         * class.
-         * <p>
-         * <b>The actual result type is {@code Class<? extends |X|>} where {@code |X|} is the
-         * erasure of the static type of the expression on which {@code getClass} is called.</b> For
-         * example, no cast is required in this code fragment:
-         * </p>
-         * <p>
-         * {@code Number n = 0;                             }<br>
-         * {@code Class<? extends Number> c = n.getClass(); }
-         * </p>
-         * 
-         * @return The {@code Class} object that represents the runtime class of this object.
-         * @see Class Literals, section 15.8.2 of <cite>The Java&trade; Language
-         *      Specification</cite>.
-         */
-        @SuppressWarnings("unused")
-        public Class $alias$getClass() {
-            return type;
-        }
-    }
-
-    /**
-     * @version 2013/09/09 12:44:31
-     */
-    private static class LambdaClass extends JSClass {
-
-        /**
-         * @param id A proxy id.
-         * @param interfaces A interface list.
-         */
-        private LambdaClass(int id, Class interfaces) {
-            super("Proxy" + id, new NativeObject(), new NativeArray(), LambdaBase.class, new NativeObject());
-
-            interfacesType = Arrays.asList(interfaces);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public String toString() {
-            return "class " + nameJS;
-        }
+        long end = System.currentTimeMillis();
+        Info.count++;
+        Info.elapsed += end - start;
+        return instance;
     }
 
     /**
