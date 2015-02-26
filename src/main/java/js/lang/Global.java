@@ -663,7 +663,7 @@ public class Global {
          * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
          */
         public String getArgumentArray() {
-            return "boot.array(\"" + Javascript.computeSimpleClassName(Object.class) + "\",Array.prototype.slice.call(arguments))";
+            return "Φ(\"" + Javascript.computeSimpleClassName(Object.class) + "\",Array.prototype.slice.call(arguments))";
         }
 
         /**

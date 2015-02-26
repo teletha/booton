@@ -120,26 +120,6 @@ class JSProxy {
     }
 
     /**
-     * <p>
-     * Returns an instance of a lambda class for the specified interfaces that dispatches method
-     * invocations to the specified lambda method.
-     * </p>
-     * 
-     * @param interfaceClass A functional interface.
-     * @param lambdaMethodHolder A lambda method holder (prptotype).
-     * @param lambdaMethodName A lambda method name in javascript runtime.
-     * @param context A lambda context object.
-     * @param parameters A list of parameters from local environment.
-     * @return
-     */
-    static Object newLambdaInstance(Class interfaceClass, String interfaceMethodName, NativeFunction lambdaMethod, Object[] contextAndParameters) {
-        NativeObject instance = ((JSClass) (Object) interfaceClass).prototype.create();
-        instance.setProperty(interfaceMethodName, lambdaMethod.bind(contextAndParameters));
-
-        return instance;
-    }
-
-    /**
      * @version 2013/08/19 14:25:00
      */
     private static class ProxyBase {

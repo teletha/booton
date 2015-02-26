@@ -18,7 +18,6 @@ import static jdk.internal.org.objectweb.asm.Type.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -36,7 +35,6 @@ import jdk.internal.org.objectweb.asm.Handle;
 import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
-import js.lang.NativeFunction;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
 import jsx.style.StaticStyle;
@@ -1232,7 +1230,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // detect functional interface
         Class interfaceClass = convert(callerType.getReturnType());
-        String interfaceClassName = Javascript.computeClass(interfaceClass);
+        String interfaceClassName = Javascript.computeClassName(interfaceClass);
         String interfaceMethodName = '"' + Javascript.computeMethodName(interfaceClass, name, functionalInterfaceType.getDescriptor()) + '"';
 
         // detect lambda method
@@ -1284,7 +1282,7 @@ class JavaMethodCompiler extends MethodVisitor {
         String lambdaMethod = holder + "." + lambdaMethodName;
 
         // create lambda proxy class
-        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, String.class, interfaceMethodName, NativeFunction.class, lambdaMethod, Object[].class, contextAndParameters.toString()));
+        current.addOperand("λ(" + interfaceClassName + "," + interfaceMethodName + "," + lambdaMethod + "," + contextAndParameters.toString() + ")");
     }
 
     /**

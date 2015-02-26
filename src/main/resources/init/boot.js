@@ -1,5 +1,54 @@
 "use strict";
 
+//====================================================================
+// Global Functions
+//====================================================================
+/**
+ * Create the instance of the specified functional interface.
+ *
+ * @param {Class} clazz An interface class.
+ * @param {String} name A single abstract method name.
+ * @param {Object} method A delegation method for lambda.
+ * @param {Array} params A list of context object and parameters.
+ * @return {Object} A created instance of the specified functional interface.
+ */
+function λ(clazz, name, method, params) {
+  // create instance from interface definition
+  var o = Object.create(clazz.prototype);
+  
+  // assign lambda method with partial application (context and parameters)
+  o[name] = Function.prototype.bind.apply(method, params);
+  
+  // API definition
+  return o;
+}
+
+/**
+ * Initialize the specified array. (all elements are initialized by 0, false or null)
+ *
+ * @param {String} type A type of new array.
+ * @param {Array or Number} array A new array or A length of new array.
+ * @param {Object} initia A initial item value of new array.
+ * @return {Array} A initialized array.
+ */
+function Φ(type, array, initial) {
+  // fill by initial value if needed
+  if (initial !== undefined) {
+    var length = array, array = [], i = 0;
+    
+    for (; i < length; i++) {
+      array[i] = initial;
+    }
+  }
+  
+  // set Class information
+  array.$ = "[" + type;
+
+  // API definition
+  return array;
+}
+
+
 function boot(global) {  
   /**
    * Define user properties.
@@ -302,32 +351,6 @@ function boot(global) {
 	      return delegator.call(instance, this, arguments);
 	    };
 	  },
-
-    /**
-     * <p>
-     * Initialize the specified array. (all elements are initialized by 0, false or null)
-     * </p>
-     *
-     * @param {String} type A type of new array.
-     * @param {Array or Number} array A new array or A length of new array.
-     * @param {Object} initia A initial item value of new array.
-     * @return {Array} A initialized array.
-     */
-    array: function(type, array, initial) {
-	    if (initial !== undefined) {
-	      var length = array, array = [], i = 0;
-	      
-        for (; i < length; i++) {
-          array[i] = initial;
-        }
-	    }
-	    
-	    // set Class information
-	    array.$ = "[" + type;
-    
-      // API definition
-      return array;
-    },
 
     /**
      * <p>
