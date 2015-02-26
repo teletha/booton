@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
@@ -37,6 +36,7 @@ import jdk.internal.org.objectweb.asm.Handle;
 import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
+import js.lang.NativeFunction;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
 import jsx.style.StaticStyle;
@@ -1237,17 +1237,18 @@ class JavaMethodCompiler extends MethodVisitor {
 
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
-        String lambdaMethodName = '"' + Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc()) + '"';
+        String lambdaMethodName = Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc());
 
         // build parameter from local environment
-        StringJoiner parameters = new StringJoiner(",", "[", "]");
+        List<String> contextAndParameters = new ArrayList();
 
         for (int i = parameterDiff - 1; 0 <= i; i--) {
-            parameters.add(current.remove(i).toString());
+            contextAndParameters.add(current.remove(i).toString());
         }
 
         // detect context
         Object context = useContext ? current.remove(0) : "null";
+        contextAndParameters.add(0, context.toString());
 
         // decide lambda context
         Object holder = null;
@@ -1280,8 +1281,10 @@ class JavaMethodCompiler extends MethodVisitor {
             holder = Javascript.computeClassName(lambdaClass) + ".prototype";
         }
 
+        String lambdaMethod = holder + "." + lambdaMethodName;
+
         // create lambda proxy class
-        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, String.class, interfaceMethodName, NativeObject.class, holder, String.class, lambdaMethodName, Object.class, context, Object[].class, parameters.toString()));
+        current.addOperand(Javascript.writeMethodCode(Proxy.class, "newLambdaInstance", Class.class, interfaceClassName, String.class, interfaceMethodName, NativeFunction.class, lambdaMethod, Object[].class, contextAndParameters.toString()));
     }
 
     /**

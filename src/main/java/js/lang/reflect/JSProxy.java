@@ -132,17 +132,10 @@ class JSProxy {
      * @param parameters A list of parameters from local environment.
      * @return
      */
-    static Object newLambdaInstance(Class interfaceClass, String interfaceMethodName, NativeObject lambdaMethodHolder, String lambdaMethodName, Object context, Object[] parameters) {
-        long start = System.currentTimeMillis();
+    static Object newLambdaInstance(Class interfaceClass, String interfaceMethodName, NativeFunction lambdaMethod, Object[] contextAndParameters) {
+        NativeObject instance = ((JSClass) (Object) interfaceClass).prototype.create();
+        instance.setProperty(interfaceMethodName, lambdaMethod.bind(contextAndParameters));
 
-        NativeObject instance = NativeObject.create(Reflections.getPrototype(interfaceClass));
-        NativeFunction lambdaFunction = lambdaMethodHolder.getPropertyAs(NativeFunction.class, lambdaMethodName)
-                .bind(context, parameters);
-        instance.setProperty(interfaceMethodName, lambdaFunction);
-
-        long end = System.currentTimeMillis();
-        Info.count++;
-        Info.elapsed += end - start;
         return instance;
     }
 
