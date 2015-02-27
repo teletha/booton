@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
@@ -468,8 +469,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, false));
             } else {
-                OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current
-                        .remove(1)) + "=" + current.remove(0).cast(type), type);
+                OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current.remove(1)) + "=" + current.remove(0)
+                        .cast(type), type);
 
                 if (match(DUPLICATE_AWAY, PUTFIELD)) {
                     // multiple assignment (i.e. this.a = this.b = 0;)
@@ -515,8 +516,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(increment(translator.translateStaticField(owner, name), type, false, false));
             } else {
-                Operand assign = new OperandExpression(translator.translateStaticField(owner, name) + "=" + current
-                        .remove(0).cast(type), type);
+                Operand assign = new OperandExpression(translator.translateStaticField(owner, name) + "=" + current.remove(0)
+                        .cast(type), type);
 
                 if (match(DUPLICATE, PUTSTATIC)) {
                     // The pattern of static field assignment in method parameter.
@@ -531,8 +532,7 @@ class JavaMethodCompiler extends MethodVisitor {
         case GETSTATIC:
             if (desc.equals(STYLE)) {
                 String cssClassName = "\"" + I.make(CascadingStyleSheet.class).register(owner, name) + "\"";
-                current.addOperand(new OperandExpression(Javascript
-                        .writeMethodCode(StaticStyle.class, "of", String.class, cssClassName)));
+                current.addOperand(new OperandExpression(Javascript.writeMethodCode(StaticStyle.class, "of", String.class, cssClassName)));
             } else {
                 current.addOperand(translator.translateStaticField(owner, name), type);
             }
@@ -646,12 +646,9 @@ class JavaMethodCompiler extends MethodVisitor {
                     current.remove(0);
 
                     if (first instanceof OperandCondition && second instanceof OperandCondition) {
-                        condition
-                                .addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
+                        condition.addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
                     } else {
-                        condition
-                                .addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second
-                                        .disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                        condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
                     }
                 }
 
@@ -1235,43 +1232,43 @@ class JavaMethodCompiler extends MethodVisitor {
         // detect functional interface
         Class interfaceClass = convert(callerType.getReturnType());
         String interfaceClassName = Javascript.computeClassName(interfaceClass);
-        String interfaceMethodName = '"' + Javascript.computeMethodName(interfaceClass, name, functionalInterfaceType
-                .getDescriptor()) + '"';
+        String interfaceMethodName = '"' + Javascript.computeMethodName(interfaceClass, name, functionalInterfaceType.getDescriptor()) + '"';
 
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
-        String lambdaMethodName = Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc());
+        String lambdaMethodName = '"' + Javascript.computeMethodName(lambdaClass, handle.getName(), handle.getDesc()) + '"';
 
         // build parameter from local environment
-        List<String> contextAndParameters = new ArrayList();
+        List<String> params = new ArrayList();
 
         for (int i = parameterDiff - 1; 0 <= i; i--) {
-            contextAndParameters.add(current.remove(i).toString());
+            params.add(current.remove(i).toString());
         }
 
-        // detect context
-        Object context = useContext ? current.remove(0) : "null";
-        // contextAndParameters.add(0, context.toString());
-
-        // decide lambda context
-        Object holder = null;
+        // write function call code
+        StringJoiner code = new StringJoiner(",", "λ(", ")");
+        code.add(interfaceClassName);
+        code.add(interfaceMethodName);
+        code.add(lambdaMethodName);
 
         switch (handle.getTag()) {
         case H_INVOKESTATIC:
-            holder = Javascript.computeClassName(lambdaClass);
+            code.add(Javascript.computeClassName(lambdaClass));
+            code.add(params.toString());
             break;
 
         case H_INVOKESPECIAL:
         case H_INVOKEVIRTUAL:
-            holder = context;
-            break;
-
         case H_INVOKEINTERFACE:
-            holder = context;
+            if (useContext) {
+                code.add(current.remove(0).toString());
+                code.add(params.toString());
+            }
             break;
 
         case H_NEWINVOKESPECIAL:
-            holder = Javascript.computeClassName(lambdaClass) + ".prototype";
+            code.add(Javascript.computeClassName(lambdaClass) + ".prototype");
+            code.add(params.toString());
             break;
 
         default:
@@ -1279,16 +1276,7 @@ class JavaMethodCompiler extends MethodVisitor {
             // wrapped error in here.
             throw new Error();
         }
-
-        if (holder.equals("null")) {
-            holder = Javascript.computeClassName(lambdaClass) + ".prototype";
-        }
-
-        String lambdaMethod = holder + "." + lambdaMethodName;
-
-        // create lambda proxy class
-        current.addOperand("λ(" + interfaceClassName + "," + interfaceMethodName + "," + lambdaMethod + "," + context + "," + contextAndParameters
-                .toString() + ")");
+        current.addOperand(code.toString());
     }
 
     /**
@@ -1604,9 +1592,8 @@ class JavaMethodCompiler extends MethodVisitor {
                         contexts.add(new OperandExpression(model));
                         contexts.add(new OperandString(path));
 
-                        current.addOperand(translator
-                                .translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
-                                        Class.class, Object.class, String.class}, contexts), owner);
+                        current.addOperand(translator.translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
+                                Class.class, Object.class, String.class}, contexts), owner);
                     } else {
                         // instance initialization method invocation
                         current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts), owner);
@@ -1620,8 +1607,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     if (className.equals("java/lang/Object")) {
                         // ignore
                     } else {
-                        current.addOperand(translator
-                                .translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
+                        current.addOperand(translator.translateSuperMethod(owner, methodName, desc, parameters, contexts), returnType);
                     }
                 }
             }
@@ -1794,9 +1780,7 @@ class JavaMethodCompiler extends MethodVisitor {
             } else if (clazz == String.class) {
                 code = "boot.isString(" + current.remove(0) + ")";
             } else if (clazz.isInterface() || clazz.isArray()) {
-                code = Javascript
-                        .writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current
-                                .remove(0));
+                code = Javascript.writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current.remove(0));
             } else {
                 code = current.remove(0) + " instanceof " + Javascript.computeClassName(clazz);
             }
@@ -1931,7 +1915,10 @@ class JavaMethodCompiler extends MethodVisitor {
      */
     private final String incrementLong(Object context, boolean increase, boolean post) {
         StringBuilder builder = new StringBuilder();
-        builder.append("(").append(context).append("=").append(context)
+        builder.append("(")
+                .append(context)
+                .append("=")
+                .append(context)
                 .append(writeLongMethod(increase ? "add" : "subtract", computeFieldFullName(PrimitiveLong, "ONE")))
                 .append(")");
 

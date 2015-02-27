@@ -10,23 +10,21 @@
 package booton.translator.lambda;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
-
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-
-import kiss.I;
+import java.util.function.ToIntFunction;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import booton.translator.Debuggable;
 
 /**
  * @version 2015/02/26 10:53:13
@@ -95,7 +93,6 @@ public class LambdaTest {
     }
 
     @Test
-    @Debuggable
     public void arrayReference() {
         IntFunction<String[]> function = String[]::new;
         String[] array = function.apply(4);
@@ -182,11 +179,41 @@ public class LambdaTest {
     }
 
     @Test
-    @Debuggable
-    public void function() throws Exception {
-        Property<List> property = new SimpleObjectProperty(new ArrayList());
-        Property<Integer> result = I.observe(property).map(List::size).to();
+    public void supplierAsFunctionOnAbstractMethod() throws Exception {
+        ToIntFunction<List> function = List::size;
 
-        assert result.getValue() == 0;
+        assert function.applyAsInt(new ArrayList()) == 0;
+    }
+
+    @Test
+    public void supplierAsFunctionOnConcreteMethod() throws Exception {
+        ToIntFunction<ArrayList> function = ArrayList::size;
+
+        assert function.applyAsInt(new ArrayList()) == 0;
+    }
+
+    @Test
+    public void functionAsBiFunction() throws Exception {
+        BiFunction<String, String, String> function = String::concat;
+
+        assert function.apply("Hello", "!").equals("Hello!");
+    }
+
+    @Test
+    public void functionAsBiFunctionOnAbstractMethod() throws Exception {
+        Map<String, String> map = new HashMap();
+        map.put("1", "one");
+
+        BiFunction<Map<String, String>, String, String> function = Map::get;
+        assert function.apply(map, "1").equals("one");
+    }
+
+    @Test
+    public void functionAsBiFunctionOnConcreteMethod() throws Exception {
+        HashMap<String, String> map = new HashMap();
+        map.put("1", "one");
+
+        BiFunction<HashMap<String, String>, String, String> function = HashMap::get;
+        assert function.apply(map, "1").equals("one");
     }
 }
