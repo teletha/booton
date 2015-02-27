@@ -6,44 +6,28 @@
 /**
  * Create the instance of the specified functional interface.
  *
- * @param {Class} clazz An interface class.
- * @param {String} name A single abstract method name.
- * @param {Object} method A delegation method for lambda.
- * @param {Array} params A list of context object and parameters.
+ * @param {Class} interfaceClass An interface class.
+ * @param {String} interfaceMethodName A single abstract method name.
+ * @param {String} lambdaMethodName A lambda method name.
+ * @param {Object} lambdaMethodHolder A lambda method holder object. This is optional.
+ * @param {Array} params A list of parameters. This is optional.
  * @return {Object} A created instance of the specified functional interface.
  */
-function λ(clazz, name, method, context, params) {
+function λ(interfaceClass, interfaceMethodName, lambdaMethodName, lambdaMethodHolder, params) {
   // create instance from interface definition
-  var o = Object.create(clazz.prototype);
-
-
-  if (context === null) {
-    if (params.length === 0) {
-      o[name] = function() {
-        var args = Array.prototype.slice.call(arguments);
-        
-        return method.apply(args.shift(), params.concat(args));
-      };
-    } else {
-      var context = params.shift();
-      var p = params;
-    
-      o[name] = function() {
-        var args = Array.prototype.slice.call(arguments);
-        
-        return method.apply(context, p.concat(args));
-      };
-    }
+  var instance = Object.create(interfaceClass.prototype);
+  
+  if (lambdaMethodHolder !== undefined) {
+    // assign lambda method with partial application (context and parameters)
+    instance[interfaceMethodName] = Function.prototype.bind.apply(lambdaMethodHolder[lambdaMethodName], [lambdaMethodHolder].concat(params));
   } else {
-    o[name] = Function.prototype.bind.apply(method, [context].concat(params));
+    instance[interfaceMethodName] = function() {
+      var args = Array.prototype.slice.call(arguments);
+      
+      return args[0][lambdaMethodName].apply(args.shift(), args);
+    };
   }
-  // assign lambda method with partial application (context and parameters)
-  // o[name] = Function.prototype.bind.apply(method, params);
-  
-
-  
-  // API definition
-  return o;
+  return instance; 
 }
 
 /**
