@@ -60,7 +60,6 @@ import js.lang.NativeFunction;
 import js.lang.NativeFunction.Delegator;
 import js.lang.NativeObject;
 import js.lang.reflect.Reflections;
-import jsx.ui.WidgetLog;
 import kiss.model.ClassUtil;
 import kiss.model.Model;
 import kiss.model.Property;
@@ -362,8 +361,6 @@ class JSKiss {
             return lifestyle; // use cache
         }
 
-        WidgetLog.CreateMakeCache.start();
-
         // Skip null check because this method can throw NullPointerException.
         // if (modelClass == null) throw new NullPointerException("NPE");
 
@@ -443,7 +440,6 @@ class JSKiss {
             return lifestyles.get(modelClass);
         } finally {
             dependency.pollLast();
-            WidgetLog.CreateMakeCache.end();
         }
     }
 
