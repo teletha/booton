@@ -60,9 +60,6 @@ class Profiler extends Interceptor<Profilable> {
 
         if (latest != null) {
             latest.stop();
-        } else {
-            Info.count = 0;
-            Info.elapsed = 0;
         }
 
         Measurement measurement = measurements.get(phase);
@@ -101,7 +98,6 @@ class Profiler extends Interceptor<Profilable> {
      * </p>
      */
     static void show() {
-        System.out.println("Proxy calls " + Info.count + "   " + Info.elapsed + "ms");
         List<Measurement> list = new ArrayList(measurements.values());
         Collections.sort(list, Comparator.<Measurement> comparingDouble(item -> item.elapsed).reversed());
 
@@ -121,6 +117,10 @@ class Profiler extends Interceptor<Profilable> {
                 System.out.println(context.phase.name() + " " + context.elapsed + "ms    " + context.elapsed / total * 100 + "%  " + context.count + "calls");
             }
         }
+
+        // clean up
+        measurements.clear();
+        stack.clear();
     }
 
     /**

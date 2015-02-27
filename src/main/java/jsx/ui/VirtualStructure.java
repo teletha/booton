@@ -216,15 +216,11 @@ public final class VirtualStructure {
     }
 
     private void process(VirtualElement container, Object child) {
-        WidgetLog.Process.start();
-
         if (child.equals("\r\n")) {
             container.items.push(new VirtualElement(0, "br"));
         } else {
             container.items.push(new VirtualText(String.valueOf(child)));
         }
-
-        WidgetLog.Process.end();
     }
 
     /**
@@ -268,8 +264,6 @@ public final class VirtualStructure {
          * @return The current container element.
          */
         private final VirtualElement container(int contextId) {
-            WidgetLog.Container.start();
-
             // This process is used in java environment only. (because js implementation of
             // LocalId always return 0)
             if (contextId != 0 && latestContextId != contextId) {
@@ -306,7 +300,6 @@ public final class VirtualStructure {
                 latest.items.push(container);
             }
 
-            WidgetLog.Container.end();
             return container;
         }
 
@@ -401,7 +394,6 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
-            WidgetLog.VirtualizeWidgetCollection.start();
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) style.assignTo(container.classList, container.inlines);
@@ -412,7 +404,6 @@ public final class VirtualStructure {
             // process into child nodes
 
             for (T child : children) {
-                WidgetLog.SubWidget.start();
                 Widget widget = Widget.of(childType, child);
 
                 // create virtual element for this widget
@@ -423,13 +414,11 @@ public final class VirtualStructure {
 
                 // process child nodes
                 widget.assemble(new VirtualStructure(virtualize));
-                WidgetLog.SubWidget.end();
             }
 
             // leave from the child node
             parents.pollLast();
             latest = parents.peekLast();
-            WidgetLog.VirtualizeWidgetCollection.end();
         }
 
         /**

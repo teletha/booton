@@ -183,9 +183,7 @@ public abstract class Widget {
      * </p>
      */
     final VirtualElement virtualize() {
-        WidgetLog.New.start();
         VirtualStructure structure = new VirtualStructure();
-        WidgetLog.New.end();
 
         // assemble the virtual structure
         assemble(structure);
@@ -205,7 +203,6 @@ public abstract class Widget {
      * @param structure A current processing structure which has the parent container.
      */
     final void assemble(VirtualStructure structure) {
-        WidgetLog.Hierarchy.start();
         Class clazz = getClass();
 
         /**
@@ -218,7 +215,6 @@ public abstract class Widget {
         if (previous != null) {
             throw new IllegalStateException(clazz + " is a nest in virtual structure.");
         }
-        WidgetLog.Hierarchy.end();
 
         /**
          * Assemble {@link VirtualStructure} actually.
@@ -232,9 +228,7 @@ public abstract class Widget {
          * Leave the hierarchy of {@link VirtualStructure}.
          * </p>
          */
-        WidgetLog.Hierarchy.start();
         VirtualStructureHierarchy.hierarchy.remove(clazz);
-        WidgetLog.Hierarchy.end();
     }
 
     /**

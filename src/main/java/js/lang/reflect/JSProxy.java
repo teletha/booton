@@ -22,7 +22,6 @@ import js.lang.Global;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import jsx.debug.Info;
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -79,8 +78,6 @@ class JSProxy {
      *         defined by the specified class loader and that implements the specified interfaces.
      */
     public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, final InvocationHandler handler) {
-        long start = System.currentTimeMillis();
-
         // find proxy class
         Integer hash = Math.abs(Arrays.hashCode(interfaces));
         Class clazz = classes.get(hash);
@@ -110,10 +107,6 @@ class JSProxy {
                 }
             }
         }
-
-        long end = System.currentTimeMillis();
-        Info.count++;
-        Info.elapsed += end - start;
 
         // API definition
         return proxy;
