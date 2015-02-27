@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import js.lang.NativeIterator.Result;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -74,5 +76,21 @@ public class NativeMapTest {
 
         map.clear();
         assert map.size() == 0;
+    }
+
+    @Test
+    public void keys() {
+        System.out.println("start");
+        NativeMap<String, String> map = new NativeMap();
+        map.set("a", "A");
+        map.set("b", "B");
+
+        NativeIterator<String> keys = map.keys();
+        Result result = keys.next();
+
+        while (!result.done()) {
+            System.out.println(result.value());
+            result = keys.next();
+        }
     }
 }
