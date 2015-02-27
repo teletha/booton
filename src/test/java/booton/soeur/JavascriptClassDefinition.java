@@ -59,7 +59,7 @@ public class JavascriptClassDefinition {
     }
 
     /**
-     * @version 2014/04/17 14:48:11
+     * @version 2015/02/27 16:04:28
      */
     public static class Map extends Helper {
 
@@ -84,6 +84,10 @@ public class JavascriptClassDefinition {
 
         public void jsFunction_clear() {
             map.clear();
+        }
+
+        public Object jsFunction_keys() {
+            return map.keys();
         }
 
         public int jsGet_size() {
