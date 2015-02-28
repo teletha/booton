@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,25 +12,26 @@ package js.util;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
-import js.lang.NativeObject;
+import js.lang.NativeArray;
+import js.lang.NativeSet;
+import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/05/30 20:38:55
+ * @version 2015/02/28 15:03:04
  */
-class HashSet<E> extends AbstractSet<E> {
-
-    /** The item count. */
-    private int size = 0;
+@JavaAPIProvider(java.util.HashSet.class)
+class HashNativeSet<E> extends AbstractSet<E> {
 
     /** The item pool. */
-    private NativeObject items = new NativeObject();
+    private NativeSet set = new NativeSet();
 
     /**
      * Constructs a new, empty set; the backing <tt>HashMap</tt> instance has default initial
      * capacity (16) and load factor (0.75).
      */
-    public HashSet() {
+    public HashNativeSet() {
     }
 
     /**
@@ -41,7 +42,7 @@ class HashSet<E> extends AbstractSet<E> {
      * @param collection the collection whose elements are to be placed into this set
      * @throws NullPointerException if the specified collection is null
      */
-    public HashSet(Collection<? extends E> collection) {
+    public HashNativeSet(Collection<? extends E> collection) {
         this();
         addAll(collection);
     }
@@ -55,7 +56,7 @@ class HashSet<E> extends AbstractSet<E> {
      * @throws IllegalArgumentException if the initial capacity is less than zero, or if the load
      *             factor is nonpositive
      */
-    public HashSet(int initialCapacity, float loadFactor) {
+    public HashNativeSet(int initialCapacity, float loadFactor) {
         this();
     }
 
@@ -66,7 +67,7 @@ class HashSet<E> extends AbstractSet<E> {
      * @param initialCapacity the initial capacity of the hash table
      * @throws IllegalArgumentException if the initial capacity is less than zero
      */
-    public HashSet(int initialCapacity) {
+    public HashNativeSet(int initialCapacity) {
         this();
     }
 
@@ -81,7 +82,7 @@ class HashSet<E> extends AbstractSet<E> {
      * @throws IllegalArgumentException if the initial capacity is less than zero, or if the load
      *             factor is nonpositive
      */
-    HashSet(int initialCapacity, float loadFactor, boolean dummy) {
+    HashNativeSet(int initialCapacity, float loadFactor, boolean dummy) {
         this();
     }
 
@@ -90,7 +91,7 @@ class HashSet<E> extends AbstractSet<E> {
      */
     @Override
     public int size() {
-        return size;
+        return set.size();
     }
 
     /**
@@ -98,7 +99,7 @@ class HashSet<E> extends AbstractSet<E> {
      */
     @Override
     public boolean contains(Object item) {
-        return items.hasProperty(hash(item));
+        return set.has(item);
     }
 
     /**
@@ -106,13 +107,10 @@ class HashSet<E> extends AbstractSet<E> {
      */
     @Override
     public boolean add(E item) {
-        int hash = hash(item);
-
-        if (items.hasProperty(hash)) {
+        if (set.has(item)) {
             return false;
         } else {
-            size++;
-            items.setProperty(hash, item);
+            set.add(item);
             return true;
         }
     }
@@ -122,15 +120,7 @@ class HashSet<E> extends AbstractSet<E> {
      */
     @Override
     public boolean remove(Object item) {
-        int hash = hash(item);
-
-        if (!items.hasProperty(hash)) {
-            return false;
-        } else {
-            size--;
-            items.deleteProperty(hash);
-            return true;
-        }
+        return set.delete(item);
     }
 
     /**
@@ -138,8 +128,7 @@ class HashSet<E> extends AbstractSet<E> {
      */
     @Override
     public void clear() {
-        size = 0;
-        items = new NativeObject();
+        set.clear();
     }
 
     /**
@@ -147,7 +136,7 @@ class HashSet<E> extends AbstractSet<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new View(items.keys());
+        return new View();
     }
 
     /**
@@ -164,84 +153,12 @@ class HashSet<E> extends AbstractSet<E> {
     }
 
     /**
-     * <p>
-     * Compute hash.
-     * </p>
-     * 
-     * @param key
-     * @return
+     * @version 2015/02/28 15:36:17
      */
-    int hash(Object key) {
-        return key == null ? -1 : key.hashCode();
-    }
-
-    /**
-     * <p>
-     * Find the item which is equals to the specified item.
-     * </p>
-     * 
-     * @param item A item to find.
-     * @return A found item in this set.
-     */
-    E find(Object item) {
-        return (E) items.getProperty(hash(item));
-    }
-
-    /**
-     * <p>
-     * Add the item overwritely and return the previous item.
-     * </p>
-     * 
-     * @param item A item to add.
-     * @return A previous item or null.
-     */
-    E push(Object item) {
-        E previous = null;
-        int hash = hash(item);
-
-        if (items.hasProperty(hash)) {
-            previous = (E) items.getProperty(hash);
-        } else {
-            size++;
-        }
-
-        // assign property
-        items.setProperty(hash, item);
-
-        // API definition
-        return previous;
-    }
-
-    /**
-     * <p>
-     * Remove the item and return it.
-     * </p>
-     * 
-     * @param item A item to remove.
-     * @return A removed item or null.
-     */
-    E pull(Object item) {
-        E previous = null;
-        int hash = hash(item);
-
-        if (items.hasProperty(hash)) {
-            previous = (E) items.getProperty(hash);
-
-            size--;
-            items.deleteProperty(hash);
-        }
-
-        // API definition
-        return previous;
-    }
-
-    /**
-     * @version 2012/12/09 19:25:43
-     */
-    class View implements Iterator<E> {
+    class View implements Iterator<E>, Consumer<E> {
 
         /** The actual view. */
-        private final String[] keys;
+        private final NativeArray<E> items = new NativeArray();
 
         /** The curren position. */
         private int index = 0;
@@ -250,10 +167,10 @@ class HashSet<E> extends AbstractSet<E> {
         private E current;
 
         /**
-         * @param keys
+         * 
          */
-        private View(String[] keys) {
-            this.keys = keys;
+        private View() {
+            set.forEach(this);
         }
 
         /**
@@ -261,7 +178,7 @@ class HashSet<E> extends AbstractSet<E> {
          */
         @Override
         public boolean hasNext() {
-            return index < keys.length;
+            return index < items.length();
         }
 
         /**
@@ -269,9 +186,7 @@ class HashSet<E> extends AbstractSet<E> {
          */
         @Override
         public E next() {
-            current = (E) items.getProperty(keys[index++]);
-
-            return current;
+            return current = items.get(index++);
         }
 
         /**
@@ -280,8 +195,16 @@ class HashSet<E> extends AbstractSet<E> {
         @Override
         public void remove() {
             if (0 < index) {
-                HashSet.this.remove(current);
+                HashNativeSet.this.remove(current);
             }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(E item) {
+            items.push(item);
         }
     }
 }
