@@ -14,20 +14,35 @@
  * @return {Object} A created instance of the specified functional interface.
  */
 function λ(interfaceClass, interfaceMethodName, lambdaMethodName, lambdaMethodHolder, params) {
-  // create instance from interface definition
-  var instance = Object.create(interfaceClass.prototype);
+  // create lambda instance from interface definition
+  var lambda = Object.create(interfaceClass.prototype);
   
-  if (lambdaMethodHolder !== undefined) {
-    // assign lambda method with partial application (context and parameters)
-    instance[interfaceMethodName] = Function.prototype.bind.apply(lambdaMethodHolder[lambdaMethodName], [lambdaMethodHolder].concat(params));
-  } else {
-    instance[interfaceMethodName] = function() {
-      var args = Array.prototype.slice.call(arguments);
+  if (lambdaMethodName.charAt(0) === '$') {
+    // for constructor
+    lambda[interfaceMethodName] = function() {
+      // create new instance
+      var instance = Object.create(lambdaMethodHolder);
       
-      return args[0][lambdaMethodName].apply(args.shift(), args);
-    };
+      // invoke constructor
+      instance[lambdaMethodName].apply(instance, arguments);
+      
+      // return it
+      return instance;
+    };    
+  } else {
+    // for method
+    if (lambdaMethodHolder !== undefined) {
+      // assign lambda method with partial application (context and parameters)
+      lambda[interfaceMethodName] = Function.prototype.bind.apply(lambdaMethodHolder[lambdaMethodName], [lambdaMethodHolder].concat(params));
+    } else {
+      lambda[interfaceMethodName] = function() {
+        var args = Array.prototype.slice.call(arguments);
+        
+        return args[0][lambdaMethodName].apply(args.shift(), args);
+      };
+    }
   }
-  return instance; 
+  return lambda;
 }
 
 /**
@@ -158,11 +173,8 @@ function boot(global) {
 
       // This is actual counstructor of class to define.
       function Class() {
-        var params = Array.prototype.slice.call(arguments);
-        var name = params.pop();
-        
         // Invoke the specified constructor function.
-        this["$" + name].apply(this, params);
+        this["$" + arguments[arguments.length - 1]].apply(this, arguments);
       }
 
       // We must store static initialization function.

@@ -14,10 +14,12 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import js.lang.NativeObject;
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/05/30 20:38:55
  */
+@JavaAPIProvider(java.util.HashSet.class)
 class HashSet<E> extends AbstractSet<E> {
 
     /** The item count. */

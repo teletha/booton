@@ -16,12 +16,10 @@ import java.util.function.Consumer;
 
 import js.lang.NativeArray;
 import js.lang.NativeSet;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2015/02/28 15:03:04
  */
-@JavaAPIProvider(java.util.HashSet.class)
 class HashNativeSet<E> extends AbstractSet<E> {
 
     /** The item pool. */

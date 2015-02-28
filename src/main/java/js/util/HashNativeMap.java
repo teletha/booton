@@ -16,7 +16,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
+import js.lang.NativeArray;
 import js.lang.NativeMap;
 
 /**
@@ -180,7 +183,7 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return items;
+        return new Entries();
     }
 
     /**
@@ -190,25 +193,9 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
     }
 
     /**
-     * Computes key.hashCode() and spreads (XORs) higher bits of hash to lower. Because the table
-     * uses power-of-two masking, sets of hashes that vary only in bits above the current mask will
-     * always collide. (Among known examples are sets of Float keys holding consecutive whole
-     * numbers in small tables.) So we apply a transform that spreads the impact of higher bits
-     * downward. There is a tradeoff between speed, utility, and quality of bit-spreading. Because
-     * many common sets of hashes are already reasonably distributed (so don't benefit from
-     * spreading), and because we use trees to handle large sets of collisions in bins, we just XOR
-     * some shifted bits in the cheapest possible way to reduce systematic lossage, as well as to
-     * incorporate impact of the highest bits that would otherwise never be used in index
-     * calculations because of table bounds.
-     */
-    static final int hash(Object key) {
-        return key == null ? -1 : key.hashCode();
-    }
-
-    /**
      * @version 2012/12/09 21:55:48
      */
-    private static class SimpleEntry<K, V> implements Entry<K, V> {
+    private class SimpleEntry implements Entry<K, V> {
 
         /** The key. */
         private K key;
@@ -250,7 +237,7 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
             V previous = this.value;
 
             // set newly
-            this.value = value;
+            items.set(key, this.value = value);
 
             // API definition
             return previous;
@@ -262,6 +249,60 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
         @Override
         public int hashCode() {
             return key.hashCode();
+        }
+    }
+
+    /**
+     * @version 2015/02/28 22:51:25
+     */
+    private class Entries extends AbstractSet<Entry<K, V>> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int size() {
+            return items.size();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean contains(Object item) {
+            return items.has(((Entry<K, V>) item).getKey());
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
+            return new View<Entry<K, V>>((key, value) -> new SimpleEntry(key, value), this::remove);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean add(Entry<K, V> e) {
+            return false; // Don't support add operation.
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean remove(Object item) {
+            return items.delete(((Entry<K, V>) item).getKey());
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void clear() {
+            items.clear();
         }
     }
 
@@ -291,7 +332,7 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
          */
         @Override
         public Iterator<K> iterator() {
-            return new View(items.iterator(), true);
+            return new View<K>((key, value) -> key, this::remove);
         }
 
         /**
@@ -345,7 +386,7 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
          */
         @Override
         public Iterator<V> iterator() {
-            return new View(items.iterator(), false);
+            return new View<V>((key, value) -> value, this::remove);
         }
 
         /**
@@ -385,22 +426,30 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
     }
 
     /**
-     * @version 2012/12/09 20:55:48
+     * @version 2015/02/28 23:23:27
      */
-    private class View implements Iterator {
+    private class View<E> implements Iterator<E> {
 
-        /** The actual view. */
-        private final Iterator<Entry<K, V>> iterator;
+        /** The item holder. */
+        private final NativeArray<E> entries = new NativeArray();
 
-        /** The view mode. */
-        private final boolean useKey;
+        /** The remove operation. */
+        private final Consumer<E> remover;
+
+        /** The curren position. */
+        private int index = 0;
+
+        /** The current selected item. */
+        private E current;
 
         /**
-         * @param iterator
+         * @param extractor
+         * @param remover
          */
-        private View(Iterator<Entry<K, V>> iterator, boolean useKey) {
-            this.iterator = iterator;
-            this.useKey = useKey;
+        private View(BiFunction<K, V, E> extractor, Consumer<E> remover) {
+            this.remover = remover;
+
+            items.forEach((value, key) -> entries.push(extractor.apply(key, value)));
         }
 
         /**
@@ -408,21 +457,15 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
          */
         @Override
         public boolean hasNext() {
-            return iterator.hasNext();
+            return index < entries.length();
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public Object next() {
-            Entry entry = iterator.next();
-
-            if (useKey) {
-                return entry.getKey();
-            } else {
-                return entry.getValue();
-            }
+        public E next() {
+            return current = entries.get(index++);
         }
 
         /**
@@ -430,7 +473,9 @@ public class HashNativeMap<K, V> extends AbstractMap<K, V> {
          */
         @Override
         public void remove() {
-            iterator.remove();
+            if (0 < index && remover != null) {
+                remover.accept(current);
+            }
         }
     }
 }

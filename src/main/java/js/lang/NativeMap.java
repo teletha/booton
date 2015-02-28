@@ -66,10 +66,8 @@ public class NativeMap<K, V> {
      * @param value The value of the element to add to the Map object.
      * @return The Map object.
      */
-    public NativeMap<K, V> set(K key, V value) {
+    public void set(K key, V value) {
         container.put(key, value);
-
-        return this;
     }
 
     /**

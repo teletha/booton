@@ -156,8 +156,8 @@ public class JavascriptClassDefinition {
         /**
          * Delegation method.
          */
-        public Object jsFunction_set(Object key, Object value) {
-            return map.set(key, value);
+        public void jsFunction_set(Object key, Object value) {
+            map.set(key, value);
         }
 
         /**
