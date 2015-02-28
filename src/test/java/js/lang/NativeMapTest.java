@@ -80,7 +80,7 @@ public class NativeMapTest {
 
     @Test
     public void keys() {
-        System.out.println("start");
+        System.out.println();
         NativeMap<String, String> map = new NativeMap();
         map.set("a", "A");
         map.set("b", "B");

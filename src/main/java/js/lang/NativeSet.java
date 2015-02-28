@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@ package js.lang;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import booton.translator.Translator;
 
@@ -19,7 +20,7 @@ import booton.translator.Translator;
  * Javascript native Set implementation in Java.
  * </p>
  * 
- * @version 2012/12/08 9:52:59
+ * @version 2015/02/28 14:19:26
  */
 public class NativeSet<T> extends NativeObject {
 
@@ -28,13 +29,24 @@ public class NativeSet<T> extends NativeObject {
 
     /**
      * <p>
+     * The {@link NativeSet} lets you store unique values of any type, whether primitive values or
+     * object references.
+     * </p>
+     */
+    public NativeSet() {
+    }
+
+    /**
+     * <p>
      * Adds the value to {@link NativeSet}.
      * </p>
      * 
-     * @param value
+     * @param value The value of the element to add to the {@link NativeSet}.
      */
-    public void add(T value) {
+    public NativeSet<T> add(T value) {
         container.add(value);
+
+        return this;
     }
 
     /**
@@ -44,8 +56,17 @@ public class NativeSet<T> extends NativeObject {
      * 
      * @param value
      */
-    public void delete(T value) {
-        container.remove(value);
+    public boolean delete(T value) {
+        return container.remove(value);
+    }
+
+    /**
+     * <p>
+     * Removes all elements from a {@link NativeSet} object.
+     * </p>
+     */
+    public void clear() {
+        container.clear();
     }
 
     /**
@@ -53,8 +74,9 @@ public class NativeSet<T> extends NativeObject {
      * Returns a boolean asserting whether the value has been added to {@link NativeSet} or not.
      * </p>
      * 
-     * @param value
-     * @return
+     * @param value The value to test for presence in the {@link NativeSet}.
+     * @return Returns true if an element with the specified value exists in the {@link NativeSet}
+     *         otherwise false.
      */
     public boolean has(T value) {
         return container.contains(value);
@@ -72,6 +94,17 @@ public class NativeSet<T> extends NativeObject {
     }
 
     /**
+     * <p>
+     * Executes a provided function once per each value in the {@link NativeMap}.
+     * </p>
+     * 
+     * @param consumer Function to execute for each element.
+     */
+    public void forEach(Consumer<? super T> consumer) {
+        container.forEach(consumer);
+    }
+
+    /**
      * @version 2012/12/08 9:56:53
      */
     @SuppressWarnings("unused")
@@ -79,10 +112,20 @@ public class NativeSet<T> extends NativeObject {
 
         /**
          * <p>
+         * The {@link NativeSet} lets you store unique values of any type, whether primitive values
+         * or object references.
+         * </p>
+         */
+        public String NativeSet() {
+            return "new Set()";
+        }
+
+        /**
+         * <p>
          * Adds the value to {@link NativeSet}.
          * </p>
          * 
-         * @param value
+         * @param value The value of the element to add to the {@link NativeSet}.
          */
         public String add(Object value) {
             return that + ".add(" + param(0) + ")";
@@ -101,11 +144,21 @@ public class NativeSet<T> extends NativeObject {
 
         /**
          * <p>
+         * Removes all elements from a {@link NativeSet} object.
+         * </p>
+         */
+        public String clear() {
+            return that + ".clear()";
+        }
+
+        /**
+         * <p>
          * Returns a boolean asserting whether the value has been added to {@link NativeSet} or not.
          * </p>
          * 
-         * @param value
-         * @return
+         * @param value The value to test for presence in the {@link NativeSet}.
+         * @return Returns true if an element with the specified value exists in the
+         *         {@link NativeSet} otherwise false.
          */
         public String has(Object value) {
             return that + ".has(" + param(0) + ")";
@@ -120,6 +173,17 @@ public class NativeSet<T> extends NativeObject {
          */
         public String size() {
             return that + ".size";
+        }
+
+        /**
+         * <p>
+         * Executes a provided function once per each value in the {@link NativeMap}.
+         * </p>
+         * 
+         * @param consumer Function to execute for each element.
+         */
+        public String forEach(Consumer consumer) {
+            return that + ".forEach(" + function(0) + ")";
         }
     }
 }
