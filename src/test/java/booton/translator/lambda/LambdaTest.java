@@ -216,4 +216,22 @@ public class LambdaTest {
         BiFunction<HashMap<String, String>, String, String> function = HashMap::get;
         assert function.apply(map, "1").equals("one");
     }
+
+    @Test
+    public void defaultMethod() throws Exception {
+        Default instance = new Default() {
+        };
+        Supplier<String> supplier = instance::value;
+        assert supplier.get().equals("test");
+    }
+
+    /**
+     * @version 2015/03/01 0:41:00
+     */
+    private static interface Default {
+
+        default String value() {
+            return "test";
+        }
+    }
 }
