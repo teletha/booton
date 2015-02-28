@@ -11,6 +11,7 @@ package js.lang;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import booton.translator.Translator;
 
@@ -105,25 +106,15 @@ public class NativeMap<K, V> {
 
     /**
      * <p>
-     * Returns a new Iterator object that contains the keys for each element in the Map object in
-     * insertion order.
+     * Executes a provided function once per each key/value pair in the Map object, in insertion
+     * order.
      * </p>
+     *
+     * @param consumer A consumer to execute for each element.
      */
-    public NativeIterator<K> keys() {
-        return new NativeIterator(container.keySet().iterator());
+    public void forEach(BiConsumer<V, K> consumer) {
+        container.forEach((key, value) -> consumer.accept(value, key));
     }
-
-    // /**
-    // * <p>
-    // * Executes a provided function once per each key/value pair in the Map object, in insertion
-    // * order.
-    // * </p>
-    // *
-    // * @param consumer A consumer to execute for each element.
-    // */
-    // public void forEach(BiConsumer<K, V> consumer) {
-    // container.forEach(consumer);
-    // }
 
     /**
      * @version 2012/12/08 9:56:53
@@ -215,12 +206,14 @@ public class NativeMap<K, V> {
 
         /**
          * <p>
-         * Returns a new Iterator object that contains the keys for each element in the Map object
-         * in insertion order.
+         * Executes a provided function once per each key/value pair in the Map object, in insertion
+         * order.
          * </p>
+         *
+         * @param consumer A consumer to execute for each element.
          */
-        public String keys() {
-            return that + ".keys()";
+        public String forEach(BiConsumer consumer) {
+            return that + ".forEach(" + function(0) + ")";
         }
     }
 }

@@ -18,12 +18,10 @@ import java.util.Map;
 import java.util.Set;
 
 import js.lang.NativeMap;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2015/02/28 15:56:27
  */
-@JavaAPIProvider(java.util.HashMap.class)
 public class HashNativeMap<K, V> extends AbstractMap<K, V> {
 
     /**

@@ -182,10 +182,15 @@ public class JavascriptClassDefinition {
         }
 
         /**
-         * Delegation method.
+         * <p>
+         * Executes a provided function once per each key/value pair in the Map object, in insertion
+         * order.
+         * </p>
+         *
+         * @param consumer A consumer to execute for each element.
          */
-        public Object jsFunction_keys() {
-            return map.keys();
+        public void jsFunction_forEach(Function consumer) {
+            map.forEach((value, key) -> consumer.call(Context.enter(), this, this, new Object[] {value, key}));
         }
 
         /**
