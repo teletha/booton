@@ -12,9 +12,12 @@ package booton.soeur;
 import js.lang.NativeIntl;
 import js.lang.NativeIntl.DateTimeFormat.Option;
 import js.lang.NativeMap;
+import js.lang.NativeSet;
 import kiss.I;
 import kiss.model.Model;
 import kiss.model.Property;
+import net.sourceforge.htmlunit.corejs.javascript.Context;
+import net.sourceforge.htmlunit.corejs.javascript.Function;
 import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
@@ -59,6 +62,83 @@ public class JavascriptClassDefinition {
     }
 
     /**
+     * @version 2015/02/28 14:29:23
+     */
+    public static class Set extends Helper {
+
+        /** The delegator. */
+        private NativeSet set = new NativeSet();
+
+        /**
+         * <p>
+         * Returns the number of key/value pairs in {@link NativeMap}.
+         * </p>
+         * 
+         * @return
+         */
+        public int jsGet_size() {
+            return set.size();
+        }
+
+        /**
+         * <p>
+         * Adds the value to {@link NativeSet}.
+         * </p>
+         * 
+         * @param value The value of the element to add to the {@link NativeSet}.
+         */
+        public Set jsFunction_add(Object value) {
+            set.add(value);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Sets the value for the key in {@link NativeSet}.
+         * </p>
+         * 
+         * @param value
+         */
+        public boolean jsFunction_delete(Object value) {
+            return set.delete(value);
+        }
+
+        /**
+         * <p>
+         * Removes all elements from a {@link NativeSet} object.
+         * </p>
+         */
+        public void jsFunction_clear() {
+            set.clear();
+        }
+
+        /**
+         * <p>
+         * Returns a boolean asserting whether the value has been added to {@link NativeSet} or not.
+         * </p>
+         * 
+         * @param value The value to test for presence in the {@link NativeSet}.
+         * @return Returns true if an element with the specified value exists in the
+         *         {@link NativeSet} otherwise false.
+         */
+        public boolean jsFunction_has(Object value) {
+            return set.has(value);
+        }
+
+        /**
+         * <p>
+         * Executes a provided function once per each value in the {@link NativeMap}.
+         * </p>
+         * 
+         * @param consumer Function to execute for each element.
+         */
+        public void jsFunction_forEach(Function consumer) {
+            set.forEach(value -> consumer.call(Context.enter(), this, this, new Object[] {value}));
+        }
+    }
+
+    /**
      * @version 2015/02/27 16:04:28
      */
     public static class Map extends Helper {
@@ -66,30 +146,51 @@ public class JavascriptClassDefinition {
         /** The delegator. */
         private NativeMap map = new NativeMap();
 
+        /**
+         * Delegation method.
+         */
         public Object jsFunction_get(Object key) {
             return map.get(key);
         }
 
+        /**
+         * Delegation method.
+         */
         public Object jsFunction_set(Object key, Object value) {
             return map.set(key, value);
         }
 
+        /**
+         * Delegation method.
+         */
         public boolean jsFunction_has(Object key) {
             return map.has(key);
         }
 
+        /**
+         * Delegation method.
+         */
         public Object jsFunction_delete(Object key) {
             return map.delete(key);
         }
 
+        /**
+         * Delegation method.
+         */
         public void jsFunction_clear() {
             map.clear();
         }
 
+        /**
+         * Delegation method.
+         */
         public Object jsFunction_keys() {
             return map.keys();
         }
 
+        /**
+         * Delegation method.
+         */
         public int jsGet_size() {
             return map.size();
         }
