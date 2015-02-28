@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Nameless Production Committee
+ * Copyright (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -9,7 +9,7 @@
  */
 package js.lang;
 
-import js.lang.NativeIterator.Result;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/04/17 13:05:52
+ * @version 2015/02/28 20:23:10
  */
 @RunWith(ScriptRunner.class)
 public class NativeMapTest {
@@ -79,18 +79,13 @@ public class NativeMapTest {
     }
 
     @Test
-    public void keys() {
-        System.out.println();
-        NativeMap<String, String> map = new NativeMap();
-        map.set("a", "A");
-        map.set("b", "B");
+    public void forEach() {
+        NativeMap<Integer, Integer> map = new NativeMap();
+        map.set(1, 10);
+        map.set(2, 20);
 
-        NativeIterator<String> keys = map.keys();
-        Result result = keys.next();
-
-        while (!result.done()) {
-            System.out.println(result.value());
-            result = keys.next();
-        }
+        AtomicInteger sum = new AtomicInteger();
+        map.forEach((value, key) -> sum.addAndGet(value));
+        assert sum.get() == 30;
     }
 }
