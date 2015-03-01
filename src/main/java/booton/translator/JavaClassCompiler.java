@@ -11,6 +11,9 @@ package booton.translator;
 
 import static booton.translator.Javascript.*;
 import static jdk.internal.org.objectweb.asm.Opcodes.*;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
@@ -26,6 +29,9 @@ class JavaClassCompiler extends ClassVisitor {
 
     /** The javascript object code. */
     private final ScriptWriter code;
+
+    /** The local id manager. */
+    private final AtomicInteger virtualStructureLocalId = new AtomicInteger();
 
     /**
      * JavaClassCompiler
@@ -123,7 +129,7 @@ class JavaClassCompiler extends ClassVisitor {
         CompilerRecorder.recordMethodName(name);
 
         // start compiling method
-        return new JavaMethodCompiler(script, code, computed, desc, isStatic);
+        return new JavaMethodCompiler(script, code, computed, desc, isStatic, virtualStructureLocalId);
     }
 
     /**
