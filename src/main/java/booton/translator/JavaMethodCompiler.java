@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 import jdk.internal.org.objectweb.asm.Attribute;
@@ -259,7 +260,7 @@ class JavaMethodCompiler extends MethodVisitor {
     private Set<Node> synchronizer = new HashSet();
 
     /** The local id of the virtual structure. */
-    private int virtualStructureLocalId = 1;
+    private AtomicInteger virtualStructureLocalId;
 
     /**
      * @param script A target script to compile.
@@ -268,7 +269,7 @@ class JavaMethodCompiler extends MethodVisitor {
      * @param description A method description.
      * @param isStatic A static flag.
      */
-    JavaMethodCompiler(Javascript script, ScriptWriter code, String name, String description, boolean isStatic) {
+    JavaMethodCompiler(Javascript script, ScriptWriter code, String name, String description, boolean isStatic, AtomicInteger virtualStructureLocalId) {
         super(ASM5);
 
         this.script = script;
@@ -277,6 +278,7 @@ class JavaMethodCompiler extends MethodVisitor {
         this.returnType = Type.getReturnType(description);
         this.parameterTypes = Type.getArgumentTypes(description);
         this.variables = new LocalVariables(isStatic);
+        this.virtualStructureLocalId = virtualStructureLocalId;
 
         Type[] parameters = Type.getArgumentTypes(description);
 
@@ -486,7 +488,7 @@ class JavaMethodCompiler extends MethodVisitor {
             if (owner == VirtualStructure.class && name.endsWith("box") && script.source != VirtualStructure.class && script.source != ContainerDescriptor.class) {
                 ArrayList<Operand> context = new ArrayList();
                 context.add(current.remove(0)); // "this" context
-                context.add(new OperandNumber(virtualStructureLocalId++)); // local id parameter
+                context.add(new OperandNumber(virtualStructureLocalId.getAndIncrement()));
                 current.addOperand(translator.translateMethod(owner, name, "(I)".concat(desc), new Class[] {int.class}, context), type);
             } else {
                 current.addOperand(translator.translateField(owner, name, current.remove(0)), type);
