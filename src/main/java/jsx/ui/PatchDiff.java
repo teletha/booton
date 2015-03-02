@@ -46,6 +46,7 @@ class PatchDiff {
         List<Patch> diff = diff(prev, next);
 
         for (int i = 0; i < diff.size(); i++) {
+            System.out.println(diff.get(i));
             diff.get(i).apply();
         }
         prev.dispose();
@@ -222,6 +223,7 @@ class PatchDiff {
                     if (index == -1) {
                         patches.add(new InsertChild(context, null, nextItem));
                     } else {
+                        System.out.println("Move " + prev.items.get(index));
                         patches.add(new MoveChild(context, prev.items.get(index).dom));
                     }
                 }

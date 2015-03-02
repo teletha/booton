@@ -19,6 +19,22 @@ import js.dom.NodeComparator;
  */
 public class DiffTestBase {
 
+    protected VirtualElement virtualize(Widget widget) {
+        return widget.virtualize();
+    }
+
+    /**
+     * <p>
+     * Monitor the specified widget and inspect diff operations.
+     * </p>
+     * 
+     * @param widget A target widget to monitor.
+     * @return
+     */
+    protected DiffOperations monitor(Widget widget) {
+        return new DiffOperations(widget);
+    }
+
     /**
      * <p>
      * Assert structure diff.
@@ -45,8 +61,10 @@ public class DiffTestBase {
         Node prevNode = prev.dom != null ? prev.dom : prev.materialize();
         Node nextNode = next.dom != null ? next.dom : next.materialize();
         clean(next);
-
+        System.out.println(prevNode);
         List<Patch> ops = PatchDiff.diff(prev, next);
+        System.out.println(ops.size());
+        System.out.println(ops);
 
         for (int i = 0; i < ops.size(); i++) {
             try {
@@ -58,11 +76,17 @@ public class DiffTestBase {
                 throw error;
             }
         }
-
+        System.out.println(prevNode);
         String message = message(prevNode, nextNode, ops, ops.size());
 
         assert expectedOperationCount == ops.size() : message;
-        NodeComparator.equals(prevNode, nextNode);
+
+        try {
+            NodeComparator.equals(prevNode, nextNode);
+        } catch (AssertionError e) {
+            e.addSuppressed(new Error(message));
+            throw e;
+        }
     }
 
     /**
@@ -113,5 +137,36 @@ public class DiffTestBase {
             }
         }
         return message.toString();
+    }
+
+    /**
+     * @version 2015/03/02 15:24:04
+     */
+    public static class DiffOperations {
+
+        /** The target widget. */
+        private final Widget widget;
+
+        /** The previous virtual element. */
+        private VirtualElement virtual;
+
+        /**
+         * Hide constructor.
+         */
+        private DiffOperations(Widget widget) {
+            this.widget = widget;
+            this.virtual = widget.virtualize();
+        }
+
+        /**
+         * <p>
+         * Test the number of diff operations.
+         * </p>
+         * 
+         * @param count An expected number of diff operations.
+         */
+        public void assertCount(int count) {
+
+        }
     }
 }
