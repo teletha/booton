@@ -1,5 +1,5 @@
 /*
- * Copynext (C) 2014 Nameless Production Committee
+ * Copynext (C) 2015 Nameless Production Committee
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import jsx.ui.Patch.ReplaceText;
 import jsx.ui.Patch.SetInlineStyle;
 
 /**
- * @version 2014/10/07 12:49:34
+ * @version 2015/03/04 11:20:53
  */
 class PatchDiff {
 
@@ -46,7 +46,6 @@ class PatchDiff {
         List<Patch> diff = diff(prev, next);
 
         for (int i = 0; i < diff.size(); i++) {
-            System.out.println(diff.get(i));
             diff.get(i).apply();
         }
         prev.dispose();
@@ -223,8 +222,19 @@ class PatchDiff {
                     if (index == -1) {
                         patches.add(new InsertChild(context, null, nextItem));
                     } else {
-                        System.out.println("Move " + prev.items.get(index));
-                        patches.add(new MoveChild(context, prev.items.get(index).dom));
+                        VirtualNode prevItem = prev.items.get(index);
+
+                        /**
+                         * {@link VirtualNode#dom}
+                         * <p>
+                         * We passes the Real DOM from the previous Virtual DOM to the next Virtual
+                         * DOM. To tell the truth, we don't want to manipulate Real DOM in here. But
+                         * here is the best place to pass the reference.
+                         * </p>
+                         */
+                        nextItem.dom = prevItem.dom;
+
+                        patches.add(new MoveChild(context, prevItem.dom));
                     }
                 }
             } else {
@@ -267,7 +277,17 @@ class PatchDiff {
                         if (nextItemInPrev == -1) {
                             if (prevItemInNext == -1) {
                                 if (prevItem instanceof VirtualText && nextItem instanceof VirtualText) {
+                                    /**
+                                     * {@link VirtualNode#dom}
+                                     * <p>
+                                     * We passes the Real DOM from the previous Virtual DOM to the
+                                     * next Virtual DOM. To tell the truth, we don't want to
+                                     * manipulate Real DOM in here. But here is the best place to
+                                     * pass the reference.
+                                     * </p>
+                                     */
                                     nextItem.dom = prevItem.dom;
+
                                     patches.add(new ReplaceText(prevItem, (VirtualText) nextItem));
                                 } else {
                                     patches.add(new ReplaceChild(context, prevItem, nextItem));
