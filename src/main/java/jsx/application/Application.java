@@ -151,9 +151,7 @@ public abstract class Application {
          */
         private void dispatch(Page page) {
             // fire page unload event
-            if (page != null) {
-                Publishable.Global.publish(new PageUnload(page));
-            }
+            Publishable.Global.publish(new PageUnload(page));
 
             // fire page load event
             // window.trigger(UIAction.PageLoad);

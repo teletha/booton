@@ -315,10 +315,6 @@ class ScriptWriter {
         } else {
 
             String value = fragment.toString();
-            if (value == null) {
-                System.out.println(buffer);
-                System.out.println(fragment);
-            }
             int length = value.length();
 
             if (length != 0) {
