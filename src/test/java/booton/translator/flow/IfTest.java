@@ -362,7 +362,7 @@ public class IfTest extends ScriptTester {
 
             boolean act(String attrs) {
                 if (attrs == null) {
-                    return attrs != null;
+                    return true;
                 } else {
                     return !attrs.equals("");
                 }

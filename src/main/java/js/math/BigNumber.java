@@ -274,7 +274,7 @@ class BigNumber {
         boolean shouldSwap = false;
 
         if (diff != 0) {
-            NativeIntArray min = null;
+            NativeIntArray min = new NativeIntArray();
 
             if (0 < diff) {
                 // "large" is larger than "small", so we should expand "small".

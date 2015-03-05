@@ -43,6 +43,7 @@ public class InstanceOfTest extends ScriptTester {
 
     private static class Child1 extends Base {
 
+        @Override
         public boolean act() {
             return this instanceof Child1;
         }
@@ -55,6 +56,7 @@ public class InstanceOfTest extends ScriptTester {
 
     private static class Child2 extends Base {
 
+        @Override
         public boolean act() {
             return this instanceof Base;
         }
@@ -132,6 +134,7 @@ public class InstanceOfTest extends ScriptTester {
     public void StringNull() {
         test(new Scriptable() {
 
+            @SuppressWarnings("null")
             public boolean act() {
                 String value = null;
                 return value instanceof String;
@@ -143,6 +146,7 @@ public class InstanceOfTest extends ScriptTester {
     public void ConcreateNull() {
         test(new Scriptable() {
 
+            @SuppressWarnings("null")
             public boolean act() {
                 ArrayList value = null;
                 return value instanceof ArrayList;
@@ -154,6 +158,7 @@ public class InstanceOfTest extends ScriptTester {
     public void InterfaceNull() {
         test(new Scriptable() {
 
+            @SuppressWarnings("null")
             public boolean act() {
                 List value = null;
                 return value instanceof List;

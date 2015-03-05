@@ -664,8 +664,7 @@ class Node {
                         buffer.write(variable, "=", "$;").line();
                         process(current.node, buffer);
                     } else {
-                        String condition = current.exception == Throwable.class ? "(true)"
-                                : "($ instanceof " + Javascript.computeClassName(current.exception) + ")";
+                        String condition = current.exception == Throwable.class ? "(true)" : "($ instanceof " + Javascript.computeClassName(current.exception) + ")";
                         buffer.write("if", condition, "{");
                         buffer.write(variable, "=", "$;").line();
                         process(current.node, buffer);
@@ -686,8 +685,7 @@ class Node {
 
                 if (exit != null) {
                     if (Debugger.isEnable()) {
-                        buffer
-                                .comment("Start " + block.start.id + "  End " + block.end.id + "   Catcher " + block.catcher.id);
+                        buffer.comment("Start " + block.start.id + "  End " + block.end.id + "   Catcher " + block.catcher.id);
                     }
                     buffer.comment("ext block " + exit.id);
                     process(exit, buffer);
@@ -1005,8 +1003,7 @@ class Node {
                 // continue
                 if (loop.hasHeader(next) && hasDominator(loop.entrance)) {
                     if (Debugger.isEnable()) {
-                        buffer
-                                .comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
+                        buffer.comment(id + " -> " + next.id + " continue to " + loop.entrance.id + " (" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
                     }
 
                     String label = loop.computeLabelFor(next);
@@ -1022,8 +1019,7 @@ class Node {
                     // check whether the current node connects to the exit node directly or not
                     if (loop.exit.incoming.contains(this)) {
                         if (Debugger.isEnable()) {
-                            buffer
-                                    .comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
+                            buffer.comment(id + " -> " + next.id + " break to " + loop.entrance.id + "(" + next.currentCalls + " of " + requiredCalls + ")  " + loop);
                         }
                         buffer.append("break", loop.computeLabelFor(next), ";").line();
                     }
@@ -1032,9 +1028,7 @@ class Node {
             }
 
             if (Debugger.isEnable()) {
-                buffer
-                        .comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")   " + (loop != null ? loop
-                                : ""));
+                buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")   " + (loop != null ? loop : ""));
             }
 
             // normal process
@@ -1185,21 +1179,23 @@ class Node {
             // search exit node of this infinite loop structure (depth-first search)
             //
             // startfrom base node
-            Deque<Node> candidates = new ArrayDeque(base.outgoing);
+            if (base != null) {
+                Deque<Node> candidates = new ArrayDeque(base.outgoing);
 
-            // record accessed nodes to avoid second access
-            Set<Node> recorder = new HashSet(entrance.incoming);
-            recorder.add(entrance);
+                // record accessed nodes to avoid second access
+                Set<Node> recorder = new HashSet(entrance.incoming);
+                recorder.add(entrance);
 
-            while (!candidates.isEmpty()) {
-                Node node = candidates.pollFirst();
+                while (!candidates.isEmpty()) {
+                    Node node = candidates.pollFirst();
 
-                if (recorder.add(node)) {
-                    if (!node.hasDominator(base)) {
-                        exit = node;
-                        break;
-                    } else {
-                        candidates.addAll(node.outgoing);
+                    if (recorder.add(node)) {
+                        if (!node.hasDominator(base)) {
+                            exit = node;
+                            break;
+                        } else {
+                            candidates.addAll(node.outgoing);
+                        }
                     }
                 }
             }
