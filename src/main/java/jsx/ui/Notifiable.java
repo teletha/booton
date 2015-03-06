@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  * @version 2015/03/05 9:45:01
  */
 @Documented
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Notifiable {
 }

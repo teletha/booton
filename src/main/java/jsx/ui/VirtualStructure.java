@@ -216,7 +216,12 @@ public final class VirtualStructure {
     }
 
     private void process(VirtualElement container, Object child) {
-        if (child.equals("\r\n")) {
+        if (child instanceof Widget) {
+            Widget widget = (Widget) child;
+            VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+            container.items.push(virtualize);
+            widget.assemble(new VirtualStructure(virtualize));
+        } else if (child.equals("\r\n")) {
             container.items.push(new VirtualElement(0, "br"));
         } else {
             container.items.push(new VirtualText(String.valueOf(child)));

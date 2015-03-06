@@ -7,20 +7,19 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.piece;
 
-import java.util.List;
-import java.util.function.Consumer;
+import jsx.style.Style;
 
 /**
- * @version 2015/03/05 9:44:28
+ * @version 2015/03/06 15:31:03
  */
-public abstract class NotifiableModel<M extends NotifiableModel> {
+public class StyleProperty {
 
-    /** The event listeners. */
-    private List<Consumer<M>> listeners;
-
-    public void listen(Consumer<M> listener) {
-
+    /**
+     * @param shown
+     */
+    public StyleProperty(Style style) {
     }
+
 }
