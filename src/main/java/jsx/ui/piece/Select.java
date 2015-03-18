@@ -14,9 +14,7 @@ import static jsx.ui.piece.SlidableViewStyle.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.SingleSelectionModel;
 
 import jsx.ui.VirtualStructure;
@@ -34,20 +32,11 @@ public class Select<M> extends Widget {
     public final SingleSelectionModel<M> selection;
 
     /** The current slide state. */
-    private final BooleanProperty shown = new SimpleBooleanProperty();
-
-    private final StyleProperty show = new StyleProperty(Shown);
+    public final StyleProperty shown = new StyleProperty(Shown);
 
     private final Input input = UI.input();
 
-    private final Button button = UI.button().label("↓").click(() -> {
-        shown.setValue(!shown.get());
-        if (shown.get()) {
-            System.out.println("Open");
-        } else {
-            System.out.println("Close");
-        }
-    });
+    private final Button button = UI.button().label("↓").click(shown::toggle);
 
     /**
      * @param values
@@ -64,7 +53,7 @@ public class Select<M> extends Widget {
     protected void virtualize(VirtualStructure 〡) {
         〡.vbox.〡(null, () -> {
             〡.nbox.〡(null, input, button);
-            〡.vbox.〡(ViewableArea.withIf(shown.get(), Shown), () -> {
+            〡.vbox.〡(ViewableArea.with(shown), () -> {
                 〡.hbox.〡(Slider, () -> {
                     〡.vbox.〡(null, values, value -> {
                         〡.nbox.〡(null, value);

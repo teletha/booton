@@ -16,7 +16,7 @@ import java.util.Optional;
 import js.lang.NativeArray;
 
 /**
- * @version 2015/01/14 13:11:32
+ * @version 2015/03/18 10:15:35
  */
 public class DualList<K, V> {
 
@@ -134,6 +134,16 @@ public class DualList<K, V> {
             }
         }
         return this;
+    }
+
+    /**
+     * <p>
+     * Remove all items.
+     * </p>
+     */
+    public void clear() {
+        keys.clear();
+        values.clear();
     }
 
     /**
