@@ -182,7 +182,7 @@ public abstract class Widget {
      * if present .
      * </p>
      */
-    final VirtualElement virtualize() {
+    protected VirtualElement virtualize() {
         VirtualStructure structure = new VirtualStructure();
 
         // assemble the virtual structure
@@ -350,7 +350,7 @@ public abstract class Widget {
         private final Widget widget;
 
         /** The virtual root element. */
-        private VirtualElement virtual = new VirtualElement(0, "div");
+        private VirtualElement virtual = new VirtualElement(0, null, "div");
 
         /**
          * @param root A target to DOM element to render widget.
