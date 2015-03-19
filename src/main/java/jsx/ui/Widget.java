@@ -350,7 +350,7 @@ public abstract class Widget {
         private final Widget widget;
 
         /** The virtual root element. */
-        private VirtualElement virtual = new VirtualElement(0, null, "div");
+        private VirtualElement virtual = new VirtualElement(0, "div");
 
         /**
          * @param root A target to DOM element to render widget.
