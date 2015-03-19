@@ -23,14 +23,6 @@ import jsx.ui.Widget.Listener;
  */
 public class VirtualElement extends VirtualNode<Element> {
 
-    /** SVG namespace uri. */
-    private static final String SVGNS = "http://www.w3.org/2000/svg";
-
-    private static final NativeArray<String> SVG = new NativeArray(new String[] {"svg", "circle"});
-
-    /** The node namespace uri. */
-    final String namespace;
-
     /** The node name. */
     final String name;
 
@@ -51,10 +43,9 @@ public class VirtualElement extends VirtualNode<Element> {
      * @param namespace
      * @param name
      */
-    VirtualElement(int id, String namespace, String name) {
+    VirtualElement(int id, String name) {
         super(id);
 
-        this.namespace = namespace;
         this.name = name;
     }
 
@@ -63,10 +54,10 @@ public class VirtualElement extends VirtualNode<Element> {
      */
     @Override
     Element materialize() {
-        if (namespace == null) {
-            dom = document.createElement(name);
+        if (name.startsWith("s:")) {
+            dom = document.createElementNS("http://www.w3.org/2000/svg", name);
         } else {
-            dom = document.createElementNS(namespace, name);
+            dom = document.createElement(name);
         }
 
         // assign attributes

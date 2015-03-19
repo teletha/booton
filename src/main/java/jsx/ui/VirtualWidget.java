@@ -24,7 +24,7 @@ class VirtualWidget extends VirtualElement {
      * @param widget
      */
     protected VirtualWidget(int id, Widget widget) {
-        super(id, null, "widget");
+        super(id, "widget");
 
         this.widget = widget;
     }

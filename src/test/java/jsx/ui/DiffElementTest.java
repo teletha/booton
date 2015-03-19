@@ -293,7 +293,7 @@ public class DiffElementTest extends DiffTestBase {
      * @return
      */
     private static VirtualElement e(String key, Map<String, String> attributes, VirtualNode... children) {
-        VirtualElement e = new VirtualElement(key.hashCode(), null, key);
+        VirtualElement e = new VirtualElement(key.hashCode(), key);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
             e.attributes.set(attribute.getKey(), attribute.getValue());
@@ -315,7 +315,7 @@ public class DiffElementTest extends DiffTestBase {
      * @return
      */
     private static VirtualElement e(String key, Map<String, String> attributes, List<Style> classes, VirtualNode... children) {
-        VirtualElement e = new VirtualElement(key.hashCode(), null, key);
+        VirtualElement e = new VirtualElement(key.hashCode(), key);
 
         for (Entry<String, String> attribute : attributes.entrySet()) {
             e.attributes.set(attribute.getKey(), attribute.getValue());
