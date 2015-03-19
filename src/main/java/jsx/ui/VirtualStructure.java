@@ -38,7 +38,7 @@ public final class VirtualStructure {
      * 
      * @see #hbox(int)
      */
-    public final ContainerDescriptor hbox = new ContainerDescriptor("hbox", HBOX);
+    public final ContainerDescriptor hbox = new ContainerDescriptor(null, "hbox", HBOX);
 
     /**
      * <p>
@@ -50,7 +50,7 @@ public final class VirtualStructure {
      * 
      * @see #vbox(int)
      */
-    public final ContainerDescriptor sbox = new ContainerDescriptor("sbox", SBOX);
+    public final ContainerDescriptor sbox = new ContainerDescriptor(null, "sbox", SBOX);
 
     /**
      * <p>
@@ -62,7 +62,7 @@ public final class VirtualStructure {
      * 
      * @see #sbox(int)
      */
-    public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX);
+    public final ContainerDescriptor vbox = new ContainerDescriptor(null, "vbox", VBOX);
 
     /**
      * <p>
@@ -74,7 +74,7 @@ public final class VirtualStructure {
      * 
      * @see #sbox(int)
      */
-    public final ContainerDescriptor nbox = new ContainerDescriptor("span", NBOX);
+    public final ContainerDescriptor nbox = new ContainerDescriptor(null, "span", NBOX);
 
     /** The descriptor of properties. */
     public final AttributeDescriptor attr = new AttributeDescriptor();
@@ -98,7 +98,7 @@ public final class VirtualStructure {
      * 
      */
     public VirtualStructure() {
-        this(new VirtualElement(0, "div"));
+        this(new VirtualElement(0, null, "div"));
     }
 
     /**
@@ -198,8 +198,33 @@ public final class VirtualStructure {
      * @return A descriptor of the container element.
      */
     public final ContainerDescriptor e(String name, int localId) {
-        ContainerDescriptor container = new ContainerDescriptor(name, null);
+        ContainerDescriptor container = new ContainerDescriptor(null, name, null);
         container.localId = localId;
+
+        return container;
+    }
+
+    /**
+     * <p>
+     * Define element with some attributes.
+     * </p>
+     * 
+     * @param name A element name.
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     */
+    public final ContainerDescriptor e(String namesapce, String name, String... attributes) {
+        ContainerDescriptor container = new ContainerDescriptor(namesapce, name, null);
+        VirtualElement element = container.container(0);
+
+        for (int i = 0; i < attributes.length; i++) {
+            element.attributes.add(attributes[i], attributes[++i]);
+        }
+
+        if (name.equals("svg")) {
+            element.attributes.add("version", "1.1");
+            element.attributes.add("preserveAspectRatio", "xMidYMid meet");
+        }
 
         return container;
     }
@@ -222,7 +247,7 @@ public final class VirtualStructure {
             container.items.push(virtualize);
             widget.assemble(new VirtualStructure(virtualize));
         } else if (child.equals("\r\n")) {
-            container.items.push(new VirtualElement(0, "br"));
+            container.items.push(new VirtualElement(0, null, "br"));
         } else {
             container.items.push(new VirtualText(String.valueOf(child)));
         }
@@ -232,6 +257,9 @@ public final class VirtualStructure {
      * @version 2015/01/21 14:20:59
      */
     public class ContainerDescriptor {
+
+        /** The container element namespace uri. */
+        private final String namespace;
 
         /** The container element name. */
         private final String name;
@@ -253,10 +281,12 @@ public final class VirtualStructure {
          * DSL to define element.
          * </p>
          * 
+         * @param namespace A container element namespace uri.
          * @param name A container element name.
          * @param style A element style.
          */
-        private ContainerDescriptor(String name, Style builtin) {
+        private ContainerDescriptor(String namespace, String name, Style builtin) {
+            this.namespace = namespace;
             this.name = name;
             this.builtin = builtin;
         }
@@ -297,7 +327,7 @@ public final class VirtualStructure {
                 }
 
                 // built-in container
-                container = new VirtualElement(id, name);
+                container = new VirtualElement(id, namespace, name);
 
                 if (builtin != null) {
                     container.classList.push(builtin);

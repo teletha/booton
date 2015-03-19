@@ -25,6 +25,9 @@ import jsx.ui.Widget;
  */
 public class Select<M> extends Widget {
 
+    /** SVG namespace uri. */
+    private static final String SVG = "http://www.w3.org/2000/svg";
+
     /** The selectable values. */
     public final ListProperty<M> values;
 
@@ -51,8 +54,12 @@ public class Select<M> extends Widget {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        〡.vbox.〡(null, () -> {
-            〡.nbox.〡(null, input, button);
+        〡.vbox.〡(() -> {
+            〡.hbox.〡(() -> {
+                〡.e(SVG, "svg", "width", "20", "height", "20").〡(() -> {
+                    〡.e(SVG, "circle", "cx", "10", "cy", "10", "r", "10", "fill", "red");
+                });
+            });
             〡.vbox.〡(ViewableArea.with(shown), () -> {
                 〡.hbox.〡(Slider, () -> {
                     〡.vbox.〡(null, values, value -> {
