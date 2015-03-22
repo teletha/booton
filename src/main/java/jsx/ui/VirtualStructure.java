@@ -231,6 +231,32 @@ public final class VirtualStructure {
 
     /**
      * <p>
+     * Define element with some attributes.
+     * </p>
+     * 
+     * @param name A element name.
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     */
+    public final ContainerDescriptor e(String name, Style style, String... attributes) {
+        ContainerDescriptor container = new ContainerDescriptor(name, null);
+        VirtualElement element = container.container(0);
+
+        for (int i = 0; i < attributes.length; i++) {
+            element.attributes.add(attributes[i], attributes[++i]);
+        }
+
+        if (name.equals("svg")) {
+            element.attributes.add("version", "1.1");
+            element.attributes.add("preserveAspectRatio", "xMidYMid meet");
+        }
+        element.classList.push(style);
+
+        return container;
+    }
+
+    /**
+     * <p>
      * Retrieve the root {@link VirtualElement}.
      * </p>
      * 
