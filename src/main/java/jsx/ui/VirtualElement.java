@@ -55,7 +55,7 @@ public class VirtualElement extends VirtualNode<Element> {
     @Override
     Element materialize() {
         if (name.startsWith("s:")) {
-            dom = document.createElementNS("http://www.w3.org/2000/svg", name);
+            dom = document.createElementNS("http://www.w3.org/2000/svg", name.substring(2));
         } else {
             dom = document.createElement(name);
         }

@@ -694,6 +694,8 @@ public final class VirtualStructure {
         private DescriptableElement(int id, String name) {
             super(id, name);
 
+            latest.items.push(this);
+
             latest = this;
         }
 
@@ -801,6 +803,28 @@ public final class VirtualStructure {
                 }
             });
         }
+
+        /**
+         * <p>
+         * Helper method to append attribute value.
+         * </p>
+         * 
+         * @param name An attribute name.
+         * @param value An attribute value to append.
+         * @return Chainable API.
+         */
+        protected final E edit(String name, NativeString value) {
+            int index = attributes.key(name);
+            System.out.println(index);
+            if (index == -1) {
+                attributes.add(name, value.toString().trim());
+            } else {
+                attributes.values().set(index, new NativeString(attributes.value(index)).concat(value).toString());
+            }
+            System.out.println(attributes.keys());
+            System.out.println(attributes.values());
+            return (E) this;
+        }
     }
 
     /**
@@ -854,9 +878,6 @@ public final class VirtualStructure {
      */
     public class Path extends DescriptableElement<Path> {
 
-        /** The value builder. */
-        private NativeString builder = new NativeString();
-
         /**
          * @param id
          * @param name
@@ -875,9 +896,7 @@ public final class VirtualStructure {
          * @return Chainable API.
          */
         public Path start(int x, int y) {
-            builder = builder.concat(" M ").concat(x).concat(" ").concat(y);
-
-            return this;
+            return edit("d", new NativeString(" M ").concat(x).concat(" ").concat(y));
         }
 
         /**
@@ -890,9 +909,7 @@ public final class VirtualStructure {
          * @return Chainable API.
          */
         public Path line(int x, int y) {
-            builder = builder.concat(" L ").concat(x).concat(" ").concat(y);
-
-            return this;
+            return edit("d", new NativeString(" L ").concat(x).concat(" ").concat(y));
         }
 
         /**
@@ -904,9 +921,7 @@ public final class VirtualStructure {
          * @return Chainable API.
          */
         public Path hline(int x) {
-            builder = builder.concat(" H ").concat(x);
-
-            return this;
+            return edit("d", new NativeString(" H ").concat(x));
         }
 
         /**
@@ -918,9 +933,7 @@ public final class VirtualStructure {
          * @return Chainable API.
          */
         public Path vline(int y) {
-            builder = builder.concat(" V ").concat(y);
-
-            return this;
+            return edit("d", new NativeString(" V ").concat(y));
         }
 
         /**
@@ -931,9 +944,7 @@ public final class VirtualStructure {
          * @return Chainable API.
          */
         public Path end() {
-            builder = builder.concat(" Z");
-
-            return this;
+            return edit("d", new NativeString(" Z"));
         }
 
         /**
@@ -953,8 +964,7 @@ public final class VirtualStructure {
          * @return Chainable API.
          */
         public Path bezierCurveTo(int cp1x, int cp1y, int cp2x, int cp2y, int x, int y) {
-            builder = builder.concat(" C ")
-                    .concat(cp1x)
+            return edit("d", new NativeString(" C ").concat(cp1x)
                     .concat(" ")
                     .concat(cp1y)
                     .concat(" ")
@@ -964,9 +974,7 @@ public final class VirtualStructure {
                     .concat(" ")
                     .concat(x)
                     .concat(" ")
-                    .concat(x);
-
-            return this;
+                    .concat(x));
         }
     }
 }
