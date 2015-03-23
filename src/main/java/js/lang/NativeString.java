@@ -32,6 +32,13 @@ public class NativeString {
     /**
      * 
      */
+    public NativeString(int text) {
+        builder.append(text);
+    }
+
+    /**
+     * 
+     */
     public NativeString(String text) {
         builder.append(text);
     }
@@ -89,6 +96,20 @@ public class NativeString {
      * @return
      */
     public NativeString concat(String value) {
+        builder.append(value);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Append primitive value.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public NativeString concat(int value) {
         builder.append(value);
 
         return this;
@@ -467,6 +488,13 @@ public class NativeString {
         }
 
         /**
+         * 
+         */
+        public String NativeString(int text) {
+            return param(0);
+        }
+
+        /**
          * <p>
          * Characters in a string are indexed from left to right. The index of the first character
          * is 0, and the index of the last character in a string called stringName is
@@ -518,6 +546,18 @@ public class NativeString {
          * @return
          */
         public String concat(NativeString value) {
+            return that + "+" + param(0);
+        }
+
+        /**
+         * <p>
+         * Append primitive value.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        public String concat(int value) {
             return that + "+" + param(0);
         }
 

@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 
 import javafx.beans.value.ObservableValue;
 
+import js.lang.NativeString;
 import jsx.style.Style;
 
 /**
@@ -106,6 +107,33 @@ public final class VirtualStructure {
      */
     public VirtualStructure(VirtualElement root) {
         parents.add(latest = root);
+    }
+
+    public SVG svg() {
+        return svg(LocalId.findContextLineNumber());
+    }
+
+    private SVG svg(int id) {
+        return new SVG(id);
+    }
+
+    /**
+     * @return
+     */
+    public Path path() {
+        return path(LocalId.findContextLineNumber());
+    }
+
+    /**
+     * <p>
+     * For compiler.
+     * </p>
+     * 
+     * @param id An identifier of the current element.
+     * @return Chainable API.
+     */
+    private Path path(int id) {
+        return new Path(id);
     }
 
     /**
@@ -651,6 +679,294 @@ public final class VirtualStructure {
                 style.assignTo(latest.classList, latest.inlines);
                 latest.attributes.add(name, value);
             }
+        }
+    }
+
+    /**
+     * @version 2015/03/23 15:58:26
+     */
+    public class DescriptableElement<E> extends VirtualElement {
+
+        /**
+         * @param id
+         * @param name
+         */
+        private DescriptableElement(int id, String name) {
+            super(id, name);
+
+            latest = this;
+        }
+
+        public E style(Style style) {
+            style.assignTo(classList, inlines);
+
+            return (E) this;
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void $(Class<? extends Widget1<T>> childType, T child) {
+            $(childType, Arrays.asList(child));
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void $(Class<? extends Widget1<T>> childType, T[] children) {
+            $(childType, Arrays.asList(children));
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void $(Class<? extends Widget1<T>> childType, Collection<T> children) {
+            $(() -> {
+                for (T child : children) {
+                    Widget widget = Widget.of(childType, child);
+
+                    // create virtual element for this widget
+                    VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+
+                    // mount virtual element on virtual structure
+                    latest.items.push(virtualize);
+
+                    // process child nodes
+                    widget.assemble(new VirtualStructure(virtualize));
+                }
+            });
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void $(T[] items, Consumer<T> child) {
+            〡(Arrays.asList(items), child);
+        }
+
+        public void $(Runnable children) {
+            parents.add(this);
+
+            children.run();
+
+            // restore context environment
+            parents.pollLast();
+            latest = parents.peekLast();
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void $(Collection<T> items, Consumer<T> child) {
+            $(() -> {
+                for (T item : items) {
+                    modifier = item.hashCode();
+                    child.accept(item);
+                }
+            });
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public final <T> void $(int size, IntConsumer child) {
+            $(() -> {
+                for (int i = 0; i < size; i++) {
+                    modifier = (i + 117 + latestContextId) * 31;
+                    child.accept(i);
+                }
+            });
+        }
+    }
+
+    /**
+     * @version 2015/03/23 16:31:44
+     */
+    public class SVG extends DescriptableElement<SVG> {
+
+        /**
+         * 
+         */
+        private SVG(int id) {
+            super(id, "s:svg");
+        }
+
+        /**
+         * <p>
+         * The viewBox attribute allows to specify that a given set of graphics stretch to fit a
+         * particular container element.
+         * </p>
+         * <p>
+         * The value of the viewBox attribute is a list of four numbers min-x, min-y, width and
+         * height, separated by whitespace and/or a comma, which specify a rectangle in user space
+         * which should be mapped to the bounds of the viewport established by the given element,
+         * taking into account attribute preserveAspectRatio.
+         * </p>
+         * <p>
+         * Negative values for width or height are not permitted and a value of zero disables
+         * rendering of the element.
+         * </p>
+         * 
+         * @param minX
+         * @param minY
+         * @param width
+         * @param height
+         */
+        public SVG viewBox(int minX, int minY, int width, int height) {
+            attributes.set("viewBox", new NativeString(minX).concat(" ")
+                    .concat(minY)
+                    .concat(" ")
+                    .concat(width)
+                    .concat(" ")
+                    .concat(height)
+                    .toString());
+
+            return this;
+        }
+    }
+
+    /**
+     * @version 2015/03/23 15:53:01
+     */
+    public class Path extends DescriptableElement<Path> {
+
+        /** The value builder. */
+        private NativeString builder = new NativeString();
+
+        /**
+         * @param id
+         * @param name
+         */
+        private Path(int id) {
+            super(id, "path");
+        }
+
+        /**
+         * <p>
+         * Set the start position to draw.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public Path start(int x, int y) {
+            builder = builder.concat(" M ").concat(x).concat(" ").concat(y);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw line to the specified position.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public Path line(int x, int y) {
+            builder = builder.concat(" L ").concat(x).concat(" ").concat(y);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw horizontal line to the specified position.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @return Chainable API.
+         */
+        public Path hline(int x) {
+            builder = builder.concat(" H ").concat(x);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw vertical line to the specified position.
+         * </p>
+         * 
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public Path vline(int y) {
+            builder = builder.concat(" V ").concat(y);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Close the current path.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public Path end() {
+            builder = builder.concat(" Z");
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw cubic Bézier curve to the path. It requires three points. The first two points are
+         * control points and the third one is the end point. The starting point is the last point
+         * in the current path, which can be changed using moveTo() before creating the Bézier
+         * curve.
+         * </p>
+         * 
+         * @param cp1x The x axis of the coordinate for the first control point.
+         * @param cp1y The y axis of the coordinate for first control point.
+         * @param cp2x The x axis of the coordinate for the second control point.
+         * @param cp2y The y axis of the coordinate for the second control point.
+         * @param x The x axis of the coordinate for the end point.
+         * @param y The y axis of the coordinate for the end point.
+         * @return Chainable API.
+         */
+        public Path bezierCurveTo(int cp1x, int cp1y, int cp2x, int cp2y, int x, int y) {
+            builder = builder.concat(" C ")
+                    .concat(cp1x)
+                    .concat(" ")
+                    .concat(cp1y)
+                    .concat(" ")
+                    .concat(cp2x)
+                    .concat(" ")
+                    .concat(cp2y)
+                    .concat(" ")
+                    .concat(x)
+                    .concat(" ")
+                    .concat(x);
+
+            return this;
         }
     }
 }
