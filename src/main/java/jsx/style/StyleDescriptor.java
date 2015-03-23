@@ -16,6 +16,7 @@ import jsx.style.property.BoxLength;
 import jsx.style.property.Content;
 import jsx.style.property.Cursor;
 import jsx.style.property.Display;
+import jsx.style.property.Fill;
 import jsx.style.property.FlexItem;
 import jsx.style.property.Font;
 import jsx.style.property.Line;
@@ -24,6 +25,7 @@ import jsx.style.property.Outline;
 import jsx.style.property.Overflows;
 import jsx.style.property.PointerEvents;
 import jsx.style.property.Position;
+import jsx.style.property.Stroke;
 import jsx.style.property.Text;
 import jsx.style.property.Transform;
 import jsx.style.property.Visibility;
@@ -205,6 +207,9 @@ public class StyleDescriptor {
      */
     public static final Display display = new Display();
 
+    /** The SVG property. */
+    public static final Fill fill = new Fill();
+
     /**
      * <p>
      * The flex CSS property is a shorthand property specifying the ability of a flex item to alter
@@ -314,6 +319,9 @@ public class StyleDescriptor {
      * </p>
      */
     public static final Position position = new Position();
+
+    /** The SVG property. */
+    public static final Stroke stroke = new Stroke();
 
     /** The text related style. */
     public static final Text text = new Text();

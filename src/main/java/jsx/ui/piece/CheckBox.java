@@ -44,11 +44,9 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
             〡.e("label").〡(() -> {
                 〡.nbox.〡(null, "text");
             });
-            〡.e("s:svg", CheckBoxSVG, "viewBox", "0 0 100 100")
-                    .〡(() -> {
-                        〡.e("s:path", "d", "M 10 10 L 90 90", "style", "stroke: #FDFCD3; stroke-width: 13px; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-dasharray: 113.137, 113.137; stroke-dashoffset: 0; transition: stroke-dashoffset 0.2s ease-in-out 0s;");
-                    });
-
+            〡.svg().style(CheckBoxSVG).viewBox(0, 0, 100, 100).$(() -> {
+                〡.path().style(CheckBoxLine).start(10, 10).line(90, 90);
+            });
         });
         〡.e("input", 0).〡(() -> {
             〡.attr.〡("type", "checkbox");
