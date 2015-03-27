@@ -117,6 +117,20 @@ public class NativeString {
 
     /**
      * <p>
+     * Append primitive value.
+     * </p>
+     * 
+     * @param value
+     * @return
+     */
+    public NativeString concat(double value) {
+        builder.append(value);
+
+        return this;
+    }
+
+    /**
+     * <p>
      * Append text.
      * </p>
      * 
@@ -558,6 +572,18 @@ public class NativeString {
          * @return
          */
         public String concat(int value) {
+            return that + "+" + param(0);
+        }
+
+        /**
+         * <p>
+         * Append primitive value.
+         * </p>
+         * 
+         * @param value
+         * @return
+         */
+        public String concat(double value) {
             return that + "+" + param(0);
         }
 
