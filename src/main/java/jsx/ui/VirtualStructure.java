@@ -878,12 +878,15 @@ public final class VirtualStructure {
      */
     public class Path extends DescriptableElement<Path> {
 
+        /** The current draw mode. */
+        private boolean relativeMode = false;
+
         /**
          * @param id
          * @param name
          */
         private Path(int id) {
-            super(id, "path");
+            super(id, "s:path");
         }
 
         /**
@@ -895,8 +898,8 @@ public final class VirtualStructure {
          * @param y A vertical position.
          * @return Chainable API.
          */
-        public Path start(int x, int y) {
-            return edit("d", new NativeString(" M ").concat(x).concat(" ").concat(y));
+        public Path moveTo(double x, double y) {
+            return edit("d", command("M").concat(x).concat(" ").concat(y));
         }
 
         /**
@@ -908,8 +911,8 @@ public final class VirtualStructure {
          * @param y A vertical position.
          * @return Chainable API.
          */
-        public Path line(int x, int y) {
-            return edit("d", new NativeString(" L ").concat(x).concat(" ").concat(y));
+        public Path lineTo(int x, int y) {
+            return edit("d", command("L").concat(x).concat(" ").concat(y));
         }
 
         /**
@@ -920,8 +923,8 @@ public final class VirtualStructure {
          * @param x A horizontal position.
          * @return Chainable API.
          */
-        public Path hline(int x) {
-            return edit("d", new NativeString(" H ").concat(x));
+        public Path hlineTo(int x) {
+            return edit("d", command("H").concat(x));
         }
 
         /**
@@ -932,8 +935,8 @@ public final class VirtualStructure {
          * @param y A vertical position.
          * @return Chainable API.
          */
-        public Path vline(int y) {
-            return edit("d", new NativeString(" V ").concat(y));
+        public Path vlineTo(int y) {
+            return edit("d", command("V").concat(y));
         }
 
         /**
@@ -944,7 +947,7 @@ public final class VirtualStructure {
          * @return Chainable API.
          */
         public Path end() {
-            return edit("d", new NativeString(" Z"));
+            return edit("d", command("Z"));
         }
 
         /**
@@ -963,8 +966,8 @@ public final class VirtualStructure {
          * @param y The y axis of the coordinate for the end point.
          * @return Chainable API.
          */
-        public Path bezierCurveTo(int cp1x, int cp1y, int cp2x, int cp2y, int x, int y) {
-            return edit("d", new NativeString(" C ").concat(cp1x)
+        public Path curveTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
+            return edit("d", command("C").concat(cp1x)
                     .concat(" ")
                     .concat(cp1y)
                     .concat(" ")
@@ -974,7 +977,75 @@ public final class VirtualStructure {
                     .concat(" ")
                     .concat(x)
                     .concat(" ")
-                    .concat(x));
+                    .concat(y));
+        }
+
+        /**
+         * <p>
+         * Draw cubic Bézier curve to the path. It requires three points. The first two points are
+         * control points and the third one is the end point. The starting point is the last point
+         * in the current path, which can be changed using moveTo() before creating the Bézier
+         * curve.
+         * </p>
+         * 
+         * @param cp1x The x axis of the coordinate for the first control point.
+         * @param cp1y The y axis of the coordinate for first control point.
+         * @param cp2x The x axis of the coordinate for the second control point.
+         * @param cp2y The y axis of the coordinate for the second control point.
+         * @param x The x axis of the coordinate for the end point.
+         * @param y The y axis of the coordinate for the end point.
+         * @return Chainable API.
+         */
+        public Path curveRelativeTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
+            return edit("d", command("C").concat(cp1x)
+                    .concat(" ")
+                    .concat(cp1y)
+                    .concat(" ")
+                    .concat(cp2x)
+                    .concat(" ")
+                    .concat(cp2y)
+                    .concat(" ")
+                    .concat(x)
+                    .concat(" ")
+                    .concat(y));
+        }
+
+        /**
+         * <p>
+         * Make drawing context relative.
+         * </p>
+         * 
+         * @return
+         */
+        public final Path relatively() {
+            relativeMode = true;
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make drawing context relative.
+         * </p>
+         * 
+         * @return
+         */
+        public final Path absolutely() {
+            relativeMode = false;
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make command expression.
+         * </p>
+         * 
+         * @param command
+         * @return
+         */
+        private final NativeString command(String command) {
+            return new NativeString(" ").concat(relativeMode ? command.toLowerCase() : command).concat(" ");
         }
     }
 }
