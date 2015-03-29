@@ -15,6 +15,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.Supplier;
@@ -134,6 +135,44 @@ public final class VirtualStructure {
      */
     private Path path(int id) {
         return new Path(id);
+    }
+
+    /**
+     * @return
+     */
+    public PolyLine polyline() {
+        return polyline(LocalId.findContextLineNumber());
+    }
+
+    /**
+     * <p>
+     * For compiler.
+     * </p>
+     * 
+     * @param id An identifier of the current element.
+     * @return Chainable API.
+     */
+    private PolyLine polyline(int id) {
+        return new PolyLine(id);
+    }
+
+    /**
+     * @return
+     */
+    public Rect rect() {
+        return rect(LocalId.findContextLineNumber());
+    }
+
+    /**
+     * <p>
+     * For compiler.
+     * </p>
+     * 
+     * @param id An identifier of the current element.
+     * @return Chainable API.
+     */
+    private Rect rect(int id) {
+        return new Rect(id);
     }
 
     /**
@@ -695,8 +734,6 @@ public final class VirtualStructure {
             super(id, name);
 
             latest.items.push(this);
-
-            latest = this;
         }
 
         public E style(Style style) {
@@ -763,7 +800,7 @@ public final class VirtualStructure {
         }
 
         public void $(Runnable children) {
-            parents.add(this);
+            parents.add(latest = this);
 
             children.run();
 
@@ -837,6 +874,8 @@ public final class VirtualStructure {
          */
         private SVG(int id) {
             super(id, "s:svg");
+
+            attributes.set("preserveAspectRatio", "xMidYMid meet");
         }
 
         /**
@@ -868,6 +907,59 @@ public final class VirtualStructure {
                     .concat(" ")
                     .concat(height)
                     .toString());
+
+            return this;
+        }
+    }
+
+    /**
+     * @version 2015/03/28 2:46:12
+     */
+    public class Rect extends DescriptableElement<Rect> {
+
+        /**
+         * @param id
+         * @param name
+         */
+        private Rect(int id) {
+            super(id, "s:rect");
+        }
+
+        public Rect position(double x, double y) {
+            attributes.set("x", String.valueOf(x));
+            attributes.set("y", String.valueOf(y));
+
+            return this;
+        }
+
+        public Rect size(double width, double height) {
+            attributes.set("width", String.valueOf(width));
+            attributes.set("height", String.valueOf(height));
+
+            return this;
+        }
+    }
+
+    /**
+     * @version 2015/03/28 2:21:56
+     */
+    public class PolyLine extends DescriptableElement<PolyLine> {
+
+        /**
+         * @param id
+         * @param name
+         */
+        private PolyLine(int id) {
+            super(id, "s:polyline");
+        }
+
+        public PolyLine points(double... points) {
+            StringJoiner joiner = new StringJoiner(" ");
+
+            for (int i = 0; i < points.length;) {
+                joiner.add(String.valueOf(points[i++])).add(",").add(String.valueOf(points[i++]));
+            }
+            attributes.set("points", joiner.toString());
 
             return this;
         }
@@ -911,7 +1003,7 @@ public final class VirtualStructure {
          * @param y A vertical position.
          * @return Chainable API.
          */
-        public Path lineTo(int x, int y) {
+        public Path lineTo(double x, double y) {
             return edit("d", command("L").concat(x).concat(" ").concat(y));
         }
 
@@ -923,7 +1015,7 @@ public final class VirtualStructure {
          * @param x A horizontal position.
          * @return Chainable API.
          */
-        public Path hlineTo(int x) {
+        public Path hlineTo(double x) {
             return edit("d", command("H").concat(x));
         }
 
@@ -935,7 +1027,7 @@ public final class VirtualStructure {
          * @param y A vertical position.
          * @return Chainable API.
          */
-        public Path vlineTo(int y) {
+        public Path vlineTo(double y) {
             return edit("d", command("V").concat(y));
         }
 
