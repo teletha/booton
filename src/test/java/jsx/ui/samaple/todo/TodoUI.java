@@ -158,7 +158,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         final BooleanProperty editing = new SimpleBooleanProperty();
 
         /** The completion box. */
-        final CheckBox complete = new CheckBox(model1.completed);
+        final CheckBox complete = UI.checkbox(model1.completed);
 
         /** The todo text. */
         final Output text = UI.output(model1.contents).dbclick(this::startEdit);

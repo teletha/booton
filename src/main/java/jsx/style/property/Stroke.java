@@ -100,6 +100,10 @@ public class Stroke extends Colorable<Stroke> {
         return value("stroke-dashoffset", offset);
     }
 
+    public Stroke miterLimit(int size) {
+        return value("stroke-miterlimit", size);
+    }
+
     /**
      * @version 2015/03/23 17:03:00
      */

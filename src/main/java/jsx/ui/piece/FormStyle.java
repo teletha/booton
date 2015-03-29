@@ -11,6 +11,7 @@ package jsx.ui.piece;
 
 import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
+import jsx.style.value.Color;
 
 /**
  * @version 2015/03/22 16:46:20
@@ -22,13 +23,17 @@ public class FormStyle extends StyleRuleDescriptor {
     };
 
     static Style CheckBoxSVG = () -> {
-        position.absolute().top(50, percent).left(5, px);
-        box.size(40, px);
+        box.size(13, px);
+    };
+
+    static Style CheckBox = () -> {
+        stroke.linecap.round().linejoin.round().color(Color.Black).miterLimit(1);
+        fill.none();
     };
 
     static Style CheckBoxLine = () -> {
         fill.none();
-        stroke.color(20, 20, 20).width(13, px).linecap.round().linejoin.round()
+        stroke.color(20, 20, 20).width(2, px).linecap.round().linejoin.round()
                 .dashArray(113.137, 113.137)
                 .dashOffset(0);
 

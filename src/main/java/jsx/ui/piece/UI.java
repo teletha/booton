@@ -9,6 +9,7 @@
  */
 package jsx.ui.piece;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -90,6 +91,17 @@ public class UI {
      */
     public static final Output output(StringProperty text) {
         return new Output(text);
+    }
+
+    /**
+     * <p>
+     * Create {@link Checkbox} with the specified boolean value.
+     * </p>
+     * 
+     * @param value
+     */
+    public static final CheckBox checkbox(BooleanProperty value) {
+        return new CheckBox(value);
     }
 
     /**
