@@ -11,6 +11,7 @@ package jsx.style;
 
 import static jsx.style.Vendor.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -18,9 +19,9 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
+import booton.util.Strings;
 import js.lang.NativeArray;
 import jsx.style.value.Unit;
-import booton.util.Strings;
 
 /**
  * @version 2014/11/13 15:49:09
@@ -108,6 +109,78 @@ public class PropertyDefinition<T> {
      */
     protected final T value(EnumSet<Vendor> vendors, Object value) {
         return value(vendors, name, Arrays.asList(value), " ", false);
+    }
+
+    /**
+     * <p>
+     * Set property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param values A list of property values.
+     * @return Chainable API.
+     */
+    protected final T value(String name, int... values) {
+        List<String> list = new ArrayList();
+
+        for (int i = 0; i < values.length; i++) {
+            list.add(String.valueOf(values[i]));
+        }
+        return value(name, list, ",");
+    }
+
+    /**
+     * <p>
+     * Set property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param values A list of property values.
+     * @return Chainable API.
+     */
+    protected final T value(String name, long... values) {
+        List<String> list = new ArrayList();
+
+        for (int i = 0; i < values.length; i++) {
+            list.add(String.valueOf(values[i]));
+        }
+        return value(name, list, ",");
+    }
+
+    /**
+     * <p>
+     * Set property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param values A list of property values.
+     * @return Chainable API.
+     */
+    protected final T value(String name, float... values) {
+        List<String> list = new ArrayList();
+
+        for (int i = 0; i < values.length; i++) {
+            list.add(String.valueOf(values[i]));
+        }
+        return value(name, list, ",");
+    }
+
+    /**
+     * <p>
+     * Set property.
+     * </p>
+     * 
+     * @param name A property name.
+     * @param values A list of property values.
+     * @return Chainable API.
+     */
+    protected final T value(String name, double... values) {
+        List<String> list = new ArrayList();
+
+        for (int i = 0; i < values.length; i++) {
+            list.add(String.valueOf(values[i]));
+        }
+        return value(name, list, ",");
     }
 
     /**

@@ -9,13 +9,10 @@
  */
 package jsx.style.property;
 
-import java.util.Arrays;
-
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
-import kiss.I;
 
 /**
  * @version 2015/03/23 16:59:38
@@ -69,10 +66,10 @@ public class Stroke extends Colorable<Stroke> {
 
     /**
      * <p>
-     * ‘stroke-dasharray’ controls the pattern of dashes and gaps used to stroke paths. <dasharray>
-     * contains a list of comma and/or white space separated <length>s and <percentage>s that
-     * specify the lengths of alternating dashes and gaps. If an odd number of values is provided,
-     * then the list of values is repeated to yield an even number of values. Thus,
+     * ‘stroke-dasharray’ controls the pattern of dashes and gaps used to stroke paths.
+     * <dasharray> contains a list of comma and/or white space separated <length>s and <percentage>s
+     * that specify the lengths of alternating dashes and gaps. If an odd number of values is
+     * provided, then the list of values is repeated to yield an even number of values. Thus,
      * stroke-dasharray: 5,3,2 is equivalent to stroke-dasharray: 5,3,2,5,3,2.
      * </p>
      * 
@@ -85,7 +82,7 @@ public class Stroke extends Colorable<Stroke> {
      * @return Chainable API.
      */
     public Stroke dashArray(double... sizes) {
-        return value("stroke-dasharray", I.join(",", Arrays.asList(sizes)));
+        return value("stroke-dasharray", sizes);
     }
 
     /**
