@@ -61,11 +61,9 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
                     .viewBox(0, 0, 100, 100)
                     .$(() -> {
                         〡.rect().style(CheckBox).size(90, 90).position(5, 5);
-                        // if (check.get()) 〡.polyline().style(CheckBoxLine).points(23.5, 7.1, 11.9,
-                        // 23.4, 6.2, 17.6);
                         〡.path()
                                 .style(CheckBoxLine.withIf(check, () -> {
-                                    stroke.dashOffset(50);
+                                    stroke.dashOffset(0);
                                 }))
                                 .moveTo(16.667, 62.167)
                                 .relatively()

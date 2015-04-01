@@ -307,4 +307,11 @@ public class Transition extends PropertyDefinition<Transition> {
         value("transition-delay", join(rule.properties.keys(), v -> delay));
         value("transition-timing-function", join(rule.properties.keys(), v -> timing));
     }
+
+    public void whenever() {
+        value("transition-property", "all");
+        value("transition-duration", duration);
+        value("transition-delay", delay);
+        value("transition-timing-function", timing);
+    }
 }
