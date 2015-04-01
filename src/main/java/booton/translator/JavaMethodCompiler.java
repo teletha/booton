@@ -41,6 +41,7 @@ import js.lang.NativeObject;
 import jsx.bwt.Input;
 import jsx.style.StaticStyle;
 import jsx.style.Style;
+import jsx.ui.VirtualElement;
 import jsx.ui.VirtualStructure;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.I;
@@ -1619,6 +1620,13 @@ class JavaMethodCompiler extends MethodVisitor {
         case INVOKEINTERFACE: // interface method call
             // push "this" operand
             contexts.add(0, current.remove(0));
+
+            if (owner == VirtualStructure.class && parameters.length == 0 && returnType != VirtualElement.class) {
+                parameters = new Class[] {int.class};
+                contexts.add(new OperandNumber(virtualStructureLocalId.getAndIncrement()));
+                current.addOperand(translator.translateMethod(owner, methodName, "(I".concat(desc.substring(1)), parameters, contexts), returnType);
+                return;
+            }
 
             // translate
             current.addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts), returnType);

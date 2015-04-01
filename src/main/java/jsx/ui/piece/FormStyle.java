@@ -23,17 +23,17 @@ public class FormStyle extends StyleRuleDescriptor {
     };
 
     static Style CheckBoxSVG = () -> {
-        box.size(13, px);
+        box.size(16, px);
     };
 
     static Style CheckBox = () -> {
-        stroke.linecap.round().linejoin.round().color(Color.Black).miterLimit(1);
+        stroke.linecap.round().linejoin.round().color(Color.Black).miterLimit(1).width(3, px);
         fill.none();
     };
 
     static Style CheckBoxLine = () -> {
         fill.none();
-        stroke.color(20, 20, 20).width(2, px).linecap.round().linejoin.round()
+        stroke.color(80, 80, 80).width(6, px).linecap.round().linejoin.round()
                 .dashArray(113.137, 113.137)
                 .dashOffset(0);
 

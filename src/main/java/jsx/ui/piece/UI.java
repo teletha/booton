@@ -101,7 +101,18 @@ public class UI {
      * @param value
      */
     public static final CheckBox checkbox(BooleanProperty value) {
-        return new CheckBox(value);
+        return checkbox(value, null);
+    }
+
+    /**
+     * <p>
+     * Create {@link Checkbox} with the specified boolean value.
+     * </p>
+     * 
+     * @param value
+     */
+    public static final CheckBox checkbox(BooleanProperty value, StringProperty label) {
+        return new CheckBox(value, label);
     }
 
     /**
