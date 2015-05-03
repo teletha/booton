@@ -10,9 +10,7 @@
 package jsx.ui.piece;
 
 import static js.lang.Global.*;
-import static jsx.ui.piece.SlidableViewStyle.*;
-import jsx.bwt.view.SlidableView.Close;
-import jsx.bwt.view.SlidableView.Open;
+
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget;
 
@@ -32,8 +30,8 @@ public class SlidableView extends Widget {
      * @param content
      */
     public SlidableView(Widget content) {
-        root.add(ViewableArea);
-        root.child(Slider).append(content);
+        // root.add(ViewableArea);
+        // root.child(Slider).append(content);
     }
 
     /**
@@ -43,14 +41,14 @@ public class SlidableView extends Widget {
      */
     public void open() {
         if (shown++ == 0) {
-            // show slide view
-            root.add(Shown);
-
-            // notify event
-            publish(new Open());
-
-            // prepare closer
-            window.subscribe(this);
+            // // show slide view
+            // root.add(Shown);
+            //
+            // // notify event
+            // publish(new Open());
+            //
+            // // prepare closer
+            // window.subscribe(this);
         }
     }
 
@@ -63,10 +61,10 @@ public class SlidableView extends Widget {
         if (2 <= shown) {
             // hide slide view
             shown = 0;
-            root.remove(Shown);
-
-            // notify event
-            publish(new Close());
+            // root.remove(Shown);
+            //
+            // // notify event
+            // publish(new Close());
 
             // discard closer
             window.unsubscribe(this);

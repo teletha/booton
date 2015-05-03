@@ -9,6 +9,7 @@
  */
 package jsx.ui.piece;
 
+import jsx.style.BinaryStyle;
 import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
 import jsx.style.value.Color;
@@ -31,39 +32,11 @@ public class FormStyle extends StyleRuleDescriptor {
         fill.none();
     };
 
-    static Style CheckBoxLine = () -> {
+    static BinaryStyle CheckMark = state -> {
         fill.none();
-        stroke.color(80, 80, 80).width(6, px).linecap.round().linejoin.round().dashArray(120, 121).dashOffset(121);
+        stroke.color(80, 80, 80).width(6, px).linecap.round().linejoin.round()
+                .dashArray(120, 130)
+                .dashOffset(state ? 0 : 121);
         transit().duration(0.2, s).easeInOut().whenever();
     };
-
-    static StatefulStyle<Binary> Mark = state -> {
-        fill.none();
-        stroke.color(80, 80, 80).width(6, px).linecap.round().linejoin.round().dashArray(120, 130);
-
-        switch (state) {
-        case True:
-            stroke.dashOffset(0);
-            break;
-
-        case False:
-            stroke.dashOffset(121);
-            break;
-        }
-    };
-
-    public static interface StatefulStyle<E extends Enum> {
-
-        void declare(E state);
-    }
-
-    public static enum Binary {
-
-        True, False;
-    }
-
-    public static enum Ternary {
-
-        True, False, Undefined;
-    }
 }
