@@ -80,29 +80,8 @@ class JSInteger extends JSNumber {
     }
 
     /**
-     * Returns the number of one-bits in the two's complement binary representation of the specified
-     * {@code int} value. This function is sometimes referred to as the <i>population count</i>.
-     *
-     * @param i the value whose bits are to be counted
-     * @return the number of one-bits in the two's complement binary representation of the specified
-     *         {@code int} value.
-     * @since 1.5
-     */
-    public static int bitCount(int i) {
-        // HD, Figure 5-2
-        i = i - ((i >>> 1) & 0x55555555);
-        i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
-        i = (i + (i >>> 4)) & 0x0f0f0f0f;
-        i = i + (i >>> 8);
-        i = i + (i >>> 16);
-        return i & 0x3f;
-    }
-
-    /**
      * Compares two {@code int} values numerically. The value returned is identical to what would be
-     * returned by:
-     * 
-     * <pre>
+     * returned by: <pre>
      *    Integer.valueOf(x).compareTo(Integer.valueOf(y))
      * </pre>
      * 
@@ -125,6 +104,45 @@ class JSInteger extends JSNumber {
      */
     public static int hashCode(int value) {
         return value;
+    }
+
+    /**
+     * Returns an {@code int} value with at most a single one-bit, in the position of the
+     * highest-order ("leftmost") one-bit in the specified {@code int} value. Returns zero if the
+     * specified value has no one-bits in its two's complement binary representation, that is, if it
+     * is equal to zero.
+     *
+     * @param value the value whose highest one bit is to be computed
+     * @return an {@code int} value with a single one-bit, in the position of the highest-order
+     *         one-bit in the specified value, or zero if the specified value is itself equal to
+     *         zero.
+     * @since 1.5
+     */
+    public static int highestOneBit(int value) {
+        // HD, Figure 3-1
+        value |= (value >> 1);
+        value |= (value >> 2);
+        value |= (value >> 4);
+        value |= (value >> 8);
+        value |= (value >> 16);
+        return value - (value >>> 1);
+    }
+
+    /**
+     * Returns an {@code int} value with at most a single one-bit, in the position of the
+     * lowest-order ("rightmost") one-bit in the specified {@code int} value. Returns zero if the
+     * specified value has no one-bits in its two's complement binary representation, that is, if it
+     * is equal to zero.
+     *
+     * @param value the value whose lowest one bit is to be computed
+     * @return an {@code int} value with a single one-bit, in the position of the lowest-order
+     *         one-bit in the specified value, or zero if the specified value is itself equal to
+     *         zero.
+     * @since 1.5
+     */
+    public static int lowestOneBit(int value) {
+        // HD, Section 2-1
+        return value & -value;
     }
 
     /**
@@ -227,6 +245,69 @@ class JSInteger extends JSNumber {
     }
 
     /**
+     * Returns the number of one-bits in the two's complement binary representation of the specified
+     * {@code int} value. This function is sometimes referred to as the <i>population count</i>.
+     *
+     * @param i the value whose bits are to be counted
+     * @return the number of one-bits in the two's complement binary representation of the specified
+     *         {@code int} value.
+     * @since 1.5
+     */
+    public static int bitCount(int i) {
+        // HD, Figure 5-2
+        i = i - ((i >>> 1) & 0x55555555);
+        i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
+        i = (i + (i >>> 4)) & 0x0f0f0f0f;
+        i = i + (i >>> 8);
+        i = i + (i >>> 16);
+        return i & 0x3f;
+    }
+
+    /**
+     * Returns the value obtained by rotating the two's complement binary representation of the
+     * specified {@code int} value left by the specified number of bits. (Bits shifted out of the
+     * left hand, or high-order, side reenter on the right, or low-order.)
+     * <p>
+     * Note that left rotation with a negative distance is equivalent to right rotation:
+     * {@code rotateLeft(val, -distance) == rotateRight(val,
+     * distance)}. Note also that rotation by any multiple of 32 is a no-op, so all but the last
+     * five bits of the rotation distance can be ignored, even if the distance is negative:
+     * {@code rotateLeft(val,
+     * distance) == rotateLeft(val, distance & 0x1F)}.
+     *
+     * @param i the value whose bits are to be rotated left
+     * @param distance the number of bit positions to rotate left
+     * @return the value obtained by rotating the two's complement binary representation of the
+     *         specified {@code int} value left by the specified number of bits.
+     * @since 1.5
+     */
+    public static int rotateLeft(int i, int distance) {
+        return (i << distance) | (i >>> -distance);
+    }
+
+    /**
+     * Returns the value obtained by rotating the two's complement binary representation of the
+     * specified {@code int} value right by the specified number of bits. (Bits shifted out of the
+     * right hand, or low-order, side reenter on the left, or high-order.)
+     * <p>
+     * Note that right rotation with a negative distance is equivalent to left rotation:
+     * {@code rotateRight(val, -distance) == rotateLeft(val,
+     * distance)}. Note also that rotation by any multiple of 32 is a no-op, so all but the last
+     * five bits of the rotation distance can be ignored, even if the distance is negative:
+     * {@code rotateRight(val,
+     * distance) == rotateRight(val, distance & 0x1F)}.
+     *
+     * @param i the value whose bits are to be rotated right
+     * @param distance the number of bit positions to rotate right
+     * @return the value obtained by rotating the two's complement binary representation of the
+     *         specified {@code int} value right by the specified number of bits.
+     * @since 1.5
+     */
+    public static int rotateRight(int i, int distance) {
+        return (i >>> distance) | (i << -distance);
+    }
+
+    /**
      * <p>
      * Parses the string argument as a signed decimal integer. The characters in the string must all
      * be decimal digits, except that the first character may be an ASCII minus sign {@code '-'} (
@@ -269,7 +350,6 @@ class JSInteger extends JSNumber {
      * <p>
      * Examples:
      * </p>
-     * 
      * <pre>
      * parseInt("0", 10) returns 0
      * parseInt("473", 10) returns 473
@@ -364,47 +444,34 @@ class JSInteger extends JSNumber {
     }
 
     /**
-     * Returns the value obtained by rotating the two's complement binary representation of the
-     * specified {@code int} value left by the specified number of bits. (Bits shifted out of the
-     * left hand, or high-order, side reenter on the right, or low-order.)
-     * <p>
-     * Note that left rotation with a negative distance is equivalent to right rotation:
-     * {@code rotateLeft(val, -distance) == rotateRight(val,
-     * distance)}. Note also that rotation by any multiple of 32 is a no-op, so all but the last
-     * five bits of the rotation distance can be ignored, even if the distance is negative:
-     * {@code rotateLeft(val,
-     * distance) == rotateLeft(val, distance & 0x1F)}.
+     * Returns the signum function of the specified {@code int} value. (The return value is -1 if
+     * the specified value is negative; 0 if the specified value is zero; and 1 if the specified
+     * value is positive.)
      *
-     * @param i the value whose bits are to be rotated left
-     * @param distance the number of bit positions to rotate left
-     * @return the value obtained by rotating the two's complement binary representation of the
-     *         specified {@code int} value left by the specified number of bits.
+     * @param value the value whose signum is to be computed
+     * @return the signum function of the specified {@code int} value.
      * @since 1.5
      */
-    public static int rotateLeft(int i, int distance) {
-        return (i << distance) | (i >>> -distance);
+    public static int signum(int value) {
+        // HD, Section 2-7
+        return (value >> 31) | (-value >>> 31);
     }
 
     /**
-     * Returns the value obtained by rotating the two's complement binary representation of the
-     * specified {@code int} value right by the specified number of bits. (Bits shifted out of the
-     * right hand, or low-order, side reenter on the left, or high-order.)
-     * <p>
-     * Note that right rotation with a negative distance is equivalent to left rotation:
-     * {@code rotateRight(val, -distance) == rotateLeft(val,
-     * distance)}. Note also that rotation by any multiple of 32 is a no-op, so all but the last
-     * five bits of the rotation distance can be ignored, even if the distance is negative:
-     * {@code rotateRight(val,
-     * distance) == rotateRight(val, distance & 0x1F)}.
+     * Returns the value obtained by reversing the order of the bits in the two's complement binary
+     * representation of the specified {@code int} value.
      *
-     * @param i the value whose bits are to be rotated right
-     * @param distance the number of bit positions to rotate right
-     * @return the value obtained by rotating the two's complement binary representation of the
-     *         specified {@code int} value right by the specified number of bits.
+     * @param value the value to be reversed
+     * @return the value obtained by reversing order of the bits in the specified {@code int} value.
      * @since 1.5
      */
-    public static int rotateRight(int i, int distance) {
-        return (i >>> distance) | (i << -distance);
+    public static int reverse(int value) {
+        // HD, Figure 7-1
+        value = (value & 0x55555555) << 1 | (value >>> 1) & 0x55555555;
+        value = (value & 0x33333333) << 2 | (value >>> 2) & 0x33333333;
+        value = (value & 0x0f0f0f0f) << 4 | (value >>> 4) & 0x0f0f0f0f;
+        value = (value << 24) | ((value & 0xff00) << 8) | ((value >>> 8) & 0xff00) | (value >>> 24);
+        return value;
     }
 
     /**
@@ -447,12 +514,12 @@ class JSInteger extends JSNumber {
      * in hexadecimal (base&nbsp;16) with no extra leading {@code 0}s. If the unsigned magnitude is
      * zero, it is represented by a single zero character {@code '0'} (<code>'&#92;u0030'</code>);
      * otherwise, the first character of the representation of the unsigned magnitude will not be
-     * the zero character. The following characters are used as hexadecimal digits: <blockquote>
-     * {@code 0123456789abcdef} </blockquote> These are the characters <code>'&#92;u0030'</code>
-     * through <code>'&#92;u0039'</code> and <code>'&#92;u0061'</code> through
-     * <code>'&#92;u0066'</code>. If uppercase letters are desired, the
-     * {@link java.lang.String#toUpperCase()} method may be called on the result: <blockquote>
-     * {@code Integer.toHexString(n).toUpperCase()} </blockquote>
+     * the zero character. The following characters are used as hexadecimal digits:
+     * <blockquote> {@code 0123456789abcdef} </blockquote> These are the characters
+     * <code>'&#92;u0030'</code> through <code>'&#92;u0039'</code> and <code>'&#92;u0061'</code>
+     * through <code>'&#92;u0066'</code>. If uppercase letters are desired, the
+     * {@link java.lang.String#toUpperCase()} method may be called on the result:
+     * <blockquote> {@code Integer.toHexString(n).toUpperCase()} </blockquote>
      * 
      * @param value an integer to be converted to a string.
      * @return the string representation of the unsigned integer value represented by the argument
