@@ -11,14 +11,10 @@ package jsx.style;
 
 import javafx.beans.property.BooleanProperty;
 
-public interface BinaryStyle {
-
-    /**
-     * <p>
-     * Declare styles.
-     * </p>
-     */
-    void declare(boolean state);
+/**
+ * @version 2015/05/04 13:33:36
+ */
+public interface BinaryStyle extends ValueStyle<Boolean> {
 
     /**
      * <p>
