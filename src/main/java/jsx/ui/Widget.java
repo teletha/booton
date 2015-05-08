@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -34,6 +35,7 @@ import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import jsx.debug.Profile;
+import jsx.style.ValueStyle;
 import jsx.ui.piece.Input;
 import kiss.Events;
 import kiss.I;
@@ -77,6 +79,61 @@ public abstract class Widget {
 
         rendering = new Rendering(this, root);
         rendering.willExecute();
+    }
+
+    /**
+     * <p>
+     * Define action for the specified location and 'CLICK' event.
+     * </p>
+     * 
+     * @param locator
+     * @param action
+     * @return
+     */
+    protected <V> Action<V> click(ValueStyle<V> locator, Consumer<V> action) {
+        return listen(UIAction.Click, locator, null, action);
+    }
+
+    /**
+     * <p>
+     * Define action for the specified location and 'CLICK' event.
+     * </p>
+     * 
+     * @param locator
+     * @param event
+     * @param action
+     * @return
+     */
+    protected final <S, V> Action<V> click(ValueStyle<S> locator, Function<Events<S>, Events<V>> event, Consumer<V> action) {
+        return listen(UIAction.Click, locator, event, action);
+    }
+
+    /**
+     * <p>
+     * Define action for the specified location and 'RIGHT CLICK' event.
+     * </p>
+     * 
+     * @param locator
+     * @param action
+     * @return
+     */
+    protected <V> Action<V> rclick(ValueStyle<V> locator, Consumer<V> action) {
+        return listen(UIAction.ClickRight, locator, null, action);
+    }
+
+    /**
+     * <p>
+     * Define action for the specified location and 'RIGHT CLICK' event.
+     * </p>
+     * 
+     * @param type
+     * @param locator
+     * @param events
+     * @param action
+     * @return
+     */
+    protected final <S, V> Action<V> listen(UIAction type, ValueStyle<S> locator, Function<Events<S>, Events<V>> events, Consumer<V> action) {
+        return new Action(type, locator, events, action);
     }
 
     /**
@@ -255,7 +312,8 @@ public abstract class Widget {
      * @return A widget with the specified models.
      */
     public static final <W extends Widget1<First>, First> W of(Class<W> widgetType, First model1) {
-        return (W) widgets.computeIfAbsent(Objects.hash(widgetType, model1), key -> create(widgetType, new Object[] {model1}));
+        return (W) widgets
+                .computeIfAbsent(Objects.hash(widgetType, model1), key -> create(widgetType, new Object[] {model1}));
     }
 
     /**
