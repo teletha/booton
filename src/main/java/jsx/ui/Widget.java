@@ -90,7 +90,7 @@ public abstract class Widget {
      * @param action
      * @return
      */
-    protected <V> Action<V> click(ValueStyle<V> locator, Consumer<V> action) {
+    protected <V> Events<V> click(ValueStyle<V> locator, Consumer<V> action) {
         return listen(UIAction.Click, locator, null, action);
     }
 
@@ -104,7 +104,7 @@ public abstract class Widget {
      * @param action
      * @return
      */
-    protected final <S, V> Action<V> click(ValueStyle<S> locator, Function<Events<S>, Events<V>> event, Consumer<V> action) {
+    protected final <S, V> Events<V> click(ValueStyle<S> locator, Function<Events<S>, Events<V>> event, Consumer<V> action) {
         return listen(UIAction.Click, locator, event, action);
     }
 
@@ -117,7 +117,7 @@ public abstract class Widget {
      * @param action
      * @return
      */
-    protected <V> Action<V> rclick(ValueStyle<V> locator, Consumer<V> action) {
+    protected <V> Events<V> rclick(ValueStyle<V> locator, Consumer<V> action) {
         return listen(UIAction.ClickRight, locator, null, action);
     }
 
@@ -132,8 +132,8 @@ public abstract class Widget {
      * @param action
      * @return
      */
-    protected final <S, V> Action<V> listen(UIAction type, ValueStyle<S> locator, Function<Events<S>, Events<V>> events, Consumer<V> action) {
-        return new Action(type, locator, events, action);
+    protected final <S, V> Events<V> listen(UIAction type, ValueStyle<S> locator, Function<Events<S>, Events<V>> events, Consumer<V> action) {
+        return null;
     }
 
     /**
