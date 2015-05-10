@@ -579,7 +579,7 @@ public abstract class Widget {
         @Override
         public void accept(UIEvent event) {
             for (int i = 0, size = listeners.length(); i < size; i++) {
-                listeners.get(i).onNext(event);
+                listeners.get(i).accept(event);
             }
         }
     }

@@ -11,10 +11,9 @@ package jsx.bwt;
 
 import static jsx.bwt.FormUIStyle.*;
 
-import java.util.function.Consumer;
-
 import js.dom.UIAction;
 import js.dom.UIEvent;
+import kiss.Observer;
 
 /**
  * @version 2013/04/17 16:09:04
@@ -41,7 +40,7 @@ public class Button extends FormUI<Button> {
     /**
      * @param label
      */
-    public Button(String label, Consumer<UIEvent> action) {
+    public Button(String label, Observer<UIEvent> action) {
         super("span");
 
         form.add(ButtonForm).text(label).observe(UIAction.Click).to(action);
@@ -52,7 +51,7 @@ public class Button extends FormUI<Button> {
     /**
      * @param label
      */
-    public Button(Icon icon, Consumer<UIEvent> action) {
+    public Button(Icon icon, Observer<UIEvent> action) {
         this("", action);
 
         form.add(Icons).attr("icon", icon.code);

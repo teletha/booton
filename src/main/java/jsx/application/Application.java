@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +24,7 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import jsx.event.Publishable;
 import kiss.I;
+import kiss.Observer;
 
 /**
  * @version 2012/12/11 14:19:29
@@ -89,7 +89,7 @@ public abstract class Application {
     /**
      * @version 2013/06/17 13:57:06
      */
-    private static class Router implements Consumer<UIEvent> {
+    private static class Router implements Observer<UIEvent> {
 
         /** The current page. */
         private static Page current;

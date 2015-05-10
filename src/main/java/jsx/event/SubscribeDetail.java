@@ -27,8 +27,8 @@ class SubscribeDetail implements Subscribable<Subscribe> {
      */
     @Override
     public Object detect(Method method, Subscribe annotation) {
-        return ClassUtil.wrap(method.getParameterTypes().length == 1 ? method.getParameterTypes()[0]
-                : annotation.value());
+        return ClassUtil
+                .wrap(method.getParameterTypes().length == 1 ? method.getParameterTypes()[0] : annotation.value());
     }
 
     /**
@@ -46,7 +46,7 @@ class SubscribeDetail implements Subscribable<Subscribe> {
                 if (value instanceof Disposable) {
                     ((Disposable) value).dispose();
                 }
-                observer.onNext(value);
+                observer.accept(value);
             });
         }
 

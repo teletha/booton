@@ -44,7 +44,7 @@ class SubscribeUIDetail implements Subscribable<SubscribeUI> {
                 if (value instanceof Disposable) {
                     ((Disposable) value).dispose();
                 }
-                observer.onNext(value);
+                observer.accept(value);
             });
         }
 

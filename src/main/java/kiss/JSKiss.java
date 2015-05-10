@@ -40,7 +40,6 @@ import java.util.concurrent.TimeUnit;
 import javax.script.ScriptException;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SetProperty;
@@ -54,6 +53,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.Global;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -64,7 +64,6 @@ import kiss.model.ClassUtil;
 import kiss.model.Model;
 import kiss.model.Property;
 import kiss.model.PropertyWalker;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/08/02 12:39:06
@@ -139,8 +138,8 @@ class JSKiss {
      * </p>
      * 
      * @param <E> An Extension Point.
-     * @param extensionPoint An extension point class. The <a
-     *            href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
+     * @param extensionPoint An extension point class. The
+     *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
      *            otherwise this method will return empty list.
      * @return All Extensions of the given Extension Point or empty list.
      * @throws NullPointerException If the Extension Point is <code>null</code>.
@@ -167,8 +166,8 @@ class JSKiss {
      * </p>
      * 
      * @param <E> An Extension Point.
-     * @param extensionPoint An Extension Point class. The <a
-     *            href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
+     * @param extensionPoint An Extension Point class. The
+     *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
      *            otherwise this method will return <code>null</code>.
      * @param key An <a href="Extensible.html#ExtensionKey">Extension Key</a> class.
      * @return A associated Extension of the given Extension Point and the given Extension Key or
@@ -194,8 +193,8 @@ class JSKiss {
      * </p>
      * 
      * @param <E> An Extension Point.
-     * @param extensionPoint An extension point class. The <a
-     *            href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
+     * @param extensionPoint An extension point class. The
+     *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
      *            otherwise this method will return empty list.
      * @return All Extension classes of the given Extension Point or empty list.
      * @throws NullPointerException If the Extension Point is <code>null</code>.
@@ -419,7 +418,8 @@ class JSKiss {
                 Manageable manageable = actualClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
-                lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class : manageable.lifestyle()));
+                lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class
+                        : manageable.lifestyle()));
             }
 
             // Trace dependency graph to detect circular dependencies.
@@ -456,7 +456,7 @@ class JSKiss {
      * @param observable A target to observe.
      * @return A observable event stream.
      */
-    public static <E extends Observable> Events<E> observe(E observable) {
+    public static <E extends javafx.beans.Observable> Events<E> observe(E observable) {
         if (observable == null) {
             return Events.NEVER;
         }
@@ -464,7 +464,7 @@ class JSKiss {
         return new Events<>(observer -> {
             // create actual listener
             InvalidationListener listener = value -> {
-                observer.onNext((E) value);
+                observer.accept((E) value);
             };
 
             observable.addListener(listener); // register listener
@@ -496,7 +496,7 @@ class JSKiss {
         return new Events<>(observer -> {
             // create actual listener
             ChangeListener<E> listener = (o, oldValue, newValue) -> {
-                observer.onNext(newValue);
+                observer.accept(newValue);
             };
 
             observable.addListener(listener); // register listener
@@ -520,7 +520,6 @@ class JSKiss {
      * {@link AutoCloseable#close()}, except any exceptions will be ignored. This is typically used
      * in finally block like the following.
      * </p>
-     * 
      * <pre>
      * AutoCloseable input = null;
      * 
@@ -542,7 +541,6 @@ class JSKiss {
      * the checked exception is unchecked one. So you can catch a raw checked exception in the
      * caller of the method which calls this method.
      * </p>
-     * 
      * <pre>
      * private void callerWithoutErrorHandling() {
      *     methodQuietly();
@@ -769,7 +767,8 @@ class JSKiss {
             if (object != null) {
                 Class clazz = object.getPropertyAs(Class.class, "$");
 
-                if (((Modifier.INTERFACE | Modifier.ABSTRACT) & clazz.getModifiers()) == 0 && type != clazz && type.isAssignableFrom(clazz)) {
+                if (((Modifier.INTERFACE | Modifier.ABSTRACT) & clazz.getModifiers()) == 0 && type != clazz && type
+                        .isAssignableFrom(clazz)) {
                     matched.add(clazz);
                 }
             }
@@ -818,7 +817,8 @@ class JSKiss {
             if (property.isAttribute()) {
                 value = transform(js.getProperty(property.name), property.model.type);
             } else {
-                value = read(property.model, make(property.model.type), js.getPropertyAs(NativeObject.class, property.name));
+                value = read(property.model, make(property.model.type), js
+                        .getPropertyAs(NativeObject.class, property.name));
             }
 
             // assign value

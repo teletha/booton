@@ -11,12 +11,6 @@ package jsx.event;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
-
-import js.dom.UIAction;
-import js.dom.UIEvent;
-import kiss.Disposable;
-import kiss.I;
 
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -24,6 +18,11 @@ import org.junit.runner.RunWith;
 
 import antibug.Chronus;
 import booton.soeur.ScriptRunner;
+import js.dom.UIAction;
+import js.dom.UIEvent;
+import kiss.Disposable;
+import kiss.I;
+import kiss.Observer;
 
 /**
  * @version 2014/03/09 11:54:20
@@ -375,7 +374,7 @@ public class PublishableTest {
         assert reciever.string.equals("click");
 
         reciever.publish(event(UIAction.Focus));
-        assert !reciever.string.equals("focus");
+        assert!reciever.string.equals("focus");
     }
 
     @Test
@@ -475,7 +474,7 @@ public class PublishableTest {
     @Test
     public void registerConsumerInt() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        Consumer<Integer> consumer = pubsub::consumeInt;
+        Observer<Integer> consumer = pubsub::consumeInt;
         pubsub.subscribe(int.class, consumer);
 
         pubsub.publish(10);
@@ -495,7 +494,7 @@ public class PublishableTest {
     @Test
     public void registerConsumerString() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        Consumer<String> consumer = pubsub::consumeString;
+        Observer<String> consumer = pubsub::consumeString;
         pubsub.subscribe(String.class, consumer);
 
         pubsub.publish("Hanekawa");
@@ -536,7 +535,7 @@ public class PublishableTest {
     @Test
     public void registerConsumerMultiple() throws Exception {
         FunctionalPubSub pubsub = new FunctionalPubSub();
-        Consumer<Integer> consumer = pubsub::consumeInt;
+        Observer<Integer> consumer = pubsub::consumeInt;
         pubsub.subscribe(int.class, consumer);
         pubsub.subscribe(int.class, consumer);
         pubsub.subscribe(int.class, consumer);

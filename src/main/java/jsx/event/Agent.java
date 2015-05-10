@@ -19,7 +19,7 @@ import kiss.Observer;
  * @version 2014/01/14 10:23:18
  */
 @SuppressWarnings("serial")
-class Agent<V> extends ArrayList<Disposable> implements Observer<V>, Disposable {
+class Agent<V> extends ArrayList<Disposable>implements Observer<V>, Disposable {
 
     /** The delegation. */
     Observer<? super V> observer;
@@ -37,11 +37,11 @@ class Agent<V> extends ArrayList<Disposable> implements Observer<V>, Disposable 
      * {@inheritDoc}
      */
     @Override
-    public void onCompleted() {
+    public void complete() {
         if (complete != null) {
             complete.run();
         } else if (observer != null) {
-            observer.onCompleted();
+            observer.complete();
         }
     }
 
@@ -49,11 +49,11 @@ class Agent<V> extends ArrayList<Disposable> implements Observer<V>, Disposable 
      * {@inheritDoc}
      */
     @Override
-    public void onError(Throwable e) {
+    public void error(Throwable e) {
         if (error != null) {
             error.accept(e);
         } else if (observer != null) {
-            observer.onError(e);
+            observer.error(e);
         }
     }
 
@@ -61,11 +61,11 @@ class Agent<V> extends ArrayList<Disposable> implements Observer<V>, Disposable 
      * {@inheritDoc}
      */
     @Override
-    public void onNext(V value) {
+    public void accept(V value) {
         if (next != null) {
             next.accept(value);
         } else if (observer != null) {
-            observer.onNext(value);
+            observer.accept(value);
         }
     }
 

@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import booton.translator.JavascriptNative;
 import js.lang.NativeFunction;
 import jsx.event.Publishable;
 import kiss.Events;
-import booton.translator.JavascriptNative;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import booton.translator.JavascriptNative;
  * 
  * @version 2013/12/29 0:15:36
  */
-public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<T> implements JavascriptNative {
+public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<T>implements JavascriptNative {
 
     /** The event listener holder. */
     private Map<UIAction, Listener> natives;
@@ -73,7 +73,7 @@ public abstract class EventTarget<T extends EventTarget<T>> extends Publishable<
     public Events<UIEvent> listen(UIAction type) {
         return new Events<UIEvent>(observer -> {
             // create native event listener and delegete event to the given event observer.
-            NativeFunction nativeListener = new NativeFunction<UIEvent>(observer::onNext);
+            NativeFunction nativeListener = new NativeFunction<UIEvent>(observer::accept);
 
             // register
             addEventListener(type.name, nativeListener);

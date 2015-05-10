@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -111,7 +110,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param subscriber An event subscriber to register.
      * @return Chainable API.
      */
-    public final <T> P subscribe(Class<T> type, Consumer<T> subscriber) {
+    public final <T> P subscribe(Class<T> type, Observer<T> subscriber) {
         observe(type).to(subscriber);
 
         // API definition
@@ -127,7 +126,7 @@ public class Publishable<P extends Publishable<P>> {
      * @param listener An event listener to add.
      * @return Chainable API.
      */
-    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> P subscribe(T type, Consumer<E> listener) {
+    public final <T extends Enum & Predicate<E>, E extends Supplier<T>> P subscribe(T type, Observer<E> listener) {
         observe(type).to(listener);
 
         // API definition
@@ -152,7 +151,8 @@ public class Publishable<P extends Publishable<P>> {
                 Agent agent = new Agent();
                 disposer.put(listeners, agent);
 
-                for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass()).entrySet()) {
+                for (Entry<Method, List<Annotation>> entry : ClassUtil.getAnnotations(listeners.getClass())
+                        .entrySet()) {
                     for (Annotation annotation : entry.getValue()) {
                         Subscribable info = I.find(Subscribable.class, annotation.annotationType());
 
@@ -326,9 +326,9 @@ public class Publishable<P extends Publishable<P>> {
                     if (subscribers != null) {
                         for (Observer subscriber : subscribers) {
                             try {
-                                subscriber.onNext(event);
+                                subscriber.accept(event);
                             } catch (Throwable e) {
-                                subscriber.onError(e);
+                                subscriber.error(e);
                             }
                         }
                     }
