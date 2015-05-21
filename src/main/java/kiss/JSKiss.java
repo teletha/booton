@@ -516,6 +516,45 @@ class JSKiss {
 
     /**
      * <p>
+     * Create value set.
+     * </p>
+     * 
+     * @param param1 A first parameter.
+     * @return
+     */
+    public static <Param1> Unary<Param1> pair(Param1 param1) {
+        return new Unary(param1);
+    }
+
+    /**
+     * <p>
+     * Create value set.
+     * </p>
+     * 
+     * @param param1 A first parameter.
+     * @param param2 A second parameter.
+     * @return
+     */
+    public static <Param1, Param2> Binary<Param1, Param2> pair(Param1 param1, Param2 param2) {
+        return new Binary(param1, param2);
+    }
+
+    /**
+     * <p>
+     * Create value set.
+     * </p>
+     * 
+     * @param param1 A first parameter.
+     * @param param2 A second parameter.
+     * @param param3 A third parameter.
+     * @return
+     */
+    public static <Param1, Param2, Param3> Ternary<Param1, Param2, Param3> pair(Param1 param1, Param2 param2, Param3 param3) {
+        return new Ternary(param1, param2, param3);
+    }
+
+    /**
+     * <p>
      * Close the specified object quietly if it is {@link AutoCloseable}. Equivalent to
      * {@link AutoCloseable#close()}, except any exceptions will be ignored. This is typically used
      * in finally block like the following.

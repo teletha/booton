@@ -9,9 +9,11 @@
  */
 package js.time;
 
+import java.time.Clock;
 import java.time.DateTimeException;
 
 import booton.translator.JavaAPIProvider;
+import js.lang.NativeDate;
 
 /**
  * @version 2014/04/29 9:51:26
@@ -108,4 +110,17 @@ class Instant {
         return new Instant(seconds, nanoOfSecond);
     }
 
+    /**
+     * Obtains the current instant from the system clock.
+     * <p>
+     * This will query the {@link Clock#systemUTC() system UTC clock} to obtain the current instant.
+     * <p>
+     * Using this method will prevent the ability to use an alternate time-source for testing
+     * because the clock is effectively hard-coded.
+     *
+     * @return the current instant using the system clock, not null
+     */
+    public static Instant now() {
+        return new Instant(NativeDate.now(), 0);
+    }
 }
