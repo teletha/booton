@@ -894,6 +894,23 @@ class JSKiss {
 
     /**
      * <p>
+     * Execute the specified task infinitely in background {@link Thread} with the specified delay
+     * and period.
+     * </p>
+     *
+     * @param delay A initial delay time.
+     * @param period A period time.
+     * @param unit A delay time unit.
+     * @param parallelExecution The <code>true</code> will execute task in parallel,
+     *            <code>false</code> will execute task in serial.
+     * @param task A task to execute.
+     */
+    public static Future<?> schedule(long delay, long period, TimeUnit unit, boolean parallelExecution, Runnable task) {
+        return parallel.scheduleAtFixedRate(task, delay, period, unit);
+    }
+
+    /**
+     * <p>
      * Writes Java object tree to the given output as XML or JSON.
      * </p>
      * <p>
