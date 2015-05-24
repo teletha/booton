@@ -276,4 +276,16 @@ public final class Position extends PropertyDefinition<Position> {
     public Position bottom(Numeric value) {
         return value("bottom", value);
     }
+
+    /**
+     * <p>
+     * Extended property for centering the box against the parent box.
+     * </p>
+     * 
+     * @return
+     */
+    public Position center() {
+        BuiltinStyle.centering.declare();
+        return this;
+    }
 }
