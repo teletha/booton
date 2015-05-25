@@ -133,7 +133,16 @@ public abstract class Widget {
      * @return
      */
     protected final <S, V> Events<V> listen(UIAction type, ValueStyle<S> locator, Function<Events<S>, Events<V>> events, Consumer<V> action) {
-        return null;
+        Events<S> source = new Events<>(observer -> {
+            return () -> {
+
+            };
+        });
+
+        Events<V> e = events.apply(source);
+        e.to(action, null, null);
+
+        return e;
     }
 
     /**
