@@ -34,6 +34,7 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
+import js.lang.builtin.Console;
 import jsx.debug.Profile;
 import jsx.style.ValueStyle;
 import jsx.ui.piece.Input;
@@ -133,6 +134,10 @@ public abstract class Widget {
      * @return
      */
     protected final <S, V> Events<V> listen(UIAction type, ValueStyle<S> locator, Function<Events<S>, Events<V>> events, Consumer<V> action) {
+        if (events == null) {
+            events = e -> (Events<V>) (Object) e;
+        }
+
         Events<S> source = new Events<>(observer -> {
             return () -> {
 
@@ -444,6 +449,8 @@ public abstract class Widget {
             } catch (Exception e) {
                 throw I.quiet(e);
             }
+
+            root.addEventListener("click", new NativeFunction<UIEvent>(v -> Console.log(v.target.type())));
         }
 
         /**

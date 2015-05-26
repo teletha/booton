@@ -473,7 +473,10 @@ public final class VirtualStructure {
         public final void 〡(Style style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines);
+            if (style != null) {
+                style.assignTo(container.classList, container.inlines);
+                container.type = style;
+            }
 
             // enter into the child node
             parents.addLast(latest = container);
@@ -566,7 +569,10 @@ public final class VirtualStructure {
         public final void 〡(Style style, Runnable children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines);
+            if (style != null) {
+                style.assignTo(container.classList, container.inlines);
+                container.type = style;
+            }
 
             // then, clean it for nested invocation
             parents.addLast(latest = container);
@@ -706,8 +712,7 @@ public final class VirtualStructure {
 
         /**
          * <p>
-         * Add {@link Style} if the given attribute is valid.
-         * < /p>
+         * Add {@link Style} if the given attribute is valid. < /p>
          * 
          * @param name An attribute name.
          * @param value An attribute value.

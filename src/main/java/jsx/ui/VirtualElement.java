@@ -10,6 +10,7 @@
 package jsx.ui;
 
 import static js.lang.Global.*;
+
 import js.dom.CSSStyleDeclaration;
 import js.dom.Element;
 import js.lang.NativeArray;
@@ -37,6 +38,8 @@ public class VirtualElement extends VirtualNode<Element> {
 
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
+
+    Style type;
 
     /**
      * @param id
@@ -78,6 +81,8 @@ public class VirtualElement extends VirtualNode<Element> {
                 style.set(inlines.key(i), inlines.value(i));
             }
         }
+
+        dom.type(type);
 
         // assign event listeners
         if (listeners != null) {

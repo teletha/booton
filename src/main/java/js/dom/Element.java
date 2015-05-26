@@ -15,13 +15,12 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.lang.NativeObject;
-import jsx.style.Style;
-import jsx.style.StyleRule;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
+import js.lang.NativeObject;
+import jsx.style.Style;
 
 /**
  * <p>
@@ -31,7 +30,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * @version 2013/07/30 19:05:51
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "Element")
-public abstract class Element extends Node<Element> implements JavascriptNative {
+public abstract class Element extends Node<Element>implements JavascriptNative {
 
     /**
      * <p>
@@ -401,6 +400,12 @@ public abstract class Element extends Node<Element> implements JavascriptNative 
 
     @JavascriptNativePropertyAccessor
     protected abstract void value(String value);
+
+    @JavascriptNativePropertyAccessor
+    public abstract Style type();
+
+    @JavascriptNativePropertyAccessor
+    public abstract void type(Style type);
 
     /**
      * <p>
