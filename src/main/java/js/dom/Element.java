@@ -407,6 +407,12 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
     @JavascriptNativePropertyAccessor
     public abstract void type(Style type);
 
+    @JavascriptNativePropertyAccessor
+    public abstract Style relationValue();
+
+    @JavascriptNativePropertyAccessor
+    public abstract void relationValue(Object type);
+
     /**
      * <p>
      * The tagName attribute must run these steps:

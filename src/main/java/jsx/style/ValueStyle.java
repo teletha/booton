@@ -30,6 +30,6 @@ public interface ValueStyle<V> {
      * @return A specific {@link Style}.
      */
     default Style of(V value) {
-        return () -> declare(value);
+        return new ContextualizableStyle(value, this, () -> declare(value));
     }
 }

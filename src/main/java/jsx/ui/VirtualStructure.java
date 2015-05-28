@@ -15,6 +15,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
@@ -24,6 +25,7 @@ import javafx.beans.value.ObservableValue;
 
 import js.lang.NativeString;
 import jsx.style.Style;
+import jsx.ui.ContextualizedEventListeners.EventListener;
 
 /**
  * @version 2014/09/13 1:52:02
@@ -93,14 +95,20 @@ public final class VirtualStructure {
     /** The node route. */
     private final Deque<VirtualElement> parents = new ArrayDeque();
 
+    /** The associated widget. */
+    private final Widget widget;
+
     /** The latest element. */
     private VirtualElement latest;
+
+    /** The context object. */
+    private Object context;
 
     /**
      * 
      */
-    public VirtualStructure() {
-        this(new VirtualElement(0, "div"));
+    public VirtualStructure(Widget widget) {
+        this(new VirtualElement(0, "div", widget));
     }
 
     /**
@@ -108,6 +116,8 @@ public final class VirtualStructure {
      */
     public VirtualStructure(VirtualElement root) {
         parents.add(latest = root);
+
+        this.widget = root.widget;
     }
 
     public SVG svg() {
@@ -115,7 +125,7 @@ public final class VirtualStructure {
     }
 
     private SVG svg(int id) {
-        return new SVG(id);
+        return new SVG(id, widget);
     }
 
     /**
@@ -134,7 +144,7 @@ public final class VirtualStructure {
      * @return Chainable API.
      */
     private Path path(int id) {
-        return new Path(id);
+        return new Path(id, widget);
     }
 
     /**
@@ -153,7 +163,7 @@ public final class VirtualStructure {
      * @return Chainable API.
      */
     private PolyLine polyline(int id) {
-        return new PolyLine(id);
+        return new PolyLine(id, widget);
     }
 
     /**
@@ -172,7 +182,7 @@ public final class VirtualStructure {
      * @return Chainable API.
      */
     private Rect rect(int id) {
-        return new Rect(id);
+        return new Rect(id, widget);
     }
 
     /**
@@ -340,7 +350,7 @@ public final class VirtualStructure {
             container.items.push(virtualize);
             widget.assemble(new VirtualStructure(virtualize));
         } else if (child.equals("\r\n")) {
-            container.items.push(new VirtualElement(0, "br"));
+            container.items.push(new VirtualElement(0, "br", widget));
         } else {
             container.items.push(new VirtualText(String.valueOf(child)));
         }
@@ -416,7 +426,7 @@ public final class VirtualStructure {
                 }
 
                 // built-in container
-                container = new VirtualElement(id, name);
+                container = new VirtualElement(id, name, widget);
 
                 if (builtin != null) {
                     container.classList.push(builtin);
@@ -463,6 +473,16 @@ public final class VirtualStructure {
             latest = parents.peekLast();
         }
 
+        public ContextualizedEventListeners createSpecifiedListenerDifinitions(Style style) {
+            List<EventListener> listeners = widget.getEventListenersFor(style.locator());
+
+            if (listeners == null) {
+                return null;
+            }
+
+            return new ContextualizedEventListeners(context, listeners);
+        }
+
         /**
          * <p>
          * Define children.
@@ -475,7 +495,8 @@ public final class VirtualStructure {
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) {
                 style.assignTo(container.classList, container.inlines);
-                container.type = style;
+
+                container.contextualized = createSpecifiedListenerDifinitions(style);
             }
 
             // enter into the child node
@@ -571,7 +592,7 @@ public final class VirtualStructure {
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) {
                 style.assignTo(container.classList, container.inlines);
-                container.type = style;
+                container.contextualized = createSpecifiedListenerDifinitions(style);
             }
 
             // then, clean it for nested invocation
@@ -606,10 +627,14 @@ public final class VirtualStructure {
          */
         public final <T> void 〡(Style style, Collection<T> items, Consumer<T> child) {
             〡(style, () -> {
+                Object last = context;
+
                 for (T item : items) {
+                    context = item;
                     modifier = item.hashCode();
                     child.accept(item);
                 }
+                context = last;
             });
         }
 
@@ -735,8 +760,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private DescriptableElement(int id, String name) {
-            super(id, name);
+        private DescriptableElement(int id, String name, Widget widget) {
+            super(id, name, widget);
 
             latest.items.push(this);
         }
@@ -877,8 +902,8 @@ public final class VirtualStructure {
         /**
          * 
          */
-        private SVG(int id) {
-            super(id, "s:svg");
+        private SVG(int id, Widget widget) {
+            super(id, "s:svg", widget);
 
             attributes.set("preserveAspectRatio", "xMidYMid meet");
         }
@@ -926,8 +951,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private Rect(int id) {
-            super(id, "s:rect");
+        private Rect(int id, Widget widget) {
+            super(id, "s:rect", widget);
         }
 
         public Rect position(double x, double y) {
@@ -954,8 +979,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private PolyLine(int id) {
-            super(id, "s:polyline");
+        private PolyLine(int id, Widget widget) {
+            super(id, "s:polyline", widget);
         }
 
         public PolyLine points(double... points) {
@@ -982,8 +1007,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private Path(int id) {
-            super(id, "s:path");
+        private Path(int id, Widget widget) {
+            super(id, "s:path", widget);
         }
 
         /**

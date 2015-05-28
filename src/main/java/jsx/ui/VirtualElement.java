@@ -27,6 +27,9 @@ public class VirtualElement extends VirtualNode<Element> {
     /** The node name. */
     final String name;
 
+    /** The associated widget. */
+    final Widget widget;
+
     /** The attributes. */
     final DualList<String, String> attributes = new DualList();
 
@@ -39,17 +42,18 @@ public class VirtualElement extends VirtualNode<Element> {
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
 
-    Style type;
+    ContextualizedEventListeners contextualized;
 
     /**
      * @param id
      * @param namespace
      * @param name
      */
-    VirtualElement(int id, String name) {
+    VirtualElement(int id, String name, Widget widget) {
         super(id);
 
         this.name = name;
+        this.widget = widget;
     }
 
     /**
@@ -82,7 +86,9 @@ public class VirtualElement extends VirtualNode<Element> {
             }
         }
 
-        dom.type(type);
+        if (contextualized != null) {
+            contextualized.assign(dom);
+        }
 
         // assign event listeners
         if (listeners != null) {

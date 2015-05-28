@@ -26,6 +26,10 @@ public interface Style {
      */
     void declare();
 
+    public default Object locator() {
+        return this;
+    }
+
     /**
      * <p>
      * Compute style class name.

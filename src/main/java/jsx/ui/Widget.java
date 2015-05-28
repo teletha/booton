@@ -15,11 +15,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -34,14 +34,16 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import js.lang.builtin.Console;
 import jsx.debug.Profile;
+import jsx.style.Style;
 import jsx.style.ValueStyle;
+import jsx.ui.ContextualizedEventListeners.EventListener;
 import jsx.ui.piece.Input;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Observer;
+import kiss.Table;
 
 /**
  * @version 2014/08/21 13:31:25
@@ -92,7 +94,7 @@ public abstract class Widget {
      * @return
      */
     protected <V> Events<V> click(ValueStyle<V> locator, Consumer<V> action) {
-        return listen(UIAction.Click, locator, null, action);
+        return on(UIAction.Click, locator, null, action);
     }
 
     /**
@@ -105,8 +107,41 @@ public abstract class Widget {
      * @param action
      * @return
      */
-    protected final <S, V> Events<V> click(ValueStyle<S> locator, Function<Events<S>, Events<V>> event, Consumer<V> action) {
-        return listen(UIAction.Click, locator, event, action);
+    protected final <V> Events<V> click(Style locator, Class<V> type, Consumer<V> action) {
+        return on(UIAction.Click, locator, type, action);
+    }
+
+    /**
+     * <p>
+     * Define action for the specified location and 'CLICK' event.
+     * </p>
+     * 
+     * @param locator
+     * @param event
+     * @param action
+     * @return
+     */
+    protected final <V> Events<V> rclick(Style locator, Class<V> type, Consumer<V> action) {
+        return on(UIAction.ClickRight, locator, type, action);
+    }
+
+    /**
+     * <p>
+     * Define action for the specified location and 'CLICK' event.
+     * </p>
+     * 
+     * @param locator
+     * @param event
+     * @param action
+     * @return
+     */
+    protected final <V> Events<V> on(UIAction action, Object locator, Class<V> type, Consumer<V> listener) {
+        EventListener<V> eventListener = new EventListener(action);
+        eventListener.event.to(listener, null, null);
+
+        definitions.push(locator, eventListener);
+
+        return eventListener.event;
     }
 
     /**
@@ -119,35 +154,16 @@ public abstract class Widget {
      * @return
      */
     protected <V> Events<V> rclick(ValueStyle<V> locator, Consumer<V> action) {
-        return listen(UIAction.ClickRight, locator, null, action);
+        return on(UIAction.ClickRight, locator, null, action);
     }
 
+    private Table<Object, EventListener> definitions = new Table();
+
     /**
-     * <p>
-     * Define action for the specified location and 'RIGHT CLICK' event.
-     * </p>
-     * 
-     * @param type
-     * @param locator
-     * @param events
-     * @param action
-     * @return
+     * @param style
      */
-    protected final <S, V> Events<V> listen(UIAction type, ValueStyle<S> locator, Function<Events<S>, Events<V>> events, Consumer<V> action) {
-        if (events == null) {
-            events = e -> (Events<V>) (Object) e;
-        }
-
-        Events<S> source = new Events<>(observer -> {
-            return () -> {
-
-            };
-        });
-
-        Events<V> e = events.apply(source);
-        e.to(action, null, null);
-
-        return e;
+    public List<EventListener> getEventListenersFor(Object style) {
+        return definitions.get(style);
     }
 
     /**
@@ -254,7 +270,7 @@ public abstract class Widget {
      * </p>
      */
     protected VirtualElement virtualize() {
-        VirtualStructure structure = new VirtualStructure();
+        VirtualStructure structure = new VirtualStructure(this);
 
         // assemble the virtual structure
         assemble(structure);
@@ -422,13 +438,14 @@ public abstract class Widget {
         private final Widget widget;
 
         /** The virtual root element. */
-        private VirtualElement virtual = new VirtualElement(0, "div");
+        private VirtualElement virtual;
 
         /**
          * @param root A target to DOM element to render widget.
          */
         private Rendering(Widget widget, Element root) {
             this.widget = widget;
+            this.virtual = new VirtualElement(0, "div", widget);
             this.virtual.dom = root;
 
             Class type = widget.getClass();
@@ -449,8 +466,6 @@ public abstract class Widget {
             } catch (Exception e) {
                 throw I.quiet(e);
             }
-
-            root.addEventListener("click", new NativeFunction<UIEvent>(v -> Console.log(v.target.type())));
         }
 
         /**
