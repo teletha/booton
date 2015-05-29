@@ -16,9 +16,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeFunction;
 import js.lang.reflect.Reflections;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/10/02 23:00:25
@@ -61,8 +61,8 @@ class JSMethodHandle {
      * Invokes the method handle, allowing any caller type descriptor, and optionally performing
      * conversions on arguments and return values.
      * <p>
-     * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * If the call site's symbolic type descriptor exactly matches this method handle's {@link #type
+     * type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call
@@ -98,8 +98,8 @@ class JSMethodHandle {
      * Invokes the method handle, allowing any caller type descriptor, and optionally performing
      * conversions on arguments and return values.
      * <p>
-     * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * If the call site's symbolic type descriptor exactly matches this method handle's {@link #type
+     * type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call
@@ -135,8 +135,8 @@ class JSMethodHandle {
      * Invokes the method handle, allowing any caller type descriptor, and optionally performing
      * conversions on arguments and return values.
      * <p>
-     * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * If the call site's symbolic type descriptor exactly matches this method handle's {@link #type
+     * type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call
@@ -172,8 +172,8 @@ class JSMethodHandle {
      * Invokes the method handle, allowing any caller type descriptor, and optionally performing
      * conversions on arguments and return values.
      * <p>
-     * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * If the call site's symbolic type descriptor exactly matches this method handle's {@link #type
+     * type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call
@@ -266,13 +266,10 @@ class JSMethodHandle {
      * <p>
      * This call is equivalent to the following code:
      * <p>
-     * <blockquote>
-     * 
-     * <pre>
+     * <blockquote> <pre>
      * MethodHandle invoker = MethodHandles.spreadInvoker(this.type(), 0);
      * Object result = invoker.invokeExact(this, arguments);
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * <p>
      * Unlike the signature polymorphic methods {@code invokeExact} and {@code invoke},
      * {@code invokeWithArguments} can be accessed normally via the Core Reflection API and JNI. It

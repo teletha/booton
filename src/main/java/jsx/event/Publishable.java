@@ -79,7 +79,7 @@ public class Publishable<P extends Publishable<P>> {
      * Observe this event sequence of this {@link Publishable}.
      * </p>
      * 
-     * @param action An event type.
+     * @param types A list of event types.
      * @return Chainable API.
      */
     public final <T extends Enum & Predicate<E>, E extends Supplier<T>> Events<E> observe(T... types) {
