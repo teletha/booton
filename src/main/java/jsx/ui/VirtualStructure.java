@@ -125,6 +125,8 @@ public final class VirtualStructure {
         parents.add(latest = root);
 
         this.widget = widget;
+
+        root.contextualized = createSpecifiedListenerDifinitions(WidgetStyle.Root);
     }
 
     public SVG svg() {
@@ -363,6 +365,20 @@ public final class VirtualStructure {
         }
     }
 
+    private ContextualizedEventListeners createSpecifiedListenerDifinitions(Style style) {
+        if (widget == null) {
+            return null;
+        }
+
+        List<EventListener> listeners = widget.getEventListenersFor(style.locator());
+
+        if (listeners == null) {
+            return null;
+        }
+
+        return new ContextualizedEventListeners(context, listeners);
+    }
+
     /**
      * @version 2015/01/21 14:20:59
      */
@@ -478,20 +494,6 @@ public final class VirtualStructure {
             // leave from the child node
             parents.pollLast();
             latest = parents.peekLast();
-        }
-
-        public ContextualizedEventListeners createSpecifiedListenerDifinitions(Style style) {
-            if (widget == null) {
-                return null;
-            }
-
-            List<EventListener> listeners = widget.getEventListenersFor(style.locator());
-
-            if (listeners == null) {
-                return null;
-            }
-
-            return new ContextualizedEventListeners(context, listeners);
         }
 
         /**
@@ -893,14 +895,11 @@ public final class VirtualStructure {
          */
         protected final E edit(String name, NativeString value) {
             int index = attributes.key(name);
-            System.out.println(index);
             if (index == -1) {
                 attributes.add(name, value.toString().trim());
             } else {
                 attributes.values().set(index, new NativeString(attributes.value(index)).concat(value).toString());
             }
-            System.out.println(attributes.keys());
-            System.out.println(attributes.values());
             return (E) this;
         }
     }

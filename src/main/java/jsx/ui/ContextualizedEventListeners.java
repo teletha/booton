@@ -10,11 +10,11 @@
 package jsx.ui;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import js.dom.Element;
 import js.dom.UIAction;
 import js.dom.UIEvent;
-import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import kiss.Events;
 import kiss.Observer;
@@ -42,15 +42,15 @@ class ContextualizedEventListeners {
      */
     void assign(Element element) {
         for (int i = 0, length = listeners.size(); i < length; i++) {
-            EventListener<?> listener = listeners.get(i);
+            EventListener<?, ?> listener = listeners.get(i);
 
-            element.addEventListener(listener.type.name, new NativeFunction<UIEvent>(event -> {
-                if (listener.type == UIAction.ClickRight) {
+            element.addEventListener(listener.action.name, new NativeFunction<UIEvent>(event -> {
+                if (listener.action == UIAction.ClickRight) {
                     event.preventDefault();
                 }
 
-                for (int j = 0, size = listener.observers.length(); j < size; j++) {
-                    listener.observers.get(j).accept(value);
+                for (Observer observer : listener.observers) {
+                    observer.accept(value == null ? event : value);
                 }
             }));
         }
@@ -59,29 +59,31 @@ class ContextualizedEventListeners {
     /**
      * @version 2015/05/28 17:11:19
      */
-    static class EventListener<V> {
+    static class EventListener<S, V> {
 
         /** The action type. */
-        private final UIAction type;
+        final UIAction action;
+
+        /** The exposed event. */
+        final Events<V> event;
 
         /** The actual listeners. */
-        private final NativeArray<Observer> observers = new NativeArray();
-
-        Events<V> event;
+        final CopyOnWriteArrayList<Observer> observers = new CopyOnWriteArrayList();
 
         /**
          * @param type
          */
-        public EventListener(UIAction type) {
-            this.type = type;
-
-            this.event = new Events<>(observer -> {
-                observers.push(observer);
+        public EventListener(UIAction action) {
+            Events<V> event = new Events<>(observer -> {
+                observers.add(observer);
 
                 return () -> {
-                    observers.remove(observers.indexOf(observer));
+                    observers.remove(observer);
                 };
             });
+
+            this.action = action;
+            this.event = event;
         }
     }
 }

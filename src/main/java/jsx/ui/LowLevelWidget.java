@@ -20,12 +20,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
-import js.dom.UIAction;
+import booton.reactive.css.StyleDefinition;
 import js.dom.UIEvent;
 import jsx.style.Style;
 import kiss.Disposable;
 import kiss.Events;
-import booton.reactive.css.StyleDefinition;
 
 /**
  * @version 2014/10/10 9:24:46
@@ -41,17 +40,21 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         if (hover == null) {
             hover = new SimpleBooleanProperty(false);
 
-            listen(MouseEnter).to(v -> hover.set(true));
-            listen(MouseLeave).to(v -> hover.set(false));
+            on(MouseEnter).to(v -> hover.set(true));
+            on(MouseLeave).to(v -> hover.set(false));
         }
         return hover;
     }
+
+    private final Events<UIEvent> click = on(Click).filter(this::isValid);
+
+    private final Events<UIEvent> dbclick = on(DoubleClick).filter(this::isValid);
 
     /**
      * @return
      */
     public T click(Runnable action) {
-        disposeLater(listen(UIAction.Click).filter(this::isValid).to(e -> action.run()));
+        click.to(e -> action.run());
 
         return (T) this;
     }
@@ -60,7 +63,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
      * @return
      */
     public T dbclick(Runnable action) {
-        disposeLater(listen(UIAction.DoubleClick).filter(this::isValid).to(e -> action.run()));
+        dbclick.to(e -> action.run());
 
         return (T) this;
     }
@@ -96,8 +99,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = listen(KeyPress).filter(byKey);
-            Events<UIEvent> keyUp = listen(KeyUp).filter(byKey);
+            Events<UIEvent> keyPress = on(KeyPress).filter(byKey);
+            Events<UIEvent> keyUp = on(KeyUp).filter(byKey);
             // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();

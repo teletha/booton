@@ -62,7 +62,7 @@ class JSMethodHandle {
      * conversions on arguments and return values.
      * <p>
      * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #type type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call
@@ -99,7 +99,7 @@ class JSMethodHandle {
      * conversions on arguments and return values.
      * <p>
      * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #type type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call
@@ -136,7 +136,7 @@ class JSMethodHandle {
      * conversions on arguments and return values.
      * <p>
      * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #type type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call
@@ -173,7 +173,7 @@ class JSMethodHandle {
      * conversions on arguments and return values.
      * <p>
      * If the call site's symbolic type descriptor exactly matches this method handle's
-     * {@link #type type}, the call proceeds as if by {@link #invokeExact invokeExact}.
+     * {@link #action type}, the call proceeds as if by {@link #invokeExact invokeExact}.
      * <p>
      * Otherwise, the call proceeds as if this method handle were first adjusted by calling
      * {@link #asType asType} to adjust this method handle to the required type, and then the call

@@ -10,11 +10,10 @@
 package jsx.ui;
 
 import js.dom.Node;
-import js.lang.NativeArray;
-import jsx.ui.Widget.Listener;
 import kiss.Disposable;
 
-/** <p>
+/**
+ * <p>
  * {@link VirtualNode} is a snapshot of the {@link Widget} state which includes its tree structure.
  * </p>
  * 
@@ -42,17 +41,6 @@ abstract class VirtualNode<N extends Node> implements Disposable {
     N dom;
 
     /**
-     * <p>
-     * The holder of event listeners.
-     * </p>
-     * <p>
-     * Only the latest Virtual DOM has the event listeners, and other Virtual DOM discards its
-     * reference immediately.
-     * </p>
-     */
-    NativeArray<Listener> listeners;
-
-    /**
      * 
      */
     VirtualNode(int id) {
@@ -74,6 +62,5 @@ abstract class VirtualNode<N extends Node> implements Disposable {
     @Override
     public void dispose() {
         dom = null;
-        listeners = null;
     }
 }

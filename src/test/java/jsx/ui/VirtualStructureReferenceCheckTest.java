@@ -17,14 +17,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.style.Style;
-import jsx.ui.piece.Input;
-import jsx.ui.piece.UI;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import jsx.style.Style;
+import jsx.ui.piece.Input;
+import jsx.ui.piece.UI;
 
 /**
  * @version 2014/10/06 23:29:29
@@ -236,7 +235,6 @@ public class VirtualStructureReferenceCheckTest {
         private void hasNoReference() {
             for (VirtualNode node : nodes) {
                 assert node.dom == null;
-                assert node.listeners == null;
             }
         }
     }

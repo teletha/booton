@@ -11,10 +11,10 @@ package js.dom;
 
 import java.util.function.Supplier;
 
-import kiss.Disposable;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
+import kiss.Disposable;
 
 /**
  * @version 2013/12/28 11:51:03
@@ -45,6 +45,26 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
     /** The namespace specified when the event was triggered. */
     @JavascriptNativeProperty
     public String namespace;
+
+    /** The DOM element that initiated the event. */
+    @JavascriptNativeProperty
+    @Deprecated
+    public int detail;
+
+    /** The DOM element that initiated the event. */
+    @JavascriptNativeProperty
+    @Deprecated
+    public int deltaX;
+
+    /** The DOM element that initiated the event. */
+    @JavascriptNativeProperty
+    @Deprecated
+    public int deltaY;
+
+    /** The DOM element that initiated the event. */
+    @JavascriptNativeProperty
+    @Deprecated
+    public int deltaZ;
 
     /**
      * 

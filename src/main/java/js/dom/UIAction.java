@@ -108,28 +108,28 @@ public enum UIAction implements Predicate<UIEvent> {
     KeyPress,
 
     /** The ui event type. */
-    @Deprecated
     MouseDown,
 
     /** The ui event type. */
-    @Deprecated
     MouseUp,
 
     /** The ui event type. */
-    @Deprecated
     MouseMove,
 
     /** The ui event type. */
-    @Deprecated
     MouseDoubleClick("dblclick"),
 
     /** The ui event type. */
-    @Deprecated
     MouseEnter,
 
     /** The ui event type. */
-    @Deprecated
     MouseLeave,
+
+    /** The ui event type. */
+    MouseWheelUp("wheel", e -> e.deltaY < 0),
+
+    /** The ui event type. */
+    MouseWheelDown("wheel", e -> e.deltaY < 0),
 
     /** The ui event type. */
     Selection,
@@ -350,6 +350,9 @@ public enum UIAction implements Predicate<UIEvent> {
     /** The event type. */
     public final boolean global;
 
+    /** The event stream converter. */
+    public final Predicate<UIEvent> condition;
+
     /**
      * 
      */
@@ -361,9 +364,17 @@ public enum UIAction implements Predicate<UIEvent> {
      * @param name
      */
     private UIAction(String name) {
+        this(name, null);
+    }
+
+    /**
+     * @param name
+     */
+    private UIAction(String name, Predicate<UIEvent> condition) {
         this.code = -1;
         this.global = false;
         this.name = name;
+        this.condition = condition;
     }
 
     /**
@@ -377,6 +388,7 @@ public enum UIAction implements Predicate<UIEvent> {
         this.code = code;
         this.global = code == 0;
         this.name = 0 < code ? "keydown" : name().toLowerCase();
+        this.condition = null;
     }
 
     /**

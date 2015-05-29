@@ -52,8 +52,8 @@ public class Input extends LowLevelWidget<Input> {
         this.value = value;
 
         // user input functionality
-        Events<UIEvent> functionInput = listen(Paste, Cut);
-        Events<UIEvent> keybordInput = listen(KeyUp);
+        Events<UIEvent> functionInput = on(Paste, Cut);
+        Events<UIEvent> keybordInput = on(KeyUp);
         functionInput.merge(keybordInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
     }
 

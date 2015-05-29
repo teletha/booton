@@ -17,7 +17,6 @@ import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.style.Style;
 import jsx.style.StyleId;
-import jsx.ui.Widget.Listener;
 
 /**
  * @version 2014/10/07 12:49:29
@@ -84,14 +83,6 @@ public class VirtualElement extends VirtualNode<Element> {
 
         if (contextualized != null) {
             contextualized.assign(dom);
-        }
-
-        // assign event listeners
-        if (listeners != null) {
-            for (int i = 0, length = listeners.length(); i < length; i++) {
-                Listener listener = listeners.get(i);
-                dom.addEventListener(listener.type.name, listener.dom);
-            }
         }
 
         // assign children nodes

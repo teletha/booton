@@ -208,7 +208,7 @@ public class NativeArray<T> extends NativeObject {
      * </p>
      * 
      * @param index
-     * @param type
+     * @param action
      * @return
      */
     private <X> X retrieve(int index, X defaultValue) {
