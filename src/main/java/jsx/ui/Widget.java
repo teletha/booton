@@ -445,7 +445,7 @@ public abstract class Widget {
          */
         private Rendering(Widget widget, Element root) {
             this.widget = widget;
-            this.virtual = new VirtualElement(0, "div", widget);
+            this.virtual = new VirtualElement(0, "div");
             this.virtual.dom = root;
 
             Class type = widget.getClass();

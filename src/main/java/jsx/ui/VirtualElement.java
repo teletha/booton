@@ -27,9 +27,6 @@ public class VirtualElement extends VirtualNode<Element> {
     /** The node name. */
     final String name;
 
-    /** The associated widget. */
-    final Widget widget;
-
     /** The attributes. */
     final DualList<String, String> attributes = new DualList();
 
@@ -46,14 +43,13 @@ public class VirtualElement extends VirtualNode<Element> {
 
     /**
      * @param id
-     * @param namespace
      * @param name
+     * @param namespace
      */
-    VirtualElement(int id, String name, Widget widget) {
+    VirtualElement(int id, String name) {
         super(id);
 
         this.name = name;
-        this.widget = widget;
     }
 
     /**

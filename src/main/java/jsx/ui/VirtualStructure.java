@@ -107,17 +107,24 @@ public final class VirtualStructure {
     /**
      * 
      */
-    public VirtualStructure(Widget widget) {
-        this(new VirtualElement(0, "div", widget));
+    public VirtualStructure() {
+        this(null, new VirtualElement(0, "div"));
     }
 
     /**
      * 
      */
-    public VirtualStructure(VirtualElement root) {
+    public VirtualStructure(Widget widget) {
+        this(widget, new VirtualElement(0, "div"));
+    }
+
+    /**
+     * 
+     */
+    public VirtualStructure(Widget widget, VirtualElement root) {
         parents.add(latest = root);
 
-        this.widget = root.widget;
+        this.widget = widget;
     }
 
     public SVG svg() {
@@ -125,7 +132,7 @@ public final class VirtualStructure {
     }
 
     private SVG svg(int id) {
-        return new SVG(id, widget);
+        return new SVG(id);
     }
 
     /**
@@ -144,7 +151,7 @@ public final class VirtualStructure {
      * @return Chainable API.
      */
     private Path path(int id) {
-        return new Path(id, widget);
+        return new Path(id);
     }
 
     /**
@@ -163,7 +170,7 @@ public final class VirtualStructure {
      * @return Chainable API.
      */
     private PolyLine polyline(int id) {
-        return new PolyLine(id, widget);
+        return new PolyLine(id);
     }
 
     /**
@@ -182,7 +189,7 @@ public final class VirtualStructure {
      * @return Chainable API.
      */
     private Rect rect(int id) {
-        return new Rect(id, widget);
+        return new Rect(id);
     }
 
     /**
@@ -348,9 +355,9 @@ public final class VirtualStructure {
             Widget widget = (Widget) child;
             VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
             container.items.push(virtualize);
-            widget.assemble(new VirtualStructure(virtualize));
+            widget.assemble(new VirtualStructure(widget, virtualize));
         } else if (child.equals("\r\n")) {
-            container.items.push(new VirtualElement(0, "br", widget));
+            container.items.push(new VirtualElement(0, "br"));
         } else {
             container.items.push(new VirtualText(String.valueOf(child)));
         }
@@ -426,7 +433,7 @@ public final class VirtualStructure {
                 }
 
                 // built-in container
-                container = new VirtualElement(id, name, widget);
+                container = new VirtualElement(id, name);
 
                 if (builtin != null) {
                     container.classList.push(builtin);
@@ -466,7 +473,7 @@ public final class VirtualStructure {
             container.items.push(virtualize);
 
             // process child nodes
-            widget.assemble(new VirtualStructure(virtualize));
+            widget.assemble(new VirtualStructure(widget, virtualize));
 
             // leave from the child node
             parents.pollLast();
@@ -474,6 +481,10 @@ public final class VirtualStructure {
         }
 
         public ContextualizedEventListeners createSpecifiedListenerDifinitions(Style style) {
+            if (widget == null) {
+                return null;
+            }
+
             List<EventListener> listeners = widget.getEventListenersFor(style.locator());
 
             if (listeners == null) {
@@ -561,7 +572,7 @@ public final class VirtualStructure {
                 container.items.push(virtualize);
 
                 // process child nodes
-                widget.assemble(new VirtualStructure(virtualize));
+                widget.assemble(new VirtualStructure(widget, virtualize));
             }
 
             // leave from the child node
@@ -760,8 +771,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private DescriptableElement(int id, String name, Widget widget) {
-            super(id, name, widget);
+        private DescriptableElement(int id, String name) {
+            super(id, name);
 
             latest.items.push(this);
         }
@@ -813,7 +824,7 @@ public final class VirtualStructure {
                     latest.items.push(virtualize);
 
                     // process child nodes
-                    widget.assemble(new VirtualStructure(virtualize));
+                    widget.assemble(new VirtualStructure(widget, virtualize));
                 }
             });
         }
@@ -902,8 +913,8 @@ public final class VirtualStructure {
         /**
          * 
          */
-        private SVG(int id, Widget widget) {
-            super(id, "s:svg", widget);
+        private SVG(int id) {
+            super(id, "s:svg");
 
             attributes.set("preserveAspectRatio", "xMidYMid meet");
         }
@@ -951,8 +962,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private Rect(int id, Widget widget) {
-            super(id, "s:rect", widget);
+        private Rect(int id) {
+            super(id, "s:rect");
         }
 
         public Rect position(double x, double y) {
@@ -979,8 +990,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private PolyLine(int id, Widget widget) {
-            super(id, "s:polyline", widget);
+        private PolyLine(int id) {
+            super(id, "s:polyline");
         }
 
         public PolyLine points(double... points) {
@@ -1007,8 +1018,8 @@ public final class VirtualStructure {
          * @param id
          * @param name
          */
-        private Path(int id, Widget widget) {
-            super(id, "s:path", widget);
+        private Path(int id) {
+            super(id, "s:path");
         }
 
         /**
