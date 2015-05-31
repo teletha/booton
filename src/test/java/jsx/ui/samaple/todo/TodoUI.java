@@ -20,6 +20,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import booton.reactive.css.DynamicStyle;
 import jsx.ui.BindingHelper;
 import jsx.ui.Key;
 import jsx.ui.VirtualStructure;
@@ -30,7 +31,6 @@ import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.piece.UI;
 import jsx.ui.samaple.todo.TodoTasks.Task;
-import booton.reactive.css.DynamicStyle;
 
 /**
  * @version 2014/09/01 15:14:06
@@ -67,28 +67,28 @@ public class TodoUI extends Widget1<TodoTasks> {
 
     /** The filter button. */
     final Button all = UI.button()
-            .label("all")
+            .label("All")
             .click(this::showAll)
             .styleIf(filter.isEqualTo(Filter.All), TodoUISkin.SELECTED_FILTER)
             .style(selectedFileter.is(Filter.All));
 
     /** The filter button. */
     final Button active = UI.button()
-            .label("active")
+            .label("Active")
             .click(this::showActive)
             .styleIf(filter.isEqualTo(Filter.Active), SELECTED_FILTER)
             .style(selectedFileter.is(Filter.Active));
 
     /** The filter button. */
     final Button completed = UI.button()
-            .label("completed")
+            .label("Completed")
             .click(this::showCompleted)
             .styleIf(filter.isEqualTo(Filter.Completed), SELECTED_FILTER)
             .style(selectedFileter.is(Filter.Completed));
 
     /** The clear button. */
     final Button clear = UI.button()
-            .label("clear completed (", completedSize, ")")
+            .label("Clear Completed (", completedSize, ")")
             .showIf(completedSize.greaterThan(0))
             .click(todos::removeCompleted);
 
