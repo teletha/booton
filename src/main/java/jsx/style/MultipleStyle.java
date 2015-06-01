@@ -17,6 +17,9 @@ import jsx.collection.DualList;
  */
 class MultipleStyle implements Style {
 
+    /** The base style. */
+    private final Style base;
+
     /** The style contianer. */
     private final NativeArray<Style> styles = new NativeArray();
 
@@ -24,7 +27,8 @@ class MultipleStyle implements Style {
      * @param base
      * @param dynamic
      */
-    public MultipleStyle(Style base, Style dynamic) {
+    MultipleStyle(Style base, Style dynamic) {
+        this.base = base;
         this.styles.push(base);
         this.styles.push(dynamic);
     }
@@ -35,6 +39,14 @@ class MultipleStyle implements Style {
     @Override
     public void declare() {
         // do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object locator() {
+        return base;
     }
 
     /**
