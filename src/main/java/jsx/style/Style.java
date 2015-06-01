@@ -67,54 +67,6 @@ public interface Style {
 
     /**
      * <p>
-     * If the specified condition is true, compose this style and the specified style.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @param other An other style to compose.
-     * @return A composed style.
-     */
-    public default Style withIf(boolean condition, Style other) {
-        return condition ? with(other) : this;
-    }
-
-    /**
-     * <p>
-     * If the specified condition is true, compose this style and the specified style.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @param other An other style to compose.
-     * @return A composed style.
-     */
-    public default Style withIf(Events<Boolean> condition, Style other) {
-        if (condition == null) {
-            return this;
-        }
-
-        BooleanProperty property = new SimpleBooleanProperty();
-        condition.to(property::setValue);
-        return withIf(property, other);
-    }
-
-    /**
-     * <p>
-     * If the specified condition is true, compose this style and the specified style.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @param other An other style to compose.
-     * @return A composed style.
-     */
-    public default Style withIf(ObservableBooleanValue condition, Style other) {
-        if (condition == null) {
-            return this;
-        }
-        return withIf(condition.get(), other);
-    }
-
-    /**
-     * <p>
      * Return the conditional style which is applied only when the specified condition is true.
      * </p>
      * 
