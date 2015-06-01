@@ -9,8 +9,10 @@
  */
 package jsx.ui.samaple.todo;
 
+import jsx.style.EnumStyle;
 import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
+import jsx.ui.samaple.todo.TodoUI.Filter;
 
 /**
  * @version 2014/10/27 9:49:27
@@ -32,7 +34,11 @@ public class TodoUISkin extends StyleRuleDescriptor {
 
     };
 
-    static Style SELECTED_FILTER = () -> {
+    public static Style SELECTED_FILTER = () -> {
+        font.weight.bold();
+    };
+
+    static EnumStyle<Filter> FILTER = filter -> {
 
     };
 }

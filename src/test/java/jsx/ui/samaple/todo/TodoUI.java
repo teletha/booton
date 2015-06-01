@@ -20,7 +20,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import booton.reactive.css.DynamicStyle;
 import jsx.ui.BindingHelper;
 import jsx.ui.Key;
 import jsx.ui.VirtualStructure;
@@ -49,14 +48,6 @@ public class TodoUI extends Widget1<TodoTasks> {
     /** The incompleted tasks. */
     final IntegerExpression incompletedSize = BindingHelper.filter(todos.list, not(Task::isCompleted)).sizeProperty();
 
-    /** The selected filter style. */
-    private final DynamicStyle<Filter> selectedFileter = new DynamicStyle(filter) {
-
-        {
-            // font.bold();
-        }
-    };
-
     /** The input field. */
     final Input input = UI.input()
             .disableIf(this::isValidTaskSize)
@@ -69,22 +60,19 @@ public class TodoUI extends Widget1<TodoTasks> {
     final Button all = UI.button()
             .label("All")
             .click(this::showAll)
-            .styleIf(filter.isEqualTo(Filter.All), TodoUISkin.SELECTED_FILTER)
-            .style(selectedFileter.is(Filter.All));
+            .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.All)));
 
     /** The filter button. */
     final Button active = UI.button()
             .label("Active")
             .click(this::showActive)
-            .styleIf(filter.isEqualTo(Filter.Active), SELECTED_FILTER)
-            .style(selectedFileter.is(Filter.Active));
+            .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.Active)));
 
     /** The filter button. */
     final Button completed = UI.button()
             .label("Completed")
             .click(this::showCompleted)
-            .styleIf(filter.isEqualTo(Filter.Completed), SELECTED_FILTER)
-            .style(selectedFileter.is(Filter.Completed));
+            .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.Completed)));
 
     /** The clear button. */
     final Button clear = UI.button()
@@ -214,7 +202,7 @@ public class TodoUI extends Widget1<TodoTasks> {
     /**
      * @version 2014/09/01 16:44:22
      */
-    private static enum Filter implements Predicate<Task> {
+    static enum Filter implements Predicate<Task> {
 
         /** Accept any. */
         All(v -> true),

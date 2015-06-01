@@ -17,10 +17,11 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
-import booton.reactive.css.StyleDefinition;
 import js.dom.UIEvent;
 import jsx.style.Style;
 import kiss.Disposable;
@@ -35,6 +36,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
     private List<Disposable> disposables;
 
     private BooleanProperty hover;
+
+    protected final Property<Style> rootStyle = new SimpleObjectProperty();
 
     public BooleanProperty hover() {
         if (hover == null) {
@@ -132,11 +135,9 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         return (T) this;
     }
 
-    public T styleIf(ObservableValue<Boolean> condition, Style onStyle) {
-        return (T) this;
-    }
+    public T style(Style style) {
+        rootStyle.setValue(style);
 
-    public T style(ObservableValue<StyleDefinition> style) {
         return (T) this;
     }
 

@@ -9,6 +9,7 @@
  */
 package jsx.style;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.Property;
 
 import js.lang.NativeArray;
@@ -91,5 +92,9 @@ public interface Style {
             return this;
         }
         return withIf(state.booleanValue(), other);
+    }
+
+    public default Style when(BooleanBinding condition) {
+        return new ConditionalStyle(this, condition);
     }
 }
