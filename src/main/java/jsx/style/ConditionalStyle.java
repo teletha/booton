@@ -9,7 +9,7 @@
  */
 package jsx.style;
 
-import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ObservableBooleanValue;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
@@ -23,13 +23,13 @@ class ConditionalStyle implements Style {
     private final Style style;
 
     /** The condition. */
-    private final BooleanBinding condition;
+    private final ObservableBooleanValue condition;
 
     /**
      * @param style
      * @param condition
      */
-    ConditionalStyle(Style style, BooleanBinding condition) {
+    ConditionalStyle(Style style, ObservableBooleanValue condition) {
         this.style = style;
         this.condition = condition;
     }

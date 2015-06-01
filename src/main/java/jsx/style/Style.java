@@ -9,11 +9,13 @@
  */
 package jsx.style;
 
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.Property;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableBooleanValue;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import kiss.Events;
 
 /**
  * @version 2015/01/29 10:00:25
@@ -85,16 +87,67 @@ public interface Style {
      * @param other An other style to compose.
      * @return A composed style.
      */
-    public default Style withIf(Property<Boolean> condition, Style other) {
-        Boolean state = condition.getValue();
-
-        if (state == null) {
+    public default Style withIf(Events<Boolean> condition, Style other) {
+        if (condition == null) {
             return this;
         }
-        return withIf(state.booleanValue(), other);
+
+        BooleanProperty property = new SimpleBooleanProperty();
+        condition.to(property::setValue);
+        return withIf(property, other);
     }
 
-    public default Style when(BooleanBinding condition) {
+    /**
+     * <p>
+     * If the specified condition is true, compose this style and the specified style.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @param other An other style to compose.
+     * @return A composed style.
+     */
+    public default Style withIf(ObservableBooleanValue condition, Style other) {
+        if (condition == null) {
+            return this;
+        }
+        return withIf(condition.get(), other);
+    }
+
+    /**
+     * <p>
+     * Return the conditional style which is applied only when the specified condition is true.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @return A conditional {@link Style}.
+     */
+    public default Style when(boolean condition) {
+        return when(new SimpleBooleanProperty(condition));
+    }
+
+    /**
+     * <p>
+     * Return the conditional style which is applied only when the specified condition is true.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @return A conditional {@link Style}.
+     */
+    public default Style when(Events<Boolean> condition) {
+        BooleanProperty property = new SimpleBooleanProperty();
+        condition.to(property::setValue);
+        return when(property);
+    }
+
+    /**
+     * <p>
+     * Return the conditional style which is applied only when the specified condition is true.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @return A conditional {@link Style}.
+     */
+    public default Style when(ObservableBooleanValue condition) {
         return new ConditionalStyle(this, condition);
     }
 }
