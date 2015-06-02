@@ -9,6 +9,8 @@
  */
 package jsx.ui.piece;
 
+import java.awt.Checkbox;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -39,7 +41,7 @@ public class UI {
      * </p>
      */
     public static final Input input() {
-        return input("");
+        return input((StringProperty) null);
     }
 
     /**
@@ -57,6 +59,9 @@ public class UI {
      * </p>
      */
     public static final Input input(StringProperty value) {
+        if (value == null) {
+            value = new SimpleStringProperty();
+        }
         return new Input(value);
     }
 

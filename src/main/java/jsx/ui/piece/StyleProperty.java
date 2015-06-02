@@ -13,7 +13,6 @@ import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.style.Style;
 import kiss.Disposable;
-import kiss.Events;
 
 /**
  * @version 2015/03/06 15:31:03
@@ -58,12 +57,6 @@ public class StyleProperty implements Style, Disposable {
         for (int i = 0, size = values.length(); i < size; i++) {
             values.set(i, !values.getAsBoolean(i));
         }
-    }
-
-    public StyleProperty withIf(Events<Boolean> condition, Style additional) {
-        disposer = disposer.and(condition.to(v -> styles.set(additional, v)));
-
-        return this;
     }
 
     /**
