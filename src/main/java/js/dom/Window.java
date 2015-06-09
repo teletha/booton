@@ -17,7 +17,7 @@ import booton.translator.JavascriptNativeProperty;
  * @version 2013/12/29 0:44:51
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "Window")
-public abstract class Window extends EventTarget<Window> implements JavascriptNative {
+public abstract class Window extends EventTarget<Window>implements JavascriptNative {
 
     /**
      * <p>
@@ -28,6 +28,14 @@ public abstract class Window extends EventTarget<Window> implements JavascriptNa
      */
     @JavascriptNativeProperty
     public Location location;
+
+    /**
+     * <p>
+     * Returns a user locale.
+     * </p>
+     */
+    @JavascriptNativeProperty
+    public String language;
 
     /**
      * <p>

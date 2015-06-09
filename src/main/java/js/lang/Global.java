@@ -16,6 +16,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.w3c.dom.DocumentFragment;
+
+import booton.translator.Javascript;
+import booton.translator.Translator;
 import js.dom.Document;
 import js.dom.Element;
 import js.dom.History;
@@ -23,14 +27,10 @@ import js.dom.Location;
 import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
+import jsx.jQuery;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-
-import org.w3c.dom.DocumentFragment;
-
-import booton.translator.Javascript;
-import booton.translator.Translator;
 
 /**
  * <p>
@@ -45,7 +45,7 @@ public class Global {
     public static NativeObject boot;
 
     /** The global object in web environment. */
-    public static Window window;
+    public static Window window = emulate(Window.class);
 
     /** The root document in web environment. */
     public static Document document = emulate(Document.class);
@@ -663,7 +663,8 @@ public class Global {
          * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
          */
         public String getArgumentArray() {
-            return "Φ(\"" + Javascript.computeSimpleClassName(Object.class) + "\",Array.prototype.slice.call(arguments))";
+            return "Φ(\"" + Javascript
+                    .computeSimpleClassName(Object.class) + "\",Array.prototype.slice.call(arguments))";
         }
 
         /**

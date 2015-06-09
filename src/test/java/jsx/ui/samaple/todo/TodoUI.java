@@ -12,6 +12,7 @@ package jsx.ui.samaple.todo;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.samaple.todo.TodoUISkin.*;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.IntegerExpression;
@@ -30,11 +31,15 @@ import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.piece.UI;
 import jsx.ui.samaple.todo.TodoTasks.Task;
+import kiss.I;
 
 /**
  * @version 2014/09/01 15:14:06
  */
 public class TodoUI extends Widget1<TodoTasks> {
+
+    /** The i18n text resource. */
+    private TodoUIText text = I.i18n(TodoUIText.class);
 
     /** Reassign to meaningful name. */
     final TodoTasks todos = model1;
@@ -126,12 +131,16 @@ public class TodoUI extends Widget1<TodoTasks> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
+        List<TodoUIText> find = I.find(TodoUIText.class);
+        for (TodoUIText todoUIText : find) {
+            System.out.println(todoUIText.getClass().getName());
+        }
         int size = incompletedSize.get();
 
         〡.〡(input);
         〡.vbox.〡(ITEMS, Item.class, todos.list);
         〡.hbox.〡(FOTTER, () -> {
-            〡.〡(size + " " + (size < 2 ? "item" : "items") + " left");
+            〡.〡(text.leftTaskIs(size));
             〡.hbox.〡(BUTTONS, all, active, completed);
             〡.〡(clear);
         });

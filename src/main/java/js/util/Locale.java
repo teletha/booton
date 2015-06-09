@@ -12,6 +12,7 @@ package js.util;
 import java.util.Locale.Category;
 
 import booton.translator.JavaAPIProvider;
+import js.lang.Global;
 
 /**
  * @version 2013/09/24 16:01:43
@@ -133,6 +134,9 @@ class Locale {
      */
     public static final Locale ROOT = new Locale("", "");
 
+    /** The user specified language. */
+    private static final Locale DEFAULT = new Locale(Global.window.language);
+
     /** The base language. */
     private final String language;
 
@@ -203,8 +207,8 @@ class Locale {
      * only the OLD codes.
      * <li>For backward compatibility reasons, this constructor does not make any syntactic checks
      * on the input.
-     * <li>The two cases ("ja", "JP", "JP") and ("th", "TH", "TH") are handled specially, see <a
-     * href="#special_cases_constructor">Special Cases</a> for more information.
+     * <li>The two cases ("ja", "JP", "JP") and ("th", "TH", "TH") are handled specially, see
+     * <a href="#special_cases_constructor">Special Cases</a> for more information.
      * </ul>
      *
      * @param language An ISO 639 alpha-2 or alpha-3 language code, or a language subtag up to 8
@@ -239,15 +243,10 @@ class Locale {
      * <b>Note:</b> ISO 639 is not a stable standard&mdash; some languages' codes have changed.
      * Locale's constructor recognizes both the new and the old codes for the languages whose codes
      * have changed, but this function always returns the old code. If you want to check for a
-     * specific language whose code has changed, don't do
-     * 
-     * <pre>
+     * specific language whose code has changed, don't do <pre>
      * if (locale.getLanguage().equals("he")) // BAD!
      *    ...
-     * </pre>
-     * Instead, do
-     * 
-     * <pre>
+     * </pre> Instead, do <pre>
      * if (locale.getLanguage().equals(new Locale("he").getLanguage()))
      *    ...
      * </pre>
@@ -322,12 +321,10 @@ class Locale {
      * <p>
      * <b>Note:</b> Although the language tag created by this method is well-formed (satisfies the
      * syntax requirements defined by the IETF BCP 47 specification), it is not necessarily a valid
-     * BCP 47 language tag. For example,
-     * 
-     * <pre>
-     *   new Locale("xx", "YY").toLanguageTag();</pre>
-     * will return "xx-YY", but the language subtag "xx" and the region subtag "YY" are invalid
-     * because they are not registered in the IANA Language Subtag Registry.
+     * BCP 47 language tag. For example, <pre>
+     *   new Locale("xx", "YY").toLanguageTag();</pre> will return "xx-YY", but the language subtag
+     * "xx" and the region subtag "YY" are invalid because they are not registered in the IANA
+     * Language Subtag Registry.
      *
      * @return a BCP47 language tag representing the locale
      * @see #forLanguageTag(String)
@@ -355,8 +352,8 @@ class Locale {
     }
 
     /**
-     * Returns {@code true} if this {@code Locale} has any <a href="#def_extensions">
-     * extensions</a>.
+     * Returns {@code true} if this {@code Locale} has any <a href="#def_extensions"> extensions</a>
+     * .
      *
      * @return {@code true} if this {@code Locale} has any extensions
      * @since 1.8
@@ -392,7 +389,7 @@ class Locale {
      * @return the default locale for this instance of the Java Virtual Machine
      */
     public static Locale getDefault() {
-        return US;
+        return DEFAULT;
     }
 
     /**
@@ -428,9 +425,7 @@ class Locale {
      * (This is the same canonicalization that's done in Locale's constructors.)
      * <li>The portion of a private use subtag prefixed by "lvariant", if any, is removed and
      * appended to the variant field in the result locale (without case normalization). If it is
-     * then empty, the private use subtag is discarded:
-     *
-     * <pre>
+     * then empty, the private use subtag is discarded: <pre>
      *     Locale loc;
      *     loc = Locale.forLanguageTag("en-US-x-lvariant-POSIX");
      *     loc.getVariant(); // returns "POSIX"
@@ -441,9 +436,7 @@ class Locale {
      *     loc.getExtension('x'); // returns "urp"
      * </pre>
      * <li>When the languageTag argument contains an extlang subtag, the first such subtag is used
-     * as the language, and the primary language subtag and other extlang subtags are ignored:
-     *
-     * <pre>
+     * as the language, and the primary language subtag and other extlang subtags are ignored: <pre>
      *     Locale.forLanguageTag("ar-aao").getLanguage(); // returns "aao"
      *     Locale.forLanguageTag("en-abc-def-us").toString(); // returns "abc_US"
      * </pre>
@@ -452,7 +445,6 @@ class Locale {
      * lower case.
      * <li>If, after processing, the locale would exactly match either ja_JP_JP or th_TH_TH with no
      * extensions, the appropriate extensions are added as though the constructor had been called:
-     *
      * <pre>
      *    Locale.forLanguageTag("ja-JP-x-lvariant-JP").toLanguageTag();
      *    // returns "ja-JP-u-ca-japanese-x-lvariant-JP"

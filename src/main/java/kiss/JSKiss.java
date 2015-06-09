@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -108,6 +109,7 @@ class JSKiss {
             return new SimpleSetProperty(FXCollections.observableSet());
         });
         lifestyles.put(ObservableSet.class, FXCollections::observableSet);
+        lifestyles.put(Locale.class, () -> Locale.getDefault());
     }
 
     /**
@@ -212,6 +214,83 @@ class JSKiss {
             list.add(extension);
         }
         return list;
+    }
+
+    /**
+     * <p>
+     * Gets a <em>type-safe and refactoring-safe</em> resource bundle (<em>not</em>
+     * {@link java.util.ResourceBundle}) corresponding to the specified resource bundle class.
+     * </p>
+     * <p>
+     * Conceptually, i18n method uses the following strategy for locating and instantiating resource
+     * bundles:
+     * </p>
+     * <p>
+     * i18n method uses the bundle class name and the default locale (obtained from
+     * <code>I.make(Locale.class)</code>)) to generate a sequence of candidate bundle names. If the
+     * default locale's language, country, and variant are all empty strings, then the bundle class
+     * name is the only candidate bundle name. Otherwise, the following sequence is generated from
+     * the attribute values of the default locale (language, country, and variant):
+     * </p>
+     * <ol>
+     * <li>bundleClassSimpleName + "_" + language + "_" + country + "_" + variant</li>
+     * <li>bundleClassSimpleName + "_" + language + "_" + country</li>
+     * <li>bundleClassSimpleName + "_" + language</li>
+     * <li>bundleClassSimpleName</li>
+     * </ol>
+     * <p>
+     * Candidate bundle names where the final component is an empty string are omitted. For example,
+     * if country is an empty string, the second candidate bundle name is omitted.
+     * </p>
+     * <p>
+     * i18n method then iterates over the candidate bundle names to find the first one for which it
+     * can instantiate an actual resource bundle. For each candidate bundle name, it attempts to
+     * create a resource bundle:
+     * </p>
+     * <ol>
+     * <li>First, it attempts to find a class using the candidate bundle name. If such a class can
+     * be found and loaded using {@link I#find(Class)}, is assignment compatible with the given
+     * bundle class, and can be instantiated, i18n method creates a new instance of this class and
+     * uses it as the result resource bundle.</li>
+     * </ol>
+     * <p>
+     * If the following classes are provided:
+     * </p>
+     * <ul>
+     * <li>MyResources.class</li>
+     * <li>MyResources_fr.class</li>
+     * <li>MyResources_fr_CH.class</li>
+     * </ul>
+     * <p>
+     * The contents of all files are valid (that is non-abstract subclasses of {@link Extensible}
+     * for the ".class" files). The default locale is Locale("en", "GB").
+     * </p>
+     * <p>
+     * Calling i18n method with the shown locale argument values instantiates resource bundles from
+     * the following sources:
+     * </p>
+     * <ol>
+     * <li>Locale("fr", "CH"): result MyResources_fr_CH.class</li>
+     * <li>Locale("fr", "FR"): result MyResources_fr.class</li>
+     * <li>Locale("es"): result MyResources.class</li>
+     * </ol>
+     *
+     * @param <B> A resource bundle.
+     * @param bundleClass A resource bundle class. <code>null</code> will throw
+     *            {@link NullPointerException}.
+     * @return A suitable resource bundle class for the given bundle class and locale.
+     * @throws NullPointerException If the bundle class is <code>null</code>.
+     */
+    public static <B extends Extensible> B i18n(Class<B> bundleClass) {
+        String lang = "_".concat(make(Locale.class).getLanguage());
+
+        for (Class clazz : extensions.get(bundleClass)) {
+            if (clazz.getName().endsWith(lang)) {
+                bundleClass = clazz;
+                break;
+            }
+        }
+        return make(bundleClass);
     }
 
     /**
@@ -418,8 +497,8 @@ class JSKiss {
                 Manageable manageable = actualClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
-                lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class
-                        : manageable.lifestyle()));
+                lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class : manageable
+                        .lifestyle()));
             }
 
             // Trace dependency graph to detect circular dependencies.

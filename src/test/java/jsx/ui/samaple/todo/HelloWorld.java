@@ -7,12 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package booton;
+package jsx.ui.samaple.todo;
 
 import js.lang.Global;
 import jsx.ui.Widget;
-import jsx.ui.samaple.todo.TodoTasks;
-import jsx.ui.samaple.todo.TodoUI;
 
 /**
  * @version 2014/03/08 11:13:39

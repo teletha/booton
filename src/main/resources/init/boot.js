@@ -107,6 +107,7 @@ function boot(global) {
   // Window Extensions
   //====================================================================
   window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+  window.language = window.navigator.userLanguage || window.navigator.language || window.navigator.browserLanguage;
 
 
   //====================================================================
