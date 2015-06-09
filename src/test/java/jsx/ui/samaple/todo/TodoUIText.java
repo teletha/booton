@@ -9,6 +9,11 @@
  */
 package jsx.ui.samaple.todo;
 
+import static jsx.ui.TextHelper.*;
+
+import javafx.beans.binding.IntegerExpression;
+import javafx.beans.binding.StringExpression;
+
 import booton.Necessary;
 import kiss.Extensible;
 
@@ -19,11 +24,56 @@ import kiss.Extensible;
 public class TodoUIText implements Extensible {
 
     /**
+     * <p>
+     * Label of the button which selects all items.
+     * </p>
+     * 
+     * @return
+     */
+    public String selectAll() {
+        return "All";
+    }
+
+    /**
+     * <p>
+     * Label of the button which selects all completed items.
+     * </p>
+     * 
+     * @return
+     */
+    public String selectCompleted() {
+        return "Complete";
+    }
+
+    /**
+     * <p>
+     * Label of the button which selects all completed items.
+     * </p>
+     * 
+     * @return
+     */
+    public String selectIncompleted() {
+        return "Active";
+    }
+
+    /**
      * @param size
      * @return
      */
     public String leftTaskIs(int size) {
         return size + " " + (size < 2 ? "item" : "items") + " left";
+    }
+
+    /**
+     * <p>
+     * LAbel of the button which clear all completed items.
+     * </p>
+     * 
+     * @param size A number of completed items.
+     * @return
+     */
+    public StringExpression clearCompleted(IntegerExpression size) {
+        return $("Clear completed (", size, ")");
     }
 
     /**
@@ -36,8 +86,41 @@ public class TodoUIText implements Extensible {
          * {@inheritDoc}
          */
         @Override
-        public String leftTaskIs(int size) {
-            return "残り" + size + "個";
+        public String selectAll() {
+            return "全て";
         }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String selectCompleted() {
+            return "完了済み";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String selectIncompleted() {
+            return "やるべきこと";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String leftTaskIs(int size) {
+            return "残りのタスク " + size;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public StringExpression clearCompleted(IntegerExpression size) {
+            return $("完了済みタスク(", size, ")を消去");
+        }
+
     }
 }

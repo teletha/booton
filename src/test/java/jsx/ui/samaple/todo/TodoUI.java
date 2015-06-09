@@ -63,25 +63,25 @@ public class TodoUI extends Widget1<TodoTasks> {
 
     /** The filter button. */
     final Button all = UI.button()
-            .label("All")
+            .label(text.selectAll())
             .click(this::showAll)
             .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.All)));
 
     /** The filter button. */
     final Button active = UI.button()
-            .label("Active")
+            .label(text.selectIncompleted())
             .click(this::showActive)
             .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.Active)));
 
     /** The filter button. */
     final Button completed = UI.button()
-            .label("Completed")
+            .label(text.selectCompleted())
             .click(this::showCompleted)
             .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.Completed)));
 
     /** The clear button. */
     final Button clear = UI.button()
-            .label("Clear Completed (", completedSize, ")")
+            .label(text.clearCompleted(completedSize))
             .showIf(completedSize.greaterThan(0))
             .click(todos::removeCompleted);
 
