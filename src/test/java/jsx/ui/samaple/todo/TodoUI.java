@@ -12,46 +12,40 @@ package jsx.ui.samaple.todo;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.samaple.todo.TodoUISkin.*;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.IntegerExpression;
+import javafx.beans.binding.StringExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import jsx.ui.BindingHelper;
+import booton.Necessary;
 import jsx.ui.Key;
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
+import jsx.ui.Widgety;
+import jsx.ui.i18n.TextLocalizer;
 import jsx.ui.piece.Button;
 import jsx.ui.piece.CheckBox;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.piece.UI;
 import jsx.ui.samaple.todo.TodoTasks.Task;
-import kiss.I;
+import jsx.ui.samaple.todo.TodoUI.Text;
+import kiss.Extensible;
 
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends Widget1<TodoTasks> {
-
-    /** The i18n text resource. */
-    private TodoUIText text = I.i18n(TodoUIText.class);
+public class TodoUI extends Widgety<TodoTasks, Text> {
 
     /** Reassign to meaningful name. */
     final TodoTasks todos = model1;
 
     /** The filter model. */
     final ObjectProperty<Filter> filter = new SimpleObjectProperty(Filter.All);
-
-    /** The completed tasks. */
-    final IntegerExpression completedSize = BindingHelper.filter(todos.list, Task::isCompleted).sizeProperty();
-
-    /** The incompleted tasks. */
-    final IntegerExpression incompletedSize = BindingHelper.filter(todos.list, not(Task::isCompleted)).sizeProperty();
 
     /** The input field. */
     final Input input = UI.input()
@@ -81,8 +75,8 @@ public class TodoUI extends Widget1<TodoTasks> {
 
     /** The clear button. */
     final Button clear = UI.button()
-            .label(text.clearCompleted(completedSize))
-            .showIf(completedSize.greaterThan(0))
+            .label(text.clearCompleted(todos.completedSize))
+            .showIf(todos.completedSize.greaterThan(0))
             .click(todos::removeCompleted);
 
     /**
@@ -131,16 +125,10 @@ public class TodoUI extends Widget1<TodoTasks> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        List<TodoUIText> find = I.find(TodoUIText.class);
-        for (TodoUIText todoUIText : find) {
-            System.out.println(todoUIText.getClass().getName());
-        }
-        int size = incompletedSize.get();
-
         〡.〡(input);
         〡.vbox.〡(ITEMS, Item.class, todos.list);
         〡.hbox.〡(FOTTER, () -> {
-            〡.〡(text.leftTaskIs(size));
+            〡.〡(text.leftTaskIs(todos.incompletedSize));
             〡.hbox.〡(BUTTONS, all, active, completed);
             〡.〡(clear);
         });
@@ -238,6 +226,113 @@ public class TodoUI extends Widget1<TodoTasks> {
         @Override
         public boolean test(Task t) {
             return predicate.test(t);
+        }
+    }
+
+    /**
+     * @version 2015/06/10 10:08:11
+     */
+    @Necessary
+    public static class Text extends TextLocalizer implements Extensible {
+
+        /**
+         * <p>
+         * Label of the button which selects all items.
+         * </p>
+         * 
+         * @return
+         */
+        public String selectAll() {
+            return "All";
+        }
+
+        /**
+         * <p>
+         * Label of the button which selects all completed items.
+         * </p>
+         * 
+         * @return
+         */
+        public String selectCompleted() {
+            return "Complete";
+        }
+
+        /**
+         * <p>
+         * Label of the button which selects all completed items.
+         * </p>
+         * 
+         * @return
+         */
+        public String selectIncompleted() {
+            return "Active";
+        }
+
+        /**
+         * @param size
+         * @return
+         */
+        public StringExpression leftTaskIs(IntegerExpression size) {
+            return $(size, " ", size.get() < 2 ? "item" : "items", " left");
+        }
+
+        /**
+         * <p>
+         * LAbel of the button which clear all completed items.
+         * </p>
+         * 
+         * @param size A number of completed items.
+         * @return
+         */
+        public StringExpression clearCompleted(IntegerExpression size) {
+            return $("Clear completed (", size, ")");
+        }
+
+        /**
+         * @version 2015/06/09 12:11:53
+         */
+        @SuppressWarnings("unused")
+        private static class Text_ja extends Text {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String selectAll() {
+                return "全て";
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String selectCompleted() {
+                return "完了済み";
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String selectIncompleted() {
+                return "やるべきこと";
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public StringExpression leftTaskIs(IntegerExpression size) {
+                return $("残りのタスク ", size);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public StringExpression clearCompleted(IntegerExpression size) {
+                return $("完了済みタスク(", size, ")を消去");
+            }
         }
     }
 }

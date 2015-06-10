@@ -13,6 +13,7 @@ import static js.dom.UIAction.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -128,6 +129,10 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
     }
 
     public T showIf(ObservableValue<Boolean> condition) {
+        return (T) this;
+    }
+
+    public T showIf(BooleanSupplier condition) {
         return (T) this;
     }
 

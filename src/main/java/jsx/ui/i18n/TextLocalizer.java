@@ -7,15 +7,19 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.i18n;
 
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
+import kiss.Manageable;
+import kiss.Singleton;
+
 /**
- * @version 2015/06/09 16:52:21
+ * @version 2015/06/10 10:06:48
  */
-public final class TextHelper {
+@Manageable(lifestyle = Singleton.class)
+public abstract class TextLocalizer {
 
     /**
      * <p>
@@ -25,7 +29,7 @@ public final class TextHelper {
      * @param texts
      * @return
      */
-    public static StringExpression $(Object... texts) {
+    protected StringExpression $(Object... texts) {
         StringExpression label = new SimpleStringProperty("");
 
         for (Object text : texts) {

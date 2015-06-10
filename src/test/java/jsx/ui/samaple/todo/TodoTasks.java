@@ -9,12 +9,16 @@
  */
 package jsx.ui.samaple.todo;
 
+import static jsx.ui.FunctionHelper.*;
+
+import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import jsx.ui.BindingHelper;
 import kiss.I;
 
 /**
@@ -24,6 +28,12 @@ public class TodoTasks {
 
     /** The data model. */
     public final ListProperty<Task> list = I.make(ListProperty.class);
+
+    /** The completed tasks. */
+    public final IntegerExpression completedSize = BindingHelper.filter(list, Task::isCompleted).sizeProperty();
+
+    /** The incompleted tasks. */
+    public final IntegerExpression incompletedSize = BindingHelper.filter(list, not(Task::isCompleted)).sizeProperty();
 
     /**
      * Make complete all tasks.
@@ -39,6 +49,17 @@ public class TodoTasks {
      */
     public void removeCompleted() {
         list.removeIf(Task::isCompleted);
+    }
+
+    /**
+     * <p>
+     * Count a number of completed items.
+     * </p>
+     * 
+     * @return
+     */
+    public long countCompleted() {
+        return list.stream().filter(Task::isCompleted).count();
     }
 
     /**
