@@ -27,7 +27,6 @@ import js.dom.Location;
 import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
-import jsx.jQuery;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
