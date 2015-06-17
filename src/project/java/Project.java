@@ -11,6 +11,7 @@ public class Project extends bee.api.Project {
 
     {
         product("npc", "Booton", "0.1");
+        producer("Nameless Production Committee");
 
         require("npc", "sinobu", "0.9.4");
         require("org.eclipse.jetty", "jetty-server", "8.1.15.v20140411");
