@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2012 Teemowork Development Team
- * 
- * Licensed under the MPL License (the "License");
+ * Copyright (C) 2015 Nameless Production Committee
+ *
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *          http://opensource.org/licenses/MPL-2.0
+ *
+ *          http://opensource.org/licenses/mit-license.php
  */
 public class Project extends bee.api.Project {
 

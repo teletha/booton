@@ -1,15 +1,11 @@
-/*!
- * jQuery JavaScript Library v2.0.0-beta3
- * http://jquery.com/
+/*
+ * Copyright (C) 2015 Nameless Production Committee
  *
- * Includes Sizzle.js
- * http://sizzlejs.com/
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors
- * Released under the MIT license
- * http://jquery.org/license
- *
- * Date: 2013-04-09
+ *          http://opensource.org/licenses/mit-license.php
  */
 (function( window, undefined ) {
 
