@@ -9,7 +9,6 @@
  */
 package js.text;
 
-import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -27,7 +26,7 @@ class SimpleDateFormat extends DateFormat {
      * {@inheritDoc}
      */
     @Override
-    public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
@@ -37,6 +36,15 @@ class SimpleDateFormat extends DateFormat {
      * {@inheritDoc}
      */
     @Override
+    public Object parseObject(String source, ParsePosition pos) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Date parse(String source, ParsePosition pos) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
@@ -53,11 +61,9 @@ class SimpleDateFormat extends DateFormat {
      * @return A <code>Date</code> parsed from the string.
      * @exception ParseException if the beginning of the specified string cannot be parsed.
      */
-    @Override
     public Date parse(String source) throws ParseException {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
-
     }
 }
