@@ -19,9 +19,8 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Function;
 
-import js.lang.NativeArray;
-import jsx.style.value.Unit;
 import booton.util.Strings;
+import js.lang.NativeArray;
 
 /**
  * @version 2014/11/13 15:49:09
@@ -321,25 +320,6 @@ public class PropertyDefinition<T> {
             joiner.add(conveter.apply(item).toString());
         }
         return joiner.toString();
-    }
-
-    /**
-     * Helper method to compute size.
-     * 
-     * @param size
-     * @param unit
-     * @return
-     */
-    protected static final String compute(double size, Unit unit) {
-        int i = (int) size;
-
-        if (size == 0) {
-            return "0";
-        } else if (i == size) {
-            return String.valueOf(i).concat(unit.toString());
-        } else {
-            return String.valueOf(size).concat(unit.toString());
-        }
     }
 
     /**

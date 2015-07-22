@@ -10,8 +10,10 @@
 package jsx.style.property;
 
 import static jsx.style.value.Unit.*;
+
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Color;
+import jsx.style.value.Numeric;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
 
@@ -63,7 +65,19 @@ public class Text extends PropertyDefinition<Text> {
      * </p>
      */
     public Text indent(double size, Unit unit) {
-        return value("text-indent", compute(size, unit));
+        return indent(new Numeric(size, unit));
+    }
+
+    /**
+     * <p>
+     * The text-indent CSS property specifies how much horizontal space should be left before the
+     * beginning of the first line of the text content of an element. Horizontal spacing is with
+     * respect to the left (or right, for right-to-left layout) edge of the containing block
+     * element's box.
+     * </p>
+     */
+    public Text indent(Numeric size) {
+        return value("text-indent", size);
     }
 
     /**
@@ -85,7 +99,6 @@ public class Text extends PropertyDefinition<Text> {
      * Helper method to write one-point text shadow. This method is equivalent to the following
      * code:
      * </p>
-     *
      * <pre>
      * text.shadow(color, 1);
      * </pre>

@@ -14,6 +14,7 @@ import java.util.List;
 
 import jsx.style.value.Color;
 import jsx.style.value.LinearGradient;
+import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 
 /**
@@ -251,7 +252,23 @@ public class Background extends Colorable<Background> {
      * @return
      */
     public Background size(double size, Unit unit) {
-        return value("background-size", compute(size, unit));
+        return size(new Numeric(size, unit));
+    }
+
+    /**
+     * <p>
+     * The background-size CSS property specifies the size of the background images. The size of the
+     * image can be fully constrained or only partially in order to preserve its intrinsic ratio.
+     * </p>
+     * <p>
+     * A value that scales the background image to the specified length in the corresponding
+     * dimension. Negative lengths are not allowed.
+     * </p>
+     * 
+     * @return
+     */
+    public Background size(Numeric size) {
+        return value("background-size", size);
     }
 
     /**
@@ -295,7 +312,17 @@ public class Background extends Colorable<Background> {
      * </p>
      */
     public Background position(double horizontalSize, Unit horizontalUnit, double verticalSize, Unit verticalUnit) {
-        return value("background-position", compute(horizontalSize, horizontalUnit) + " " + compute(verticalSize, verticalUnit));
+        return position(new Numeric(horizontalSize, horizontalUnit), new Numeric(verticalSize, verticalUnit));
+    }
+
+    /**
+     * <p>
+     * The background-position CSS property sets the initial position, relative to the background
+     * position layer defined by background-origin for each defined background image.
+     * </p>
+     */
+    public Background position(Numeric horizontalSize, Numeric verticalSize) {
+        return value("background-position", horizontalSize + " " + verticalSize);
     }
 
     /**
@@ -305,7 +332,17 @@ public class Background extends Colorable<Background> {
      * </p>
      */
     public Background horizontal(double horizontalSize, Unit horizontalUnit) {
-        return value("background-position", compute(horizontalSize, horizontalUnit) + " 0%");
+        return horizontal(new Numeric(horizontalSize, horizontalUnit));
+    }
+
+    /**
+     * <p>
+     * The background-position CSS property sets the initial position, relative to the background
+     * position layer defined by background-origin for each defined background image.
+     * </p>
+     */
+    public Background horizontal(Numeric horizontalSize) {
+        return value("background-position", horizontalSize + " 0%");
     }
 
     /**
@@ -315,7 +352,17 @@ public class Background extends Colorable<Background> {
      * </p>
      */
     public Background vertical(double verticalSize, Unit verticalUnit) {
-        return value("background-position", "0% " + compute(verticalSize, verticalUnit));
+        return vertical(new Numeric(verticalSize, verticalUnit));
+    }
+
+    /**
+     * <p>
+     * The background-position CSS property sets the initial position, relative to the background
+     * position layer defined by background-origin for each defined background image.
+     * </p>
+     */
+    public Background vertical(Numeric verticalSize) {
+        return value("background-position", "0% " + verticalSize);
     }
 
     /**
@@ -517,7 +564,17 @@ public class Background extends Colorable<Background> {
          * </p>
          */
         public BackgroundImage vertical(double size, Unit unit) {
-            properties[3] = compute(size, unit);
+            return vertical(new Numeric(size, unit));
+        }
+
+        /**
+         * <p>
+         * The background-position CSS property sets the initial position, relative to the
+         * background position layer defined by background-origin for each defined background image.
+         * </p>
+         */
+        public BackgroundImage vertical(Numeric size) {
+            properties[3] = size;
 
             return this;
         }
@@ -553,7 +610,17 @@ public class Background extends Colorable<Background> {
          * </p>
          */
         public BackgroundImage horizontal(double size, Unit unit) {
-            properties[2] = compute(size, unit);
+            return horizontal(new Numeric(size, unit));
+        }
+
+        /**
+         * <p>
+         * The background-position CSS property sets the initial position, relative to the
+         * background position layer defined by background-origin for each defined background image.
+         * </p>
+         */
+        public BackgroundImage horizontal(Numeric size) {
+            properties[2] = size;
 
             return this;
         }
@@ -572,7 +639,24 @@ public class Background extends Colorable<Background> {
          * @return
          */
         public BackgroundImage size(double size, Unit unit) {
-            properties[5] = compute(size, unit).toString();
+            return size(new Numeric(size, unit));
+        }
+
+        /**
+         * <p>
+         * The background-size CSS property specifies the size of the background images. The size of
+         * the image can be fully constrained or only partially in order to preserve its intrinsic
+         * ratio.
+         * </p>
+         * <p>
+         * A value that scales the background image to the specified length in the corresponding
+         * dimension. Negative lengths are not allowed.
+         * </p>
+         * 
+         * @return
+         */
+        public BackgroundImage size(Numeric size) {
+            properties[5] = size.toString();
 
             return this;
         }
