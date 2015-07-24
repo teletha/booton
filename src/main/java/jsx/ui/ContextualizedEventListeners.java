@@ -12,9 +12,10 @@ package jsx.ui;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import js.dom.Element;
+import js.dom.EventTarget;
 import js.dom.UIAction;
 import js.dom.UIEvent;
+import js.lang.Global;
 import js.lang.NativeFunction;
 import kiss.Events;
 import kiss.Observer;
@@ -40,9 +41,14 @@ class ContextualizedEventListeners {
     /**
      * @param dom
      */
-    void assign(Element element) {
+    void assign(EventTarget element) {
         for (int i = 0, length = listeners.size(); i < length; i++) {
             EventListener<?, ?> listener = listeners.get(i);
+
+            // TODO FIXME
+            if (listener.action.name.equals("keydown")) {
+                element = Global.window;
+            }
 
             element.addEventListener(listener.action.name, new NativeFunction<UIEvent>(event -> {
                 if (listener.action == UIAction.ClickRight) {
