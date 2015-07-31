@@ -358,7 +358,7 @@ public final class VirtualStructure {
             VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
             container.items.push(virtualize);
             widget.assemble(new VirtualStructure(widget, virtualize));
-        } else if (child.equals("\r\n")) {
+        } else if (child instanceof String && child.equals("\r\n")) {
             container.items.push(new VirtualElement(0, "br"));
         } else {
             container.items.push(new VirtualText(String.valueOf(child)));
