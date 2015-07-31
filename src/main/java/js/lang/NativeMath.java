@@ -210,7 +210,7 @@ public class NativeMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static int min(int a, int b) {
-        return Math.max(a, b);
+        return Math.min(a, b);
     }
 
     /**
@@ -223,7 +223,7 @@ public class NativeMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static long min(long a, long b) {
-        return Math.max(a, b);
+        return Math.min(a, b);
     }
 
     /**
@@ -238,7 +238,7 @@ public class NativeMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static float min(float a, float b) {
-        return Math.max(a, b);
+        return Math.min(a, b);
     }
 
     /**
@@ -253,7 +253,7 @@ public class NativeMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static double min(double a, double b) {
-        return Math.max(a, b);
+        return Math.min(a, b);
     }
 
     /**
@@ -937,7 +937,8 @@ public class NativeMath {
          * <li>If the argument is negative infinity or any value less than or equal to the value of
          * {@code Long.MIN_VALUE}, the result is equal to the value of {@code Long.MIN_VALUE}.</li>
          * <li>If the argument is positive infinity or any value greater than or equal to the value
-         * of {@code Long.MAX_VALUE}, the result is equal to the value of {@code Long.MAX_VALUE}.</li>
+         * of {@code Long.MAX_VALUE}, the result is equal to the value of {@code Long.MAX_VALUE}.
+         * </li>
          * </ul>
          * 
          * @param A a floating-point value to be rounded to an integer.
@@ -960,7 +961,8 @@ public class NativeMath {
          * <li>If the argument is negative infinity or any value less than or equal to the value of
          * {@code Long.MIN_VALUE}, the result is equal to the value of {@code Long.MIN_VALUE}.</li>
          * <li>If the argument is positive infinity or any value greater than or equal to the value
-         * of {@code Long.MAX_VALUE}, the result is equal to the value of {@code Long.MAX_VALUE}.</li>
+         * of {@code Long.MAX_VALUE}, the result is equal to the value of {@code Long.MAX_VALUE}.
+         * </li>
          * </ul>
          * 
          * @param A a floating-point value to be rounded to an integer.
