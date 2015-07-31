@@ -1066,7 +1066,7 @@ class JSMath {
      * @return the smaller of {@code a} and {@code b}.
      */
     public static double min(double a, double b) {
-        return NativeMath.max(a, b);
+        return NativeMath.min(a, b);
     }
 
     /**
@@ -1110,8 +1110,8 @@ class JSMath {
      * {@code -1.0}. Note that once the exact result of <i>e</i><sup>{@code x}</sup>&nbsp;-&nbsp;1
      * is within 1/2 ulp of the limit value -1, {@code -1.0} should be returned.
      *
-     * @param x the exponent to raise <i>e</i> to in the computation of <i>e</i><sup>{@code x}
-     *            </sup>&nbsp;-1.
+     * @param x the exponent to raise <i>e</i> to in the computation of <i>e</i><sup>
+     *            {@code x} </sup>&nbsp;-1.
      * @return the value <i>e</i><sup>{@code x}</sup>&nbsp;-&nbsp;1.
      * @since 1.5
      */
