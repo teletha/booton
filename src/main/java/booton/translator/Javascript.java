@@ -29,6 +29,9 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import booton.BootonProfile;
+import booton.Necessary;
+import booton.Unnecessary;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.Global;
@@ -38,9 +41,6 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.Necessary;
-import booton.BootonProfile;
-import booton.Unnecessary;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -77,7 +77,8 @@ public class Javascript {
     private static final Constructor primitiveLongConstructor;
 
     /** The primitive types. */
-    private static final List<Class<?>> primitives = Arrays.asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
+    private static final List<Class<?>> primitives = Arrays
+            .asList(int.class, long.class, float.class, double.class, boolean.class, byte.class, short.class, char.class, void.class);
 
     /** The fixed id for primitives. */
     private static final List<Integer> primitiveIds = Arrays.asList(8, 9, 5, 3, 25, 1, 18, 2, 21);
@@ -213,18 +214,6 @@ public class Javascript {
      * </p>
      * 
      * @param outout A script output.
-     */
-    public void writeTo(Path output) {
-        writeTo(output, null);
-    }
-
-    /**
-     * <p>
-     * Write this script into the specified output. This method write out dependency scripts of this
-     * script too.
-     * </p>
-     * 
-     * @param outout A script output.
      * @param requirements A list of required script classes.
      */
     public void writeTo(Path output, Set<Class> defined) {
@@ -233,19 +222,6 @@ public class Javascript {
         } catch (IOException e) {
             throw I.quiet(e);
         }
-    }
-
-    /**
-     * <p>
-     * Write this script into the specified output. This method write out dependency scripts of this
-     * script too.
-     * </p>
-     * 
-     * @param outout A script output.
-     * @param requirements A list of required script classes.
-     */
-    public void writeTo(Appendable output) {
-        writeTo(output, null);
     }
 
     /**
@@ -607,7 +583,8 @@ public class Javascript {
         source = JavaAPIProviders.convert(source);
 
         // check Native Class
-        if (source == null || source.isArray() || TranslatorManager.hasTranslator(source) && !source.isAnnotationPresent(JavascriptAPIProvider.class)) {
+        if (source == null || source.isArray() || TranslatorManager
+                .hasTranslator(source) && !source.isAnnotationPresent(JavascriptAPIProvider.class)) {
             return null;
         }
 

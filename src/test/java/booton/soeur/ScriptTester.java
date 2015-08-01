@@ -27,6 +27,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.ScriptException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebConsole.Logger;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
+
+import antibug.powerassert.PowerAssertOffError;
+import booton.BootonProfile;
+import booton.Unnecessary;
+import booton.live.ClientStackTrace;
+import booton.live.Source;
+import booton.translator.Javascript;
+import booton.translator.TranslationError;
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.EcmaError;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
@@ -34,19 +48,6 @@ import net.sourceforge.htmlunit.corejs.javascript.NativeObject;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.Undefined;
 import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
-import antibug.powerassert.PowerAssertOffError;
-import booton.Unnecessary;
-import booton.live.ClientStackTrace;
-import booton.live.Source;
-import booton.translator.Javascript;
-import booton.translator.TranslationError;
-
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.ScriptException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebConsole.Logger;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
 
 /**
  * @version 2014/08/18 13:01:22
@@ -110,6 +111,10 @@ public class ScriptTester {
             // compile and load boot script
             engine.execute(html, engine.compile(html, unitTest, "unitTest.js", 1));
             engine.execute(html, engine.compile(html, boot, "boot.js", 1));
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                BootonProfile.show();
+            }));
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -145,12 +150,16 @@ public class ScriptTester {
         Constructor constructor = searchInstantiator(source);
         Object[] parameter = constructor.getParameterTypes().length == 0 ? new Object[0] : new Object[] {this};
 
+        BootonProfile.RunTest.start(source);
+
         // prepare input and result store
         List inputs = prepareInputs(method);
         List results = new ArrayList();
 
         // invoke as Java
         try {
+            BootonProfile.RunTestAsJava.start(source);
+
             for (Object input : inputs) {
                 Object result;
 
@@ -170,6 +179,8 @@ public class ScriptTester {
             }
         } catch (Exception e) {
             throw I.quiet(e);
+        } finally {
+            BootonProfile.RunTestAsJava.end();
         }
 
         StringBuilder script = new StringBuilder();
@@ -179,7 +190,9 @@ public class ScriptTester {
 
         try {
             // compile as Javascript and script engine read it
+            BootonProfile.ParseTest.start(source);
             engine.execute(html, script.toString(), source.getSimpleName(), 1);
+            BootonProfile.ParseTest.end();
 
             String className = Javascript.computeClassName(source);
             String constructorName = Javascript.computeMethodName(constructor).substring(1);
@@ -187,6 +200,8 @@ public class ScriptTester {
 
             // invoke it and compare result
             for (int i = 0; i < inputs.size(); i++) {
+                BootonProfile.RunTestMethod.start(source);
+
                 Object input = inputs.get(i);
 
                 // write test script
@@ -210,11 +225,16 @@ public class ScriptTester {
 
                 // execute
                 Object js = engine.execute(html, invoker.toString(), "", 1);
+                BootonProfile.RunTestMethod.end();
 
                 try {
-                    // compare it to the java resul
+                    BootonProfile.AnalyzeTestResult.start(source);
+
+                    // compare it to the java result
                     assertObject(results.get(i), js);
                 } catch (AssertionError e) {
+                    BootonProfile.AnalyzeTestError.start(source);
+
                     StringBuilder builder = new StringBuilder();
                     builder.append("Compiling script is success but execution results of Java and JS are different.")
                             .append(END);
@@ -224,7 +244,10 @@ public class ScriptTester {
                         builder.append("Java    : ").append(results.get(i)).append(END);
                         builder.append("Script   : ").append(js).append(END);
                     }
+                    BootonProfile.AnalyzeTestError.end();
                     throw new AssertionError(builder.toString(), e);
+                } finally {
+                    BootonProfile.AnalyzeTestResult.end();
                 }
             }
         } catch (AssertionError e) {
@@ -242,6 +265,8 @@ public class ScriptTester {
 
             TranslationError error = new TranslationError(e);
             throw error;
+        } finally {
+            BootonProfile.RunTest.end();
         }
     }
 
@@ -257,36 +282,52 @@ public class ScriptTester {
         String sourceName = source.getSimpleName();
         Javascript script = Javascript.getScript(source);
 
+        BootonProfile.RunTest.start(source);
+
         try {
             // compile as Javascript
             String compiled = script.write(defined);
 
             // script engine read it
+            BootonProfile.ParseTest.start(source);
             engine.execute(html, compiled, sourceName, 1);
+            BootonProfile.ParseTest.end();
+
+            BootonProfile.RunTestMethod.start(source);
 
             // write test script
             String wraped = Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "e");
             String encode = Javascript.writeMethodCode(ClientStackTrace.class, "encode", Throwable.class, wraped);
-            String invoker = "try {" + Javascript.writeMethodCode(source, method.getName()) + ";} catch(e) {" + encode + ";}";
+            String invoker = "try {" + Javascript
+                    .writeMethodCode(source, method.getName()) + ";} catch(e) {" + encode + ";}";
 
             // invoke test script
             Object result = engine.execute(html, invoker, sourceName, 1);
+            BootonProfile.RunTestMethod.end();
 
-            if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
-                return null; // success
-            } else {
-                // fail (AssertionError) or error
+            try {
+                BootonProfile.AnalyzeTestResult.start(source);
 
-                // decode as Java's error and rethrow it
-                Source code = new Source(sourceName, compiled.length() != 0 ? compiled : script.write());
-                Throwable throwable = ClientStackTrace.decode((String) result, code);
+                if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
+                    return null; // success
+                } else {
+                    // fail (AssertionError) or error
+                    BootonProfile.AnalyzeTestError2.start(source);
 
-                if (throwable instanceof AssertionError || throwable instanceof InternalError) {
-                    dumpCode(code);
+                    // decode as Java's error and rethrow it
+                    Source code = new Source(sourceName, compiled.length() != 0 ? compiled : script.write());
+                    Throwable throwable = ClientStackTrace.decode((String) result, code);
 
-                    throwable = new PowerAssertOffError(throwable);
+                    if (throwable instanceof AssertionError || throwable instanceof InternalError) {
+                        dumpCode(code);
+
+                        throwable = new PowerAssertOffError(throwable);
+                    }
+                    BootonProfile.AnalyzeTestError2.end();
+                    throw I.quiet(throwable);
                 }
-                throw I.quiet(throwable);
+            } finally {
+                BootonProfile.AnalyzeTestResult.end();
             }
         } catch (ScriptException e) {
             dumpCode(source);
@@ -318,6 +359,8 @@ public class ScriptTester {
             }
         } catch (Throwable e) {
             throw I.quiet(e);
+        } finally {
+            BootonProfile.RunTest.end();
         }
     }
 
@@ -552,12 +595,12 @@ public class ScriptTester {
                 // ========================
                 // SHORT
                 // ========================
-                assert ((Short) java).doubleValue() == ((Double) js).doubleValue();
+                assert((Short) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Byte.class) {
                 // ========================
                 // BYTE
                 // ========================
-                assert ((Byte) java).doubleValue() == ((Double) js).doubleValue();
+                assert((Byte) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Boolean.class) {
                 // ========================
                 // BOOLEAN
@@ -583,7 +626,7 @@ public class ScriptTester {
                     js = NativeObject.callMethod((NativeObject) js, Javascript
                             .computeMethodName(Object.class, "toString", "()Ljava/lang/String;"), new Object[] {});
                 }
-                assert ((Character) java).toString().equals(js.toString());
+                assert((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {
                 // ========================
                 // THROWABLE

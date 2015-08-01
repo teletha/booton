@@ -29,7 +29,7 @@ import kiss.model.ClassUtil;
  * @version 2015/02/13 16:10:25
  */
 public enum BootonProfile {
-    Others, ParseCode, Loading, Compile, BuildApplication, BuildLiveCoding, WriteHTML, WriteJS, WriteCSS, Construct, Annotation, ServerLaunch;
+    Others, ParseCode, Loading, Compile, BuildApplication, BuildLiveCoding, WriteHTML, WriteJS, WriteCSS, Construct, Annotation, ServerLaunch, RunTest, ParseTest, RunTestMethod, RunTestAsJava, AnalyzeTestResult, AnalyzeTestError, AnalyzeTestError2;
 
     private static final Path JDK = Paths.get("rt.jar");
 
@@ -108,9 +108,13 @@ public enum BootonProfile {
                 System.out.format("Total Time: %5dms%n", root.end - root.start);
                 System.out.format("Total Profiled Time: %5.0fms%n", total);
 
-                for (Context context : list) {
+                for (int i = 0, size = Math.min(10, list.size()); i < size; i++) {
+                    Context context = list.get(i);
+
                     if (context.elapsed != 0) {
-                        System.out.format("%-15s\t%5dms\t%2.0f%%\t%s(%d)%n", context.profile, context.elapsed, context.elapsed / total * 100, context.path, context.sources.size());
+                        System.out
+                                .format("%-15s\t%6dms\t%2.0f%%\t%6d\t%s(%d)%n", context.profile, context.elapsed, context.elapsed / total * 100, context.count, context.path, context.sources
+                                        .size());
                     }
                 }
             }
@@ -146,6 +150,9 @@ public enum BootonProfile {
         /** The end time of the specified phase. */
         private long end;
 
+        /** The call count. */
+        private long count;
+
         /**
          * @param target
          */
@@ -169,6 +176,7 @@ public enum BootonProfile {
          * 
          */
         private void start() {
+            count++;
             long now = System.currentTimeMillis();
 
             if (start == 0) {
