@@ -282,54 +282,52 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set<Class> defined) {
-        profiler.start("WriteJS", source);
+        profiler.start("WriteJS", source, () -> {
+            // record compile route
+            CompilerRecorder.startCompiling(this);
 
-        // record compile route
-        CompilerRecorder.startCompiling(this);
+            try {
+                // compile script
+                compile();
 
-        try {
-            // compile script
-            compile();
+                // write super class and interfaces
+                if (source != RootClass && !isEnumSubType(source)) {
+                    write(output, defined, source.getSuperclass());
 
-            // write super class and interfaces
-            if (source != RootClass && !isEnumSubType(source)) {
-                write(output, defined, source.getSuperclass());
-
-                for (Class interfaceType : source.getInterfaces()) {
-                    write(output, defined, interfaceType);
-                }
-            }
-
-            // write sub type enum class
-            if (source.getSuperclass() == Enum.class) {
-                for (Object constant : source.getEnumConstants()) {
-                    Class sub = constant.getClass();
-
-                    if (sub != source) {
-                        write(output, defined, sub);
+                    for (Class interfaceType : source.getInterfaces()) {
+                        write(output, defined, interfaceType);
                     }
                 }
-            }
 
-            // write this class
-            if (defined.add(source)) {
-                try {
-                    output.append(code);
-                } catch (IOException e) {
-                    throw I.quiet(e);
+                // write sub type enum class
+                if (source.getSuperclass() == Enum.class) {
+                    for (Object constant : source.getEnumConstants()) {
+                        Class sub = constant.getClass();
+
+                        if (sub != source) {
+                            write(output, defined, sub);
+                        }
+                    }
                 }
-            }
 
-            // write dependency classes
-            for (Class dependency : dependencies) {
-                write(output, defined, dependency);
-            }
-        } finally {
-            // record compile route
-            CompilerRecorder.finishCompiling(this);
+                // write this class
+                if (defined.add(source)) {
+                    try {
+                        output.append(code);
+                    } catch (IOException e) {
+                        throw I.quiet(e);
+                    }
+                }
 
-            profiler.stop();
-        }
+                // write dependency classes
+                for (Class dependency : dependencies) {
+                    write(output, defined, dependency);
+                }
+            } finally {
+                // record compile route
+                CompilerRecorder.finishCompiling(this);
+            }
+        });
     }
 
     private boolean isEnumSubType(Class type) {
@@ -364,75 +362,72 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            profiler.start("Compile", source);
+            profiler.start("Compile", source, () -> {
+                ScriptWriter code = new ScriptWriter();
 
-            ScriptWriter code = new ScriptWriter();
+                // compute related class names
+                Class parent = source.getSuperclass();
+                String className = '"' + computeSimpleClassName(source) + '"';
+                String parentName = '"' + (parent == null || parent == Object.class ? "" : computeSimpleClassName(parent)) + '"';
+                StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
 
-            // compute related class names
-            Class parent = source.getSuperclass();
-            String className = '"' + computeSimpleClassName(source) + '"';
-            String parentName = '"' + (parent == null || parent == Object.class ? ""
-                    : computeSimpleClassName(parent)) + '"';
-            StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
+                for (Class type : source.getInterfaces()) {
+                    interfaces.add(computeSimpleClassName(type));
+                }
 
-            for (Class type : source.getInterfaces()) {
-                interfaces.add(computeSimpleClassName(type));
-            }
+                // write class definition
+                code.comment(source + " " + className);
+                code.append("boot.define(", className, ",", parentName, ",", interfaces, ",{");
 
-            // write class definition
-            code.comment(source + " " + className);
-            code.append("boot.define(", className, ",", parentName, ",", interfaces, ",{");
-
-            // write constructors, fields and methods
-            try {
-                if (source.isInterface() && !hasImplementation(source, true)) {
-                    if (source.isAnnotation()) {
-                        compileAnnotation(code);
+                // write constructors, fields and methods
+                try {
+                    if (source.isInterface() && !hasImplementation(source, true)) {
+                        if (source.isAnnotation()) {
+                            compileAnnotation(code);
+                        }
+                    } else if (TranslatorManager.hasTranslator(source)) {
+                        // do nothing
+                    } else {
+                        profiler.start("PraseByteCode", source);
+                        new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+                        profiler.stop();
                     }
-                } else if (TranslatorManager.hasTranslator(source)) {
-                    // do nothing
-                } else {
-                    profiler.start("PraseByteCode", source);
-                    new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
-                    profiler.stop();
+                } catch (TranslationError e) {
+                    e.write("\r\n");
+
+                    throw CompilerRecorder.rethrow(e);
+                } catch (Throwable e) {
+                    TranslationError error = new TranslationError(e);
+                    error.write("Can't compile ", source.getName() + ".");
+
+                    throw CompilerRecorder.rethrow(error);
                 }
-            } catch (TranslationError e) {
-                e.write("\r\n");
 
-                throw CompilerRecorder.rethrow(e);
-            } catch (Throwable e) {
-                TranslationError error = new TranslationError(e);
-                error.write("Can't compile ", source.getName() + ".");
+                // write metadata
+                code.append("},", new JavaMetadataCompiler(source));
 
-                throw CompilerRecorder.rethrow(error);
-            }
+                // write native class enhancement
+                JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
 
-            // write metadata
-            code.append("},", new JavaMetadataCompiler(source));
+                if (provider != null) {
+                    String JSClassName = provider.targetJavaScriptClassName();
 
-            // write native class enhancement
-            JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
-
-            if (provider != null) {
-                String JSClassName = provider.targetJavaScriptClassName();
-
-                if (JSClassName.length() != 0) {
-                    code.append(",").string(JSClassName);
+                    if (JSClassName.length() != 0) {
+                        code.append(",").string(JSClassName);
+                    }
                 }
-            }
 
-            if (Extensible.class.isAssignableFrom(source)) {
-                code.append(",").string("e");
-            }
+                if (Extensible.class.isAssignableFrom(source)) {
+                    code.append(",").string("e");
+                }
 
-            // End class definition
-            code.append(");");
-            code.line();
+                // End class definition
+                code.append(");");
+                code.line();
 
-            // create cache
-            this.code = code.toString();
-
-            profiler.stop();
+                // create cache
+                this.code = code.toString();
+            });
         }
     }
 
@@ -444,28 +439,26 @@ public class Javascript {
      * @param code
      */
     private void compileAnnotation(ScriptWriter code) {
-        profiler.start("CompileAnnotation");
+        profiler.start("CompileAnnotation", source, () -> {
+            Method[] methods = source.getDeclaredMethods();
 
-        Method[] methods = source.getDeclaredMethods();
+            for (int i = 0; i < methods.length; i++) {
+                code.comment(methods[i]);
+                code.write(computeMethodName(methods[i]), ":");
 
-        for (int i = 0; i < methods.length; i++) {
-            code.comment(methods[i]);
-            code.write(computeMethodName(methods[i]), ":");
+                Object value = methods[i].getDefaultValue();
 
-            Object value = methods[i].getDefaultValue();
+                if (value == null) {
+                    code.write("null");
+                } else {
+                    code.write("function()", "{return " + JavaMetadataCompiler.compileValue(value) + ";}");
+                }
 
-            if (value == null) {
-                code.write("null");
-            } else {
-                code.write("function()", "{return " + JavaMetadataCompiler.compileValue(value) + ";}");
+                if (i < methods.length - 1) {
+                    code.separator();
+                }
             }
-
-            if (i < methods.length - 1) {
-                code.separator();
-            }
-        }
-
-        profiler.stop();
+        });
     }
 
     /**

@@ -314,41 +314,41 @@ public class ScriptTester {
 
                                     throwable = new PowerAssertOffError(throwable);
                                 }
-                                profiler.stop();
-
                                 throw I.quiet(throwable);
                             });
                         }
                     });
                 });
             } catch (ScriptException e) {
-                dumpCode(source);
-                // script parse error (translation fails) or runtime error
-                Source code = new Source(sourceName, script.write());
+                return profiler.start("ScriptException", source, () -> {
+                    dumpCode(source);
+                    // script parse error (translation fails) or runtime error
+                    Source code = new Source(sourceName, script.write());
 
-                if (e.getScriptSourceCode() == null) {
-                    Throwable cause = e.getCause();
+                    if (e.getScriptSourceCode() == null) {
+                        Throwable cause = e.getCause();
 
-                    if (cause instanceof EcmaError) {
-                        throw new ScriptRuntimeError(code, (EcmaError) cause);
-                    } else {
-                        // error in boot.js
-                        int number = e.getFailingLineNumber();
-
-                        if (number != -1) {
-                            TranslationError error = new TranslationError(e);
-                            error.write(code.findBlock(number));
-                            throw error;
+                        if (cause instanceof EcmaError) {
+                            throw new ScriptRuntimeError(code, (EcmaError) cause);
                         } else {
-                            throw I.quiet(e);
+                            // error in boot.js
+                            int number = e.getFailingLineNumber();
+
+                            if (number != -1) {
+                                TranslationError error = new TranslationError(e);
+                                error.write(code.findBlock(number));
+                                throw error;
+                            } else {
+                                throw I.quiet(e);
+                            }
                         }
+                    } else {
+                        // error in test script
+                        TranslationError error = new TranslationError(e);
+                        error.write(code.findBlock(e.getFailingLineNumber()));
+                        throw error;
                     }
-                } else {
-                    // error in test script
-                    TranslationError error = new TranslationError(e);
-                    error.write(code.findBlock(e.getFailingLineNumber()));
-                    throw error;
-                }
+                });
             } catch (Throwable e) {
                 throw I.quiet(e);
             }
