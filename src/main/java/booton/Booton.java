@@ -16,9 +16,6 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import kiss.I;
-import kiss.XML;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -30,6 +27,8 @@ import booton.live.ResourceServlet;
 import booton.translator.Javascript;
 import booton.util.HTMLWriter;
 import jsx.ui.samaple.todo.HelloWorld;
+import kiss.I;
+import kiss.XML;
 
 /**
  * @version 2014/03/09 13:08:45
@@ -82,21 +81,19 @@ public class Booton {
      * @param port
      */
     public void launch() {
-        BootonProfile.ServerLaunch.start(() -> {
-            if (requireServer()) {
-                try {
-                    ServletContextHandler servletHandler = new ServletContextHandler();
-                    servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(config.root)), "/live/*");
-                    servletHandler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
+        if (requireServer()) {
+            try {
+                ServletContextHandler servletHandler = new ServletContextHandler();
+                servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(config.root)), "/live/*");
+                servletHandler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
 
-                    Server server = new Server(config.port);
-                    server.setHandler(servletHandler);
-                    server.start();
-                } catch (Exception e) {
-                    throw I.quiet(e);
-                }
+                Server server = new Server(config.port);
+                server.setHandler(servletHandler);
+                server.start();
+            } catch (Exception e) {
+                throw I.quiet(e);
             }
-        });
+        }
     }
 
     /**
@@ -141,13 +138,11 @@ public class Booton {
         this.js = root.resolve("application.js");
         this.css = root.resolve("application.css");
 
-        BootonProfile.Loading.start(() -> {
-            // load booton extensions
-            I.load(Booton.class, false);
+        // load booton extensions
+        I.load(Booton.class, false);
 
-            // load application extensions
-            I.load(application, true);
-        });
+        // load application extensions
+        I.load(application, true);
 
         Path mutex = root.resolve(BuildPhase);
 
@@ -158,27 +153,19 @@ public class Booton {
             }
 
             // build html file
-            BootonProfile.WriteHTML.start(() -> {
-                buildHTML();
-            });
+            buildHTML();
 
             Set set = new HashSet();
 
             // build js file
-            BootonProfile.BuildApplication.start(() -> {
-                Javascript.getScript(application).writeTo(js, set);
-            });
+            Javascript.getScript(application).writeTo(js, set);
 
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
-            BootonProfile.BuildLiveCoding.start(() -> {
-                Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
-            });
+            Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
 
             // build css file
-            BootonProfile.WriteCSS.start(() -> {
-                I.make(CascadingStyleSheet.class).write(css);
-            });
+            I.make(CascadingStyleSheet.class).write(css);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } finally {
@@ -234,12 +221,8 @@ public class Booton {
      * @param applicationClass A target application.
      */
     public static void launch(Class applicationClass) {
-        BootonProfile.Others.start(() -> {
-            Booton booton = new Booton(applicationClass);
-            booton.launch();
-            booton.build();
-        });
-
-        BootonProfile.show();
+        Booton booton = new Booton(applicationClass);
+        booton.launch();
+        booton.build();
     }
 }

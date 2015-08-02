@@ -11,11 +11,14 @@ package booton;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
+import antibug.profiler.Profiler;
 import jsx.application.ApplicationTheme;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+import kiss.model.ClassUtil;
 
 /**
  * @version 2014/03/09 13:06:59
@@ -36,7 +39,28 @@ public class BootonConfiguration {
     public int port = 10021;
 
     /** The build process profiling. */
-    public boolean profile = true;
+    public Profiler<String, Class, Object> profiler = new Profiler<String, Class, Object>() {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected String name(String key1, Class key2, Object key3) {
+            Path archive = key2 == null ? null : ClassUtil.getArchive(key2);
+
+            return key1 + "(" + (archive == null ? "JDK" : archive.getFileName().toString()) + ")";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Object group(String key1, Class key2, Object key3) {
+            Path archive = key2 == null ? null : ClassUtil.getArchive(key2);
+
+            return Objects.hash(key1, archive);
+        }
+    };
 
     /**
      * <p>

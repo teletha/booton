@@ -29,7 +29,8 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import booton.BootonProfile;
+import antibug.profiler.Profiler;
+import booton.BootonConfiguration;
 import booton.Necessary;
 import booton.Unnecessary;
 import jdk.internal.org.objectweb.asm.ClassReader;
@@ -66,6 +67,12 @@ import kiss.Singleton;
  * @version 2014/03/08 11:26:32
  */
 public class Javascript {
+
+    /** The configuration. */
+    private static final BootonConfiguration config = I.make(BootonConfiguration.class);
+
+    /** The profiler. */
+    private static final Profiler profiler = config.profiler;
 
     /** The primitive long class for javascript runtime. */
     static final Class PrimitiveLong;
@@ -136,7 +143,8 @@ public class Javascript {
      * @param source A Java class as source.
      */
     private Javascript(Class source) {
-        BootonProfile.Construct.start(source);
+        profiler.start("JavascriptConstructor", source);
+
         this.source = source;
 
         Class reverted = JavaAPIProviders.revert(source);
@@ -174,7 +182,8 @@ public class Javascript {
                 }
             }
         }
-        BootonProfile.Construct.end();
+
+        profiler.stop();
     }
 
     /**
@@ -273,7 +282,7 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set<Class> defined) {
-        BootonProfile.WriteJS.start(source);
+        profiler.start("WriteJS", source);
 
         // record compile route
         CompilerRecorder.startCompiling(this);
@@ -319,7 +328,7 @@ public class Javascript {
             // record compile route
             CompilerRecorder.finishCompiling(this);
 
-            BootonProfile.WriteJS.end();
+            profiler.stop();
         }
     }
 
@@ -355,14 +364,15 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            BootonProfile.Compile.start(source);
+            profiler.start("Compile", source);
 
             ScriptWriter code = new ScriptWriter();
 
             // compute related class names
             Class parent = source.getSuperclass();
             String className = '"' + computeSimpleClassName(source) + '"';
-            String parentName = '"' + (parent == null || parent == Object.class ? "" : computeSimpleClassName(parent)) + '"';
+            String parentName = '"' + (parent == null || parent == Object.class ? ""
+                    : computeSimpleClassName(parent)) + '"';
             StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
 
             for (Class type : source.getInterfaces()) {
@@ -382,9 +392,9 @@ public class Javascript {
                 } else if (TranslatorManager.hasTranslator(source)) {
                     // do nothing
                 } else {
-                    BootonProfile.ParseCode.start(source);
+                    profiler.start("PraseByteCode", source);
                     new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
-                    BootonProfile.ParseCode.end();
+                    profiler.stop();
                 }
             } catch (TranslationError e) {
                 e.write("\r\n");
@@ -422,7 +432,7 @@ public class Javascript {
             // create cache
             this.code = code.toString();
 
-            BootonProfile.Compile.end();
+            profiler.stop();
         }
     }
 
@@ -434,7 +444,7 @@ public class Javascript {
      * @param code
      */
     private void compileAnnotation(ScriptWriter code) {
-        BootonProfile.Annotation.start(source);
+        profiler.start("CompileAnnotation");
 
         Method[] methods = source.getDeclaredMethods();
 
@@ -454,7 +464,8 @@ public class Javascript {
                 code.separator();
             }
         }
-        BootonProfile.Annotation.end();
+
+        profiler.stop();
     }
 
     /**
