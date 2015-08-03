@@ -11,7 +11,6 @@ package booton;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 import antibug.profiler.Profiler;
 import jsx.application.ApplicationTheme;
@@ -48,18 +47,18 @@ public class BootonConfiguration {
         protected String name(String key1, Class key2, Object key3) {
             Path archive = key2 == null ? null : ClassUtil.getArchive(key2);
 
-            return key1 + "(" + (archive == null ? "JDK" : archive.getFileName().toString()) + ")";
+            return key1 + "(" + key2 + ")";
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected Object group(String key1, Class key2, Object key3) {
-            Path archive = key2 == null ? null : ClassUtil.getArchive(key2);
-
-            return Objects.hash(key1, archive);
-        }
+        // /**
+        // * {@inheritDoc}
+        // */
+        // @Override
+        // protected Object group(String key1, Class key2, Object key3) {
+        // Path archive = key2 == null ? null : ClassUtil.getArchive(key2);
+        //
+        // return Objects.hash(key1, archive);
+        // }
     };
 
     /**
