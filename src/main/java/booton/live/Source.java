@@ -36,8 +36,8 @@ public class Source {
      * 
      * @param source A source code.
      */
-    public Source(String name, String source) {
-        this(name, source.split("\\r\\n"));
+    public Source(String name, CharSequence source) {
+        this(name, source.toString().split("\\r\\n"));
     }
 
     /**

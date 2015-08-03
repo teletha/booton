@@ -186,15 +186,13 @@ public class ScriptTester {
                 }
             });
 
-            StringBuilder script = new StringBuilder();
-
             // invoke as Javascript
-            Javascript.getScript(source).writeTo(script, defined);
+            String script = Javascript.getScript(source).write(defined);
 
             try {
                 // compile as Javascript and script engine read it
                 profiler.start("ParseTest1", source, () -> {
-                    engine.execute(html, script.toString(), source.getSimpleName(), 1);
+                    engine.execute(html, script, source.getSimpleName(), 1);
                 });
 
                 String className = Javascript.computeClassName(source);
@@ -310,7 +308,7 @@ public class ScriptTester {
                             // fail (AssertionError) or error
                             return profiler.start("BuildAssertionResult2", source, () -> {
                                 // decode as Java's error and rethrow it
-                                Source code = new Source(sourceName, codes.toString());
+                                Source code = new Source(sourceName, codes);
                                 Throwable throwable = ClientStackTrace.decode((String) result, code);
 
                                 if (throwable instanceof AssertionError || throwable instanceof InternalError) {
@@ -327,7 +325,7 @@ public class ScriptTester {
                 return profiler.start("ScriptException2", source, () -> {
                     dumpCode(source);
                     // script parse error (translation fails) or runtime error
-                    Source code = new Source(sourceName, script.write());
+                    Source code = new Source(sourceName, codes);
 
                     if (e.getScriptSourceCode() == null) {
                         Throwable cause = e.getCause();
