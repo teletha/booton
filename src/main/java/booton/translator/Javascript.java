@@ -244,6 +244,8 @@ public class Javascript {
      * @param necessaries A list of required script classes.
      */
     public void writeTo(Appendable output, Set<Class> defined) {
+        profiler.start("WriteTo", source);
+
         if (defined == null) {
             defined = new HashSet();
         }
@@ -271,6 +273,8 @@ public class Javascript {
 
         // close stream
         I.quiet(output);
+
+        profiler.stop();
     }
 
     /**
@@ -298,30 +302,29 @@ public class Javascript {
                         write(output, defined, interfaceType);
                     }
                 }
+                if (defined.add(source)) {
+                    // write sub type enum class
+                    if (source.getSuperclass() == Enum.class) {
+                        for (Object constant : source.getEnumConstants()) {
+                            Class sub = constant.getClass();
 
-                // write sub type enum class
-                if (source.getSuperclass() == Enum.class) {
-                    for (Object constant : source.getEnumConstants()) {
-                        Class sub = constant.getClass();
-
-                        if (sub != source) {
-                            write(output, defined, sub);
+                            if (sub != source) {
+                                write(output, defined, sub);
+                            }
                         }
                     }
-                }
 
-                // write this class
-                if (defined.add(source)) {
+                    // write this class
                     try {
                         output.append(code);
                     } catch (IOException e) {
                         throw I.quiet(e);
                     }
-                }
 
-                // write dependency classes
-                for (Class dependency : dependencies) {
-                    write(output, defined, dependency);
+                    // write dependency classes
+                    for (Class dependency : dependencies) {
+                        write(output, defined, dependency);
+                    }
                 }
             } finally {
                 // record compile route
