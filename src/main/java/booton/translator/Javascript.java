@@ -296,11 +296,15 @@ public class Javascript {
 
                 // write super class and interfaces
                 if (source != RootClass && !isEnumSubType(source)) {
-                    write(output, defined, source.getSuperclass());
+                    profiler.start("WriteSuperClass", source, () -> {
+                        write(output, defined, source.getSuperclass());
+                    });
 
-                    for (Class interfaceType : source.getInterfaces()) {
-                        write(output, defined, interfaceType);
-                    }
+                    profiler.start("WriteInterface", source, () -> {
+                        for (Class interfaceType : source.getInterfaces()) {
+                            write(output, defined, interfaceType);
+                        }
+                    });
                 }
                 if (defined.add(source)) {
                     // write sub type enum class
@@ -316,15 +320,20 @@ public class Javascript {
 
                     // write this class
                     try {
+                        profiler.start("WriteJSActually", source);
                         output.append(code);
                     } catch (IOException e) {
                         throw I.quiet(e);
+                    } finally {
+                        profiler.stop();
                     }
 
                     // write dependency classes
-                    for (Class dependency : dependencies) {
-                        write(output, defined, dependency);
-                    }
+                    profiler.start("WriteDependency", source, () -> {
+                        for (Class dependency : dependencies) {
+                            write(output, defined, dependency);
+                        }
+                    });
                 }
             } finally {
                 // record compile route
@@ -391,9 +400,12 @@ public class Javascript {
                     } else if (TranslatorManager.hasTranslator(source)) {
                         // do nothing
                     } else {
-                        profiler.start("PraseByteCode", source);
-                        new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
-                        profiler.stop();
+                        try {
+                            profiler.start("PraseByteCode", source);
+                            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+                        } finally {
+                            profiler.stop();
+                        }
                     }
                 } catch (TranslationError e) {
                     e.write("\r\n");

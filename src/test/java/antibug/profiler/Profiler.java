@@ -143,6 +143,7 @@ public class Profiler<K, E, Y> {
             String key = String.valueOf(key1).concat(String.valueOf(key2)).concat(String.valueOf(key3));
             Result now = results.computeIfAbsent(key, name -> new Result(key1, key2, key3));
             now.previous = latest;
+            now.count++;
             latest = now;
             now.start();
         }
@@ -252,7 +253,8 @@ public class Profiler<K, E, Y> {
             for (Result result : results) {
                 Object key = group(result.key1, result.key2, result.key3);
 
-                Result computed = grouped.computeIfAbsent(key, name -> new Result(name(result.key1, result.key2, result.key3)));
+                Result computed = grouped
+                        .computeIfAbsent(key, name -> new Result(name(result.key1, result.key2, result.key3)));
                 computed.elapsed += result.elapsed;
                 computed.count += result.count;
 
@@ -276,11 +278,15 @@ public class Profiler<K, E, Y> {
     protected void show(double total, List<Result> results) {
         System.out.format("Total Profiled Time: %5.0fms%n", total);
 
-        String name = max(results, v -> v.name, true);
-        String time = max(results, v -> String.valueOf(v.elapsed), false);
-        String count = max(results, v -> String.valueOf(v.count), false);
+        int size = Math.min(15, results.size());
 
-        for (Result result : results) {
+        String name = max(results.subList(0, size), v -> v.name, true);
+        String time = max(results.subList(0, size), v -> String.valueOf(v.elapsed), false);
+        String count = max(results.subList(0, size), v -> String.valueOf(v.count), false);
+
+        for (int i = 0; i < size; i++) {
+            Result result = results.get(i);
+
             if (result.elapsed != 0) {
                 String format = name + "  " + time + "ms  %2.0f%%  " + count + "call%n";
 
@@ -300,7 +306,11 @@ public class Profiler<K, E, Y> {
      * @return
      */
     private String max(List<Result> list, Function<Result, String> value, boolean left) {
-        return "%" + (left ? "-" : "") + list.stream().map(value).max(Comparator.comparingInt(v -> v.length())).get().length() + "s";
+        return "%" + (left ? "-" : "") + list.stream()
+                .map(value)
+                .max(Comparator.comparingInt(v -> v.length()))
+                .get()
+                .length() + "s";
     }
 
     /**
@@ -366,7 +376,6 @@ public class Profiler<K, E, Y> {
          * 
          */
         private void start() {
-            count++;
             long now = System.currentTimeMillis();
 
             if (start == 0) {

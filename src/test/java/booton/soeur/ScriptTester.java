@@ -80,6 +80,9 @@ public class ScriptTester {
     /** The defined classes. */
     private static final Set defined = new HashSet();
 
+    /** The defined code. */
+    private static final StringBuilder codes = new StringBuilder();
+
     /** The boot.js file. */
     private static final String boot;
 
@@ -153,13 +156,13 @@ public class ScriptTester {
         Constructor constructor = searchInstantiator(source);
         Object[] parameter = constructor.getParameterTypes().length == 0 ? new Object[0] : new Object[] {this};
 
-        profiler.start("RunTest", source, () -> {
+        profiler.start("RunTest1", source, () -> {
             // prepare input and result store
             List inputs = prepareInputs(method);
             List results = new ArrayList();
 
             // invoke as Java
-            profiler.start("RunTestAsJava", source, () -> {
+            profiler.start("RunTestAsJava1", source, () -> {
                 try {
                     for (Object input : inputs) {
                         Object result;
@@ -190,7 +193,7 @@ public class ScriptTester {
 
             try {
                 // compile as Javascript and script engine read it
-                profiler.start("ParseTest", source, () -> {
+                profiler.start("ParseTest1", source, () -> {
                     engine.execute(html, script.toString(), source.getSimpleName(), 1);
                 });
 
@@ -202,7 +205,7 @@ public class ScriptTester {
                 for (int i = 0; i < inputs.size(); i++) {
                     int index = i;
 
-                    profiler.start("RunTestMethod", source, () -> {
+                    profiler.start("RunTestMethod1", source, () -> {
                         Object input = inputs.get(index);
 
                         // write test script
@@ -229,11 +232,11 @@ public class ScriptTester {
 
                         try {
                             // compare it to the java result
-                            profiler.start("AssertObject", source, () -> {
+                            profiler.start("AssertObject1", source, () -> {
                                 assertObject(results.get(index), js);
                             });
                         } catch (AssertionError e) {
-                            profiler.start("BuildAssertionError", source, () -> {
+                            profiler.start("BuildAssertionError1", source, () -> {
                                 StringBuilder builder = new StringBuilder();
                                 builder.append("Compiling script is success but execution results of Java and JS are different.")
                                         .append(END);
@@ -280,17 +283,18 @@ public class ScriptTester {
         String sourceName = source.getSimpleName();
         Javascript script = Javascript.getScript(source);
 
-        return profiler.start("RunTest", source, () -> {
+        return profiler.start("RunTest2", source, () -> {
             try {
                 // compile as Javascript
                 String compiled = script.write(defined);
+                codes.append(compiled);
 
                 // script engine read it
-                profiler.start("ParseTest", source, () -> {
+                profiler.start("ParseTest2", source, () -> {
                     engine.execute(html, compiled, sourceName, 1);
                 });
 
-                return profiler.start("RunTestMethod", source, () -> {
+                return profiler.start("RunTestMethod2", source, () -> {
                     // write test script
                     String wraped = Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "e");
                     String encode = Javascript.writeMethodCode(ClientStackTrace.class, "encode", Throwable.class, wraped);
@@ -299,14 +303,14 @@ public class ScriptTester {
                     // invoke test script
                     Object result = engine.execute(html, invoker, sourceName, 1);
 
-                    return profiler.start("AnalyzeTestResult", source, () -> {
+                    return profiler.start("AnalyzeTestResult2", source, () -> {
                         if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
                             return null; // success
                         } else {
                             // fail (AssertionError) or error
                             return profiler.start("BuildAssertionResult2", source, () -> {
                                 // decode as Java's error and rethrow it
-                                Source code = new Source(sourceName, compiled.length() != 0 ? compiled : script.write());
+                                Source code = new Source(sourceName, codes.toString());
                                 Throwable throwable = ClientStackTrace.decode((String) result, code);
 
                                 if (throwable instanceof AssertionError || throwable instanceof InternalError) {
@@ -320,7 +324,7 @@ public class ScriptTester {
                     });
                 });
             } catch (ScriptException e) {
-                return profiler.start("ScriptException", source, () -> {
+                return profiler.start("ScriptException2", source, () -> {
                     dumpCode(source);
                     // script parse error (translation fails) or runtime error
                     Source code = new Source(sourceName, script.write());
