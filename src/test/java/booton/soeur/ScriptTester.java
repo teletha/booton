@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -89,6 +88,12 @@ public class ScriptTester {
 
     /** The boot.js file for unit test. */
     private static final String unitTest;
+
+    /** The code fragment for error wrapping. */
+    private static final String wraped = Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "e");
+
+    /** The code fragment for error wrapping. */
+    private static final String errorCatch = Javascript.writeMethodCode(ClientStackTrace.class, "encode", Throwable.class, wraped);
 
     static {
         try {
@@ -171,14 +176,10 @@ public class ScriptTester {
                         // create scriptable instance for each tests
                         Object instance = constructor.newInstance(parameter);
 
-                        try {
-                            if (input == NONE) {
-                                result = method.invoke(instance);
-                            } else {
-                                result = method.invoke(instance, input);
-                            }
-                        } catch (InvocationTargetException e) {
-                            throw I.quiet(e.getTargetException());
+                        if (input == NONE) {
+                            result = method.invoke(instance);
+                        } else {
+                            result = method.invoke(instance, input);
                         }
                         results.add(result);
                     }
@@ -294,9 +295,7 @@ public class ScriptTester {
 
                 return profiler.start("RunTestMethod2", source, () -> {
                     // write test script
-                    String wraped = Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "e");
-                    String encode = Javascript.writeMethodCode(ClientStackTrace.class, "encode", Throwable.class, wraped);
-                    String invoker = "try {" + Javascript.writeMethodCode(source, method.getName()) + ";} catch(e) {" + encode + ";}";
+                    String invoker = "try {" + Javascript.writeMethodCode(source, method.getName()) + ";} catch(e) {" + errorCatch + ";}";
 
                     // invoke test script
                     Object result = engine.execute(html, invoker, sourceName, 1);
