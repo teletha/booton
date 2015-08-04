@@ -443,7 +443,7 @@ public class NativeString {
      * Returns a string created by using the specified sequence of Unicode values.
      * </p>
      * 
-     * @param codes A sequence of numbers that are Unicode values.
+     * @param lines A sequence of numbers that are Unicode values.
      * @return
      */
     public static NativeString fromCharCode(int code) {
@@ -881,7 +881,7 @@ public class NativeString {
          * Returns a string created by using the specified sequence of Unicode values.
          * </p>
          * 
-         * @param codes A sequence of numbers that are Unicode values.
+         * @param lines A sequence of numbers that are Unicode values.
          * @return
          */
         public String fromCharCode(int code) {

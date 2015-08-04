@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,7 +82,7 @@ public class ScriptTester {
     private static final Set defined = new HashSet();
 
     /** The defined code. */
-    private static final StringBuilder codes = new StringBuilder();
+    private static final Source codes = new Source("TestCase");
 
     /** The boot.js file. */
     private static final String boot;
@@ -234,33 +235,32 @@ public class ScriptTester {
                                 assertObject(results.get(index), js);
                             });
                         } catch (AssertionError e) {
-                            profiler.start("BuildAssertionError1", source, () -> {
-                                StringBuilder builder = new StringBuilder();
-                                builder.append("Compiling script is success but execution results of Java and JS are different.")
-                                        .append(END);
+                            StringBuilder error = new StringBuilder();
+                            error.append("Compiling script is success but execution results of Java and JS are different.").append(END);
 
-                                if (input != NONE) {
-                                    builder.append("Input value : ").append(input).append(END);
-                                    builder.append("Java    : ").append(results.get(index)).append(END);
-                                    builder.append("Script   : ").append(js).append(END);
-                                }
-                                throw new AssertionError(builder.toString(), e);
-                            });
+                            if (input != NONE) {
+                                error.append("Input value : ").append(input).append(END);
+                                error.append("Java    : ").append(results.get(index)).append(END);
+                                error.append("Script   : ").append(js).append(END);
+                            }
+                            throw new AssertionError(error.toString(), e);
                         }
                     });
                 }
             } catch (AssertionError e) {
                 throw e; // rethrow assertion error
             } catch (ScriptException e) {
-                dumpCode(source);
+                dump();
 
-                Source code = new Source(source.getSimpleName(), Javascript.getScript(source).write());
+                Source code = new Source(source.getSimpleName());
+                code.add(Javascript.getScript(source).write());
+
                 TranslationError error = new TranslationError(e);
                 error.write(code.findBlock(e.getFailingLineNumber()));
 
                 throw error;
             } catch (Throwable e) {
-                dumpCode(source);
+                dump();
 
                 TranslationError error = new TranslationError(e);
                 throw error;
@@ -285,7 +285,7 @@ public class ScriptTester {
             try {
                 // compile as Javascript
                 String compiled = script.write(defined);
-                codes.append(compiled);
+                codes.add(compiled);
 
                 // script engine read it
                 profiler.start("ParseTest2", source, () -> {
@@ -306,39 +306,35 @@ public class ScriptTester {
                             return null; // success
                         } else {
                             // fail (AssertionError) or error
-                            return profiler.start("BuildAssertionResult2", source, () -> {
-                                // decode as Java's error and rethrow it
-                                Source code = new Source(sourceName, codes);
-                                Throwable throwable = ClientStackTrace.decode((String) result, code);
+                            // decode as Java's error and rethrow it
+                            Throwable error = ClientStackTrace.decode((String) result, codes);
 
-                                if (throwable instanceof AssertionError || throwable instanceof InternalError) {
-                                    dumpCode(code);
+                            if (error instanceof AssertionError || error instanceof InternalError) {
+                                dump();
 
-                                    throwable = new PowerAssertOffError(throwable);
-                                }
-                                throw I.quiet(throwable);
-                            });
+                                error = new PowerAssertOffError(error);
+                            }
+                            throw I.quiet(error);
                         }
                     });
                 });
             } catch (ScriptException e) {
                 return profiler.start("ScriptException2", source, () -> {
-                    dumpCode(source);
-                    // script parse error (translation fails) or runtime error
-                    Source code = new Source(sourceName, codes);
+                    dump();
 
+                    // script parse error (translation fails) or runtime error
                     if (e.getScriptSourceCode() == null) {
                         Throwable cause = e.getCause();
 
                         if (cause instanceof EcmaError) {
-                            throw new ScriptRuntimeError(code, (EcmaError) cause);
+                            throw new ScriptRuntimeError(codes, (EcmaError) cause);
                         } else {
                             // error in boot.js
                             int number = e.getFailingLineNumber();
 
                             if (number != -1) {
                                 TranslationError error = new TranslationError(e);
-                                error.write(code.findBlock(number));
+                                error.write(codes.findBlock(number));
                                 throw error;
                             } else {
                                 throw I.quiet(e);
@@ -347,7 +343,7 @@ public class ScriptTester {
                     } else {
                         // error in test script
                         TranslationError error = new TranslationError(e);
-                        error.write(code.findBlock(e.getFailingLineNumber()));
+                        error.write(codes.findBlock(e.getFailingLineNumber()));
                         throw error;
                     }
                 });
@@ -712,29 +708,12 @@ public class ScriptTester {
 
     /**
      * <p>
-     * Helper method to dump code.
+     * Dump test script.
      * </p>
-     * 
-     * @param source
      */
-    private void dumpCode(Class source) {
+    private void dump() {
         try {
-            Files.write(I.locate("e:\\dump.js"), Javascript.getScript(source).write().getBytes());
-        } catch (IOException e) {
-            throw I.quiet(e);
-        }
-    }
-
-    /**
-     * <p>
-     * Helper method to dump code.
-     * </p>
-     * 
-     * @param source
-     */
-    private void dumpCode(Source source) {
-        try {
-            Files.write(I.locate("e:\\dump.js"), source.toString().getBytes());
+            Files.write(I.locate("target/dump.js"), codes.lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw I.quiet(e);
         }

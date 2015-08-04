@@ -153,7 +153,10 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         private Source create(Path path) {
             try {
-                return new Source(path.getFileName().toString(), Files.readAllLines(path, StandardCharsets.UTF_8));
+                Source source = new Source(path.getFileName().toString());
+                source.add(Files.readAllLines(path, StandardCharsets.UTF_8));
+
+                return source;
             } catch (IOException e) {
                 throw I.quiet(e);
             }
