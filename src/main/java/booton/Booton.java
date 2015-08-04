@@ -138,11 +138,13 @@ public class Booton {
         this.js = root.resolve("application.js");
         this.css = root.resolve("application.css");
 
-        // load booton extensions
-        I.load(Booton.class, false);
+        config.profiler.start("LoadLibrary", () -> {
+            // load booton extensions
+            I.load(Booton.class, false);
 
-        // load application extensions
-        I.load(application, true);
+            // load application extensions
+            I.load(application, true);
+        });
 
         Path mutex = root.resolve(BuildPhase);
 
@@ -224,5 +226,7 @@ public class Booton {
         Booton booton = new Booton(applicationClass);
         booton.launch();
         booton.build();
+
+        booton.config.profiler.show();
     }
 }
