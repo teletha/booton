@@ -167,7 +167,7 @@ public class ScriptTester {
             List inputs = prepareInputs(method);
             List results = new ArrayList();
 
-            // invoke as Java
+            // =========== Invoke as Java ===========
             profiler.start("RunTestAsJava1", source, () -> {
                 try {
                     for (Object input : inputs) {
@@ -188,13 +188,17 @@ public class ScriptTester {
                 }
             });
 
-            // invoke as Javascript
-            String script = Javascript.getScript(source).write(defined);
+            // =========== Invoke as JavaScript ===========
+            Javascript script = Javascript.getScript(source);
+
+            // compile as Javascript
+            String compiled = script.write(defined);
+            codes.add(compiled);
 
             try {
                 // compile as Javascript and script engine read it
                 profiler.start("ParseTest1", source, () -> {
-                    engine.execute(html, script, source.getSimpleName(), 1);
+                    engine.execute(html, compiled, source.getSimpleName(), 1);
                 });
 
                 String className = Javascript.computeClassName(source);
@@ -232,9 +236,7 @@ public class ScriptTester {
 
                         try {
                             // compare it to the java result
-                            profiler.start("AssertObject1", source, () -> {
-                                assertObject(results.get(index), js);
-                            });
+                            assertObject(results.get(index), js);
                         } catch (AssertionError e) {
                             StringBuilder error = new StringBuilder();
                             error.append("Compiling script is success but execution results of Java and JS are different.").append(END);
@@ -253,11 +255,8 @@ public class ScriptTester {
             } catch (ScriptException e) {
                 dump();
 
-                Source code = new Source(source.getSimpleName());
-                code.add(Javascript.getScript(source).write());
-
                 TranslationError error = new TranslationError(e);
-                error.write(code.findBlock(e.getFailingLineNumber()));
+                error.write(codes.findBlock(e.getFailingLineNumber()));
 
                 throw error;
             } catch (Throwable e) {
@@ -300,52 +299,48 @@ public class ScriptTester {
                     // invoke test script
                     Object result = engine.execute(html, invoker, sourceName, 1);
 
-                    return profiler.start("AnalyzeTestResult2", source, () -> {
-                        if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
-                            return null; // success
-                        } else {
-                            // fail (AssertionError) or error
-                            // decode as Java's error and rethrow it
-                            Throwable error = ClientStackTrace.decode((String) result, codes);
-
-                            if (error instanceof AssertionError || error instanceof InternalError) {
-                                dump();
-
-                                error = new PowerAssertOffError(error);
-                            }
-                            throw I.quiet(error);
-                        }
-                    });
-                });
-            } catch (ScriptException e) {
-                return profiler.start("ScriptException2", source, () -> {
-                    dump();
-
-                    // script parse error (translation fails) or runtime error
-                    if (e.getScriptSourceCode() == null) {
-                        Throwable cause = e.getCause();
-
-                        if (cause instanceof EcmaError) {
-                            throw new ScriptRuntimeError(codes, (EcmaError) cause);
-                        } else {
-                            // error in boot.js
-                            int number = e.getFailingLineNumber();
-
-                            if (number != -1) {
-                                TranslationError error = new TranslationError(e);
-                                error.write(codes.findBlock(number));
-                                throw error;
-                            } else {
-                                throw I.quiet(e);
-                            }
-                        }
+                    if (result == null || result instanceof Undefined || result instanceof UniqueTag) {
+                        return null; // success
                     } else {
-                        // error in test script
-                        TranslationError error = new TranslationError(e);
-                        error.write(codes.findBlock(e.getFailingLineNumber()));
-                        throw error;
+                        // fail (AssertionError) or error
+                        // decode as Java's error and rethrow it
+                        Throwable error = ClientStackTrace.decode((String) result, codes);
+
+                        if (error instanceof AssertionError || error instanceof InternalError) {
+                            dump();
+
+                            error = new PowerAssertOffError(error);
+                        }
+                        throw I.quiet(error);
                     }
                 });
+            } catch (ScriptException e) {
+                dump();
+
+                // script parse error (translation fails) or runtime error
+                if (e.getScriptSourceCode() == null) {
+                    Throwable cause = e.getCause();
+
+                    if (cause instanceof EcmaError) {
+                        throw new ScriptRuntimeError(codes, (EcmaError) cause);
+                    } else {
+                        // error in boot.js
+                        int number = e.getFailingLineNumber();
+
+                        if (number != -1) {
+                            TranslationError error = new TranslationError(e);
+                            error.write(codes.findBlock(number));
+                            throw error;
+                        } else {
+                            throw I.quiet(e);
+                        }
+                    }
+                } else {
+                    // error in test script
+                    TranslationError error = new TranslationError(e);
+                    error.write(codes.findBlock(e.getFailingLineNumber()));
+                    throw error;
+                }
             } catch (Throwable e) {
                 throw I.quiet(e);
             }
