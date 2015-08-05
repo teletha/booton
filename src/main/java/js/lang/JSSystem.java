@@ -36,12 +36,9 @@ class JSSystem {
      * by the host environment or user.
      * <p>
      * For simple stand-alone Java applications, a typical way to write a line of output data is:
-     * <blockquote>
-     * 
-     * <pre>
+     * <blockquote> <pre>
      *     System.out.println(data)
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * <p>
      * See the <code>println</code> methods in class <code>PrintStream</code>.
      * 
@@ -220,35 +217,29 @@ class JSSystem {
      * is, how frequently the value changes) - no guarantees are made except that the resolution is
      * at least as good as that of {@link #currentTimeMillis()}.
      * <p>
-     * Differences in successive calls that span greater than approximately 292 years
-     * (2<sup>63</sup> nanoseconds) will not correctly compute elapsed time due to numerical
-     * overflow.
+     * Differences in successive calls that span greater than approximately 292 years (2
+     * <sup>63</sup> nanoseconds) will not correctly compute elapsed time due to numerical overflow.
      * <p>
      * The values returned by this method become meaningful only when the difference between two
      * such values, obtained within the same instance of a Java virtual machine, is computed.
      * <p>
-     * For example, to measure how long some code takes to execute:
-     * 
-     * <pre> {@code
+     * For example, to measure how long some code takes to execute: <pre> {@code
      * long startTime = System.nanoTime();
      * // ... the code being measured ...
      * long estimatedTime = System.nanoTime() - startTime;}</pre>
      * <p>
-     * To compare two nanoTime values
-     * 
-     * <pre> {@code
+     * To compare two nanoTime values <pre> {@code
      * long t0 = System.nanoTime();
      * ...
-     * long t1 = System.nanoTime();}</pre>
-     * one should use {@code t1 - t0 < 0}, not {@code t1 < t0}, because of the possibility of
-     * numerical overflow.
+     * long t1 = System.nanoTime();}</pre> one should use {@code t1 - t0 < 0}, not {@code t1 < t0},
+     * because of the possibility of numerical overflow.
      * 
      * @return the current value of the running Java Virtual Machine's high-resolution time source,
      *         in nanoseconds
      * @since 1.5
      */
     public static long nanoTime() {
-        return currentTimeMillis();
+        return (long) (Global.performance.now() * 1000);
     }
 
     /**
@@ -371,12 +362,9 @@ class JSSystem {
      * for quick reuse. When control returns from the method call, the Java Virtual Machine has made
      * a best effort to reclaim space from all discarded objects.
      * <p>
-     * The call <code>System.gc()</code> is effectively equivalent to the call: <blockquote>
-     * 
-     * <pre>
+     * The call <code>System.gc()</code> is effectively equivalent to the call: <blockquote> <pre>
      * Runtime.getRuntime().gc()
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      *
      * @see java.lang.Runtime#gc()
      */

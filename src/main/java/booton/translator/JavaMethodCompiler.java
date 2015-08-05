@@ -30,6 +30,10 @@ import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import booton.Obfuscator;
+import booton.css.CascadingStyleSheet;
+import booton.translator.Node.Switch;
+import booton.translator.Node.TryCatchFinallyBlocks;
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 import jdk.internal.org.objectweb.asm.Attribute;
 import jdk.internal.org.objectweb.asm.ClassReader;
@@ -46,10 +50,6 @@ import jsx.ui.VirtualStructure;
 import jsx.ui.VirtualStructure.ContainerDescriptor;
 import kiss.I;
 import kiss.model.ClassUtil;
-import booton.Obfuscator;
-import booton.css.CascadingStyleSheet;
-import booton.translator.Node.Switch;
-import booton.translator.Node.TryCatchFinallyBlocks;
 
 /**
  * <p>
@@ -238,7 +238,6 @@ class JavaMethodCompiler extends MethodVisitor {
      * Switch statement with enum produces special bytecode, so we must handle it by special way.
      * The following asmfier code is typical code for enum switch.
      * </p>
-     * 
      * <pre>
      * // invoke compiler generated static method to retrieve the user class specific number array
      * // we should ignore this oeprand
@@ -472,8 +471,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 current.addOperand(increment(current.remove(0) + "." + computeFieldName(owner, name), type, false, false));
             } else {
-                OperandExpression assignment = new OperandExpression(translator.translateField(owner, name, current.remove(1)) + "=" + current.remove(0)
-                        .cast(type), type);
+                OperandExpression assignment = new OperandExpression(translator
+                        .translateField(owner, name, current.remove(1)) + "=" + current.remove(0).cast(type), type);
 
                 if (match(DUPLICATE_AWAY, PUTFIELD)) {
                     // multiple assignment (i.e. this.a = this.b = 0;)
@@ -486,7 +485,8 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETFIELD:
-            if (owner == VirtualStructure.class && name.endsWith("box") && script.source != VirtualStructure.class && script.source != ContainerDescriptor.class) {
+            if (owner == VirtualStructure.class && name
+                    .endsWith("box") && script.source != VirtualStructure.class && script.source != ContainerDescriptor.class) {
                 ArrayList<Operand> context = new ArrayList();
                 context.add(current.remove(0)); // "this" context
                 context.add(new OperandNumber(virtualStructureLocalId.getAndIncrement()));
@@ -649,9 +649,11 @@ class JavaMethodCompiler extends MethodVisitor {
                     current.remove(0);
 
                     if (first instanceof OperandCondition && second instanceof OperandCondition) {
-                        condition.addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
+                        condition
+                                .addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
                     } else {
-                        condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second.disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                        condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second
+                                .disclose() + ":" + first.disclose(), new InferredType(first, second))));
                     }
                 }
 
@@ -985,7 +987,8 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // remove empty node if needed
                 if (current.previous.stack.isEmpty()) dispose(current.previous);
-            } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN)) {
+            } else
+                if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN)) {
                 // Current operands is like the following, so we must remove four operands to
                 // represent boolean value.
                 //
@@ -1127,6 +1130,11 @@ class JavaMethodCompiler extends MethodVisitor {
             // cast long to double
             current.addOperand(operateLong("toDouble"));
             break;
+
+        case D2L:
+            // cast double to long
+            current.addOperand(writeLongMethod("fromNumber", current.remove(0)));
+            break;
         }
     }
 
@@ -1235,7 +1243,8 @@ class JavaMethodCompiler extends MethodVisitor {
         // detect functional interface
         Class interfaceClass = convert(callerType.getReturnType());
         String interfaceClassName = Javascript.computeClassName(interfaceClass);
-        String interfaceMethodName = '"' + Javascript.computeMethodName(interfaceClass, name, functionalInterfaceType.getDescriptor()) + '"';
+        String interfaceMethodName = '"' + Javascript
+                .computeMethodName(interfaceClass, name, functionalInterfaceType.getDescriptor()) + '"';
 
         // detect lambda method
         Class lambdaClass = convert(handle.getOwner());
@@ -1595,8 +1604,9 @@ class JavaMethodCompiler extends MethodVisitor {
                         contexts.add(new OperandExpression(model));
                         contexts.add(new OperandString(path));
 
-                        current.addOperand(translator.translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
-                                Class.class, Object.class, String.class}, contexts), owner);
+                        current.addOperand(translator
+                                .translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
+                                        Class.class, Object.class, String.class}, contexts), owner);
                     } else {
                         // instance initialization method invocation
                         current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts), owner);
@@ -1624,7 +1634,8 @@ class JavaMethodCompiler extends MethodVisitor {
             if (owner == VirtualStructure.class && parameters.length == 0 && returnType != VirtualElement.class) {
                 parameters = new Class[] {int.class};
                 contexts.add(new OperandNumber(virtualStructureLocalId.getAndIncrement()));
-                current.addOperand(translator.translateMethod(owner, methodName, "(I".concat(desc.substring(1)), parameters, contexts), returnType);
+                current.addOperand(translator
+                        .translateMethod(owner, methodName, "(I".concat(desc.substring(1)), parameters, contexts), returnType);
                 return;
             }
 
@@ -1790,7 +1801,8 @@ class JavaMethodCompiler extends MethodVisitor {
             } else if (clazz == String.class) {
                 code = "boot.isString(" + current.remove(0) + ")";
             } else if (clazz.isInterface() || clazz.isArray()) {
-                code = Javascript.writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current.remove(0));
+                code = Javascript
+                        .writeMethodCode(Class.class, "isInstance", Javascript.computeClass(clazz), Object.class, current.remove(0));
             } else {
                 code = current.remove(0) + " instanceof " + Javascript.computeClassName(clazz);
             }

@@ -95,6 +95,13 @@ public class Global {
 
     /**
      * <p>
+     * The performance API.
+     * </p>
+     */
+    public static NativePerformance performance = new NativePerformance();
+
+    /**
+     * <p>
      * Create emulater object of the specified type.
      * </p>
      * 
@@ -498,6 +505,9 @@ public class Global {
          */
         public String JSON = "JSON";
 
+        /** The performance API. */
+        public String performance = "performance";
+
         /**
          * <p>
          * Provide JQuery support.
@@ -662,8 +672,7 @@ public class Global {
          * @param timeoutId The ID of the timeout you wish to clear, as returned by setTimeout().
          */
         public String getArgumentArray() {
-            return "Φ(\"" + Javascript
-                    .computeSimpleClassName(Object.class) + "\",Array.prototype.slice.call(arguments))";
+            return "Φ(\"" + Javascript.computeSimpleClassName(Object.class) + "\",Array.prototype.slice.call(arguments))";
         }
 
         /**
