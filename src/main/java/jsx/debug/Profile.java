@@ -108,6 +108,17 @@ public interface Profile<K, E, Y> {
      * 
      * @param key1
      */
+    public default void start(Runnable process) {
+        start((K) null, (E) null, (Y) null, process);
+    }
+
+    /**
+     * <p>
+     * Start profiling phase with the specified grouping key.
+     * </p>
+     * 
+     * @param key1
+     */
     public default void start(K key1) {
         start(key1, (E) null, (Y) null);
     }

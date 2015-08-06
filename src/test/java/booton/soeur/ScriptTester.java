@@ -35,13 +35,13 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
 
 import antibug.powerassert.PowerAssertOffError;
-import antibug.profiler.Profiler;
-import booton.BootonConfiguration;
+import booton.CompilerLog;
 import booton.Unnecessary;
 import booton.live.ClientStackTrace;
 import booton.live.Source;
 import booton.translator.Javascript;
 import booton.translator.TranslationError;
+import jsx.debug.Profile;
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.EcmaError;
 import net.sourceforge.htmlunit.corejs.javascript.NativeArray;
@@ -55,12 +55,6 @@ import net.sourceforge.htmlunit.corejs.javascript.UniqueTag;
  */
 @Unnecessary
 public class ScriptTester {
-
-    /** The configuration. */
-    private static final BootonConfiguration config = I.make(BootonConfiguration.class);
-
-    /** The profiler. */
-    private static final Profiler<String, Class, Object> profiler = config.profiler;
 
     /** The line feed. */
     private static final String END = "\r\n";
@@ -127,6 +121,10 @@ public class ScriptTester {
             // compile and load boot script
             engine.execute(html, engine.compile(html, unitTest, "unitTest.js", 1));
             engine.execute(html, engine.compile(html, boot, "boot.js", 1));
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                Profile.show();
+            }));
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -162,13 +160,13 @@ public class ScriptTester {
         Constructor constructor = searchInstantiator(source);
         Object[] parameter = constructor.getParameterTypes().length == 0 ? new Object[0] : new Object[] {this};
 
-        profiler.start("RunTest1", source, () -> {
+        CompilerLog.RunTest1.start(source, () -> {
             // prepare input and result store
             List inputs = prepareInputs(method);
             List results = new ArrayList();
 
             // =========== Invoke as Java ===========
-            profiler.start("RunTestAsJava1", source, () -> {
+            CompilerLog.RunTestAsJava1.start(source, () -> {
                 try {
                     for (Object input : inputs) {
                         Object result;
@@ -197,7 +195,7 @@ public class ScriptTester {
 
             try {
                 // compile as Javascript and script engine read it
-                profiler.start("ParseTest1", source, () -> {
+                CompilerLog.ParseTest1.start(source, () -> {
                     engine.execute(html, compiled, source.getSimpleName(), 1);
                 });
 
@@ -209,7 +207,7 @@ public class ScriptTester {
                 for (int i = 0; i < inputs.size(); i++) {
                     int index = i;
 
-                    profiler.start("RunTestMethod1", source, () -> {
+                    CompilerLog.RunTestMethod1.start(source, () -> {
                         Object input = inputs.get(index);
 
                         // write test script
@@ -281,18 +279,18 @@ public class ScriptTester {
         String sourceName = source.getSimpleName();
         Javascript script = Javascript.getScript(source);
 
-        return profiler.start("RunTest2", source, () -> {
+        return CompilerLog.RunTest2.start(source, () -> {
             try {
                 // compile as Javascript
                 String compiled = script.write(defined);
                 codes.add(compiled);
 
                 // script engine read it
-                profiler.start("ParseTest2", source, () -> {
+                CompilerLog.ParseTest2.start(source, () -> {
                     engine.execute(html, compiled, sourceName, 1);
                 });
 
-                return profiler.start("RunTestMethod2", source, () -> {
+                return CompilerLog.RunTestMethod2.start(source, () -> {
                     // write test script
                     String invoker = "try {" + Javascript.writeMethodCode(source, method.getName()) + ";} catch(e) {" + errorCatch + ";}";
 

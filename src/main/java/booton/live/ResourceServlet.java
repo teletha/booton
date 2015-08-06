@@ -10,8 +10,8 @@
 package booton.live;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
@@ -21,10 +21,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kiss.I;
-import kiss.XML;
 import booton.Booton;
 import booton.util.HTMLWriter;
+import kiss.I;
+import kiss.XML;
+import kiss.model.ClassUtil;
 
 /**
  * @version 2014/03/07 10:22:55
@@ -35,23 +36,36 @@ public class ResourceServlet extends HttpServlet {
     /** The current root path. */
     private final Path root;
 
+    /** The resource directory. */
+    private final Path resources;
+
     /**
      * @param root
      */
     public ResourceServlet(Path root) {
+        Path resources = ClassUtil.getArchive(Booton.class);
+
+        if (Files.isRegularFile(resources)) {
+            try {
+                resources = FileSystems.newFileSystem(resources, ClassLoader.getSystemClassLoader()).getPath("/");
+            } catch (IOException e) {
+                throw I.quiet(e);
+            }
+        }
+
         this.root = root;
+        this.resources = resources;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
 
         if (path == null) {
-            path = "/index.html";
+            path = "/application.html";
         }
         path = path.substring(1);
 
@@ -62,25 +76,25 @@ public class ResourceServlet extends HttpServlet {
         if (path.endsWith(".html")) {
             rebuild(file).to(new HTMLWriter(new OutputStreamWriter(response.getOutputStream(), I.$encoding)));
         } else {
+            // assign content-type
             if (path.endsWith(".css")) {
                 response.addHeader("Content-Type", "text/css");
-            }
-
-            if (path.endsWith(".js")) {
+            } else if (path.endsWith(".js")) {
                 response.addHeader("Content-Type", "text/javascript");
             }
 
-            if (Files.exists(file)) {
-                // from configured root directory
-                I.copy(Files.newInputStream(file), response.getOutputStream(), true);
-            } else {
-                // from resource directory in jar
-                InputStream resource = ClassLoader.getSystemResourceAsStream("init/" + path);
+            // check resource file
+            Path resource = resources.resolve("init/" + path);
+            Path deployed = root.resolve(path);
 
-                if (resource != null) {
-                    I.copy(resource, response.getOutputStream(), true);
+            if (Files.exists(resource)) {
+                if (Files.getLastModifiedTime(resource) != Files.getLastModifiedTime(deployed)) {
+                    I.copy(resource, deployed);
                 }
             }
+
+            // return resource
+            I.copy(Files.newInputStream(file), response.getOutputStream(), true);
         }
     }
 
@@ -115,10 +129,7 @@ public class ResourceServlet extends HttpServlet {
         XML html = I.xml(file);
 
         // append live coding script
-        html.find("script[src=\"application.js\"]").after(I
-                .xml("script")
-                .attr("type", "text/javascript")
-                .attr("src", "live.js"));
+        html.find("script[src=\"application.js\"]").after(I.xml("script").attr("type", "text/javascript").attr("src", "live.js"));
 
         // ignore cache
         for (XML link : html.find("link[rel=stylesheet]")) {

@@ -29,8 +29,7 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import antibug.profiler.Profiler;
-import booton.BootonConfiguration;
+import booton.CompilerLog;
 import booton.Necessary;
 import booton.Unnecessary;
 import jdk.internal.org.objectweb.asm.ClassReader;
@@ -67,12 +66,6 @@ import kiss.Singleton;
  * @version 2014/03/08 11:26:32
  */
 public class Javascript {
-
-    /** The configuration. */
-    private static final BootonConfiguration config = I.make(BootonConfiguration.class);
-
-    /** The profiler. */
-    private static final Profiler profiler = config.profiler;
 
     /** The primitive long class for javascript runtime. */
     static final Class PrimitiveLong;
@@ -143,7 +136,7 @@ public class Javascript {
      * @param source A Java class as source.
      */
     private Javascript(Class source) {
-        profiler.start("JavascriptConstructor", source);
+        CompilerLog.JavascriptConstructor.start(source);
 
         this.source = source;
 
@@ -183,7 +176,7 @@ public class Javascript {
             }
         }
 
-        profiler.stop();
+        CompilerLog.JavascriptConstructor.end();
     }
 
     /**
@@ -244,7 +237,7 @@ public class Javascript {
      * @param necessaries A list of required script classes.
      */
     public void writeTo(Appendable output, Set<Class> defined) {
-        profiler.start("WriteTo", source);
+        CompilerLog.WriteTo.start(source);
 
         if (defined == null) {
             defined = new HashSet();
@@ -274,7 +267,7 @@ public class Javascript {
         // close stream
         I.quiet(output);
 
-        profiler.stop();
+        CompilerLog.WriteTo.end();
     }
 
     /**
@@ -286,7 +279,7 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set<Class> defined) {
-        profiler.start("WriteJS", source, () -> {
+        CompilerLog.WriteJS.start(source, () -> {
             // record compile route
             CompilerRecorder.startCompiling(this);
 
@@ -296,11 +289,11 @@ public class Javascript {
 
                 // write super class and interfaces
                 if (source != RootClass && !isEnumSubType(source)) {
-                    profiler.start("WriteSuperClass", source, () -> {
+                    CompilerLog.WriteSuperClass.start(source, () -> {
                         write(output, defined, source.getSuperclass());
                     });
 
-                    profiler.start("WriteInterface", source, () -> {
+                    CompilerLog.WriteInterface.start(source, () -> {
                         for (Class interfaceType : source.getInterfaces()) {
                             write(output, defined, interfaceType);
                         }
@@ -320,16 +313,16 @@ public class Javascript {
 
                     // write this class
                     try {
-                        profiler.start("WriteJSActually", source);
+                        CompilerLog.WriteJSActually.start(source);
                         output.append(code);
                     } catch (IOException e) {
                         throw I.quiet(e);
                     } finally {
-                        profiler.stop();
+                        CompilerLog.WriteJSActually.end();
                     }
 
                     // write dependency classes
-                    profiler.start("WriteDependency", source, () -> {
+                    CompilerLog.WriteDependency.start(source, () -> {
                         for (Class dependency : dependencies) {
                             write(output, defined, dependency);
                         }
@@ -374,7 +367,7 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            profiler.start("Compile", source, () -> {
+            CompilerLog.Compile.start(source, () -> {
                 ScriptWriter code = new ScriptWriter();
 
                 // compute related class names
@@ -401,10 +394,10 @@ public class Javascript {
                         // do nothing
                     } else {
                         try {
-                            profiler.start("PraseByteCode", source);
+                            CompilerLog.PraseByteCode.start(source);
                             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
                         } finally {
-                            profiler.stop();
+                            CompilerLog.PraseByteCode.end();
                         }
                     }
                 } catch (TranslationError e) {
@@ -454,7 +447,7 @@ public class Javascript {
      * @param code
      */
     private void compileAnnotation(ScriptWriter code) {
-        profiler.start("CompileAnnotation", source, () -> {
+        CompilerLog.CompileAnnotation.start(source, () -> {
             Method[] methods = source.getDeclaredMethods();
 
             for (int i = 0; i < methods.length; i++) {

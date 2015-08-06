@@ -27,7 +27,7 @@ import kiss.Interceptor;
 /**
  * @version 2015/02/22 15:22:02
  */
-class Profiler<K, E, Y> extends Interceptor<Profilable> {
+public class Profiler<K, E, Y> extends Interceptor<Profilable> {
 
     static boolean execute = true;
 

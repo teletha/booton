@@ -134,11 +134,11 @@ public class Booton {
     public void build() {
         Path root = config.root;
 
-        this.html = root.resolve("index.html");
+        this.html = root.resolve("application.html");
         this.js = root.resolve("application.js");
         this.css = root.resolve("application.css");
 
-        config.profiler.start("LoadLibrary", () -> {
+        CompilerLog.LoadLibrary.start(() -> {
             // load booton extensions
             I.load(Booton.class, false);
 
@@ -226,7 +226,5 @@ public class Booton {
         Booton booton = new Booton(applicationClass);
         booton.launch();
         booton.build();
-
-        booton.config.profiler.show();
     }
 }
