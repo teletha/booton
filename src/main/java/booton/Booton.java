@@ -138,7 +138,7 @@ public class Booton {
         this.js = root.resolve("application.js");
         this.css = root.resolve("application.css");
 
-        CompilerLog.LoadLibrary.start(() -> {
+        BootonLog.LoadLibrary.start(() -> {
             // load booton extensions
             I.load(Booton.class, false);
 

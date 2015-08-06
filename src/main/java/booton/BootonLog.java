@@ -18,9 +18,9 @@ import kiss.model.ClassUtil;
 /**
  * @version 2015/08/05 12:50:25
  */
-public enum CompilerLog implements Profile<Class, Object, Object> {
+public enum BootonLog implements Profile<Class, Object, Object> {
 
-    RunTest1, RunTestAsJava1, ParseTest1, RunTestMethod1, RunTest2, ParseTest2, RunTestMethod2, JavascriptConstructor, WriteTo, WriteJS, WriteSuperClass, WriteInterface, WriteJSActually, WriteDependency, Compile, PraseByteCode, CompileAnnotation, LoadLibrary;
+    RunTest1, RunTestAsJava, ParseTest1, RunTestMethod1, RunTest2, ParseTest2, RunTestMethod2, JavascriptConstructor, WriteTo, WriteJS, WriteSuperClass, WriteInterface, WriteJSActually, WriteDependency, Compile, PraseByteCode, CompileAnnotation, LoadLibrary;
 
     /**
      * {@inheritDoc}

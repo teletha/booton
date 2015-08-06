@@ -11,8 +11,8 @@ package js.util.regex;
 
 import java.util.regex.MatchResult;
 
-import js.lang.NativeRegExp.Result;
 import booton.translator.JavaAPIProvider;
+import js.lang.NativeRegExp.Result;
 
 /**
  * @version 2013/08/28 8:39:33
@@ -158,6 +158,34 @@ class Matcher {
      */
     public int groupCount() {
         return result.length() - 1;
+    }
+
+    /**
+     * Returns the start index of the previous match.
+     *
+     * @return The index of the first character matched
+     * @throws IllegalStateException If no match has yet been attempted, or if the previous match
+     *             operation failed
+     */
+    public int start() {
+        if (result == null) {
+            throw new IllegalStateException("No match found");
+        }
+        return result.start();
+    }
+
+    /**
+     * Returns the offset after the last character matched.
+     *
+     * @return The offset after the last character matched
+     * @throws IllegalStateException If no match has yet been attempted, or if the previous match
+     *             operation failed
+     */
+    public int end() {
+        if (result == null) {
+            throw new IllegalStateException("No match found");
+        }
+        return result.start() + result.group(0).length();
     }
 
     /**

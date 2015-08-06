@@ -27,15 +27,15 @@ public class MatcherTest {
     public void matches() throws Exception {
         Pattern pattern = Pattern.compile("text");
         assert pattern.matcher("text").matches();
-        assert !pattern.matcher("my text").matches();
-        assert !pattern.matcher("textual").matches();
+        assert!pattern.matcher("my text").matches();
+        assert!pattern.matcher("textual").matches();
     }
 
     @Test
     public void lookingAt() throws Exception {
         Pattern pattern = Pattern.compile("text");
         assert pattern.matcher("text").lookingAt();
-        assert !pattern.matcher("my text").lookingAt();
+        assert!pattern.matcher("my text").lookingAt();
         assert pattern.matcher("textual").lookingAt();
     }
 
@@ -71,7 +71,7 @@ public class MatcherTest {
         assert matcher.group().equals("text2");
         assert matcher.find();
         assert matcher.group().equals("text3");
-        assert !matcher.find();
+        assert!matcher.find();
 
         try {
             matcher.group();
@@ -90,7 +90,7 @@ public class MatcherTest {
         assert matcher.group().equals("text2");
         assert matcher.find();
         assert matcher.group().equals("text3");
-        assert !matcher.find();
+        assert!matcher.find();
     }
 
     @Test
@@ -138,4 +138,31 @@ public class MatcherTest {
         assert pattern.matcher("text").pattern() == pattern;
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void start() throws Exception {
+        Matcher matcher = Pattern.compile("text\\d").matcher("text1 text2 text3");
+
+        assert matcher.find();
+        assert matcher.start() == 0;
+        assert matcher.find();
+        assert matcher.start() == 6;
+        assert matcher.find();
+        assert matcher.start() == 12;
+        assert!matcher.find();
+        matcher.start();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void end() throws Exception {
+        Matcher matcher = Pattern.compile("text\\d").matcher("text1 text2 text3");
+
+        assert matcher.find();
+        assert matcher.end() == 5;
+        assert matcher.find();
+        assert matcher.end() == 11;
+        assert matcher.find();
+        assert matcher.end() == 17;
+        assert!matcher.find();
+        matcher.end();
+    }
 }

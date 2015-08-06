@@ -29,7 +29,7 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import booton.CompilerLog;
+import booton.BootonLog;
 import booton.Necessary;
 import booton.Unnecessary;
 import jdk.internal.org.objectweb.asm.ClassReader;
@@ -136,7 +136,7 @@ public class Javascript {
      * @param source A Java class as source.
      */
     private Javascript(Class source) {
-        CompilerLog.JavascriptConstructor.start(source);
+        BootonLog.JavascriptConstructor.start(source);
 
         this.source = source;
 
@@ -176,7 +176,7 @@ public class Javascript {
             }
         }
 
-        CompilerLog.JavascriptConstructor.end();
+        BootonLog.JavascriptConstructor.end();
     }
 
     /**
@@ -237,7 +237,7 @@ public class Javascript {
      * @param necessaries A list of required script classes.
      */
     public void writeTo(Appendable output, Set<Class> defined) {
-        CompilerLog.WriteTo.start(source);
+        BootonLog.WriteTo.start(source);
 
         if (defined == null) {
             defined = new HashSet();
@@ -267,7 +267,7 @@ public class Javascript {
         // close stream
         I.quiet(output);
 
-        CompilerLog.WriteTo.end();
+        BootonLog.WriteTo.end();
     }
 
     /**
@@ -279,7 +279,7 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set<Class> defined) {
-        CompilerLog.WriteJS.start(source, () -> {
+        BootonLog.WriteJS.start(source, () -> {
             // record compile route
             CompilerRecorder.startCompiling(this);
 
@@ -289,11 +289,11 @@ public class Javascript {
 
                 // write super class and interfaces
                 if (source != RootClass && !isEnumSubType(source)) {
-                    CompilerLog.WriteSuperClass.start(source, () -> {
+                    BootonLog.WriteSuperClass.start(source, () -> {
                         write(output, defined, source.getSuperclass());
                     });
 
-                    CompilerLog.WriteInterface.start(source, () -> {
+                    BootonLog.WriteInterface.start(source, () -> {
                         for (Class interfaceType : source.getInterfaces()) {
                             write(output, defined, interfaceType);
                         }
@@ -313,16 +313,16 @@ public class Javascript {
 
                     // write this class
                     try {
-                        CompilerLog.WriteJSActually.start(source);
+                        BootonLog.WriteJSActually.start(source);
                         output.append(code);
                     } catch (IOException e) {
                         throw I.quiet(e);
                     } finally {
-                        CompilerLog.WriteJSActually.end();
+                        BootonLog.WriteJSActually.end();
                     }
 
                     // write dependency classes
-                    CompilerLog.WriteDependency.start(source, () -> {
+                    BootonLog.WriteDependency.start(source, () -> {
                         for (Class dependency : dependencies) {
                             write(output, defined, dependency);
                         }
@@ -367,7 +367,7 @@ public class Javascript {
      */
     private synchronized void compile() {
         if (code == null) {
-            CompilerLog.Compile.start(source, () -> {
+            BootonLog.Compile.start(source, () -> {
                 ScriptWriter code = new ScriptWriter();
 
                 // compute related class names
@@ -394,10 +394,10 @@ public class Javascript {
                         // do nothing
                     } else {
                         try {
-                            CompilerLog.PraseByteCode.start(source);
+                            BootonLog.PraseByteCode.start(source);
                             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
                         } finally {
-                            CompilerLog.PraseByteCode.end();
+                            BootonLog.PraseByteCode.end();
                         }
                     }
                 } catch (TranslationError e) {
@@ -447,7 +447,7 @@ public class Javascript {
      * @param code
      */
     private void compileAnnotation(ScriptWriter code) {
-        CompilerLog.CompileAnnotation.start(source, () -> {
+        BootonLog.CompileAnnotation.start(source, () -> {
             Method[] methods = source.getDeclaredMethods();
 
             for (int i = 0; i < methods.length; i++) {

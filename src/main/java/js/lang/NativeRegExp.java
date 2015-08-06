@@ -198,6 +198,17 @@ public class NativeRegExp extends NativeObject {
         }
 
         /**
+         * <p>
+         * The 0-based index of the match in the input string.
+         * </p>
+         * 
+         * @return
+         */
+        public int start() {
+            return matcher.start();
+        }
+
+        /**
          * @version 2013/08/27 16:01:38
          */
         @SuppressWarnings("unused")
@@ -225,6 +236,17 @@ public class NativeRegExp extends NativeObject {
              */
             public String group(int index) {
                 return that + "[" + param(0) + "]";
+            }
+
+            /**
+             * <p>
+             * The 0-based index of the match in the input string.
+             * </p>
+             * 
+             * @return
+             */
+            public String start() {
+                return that + ".index";
             }
         }
     }

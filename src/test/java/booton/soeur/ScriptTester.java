@@ -35,7 +35,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
 
 import antibug.powerassert.PowerAssertOffError;
-import booton.CompilerLog;
+import booton.BootonLog;
 import booton.Unnecessary;
 import booton.live.ClientStackTrace;
 import booton.live.Source;
@@ -160,13 +160,13 @@ public class ScriptTester {
         Constructor constructor = searchInstantiator(source);
         Object[] parameter = constructor.getParameterTypes().length == 0 ? new Object[0] : new Object[] {this};
 
-        CompilerLog.RunTest1.start(source, () -> {
+        BootonLog.RunTest1.start(source, () -> {
             // prepare input and result store
             List inputs = prepareInputs(method);
             List results = new ArrayList();
 
             // =========== Invoke as Java ===========
-            CompilerLog.RunTestAsJava1.start(source, () -> {
+            BootonLog.RunTestAsJava.start(source, () -> {
                 try {
                     for (Object input : inputs) {
                         Object result;
@@ -195,7 +195,7 @@ public class ScriptTester {
 
             try {
                 // compile as Javascript and script engine read it
-                CompilerLog.ParseTest1.start(source, () -> {
+                BootonLog.ParseTest1.start(source, () -> {
                     engine.execute(html, compiled, source.getSimpleName(), 1);
                 });
 
@@ -207,7 +207,7 @@ public class ScriptTester {
                 for (int i = 0; i < inputs.size(); i++) {
                     int index = i;
 
-                    CompilerLog.RunTestMethod1.start(source, () -> {
+                    BootonLog.RunTestMethod1.start(source, () -> {
                         Object input = inputs.get(index);
 
                         // write test script
@@ -279,18 +279,18 @@ public class ScriptTester {
         String sourceName = source.getSimpleName();
         Javascript script = Javascript.getScript(source);
 
-        return CompilerLog.RunTest2.start(source, () -> {
+        return BootonLog.RunTest2.start(source, () -> {
             try {
                 // compile as Javascript
                 String compiled = script.write(defined);
                 codes.add(compiled);
 
                 // script engine read it
-                CompilerLog.ParseTest2.start(source, () -> {
+                BootonLog.ParseTest2.start(source, () -> {
                     engine.execute(html, compiled, sourceName, 1);
                 });
 
-                return CompilerLog.RunTestMethod2.start(source, () -> {
+                return BootonLog.RunTestMethod2.start(source, () -> {
                     // write test script
                     String invoker = "try {" + Javascript.writeMethodCode(source, method.getName()) + ";} catch(e) {" + errorCatch + ";}";
 
