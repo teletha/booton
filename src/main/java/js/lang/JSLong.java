@@ -74,8 +74,8 @@ class JSLong extends JSNumber {
     /**
      * Returns a hash code for this {@code Long}. The result is the exclusive OR of the two halves
      * of the primitive {@code long} value held by this {@code Long} object. That is, the hashcode
-     * is the value of the expression: <blockquote>
-     * {@code (int)(this.longValue()^(this.longValue()>>>32))} </blockquote>
+     * is the value of the expression:
+     * <blockquote> {@code (int)(this.longValue()^(this.longValue()>>>32))} </blockquote>
      * 
      * @return a hash code value for this object.
      */
@@ -144,9 +144,7 @@ class JSLong extends JSNumber {
 
     /**
      * Compares two {@code long} values numerically. The value returned is identical to what would
-     * be returned by:
-     * 
-     * <pre>
+     * be returned by: <pre>
      *    Long.valueOf(x).compareTo(Long.valueOf(y))
      * </pre>
      * 
@@ -376,9 +374,7 @@ class JSLong extends JSNumber {
      * <li>The value represented by the string is not a value of type {@code long}.
      * </ul>
      * <p>
-     * Examples: <blockquote>
-     * 
-     * <pre>
+     * Examples: <blockquote> <pre>
      * parseLong("0", 10) returns 0L
      * parseLong("473", 10) returns 473L
      * parseLong("+42", 10) returns 42L
@@ -388,8 +384,7 @@ class JSLong extends JSNumber {
      * parseLong("99", 8) throws a NumberFormatException
      * parseLong("Hazelnut", 10) throws a NumberFormatException
      * parseLong("Hazelnut", 36) returns 1356099454469L
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * 
      * @param value the {@code String} containing the {@code long} representation to be parsed.
      * @param radix the radix to be used while parsing {@code s}.
@@ -467,6 +462,65 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Returns a string representation of the {@code long} argument as an unsigned integer in
+     * base&nbsp;16.
+     * <p>
+     * The unsigned {@code long} value is the argument plus 2<sup>64</sup> if the argument is
+     * negative; otherwise, it is equal to the argument. This value is converted to a string of
+     * ASCII digits in hexadecimal (base&nbsp;16) with no extra leading {@code 0}s.
+     * <p>
+     * The value of the argument can be recovered from the returned string {@code s} by calling
+     * {@link Long#parseUnsignedLong(String, int) Long.parseUnsignedLong(s, 16)}.
+     * <p>
+     * If the unsigned magnitude is zero, it is represented by a single zero character {@code '0'} (
+     * {@code '\u005Cu0030'}); otherwise, the first character of the representation of the unsigned
+     * magnitude will not be the zero character. The following characters are used as hexadecimal
+     * digits: <blockquote> {@code 0123456789abcdef} </blockquote> These are the characters
+     * {@code '\u005Cu0030'} through {@code '\u005Cu0039'} and {@code '\u005Cu0061'} through
+     * {@code '\u005Cu0066'}. If uppercase letters are desired, the
+     * {@link java.lang.String#toUpperCase()} method may be called on the result:
+     * <blockquote> {@code Long.toHexString(n).toUpperCase()} </blockquote>
+     *
+     * @param i a {@code long} to be converted to a string.
+     * @return the string representation of the unsigned {@code long} value represented by the
+     *         argument in hexadecimal (base&nbsp;16).
+     * @see #parseUnsignedLong(String, int)
+     * @see #toUnsignedString(long, int)
+     * @since JDK 1.0.2
+     */
+    public static String toHexString(long i) {
+        return toUnsignedString0(i, 4);
+    }
+
+    /**
+     * Returns a string representation of the {@code long} argument as an unsigned integer in
+     * base&nbsp;8.
+     * <p>
+     * The unsigned {@code long} value is the argument plus 2<sup>64</sup> if the argument is
+     * negative; otherwise, it is equal to the argument. This value is converted to a string of
+     * ASCII digits in octal (base&nbsp;8) with no extra leading {@code 0}s.
+     * <p>
+     * The value of the argument can be recovered from the returned string {@code s} by calling
+     * {@link Long#parseUnsignedLong(String, int) Long.parseUnsignedLong(s, 8)}.
+     * <p>
+     * If the unsigned magnitude is zero, it is represented by a single zero character {@code '0'} (
+     * {@code '\u005Cu0030'}); otherwise, the first character of the representation of the unsigned
+     * magnitude will not be the zero character. The following characters are used as octal digits:
+     * <blockquote> {@code 01234567} </blockquote> These are the characters {@code '\u005Cu0030'}
+     * through {@code '\u005Cu0037'}.
+     *
+     * @param i a {@code long} to be converted to a string.
+     * @return the string representation of the unsigned {@code long} value represented by the
+     *         argument in octal (base&nbsp;8).
+     * @see #parseUnsignedLong(String, int)
+     * @see #toUnsignedString(long, int)
+     * @since JDK 1.0.2
+     */
+    public static String toOctalString(long i) {
+        return toUnsignedString0(i, 3);
+    }
+
+    /**
      * Returns a {@code String} object representing the specified {@code long}. The argument is
      * converted to signed decimal representation and returned as a string, exactly as if the
      * argument and the radix 10 were given as arguments to the {@link #toString(long, int)} method.
@@ -498,8 +552,8 @@ class JSLong extends JSNumber {
      * {@code '\u005Cu007a'}. If {@code radix} is <var>N</var>, then the first <var>N</var> of these
      * characters are used as radix-<var>N</var> digits in the order shown. Thus, the digits for
      * hexadecimal (radix 16) are {@code 0123456789abcdef}. If uppercase letters are desired, the
-     * {@link java.lang.String#toUpperCase()} method may be called on the result: <blockquote>
-     * {@code Long.toString(n, 16).toUpperCase()} </blockquote>
+     * {@link java.lang.String#toUpperCase()} method may be called on the result:
+     * <blockquote> {@code Long.toString(n, 16).toUpperCase()} </blockquote>
      *
      * @param i a {@code long} to be converted to a string.
      * @param radix the radix to use in the string representation.
@@ -537,6 +591,104 @@ class JSLong extends JSNumber {
     }
 
     /**
+     * Returns a string representation of the first argument as an unsigned integer value in the
+     * radix specified by the second argument.
+     * <p>
+     * If the radix is smaller than {@code Character.MIN_RADIX} or larger than
+     * {@code Character.MAX_RADIX}, then the radix {@code 10} is used instead.
+     * <p>
+     * Note that since the first argument is treated as an unsigned value, no leading sign character
+     * is printed.
+     * <p>
+     * If the magnitude is zero, it is represented by a single zero character {@code '0'} (
+     * {@code '\u005Cu0030'}); otherwise, the first character of the representation of the magnitude
+     * will not be the zero character.
+     * <p>
+     * The behavior of radixes and the characters used as digits are the same as
+     * {@link #toString(long, int) toString}.
+     *
+     * @param i an integer to be converted to an unsigned string.
+     * @param radix the radix to use in the string representation.
+     * @return an unsigned string representation of the argument in the specified radix.
+     * @see #toString(long, int)
+     * @since 1.8
+     */
+    public static String toUnsignedString(long i, int radix) {
+        if (i >= 0)
+            return toString(i, radix);
+        else {
+            switch (radix) {
+            case 2:
+                return toBinaryString(i);
+
+            case 4:
+                return toUnsignedString0(i, 2);
+
+            case 8:
+                return toOctalString(i);
+
+            case 10:
+                /*
+                 * We can get the effect of an unsigned division by 10 on a long value by first
+                 * shifting right, yielding a positive value, and then dividing by 5. This allows
+                 * the last digit and preceding digits to be isolated more quickly than by an
+                 * initial conversion to BigInteger.
+                 */
+                long quot = (i >>> 1) / 5;
+                long rem = i - quot * 10;
+                return toString(quot) + rem;
+
+            case 16:
+                return toHexString(i);
+
+            case 32:
+                return toUnsignedString0(i, 5);
+
+            default:
+                return toUnsignedBigInteger(i).toString(radix);
+            }
+        }
+    }
+
+    /**
+     * Format a long (treated as unsigned) into a String.
+     * 
+     * @param val the value to format
+     * @param shift the log2 of the base to format in (4 for hex, 3 for octal, 1 for binary)
+     */
+    static String toUnsignedString0(long val, int shift) {
+        // assert shift > 0 && shift <=5 : "Illegal shift value";
+        int mag = Long.SIZE - Long.numberOfLeadingZeros(val);
+        int chars = Math.max(((mag + (shift - 1)) / shift), 1);
+        char[] buf = new char[chars];
+
+        formatUnsignedLong(val, shift, buf, 0, chars);
+        return String.valueOf(buf);
+    }
+
+    /**
+     * Format a long (treated as unsigned) into a character buffer.
+     * 
+     * @param val the unsigned long to format
+     * @param shift the log2 of the base to format in (4 for hex, 3 for octal, 1 for binary)
+     * @param buf the character buffer to write to
+     * @param offset the offset in the destination buffer to start at
+     * @param len the number of characters to write
+     * @return the lowest character location used
+     */
+    static int formatUnsignedLong(long val, int shift, char[] buf, int offset, int len) {
+        int charPos = len;
+        int radix = 1 << shift;
+        int mask = radix - 1;
+        do {
+            buf[offset + --charPos] = JSInteger.digits[((int) val) & mask];
+            val >>>= shift;
+        } while (val != 0 && charPos > 0);
+
+        return charPos;
+    }
+
+    /**
      * Return a BigInteger equal to the unsigned value of the argument.
      */
     private static BigInteger toUnsignedBigInteger(long i) {
@@ -547,8 +699,7 @@ class JSLong extends JSNumber {
             int lower = (int) i;
 
             // return (upper << 32) + lower
-            return (BigInteger.valueOf(Integer.toUnsignedLong(upper))).shiftLeft(32)
-                    .add(BigInteger.valueOf(Integer.toUnsignedLong(lower)));
+            return (BigInteger.valueOf(Integer.toUnsignedLong(upper))).shiftLeft(32).add(BigInteger.valueOf(Integer.toUnsignedLong(lower)));
         }
     }
 
@@ -558,8 +709,8 @@ class JSLong extends JSNumber {
      * given to the {@link #parseLong(java.lang.String)} method. The result is a {@code Long} object
      * that represents the integer value specified by the string.
      * <p>
-     * In other words, this method returns a {@code Long} object equal to the value of: <blockquote>
-     * {@code new Long(Long.parseLong(s))} </blockquote>
+     * In other words, this method returns a {@code Long} object equal to the value of:
+     * <blockquote> {@code new Long(Long.parseLong(s))} </blockquote>
      * 
      * @param value the string to be parsed.
      * @return a {@code Long} object holding the value represented by the string argument.
@@ -577,8 +728,8 @@ class JSLong extends JSNumber {
      * result is a {@code Long} object that represents the {@code long} value specified by the
      * string.
      * <p>
-     * In other words, this method returns a {@code Long} object equal to the value of: <blockquote>
-     * {@code new Long(Long.parseLong(s, radix))} </blockquote>
+     * In other words, this method returns a {@code Long} object equal to the value of:
+     * <blockquote> {@code new Long(Long.parseLong(s, radix))} </blockquote>
      * 
      * @param value the string to be parsed
      * @param radix the radix to be used in interpreting {@code s}

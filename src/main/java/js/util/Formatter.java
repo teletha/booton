@@ -7,13 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.io;
-
-import booton.translator.JavaAPIProvider;
+package js.util;
 
 /**
- * @version 2015/08/08 1:29:52
+ * @version 2015/08/07 0:23:36
  */
-@JavaAPIProvider(java.io.FileInputStream.class)
-class FileInputStream {
+// @JavaAPIProvider(java.util.Formatter.class)
+class Formatter {
+
 }

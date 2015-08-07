@@ -610,6 +610,58 @@ class BigDecimalEmulation {
     }
 
     /**
+     * Returns the signum function of this {@code BigDecimal}.
+     *
+     * @return -1, 0, or 1 as the value of this {@code BigDecimal} is negative, zero, or positive.
+     */
+    public int signum() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@code BigDecimal} whose value is the absolute value of this {@code BigDecimal},
+     * and whose scale is {@code this.scale()}.
+     *
+     * @return {@code abs(this)}
+     */
+    public BigDecimal abs() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns the <i>precision</i> of this {@code BigDecimal}. (The precision is the number of
+     * digits in the unscaled value.)
+     * <p>
+     * The precision of a zero value is 1.
+     *
+     * @return the precision of this {@code BigDecimal}.
+     * @since 1.5
+     */
+    public int precision() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a {@code BigInteger} whose value is the <i>unscaled value</i> of this
+     * {@code BigDecimal}. (Computes <tt>(this *
+     * 10<sup>this.scale()</sup>)</tt>.)
+     *
+     * @return the unscaled value of this {@code BigDecimal}.
+     * @since 1.2
+     */
+    public BigInteger unscaledValue() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Translates a {@code long} unscaled value and an {@code int} scale into a {@code BigDecimal}.
      * This {@literal "static factory method"} is provided in preference to a ({@code long},
      * {@code int}) constructor because it allows for reuse of frequently used {@code BigDecimal}

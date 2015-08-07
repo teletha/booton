@@ -11,6 +11,9 @@ package js.lang;
 
 import java.util.Random;
 
+import sun.misc.DoubleConsts;
+import sun.misc.FloatConsts;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -1140,5 +1143,199 @@ class JSMath {
      */
     public static double log1p(double x) {
         return NativeMath.log1p(x);
+    }
+
+    /**
+     * Returns the first floating-point argument with the sign of the second floating-point
+     * argument. Note that unlike the {@link StrictMath#copySign(double, double)
+     * StrictMath.copySign} method, this method does not require NaN {@code sign} arguments to be
+     * treated as positive values; implementations are permitted to treat some NaN arguments as
+     * positive and other NaN arguments as negative to allow greater performance.
+     *
+     * @param magnitude the parameter providing the magnitude of the result
+     * @param sign the parameter providing the sign of the result
+     * @return a value with the magnitude of {@code magnitude} and the sign of {@code sign}.
+     * @since 1.6
+     */
+    public static double copySign(double magnitude, double sign) {
+        return Double.longBitsToDouble((Double.doubleToRawLongBits(sign) & (DoubleConsts.SIGN_BIT_MASK)) | (Double
+                .doubleToRawLongBits(magnitude) & (DoubleConsts.EXP_BIT_MASK | DoubleConsts.SIGNIF_BIT_MASK)));
+    }
+
+    /**
+     * Returns the unbiased exponent used in the representation of a {@code float}. Special cases:
+     * <ul>
+     * <li>If the argument is NaN or infinite, then the result is {@link Float#MAX_EXPONENT} + 1.
+     * <li>If the argument is zero or subnormal, then the result is {@link Float#MIN_EXPONENT} -1.
+     * </ul>
+     * 
+     * @param f a {@code float} value
+     * @return the unbiased exponent of the argument
+     * @since 1.6
+     */
+    public static int getExponent(float f) {
+        /*
+         * Bitwise convert f to integer, mask out exponent bits, shift to the right and then
+         * subtract out float's bias adjust to get true exponent value
+         */
+        return ((Float.floatToRawIntBits(f) & FloatConsts.EXP_BIT_MASK) >> (FloatConsts.SIGNIFICAND_WIDTH - 1)) - FloatConsts.EXP_BIAS;
+    }
+
+    /**
+     * Returns the unbiased exponent used in the representation of a {@code double}. Special cases:
+     * <ul>
+     * <li>If the argument is NaN or infinite, then the result is {@link Double#MAX_EXPONENT} + 1.
+     * <li>If the argument is zero or subnormal, then the result is {@link Double#MIN_EXPONENT} -1.
+     * </ul>
+     * 
+     * @param d a {@code double} value
+     * @return the unbiased exponent of the argument
+     * @since 1.6
+     */
+    public static int getExponent(double d) {
+        /*
+         * Bitwise convert d to long, mask out exponent bits, shift to the right and then subtract
+         * out double's bias adjust to get true exponent value.
+         */
+        return (int) (((Double
+                .doubleToRawLongBits(d) & DoubleConsts.EXP_BIT_MASK) >> (DoubleConsts.SIGNIFICAND_WIDTH - 1)) - DoubleConsts.EXP_BIAS);
+    }
+
+    static double twoToTheDoubleScaleUp = powerOfTwoD(512);
+
+    static double twoToTheDoubleScaleDown = powerOfTwoD(-512);
+
+    /**
+     * Returns {@code d} &times; 2<sup>{@code scaleFactor}</sup> rounded as if performed by a single
+     * correctly rounded floating-point multiply to a member of the double value set. See the Java
+     * Language Specification for a discussion of floating-point value sets. If the exponent of the
+     * result is between {@link Double#MIN_EXPONENT} and {@link Double#MAX_EXPONENT}, the answer is
+     * calculated exactly. If the exponent of the result would be larger than
+     * {@code Double.MAX_EXPONENT}, an infinity is returned. Note that if the result is subnormal,
+     * precision may be lost; that is, when {@code scalb(x, n)} is subnormal,
+     * {@code scalb(scalb(x, n), -n)} may not equal <i>x</i>. When the result is non-NaN, the result
+     * has the same sign as {@code d}.
+     * <p>
+     * Special cases:
+     * <ul>
+     * <li>If the first argument is NaN, NaN is returned.
+     * <li>If the first argument is infinite, then an infinity of the same sign is returned.
+     * <li>If the first argument is zero, then a zero of the same sign is returned.
+     * </ul>
+     *
+     * @param d number to be scaled by a power of two.
+     * @param scaleFactor power of 2 used to scale {@code d}
+     * @return {@code d} &times; 2<sup>{@code scaleFactor}</sup>
+     * @since 1.6
+     */
+    public static double scalb(double d, int scaleFactor) {
+        /*
+         * This method does not need to be declared strictfp to compute the same correct result on
+         * all platforms. When scaling up, it does not matter what order the multiply-store
+         * operations are done; the result will be finite or overflow regardless of the operation
+         * ordering. However, to get the correct result when scaling down, a particular ordering
+         * must be used. When scaling down, the multiply-store operations are sequenced so that it
+         * is not possible for two consecutive multiply-stores to return subnormal results. If one
+         * multiply-store result is subnormal, the next multiply will round it away to zero. This is
+         * done by first multiplying by 2 ^ (scaleFactor % n) and then multiplying several times by
+         * by 2^n as needed where n is the exponent of number that is a covenient power of two. In
+         * this way, at most one real rounding error occurs. If the double value set is being used
+         * exclusively, the rounding will occur on a multiply. If the double-extended-exponent value
+         * set is being used, the products will (perhaps) be exact but the stores to d are
+         * guaranteed to round to the double value set. It is _not_ a valid implementation to first
+         * multiply d by 2^MIN_EXPONENT and then by 2 ^ (scaleFactor % MIN_EXPONENT) since even in a
+         * strictfp program double rounding on underflow could occur; e.g. if the scaleFactor
+         * argument was (MIN_EXPONENT - n) and the exponent of d was a little less than
+         * -(MIN_EXPONENT - n), meaning the final result would be subnormal. Since exact
+         * reproducibility of this method can be achieved without any undue performance burden,
+         * there is no compelling reason to allow double rounding on underflow in scalb.
+         */
+
+        // magnitude of a power of two so large that scaling a finite
+        // nonzero value by it would be guaranteed to over or
+        // underflow; due to rounding, scaling down takes takes an
+        // additional power of two which is reflected here
+        final int MAX_SCALE = DoubleConsts.MAX_EXPONENT + -DoubleConsts.MIN_EXPONENT + DoubleConsts.SIGNIFICAND_WIDTH + 1;
+        int exp_adjust = 0;
+        int scale_increment = 0;
+        double exp_delta = Double.NaN;
+
+        // Make sure scaling factor is in a reasonable range
+
+        if (scaleFactor < 0) {
+            scaleFactor = Math.max(scaleFactor, -MAX_SCALE);
+            scale_increment = -512;
+            exp_delta = twoToTheDoubleScaleDown;
+        } else {
+            scaleFactor = Math.min(scaleFactor, MAX_SCALE);
+            scale_increment = 512;
+            exp_delta = twoToTheDoubleScaleUp;
+        }
+
+        // Calculate (scaleFactor % +/-512), 512 = 2^9, using
+        // technique from "Hacker's Delight" section 10-2.
+        int t = (scaleFactor >> 9 - 1) >>> 32 - 9;
+        exp_adjust = ((scaleFactor + t) & (512 - 1)) - t;
+
+        d *= powerOfTwoD(exp_adjust);
+        scaleFactor -= exp_adjust;
+
+        while (scaleFactor != 0) {
+            d *= exp_delta;
+            scaleFactor -= scale_increment;
+        }
+        return d;
+    }
+
+    /**
+     * Returns {@code f} &times; 2<sup>{@code scaleFactor}</sup> rounded as if performed by a single
+     * correctly rounded floating-point multiply to a member of the float value set. See the Java
+     * Language Specification for a discussion of floating-point value sets. If the exponent of the
+     * result is between {@link Float#MIN_EXPONENT} and {@link Float#MAX_EXPONENT}, the answer is
+     * calculated exactly. If the exponent of the result would be larger than
+     * {@code Float.MAX_EXPONENT}, an infinity is returned. Note that if the result is subnormal,
+     * precision may be lost; that is, when {@code scalb(x, n)} is subnormal,
+     * {@code scalb(scalb(x, n), -n)} may not equal <i>x</i>. When the result is non-NaN, the result
+     * has the same sign as {@code f}.
+     * <p>
+     * Special cases:
+     * <ul>
+     * <li>If the first argument is NaN, NaN is returned.
+     * <li>If the first argument is infinite, then an infinity of the same sign is returned.
+     * <li>If the first argument is zero, then a zero of the same sign is returned.
+     * </ul>
+     *
+     * @param f number to be scaled by a power of two.
+     * @param scaleFactor power of 2 used to scale {@code f}
+     * @return {@code f} &times; 2<sup>{@code scaleFactor}</sup>
+     * @since 1.6
+     */
+    public static float scalb(float f, int scaleFactor) {
+        // magnitude of a power of two so large that scaling a finite
+        // nonzero value by it would be guaranteed to over or
+        // underflow; due to rounding, scaling down takes takes an
+        // additional power of two which is reflected here
+        final int MAX_SCALE = FloatConsts.MAX_EXPONENT + -FloatConsts.MIN_EXPONENT + FloatConsts.SIGNIFICAND_WIDTH + 1;
+
+        // Make sure scaling factor is in a reasonable range
+        scaleFactor = Math.max(Math.min(scaleFactor, MAX_SCALE), -MAX_SCALE);
+
+        /*
+         * Since + MAX_SCALE for float fits well within the double exponent range and + float ->
+         * double conversion is exact the multiplication below will be exact. Therefore, the
+         * rounding that occurs when the double product is cast to float will be the correctly
+         * rounded float result. Since all operations other than the final multiply will be exact,
+         * it is not necessary to declare this method strictfp.
+         */
+        return (float) (f * powerOfTwoD(scaleFactor));
+    }
+
+    /**
+     * Returns a floating-point power of two in the normal range.
+     */
+    static double powerOfTwoD(int n) {
+        assert(n >= DoubleConsts.MIN_EXPONENT && n <= DoubleConsts.MAX_EXPONENT);
+        return Double
+                .longBitsToDouble((((long) n + (long) DoubleConsts.EXP_BIAS) << (DoubleConsts.SIGNIFICAND_WIDTH - 1)) & DoubleConsts.EXP_BIT_MASK);
     }
 }

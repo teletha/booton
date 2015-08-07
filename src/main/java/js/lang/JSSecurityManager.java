@@ -64,6 +64,51 @@ class JSSecurityManager {
     }
 
     /**
+     * Throws a <code>SecurityException</code> if the calling thread is not allowed to write to the
+     * file specified by the string argument.
+     * <p>
+     * This method calls <code>checkPermission</code> with the
+     * <code>FilePermission(file,"write")</code> permission.
+     * <p>
+     * If you override this method, then you should make a call to <code>super.checkWrite</code> at
+     * the point the overridden method would normally throw an exception.
+     *
+     * @param file the system-dependent filename.
+     * @exception SecurityException if the calling thread does not have permission to access the
+     *                specified file.
+     * @exception NullPointerException if the <code>file</code> argument is <code>null</code>.
+     * @see #checkPermission(java.security.Permission) checkPermission
+     */
+    public void checkWrite(String file) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Throws a <code>SecurityException</code> if the calling thread is not allowed to write to the
+     * specified file descriptor.
+     * <p>
+     * This method calls <code>checkPermission</code> with the
+     * <code>RuntimePermission("writeFileDescriptor")</code> permission.
+     * <p>
+     * If you override this method, then you should make a call to <code>super.checkWrite</code> at
+     * the point the overridden method would normally throw an exception.
+     *
+     * @param fd the system-dependent file descriptor.
+     * @exception SecurityException if the calling thread does not have permission to access the
+     *                specified file descriptor.
+     * @exception NullPointerException if the file descriptor argument is <code>null</code>.
+     * @see java.io.FileDescriptor
+     * @see #checkPermission(java.security.Permission) checkPermission
+     */
+    public void checkWrite(FileDescriptor fd) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Throws a <code>SecurityException</code> if the calling thread is not allowed to access
      * members.
      * <p>

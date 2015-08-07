@@ -10,7 +10,9 @@
 package js.util;
 
 import java.time.ZoneId;
+import java.util.Locale;
 import java.util.PropertyPermission;
+import java.util.ResourceBundle;
 
 import booton.translator.JavaAPIProvider;
 
@@ -41,6 +43,101 @@ class TimeZone {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
+    }
+
+    /**
+     * Returns a long standard time name of this {@code TimeZone} suitable for presentation to the
+     * user in the default locale.
+     * <p>
+     * This method is equivalent to: <blockquote><pre>
+     * getDisplayName(false, {@link #LONG},
+     *                Locale.getDefault({@link Locale.Category#DISPLAY}))
+     * </pre></blockquote>
+     *
+     * @return the human-readable name of this time zone in the default locale.
+     * @since 1.2
+     * @see #getDisplayName(boolean, int, Locale)
+     * @see Locale#getDefault(Locale.Category)
+     * @see Locale.Category
+     */
+    public final String getDisplayName() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns a long standard time name of this {@code TimeZone} suitable for presentation to the
+     * user in the specified {@code locale}.
+     * <p>
+     * This method is equivalent to: <blockquote><pre>
+     * getDisplayName(false, {@link #LONG}, locale)
+     * </pre></blockquote>
+     *
+     * @param locale the locale in which to supply the display name.
+     * @return the human-readable name of this time zone in the given locale.
+     * @exception NullPointerException if {@code locale} is {@code null}.
+     * @since 1.2
+     * @see #getDisplayName(boolean, int, Locale)
+     */
+    public final String getDisplayName(Locale locale) {
+        return getDisplayName();
+    }
+
+    /**
+     * Returns a name in the specified {@code style} of this {@code TimeZone} suitable for
+     * presentation to the user in the default locale. If the specified {@code daylight} is
+     * {@code true}, a Daylight Saving Time name is returned (even if this {@code TimeZone} doesn't
+     * observe Daylight Saving Time). Otherwise, a Standard Time name is returned.
+     * <p>
+     * This method is equivalent to: <blockquote><pre>
+     * getDisplayName(daylight, style,
+     *                Locale.getDefault({@link Locale.Category#DISPLAY}))
+     * </pre></blockquote>
+     *
+     * @param daylight {@code true} specifying a Daylight Saving Time name, or {@code false}
+     *            specifying a Standard Time name
+     * @param style either {@link #LONG} or {@link #SHORT}
+     * @return the human-readable name of this time zone in the default locale.
+     * @exception IllegalArgumentException if {@code style} is invalid.
+     * @since 1.2
+     * @see #getDisplayName(boolean, int, Locale)
+     * @see Locale#getDefault(Locale.Category)
+     * @see Locale.Category
+     * @see java.text.DateFormatSymbols#getZoneStrings()
+     */
+    public final String getDisplayName(boolean daylight, int style) {
+        return getDisplayName();
+    }
+
+    /**
+     * Returns a name in the specified {@code style} of this {@code TimeZone} suitable for
+     * presentation to the user in the specified {@code
+     * locale}. If the specified {@code daylight} is {@code true}, a Daylight Saving Time name is
+     * returned (even if this {@code TimeZone} doesn't observe Daylight Saving Time). Otherwise, a
+     * Standard Time name is returned.
+     * <p>
+     * When looking up a time zone name, the
+     * {@linkplain ResourceBundle.Control#getCandidateLocales(String,Locale) default
+     * <code>Locale</code> search path of <code>ResourceBundle</code>} derived from the specified
+     * {@code locale} is used. (No
+     * {@linkplain ResourceBundle.Control#getFallbackLocale(String,Locale) fallback
+     * <code>Locale</code>} search is performed.) If a time zone name in any {@code Locale} of the
+     * search path, including {@link Locale#ROOT}, is found, the name is returned. Otherwise, a
+     * string in the <a href="#NormalizedCustomID">normalized custom ID format</a> is returned.
+     *
+     * @param daylight {@code true} specifying a Daylight Saving Time name, or {@code false}
+     *            specifying a Standard Time name
+     * @param style either {@link #LONG} or {@link #SHORT}
+     * @param locale the locale in which to supply the display name.
+     * @return the human-readable name of this time zone in the given locale.
+     * @exception IllegalArgumentException if {@code style} is invalid.
+     * @exception NullPointerException if {@code locale} is {@code null}.
+     * @since 1.2
+     * @see java.text.DateFormatSymbols#getZoneStrings()
+     */
+    public String getDisplayName(boolean daylight, int style, Locale locale) {
+        return getDisplayName();
     }
 
     /**

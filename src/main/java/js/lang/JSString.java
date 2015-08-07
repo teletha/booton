@@ -264,6 +264,50 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
+     * Copy characters from this string into dst starting at dstBegin. This method doesn't perform
+     * any range checking.
+     */
+    void getChars(char[] dst, int dstBegin) {
+        getChars(0, dst.length, dst, dstBegin);
+    }
+
+    /**
+     * Copies characters from this string into the destination character array.
+     * <p>
+     * The first character to be copied is at index {@code srcBegin}; the last character to be
+     * copied is at index {@code srcEnd-1} (thus the total number of characters to be copied is
+     * {@code srcEnd-srcBegin}). The characters are copied into the subarray of {@code dst} starting
+     * at index {@code dstBegin} and ending at index: <blockquote><pre>
+     *     dstBegin + (srcEnd-srcBegin) - 1
+     * </pre></blockquote>
+     *
+     * @param srcBegin index of the first character in the string to copy.
+     * @param srcEnd index after the last character in the string to copy.
+     * @param dst the destination array.
+     * @param dstBegin the start offset in the destination array.
+     * @exception IndexOutOfBoundsException If any of the following is true:
+     *                <ul>
+     *                <li>{@code srcBegin} is negative.
+     *                <li>{@code srcBegin} is greater than {@code srcEnd}
+     *                <li>{@code srcEnd} is greater than the length of this string
+     *                <li>{@code dstBegin} is negative
+     *                <li>{@code dstBegin+(srcEnd-srcBegin)} is larger than {@code dst.length}
+     *                </ul>
+     */
+    public void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin) {
+        if (srcBegin < 0) {
+            throw new StringIndexOutOfBoundsException(srcBegin);
+        }
+        if (srcEnd > length()) {
+            throw new StringIndexOutOfBoundsException(srcEnd);
+        }
+        if (srcBegin > srcEnd) {
+            throw new StringIndexOutOfBoundsException(srcEnd - srcBegin);
+        }
+        System.arraycopy(toCharArray(), srcBegin, dst, dstBegin, srcEnd - srcBegin);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

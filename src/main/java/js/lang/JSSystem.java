@@ -204,6 +204,21 @@ class JSSystem {
     }
 
     /**
+     * Returns the system-dependent line separator string. It always returns the same value - the
+     * initial value of the {@linkplain #getProperty(String) system property} {@code line.separator}
+     * .
+     * <p>
+     * On UNIX systems, it returns {@code "\n"}; on Microsoft Windows systems it returns
+     * {@code "\r\n"}.
+     *
+     * @return the system-dependent line separator string
+     * @since 1.7
+     */
+    public static String lineSeparator() {
+        return "\r\n";
+    }
+
+    /**
      * Returns the current value of the running Java Virtual Machine's high-resolution time source,
      * in nanoseconds.
      * <p>

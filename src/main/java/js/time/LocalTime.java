@@ -43,6 +43,7 @@ class LocalTime {
      * Constants for the local time of each hour.
      */
     private static final LocalTime[] HOURS = new LocalTime[24];
+
     static {
         for (int i = 0; i < HOURS.length; i++) {
             HOURS[i] = new LocalTime(i, 0, 0, 0);
@@ -146,5 +147,67 @@ class LocalTime {
         this.minute = (byte) minute;
         this.second = (byte) second;
         this.nano = nanoOfSecond;
+    }
+
+    /**
+     * Gets the hour-of-day field.
+     *
+     * @return the hour-of-day, from 0 to 23
+     */
+    public int getHour() {
+        return hour;
+    }
+
+    /**
+     * Gets the minute-of-hour field.
+     *
+     * @return the minute-of-hour, from 0 to 59
+     */
+    public int getMinute() {
+        return minute;
+    }
+
+    /**
+     * Gets the second-of-minute field.
+     *
+     * @return the second-of-minute, from 0 to 59
+     */
+    public int getSecond() {
+        return second;
+    }
+
+    /**
+     * Gets the nano-of-second field.
+     *
+     * @return the nano-of-second, from 0 to 999,999,999
+     */
+    public int getNano() {
+        return nano;
+    }
+
+    /**
+     * Extracts the time as seconds of day, from {@code 0} to {@code 24 * 60 * 60 - 1}.
+     *
+     * @return the second-of-day equivalent to this time
+     */
+    public int toSecondOfDay() {
+        int total = hour * SECONDS_PER_HOUR;
+        total += minute * SECONDS_PER_MINUTE;
+        total += second;
+        return total;
+    }
+
+    /**
+     * Extracts the time as nanos of day, from {@code 0} to {@code 24 * 60 * 60 * 1,000,000,000 - 1}
+     * .
+     *
+     * @return the nano of day equivalent to this time
+     */
+    public long toNanoOfDay() {
+        long total = hour * NANOS_PER_HOUR;
+        total += minute * NANOS_PER_MINUTE;
+        total += second * NANOS_PER_SECOND;
+        total += nano;
+        return total;
     }
 }

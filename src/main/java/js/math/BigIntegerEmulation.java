@@ -177,6 +177,48 @@ class BigIntegerEmulation extends Number implements Comparable<BigInteger> {
     }
 
     /**
+     * Returns a BigInteger whose value is the absolute value of this BigInteger.
+     *
+     * @return {@code abs(this)}
+     */
+    public BigInteger abs() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns the signum function of this BigInteger.
+     *
+     * @return -1, 0 or 1 as the value of this BigInteger is negative, zero or positive.
+     */
+    public int signum() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Returns the String representation of this BigInteger in the given radix. If the radix is
+     * outside the range from {@link Character#MIN_RADIX} to {@link Character#MAX_RADIX} inclusive,
+     * it will default to 10 (as is the case for {@code Integer.toString}). The digit-to-character
+     * mapping provided by {@code Character.forDigit} is used, and a minus sign is prepended if
+     * appropriate. (This representation is compatible with the {@link #BigInteger(String, int)
+     * (String, int)} constructor.)
+     *
+     * @param radix radix of the String representation.
+     * @return String representation of this BigInteger in the given radix.
+     * @see Integer#toString
+     * @see Character#forDigit
+     * @see #BigInteger(java.lang.String, int)
+     */
+    public String toString(int radix) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Returns a BigInteger whose value is equal to that of the specified {@code long}. This
      * "static factory method" is provided in preference to a ({@code long}) constructor because it
      * allows for reuse of frequently used BigIntegers.

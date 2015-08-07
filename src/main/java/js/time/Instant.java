@@ -9,8 +9,15 @@
  */
 package js.time;
 
+import static java.time.temporal.ChronoField.*;
+import static js.time.LocalTime.*;
+
 import java.time.Clock;
 import java.time.DateTimeException;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQuery;
+import java.util.Objects;
 
 import booton.translator.JavaAPIProvider;
 import js.lang.NativeDate;
@@ -123,4 +130,77 @@ class Instant {
     public static Instant now() {
         return new Instant(NativeDate.now(), 0);
     }
+
+    // -----------------------------------------------------------------------
+    /**
+     * Obtains an instance of {@code Instant} from a temporal object.
+     * <p>
+     * This obtains an instant based on the specified temporal. A {@code TemporalAccessor}
+     * represents an arbitrary set of date and time information, which this factory converts to an
+     * instance of {@code Instant}.
+     * <p>
+     * The conversion extracts the {@link ChronoField#INSTANT_SECONDS INSTANT_SECONDS} and
+     * {@link ChronoField#NANO_OF_SECOND NANO_OF_SECOND} fields.
+     * <p>
+     * This method matches the signature of the functional interface {@link TemporalQuery} allowing
+     * it to be used as a query via method reference, {@code Instant::from}.
+     *
+     * @param temporal the temporal object to convert, not null
+     * @return the instant, not null
+     * @throws DateTimeException if unable to convert to an {@code Instant}
+     */
+    public static Instant from(TemporalAccessor temporal) {
+        if (temporal instanceof Instant) {
+            return (Instant) temporal;
+        }
+        Objects.requireNonNull(temporal, "temporal");
+        try {
+            long instantSecs = temporal.getLong(INSTANT_SECONDS);
+            int nanoOfSecond = temporal.get(NANO_OF_SECOND);
+            return Instant.ofEpochSecond(instantSecs, nanoOfSecond);
+        } catch (DateTimeException ex) {
+            throw new DateTimeException("Unable to obtain Instant from TemporalAccessor: " + temporal + " of type " + temporal.getClass()
+                    .getName(), ex);
+        }
+    }
+
+    /**
+     * Obtains an instance of {@code Instant} using seconds from the epoch of 1970-01-01T00:00:00Z.
+     * <p>
+     * The nanosecond field is set to zero.
+     *
+     * @param epochSecond the number of seconds from 1970-01-01T00:00:00Z
+     * @return an instant, not null
+     * @throws DateTimeException if the instant exceeds the maximum or minimum instant
+     */
+    public static Instant ofEpochSecond(long epochSecond) {
+        return create(epochSecond, 0);
+    }
+
+    /**
+     * Obtains an instance of {@code Instant} using seconds from the epoch of 1970-01-01T00:00:00Z
+     * and nanosecond fraction of second.
+     * <p>
+     * This method allows an arbitrary number of nanoseconds to be passed in. The factory will alter
+     * the values of the second and nanosecond in order to ensure that the stored nanosecond is in
+     * the range 0 to 999,999,999. For example, the following will result in the exactly the same
+     * instant: <pre>
+     *  Instant.ofEpochSecond(3, 1);
+     *  Instant.ofEpochSecond(4, -999_999_999);
+     *  Instant.ofEpochSecond(2, 1000_000_001);
+     * </pre>
+     *
+     * @param epochSecond the number of seconds from 1970-01-01T00:00:00Z
+     * @param nanoAdjustment the nanosecond adjustment to the number of seconds, positive or
+     *            negative
+     * @return an instant, not null
+     * @throws DateTimeException if the instant exceeds the maximum or minimum instant
+     * @throws ArithmeticException if numeric overflow occurs
+     */
+    public static Instant ofEpochSecond(long epochSecond, long nanoAdjustment) {
+        long secs = Math.addExact(epochSecond, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND));
+        int nos = (int) Math.floorMod(nanoAdjustment, NANOS_PER_SECOND);
+        return create(secs, nos);
+    }
+
 }

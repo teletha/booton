@@ -9,6 +9,7 @@
  */
 package js.util;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -448,6 +449,8 @@ class Calendar {
      */
     public static final int LONG_STANDALONE = LONG | STANDALONE_MASK;
 
+    private long time;
+
     private boolean lenient;
 
     private TimeZone zone;
@@ -482,9 +485,9 @@ class Calendar {
 
     /**
      * Returns the minimum value for the given calendar field of this <code>Calendar</code>
-     * instance. The minimum value is defined as the smallest value returned by the
-     * {@link #get(int) get} method for any possible time value. The minimum value depends on
-     * calendar system specific parameters of the instance.
+     * instance. The minimum value is defined as the smallest value returned by the {@link #get(int)
+     * get} method for any possible time value. The minimum value depends on calendar system
+     * specific parameters of the instance.
      *
      * @param field the calendar field.
      * @return the minimum value for the given calendar field.
@@ -787,6 +790,54 @@ class Calendar {
      */
     public void setTimeZone(TimeZone value) {
         this.zone = value;
+    }
+
+    /**
+     * Returns a <code>Date</code> object representing this <code>Calendar</code>'s time value
+     * (millisecond offset from the <a href="#Epoch">Epoch</a>").
+     *
+     * @return a <code>Date</code> representing the time value.
+     * @see #setTime(Date)
+     * @see #getTimeInMillis()
+     */
+    public final Date getTime() {
+        return new Date(getTimeInMillis());
+    }
+
+    /**
+     * Sets this Calendar's time with the given <code>Date</code>.
+     * <p>
+     * Note: Calling <code>setTime()</code> with <code>Date(Long.MAX_VALUE)</code> or
+     * <code>Date(Long.MIN_VALUE)</code> may yield incorrect field values from <code>get()</code>.
+     *
+     * @param date the given Date.
+     * @see #getTime()
+     * @see #setTimeInMillis(long)
+     */
+    public final void setTime(Date date) {
+        setTimeInMillis(date.getTime());
+    }
+
+    /**
+     * Returns this Calendar's time value in milliseconds.
+     *
+     * @return the current time as UTC milliseconds from the epoch.
+     * @see #getTime()
+     * @see #setTimeInMillis(long)
+     */
+    public long getTimeInMillis() {
+        return time;
+    }
+
+    /**
+     * Sets this Calendar's current time from the given long value.
+     *
+     * @param millis the new time in UTC milliseconds from the epoch.
+     * @see #setTime(Date)
+     * @see #getTimeInMillis()
+     */
+    public void setTimeInMillis(long millis) {
+        time = millis;
     }
 
     /**
