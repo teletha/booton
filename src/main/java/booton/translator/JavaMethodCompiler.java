@@ -1265,7 +1265,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
         switch (handle.getTag()) {
         case H_INVOKESTATIC:
-            code.add(Javascript.computeClassName(lambdaClass));
+            code.add(Javascript.computeClassName(lambdaClass, true));
             code.add(params.toString());
             break;
 
@@ -1654,7 +1654,7 @@ class JavaMethodCompiler extends MethodVisitor {
                 }
 
                 // push class operand
-                contexts.add(0, new OperandExpression(Javascript.computeClassName(owner)));
+                contexts.add(0, new OperandExpression(Javascript.computeClassName(owner, true)));
 
                 // translate
                 current.addOperand(translator.translateStaticMethod(owner, methodName, desc, parameters, contexts), returnType);

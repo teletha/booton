@@ -23,13 +23,13 @@ public class StringTest {
 
     @Test
     public void length() throws Exception {
-        assert "".length() == 0;
-        assert "a".length() == 1;
+        assert"".length() == 0;
+        assert"a".length() == 1;
     }
 
     @Test
     public void clazz() throws Exception {
-        assert "".getClass() == String.class;
+        assert"".getClass() == String.class;
     }
 
     @Test
@@ -39,7 +39,7 @@ public class StringTest {
         assert o instanceof String;
         assert o instanceof CharSequence;
         assert o instanceof Comparable;
-        assert !(o instanceof Character);
+        assert!(o instanceof Character);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class StringTest {
         assert String.class.isAssignableFrom(o);
         assert CharSequence.class.isAssignableFrom(o);
         assert Comparable.class.isAssignableFrom(o);
-        assert !Character.class.isAssignableFrom(o);
+        assert!Character.class.isAssignableFrom(o);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -64,8 +64,8 @@ public class StringTest {
 
     @Test
     public void codePointAt() throws Exception {
-        assert "abc".codePointAt(0) == 97;
-        assert "abc".codePointAt(1) == 98;
+        assert"abc".codePointAt(0) == 97;
+        assert"abc".codePointAt(1) == 98;
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -80,8 +80,8 @@ public class StringTest {
 
     @Test
     public void codePointBefore() throws Exception {
-        assert "abc".codePointBefore(1) == 97;
-        assert "abc".codePointBefore(2) == 98;
+        assert"abc".codePointBefore(1) == 97;
+        assert"abc".codePointBefore(2) == 98;
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -104,9 +104,18 @@ public class StringTest {
     }
 
     @Test
+    public void compareIgnoreCase() {
+        String o = "b";
+
+        assert o.compareToIgnoreCase("B") == 0;
+        assert o.compareToIgnoreCase("C") == -1;
+        assert o.compareToIgnoreCase("A") == 1;
+    }
+
+    @Test
     public void concat() throws Exception {
-        assert "a".concat("b").equals("ab");
-        assert "a".concat("").equals("a");
+        assert"a".concat("b").equals("ab");
+        assert"a".concat("").equals("a");
     }
 
     @Test(expected = NullPointerException.class)
@@ -116,9 +125,9 @@ public class StringTest {
 
     @Test
     public void contains() throws Exception {
-        assert "abc".contains("bc");
-        assert "abc".contains("");
-        assert !"abc".contains("z");
+        assert"abc".contains("bc");
+        assert"abc".contains("");
+        assert!"abc".contains("z");
     }
 
     @Test(expected = NullPointerException.class)
@@ -128,12 +137,12 @@ public class StringTest {
 
     @Test
     public void startsWith() {
-        assert "abc".startsWith("ab");
-        assert !"abc".startsWith("zzz");
-        assert "abc".startsWith("");
-        assert "abcd".startsWith("bc", 1);
-        assert !"abc".startsWith("a", 100);
-        assert !"abc".startsWith("a", -1);
+        assert"abc".startsWith("ab");
+        assert!"abc".startsWith("zzz");
+        assert"abc".startsWith("");
+        assert"abcd".startsWith("bc", 1);
+        assert!"abc".startsWith("a", 100);
+        assert!"abc".startsWith("a", -1);
     }
 
     @Test(expected = NullPointerException.class)
@@ -143,10 +152,10 @@ public class StringTest {
 
     @Test
     public void endsWith() {
-        assert "abc".endsWith("bc");
-        assert !"abc".endsWith("ab");
-        assert !"abc".endsWith("zzzz");
-        assert "abc".endsWith("");
+        assert"abc".endsWith("bc");
+        assert!"abc".endsWith("ab");
+        assert!"abc".endsWith("zzzz");
+        assert"abc".endsWith("");
     }
 
     @Test(expected = NullPointerException.class)
@@ -156,14 +165,14 @@ public class StringTest {
 
     @Test
     public void equals() throws Exception {
-        assert "as".equals("as");
-        assert !"as".equals("AS");
+        assert"as".equals("as");
+        assert!"as".equals("AS");
     }
 
     @Test
     public void equalsIgnoreCase() throws Exception {
-        assert "as".equalsIgnoreCase("as");
-        assert "as".equalsIgnoreCase("AS");
+        assert"as".equalsIgnoreCase("as");
+        assert"as".equalsIgnoreCase("AS");
     }
 
     @Test
@@ -176,85 +185,85 @@ public class StringTest {
 
     @Test
     public void indexOf() throws Exception {
-        assert "abcde".indexOf("cd") == 2;
-        assert "abcde".indexOf("z") == -1;
+        assert"abcde".indexOf("cd") == 2;
+        assert"abcde".indexOf("z") == -1;
     }
 
     @Test
     public void indexOfWithPosition() throws Exception {
-        assert "abcabc".indexOf("b", -1) == 1;
-        assert "abcabc".indexOf("b", 3) == 4;
-        assert "abcabc".indexOf("b", 5) == -1;
-        assert "abcabc".indexOf("b", 10) == -1;
+        assert"abcabc".indexOf("b", -1) == 1;
+        assert"abcabc".indexOf("b", 3) == 4;
+        assert"abcabc".indexOf("b", 5) == -1;
+        assert"abcabc".indexOf("b", 10) == -1;
     }
 
     @Test
     public void indexOfChar() throws Exception {
         int code = "c".codePointAt(0);
 
-        assert "abcde".indexOf(code) == 2;
-        assert "abcde".indexOf(0) == -1;
+        assert"abcde".indexOf(code) == 2;
+        assert"abcde".indexOf(0) == -1;
     }
 
     @Test
     public void indexOfCharWithPosition() throws Exception {
         int code = "b".codePointAt(0);
 
-        assert "abcabc".indexOf(code, 3) == 4;
-        assert "abcabc".indexOf(code, 5) == -1;
+        assert"abcabc".indexOf(code, 3) == 4;
+        assert"abcabc".indexOf(code, 5) == -1;
     }
 
     @Test
     public void intern() throws Exception {
-        assert "a".intern() == "a";
+        assert"a".intern() == "a";
     }
 
     @Test
     public void isEmpty() {
-        assert "".isEmpty();
-        assert !" ".isEmpty();
-        assert !"a".isEmpty();
-        assert !"\t".isEmpty();
+        assert"".isEmpty();
+        assert!" ".isEmpty();
+        assert!"a".isEmpty();
+        assert!"\t".isEmpty();
     }
 
     @Test
     public void lastIndexOf() throws Exception {
-        assert "abcde".lastIndexOf("cd") == 2;
-        assert "abcde".lastIndexOf("z") == -1;
+        assert"abcde".lastIndexOf("cd") == 2;
+        assert"abcde".lastIndexOf("z") == -1;
     }
 
     @Test
     public void lastIndexOfWithPosition() throws Exception {
-        assert "abcabc".lastIndexOf("b", 5) == 4;
-        assert "abcabc".lastIndexOf("b", 3) == 1;
-        assert "abcabc".lastIndexOf("b", 0) == -1;
-        assert "abcabc".lastIndexOf("b", -10) == -1;
+        assert"abcabc".lastIndexOf("b", 5) == 4;
+        assert"abcabc".lastIndexOf("b", 3) == 1;
+        assert"abcabc".lastIndexOf("b", 0) == -1;
+        assert"abcabc".lastIndexOf("b", -10) == -1;
     }
 
     @Test
     public void lastIndexOfChar() throws Exception {
         int code = "c".codePointAt(0);
 
-        assert "abcde".lastIndexOf(code) == 2;
-        assert "abcde".lastIndexOf(0) == -1;
+        assert"abcde".lastIndexOf(code) == 2;
+        assert"abcde".lastIndexOf(0) == -1;
     }
 
     @Test
     public void lastIndexOfCharWithPosition() throws Exception {
         int code = "b".codePointAt(0);
 
-        assert "abcabc".lastIndexOf(code, 5) == 4;
-        assert "abcabc".lastIndexOf(code, 3) == 1;
-        assert "abcabc".lastIndexOf(code, 0) == -1;
-        assert "abcabc".lastIndexOf(code, -10) == -1;
+        assert"abcabc".lastIndexOf(code, 5) == 4;
+        assert"abcabc".lastIndexOf(code, 3) == 1;
+        assert"abcabc".lastIndexOf(code, 0) == -1;
+        assert"abcabc".lastIndexOf(code, -10) == -1;
     }
 
     @Test
     public void replace() throws Exception {
-        assert "abcabc".replace("a", "A").equals("AbcAbc");
-        assert "abcabc".replace("ab", "").equals("cc");
-        assert "abcabc".replace("", "A").equals("AaAbAcAaAbAcA");
-        assert "aaa".replace("aa", "b").equals("ba");
+        assert"abcabc".replace("a", "A").equals("AbcAbc");
+        assert"abcabc".replace("ab", "").equals("cc");
+        assert"abcabc".replace("", "A").equals("AaAbAcAaAbAcA");
+        assert"aaa".replace("aa", "b").equals("ba");
     }
 
     @Test
@@ -262,7 +271,7 @@ public class StringTest {
         String[] specials = {".", "+", "{", "}", "[", "]", "?", "*", "#", "\\", "^", "$", ","};
 
         for (String special : specials) {
-            assert !special.equals("@@");
+            assert!special.equals("@@");
             assert special.concat(special).replace(special, "@").equals("@@");
         }
     }
@@ -284,40 +293,40 @@ public class StringTest {
 
     @Test
     public void replaceChar() throws Exception {
-        assert "abcabc".replace('a', 'A').equals("AbcAbc");
-        assert "a.b.c".replace('.', '_').equals("a_b_c");
+        assert"abcabc".replace('a', 'A').equals("AbcAbc");
+        assert"a.b.c".replace('.', '_').equals("a_b_c");
     }
 
     @Test
     public void replaceCharWithExpression() throws Exception {
         String text = "aA";
-        assert "abcabc".replace(text.charAt(0), text.charAt(1)).equals("AbcAbc");
+        assert"abcabc".replace(text.charAt(0), text.charAt(1)).equals("AbcAbc");
     }
 
     @Test
     public void replaceAll() throws Exception {
-        assert "abcabc".replaceAll("a", "A").equals("AbcAbc");
-        assert "jaaava".replaceAll("a+", "o").equals("jovo");
-        assert " j a v a ".replaceAll("\\s", "").equals("java");
+        assert"abcabc".replaceAll("a", "A").equals("AbcAbc");
+        assert"jaaava".replaceAll("a+", "o").equals("jovo");
+        assert" j a v a ".replaceAll("\\s", "").equals("java");
 
         String variable = "a";
-        assert "abcabc".replaceAll(variable, "A").equals("AbcAbc");
+        assert"abcabc".replaceAll(variable, "A").equals("AbcAbc");
 
         String regex = "a+";
-        assert "jaaava".replaceAll(regex, "o").equals("jovo");
+        assert"jaaava".replaceAll(regex, "o").equals("jovo");
     }
 
     @Test
     public void replaceFirst() throws Exception {
-        assert "abcabc".replaceFirst("a", "A").equals("Abcabc");
-        assert "jaaava".replaceFirst("a+", "o").equals("jova");
-        assert " j a v a ".replaceFirst("\\s", "").equals("j a v a ");
+        assert"abcabc".replaceFirst("a", "A").equals("Abcabc");
+        assert"jaaava".replaceFirst("a+", "o").equals("jova");
+        assert" j a v a ".replaceFirst("\\s", "").equals("j a v a ");
     }
 
     @Test
     public void regionMatches() throws Exception {
-        assert "abcdef".regionMatches(false, 2, "oocdoo", 2, 2);
-        assert "abcdef".regionMatches(true, 2, "ooCDoo", 2, 2);
+        assert"abcdef".regionMatches(false, 2, "oocdoo", 2, 2);
+        assert"abcdef".regionMatches(true, 2, "ooCDoo", 2, 2);
     }
 
     @Test
@@ -356,8 +365,8 @@ public class StringTest {
 
     @Test
     public void subSequence() throws Exception {
-        assert "abcde".subSequence(0, 2).equals("ab");
-        assert "abcde".subSequence(2, 4).equals("cd");
+        assert"abcde".subSequence(0, 2).equals("ab");
+        assert"abcde".subSequence(2, 4).equals("cd");
     }
 
     @Test(expected = StringIndexOutOfBoundsException.class)
@@ -372,9 +381,9 @@ public class StringTest {
 
     @Test
     public void substring() throws Exception {
-        assert "abcde".substring(3).equals("de");
-        assert "abcde".substring(0, 2).equals("ab");
-        assert "abcde".substring(2, 4).equals("cd");
+        assert"abcde".substring(3).equals("de");
+        assert"abcde".substring(0, 2).equals("ab");
+        assert"abcde".substring(2, 4).equals("cd");
     }
 
     @Test(expected = StringIndexOutOfBoundsException.class)
@@ -405,25 +414,25 @@ public class StringTest {
 
     @Test
     public void toLowerCase() throws Exception {
-        assert "abc".toLowerCase().equals("abc");
-        assert "ABC".toLowerCase().equals("abc");
-        assert "123$#&!%@<>?".toUpperCase().equals("123$#&!%@<>?");
+        assert"abc".toLowerCase().equals("abc");
+        assert"ABC".toLowerCase().equals("abc");
+        assert"123$#&!%@<>?".toUpperCase().equals("123$#&!%@<>?");
     }
 
     @Test
     public void toUpperCase() throws Exception {
-        assert "abc".toUpperCase().equals("ABC");
-        assert "ABC".toUpperCase().equals("ABC");
-        assert "123$#&!%@<>?".toUpperCase().equals("123$#&!%@<>?");
+        assert"abc".toUpperCase().equals("ABC");
+        assert"ABC".toUpperCase().equals("ABC");
+        assert"123$#&!%@<>?".toUpperCase().equals("123$#&!%@<>?");
     }
 
     @Test
     public void trim() throws Exception {
-        assert "".trim().equals("");
-        assert " a b c ".trim().equals("a b c");
-        assert "a".trim().equals("a");
-        assert "\tQ\t".trim().equals("Q");
-        assert "\r\nQ\r\n".trim().equals("Q");
+        assert"".trim().equals("");
+        assert" a b c ".trim().equals("a b c");
+        assert"a".trim().equals("a");
+        assert"\tQ\t".trim().equals("Q");
+        assert"\r\nQ\r\n".trim().equals("Q");
     }
 
     @Test

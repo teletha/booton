@@ -55,13 +55,12 @@ public class Source {
         String value = code.toString();
 
         int start = 0;
-        int end = value.indexOf("\\r\\n", start);
-
+        int end = value.indexOf("\r\n", start);
         while (end != -1) {
             add(value.substring(start, end));
 
-            start = end + 1;
-            end = value.indexOf("\\r\\n", start);
+            start = end + 2;
+            end = value.indexOf("\r\n", start);
         }
         add(value.substring(start));
     }

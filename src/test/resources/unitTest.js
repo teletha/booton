@@ -28,3 +28,5 @@ Element.prototype.matches = function(selector) {
   }
   return false;
 };
+
+window.performance = new Performance();

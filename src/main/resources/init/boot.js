@@ -282,7 +282,6 @@ function boot(global) {
 
         if (clazz) {
           define(clazz.prototype, Class.prototype);
-          define(clazz, Class);
 
           // define function uses not "for-in loop" but "Object.keys" to enumerate properties,
           // so Class.prototype property hides prototype chained properties.
@@ -293,8 +292,6 @@ function boot(global) {
             
             superClass = superClass.super;
           }
-          
-          if (init) init();
         } else {
           // extension class
           boot.extensions.push(Class);

@@ -79,12 +79,10 @@ class TranslatorManager {
                             // Methods defined in class are as native if these have native modifier.
                             if (type.isInterface() || Modifier.isNative(method.getModifiers()) || method
                                     .isAnnotationPresent(JavascriptNativeProperty.class)) {
-                                nativeMethods
-                                        .push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                                nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
                             }
 
-                            JavascriptNativePropertyAccessor accessor = method
-                                    .getAnnotation(JavascriptNativePropertyAccessor.class);
+                            JavascriptNativePropertyAccessor accessor = method.getAnnotation(JavascriptNativePropertyAccessor.class);
 
                             if (accessor != null) {
                                 Integer hash = hash(method.getName(), Type.getMethodDescriptor(method));
@@ -257,8 +255,7 @@ class TranslatorManager {
             return true;
         }
 
-        if (name.equals("$deserializeLambda$") && description
-                .equals("(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;")) {
+        if (name.equals("$deserializeLambda$") && description.equals("(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;")) {
             return true;
         }
 
@@ -282,8 +279,7 @@ class TranslatorManager {
         @Override
         protected String translateConstructor(Class owner, String desc, Class[] types, List<Operand> context) {
             // append identifier of constructor method
-            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc)
-                    .substring(1))));
+            context.add(new OperandNumber(Integer.valueOf(Javascript.computeMethodName(owner, "<init>", desc).substring(1))));
 
             return "new " + Javascript.computeClassName(owner) + writeParameter(types, context);
         }
@@ -323,7 +319,8 @@ class TranslatorManager {
             // append context 'this' of super method
             context.add(1, new OperandExpression("this"));
 
-            return Javascript.computeClassName(owner) + ".prototype." + Javascript.computeMethodName(owner, name, desc) + ".call" + writeParameter(types, context);
+            return Javascript.computeClassName(owner) + ".prototype." + Javascript
+                    .computeMethodName(owner, name, desc) + ".call" + writeParameter(types, context);
         }
 
         /**
@@ -341,7 +338,7 @@ class TranslatorManager {
         protected String translateStaticField(Class owner, String fieldName) {
             try {
                 owner.getDeclaredField(fieldName);
-                return Javascript.computeClassName(owner) + "." + Javascript.computeFieldName(owner, fieldName);
+                return Javascript.computeClassName(owner, true) + "." + Javascript.computeFieldName(owner, fieldName);
             } catch (NoSuchFieldException e) {
                 return translateStaticField(owner.getSuperclass(), fieldName);
             }

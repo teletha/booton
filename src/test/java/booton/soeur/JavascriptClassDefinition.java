@@ -220,4 +220,19 @@ public class JavascriptClassDefinition {
             return format.format(date);
         }
     }
+
+    /**
+     * @version 2015/08/07 23:30:23
+     */
+    public static class Performance extends Helper {
+
+        /**
+         * <p>
+         * Wait script execution.
+         * </p>
+         */
+        public double jsFunction_now() {
+            return System.nanoTime();
+        }
+    }
 }

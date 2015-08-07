@@ -12,6 +12,7 @@ package js.lang;
 import static js.lang.JSStringHelper.*;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -26,6 +27,40 @@ import booton.translator.JavascriptAPIProvider;
 @JavaAPIProvider(String.class)
 @JavascriptAPIProvider(targetJavaScriptClassName = "String")
 class JSString implements Comparable<String>, CharSequence {
+
+    /**
+     * A Comparator that orders {@code String} objects as by {@code compareToIgnoreCase}. This
+     * comparator is serializable.
+     * <p>
+     * Note that this Comparator does <em>not</em> take locale into account, and will result in an
+     * unsatisfactory ordering for certain locales. The java.text package provides
+     * <em>Collators</em> to allow locale-sensitive ordering.
+     *
+     * @see java.text.Collator#compare(String, String)
+     * @since 1.2
+     */
+    public static final Comparator<String> CASE_INSENSITIVE_ORDER = (s1, s2) -> {
+        int n1 = s1.length();
+        int n2 = s2.length();
+        int min = Math.min(n1, n2);
+        for (int i = 0; i < min; i++) {
+            char c1 = s1.charAt(i);
+            char c2 = s2.charAt(i);
+            if (c1 != c2) {
+                c1 = Character.toUpperCase(c1);
+                c2 = Character.toUpperCase(c2);
+                if (c1 != c2) {
+                    c1 = Character.toLowerCase(c1);
+                    c2 = Character.toLowerCase(c2);
+                    if (c1 != c2) {
+                        // No overflow because of numeric promotion
+                        return c1 - c2;
+                    }
+                }
+            }
+        }
+        return n1 - n2;
+    };
 
     /** The cache for hash. */
     private int hash = 0;
@@ -47,8 +82,8 @@ class JSString implements Comparable<String>, CharSequence {
      * sequence is at index <code>0</code>, the next at index <code>1</code>, and so on, as for
      * array indexing.
      * <p>
-     * If the <code>char</code> value specified by the index is a <a
-     * href="Character.html#unicode">surrogate</a>, the surrogate value is returned.
+     * If the <code>char</code> value specified by the index is a
+     * <a href="Character.html#unicode">surrogate</a>, the surrogate value is returned.
      * 
      * @param index the index of the <code>char</code> value.
      * @return the <code>char</code> value at the specified index of this string. The first
@@ -123,6 +158,26 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
+     * Compares two strings lexicographically, ignoring case differences. This method returns an
+     * integer whose sign is that of calling {@code compareTo} with normalized versions of the
+     * strings where case differences have been eliminated by calling
+     * {@code Character.toLowerCase(Character.toUpperCase(character))} on each character.
+     * <p>
+     * Note that this method does <em>not</em> take locale into account, and will result in an
+     * unsatisfactory ordering for certain locales. The java.text package provides
+     * <em>collators</em> to allow locale-sensitive ordering.
+     *
+     * @param str the {@code String} to be compared.
+     * @return a negative integer, zero, or a positive integer as the specified String is greater
+     *         than, equal to, or less than this String, ignoring case considerations.
+     * @see java.text.Collator#compare(String, String)
+     * @since 1.2
+     */
+    public int compareToIgnoreCase(String str) {
+        return CASE_INSENSITIVE_ORDER.compare((String) (Object) this, str);
+    }
+
+    /**
      * Concatenates the specified string to the end of this string.
      * <p>
      * If the length of the argument string is <code>0</code>, then this <code>String</code> object
@@ -130,13 +185,10 @@ class JSString implements Comparable<String>, CharSequence {
      * sequence that is the concatenation of the character sequence represented by this
      * <code>String</code> object and the character sequence represented by the argument string.
      * <p>
-     * Examples: <blockquote>
-     * 
-     * <pre>
+     * Examples: <blockquote> <pre>
      * "cares".concat("s") returns "caress"
      * "to".concat("get").concat("her") returns "together"
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * 
      * @param value the <code>String</code> that is concatenated to the end of this
      *            <code>String</code>.
@@ -232,21 +284,13 @@ class JSString implements Comparable<String>, CharSequence {
      * character with value <code>ch</code> occurs in the character sequence represented by this
      * <code>String</code> object, then the index (in Unicode code units) of the first such
      * occurrence is returned. For values of <code>ch</code> in the range from 0 to 0xFFFF
-     * (inclusive), this is the smallest value <i>k</i> such that: <blockquote>
-     * 
-     * <pre>
+     * (inclusive), this is the smallest value <i>k</i> such that: <blockquote> <pre>
      * this.charAt(<i>k</i>) == ch
-     * </pre>
-     * 
-     * </blockquote> is true. For other values of <code>ch</code>, it is the smallest value <i>k</i>
-     * such that: <blockquote>
-     * 
-     * <pre>
+     * </pre> </blockquote> is true. For other values of <code>ch</code>, it is the smallest value
+     * <i>k</i> such that: <blockquote> <pre>
      * this.codePointAt(<i>k</i>) == ch
-     * </pre>
-     * 
-     * </blockquote> is true. In either case, if no such character occurs in this string, then
-     * <code>-1</code> is returned.
+     * </pre> </blockquote> is true. In either case, if no such character occurs in this string,
+     * then <code>-1</code> is returned.
      * 
      * @param ch a character (Unicode code point).
      * @return the index of the first occurrence of the character in the character sequence
@@ -264,18 +308,13 @@ class JSString implements Comparable<String>, CharSequence {
      * this <code>String</code> object at an index no smaller than <code>fromIndex</code>, then the
      * index of the first such occurrence is returned. For values of <code>ch</code> in the range
      * from 0 to 0xFFFF (inclusive), this is the smallest value <i>k</i> such that: <blockquote>
-     * 
      * <pre>
      * (this.charAt(<i>k</i>) == ch) && (<i>k</i> &gt;= fromIndex)
-     * </pre>
-     * </blockquote> is true. For other values of <code>ch</code>, it is the smallest value <i>k</i>
-     * such that: <blockquote>
-     * 
-     * <pre>
+     * </pre> </blockquote> is true. For other values of <code>ch</code>, it is the smallest value
+     * <i>k</i> such that: <blockquote> <pre>
      * (this.codePointAt(<i>k</i>) == ch) && (<i>k</i> &gt;= fromIndex)
-     * </pre>
-     * </blockquote> is true. In either case, if no such character occurs in this string at or after
-     * position <code>fromIndex</code>, then <code>-1</code> is returned.
+     * </pre> </blockquote> is true. In either case, if no such character occurs in this string at
+     * or after position <code>fromIndex</code>, then <code>-1</code> is returned.
      * <p>
      * There is no restriction on the value of <code>fromIndex</code>. If it is negative, it has the
      * same effect as if it were zero: this entire string may be searched. If it is greater than the
@@ -297,12 +336,9 @@ class JSString implements Comparable<String>, CharSequence {
     /**
      * Returns the index within this string of the first occurrence of the specified substring.
      * <p>
-     * The returned index is the smallest value <i>k</i> for which: <blockquote>
-     * 
-     * <pre>
+     * The returned index is the smallest value <i>k</i> for which: <blockquote> <pre>
      * this.startsWith(str, <i>k</i>)
-     * </pre>
-     * </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
+     * </pre> </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
      * 
      * @param text the substring to search for.
      * @return the index of the first occurrence of the specified substring, or {@code -1} if there
@@ -316,12 +352,9 @@ class JSString implements Comparable<String>, CharSequence {
      * Returns the index within this string of the first occurrence of the specified substring,
      * starting at the specified index.
      * <p>
-     * The returned index is the smallest value <i>k</i> for which: <blockquote>
-     * 
-     * <pre>
+     * The returned index is the smallest value <i>k</i> for which: <blockquote> <pre>
      * <i>k</i> &gt;= fromIndex && this.startsWith(str, <i>k</i>)
-     * </pre>
-     * </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
+     * </pre> </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
      * 
      * @param text the substring to search for.
      * @param fromIndex the index from which to start the search.
@@ -368,22 +401,14 @@ class JSString implements Comparable<String>, CharSequence {
     /**
      * Returns the index within this string of the last occurrence of the specified character. For
      * values of <code>ch</code> in the range from 0 to 0xFFFF (inclusive), the index (in Unicode
-     * code units) returned is the largest value <i>k</i> such that: <blockquote>
-     * 
-     * <pre>
+     * code units) returned is the largest value <i>k</i> such that: <blockquote> <pre>
      * this.charAt(<i>k</i>) == ch
-     * </pre>
-     * 
-     * </blockquote> is true. For other values of <code>ch</code>, it is the largest value <i>k</i>
-     * such that: <blockquote>
-     * 
-     * <pre>
+     * </pre> </blockquote> is true. For other values of <code>ch</code>, it is the largest value
+     * <i>k</i> such that: <blockquote> <pre>
      * this.codePointAt(<i>k</i>) == ch
-     * </pre>
-     * 
-     * </blockquote> is true. In either case, if no such character occurs in this string, then
-     * <code>-1</code> is returned. The <code>String</code> is searched backwards starting at the
-     * last character.
+     * </pre> </blockquote> is true. In either case, if no such character occurs in this string,
+     * then <code>-1</code> is returned. The <code>String</code> is searched backwards starting at
+     * the last character.
      * 
      * @param ch a character (Unicode code point).
      * @return the index of the last occurrence of the character in the character sequence
@@ -397,21 +422,13 @@ class JSString implements Comparable<String>, CharSequence {
      * Returns the index within this string of the last occurrence of the specified character,
      * searching backward starting at the specified index. For values of <code>ch</code> in the
      * range from 0 to 0xFFFF (inclusive), the index returned is the largest value <i>k</i> such
-     * that: <blockquote>
-     * 
-     * <pre>
+     * that: <blockquote> <pre>
      * (this.charAt(<i>k</i>) == ch) && (<i>k</i> &lt;= fromIndex)
-     * </pre>
-     * 
-     * </blockquote> is true. For other values of <code>ch</code>, it is the largest value <i>k</i>
-     * such that: <blockquote>
-     * 
-     * <pre>
+     * </pre> </blockquote> is true. For other values of <code>ch</code>, it is the largest value
+     * <i>k</i> such that: <blockquote> <pre>
      * (this.codePointAt(<i>k</i>) == ch) && (<i>k</i> &lt;= fromIndex)
-     * </pre>
-     * 
-     * </blockquote> is true. In either case, if no such character occurs in this string at or
-     * before position <code>fromIndex</code>, then <code>-1</code> is returned.
+     * </pre> </blockquote> is true. In either case, if no such character occurs in this string at
+     * or before position <code>fromIndex</code>, then <code>-1</code> is returned.
      * <p>
      * All indices are specified in <code>char</code> values (Unicode code units).
      * 
@@ -434,12 +451,9 @@ class JSString implements Comparable<String>, CharSequence {
      * last occurrence of the empty string "" is considered to occur at the index value
      * {@code this.length()}.
      * <p>
-     * The returned index is the largest value <i>k</i> for which: <blockquote>
-     * 
-     * <pre>
+     * The returned index is the largest value <i>k</i> for which: <blockquote> <pre>
      * this.startsWith(str, <i>k</i>)
-     * </pre>
-     * </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
+     * </pre> </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
      * 
      * @param text the substring to search for.
      * @return the index of the last occurrence of the specified substring, or {@code -1} if there
@@ -453,12 +467,9 @@ class JSString implements Comparable<String>, CharSequence {
      * Returns the index within this string of the last occurrence of the specified substring,
      * searching backward starting at the specified index.
      * <p>
-     * The returned index is the largest value <i>k</i> for which: <blockquote>
-     * 
-     * <pre>
+     * The returned index is the largest value <i>k</i> for which: <blockquote> <pre>
      * <i>k</i> &lt;= fromIndex && this.startsWith(str, <i>k</i>)
-     * </pre>
-     * </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
+     * </pre> </blockquote> If no such value of <i>k</i> exists, then {@code -1} is returned.
      * 
      * @param text the substring to search for.
      * @param from the index to start the search from.
@@ -470,8 +481,8 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
-     * Returns the length of this string. The length is equal to the number of <a
-     * href="Character.html#unicode">Unicode code units</a> in the string.
+     * Returns the length of this string. The length is equal to the number of
+     * <a href="Character.html#unicode">Unicode code units</a> in the string.
      * 
      * @return the length of the sequence of characters represented by this object.
      */
@@ -491,9 +502,7 @@ class JSString implements Comparable<String>, CharSequence {
      * except that every occurrence of <code>oldChar</code> is replaced by an occurrence of
      * <code>newChar</code>.
      * <p>
-     * Examples: <blockquote>
-     * 
-     * <pre>
+     * Examples: <blockquote> <pre>
      * "mesquite in your cellar".replace('e', 'o')
      *         returns "mosquito in your collar"
      * "the war of baronets".replace('r', 'y')
@@ -501,8 +510,7 @@ class JSString implements Comparable<String>, CharSequence {
      * "sparring with a purple porpoise".replace('p', 't')
      *         returns "starring with a turtle tortoise"
      * "JonL".replace('q', 'x') returns "JonL" (no change)
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * 
      * @param oldChar the old character.
      * @param newChar the new character.
@@ -534,8 +542,8 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
-     * Replaces each substring of this string that matches the given <a
-     * href="../util/regex/Pattern.html#sum">regular expression</a> with the given replacement.
+     * Replaces each substring of this string that matches the given
+     * <a href="../util/regex/Pattern.html#sum">regular expression</a> with the given replacement.
      * <p>
      * An invocation of this method of the form <i>str</i><tt>.replaceAll(</tt><i>regex</i>
      * <tt>,</tt> <i>repl</i><tt>)</tt> yields exactly the same result as the expression
@@ -565,8 +573,8 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
-     * Replaces the first substring of this string that matches the given <a
-     * href="../util/regex/Pattern.html#sum">regular expression</a> with the given replacement.
+     * Replaces the first substring of this string that matches the given
+     * <a href="../util/regex/Pattern.html#sum">regular expression</a> with the given replacement.
      * <p>
      * An invocation of this method of the form <i>str</i><tt>.replaceFirst(</tt><i>regex</i>
      * <tt>,</tt> <i>repl</i><tt>)</tt> yields exactly the same result as the expression
@@ -640,26 +648,17 @@ class JSString implements Comparable<String>, CharSequence {
      * <li><tt>toffset+len</tt> is greater than the length of this <tt>String</tt> object.
      * <li><tt>ooffset+len</tt> is greater than the length of the other argument.
      * <li><tt>ignoreCase</tt> is <tt>false</tt> and there is some nonnegative integer <i>k</i> less
-     * than <tt>len</tt> such that: <blockquote>
-     * 
-     * <pre>
+     * than <tt>len</tt> such that: <blockquote> <pre>
      * this.charAt(toffset+k) != other.charAt(ooffset+k)
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * <li><tt>ignoreCase</tt> is <tt>true</tt> and there is some nonnegative integer <i>k</i> less
-     * than <tt>len</tt> such that: <blockquote>
-     * 
-     * <pre>
+     * than <tt>len</tt> such that: <blockquote> <pre>
      * Character.toLowerCase(this.charAt(toffset+k)) !=
      Character.toLowerCase(other.charAt(ooffset+k))
-     * </pre>
-     * </blockquote> and: <blockquote>
-     * 
-     * <pre>
+     * </pre> </blockquote> and: <blockquote> <pre>
      * Character.toUpperCase(this.charAt(toffset+k)) !=
      *         Character.toUpperCase(other.charAt(ooffset+k))
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * </ul>
      * 
      * @param ignoreCase if <code>true</code>, ignore case when comparing characters.
@@ -710,8 +709,8 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
-     * Splits this string around matches of the given <a
-     * href="../util/regex/Pattern.html#sum">regular expression</a>.
+     * Splits this string around matches of the given
+     * <a href="../util/regex/Pattern.html#sum">regular expression</a>.
      * <p>
      * The array returned by this method contains each substring of this string that is terminated
      * by another substring that matches the given expression or is terminated by the end of the
@@ -737,43 +736,34 @@ class JSString implements Comparable<String>, CharSequence {
      * <th>Result</th>
      * </tr>
      * <tr>
-     * <td align=center>:</td>
-     * <td align=center>2</td>
-     * <td><tt>{ "boo", "and:foo" }</tt></td>
+     * <td align=center>:</td> <td align=center>2</td> <td><tt>{ "boo", "and:foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>:</td>
-     * <td align=center>5</td>
-     * <td><tt>{ "boo", "and", "foo" }</tt></td>
+     * <td align=center>:</td> <td align=center>5</td> <td><tt>{ "boo", "and", "foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>:</td>
-     * <td align=center>-2</td>
-     * <td><tt>{ "boo", "and", "foo" }</tt></td>
+     * <td align=center>:</td> <td align=center>-2</td> <td><tt>{ "boo", "and", "foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>o</td>
-     * <td align=center>5</td>
-     * <td><tt>{ "b", "", ":and:f", "", "" }</tt></td>
+     * <td align=center>o</td> <td align=center>5</td> <td><tt>{ "b", "", ":and:f", "", "" }</tt>
+     * </td>
      * </tr>
      * <tr>
-     * <td align=center>o</td>
-     * <td align=center>-2</td>
-     * <td><tt>{ "b", "", ":and:f", "", "" }</tt></td>
+     * <td align=center>o</td> <td align=center>-2</td> <td><tt>{ "b", "", ":and:f", "", "" }</tt>
+     * </td>
      * </tr>
      * <tr>
-     * <td align=center>o</td>
-     * <td align=center>0</td>
-     * <td><tt>{ "b", "", ":and:f" }</tt></td>
+     * <td align=center>o</td> <td align=center>0</td> <td><tt>{ "b", "", ":and:f" }</tt></td>
      * </tr>
      * </table>
      * </blockquote>
      * <p>
      * An invocation of this method of the form <i>str.</i><tt>split(</tt><i>regex</i><tt>,</tt>
-     * &nbsp;<i>n</i><tt>)</tt> yields the same result as the expression <blockquote>
-     * {@link java.util.regex.Pattern}.{@link java.util.regex.Pattern#compile compile}<tt>(</tt>
-     * <i>regex</i><tt>)</tt>.{@link java.util.regex.Pattern#split(java.lang.CharSequence,int)
-     * split}<tt>(</tt><i>str</i><tt>,</tt>&nbsp;<i>n</i><tt>)</tt> </blockquote>
+     * &nbsp;<i>n</i><tt>)</tt> yields the same result as the expression
+     * <blockquote> {@link java.util.regex.Pattern}.{@link java.util.regex.Pattern#compile compile}
+     * <tt>(</tt> <i>regex</i><tt>)</tt>.
+     * {@link java.util.regex.Pattern#split(java.lang.CharSequence,int) split}<tt>(</tt><i>str</i>
+     * <tt>,</tt>&nbsp;<i>n</i><tt>)</tt> </blockquote>
      * 
      * @param regex the delimiting regular expression
      * @param limit the result threshold, as described above
@@ -789,8 +779,8 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
-     * Splits this string around matches of the given <a
-     * href="../util/regex/Pattern.html#sum">regular expression</a>.
+     * Splits this string around matches of the given
+     * <a href="../util/regex/Pattern.html#sum">regular expression</a>.
      * <p>
      * This method works as if by invoking the two-argument {@link #split(String, int) split} method
      * with the given expression and a limit argument of zero. Trailing empty strings are therefore
@@ -804,12 +794,10 @@ class JSString implements Comparable<String>, CharSequence {
      * <th>Result</th>
      * </tr>
      * <tr>
-     * <td align=center>:</td>
-     * <td><tt>{ "boo", "and", "foo" }</tt></td>
+     * <td align=center>:</td> <td><tt>{ "boo", "and", "foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>o</td>
-     * <td><tt>{ "b", "", ":and:f" }</tt></td>
+     * <td align=center>o</td> <td><tt>{ "b", "", ":and:f" }</tt></td>
      * </tr>
      * </table>
      * </blockquote>
@@ -853,9 +841,7 @@ class JSString implements Comparable<String>, CharSequence {
      *         <code>false</code> otherwise. The result is <code>false</code> if
      *         <code>toffset</code> is negative or greater than the length of this
      *         <code>String</code> object; otherwise the result is the same as the result of the
-     *         expression
-     * 
-     * <pre>
+     *         expression <pre>
      *          this.substring(toffset).startsWith(prefix)
      *          </pre>
      */
@@ -867,16 +853,11 @@ class JSString implements Comparable<String>, CharSequence {
     /**
      * Returns a new character sequence that is a subsequence of this sequence.
      * <p>
-     * An invocation of this method of the form <blockquote>
-     * 
-     * <pre>
-     * str.subSequence(begin,&nbsp;end)</pre>
-     * </blockquote> behaves in exactly the same way as the invocation <blockquote>
-     * 
-     * <pre>
-     * str.substring(begin,&nbsp;end)</pre>
-     * </blockquote> This method is defined so that the <tt>String</tt> class can implement the
-     * {@link CharSequence} interface.
+     * An invocation of this method of the form <blockquote> <pre>
+     * str.subSequence(begin,&nbsp;end)</pre> </blockquote> behaves in exactly the same way as the
+     * invocation <blockquote> <pre>
+     * str.substring(begin,&nbsp;end)</pre> </blockquote> This method is defined so that the
+     * <tt>String</tt> class can implement the {@link CharSequence} interface.
      * </p>
      * 
      * @param beginIndex the begin index, inclusive.
@@ -897,14 +878,11 @@ class JSString implements Comparable<String>, CharSequence {
      * Returns a new string that is a substring of this string. The substring begins with the
      * character at the specified index and extends to the end of this string.
      * <p>
-     * Examples: <blockquote>
-     * 
-     * <pre>
+     * Examples: <blockquote> <pre>
      * "unhappy".substring(2) returns "happy"
      * "Harbison".substring(3) returns "bison"
      * "emptiness".substring(9) returns "" (an empty string)
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * 
      * @param beginIndex the beginning index, inclusive.
      * @return the specified substring.
@@ -921,13 +899,10 @@ class JSString implements Comparable<String>, CharSequence {
      * <code>endIndex - 1</code>. Thus the length of the substring is
      * <code>endIndex-beginIndex</code>.
      * <p>
-     * Examples: <blockquote>
-     * 
-     * <pre>
+     * Examples: <blockquote> <pre>
      * "hamburger".substring(4, 8) returns "urge"
      * "smiles".substring(1, 5) returns "mile"
-     * </pre>
-     * </blockquote>
+     * </pre> </blockquote>
      * 
      * @param beginIndex the beginning index, inclusive.
      * @param endIndex the ending index, exclusive.
@@ -995,7 +970,9 @@ class JSString implements Comparable<String>, CharSequence {
      * {@code String}.
      * <p>
      * Examples of lowercase mappings are in the following table:
-     * <table border="1" summary="Lowercase mapping examples showing language code of locale, upper case, lower case, and description">
+     * <table border="1" summary=
+     * "Lowercase mapping examples showing language code of locale, upper case, lower case, and description"
+     * >
      * <tr>
      * <th>Language Code of Locale</th>
      * <th>Upper Case</th>
@@ -1022,13 +999,12 @@ class JSString implements Comparable<String>, CharSequence {
      * </tr>
      * <tr>
      * <td>(all)</td>
-     * <td><img src="doc-files/capiota.gif" alt="capiota"><img src="doc-files/capchi.gif"
-     * alt="capchi"> <img src="doc-files/captheta.gif" alt="captheta"><img
-     * src="doc-files/capupsil.gif" alt="capupsil"> <img src="doc-files/capsigma.gif"
-     * alt="capsigma"></td>
-     * <td><img src="doc-files/iota.gif" alt="iota"><img src="doc-files/chi.gif" alt="chi"> <img
-     * src="doc-files/theta.gif" alt="theta"><img src="doc-files/upsilon.gif" alt="upsilon"> <img
-     * src="doc-files/sigma1.gif" alt="sigma"></td>
+     * <td><img src="doc-files/capiota.gif" alt="capiota"><img src="doc-files/capchi.gif" alt=
+     * "capchi"> <img src="doc-files/captheta.gif" alt="captheta"><img src="doc-files/capupsil.gif"
+     * alt="capupsil"> <img src="doc-files/capsigma.gif" alt="capsigma"></td>
+     * <td><img src="doc-files/iota.gif" alt="iota"><img src="doc-files/chi.gif" alt="chi"> <img src
+     * ="doc-files/theta.gif" alt="theta"><img src="doc-files/upsilon.gif" alt="upsilon"> <img src=
+     * "doc-files/sigma1.gif" alt="sigma"></td>
      * <td>lowercased all chars in String</td>
      * </tr>
      * </table>
@@ -1072,7 +1048,9 @@ class JSString implements Comparable<String>, CharSequence {
      * {@code String}.
      * <p>
      * Examples of locale-sensitive and 1:M case mappings are in the following table.
-     * <table border="1" summary="Examples of locale-sensitive and 1:M case mappings. Shows Language code of locale, lower case, upper case, and description.">
+     * <table border="1" summary=
+     * "Examples of locale-sensitive and 1:M case mappings. Shows Language code of locale, lower case, upper case, and description."
+     * >
      * <tr>
      * <th>Language Code of Locale</th>
      * <th>Lower Case</th>
@@ -1180,7 +1158,7 @@ class JSString implements Comparable<String>, CharSequence {
      * @return a {@code String} that contains the characters of the character array.
      */
     public static String copyValueOf(char[] data) {
-        return new String(data);
+        return valueOf(data);
     }
 
     /**
@@ -1195,7 +1173,7 @@ class JSString implements Comparable<String>, CharSequence {
      *                negative, or {@code offset+count} is larger than {@code data.length}.
      */
     public static String copyValueOf(char[] data, int offset, int count) {
-        return new String(data, offset, count);
+        return valueOf(data, offset, count);
     }
 
     /**
@@ -1214,9 +1192,9 @@ class JSString implements Comparable<String>, CharSequence {
      * @throws java.util.IllegalFormatException If a format string contains an illegal syntax, a
      *             format specifier that is incompatible with the given arguments, insufficient
      *             arguments given the format string, or other illegal conditions. For specification
-     *             of all possible formatting errors, see the <a
-     *             href="../util/Formatter.html#detail">Details</a> section of the formatter class
-     *             specification.
+     *             of all possible formatting errors, see the
+     *             <a href="../util/Formatter.html#detail">Details</a> section of the formatter
+     *             class specification.
      * @return A formatted string
      * @see java.util.Formatter
      * @since 1.5
@@ -1240,9 +1218,9 @@ class JSString implements Comparable<String>, CharSequence {
      * @throws java.util.IllegalFormatException If a format string contains an illegal syntax, a
      *             format specifier that is incompatible with the given arguments, insufficient
      *             arguments given the format string, or other illegal conditions. For specification
-     *             of all possible formatting errors, see the <a
-     *             href="../util/Formatter.html#detail">Details</a> section of the formatter class
-     *             specification
+     *             of all possible formatting errors, see the
+     *             <a href="../util/Formatter.html#detail">Details</a> section of the formatter
+     *             class specification
      * @return A formatted string
      * @see java.util.Formatter
      * @since 1.5

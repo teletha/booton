@@ -550,7 +550,7 @@ public class Javascript {
             String code;
 
             if (Modifier.isStatic(method.getModifiers())) {
-                code = computeClassName(source);
+                code = computeClassName(source, true);
             } else if (context == null) {
                 code = "new " + computeClassName(source) + "(0)";
             } else {
@@ -649,9 +649,21 @@ public class Javascript {
      * @return An identified class name for ECMAScript.
      */
     public static final String computeClassName(Class<?> clazz) {
+        return computeClassName(clazz, false);
+    }
+
+    /**
+     * <p>
+     * Compute the identified qualified class name for ECMAScript.
+     * </p>
+     * 
+     * @param clazz A class with fully qualified class name(e.g. java.lang.String).
+     * @return An identified class name for ECMAScript.
+     */
+    public static final String computeClassName(Class<?> clazz, boolean useAtStaticMemberAccess) {
         JavascriptAPIProvider js = clazz.getAnnotation(JavascriptAPIProvider.class);
 
-        if (js == null || js.targetJavaScriptClassName().isEmpty() || TranslatorManager.hasTranslator(clazz)) {
+        if (useAtStaticMemberAccess || js == null || TranslatorManager.hasTranslator(clazz)) {
             return "boot." + computeSimpleClassName(clazz);
         } else {
             return js.targetJavaScriptClassName();
