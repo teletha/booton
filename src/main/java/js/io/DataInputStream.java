@@ -14,6 +14,6 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2015/08/08 8:38:51
  */
-@JavaAPIProvider(java.io.BufferedInputStream.class)
-class BufferedInputStream {
+@JavaAPIProvider(java.io.DataInputStream.class)
+class DataInputStream {
 }

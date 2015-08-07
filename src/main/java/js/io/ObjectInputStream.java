@@ -11,17 +11,16 @@ package js.io;
 
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
 import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
 
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/08/09 2:11:48
+ * @version 2015/08/08 8:36:56
  */
-@JavaAPIProvider(ObjectInputStream.class)
-class JSObjectInputStream {
+@JavaAPIProvider(java.io.ObjectInputStream.class)
+class ObjectInputStream {
 
     /**
      * Read an object from the ObjectInputStream. The class of the object, the signature of the

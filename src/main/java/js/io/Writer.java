@@ -12,8 +12,8 @@ package js.io;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2015/08/08 8:38:51
+ * @version 2015/08/08 8:45:16
  */
-@JavaAPIProvider(java.io.BufferedInputStream.class)
-class BufferedInputStream {
+@JavaAPIProvider(java.io.Writer.class)
+class Writer {
 }
