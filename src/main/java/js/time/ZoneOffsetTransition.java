@@ -10,12 +10,18 @@
 package js.time;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2015/08/08 16:40:06
  */
-// @JavaAPIProvider(java.time.zone.ZoneOffsetTransition.class)
-class ZoneOffsetTransition {
+@JavaAPIProvider(java.time.zone.ZoneOffsetTransition.class)
+class ZoneOffsetTransition implements Comparable<ZoneOffsetTransition> {
 
     /**
      * The local transition date-time at the transition.
@@ -32,6 +38,34 @@ class ZoneOffsetTransition {
      */
     private final ZoneOffset offsetAfter;
 
+    // -----------------------------------------------------------------------
+    /**
+     * Obtains an instance defining a transition between two offsets.
+     * <p>
+     * Applications should normally obtain an instance from {@link ZoneRules}. This factory is only
+     * intended for use when creating {@link ZoneRules}.
+     *
+     * @param transition the transition date-time at the transition, which never actually occurs,
+     *            expressed local to the before offset, not null
+     * @param offsetBefore the offset before the transition, not null
+     * @param offsetAfter the offset at and after the transition, not null
+     * @return the transition, not null
+     * @throws IllegalArgumentException if {@code offsetBefore} and {@code offsetAfter} are equal,
+     *             or {@code transition.getNano()} returns non-zero value
+     */
+    public static ZoneOffsetTransition of(LocalDateTime transition, ZoneOffset offsetBefore, ZoneOffset offsetAfter) {
+        Objects.requireNonNull(transition, "transition");
+        Objects.requireNonNull(offsetBefore, "offsetBefore");
+        Objects.requireNonNull(offsetAfter, "offsetAfter");
+        if (offsetBefore.equals(offsetAfter)) {
+            throw new IllegalArgumentException("Offsets must not be equal");
+        }
+        if (transition.getNano() != 0) {
+            throw new IllegalArgumentException("Nano-of-second must be zero");
+        }
+        return new ZoneOffsetTransition(transition, offsetBefore, offsetAfter);
+    }
+
     /**
      * Creates an instance defining a transition between two offsets.
      *
@@ -45,6 +79,20 @@ class ZoneOffsetTransition {
         this.offsetAfter = offsetAfter;
     }
 
+    /**
+     * Creates an instance from epoch-second and offsets.
+     *
+     * @param epochSecond the transition epoch-second
+     * @param offsetBefore the offset before the transition, not null
+     * @param offsetAfter the offset at and after the transition, not null
+     */
+    ZoneOffsetTransition(long epochSecond, ZoneOffset offsetBefore, ZoneOffset offsetAfter) {
+        this.transition = LocalDateTime.ofEpochSecond(epochSecond, 0, offsetBefore);
+        this.offsetBefore = offsetBefore;
+        this.offsetAfter = offsetAfter;
+    }
+
+    // -----------------------------------------------------------------------
     /**
      * Gets the transition instant.
      * <p>
@@ -171,15 +219,96 @@ class ZoneOffsetTransition {
     }
 
     /**
-     * Creates an instance from epoch-second and offsets.
+     * Checks if the specified offset is valid during this transition.
+     * <p>
+     * This checks to see if the given offset will be valid at some point in the transition. A gap
+     * will always return false. An overlap will return true if the offset is either the before or
+     * after offset.
      *
-     * @param epochSecond the transition epoch-second
-     * @param offsetBefore the offset before the transition, not null
-     * @param offsetAfter the offset at and after the transition, not null
+     * @param offset the offset to check, null returns false
+     * @return true if the offset is valid during the transition
      */
-    ZoneOffsetTransition(long epochSecond, ZoneOffset offsetBefore, ZoneOffset offsetAfter) {
-        this.transition = LocalDateTime.ofEpochSecond(epochSecond, 0, offsetBefore);
-        this.offsetBefore = offsetBefore;
-        this.offsetAfter = offsetAfter;
+    public boolean isValidOffset(ZoneOffset offset) {
+        return isGap() ? false : (getOffsetBefore().equals(offset) || getOffsetAfter().equals(offset));
+    }
+
+    /**
+     * Gets the valid offsets during this transition.
+     * <p>
+     * A gap will return an empty list, while an overlap will return both offsets.
+     *
+     * @return the list of valid offsets
+     */
+    List<ZoneOffset> getValidOffsets() {
+        if (isGap()) {
+            return Collections.emptyList();
+        }
+        return Arrays.asList(getOffsetBefore(), getOffsetAfter());
+    }
+
+    // -----------------------------------------------------------------------
+    /**
+     * Compares this transition to another based on the transition instant.
+     * <p>
+     * This compares the instants of each transition. The offsets are ignored, making this order
+     * inconsistent with equals.
+     *
+     * @param transition the transition to compare to, not null
+     * @return the comparator value, negative if less, positive if greater
+     */
+    @Override
+    public int compareTo(ZoneOffsetTransition transition) {
+        return this.getInstant().compareTo(transition.getInstant());
+    }
+
+    // -----------------------------------------------------------------------
+    /**
+     * Checks if this object equals another.
+     * <p>
+     * The entire state of the object is compared.
+     *
+     * @param other the other object to compare to, null returns false
+     * @return true if equal
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (other instanceof ZoneOffsetTransition) {
+            ZoneOffsetTransition d = (ZoneOffsetTransition) other;
+            return transition.equals(d.transition) && offsetBefore.equals(d.offsetBefore) && offsetAfter.equals(d.offsetAfter);
+        }
+        return false;
+    }
+
+    /**
+     * Returns a suitable hash code.
+     *
+     * @return the hash code
+     */
+    @Override
+    public int hashCode() {
+        return transition.hashCode() ^ offsetBefore.hashCode() ^ Integer.rotateLeft(offsetAfter.hashCode(), 16);
+    }
+
+    // -----------------------------------------------------------------------
+    /**
+     * Returns a string describing this object.
+     *
+     * @return a string for debugging, not null
+     */
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        buf.append("Transition[")
+                .append(isGap() ? "Gap" : "Overlap")
+                .append(" at ")
+                .append(transition)
+                .append(offsetBefore)
+                .append(" to ")
+                .append(offsetAfter)
+                .append(']');
+        return buf.toString();
     }
 }

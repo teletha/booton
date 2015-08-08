@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.time.Clock;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -50,7 +49,7 @@ import booton.translator.JavaAPIProvider;
 /**
  * @version 2014/04/25 15:55:13
  */
-// @JavaAPIProvider(java.time.LocalDateTime.class)
+@JavaAPIProvider(java.time.LocalDateTime.class)
 class LocalDateTime implements Temporal, TemporalAdjuster, ChronoLocalDateTime<LocalDate>, Serializable {
 
     /**
