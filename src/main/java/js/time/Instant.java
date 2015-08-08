@@ -19,13 +19,12 @@ import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQuery;
 import java.util.Objects;
 
-import booton.translator.JavaAPIProvider;
 import js.lang.NativeDate;
 
 /**
  * @version 2014/04/29 9:51:26
  */
-@JavaAPIProvider(java.time.Instant.class)
+// @JavaAPIProvider(java.time.Instant.class)
 class Instant {
 
     /**

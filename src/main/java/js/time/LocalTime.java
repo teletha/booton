@@ -9,12 +9,10 @@
  */
 package js.time;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2014/04/25 16:23:42
  */
-@JavaAPIProvider(java.time.LocalTime.class)
+// @JavaAPIProvider(java.time.LocalTime.class)
 class LocalTime {
 
     /**

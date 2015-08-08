@@ -12,9 +12,9 @@ package js.lang;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
+import java.util.Date;
 
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -50,10 +50,20 @@ public class NativeIntl {
          * </p>
          */
         public DateTimeFormat(String locales, Option option) {
-            System.out.println("aaAAA " + option);
-            DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder();
             format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT);
+        }
 
+        /**
+         * <p>
+         * Returns a getter function that formats a date according to the locale and formatting
+         * options of this DateTimeFormat object.
+         * </p>
+         * 
+         * @param date The date to format.
+         * @return
+         */
+        public String format(Date date) {
+            return format.format(date.toInstant());
         }
 
         /**
@@ -110,6 +120,15 @@ public class NativeIntl {
 
             @JavascriptNativeProperty
             public String month;
+
+            @JavascriptNativeProperty
+            public String hour;
+
+            @JavascriptNativeProperty
+            public String minute;
+
+            @JavascriptNativeProperty
+            public String second;
         }
 
         /**

@@ -19,12 +19,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeObject;
-import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/21 23:37:10
+ * @version 2015/08/08 14:28:02
  */
 @JavaAPIProvider(Executable.class)
 class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
@@ -72,6 +72,17 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
             parameters = convert(getGenericParameterTypes());
         }
         return parameters.toArray(new Class[parameters.size()]);
+    }
+
+    /**
+     * Returns the number of formal parameters (whether explicitly declared or implicitly declared
+     * or neither) for the executable represented by this object.
+     *
+     * @since 1.8
+     * @return The number of formal parameters for the executable this object represents
+     */
+    public int getParameterCount() {
+        return getParameterTypes().length;
     }
 
     /**
@@ -168,7 +179,8 @@ class Parameterizable extends JSAccessibleObject implements GenericDeclaration {
                 for (String name : definition.keys()) {
                     Class type = JSClass.forName(name);
 
-                    container.add((Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, definition.getProperty(name))));
+                    container.add((Annotation) Proxy
+                            .newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, definition.getProperty(name))));
                 }
                 parameterAnnotations.setProperty(index, container);
             }

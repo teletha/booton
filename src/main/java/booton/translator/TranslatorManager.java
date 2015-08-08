@@ -247,11 +247,18 @@ class TranslatorManager {
      * @return A result.
      */
     static boolean isIgnorableMethod(String name, String description) {
+        // serialization
         if (name.equals("writeObject") && description.equals("(Ljava/io/ObjectOutputStream;)V")) {
             return true;
-        }
-
-        if (name.equals("readObject") && description.equals("(Ljava/io/ObjectInputStream;)V")) {
+        } else if (name.equals("writeExternal") && description.equals("(Ljava/io/ObjectOutput;)V")) {
+            return true;
+        } else if (name.equals("writeReplace") && description.equals("()Ljava/lang/Object;")) {
+            return true;
+        } else if (name.equals("readObject") && description.equals("(Ljava/io/ObjectInputStream;)V")) {
+            return true;
+        } else if (name.equals("readExternal") && description.equals("(Ljava/io/ObjectInput;)V")) {
+            return true;
+        } else if ((name.equals("readObjectNoData") || name.equals("readResolve")) && description.equals("()V")) {
             return true;
         }
 

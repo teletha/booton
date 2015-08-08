@@ -9,28 +9,28 @@
  */
 package js.lang;
 
-import js.lang.NativeIntl.DateTimeFormat;
-import js.lang.NativeIntl.DateTimeFormat.Option;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import js.lang.NativeIntl.DateTimeFormat;
+import js.lang.NativeIntl.DateTimeFormat.Option;
 
 /**
- * @version 2014/03/09 23:02:23
+ * @version 2015/08/08 9:45:04
  */
 @RunWith(ScriptRunner.class)
 public class NativeDateTimeFormatTest {
 
     @Test
     public void format() throws Exception {
-        DateTimeFormat format = new DateTimeFormat("en");
-        String text = format.format(0);
-        System.out.println(text);
+        DateTimeFormat en = new DateTimeFormat("en");
+        DateTimeFormat jp = new DateTimeFormat("jp");
+
+        assert en.format(0).equals("70/01/01 0:00");
+        assert jp.format(0).equals("70/01/01 0:00");
     }
 
-    @Test
     public void option() throws Exception {
         Option option = new Option();
         option.year = "numeric";

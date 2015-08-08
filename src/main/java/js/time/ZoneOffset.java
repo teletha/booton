@@ -12,16 +12,18 @@ package js.time;
 import static js.time.LocalTime.*;
 
 import java.time.DateTimeException;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalField;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2014/04/29 9:40:57
  */
-@JavaAPIProvider(java.time.ZoneOffset.class)
-class ZoneOffset {
+// @JavaAPIProvider(java.time.ZoneOffset.class)
+class ZoneOffset extends ZoneId implements TemporalAccessor, TemporalAdjuster, Comparable<ZoneOffset> {
 
     /** Cache of time-zone offset by offset in seconds. */
     private static final ConcurrentMap<Integer, ZoneOffset> SECONDS_CACHE = new ConcurrentHashMap<>(16, 0.75f, 4);
@@ -55,6 +57,8 @@ class ZoneOffset {
      * @param totalSeconds the total time-zone offset in seconds, from -64800 to +64800
      */
     private ZoneOffset(int totalSeconds) {
+        super();
+
         this.totalSeconds = totalSeconds;
         this.id = buildId(totalSeconds);
     }
@@ -84,8 +88,54 @@ class ZoneOffset {
      *
      * @return the zone offset ID, not null
      */
+    @Override
     public String getId() {
         return id;
+    }
+
+    /**
+     * Gets the associated time-zone rules.
+     * <p>
+     * The rules will always return this offset when queried. The implementation class is immutable,
+     * thread-safe and serializable.
+     *
+     * @return the rules, not null
+     */
+    @Override
+    public ZoneRules getRules() {
+        return ZoneRules.of(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int compareTo(ZoneOffset o) {
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Temporal adjustInto(Temporal temporal) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSupported(TemporalField field) {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getLong(TemporalField field) {
+        return 0;
     }
 
     /**
