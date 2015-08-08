@@ -9,7 +9,6 @@
  */
 package js.util;
 
-import java.time.ZoneId;
 import java.util.Locale;
 import java.util.PropertyPermission;
 import java.util.ResourceBundle;
@@ -140,17 +139,17 @@ class TimeZone {
         return getDisplayName();
     }
 
-    /**
-     * Converts this {@code TimeZone} object to a {@code ZoneId}.
-     *
-     * @return a {@code ZoneId} representing the same time zone as this {@code TimeZone}
-     * @since 1.8
-     */
-    public ZoneId toZoneId() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
+    // /**
+    // * Converts this {@code TimeZone} object to a {@code ZoneId}.
+    // *
+    // * @return a {@code ZoneId} representing the same time zone as this {@code TimeZone}
+    // * @since 1.8
+    // */
+    // public ZoneId toZoneId() {
+    // // If this exception will be thrown, it is bug of this program. So we must rethrow the
+    // // wrapped error in here.
+    // throw new Error();
+    // }
 
     /**
      * Gets the default {@code TimeZone} of the Java virtual machine. If the cached default

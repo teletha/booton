@@ -295,7 +295,11 @@ class JSDouble extends JSNumber {
      * @return the bits that represent the floating-point number.
      * @since 1.3
      */
-    public static native long doubleToRawLongBits(double value);
+    public static long doubleToRawLongBits(double value) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 
     /**
      * Returns the {@code double} value corresponding to a given bit representation. The argument is
@@ -339,7 +343,9 @@ class JSDouble extends JSNumber {
      * @param bits any {@code long} integer.
      * @return the {@code double} floating-point value with the same bit pattern.
      */
-    public static native double longBitsToDouble(long bits);
+    public static double longBitsToDouble(long bits) {
+        return 0;
+    }
 
     /**
      * Returns a hexadecimal string representation of the {@code double} argument. All characters

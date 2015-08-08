@@ -1334,8 +1334,9 @@ class JSMath {
      * Returns a floating-point power of two in the normal range.
      */
     static double powerOfTwoD(int n) {
-        assert(n >= DoubleConsts.MIN_EXPONENT && n <= DoubleConsts.MAX_EXPONENT);
-        return Double
-                .longBitsToDouble((((long) n + (long) DoubleConsts.EXP_BIAS) << (DoubleConsts.SIGNIFICAND_WIDTH - 1)) & DoubleConsts.EXP_BIT_MASK);
+        long value = (long) n + (long) DoubleConsts.EXP_BIAS;
+        value = value << (DoubleConsts.SIGNIFICAND_WIDTH - 1);
+        value = value & DoubleConsts.EXP_BIT_MASK;
+        return Double.longBitsToDouble(value);
     }
 }

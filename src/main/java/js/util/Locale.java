@@ -9,6 +9,7 @@
  */
 package js.util;
 
+import java.util.List;
 import java.util.Locale.Category;
 
 import booton.translator.JavaAPIProvider;
@@ -19,6 +20,9 @@ import js.lang.Global;
  */
 @JavaAPIProvider(java.util.Locale.class)
 class Locale {
+
+    /** The availables. */
+    private static final List<Locale> locales = new ArrayList();
 
     /**
      * Useful constant for language.
@@ -409,6 +413,19 @@ class Locale {
      */
     public static Locale getDefault(Category category) {
         return getDefault();
+    }
+
+    /**
+     * Returns an array of all installed locales. The returned array represents the union of locales
+     * supported by the Java runtime environment and by installed
+     * {@link java.util.spi.LocaleServiceProvider LocaleServiceProvider} implementations. It must
+     * contain at least a <code>Locale</code> instance equal to {@link java.util.Locale#US
+     * Locale.US}.
+     *
+     * @return An array of installed locales.
+     */
+    public static Locale[] getAvailableLocales() {
+        return locales.toArray(new Locale[locales.size()]);
     }
 
     /**

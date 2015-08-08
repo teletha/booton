@@ -7,9 +7,15 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package js.time;
+package js.time.zone;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.zone.ZoneRules;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +24,7 @@ import java.util.Objects;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2015/08/08 16:40:06
+ * @version 2015/08/08 23:06:41
  */
 @JavaAPIProvider(java.time.zone.ZoneOffsetTransition.class)
 class ZoneOffsetTransition implements Comparable<ZoneOffsetTransition> {
@@ -90,6 +96,17 @@ class ZoneOffsetTransition implements Comparable<ZoneOffsetTransition> {
         this.transition = LocalDateTime.ofEpochSecond(epochSecond, 0, offsetBefore);
         this.offsetBefore = offsetBefore;
         this.offsetAfter = offsetAfter;
+    }
+
+    // -----------------------------------------------------------------------
+    /**
+     * Defend against malicious streams.
+     *
+     * @param s the stream to read
+     * @throws InvalidObjectException always
+     */
+    private void readObject(ObjectInputStream s) throws InvalidObjectException {
+        throw new InvalidObjectException("Deserialization via serialization delegate");
     }
 
     // -----------------------------------------------------------------------

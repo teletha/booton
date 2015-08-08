@@ -346,4 +346,19 @@ class DateFormatSymbols {
     public static final DateFormatSymbols getInstance(Locale locale) {
         return getInstance();
     }
+
+    /**
+     * Returns an array of all locales for which the <code>getInstance</code> methods of this class
+     * can return localized instances. The returned array represents the union of locales supported
+     * by the Java runtime and by installed {@link java.text.spi.DateFormatSymbolsProvider
+     * DateFormatSymbolsProvider} implementations. It must contain at least a <code>Locale</code>
+     * instance equal to {@link java.util.Locale#US Locale.US}.
+     *
+     * @return An array of locales for which localized <code>DateFormatSymbols</code> instances are
+     *         available.
+     * @since 1.6
+     */
+    public static Locale[] getAvailableLocales() {
+        return Locale.getAvailableLocales();
+    }
 }
