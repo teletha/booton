@@ -887,9 +887,6 @@ class Node {
                  */
                 condition.invert();
 
-                if (Debugger.isEnable()) {
-                    System.out.println(destination);
-                }
                 then = other;
                 elze = createConnectorNode(this, one);
                 follow = one;
