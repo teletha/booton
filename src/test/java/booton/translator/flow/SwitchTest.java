@@ -232,6 +232,30 @@ public class SwitchTest extends ScriptTester {
     }
 
     @Test
+    public void BreakNoDefaultWithIf() {
+        test(new Scriptable() {
+
+            public int act(@Param(from = 0, to = 5) int value) {
+                int result = 100;
+
+                switch (value) {
+                case 1:
+                case 2:
+                    if (value % 2 == 0) {
+                        result = -5;
+                    }
+                    break;
+
+                case 3:
+                    result = -2;
+                    break;
+                }
+                return result;
+            }
+        });
+    }
+
+    @Test
     public void breakInOtherFlow1() {
         test(new Scriptable() {
 

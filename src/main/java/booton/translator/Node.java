@@ -81,6 +81,9 @@ class Node {
     /** The dominator node. */
     Node dominator;
 
+    /** The flag whether this node has break expression or not. */
+    private boolean breaker = false;
+
     /** The state. */
     private boolean whileFindingDominator;
 
@@ -652,8 +655,7 @@ class Node {
             // =============================================================
             for (TryCatchFinally block : tries) {
                 buffer.write("}", "catch", "($)", "{");
-                buffer.write("$", "=", Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "$"), ";")
-                        .line();
+                buffer.write("$", "=", Javascript.writeMethodCode(Throwable.class, "wrap", Object.class, "$"), ";").line();
 
                 for (int i = 0; i < block.catches.size(); i++) {
                     Catch current = block.catches.get(i);
@@ -664,7 +666,8 @@ class Node {
                         buffer.write(variable, "=", "$;").line();
                         process(current.node, buffer);
                     } else {
-                        String condition = current.exception == Throwable.class ? "(true)" : "($ instanceof " + Javascript.computeClassName(current.exception) + ")";
+                        String condition = current.exception == Throwable.class ? "(true)"
+                                : "($ instanceof " + Javascript.computeClassName(current.exception) + ")";
                         buffer.write("if", condition, "{");
                         buffer.write(variable, "=", "$;").line();
                         process(current.node, buffer);
@@ -871,9 +874,7 @@ class Node {
         if (one.getPureIncoming().size() != 1) {
             if (one.getDominator() != this) {
                 /**
-                 * loop breaker
-                 * 
-                 * <pre>
+                 * loop breaker <pre>
                  * loop-structure ( ~ ) {
                  *   if (condition) {
                  *     break; // to one
@@ -886,15 +887,16 @@ class Node {
                  */
                 condition.invert();
 
+                if (Debugger.isEnable()) {
+                    System.out.println(destination);
+                }
                 then = other;
                 elze = createConnectorNode(this, one);
                 follow = one;
                 follow.currentCalls--;
             } else {
                 /**
-                 * no else
-                 * 
-                 * <pre>
+                 * no else <pre>
                  * if (condition) {
                  *      other
                  * }
@@ -909,9 +911,7 @@ class Node {
         } else if (other.getPureIncoming().size() != 1) {
             if (other.getDominator() != this) {
                 /**
-                 * loop breaker
-                 * 
-                 * <pre>
+                 * loop breaker <pre>
                  * loop-structure ( ~ ) {
                  *   if (condition) {
                  *     break; // to other
@@ -928,9 +928,7 @@ class Node {
                 follow.currentCalls--;
             } else {
                 /**
-                 * no else
-                 * 
-                 * <pre>
+                 * no else <pre>
                  * if (condition) {
                  *      one
                  * }
@@ -942,9 +940,7 @@ class Node {
             }
         } else {
             /**
-             * with else
-             * 
-             * <pre>
+             * with else <pre>
              * if (condition) {
              *      one
              * } else {
@@ -1028,7 +1024,8 @@ class Node {
             }
 
             if (Debugger.isEnable()) {
-                buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")   " + (loop != null ? loop : ""));
+                buffer.comment(id + " -> " + next.id + " (" + next.currentCalls + " of " + requiredCalls + ")   " + (loop != null ? loop
+                        : ""));
             }
 
             // normal process
@@ -1072,9 +1069,7 @@ class Node {
         }
 
         /**
-         * condition's destination node must be the process node
-         * 
-         * <pre>
+         * condition's destination node must be the process node <pre>
          * loop (condition) {
          *      process-node
          * }
@@ -1112,6 +1107,10 @@ class Node {
 
         next.previous = node;
         node.previous = previous;
+
+        if (previous.breaker) {
+            node.addExpression("break");
+        }
 
         // API definition
         return node;
@@ -1442,7 +1441,11 @@ class Node {
             }
 
             for (Node node : defaults.incoming) {
-                node.addExpression("break");
+                if (node.outgoing.size() == 1) {
+                    node.addExpression("break");
+                } else {
+                    node.breaker = true;
+                }
             }
 
             if (!noDefault) {
