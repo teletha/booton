@@ -9,6 +9,9 @@
  */
 package js.util;
 
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.PropertyPermission;
 import java.util.ResourceBundle;
@@ -150,15 +153,127 @@ class TimeZone {
         return getDisplayName();
     }
 
-    // /**
-    // * Converts this {@code TimeZone} object to a {@code ZoneId}.
-    // *
-    // * @return a {@code ZoneId} representing the same time zone as this {@code TimeZone}
-    // * @since 1.8
-    // */
-    // public ZoneId toZoneId() {
-    // return ZoneId.of(getID(), ZoneId.SHORT_IDS);
-    // }
+    /**
+     * Returns the offset of this time zone from UTC at the specified date. If Daylight Saving Time
+     * is in effect at the specified date, the offset value is adjusted with the amount of daylight
+     * saving.
+     * <p>
+     * This method returns a historically correct offset value if an underlying TimeZone
+     * implementation subclass supports historical Daylight Saving Time schedule and GMT offset
+     * changes.
+     *
+     * @param date the date represented in milliseconds since January 1, 1970 00:00:00 GMT
+     * @return the amount of time in milliseconds to add to UTC to get local time.
+     * @see Calendar#ZONE_OFFSET
+     * @see Calendar#DST_OFFSET
+     * @since 1.4
+     */
+    public int getOffset(long date) {
+        if (inDaylightTime(new Date(date))) {
+            return getRawOffset() + getDSTSavings();
+        }
+        return getRawOffset();
+    }
+
+    /**
+     * Returns the amount of time in milliseconds to add to UTC to get standard time in this time
+     * zone. Because this value is not affected by daylight saving time, it is called <I>raw
+     * offset</I>.
+     * <p>
+     * If an underlying <code>TimeZone</code> implementation subclass supports historical GMT offset
+     * changes, the method returns the raw offset value of the current date. In Honolulu, for
+     * example, its raw offset changed from GMT-10:30 to GMT-10:00 in 1947, and this method always
+     * returns -36000000 milliseconds (i.e., -10 hours).
+     *
+     * @return the amount of raw offset time in milliseconds to add to UTC.
+     * @see Calendar#ZONE_OFFSET
+     */
+    public int getRawOffset() {
+        return 0;
+    }
+
+    /**
+     * Returns the amount of time to be added to local standard time to get local wall clock time.
+     * <p>
+     * The default implementation returns 3600000 milliseconds (i.e., one hour) if a call to
+     * {@link #useDaylightTime()} returns {@code true}. Otherwise, 0 (zero) is returned.
+     * <p>
+     * If an underlying {@code TimeZone} implementation subclass supports historical and future
+     * Daylight Saving Time schedule changes, this method returns the amount of saving time of the
+     * last known Daylight Saving Time rule that can be a future prediction.
+     * <p>
+     * If the amount of saving time at any given time stamp is required, construct a
+     * {@link Calendar} with this {@code
+     * TimeZone} and the time stamp, and call {@link Calendar#get(int) Calendar.get}{@code (}
+     * {@link Calendar#DST_OFFSET}{@code )}.
+     *
+     * @return the amount of saving time in milliseconds
+     * @since 1.4
+     * @see #inDaylightTime(Date)
+     * @see #getOffset(long)
+     * @see #getOffset(int,int,int,int,int,int)
+     * @see Calendar#ZONE_OFFSET
+     */
+    public int getDSTSavings() {
+        if (useDaylightTime()) {
+            return 3600000;
+        }
+        return 0;
+    }
+
+    /**
+     * Queries if this {@code TimeZone} uses Daylight Saving Time.
+     * <p>
+     * If an underlying {@code TimeZone} implementation subclass supports historical and future
+     * Daylight Saving Time schedule changes, this method refers to the last known Daylight Saving
+     * Time rule that can be a future prediction and may not be the same as the current rule.
+     * Consider calling {@link #observesDaylightTime()} if the current rule should also be taken
+     * into account.
+     *
+     * @return {@code true} if this {@code TimeZone} uses Daylight Saving Time, {@code false},
+     *         otherwise.
+     * @see #inDaylightTime(Date)
+     * @see Calendar#DST_OFFSET
+     */
+    public boolean useDaylightTime() {
+        return false;
+    }
+
+    /**
+     * Queries if the given {@code date} is in Daylight Saving Time in this time zone.
+     *
+     * @param date the given Date.
+     * @return {@code true} if the given date is in Daylight Saving Time, {@code false}, otherwise.
+     */
+    public boolean inDaylightTime(Date date) {
+        return false;
+    }
+
+    /**
+     * Converts this {@code TimeZone} object to a {@code ZoneId}.
+     *
+     * @return a {@code ZoneId} representing the same time zone as this {@code TimeZone}
+     * @since 1.8
+     */
+    public ZoneId toZoneId() {
+        return ZoneId.of(getID(), ZoneId.SHORT_IDS);
+    }
+
+    /**
+     * Creates a copy of this <code>TimeZone</code>.
+     *
+     * @return a clone of this <code>TimeZone</code>
+     */
+    @Override
+    public Object clone() {
+        try {
+            TimeZone other = (TimeZone) super.clone();
+            other.ID = ID;
+            return other;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
+        }
+    }
 
     /**
      * Gets the default {@code TimeZone} of the Java virtual machine. If the cached default

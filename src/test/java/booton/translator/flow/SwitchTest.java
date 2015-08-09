@@ -14,6 +14,7 @@ import org.junit.Test;
 import booton.soeur.Param;
 import booton.soeur.ScriptTester;
 import booton.soeur.Scriptable;
+import booton.translator.Debuggable;
 
 /**
  * @version 2013/04/08 14:28:16
@@ -440,6 +441,28 @@ public class SwitchTest extends ScriptTester {
 
                     default:
                         result++;
+                        break;
+                    }
+                }
+                return result;
+            }
+        });
+    }
+
+    @Test
+    public void inIfElse() throws Exception {
+        test(new Scriptable() {
+
+            @Debuggable
+            public int act(@Param(from = 0, to = 2) int value) {
+                int result = 0;
+
+                if (value % 2 == 0) {
+                    result = -1;
+                } else {
+                    switch (value) {
+                    case 1:
+                        result = -3;
                         break;
                     }
                 }

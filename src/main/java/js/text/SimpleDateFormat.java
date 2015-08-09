@@ -62,8 +62,6 @@ class SimpleDateFormat extends DateFormat {
      * @exception ParseException if the beginning of the specified string cannot be parsed.
      */
     public Date parse(String source) throws ParseException {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return new Date();
     }
 }

@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        // enable(".+NumberPrinterParser", "format");
+        enable(".+NumberPrinterParser", "format");
 
         boolean flag = false;
 

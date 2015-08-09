@@ -21,6 +21,8 @@ import booton.translator.JavaAPIProvider;
 @JavaAPIProvider(java.text.DateFormat.class)
 abstract class DateFormat extends Format {
 
+    private boolean lenient;
+
     /**
      * Formats a Date into a date/time string.
      * 
@@ -69,8 +71,6 @@ abstract class DateFormat extends Format {
      * @see java.util.Calendar#setLenient(boolean)
      */
     public void setLenient(boolean lenient) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        this.lenient = lenient;
     }
 }

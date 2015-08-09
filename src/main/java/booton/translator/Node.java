@@ -1106,6 +1106,7 @@ class Node {
         node.previous = previous;
 
         if (previous.breaker) {
+            previous.breaker = false;
             node.addExpression("break");
         }
 
@@ -1438,10 +1439,12 @@ class Node {
             }
 
             for (Node node : defaults.incoming) {
-                if (node.outgoing.size() == 1) {
-                    node.addExpression("break");
-                } else {
-                    node.breaker = true;
+                if (node.hasDominator(enter)) {
+                    if (node.outgoing.size() == 1) {
+                        node.addExpression("break");
+                    } else {
+                        node.breaker = true;
+                    }
                 }
             }
 

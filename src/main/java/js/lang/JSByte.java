@@ -49,6 +49,22 @@ class JSByte extends JSNumber {
     }
 
     /**
+     * Compares two {@code byte} values numerically. The value returned is identical to what would
+     * be returned by: <pre>
+     *    Byte.valueOf(x).compareTo(Byte.valueOf(y))
+     * </pre>
+     *
+     * @param x the first {@code byte} to compare
+     * @param y the second {@code byte} to compare
+     * @return the value {@code 0} if {@code x == y}; a value less than {@code 0} if {@code x < y};
+     *         and a value greater than {@code 0} if {@code x > y}
+     * @since 1.7
+     */
+    public static int compare(byte x, byte y) {
+        return x - y;
+    }
+
+    /**
      * Parses the string argument as a signed decimal {@code byte}. The characters in the string
      * must all be decimal digits, except that the first character may be an ASCII minus sign
      * {@code '-'} (<code>'&#92;u002D'</code>) to indicate a negative value or an ASCII plus sign
@@ -105,8 +121,8 @@ class JSByte extends JSNumber {
      * argument were given to the {@link #parseByte(java.lang.String)} method. The result is a
      * {@code Byte} object that represents the {@code byte} value specified by the string.
      * <p>
-     * In other words, this method returns a {@code Byte} object equal to the value of: <blockquote>
-     * {@code new Byte(Byte.parseByte(s))} </blockquote>
+     * In other words, this method returns a {@code Byte} object equal to the value of:
+     * <blockquote> {@code new Byte(Byte.parseByte(s))} </blockquote>
      * 
      * @param value the string to be parsed
      * @return a {@code Byte} object holding the value represented by the string argument
@@ -124,8 +140,8 @@ class JSByte extends JSNumber {
      * result is a {@code Byte} object that represents the {@code byte} value specified by the
      * string.
      * <p>
-     * In other words, this method returns a {@code Byte} object equal to the value of: <blockquote>
-     * {@code new Byte(Byte.parseByte(s, radix))} </blockquote>
+     * In other words, this method returns a {@code Byte} object equal to the value of:
+     * <blockquote> {@code new Byte(Byte.parseByte(s, radix))} </blockquote>
      * 
      * @param value the string to be parsed
      * @param radix the radix to be used in interpreting {@code s}

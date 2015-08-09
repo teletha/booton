@@ -37,4 +37,10 @@ class TimeZoneNameUtility {
         // wrapped error in here.
         throw new Error();
     }
+
+    public static String retrieveGenericDisplayName(String bane, int i, Locale locale) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 }
