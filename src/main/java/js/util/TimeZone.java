@@ -265,7 +265,7 @@ class TimeZone {
      * @return a clone of this <code>TimeZone</code>
      */
     @Override
-    public Object clone() {
+    public Object clone() throws CloneNotSupportedException {
         try {
             TimeZone other = (TimeZone) super.clone();
             other.ID = ID;

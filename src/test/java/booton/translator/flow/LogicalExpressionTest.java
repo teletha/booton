@@ -696,8 +696,7 @@ public class LogicalExpressionTest extends ScriptTester {
         test(new Scriptable() {
 
             public int act(@Param(from = 0, to = 100) int value) {
-                return value % 2 == 0 ? value % 3 == 0 || value % 4 == 0 && (value % 5 == 0 || value % 7 == 0) ? 20
-                        : 10 : value;
+                return value % 2 == 0 ? value % 3 == 0 || value % 4 == 0 && (value % 5 == 0 || value % 7 == 0) ? 20 : 10 : value;
             }
         });
     }

@@ -622,7 +622,11 @@ class JavaMethodCompiler extends MethodVisitor {
             // [LEFT value]
             // [label]
             // [RIGHT value]
-            boolean transition = collect(((OperandCondition) third).then).contains(right);
+            boolean conditionTransition = collect(((OperandCondition) third).then).contains(right);
+
+            // In ternary operator, the left node's outgoing node must not contain right node.
+            // But the outgoing nodes contains right node, this sequence will be logical expression.
+            // boolean leftTransition = condition == left || !left.outgoing.contains(right);
 
             // The condition node must be dominator of the left and right nodes.
             boolean dominator = left.hasDominator(condition) && right.hasDominator(condition);
@@ -631,7 +635,7 @@ class JavaMethodCompiler extends MethodVisitor {
             // value are in same node.
             boolean values = condition != left && right.hasDominator(left);
 
-            if (transition && dominator && !values) {
+            if (conditionTransition && dominator && !values) {
                 Debugger.print("Create ternary operator. condition[" + third + "]  left[" + second + "]  right[" + first + "]");
                 Debugger.print(nodes);
 
@@ -2116,8 +2120,18 @@ class JavaMethodCompiler extends MethodVisitor {
             }
 
             // dispose empty node recursively
-            if (recursive && target.previous != null && target.previous.stack.isEmpty()) {
-                dispose(target.previous, clearStack, recursive);
+            if (recursive && target.previous != null) {
+                if (target.previous.stack.isEmpty()) {
+                    dispose(target.previous, clearStack, recursive);
+                } else {
+                    Node previous = target.previous.previous;
+
+                    if (previous != null && previous.stack.size() == 1 && previous.stack
+                            .peek() instanceof OperandCondition && target.previous.outgoing
+                                    .contains(((OperandCondition) previous.stack.peek()).then)) {
+                        dispose(target.previous, clearStack, recursive);
+                    }
+                }
             }
         }
     }
@@ -2630,7 +2644,7 @@ class JavaMethodCompiler extends MethodVisitor {
             // Search the sequential conditional operands in the specified node from right to left.
             for (int index = 0; index < node.stack.size(); index++) {
                 Operand operand = node.peek(index);
-
+                Debugger.print(index + "   " + node.stack.size());
                 if (operand instanceof OperandCondition == false) {
                     // non-conditional operand is found
                     if (conditions.isEmpty()) {
@@ -2659,6 +2673,13 @@ class JavaMethodCompiler extends MethodVisitor {
                     // this is last condition
                 }
                 conditions.add(condition);
+
+                // if (index + 1 == node.stack.size()) {
+                // if (node.peek(index + 1) instanceof OperandCondition) {
+                // node = node.previous;
+                // index = 0;
+                // }
+                // }
             }
 
             this.conditionalHead = node.stack.size() == start + conditions.size();
