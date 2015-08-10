@@ -63,6 +63,16 @@ class OperandCondition extends Operand {
     private boolean group = false;
 
     /**
+     * @param condition
+     */
+    OperandCondition(OperandCondition condition) {
+        this.then = condition.then;
+        this.elze = condition.elze;
+        this.operator = condition.operator;
+        this.group = condition.group;
+    }
+
+    /**
      * @param left
      * @param operator
      * @param right
@@ -137,7 +147,7 @@ class OperandCondition extends Operand {
      * {@inheritDoc}
      */
     @Override
-    Operand invert() {
+    OperandCondition invert() {
         // invert each operands
         left.invert();
         right.invert();

@@ -35,6 +35,16 @@ class OperandTernaryCondition extends OperandCondition {
      * {@inheritDoc}
      */
     @Override
+    OperandCondition invert() {
+        condition.invert();
+
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString() {
         return condition + "?" + left + ":" + right;
     }

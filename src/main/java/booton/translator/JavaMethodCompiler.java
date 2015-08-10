@@ -656,8 +656,7 @@ class JavaMethodCompiler extends MethodVisitor {
                         condition
                                 .addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
                     } else {
-                        condition.addOperand(new OperandEnclose(new OperandExpression(third.invert().disclose() + "?" + second
-                                .disclose() + ":" + first.disclose(), new InferredType(first, second))));
+                        condition.addOperand(new OperandEnclose(new OperandTernary(((OperandCondition) third).invert(), second, first)));
                     }
                 }
 
@@ -2123,14 +2122,6 @@ class JavaMethodCompiler extends MethodVisitor {
             if (recursive && target.previous != null) {
                 if (target.previous.stack.isEmpty()) {
                     dispose(target.previous, clearStack, recursive);
-                } else {
-                    Node previous = target.previous.previous;
-
-                    if (previous != null && previous.stack.size() == 1 && previous.stack
-                            .peek() instanceof OperandCondition && target.previous.outgoing
-                                    .contains(((OperandCondition) previous.stack.peek()).then)) {
-                        dispose(target.previous, clearStack, recursive);
-                    }
                 }
             }
         }
