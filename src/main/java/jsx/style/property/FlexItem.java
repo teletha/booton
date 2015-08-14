@@ -9,6 +9,8 @@
  */
 package jsx.style.property;
 
+import static jsx.style.Vendor.*;
+
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
@@ -17,6 +19,15 @@ import jsx.style.value.Unit;
  * @version 2014/10/29 11:01:22
  */
 public class FlexItem extends PropertyDefinition<FlexItem> {
+
+    /**
+     * <p>
+     * The align-self CSS property aligns flex items of the current flex line overriding the
+     * align-items value. If any of the flex item's cross-axis margin is set to auto, then
+     * align-self is ignored.
+     * </p>
+     */
+    public final AlignSelf alignSelf = new AlignSelf();
 
     /**
      * <p>
@@ -79,5 +90,80 @@ public class FlexItem extends PropertyDefinition<FlexItem> {
         value("-webkit-order", order);
 
         return this;
+    }
+
+    /**
+     * @version 2013/07/22 11:33:09
+     */
+    public class AlignSelf extends PropertyDefinition<FlexItem> {
+
+        /**
+         * 
+         */
+        private AlignSelf() {
+            super("align-self", FlexItem.this, Webkit);
+        }
+
+        /**
+         * <p>
+         * The cross-start margin edge of the flex item is flushed with the cross-start edge of the
+         * line.
+         * </p>
+         * 
+         * @return
+         */
+        public FlexItem start() {
+            return value("flex-start");
+        }
+
+        /**
+         * <p>
+         * The cross-end margin edge of the flex item is flushed with the cross-end edge of the
+         * line.
+         * </p>
+         * 
+         * @return
+         */
+        public FlexItem end() {
+            return value("flex-end");
+        }
+
+        /**
+         * <p>
+         * The flex item's margin box is centered within the line on the cross-axis. If the
+         * cross-size of the item is larger than the flex container, it will overflow equally in
+         * both directions.
+         * </p>
+         * 
+         * @return
+         */
+        public FlexItem center() {
+            return value("center");
+        }
+
+        /**
+         * <p>
+         * All flex items are aligned such that their baselines align. The item with the largest
+         * distance between its cross-start margin edge and its baseline is flushed with the
+         * cross-start edge of the line.
+         * </p>
+         * 
+         * @return
+         */
+        public FlexItem baseline() {
+            return value("baseline");
+        }
+
+        /**
+         * <p>
+         * Flex items are stretched such as the cross-size of the item's margin box is the same as
+         * the line while respecting width and height constraints.
+         * </p>
+         * 
+         * @return
+         */
+        public FlexItem stretch() {
+            return value("stretch");
+        }
     }
 }
