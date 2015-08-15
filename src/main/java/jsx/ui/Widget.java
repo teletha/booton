@@ -130,7 +130,7 @@ public abstract class Widget extends EventEmittable {
          */
         WidgetLog.Virtualize.start();
         virtualize(structure);
-        WidgetLog.Virtualize.end();
+        WidgetLog.Virtualize.stop();
 
         /**
          * <p>
@@ -164,8 +164,7 @@ public abstract class Widget extends EventEmittable {
      * @return A widget with the specified models.
      */
     public static final <W extends Widget1<First>, First> W of(Class<W> widgetType, First model1) {
-        return (W) widgets
-                .computeIfAbsent(Objects.hash(widgetType, model1), key -> create(widgetType, new Object[] {model1}));
+        return (W) widgets.computeIfAbsent(Objects.hash(widgetType, model1), key -> create(widgetType, new Object[] {model1}));
     }
 
     /**
@@ -245,7 +244,7 @@ public abstract class Widget extends EventEmittable {
         loophole = models;
         WidgetLog.Make.start();
         widget = I.make(widgetType);
-        WidgetLog.Make.end();
+        WidgetLog.Make.stop();
         loophole = null;
 
         return widget;
@@ -392,7 +391,7 @@ public abstract class Widget extends EventEmittable {
             // create patch to manipulate DOM and apply it
             WidgetLog.Diff.start();
             PatchDiff.apply(virtual, next);
-            WidgetLog.Diff.end();
+            WidgetLog.Diff.stop();
 
             Profile.show();
 

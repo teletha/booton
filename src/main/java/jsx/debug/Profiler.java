@@ -9,7 +9,6 @@
  */
 package jsx.debug;
 
-import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,24 +18,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import booton.translator.JavascriptNative;
-import booton.translator.JavascriptNativeProperty;
-import js.lang.NativeArray;
 import kiss.Interceptor;
 
 /**
- * @version 2015/02/22 15:22:02
+ * @version 2015/08/15 22:20:21
  */
-public class Profiler<K, E, Y> extends Interceptor<Profilable> {
+class Profiler<K, E, Y> extends Interceptor<Profilable> {
 
     static boolean execute = true;
-
-    private static final Map<MethodHandle, Profile> phases = new HashMap();
-
-    private static final Map<Profile, Measurement> measurements = new HashMap();
-
-    /** The context manager. */
-    private static final NativeArray<Measurement> stack = new NativeArray();
 
     /** The profiling manager. */
     private static final ConcurrentHashMap<String, Result> results = new ConcurrentHashMap();
@@ -49,89 +38,11 @@ public class Profiler<K, E, Y> extends Interceptor<Profilable> {
      */
     @Override
     protected Object invoke(Object... params) {
-        Profile phase = phases.computeIfAbsent(method, m -> () -> that.getClass().getSimpleName() + "#" + name);
-
-        start(phase);
+        start(() -> that.getClass().getSimpleName() + "#" + name, null, null, null);
         Object value = super.invoke(params);
-        end(phase);
+        stop();
 
         return value;
-    }
-
-    /**
-     * <p>
-     * Start profiling with the specified phase.
-     * </p>
-     * 
-     * @param phase A profiling phase to start.
-     */
-    static final void start(Profile phase) {
-        Measurement latest = stack.last();
-
-        if (latest != null) {
-            latest.stop();
-        }
-
-        Measurement measurement = measurements.get(phase);
-
-        if (measurement == null) {
-            measurement = new Measurement(phase);
-            measurements.put(phase, measurement);
-        }
-
-        stack.push(latest = measurement);
-        latest.start2();
-        latest.count++;
-    }
-
-    /**
-     * <p>
-     * End profiling with the specified phase.
-     * </p>
-     * 
-     * @param phase A profiling phase to end.
-     */
-    static final void end(Profile phase) {
-        Measurement latest = stack.length() == 1 ? stack.get(0) : stack.pop();
-        latest.stop();
-
-        latest = stack.get(stack.length() - 1);
-
-        if (latest != null) {
-            latest.start2();
-        }
-    }
-
-    /**
-     * <p>
-     * Display result.
-     * </p>
-     */
-    static void show() {
-        List<Measurement> list = new ArrayList(measurements.values());
-        Collections.sort(list, Comparator.<Measurement> comparingDouble(item -> item.elapsed).reversed());
-
-        double total = 0;
-
-        for (Measurement context : list) {
-            total += context.elapsed;
-        }
-
-        Measurement root = stack.get(0);
-
-        System.out.println("Total Time: " + (root.end - root.start) + "ms");
-        System.out.println("Total Profiled Time: " + total + "ms");
-
-        for (Measurement context : list) {
-            if (context.elapsed != 0) {
-                System.out.println(context.phase
-                        .name() + " " + context.elapsed + "ms    " + context.elapsed / total * 100 + "%  " + context.count + "calls");
-            }
-        }
-
-        // clean up
-        measurements.clear();
-        stack.clear();
     }
 
     /**
@@ -141,7 +52,7 @@ public class Profiler<K, E, Y> extends Interceptor<Profilable> {
      * 
      * @param key1
      */
-    public static final <K, E, Y> void start(Profile profile, K key1, E key2, Y key3) {
+    static final <K, E, Y> void start(Profile profile, K key1, E key2, Y key3) {
         if (execute) {
             latest.stop();
 
@@ -159,7 +70,7 @@ public class Profiler<K, E, Y> extends Interceptor<Profilable> {
      * Stop profiling phase.
      * </p>
      */
-    public static final void stop() {
+    static final void stop() {
         if (execute) {
             latest.stop();
             latest = latest.previous;
@@ -174,7 +85,7 @@ public class Profiler<K, E, Y> extends Interceptor<Profilable> {
      * 
      * @param results
      */
-    public static final void show2() {
+    static final void show() {
         if (execute) {
             long total = 0;
             Map<Object, Result> grouped = new HashMap();
@@ -202,6 +113,7 @@ public class Profiler<K, E, Y> extends Interceptor<Profilable> {
                     result.profile.show(result.name, ms(result.elapsed), (result.elapsed / total) * 100, result.count);
                 }
             }
+            results.clear();
         }
     }
 
@@ -215,57 +127,6 @@ public class Profiler<K, E, Y> extends Interceptor<Profilable> {
      */
     private static long ms(long nano) {
         return nano / 1000000;
-    }
-
-    /**
-     * @version 2015/02/22 15:36:52
-     */
-    private static class Measurement implements JavascriptNative {
-
-        /** The associated phase. */
-        private final Profile phase;
-
-        /** The latest recorded time. */
-        private long latest;
-
-        /** The elapsed time of the specified phase. */
-        @JavascriptNativeProperty
-        private long elapsed;
-
-        /** The start time of the specified phase. */
-        private long start;
-
-        /** The end time of the specified phase. */
-        private long end;
-
-        private int count;
-
-        /**
-         * @param phase
-         */
-        private Measurement(Profile phase) {
-            this.phase = phase;
-        }
-
-        /**
-         * 
-         */
-        private void start2() {
-            long now = System.currentTimeMillis();
-
-            if (start == 0) {
-                start = now;
-            }
-            latest = now;
-        }
-
-        /**
-         * 
-         */
-        private void stop() {
-            end = System.currentTimeMillis();
-            elapsed += end - latest;
-        }
     }
 
     /**

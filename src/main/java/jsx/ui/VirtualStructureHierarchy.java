@@ -44,7 +44,7 @@ class VirtualStructureHierarchy extends Prototype<Widget> {
         if (widget == null) {
             WidgetLog.GetWidget.start();
             widget = super.get();
-            WidgetLog.GetWidget.end();
+            WidgetLog.GetWidget.stop();
         }
         return widget;
     }

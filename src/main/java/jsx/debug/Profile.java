@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * @version 2015/02/22 15:23:08
+ * @version 2015/08/15 22:34:09
  */
 public interface Profile<K, E, Y> {
 
@@ -25,40 +25,6 @@ public interface Profile<K, E, Y> {
      * @return A name of this phase.
      */
     public String name();
-
-    /**
-     * <p>
-     * Start profiling.
-     * </p>
-     */
-    public default void start() {
-        start((K) null, (E) null, (Y) null);
-    }
-
-    /**
-     * <p>
-     * End profiling.
-     * </p>
-     */
-    public default void end() {
-        stop();
-    }
-
-    /**
-     * <p>
-     * Execute profiling.
-     * </p>
-     * 
-     * @param action
-     */
-    public default void execute(Runnable action) {
-        start();
-        try {
-            action.run();
-        } finally {
-            end();
-        }
-    }
 
     /**
      * <p>
@@ -88,28 +54,31 @@ public interface Profile<K, E, Y> {
         return Objects.hash(key1, key2, key3);
     }
 
-    public default void show(String name, long elapsedMillSeconds, float occupancy, long count) {
-        System.out.println(name + "  \t" + elapsedMillSeconds + "ms  \t" + occupancy + "%  \t" + count + "calls");
-    }
-
     /**
      * <p>
      * Display result.
      * </p>
      */
     public static void show() {
-        Profiler.show2();
+        Profiler.show();
     }
 
     /**
      * <p>
-     * Start profiling phase with the specified grouping key.
+     * Display each result.
      * </p>
-     * 
-     * @param key1
      */
-    public default void start(Runnable process) {
-        start((K) null, (E) null, (Y) null, process);
+    public default void show(String name, long elapsedMillSeconds, float occupancy, long count) {
+        System.out.println(name + "  \t" + elapsedMillSeconds + "ms  \t" + occupancy + "%  \t" + count + "calls");
+    }
+
+    /**
+     * <p>
+     * Start profiling.
+     * </p>
+     */
+    public default void start() {
+        start((K) null, (E) null, (Y) null);
     }
 
     /**
@@ -143,6 +112,17 @@ public interface Profile<K, E, Y> {
      */
     public default void start(K key1, E key2, Y key3) {
         Profiler.start(this, key1, key2, key3);
+    }
+
+    /**
+     * <p>
+     * Start profiling phase with the specified grouping key.
+     * </p>
+     * 
+     * @param key1
+     */
+    public default void start(Runnable process) {
+        start((K) null, (E) null, (Y) null, process);
     }
 
     /**
@@ -228,5 +208,21 @@ public interface Profile<K, E, Y> {
      */
     public default void stop() {
         Profiler.stop();
+    }
+
+    /**
+     * <p>
+     * Execute profiling.
+     * </p>
+     * 
+     * @param action
+     */
+    public default void execute(Runnable action) {
+        start();
+        try {
+            action.run();
+        } finally {
+            stop();
+        }
     }
 }

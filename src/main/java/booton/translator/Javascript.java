@@ -176,7 +176,7 @@ public class Javascript {
             }
         }
 
-        BootonLog.JavascriptConstructor.end();
+        BootonLog.JavascriptConstructor.stop();
     }
 
     /**
@@ -267,7 +267,7 @@ public class Javascript {
         // close stream
         I.quiet(output);
 
-        BootonLog.WriteTo.end();
+        BootonLog.WriteTo.stop();
     }
 
     /**
@@ -318,7 +318,7 @@ public class Javascript {
                     } catch (IOException e) {
                         throw I.quiet(e);
                     } finally {
-                        BootonLog.WriteJSActually.end();
+                        BootonLog.WriteJSActually.stop();
                     }
 
                     // write dependency classes
@@ -397,7 +397,7 @@ public class Javascript {
                             BootonLog.PraseByteCode.start(source);
                             new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
                         } finally {
-                            BootonLog.PraseByteCode.end();
+                            BootonLog.PraseByteCode.stop();
                         }
                     }
                 } catch (TranslationError e) {
