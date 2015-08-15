@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import booton.translator.Debuggable;
 import jsx.style.Style;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.UI;
@@ -107,7 +106,6 @@ public class VirtualStructureReferenceCheckTest {
     }
 
     @Test
-    @Debuggable
     public void widget() throws Exception {
         SingleWidget widget = Widget.of(SingleWidget.class);
 
