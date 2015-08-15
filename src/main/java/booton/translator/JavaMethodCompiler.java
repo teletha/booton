@@ -656,7 +656,7 @@ class JavaMethodCompiler extends MethodVisitor {
                         condition
                                 .addOperand(new OperandTernaryCondition((OperandCondition) third, (OperandCondition) second, (OperandCondition) first));
                     } else {
-                        condition.addOperand(new OperandEnclose(new OperandTernary(((OperandCondition) third).invert(), second, first)));
+                        condition.addOperand(new OperandTernary(((OperandCondition) third).invert(), second, first).encolose());
                     }
                 }
 
