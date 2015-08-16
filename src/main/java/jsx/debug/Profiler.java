@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import kiss.Interceptor;
 
@@ -103,6 +104,11 @@ class Profiler<K, E, Y> extends Interceptor<Profilable> {
             List<Result> list = new ArrayList(grouped.values());
             Collections.sort(list, Comparator.<Result> comparingDouble(item -> item.elapsed).reversed());
 
+            // compute maximum size
+            int nameSize = max(list, item -> item.name);
+            int elapsedSize = max(list, item -> String.valueOf(item.elapsed));
+            int countSize = max(list, item -> String.valueOf(item.count));
+
             // size filter
             list = list.subList(0, Math.min(15, list.size()));
 
@@ -110,11 +116,34 @@ class Profiler<K, E, Y> extends Interceptor<Profilable> {
 
             for (Result result : list) {
                 if (result.elapsed != 0) {
-                    result.profile.show(result.name, ms(result.elapsed), (result.elapsed / total) * 100, result.count);
+                    result.profile
+                            .show(nameSize, result.name, elapsedSize, ms(result.elapsed), (int) (((double) result.elapsed / total) * 100), countSize, result.count);
                 }
             }
             results.clear();
         }
+    }
+
+    /**
+     * <p>
+     * Helper method to build formatter.
+     * </p>
+     * 
+     * @param list
+     * @param value
+     * @return
+     */
+    private static int max(List<Result> list, Function<Result, String> value) {
+        int max = 0;
+
+        for (Result result : list) {
+            int length = value.apply(result).length();
+
+            if (max < length) {
+                max = length;
+            }
+        }
+        return max;
     }
 
     /**
@@ -127,6 +156,16 @@ class Profiler<K, E, Y> extends Interceptor<Profilable> {
      */
     private static long ms(long nano) {
         return nano / 1000000;
+    }
+
+    static String padding(String value, int size) {
+        StringBuilder builder = new StringBuilder(value);
+
+        for (int i = size - value.length(); 0 <= i; i--) {
+            builder.append(" ");
+        }
+        builder.append("\t");
+        return builder.toString();
     }
 
     /**

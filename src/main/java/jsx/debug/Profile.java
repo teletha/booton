@@ -68,8 +68,9 @@ public interface Profile<K, E, Y> {
      * Display each result.
      * </p>
      */
-    public default void show(String name, long elapsedMillSeconds, float occupancy, long count) {
-        System.out.println(name + "  \t" + elapsedMillSeconds + "ms  \t" + occupancy + "%  \t" + count + "calls");
+    public default void show(int nameSize, String name, int elapsedSize, long elapsedMillSeconds, int occupancy, int countSize, long count) {
+        System.out.println(Profiler.padding(elapsedMillSeconds + "ms", elapsedSize + 2) + Profiler.padding(occupancy + "%", 3) + Profiler
+                .padding(count + "call", countSize + 4) + name);
     }
 
     /**
