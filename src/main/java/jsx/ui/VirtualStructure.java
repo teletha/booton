@@ -509,7 +509,6 @@ public final class VirtualStructure {
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) {
                 style.assignTo(container.classList, container.inlines);
-
                 container.contextualized = createSpecifiedListenerDifinitions(style);
             }
 

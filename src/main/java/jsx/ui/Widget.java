@@ -32,6 +32,8 @@ import javafx.collections.ListChangeListener;
 import js.dom.Element;
 import js.dom.UIAction;
 import js.dom.UIEvent;
+import js.lang.NativeArray;
+import js.lang.NativeFunction;
 import jsx.debug.Profile;
 import jsx.style.Style;
 import jsx.style.ValueStyle;
@@ -76,6 +78,13 @@ public abstract class Widget {
 
         rendering = new Rendering(this, root);
         rendering.willExecute();
+
+        // register event listener
+        if (contexts != null) {
+            for (int i = 0, length = contexts.length(); i < length; i++) {
+                contexts.get(i).register(root);
+            }
+        }
     }
 
     protected boolean shouldUpdate() {
@@ -251,6 +260,73 @@ public abstract class Widget {
                     return;
                 }
             }
+        }
+    }
+
+    private NativeArray<EventContext> contexts;
+
+    protected final <V> Events<V> when(UIAction actionType, Style locator, Class<V> contextType) {
+        EventContext context = new EventContext(actionType, locator, contextType);
+
+        if (contexts == null) {
+            contexts = new NativeArray();
+        }
+        contexts.push(context);
+
+        return context.events;
+    }
+
+    /**
+     * @version 2015/08/19 21:32:14
+     */
+    private static class EventContext<V> {
+
+        private final UIAction actionType;
+
+        private final Style locator;
+
+        private final Class<V> contextType;
+
+        private final Events<V> events;
+
+        /** The actual listeners. */
+        private final NativeArray<Observer> observers = new NativeArray();
+
+        /**
+         * @param actionType
+         * @param locator
+         * @param contextType
+         */
+        private EventContext(UIAction actionType, Style locator, Class<V> contextType) {
+            this.actionType = actionType;
+            this.locator = locator;
+            this.contextType = contextType;
+            this.events = new Events<V>(observer -> {
+                observers.push(observer);
+
+                return () -> {
+                    observers.remove(observers.indexOf(observer));
+                };
+            });
+        }
+
+        /**
+         * <p>
+         * Register event listener to the specified {@link Element}.
+         * </p>
+         * 
+         * @param element
+         */
+        private void register(Element element) {
+            element.addEventListener(actionType.name, new NativeFunction<UIEvent>(event -> {
+                if (actionType == UIAction.ClickRight) {
+                    event.preventDefault();
+                }
+
+                for (int i = 0, length = observers.length(); i < length; i++) {
+                    System.out.println(event.target);
+                }
+            }));
         }
     }
 

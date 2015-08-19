@@ -146,11 +146,7 @@ public class VirtualElement extends VirtualNode<Element> {
         builder.append("<").append(element.name);
 
         for (int i = 0; i < element.attributes.size(); i++) {
-            builder.append(" ")
-                    .append(element.attributes.key(i))
-                    .append("=\"")
-                    .append(element.attributes.value(i))
-                    .append("\"");
+            builder.append(" ").append(element.attributes.key(i)).append("=\"").append(element.attributes.value(i)).append("\"");
         }
 
         if (element.classList.length() != 0) {
