@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
@@ -644,7 +645,7 @@ public final class VirtualStructure {
 
                 for (T item : items) {
                     context = item;
-                    modifier = item.hashCode();
+                    modifier = Objects.hashCode(item);
                     child.accept(item);
                 }
                 context = last;

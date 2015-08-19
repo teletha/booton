@@ -12,7 +12,6 @@ package jsx.application;
 import static js.lang.Global.*;
 
 import java.lang.reflect.Method;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,9 +31,6 @@ import kiss.Singleton;
  */
 @Manageable(lifestyle = Singleton.class)
 public abstract class NewApplication {
-
-    /** The application configuration. */
-    final Config config = new Config();
 
     /** The path router. */
     private final NativeArray<PageRoute> router = new NativeArray();
@@ -78,6 +74,24 @@ public abstract class NewApplication {
 
     /**
      * <p>
+     * Retrieve the default widget.
+     * </p>
+     */
+    protected abstract Supplier<Widget> defaultWidget();
+
+    /**
+     * <p>
+     * Retrieve the general error widget.
+     * </p>
+     * 
+     * @return
+     */
+    protected Supplier<Widget> errorWidget() {
+        return defaultWidget();
+    }
+
+    /**
+     * <p>
      * Dispatch page by the specified path.
      * </p>
      * 
@@ -114,12 +128,8 @@ public abstract class NewApplication {
      * @param widget
      */
     private void show(Widget widget) {
-        if (widget == null && config.defaultPage != null) {
-            widget = config.defaultPage.get();
-        }
-
         if (widget == null) {
-            throw new IllegalAccessError("The default page is not found. Use Config#defaultPage method.");
+            widget = findDefault();
         }
 
         // create element cradle
@@ -134,17 +144,35 @@ public abstract class NewApplication {
 
     /**
      * <p>
+     * Helper method to retrieve the default widget.
+     * </p>
+     * 
+     * @return
+     */
+    private Widget findDefault() {
+        Supplier<Widget> supplier = defaultWidget();
+
+        if (supplier != null) {
+            Widget widget = supplier.get();
+
+            if (widget != null) {
+                return widget;
+            }
+        }
+
+        throw new IllegalStateException("Default widget is not found.");
+    }
+
+    /**
+     * <p>
      * Initialize application.
      * </p>
      * 
      * @param applicationClass An application class to start.
      * @param configurator You can configure your application.
      */
-    protected static <A extends NewApplication> void initialize(Class<A> applicationClass, BiConsumer<Config, A> configurator) {
+    protected static <A extends NewApplication> void initialize(Class<A> applicationClass) {
         A application = I.make(applicationClass);
-
-        // Configure application
-        configurator.accept(application.config, application);
 
         // View initial page by URL.
         application.dispatch(location.hash);
@@ -197,28 +225,6 @@ public abstract class NewApplication {
                 return (Widget) method.invoke(NewApplication.this, parameters);
             } catch (Exception e) {
                 throw I.quiet(e);
-            }
-        }
-    }
-
-    /**
-     * @version 2015/08/18 15:38:18
-     */
-    protected static class Config {
-
-        /** The defualt page dispatcher. */
-        private Supplier<Widget> defaultPage;
-
-        /**
-         * <p>
-         * Set default page.
-         * </p>
-         * 
-         * @param dispatcher
-         */
-        public void defaultPage(Supplier<Widget> dispatcher) {
-            if (dispatcher != null) {
-                this.defaultPage = dispatcher;
             }
         }
     }
