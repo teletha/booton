@@ -57,6 +57,6 @@ public class Button extends LowLevelWidget<Button> {
      */
     @Override
     protected void virtualize(VirtualStructure $〡) {
-        $〡.e("button", 0).〡(rootStyle.getValue(), label.get());
+        $〡.e("button", 0).ⅼ(rootStyle.getValue(), label.get());
     }
 }

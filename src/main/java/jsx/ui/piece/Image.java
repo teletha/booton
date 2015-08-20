@@ -28,7 +28,7 @@ public class Image extends LowLevelWidget<Image> {
      */
     @Override
     protected void virtualize(VirtualStructure $〡) {
-        $〡.e("img", 0).〡(() -> {
+        $〡.e("img", 0).ⅼ(() -> {
         });
     }
 }

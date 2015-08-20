@@ -31,7 +31,7 @@ public class VirtualStructureTest {
     @Test
     public void text() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.〡("text");
+        root〡.ⅼ("text");
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
@@ -52,8 +52,8 @@ public class VirtualStructureTest {
     @Test
     public void textSequencialCall() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.〡("first");
-        root〡.〡("second");
+        root〡.ⅼ("first");
+        root〡.ⅼ("second");
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 2;
@@ -65,8 +65,8 @@ public class VirtualStructureTest {
     @Ignore
     public void widgetText() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.〡(widget(sub〡 -> {
-            sub〡.〡("widget text");
+        root〡.ⅼ(widget(sub〡 -> {
+            sub〡.ⅼ("widget text");
         }));
 
         VirtualElement root = root〡.getRoot();
@@ -79,7 +79,7 @@ public class VirtualStructureTest {
     @Test
     public void boxText() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, "text");
+        root〡.hbox.ⅼ(style, "text");
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
@@ -91,8 +91,8 @@ public class VirtualStructureTest {
     @Test
     public void boxTextSequentialCall() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, "first");
-        root〡.hbox.〡(style, "second");
+        root〡.hbox.ⅼ(style, "first");
+        root〡.hbox.ⅼ(style, "second");
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 2;
@@ -107,8 +107,8 @@ public class VirtualStructureTest {
     @Test
     public void boxTextNestedCall() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, () -> {
-            root〡.hbox.〡(style, "nested text");
+        root〡.hbox.ⅼ(style, () -> {
+            root〡.hbox.ⅼ(style, "nested text");
         });
 
         VirtualElement root = root〡.getRoot();
@@ -123,8 +123,8 @@ public class VirtualStructureTest {
     @Test
     public void boxWidgetText() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, widget(sub〡 -> {
-            sub〡.hbox.〡(style, "nested text");
+        root〡.hbox.ⅼ(style, widget(sub〡 -> {
+            sub〡.hbox.ⅼ(style, "nested text");
         }));
 
         VirtualElement root = root〡.getRoot();
@@ -143,7 +143,7 @@ public class VirtualStructureTest {
         List<String> items = Arrays.asList("first", "second", "third");
 
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, StringWidget.class, items);
+        root〡.hbox.ⅼ(style, StringWidget.class, items);
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
@@ -164,8 +164,8 @@ public class VirtualStructureTest {
     @Test
     public void range() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, 3, i -> {
-            root〡.vbox.〡(style, "text" + i);
+        root〡.hbox.ⅼ(style, 3, i -> {
+            root〡.vbox.ⅼ(style, "text" + i);
         });
 
         VirtualElement root = root〡.getRoot();
@@ -195,7 +195,7 @@ public class VirtualStructureTest {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.〡(model1);
+            $〡.ⅼ(model1);
         }
     }
 

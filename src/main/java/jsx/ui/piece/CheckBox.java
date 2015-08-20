@@ -54,7 +54,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        〡.hbox.〡(() -> {
+        〡.hbox.ⅼ(() -> {
             〡.svg().style(CheckBoxSVG).viewBox(0, 0, 100, 100).$(() -> {
                 〡.rect().style(CheckBox).size(90, 90).position(5, 5);
                 〡.path()

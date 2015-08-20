@@ -67,6 +67,6 @@ public class Output extends LowLevelWidget<Output> {
      */
     @Override
     protected void virtualize(VirtualStructure $〡) {
-        $〡.nbox.〡(null, text.get());
+        $〡.nbox.ⅼ(null, text.get());
     }
 }

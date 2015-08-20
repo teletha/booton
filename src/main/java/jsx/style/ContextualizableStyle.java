@@ -14,8 +14,6 @@ package jsx.style;
  */
 public class ContextualizableStyle<T> implements Style {
 
-    private final T value;
-
     private final ValueStyle base;
 
     private final Style style;
@@ -25,13 +23,8 @@ public class ContextualizableStyle<T> implements Style {
      * @param style
      */
     public ContextualizableStyle(T value, ValueStyle base, Style style) {
-        this.value = value;
         this.base = base;
         this.style = style;
-    }
-
-    public T get() {
-        return value;
     }
 
     /**
@@ -47,10 +40,6 @@ public class ContextualizableStyle<T> implements Style {
      */
     @Override
     public Object locator() {
-        return base;
-    }
-
-    public ValueStyle style() {
         return base;
     }
 }

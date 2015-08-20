@@ -23,10 +23,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void textChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.〡("text");
+        prev〡.ⅼ("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.〡("change");
+        next〡.ⅼ("change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -66,10 +66,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void textNoChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.〡("text");
+        prev〡.ⅼ("text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.〡("text");
+        next〡.ⅼ("text");
 
         assertDiff(prev〡, next〡, 0);
     }
@@ -77,10 +77,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void hboxTextChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.hbox.〡(null, "text");
+        prev〡.hbox.ⅼ(null, "text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.hbox.〡(null, "change");
+        next〡.hbox.ⅼ(null, "change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -101,9 +101,9 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     private <T> VirtualStructure change(boolean condition) {
         VirtualStructure $〡 = new VirtualStructure();
         if (condition) {
-            $〡.vbox.〡(null, "text");
+            $〡.vbox.ⅼ(null, "text");
         } else {
-            $〡.hbox.〡(null, "text");
+            $〡.hbox.ⅼ(null, "text");
         }
         return $〡;
     }

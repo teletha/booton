@@ -102,4 +102,8 @@ public interface Style {
     public default Style when(ObservableBooleanValue condition) {
         return new ConditionalStyle(this, condition);
     }
+
+    public default Style of(Object context) {
+        return new ContextualizedStyle(this, context);
+    }
 }

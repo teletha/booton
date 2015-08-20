@@ -277,6 +277,15 @@ public abstract class Widget {
     }
 
     /**
+     * <p>
+     * Update this widget by manual.
+     * </p>
+     */
+    protected final void update() {
+        rendering.willExecute();
+    }
+
+    /**
      * @version 2015/08/19 21:32:14
      */
     private static class EventContext<V> {
