@@ -11,215 +11,256 @@ package jsx.application;
 
 import static js.lang.Global.*;
 
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.UIAction;
-import js.dom.UIEvent;
-import jsx.event.Publishable;
+import js.lang.NativeArray;
+import jsx.ui.Widget;
+import kiss.Codec;
 import kiss.I;
-import kiss.Observer;
+import kiss.Interceptor;
+import kiss.Manageable;
+import kiss.Singleton;
 
 /**
- * @version 2012/12/11 14:19:29
+ * @version 2015/08/18 10:27:23
  */
+@Manageable(lifestyle = Singleton.class)
 public abstract class Application {
 
-    /** The page router. */
-    private static final Router router = new Router();
+    /** The path router. */
+    private final NativeArray<PageRoute> router = new NativeArray();
+
+    /**
+     * Initialize application.
+     */
+    protected Application() {
+        root: for (Method method : getClass().getMethods()) {
+            if (method.isAnnotationPresent(Route.class)) {
+                // Return type must be Widget
+                if (!Widget.class.isAssignableFrom(method.getReturnType())) {
+                    continue;
+                }
+
+                StringBuilder pattern = new StringBuilder(method.getName());
+
+                // All parameters must be decodable.
+                Class[] parameTypes = method.getParameterTypes();
+                Codec[] codecs = new Codec[parameTypes.length];
+
+                for (int i = 0; i < codecs.length; i++) {
+                    Codec codec = I.find(Codec.class, parameTypes[i]);
+
+                    if (codec == null) {
+                        continue root;
+                    }
+                    codecs[i] = codec;
+                    pattern.append("/").append("([^/].+)");
+                }
+
+                router.push(new PageRoute(pattern.toString(), codecs, method));
+            }
+        }
+
+        // Activate router system.
+        window.observe(UIAction.HashChange).to(event -> {
+            dispatch(location.hash);
+        });
+    }
+
+    /**
+     * <p>
+     * Retrieve the default widget.
+     * </p>
+     */
+    protected abstract Supplier<Widget> defaultWidget();
+
+    /**
+     * <p>
+     * Retrieve the general error widget.
+     * </p>
+     * 
+     * @return
+     */
+    protected Supplier<Widget> errorWidget() {
+        return defaultWidget();
+    }
+
+    /**
+     * <p>
+     * Dispatch page by the specified path.
+     * </p>
+     * 
+     * @param path
+     */
+    void dispatch(String path) {
+        if (path.length() != 0 && path.startsWith("#")) {
+            path = path.substring(1);
+        }
+
+        if (path.length() == 0) {
+            show(null);
+            return;
+        }
+
+        System.out.println("Change " + path);
+
+        for (int i = 0; i < router.length(); i++) {
+            Widget widget = router.get(i).dispatch(path);
+
+            if (widget != null) {
+                return;
+            }
+        }
+
+        show(null);
+    }
+
+    /**
+     * <p>
+     * Show the specified {@link Widget}.
+     * </p>
+     * 
+     * @param widget
+     */
+    private void show(Widget widget) {
+        if (widget == null) {
+            widget = findDefault();
+        }
+
+        // create element cradle
+        DocumentFragment cradle = document.createDocumentFragment();
+
+        // build page element
+        widget.renderIn(cradle.child("div"));
+
+        // clear old page and append new page
+        document.getElementById("Content").empty().append(cradle);
+    }
+
+    /**
+     * <p>
+     * Helper method to retrieve the default widget.
+     * </p>
+     * 
+     * @return
+     */
+    private Widget findDefault() {
+        Supplier<Widget> supplier = defaultWidget();
+
+        if (supplier != null) {
+            Widget widget = supplier.get();
+
+            if (widget != null) {
+                return widget;
+            }
+        }
+
+        throw new IllegalStateException("Default widget is not found.");
+    }
 
     /**
      * <p>
      * Initialize application.
      * </p>
+     * 
+     * @param applicationClass An application class to start.
+     * @param configurator You can configure your application.
      */
-    protected Application() {
-        // Collect all pages and register it.
-        for (Class page : I.findAs(Page.class)) {
-            for (Constructor<?> constructor : page.getConstructors()) {
-                PageInfo info = constructor.getAnnotation(PageInfo.class);
-
-                if (info != null) {
-                    if (info.path().contains("*")) {
-                        router.wildcards.add(new Route(constructor, info));
-                    } else {
-                        router.route.put(info.path(), constructor);
-                    }
-                }
-            }
-        }
-
-        // Activate router system.
-        window.observe(UIAction.HashChange).to(router);
+    protected static <A extends Application> void initialize(Class<A> applicationClass) {
+        A application = I.make(applicationClass);
 
         // View initial page by URL.
-        router.dispatch(location.hash);
+        application.dispatch(location.hash);
     }
 
     /**
-     * <p>
-     * Configure header part.
-     * </p>
-     * 
-     * @param header
+     * @version 2015/08/18 14:47:12
      */
-    protected void configure(Header header) {
-    }
+    private class PageRoute {
 
-    /**
-     * <p>
-     * Show page with effect.
-     * </p>
-     * 
-     * @param page
-     */
-    public static void show(Page page) {
-        if (page != null) {
-            router.dispatch(page.getPageId());
-            history.pushState("", "", "#" + page.getPageId());
-        }
-    }
-
-    /**
-     * @version 2013/06/17 13:57:06
-     */
-    private static class Router implements Observer<UIEvent> {
-
-        /** The current page. */
-        private static Page current;
-
-        /** The page router. */
-        private final Map<String, Constructor> route = new HashMap();
-
-        /** The page router. */
-        private final List<Route> wildcards = new ArrayList();
-
-        /**
-         * <p>
-         * URI dispatcher.
-         * </p>
-         */
-        @Override
-        public void accept(UIEvent event) {
-            dispatch(location.hash);
-        }
-
-        /**
-         * <p>
-         * Dispatch page by identifier
-         * </p>
-         * 
-         * @param pageId
-         */
-        private void dispatch(String pageId) {
-            if (pageId.length() != 0 && pageId.startsWith("#")) {
-                pageId = pageId.substring(1);
-            }
-
-            Constructor constructor = route.get(pageId);
-
-            if (constructor != null) {
-                try {
-                    dispatch((Page) constructor.newInstance());
-                } catch (Exception e) {
-                    // do nothing
-                }
-            } else {
-                for (Route route : wildcards) {
-                    Page page = route.match(pageId);
-
-                    if (page != null) {
-                        dispatch(page);
-                        return;
-                    }
-                }
-            }
-        }
-
-        /**
-         * <p>
-         * Dispatch page.
-         * </p>
-         * 
-         * @param pageId
-         */
-        private void dispatch(Page page) {
-            // fire page unload event
-            Publishable.Global.publish(new PageUnload(page));
-
-            // fire page load event
-            // window.trigger(UIAction.PageLoad);
-
-            // create element cradle
-            DocumentFragment cradle = document.createDocumentFragment();
-
-            // build page element
-            page.load(cradle);
-
-            // clear old page and append new page
-            document.getElementById("Content").empty().append(cradle);
-
-            // record page
-            current = page;
-        }
-    }
-
-    /**
-     * @version 2013/01/18 10:43:43
-     */
-    private static class Route {
-
-        /** The page pattern. */
+        /** The path pattern. */
         private final Pattern pattern;
 
-        /** The page constructor. */
-        private Constructor constructor;
+        /** The parameter pattern. */
+        private final Codec[] codecs;
+
+        /** The dispatch method. */
+        private final Method method;
 
         /**
-         * <p>
-         * Create new route.
-         * </p>
-         * 
-         * @param constructor
-         * @param info
+         * @param pattern
+         * @param codecs
+         * @param method
          */
-        private Route(Constructor constructor, PageInfo info) {
-            this.constructor = constructor;
-            this.pattern = Pattern.compile(info.path().replaceAll("\\*", "([^/].+)"));
+        private PageRoute(String pattern, Codec[] codecs, Method method) {
+            this.pattern = Pattern.compile(pattern);
+            this.codecs = codecs;
+            this.method = method;
         }
 
         /**
          * <p>
-         * Detect pattern matching.
+         * Dispatch by the specified path pattern.
          * </p>
-         * 
-         * @param path
-         * @return
          */
-        private Page match(String path) {
+        private Widget dispatch(String path) {
             Matcher matcher = pattern.matcher(path);
 
-            if (!matcher.matches()) {
+            if (!matcher.matches() || matcher.groupCount() != codecs.length) {
                 return null;
-            } else {
-                List<String> wildcards = new ArrayList();
-
-                for (int i = 0; i < matcher.groupCount(); i++) {
-                    wildcards.add(matcher.group(i + 1));
-                }
-
-                try {
-                    return (Page) constructor.newInstance(wildcards.toArray());
-                } catch (Exception e) {
-                    return null;
-                }
             }
+
+            Object[] parameters = new Object[codecs.length];
+
+            for (int i = 0; i < codecs.length; i++) {
+                parameters[i] = codecs[i].decode(matcher.group(i + 1));
+            }
+
+            try {
+                return (Widget) method.invoke(Application.this, parameters);
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+        }
+    }
+
+    /**
+     * @version 2015/08/18 16:48:41
+     */
+    @Manageable(lifestyle = Singleton.class)
+    static class Router extends Interceptor<Route> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Object invoke(Object... params) {
+            Object widget = super.invoke(params);
+
+            if (that instanceof Application && widget instanceof Widget) {
+                // rebuild path
+                StringBuilder builder = new StringBuilder("#").append(name);
+
+                for (Object param : params) {
+                    builder.append("/").append(I.find(Codec.class, param.getClass()).encode(param));
+                }
+
+                // update history if needed
+                String path = builder.toString();
+
+                if (!location.hash.equals(path)) {
+                    history.pushState("", "", path);
+                }
+
+                // render widget
+                ((Application) that).show((Widget) widget);
+            }
+            return widget;
         }
     }
 }
