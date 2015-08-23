@@ -216,7 +216,7 @@ public final class VirtualStructure {
      * 
      * @param item A child item.
      */
-    public void ⅼ(Object item) {
+    public void 〡(Object item) {
         process(latest, item);
     }
 
@@ -469,13 +469,13 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void ⅼ(Style style, String text) {
+        public final void 〡(Style style, String text) {
             if (text != null && text.length() != 0) {
-                ⅼ(style, new Object[] {text});
+                〡(style, new Object[] {text});
             }
         }
 
-        public final void ⅼ(Style style, Widget widget) {
+        public final void 〡(Style style, Widget widget) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) style.assignTo(container.classList, container.inlines);
@@ -505,7 +505,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void ⅼ(Style style, Object... children) {
+        public final void 〡(Style style, Object... children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) {
@@ -533,8 +533,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void ⅼ(Style style, Class<? extends Widget1<T>> childType, T child) {
-            ⅼ(style, childType, Arrays.asList(child));
+        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T child) {
+            〡(style, childType, Arrays.asList(child));
         }
 
         /**
@@ -544,8 +544,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void ⅼ(Style style, Class<? extends Widget1<T>> childType, T[] children) {
-            ⅼ(style, childType, Arrays.asList(children));
+        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, T[] children) {
+            〡(style, childType, Arrays.asList(children));
         }
 
         /**
@@ -555,7 +555,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void ⅼ(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
+        public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) style.assignTo(container.classList, container.inlines);
@@ -590,8 +590,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void ⅼ(Runnable children) {
-            ⅼ((Style) null, children);
+        public final void 〡(Runnable children) {
+            〡((Style) null, children);
         }
 
         /**
@@ -601,7 +601,7 @@ public final class VirtualStructure {
          * 
          * @param children A list of child nodes.
          */
-        public final void ⅼ(Style style, Runnable children) {
+        public final void 〡(Style style, Runnable children) {
             // store the current context
             VirtualElement container = container(LocalId.findContextLineNumber());
             if (style != null) {
@@ -628,8 +628,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void ⅼ(Style style, T[] items, Consumer<T> child) {
-            ⅼ(style, Arrays.asList(items), child);
+        public final <T> void 〡(Style style, T[] items, Consumer<T> child) {
+            〡(style, Arrays.asList(items), child);
         }
 
         /**
@@ -639,8 +639,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void ⅼ(Style style, Collection<T> items, Consumer<T> child) {
-            ⅼ(style, () -> {
+        public final <T> void 〡(Style style, Collection<T> items, Consumer<T> child) {
+            〡(style, () -> {
                 Object last = context;
 
                 for (T item : items) {
@@ -659,8 +659,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void ⅼ(Style style, int size, IntConsumer child) {
-            ⅼ(style, () -> {
+        public final <T> void 〡(Style style, int size, IntConsumer child) {
+            〡(style, () -> {
                 for (int i = 0; i < size; i++) {
                     modifier = (i + 117 + latestContextId) * 31;
                     child.accept(i);

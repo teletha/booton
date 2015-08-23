@@ -64,7 +64,7 @@ public class VirtualStructureReferenceCheckTest {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.ⅼ(property);
+            $〡.〡(property);
         }
     }
 
@@ -97,9 +97,9 @@ public class VirtualStructureReferenceCheckTest {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.hbox.ⅼ(style, () -> {
+            $〡.hbox.〡(style, () -> {
                 for (int i = 1; i <= property.get(); i++) {
-                    $〡.vbox(i).ⅼ(null, "Text" + i);
+                    $〡.vbox(i).〡(null, "Text" + i);
                 }
             });
         }
@@ -134,7 +134,7 @@ public class VirtualStructureReferenceCheckTest {
          */
         @Override
         protected void virtualize(VirtualStructure $〡) {
-            $〡.ⅼ(input);
+            $〡.〡(input);
         }
     }
 
