@@ -536,6 +536,26 @@ class JSString implements Comparable<String>, CharSequence {
     }
 
     /**
+     * Tells whether or not this string matches the given
+     * <a href="../util/regex/Pattern.html#sum">regular expression</a>.
+     * <p>
+     * An invocation of this method of the form <i>str</i>{@code .matches(}<i>regex</i>{@code )}
+     * yields exactly the same result as the expression <blockquote> {@link java.util.regex.Pattern}
+     * .{@link java.util.regex.Pattern#matches(String,CharSequence) matches(<i>regex</i>, <i>str</i>
+     * )} </blockquote>
+     *
+     * @param regex the regular expression to which this string is to be matched
+     * @return {@code true} if, and only if, this string matches the given regular expression
+     * @throws PatternSyntaxException if the regular expression's syntax is invalid
+     * @see java.util.regex.Pattern
+     * @since 1.4
+     * @spec JSR-51
+     */
+    public boolean matches(String regex) {
+        return Pattern.matches(regex, this);
+    }
+
+    /**
      * Returns a new string resulting from replacing all occurrences of <code>oldChar</code> in this
      * string with <code>newChar</code>.
      * <p>

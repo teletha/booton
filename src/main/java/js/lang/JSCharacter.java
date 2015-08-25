@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import java.util.regex.Pattern;
+
 import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
@@ -91,6 +93,9 @@ class JSCharacter implements JavascriptNative {
      * @since 1.5
      */
     public static final int MAX_CODE_POINT = 0X10FFFF;
+
+    /** The matching pattern. */
+    private static final Pattern whitespace = Pattern.compile("\\s");
 
     /** The actual character. */
     private NativeString character;
@@ -380,7 +385,7 @@ class JSCharacter implements JavascriptNative {
      * @since 1.1
      */
     public static boolean isWhitespace(char ch) {
-        return isWhitespace((int) ch);
+        return whitespace.matcher(String.valueOf(ch)).matches();
     }
 
     /**
