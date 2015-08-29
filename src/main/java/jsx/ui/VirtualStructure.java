@@ -28,6 +28,7 @@ import js.lang.NativeString;
 import jsx.style.ContextualizedStyle;
 import jsx.style.Style;
 import jsx.ui.ContextualizedEventListeners.EventListener;
+import kiss.NamedValue;
 
 /**
  * @version 2014/09/13 1:52:02
@@ -345,6 +346,27 @@ public final class VirtualStructure {
 
     /**
      * <p>
+     * Define element with some attributes.
+     * </p>
+     * 
+     * @param name A element name.
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     */
+    public final ContainerDescriptor e(String name, Style style, NamedValue... attributes) {
+        ContainerDescriptor container = new ContainerDescriptor(name, null);
+        VirtualElement element = container.container(0);
+
+        for (NamedValue attribute : attributes) {
+            element.attributes.add(attribute.name(), String.valueOf(attribute.value()));
+        }
+        element.classList.push(style);
+
+        return container;
+    }
+
+    /**
+     * <p>
      * Retrieve the root {@link VirtualElement}.
      * </p>
      * 
@@ -378,7 +400,8 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
+                : context, listeners);
     }
 
     /**

@@ -497,8 +497,7 @@ class JSKiss {
                 Manageable manageable = actualClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
-                lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class : manageable
-                        .lifestyle()));
+                lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class : manageable.lifestyle()));
             }
 
             // Trace dependency graph to detect circular dependencies.
@@ -520,6 +519,18 @@ class JSKiss {
         } finally {
             dependency.pollLast();
         }
+    }
+
+    /**
+     * <p>
+     * Findthe first parameter name of lambda method.
+     * </p>
+     * 
+     * @param object A lambda instance.
+     * @return A parameter name.
+     */
+    static String method(Object object) {
+        return "type";
     }
 
     /**
@@ -935,8 +946,7 @@ class JSKiss {
             if (property.isAttribute()) {
                 value = transform(js.getProperty(property.name), property.model.type);
             } else {
-                value = read(property.model, make(property.model.type), js
-                        .getPropertyAs(NativeObject.class, property.name));
+                value = read(property.model, make(property.model.type), js.getPropertyAs(NativeObject.class, property.name));
             }
 
             // assign value

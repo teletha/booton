@@ -151,8 +151,6 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        〡.e("input", 0).〡(InputForm, () -> {
-            〡.attr.〡("type", "text").〡("value", value).〡("placeholder", placeholder);
-        });
+        〡.e("input", InputForm, type -> "text", value -> value, placeholder -> placeholder);
     }
 }
