@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import booton.BootonConfiguration;
 import jsx.style.Style;
 import jsx.style.StyleId;
 import jsx.style.StyleRule;
@@ -23,7 +24,6 @@ import jsx.style.value.Font;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.BootonConfiguration;
 
 /**
  * @version 2014/11/15 16:05:39

@@ -327,12 +327,14 @@ public final class VirtualStructure {
      * @param localId A local id for the container element.
      * @return A descriptor of the container element.
      */
-    public final ContainerDescriptor e(String name, Style style, String... attributes) {
+    public final ContainerDescriptor e(String name, Style style, Object... attributes) {
         ContainerDescriptor container = new ContainerDescriptor(name, null);
         VirtualElement element = container.container(0);
 
         for (int i = 0; i < attributes.length; i++) {
-            element.attributes.add(attributes[i], attributes[++i]);
+            if (attributes[i] != null && attributes[i + 1] != null) {
+                element.attributes.add(String.valueOf(attributes[i]), String.valueOf(attributes[++i]));
+            }
         }
 
         if (name.equals("svg")) {
@@ -400,8 +402,7 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
-                : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
     }
 
     /**
