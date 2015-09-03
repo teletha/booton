@@ -9,17 +9,10 @@
  */
 package jsx.html;
 
-import static jsx.html.DSL.*;
-import static jsx.html.DSLStyle.*;
-
 /**
- * @version 2014/12/02 13:51:39
+ * @version 2015/09/03 19:42:09
  */
-public class DSLUser {
+public interface Declarable {
 
-    private static void a() {
-        div().clazz(Root, () -> {
-            text("Hello!");
-        });
-    }
+    void declare();
 }
