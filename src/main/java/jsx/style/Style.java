@@ -15,6 +15,7 @@ import javafx.beans.value.ObservableBooleanValue;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import jsx.ui.WidgetLog;
 import kiss.Events;
 
 /**
@@ -45,12 +46,14 @@ public interface Style {
     }
 
     public default void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
+        WidgetLog.InlineStyle.start();
         StyleRule style = new StyleRule(inlines);
 
         // swap context rule and execute it
         PropertyDefinition.declarable = style;
         declare();
         PropertyDefinition.declarable = null;
+        WidgetLog.InlineStyle.stop();
     }
 
     /**

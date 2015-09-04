@@ -254,7 +254,7 @@ class JSSystem {
      * @since 1.5
      */
     public static long nanoTime() {
-        return (long) (Global.performance.now() * 1000);
+        return (long) (Global.performance.now() * 1000000);
     }
 
     /**

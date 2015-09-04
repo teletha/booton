@@ -104,20 +104,20 @@ class Profiler<K, E, Y> extends Interceptor<Profilable> {
             List<Result> list = new ArrayList(grouped.values());
             Collections.sort(list, Comparator.<Result> comparingDouble(item -> item.elapsed).reversed());
 
-            // compute maximum size
-            int nameSize = max(list, item -> item.name);
-            int elapsedSize = max(list, item -> String.valueOf(item.elapsed));
-            int countSize = max(list, item -> String.valueOf(item.count));
-
             // size filter
             list = list.subList(0, Math.min(15, list.size()));
+
+            // compute maximum size
+            int nameSize = max(list, item -> item.name);
+            int elapsedSize = max(list, item -> String.valueOf(ms(item.elapsed)));
+            int countSize = max(list, item -> String.valueOf(item.count));
 
             System.out.println("Total Profiled Time: " + ms(total) + "ms");
 
             for (Result result : list) {
                 if (result.elapsed != 0) {
-                    result.profile
-                            .show(nameSize, result.name, elapsedSize, ms(result.elapsed), (int) (((double) result.elapsed / total) * 100), countSize, result.count);
+                    result.profile.show(nameSize, result.name, elapsedSize, ms(result.elapsed), Math
+                            .round(((float) result.elapsed / total) * 100), countSize, result.count);
                 }
             }
             results.clear();

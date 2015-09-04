@@ -14,6 +14,7 @@ import java.util.Map;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import jsx.ui.WidgetLog;
 import booton.Necessary;
 
 /**
@@ -60,7 +61,9 @@ public class StaticStyle implements Style {
      */
     @Override
     public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
+        WidgetLog.StaticStyle.start();
         styles.push(this);
+        WidgetLog.StaticStyle.stop();
     }
 
     /**

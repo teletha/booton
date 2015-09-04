@@ -304,7 +304,7 @@ public final class VirtualStructure {
      */
     public final ContainerDescriptor e(String name, String... attributes) {
         ContainerDescriptor container = new ContainerDescriptor(name, null);
-        VirtualElement element = container.container(0);
+        VirtualElement element = container.container(0, null);
 
         for (int i = 0; i < attributes.length; i++) {
             element.attributes.add(attributes[i], attributes[++i]);
@@ -329,7 +329,7 @@ public final class VirtualStructure {
      */
     public final ContainerDescriptor e(String name, Style style, Object... attributes) {
         ContainerDescriptor container = new ContainerDescriptor(name, null);
-        VirtualElement element = container.container(0);
+        VirtualElement element = container.container(0, style);
 
         for (int i = 0; i < attributes.length; i++) {
             if (attributes[i] != null && attributes[i + 1] != null) {
@@ -341,7 +341,6 @@ public final class VirtualStructure {
             element.attributes.add("version", "1.1");
             element.attributes.add("preserveAspectRatio", "xMidYMid meet");
         }
-        element.classList.push(style);
 
         return container;
     }
@@ -357,12 +356,11 @@ public final class VirtualStructure {
      */
     public final ContainerDescriptor e(String name, Style style, NamedValue... attributes) {
         ContainerDescriptor container = new ContainerDescriptor(name, null);
-        VirtualElement element = container.container(0);
+        VirtualElement element = container.container(0, style);
 
         for (NamedValue attribute : attributes) {
             element.attributes.add(attribute.name(), String.valueOf(attribute.value()));
         }
-        element.classList.push(style);
 
         return container;
     }
@@ -446,7 +444,7 @@ public final class VirtualStructure {
          * 
          * @return The current container element.
          */
-        private final VirtualElement container(int contextId) {
+        private final VirtualElement container(int contextId, Style style) {
             // This process is used in java environment only. (because js implementation of
             // LocalId always return 0)
             if (contextId != 0 && latestContextId != contextId) {
@@ -481,6 +479,13 @@ public final class VirtualStructure {
                     container.classList.push(builtin);
                 }
                 latest.items.push(container);
+
+                if (style != null) {
+                    WidgetLog.Style.start();
+                    style.assignTo(container.classList, container.inlines);
+                    container.contextualized = createSpecifiedListenerDifinitions(style);
+                    WidgetLog.Style.stop();
+                }
             }
 
             return container;
@@ -501,7 +506,7 @@ public final class VirtualStructure {
 
         public final void 〡(Style style, Widget widget) {
             // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
+            VirtualElement container = container(LocalId.findContextLineNumber(), style);
             if (style != null) style.assignTo(container.classList, container.inlines);
 
             // enter into the child node
@@ -531,11 +536,7 @@ public final class VirtualStructure {
          */
         public final void 〡(Style style, Object... children) {
             // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) {
-                style.assignTo(container.classList, container.inlines);
-                container.contextualized = createSpecifiedListenerDifinitions(style);
-            }
+            VirtualElement container = container(LocalId.findContextLineNumber(), style);
 
             // enter into the child node
             parents.addLast(latest = container);
@@ -581,8 +582,7 @@ public final class VirtualStructure {
          */
         public final <T> void 〡(Style style, Class<? extends Widget1<T>> childType, Collection<T> children) {
             // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) style.assignTo(container.classList, container.inlines);
+            VirtualElement container = container(LocalId.findContextLineNumber(), style);
 
             // enter into the child node
             parents.addLast(latest = container);
@@ -627,11 +627,7 @@ public final class VirtualStructure {
          */
         public final void 〡(Style style, Runnable children) {
             // store the current context
-            VirtualElement container = container(LocalId.findContextLineNumber());
-            if (style != null) {
-                style.assignTo(container.classList, container.inlines);
-                container.contextualized = createSpecifiedListenerDifinitions(style);
-            }
+            VirtualElement container = container(LocalId.findContextLineNumber(), style);
 
             // then, clean it for nested invocation
             parents.addLast(latest = container);

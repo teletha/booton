@@ -11,6 +11,7 @@ package jsx.style;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import jsx.ui.WidgetLog;
 
 /**
  * @version 2015/08/20 12:39:20
@@ -51,6 +52,8 @@ public class ContextualizedStyle implements Style {
      */
     @Override
     public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
+        WidgetLog.ContextualizedStyle.start();
         style.assignTo(styles, inlines);
+        WidgetLog.ContextualizedStyle.stop();
     }
 }
