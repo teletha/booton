@@ -9,10 +9,12 @@
  */
 package jsx.style;
 
-
 /**
  * @version 2015/06/02 13:04:18
  */
-public interface Locatable {
+interface Locatable {
 
+    default Object locator() {
+        return this;
+    }
 }

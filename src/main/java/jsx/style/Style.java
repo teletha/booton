@@ -21,7 +21,7 @@ import kiss.Events;
 /**
  * @version 2015/01/29 10:00:25
  */
-public interface Style {
+public interface Style extends Locatable {
 
     /**
      * <p>
@@ -29,10 +29,6 @@ public interface Style {
      * </p>
      */
     void declare();
-
-    public default Object locator() {
-        return this;
-    }
 
     /**
      * <p>
