@@ -22,12 +22,12 @@ public class StyleTester extends StyleRuleDescriptor {
 
     protected ValidatableStyle style(Style style) {
         // empty style sheet
-        PropertySet.create("$", style);
+        PropertyHolder.create("$", style);
 
         // search specified rule
         String name = "." + StyleId.of(style);
 
-        for (PropertySet rule : PropertySet.rules) {
+        for (PropertyHolder rule : PropertyHolder.holders) {
             if (rule.selector.equals(name)) {
                 return new ValidatableStyle(rule);
             }
@@ -43,12 +43,12 @@ public class StyleTester extends StyleRuleDescriptor {
     public static class ValidatableStyle {
 
         /** The target to validate. */
-        private final PropertySet rules;
+        private final PropertyHolder rules;
 
         /**
          * @param rules
          */
-        private ValidatableStyle(PropertySet rules) {
+        private ValidatableStyle(PropertyHolder rules) {
             this.rules = rules;
         }
 
@@ -97,7 +97,7 @@ public class StyleTester extends StyleRuleDescriptor {
             String combinator = rules.selector + ":" + selector;
             String pseudo = rules.selector + "::" + selector;
 
-            for (PropertySet rule : PropertySet.rules) {
+            for (PropertyHolder rule : PropertyHolder.holders) {
                 selector = rule.selector;
 
                 if (selector.equals(combinator) || selector.equals(pseudo)) {

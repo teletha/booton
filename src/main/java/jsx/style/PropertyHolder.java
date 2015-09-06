@@ -21,12 +21,16 @@ import jsx.collection.DualList;
 import kiss.I;
 
 /**
- * @version 2014/11/13 15:49:15
+ * <p>
+ * This class is CSSStyleRule which represents a single CSS style rule.
+ * </p>
+ * 
+ * @version 2015/09/06 10:58:56
  */
-public class PropertySet {
+public class PropertyHolder {
 
     /** The list of rules. */
-    public static final List<PropertySet> rules = new ArrayList();
+    public static final List<PropertyHolder> holders = new ArrayList();
 
     /** The selector. */
     public final String selector;
@@ -41,7 +45,7 @@ public class PropertySet {
      * 
      * @param name An actual selector.
      */
-    public PropertySet() {
+    public PropertyHolder() {
         this("");
     }
 
@@ -52,7 +56,7 @@ public class PropertySet {
      * 
      * @param name An actual selector.
      */
-    PropertySet(String selector) {
+    PropertyHolder(String selector) {
         this.selector = selector;
         this.properties = new DualList();
     }
@@ -64,7 +68,7 @@ public class PropertySet {
      *
      * @param name An actual selector.
      */
-    PropertySet(DualList<String, String> properties) {
+    PropertyHolder(DualList<String, String> properties) {
         this.selector = "";
         this.properties = properties;
     }
@@ -78,7 +82,7 @@ public class PropertySet {
      * @param value A property value you want.
      * @return
      */
-    public boolean is(String name, String value) {
+    boolean is(String name, String value) {
         return properties.contains(name, value);
     }
 
@@ -161,16 +165,16 @@ public class PropertySet {
 
     /**
      * <p>
-     * Create {@link PropertySet} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
-     * )
+     * Create {@link PropertyHolder} from the specified object. (e.g. {@link Style},
+     * {@link RuntimeStyle} )
      * </p>
      * 
      * @param object A style description.
-     * @return A create new {@link PropertySet}.
+     * @return A create new {@link PropertyHolder}.
      */
-    public static PropertySet create(String template, Style style) {
+    public static PropertyHolder create(String template, Style style) {
         // store parent rule
-        PropertySet parent = PropertyDefinition.declarable;
+        PropertyHolder parent = PropertyDefinition.properties;
 
         // compute selector
         String selector;
@@ -193,15 +197,15 @@ public class PropertySet {
         }
 
         // create child rule
-        PropertySet child = new PropertySet(selector);
+        PropertyHolder child = new PropertyHolder(selector);
 
         // swap context rule and execute it
-        PropertyDefinition.declarable = child;
+        PropertyDefinition.properties = child;
         style.declare();
-        PropertyDefinition.declarable = parent;
+        PropertyDefinition.properties = parent;
 
         // assign rule
-        rules.add(child);
+        holders.add(child);
 
         return child;
     }

@@ -28,7 +28,7 @@ import js.lang.NativeArray;
 public class PropertyDefinition<T> {
 
     /** The current processing property holder. */
-    protected static PropertySet declarable;
+    protected static PropertyHolder properties;
 
     /** The property name. */
     private final String name;
@@ -251,7 +251,7 @@ public class PropertyDefinition<T> {
     protected final T value(EnumSet<Vendor> vendors, String name, List values, String separator, boolean override) {
         vendors.addAll(this.vendors);
 
-        declarable.property(name, values, separator, override, vendors);
+        properties.property(name, values, separator, override, vendors);
 
         return context;
     }
@@ -265,7 +265,7 @@ public class PropertyDefinition<T> {
      * @return A result.
      */
     protected final boolean is(String value) {
-        return declarable.is(name, value);
+        return properties.is(name, value);
     }
 
     /**
@@ -330,8 +330,8 @@ public class PropertyDefinition<T> {
      * @param template A selector template.
      * @param sub A sub style descriptor.
      */
-    protected static final PropertySet createSubRule(String template, Style sub) {
-        return PropertySet.create(template, sub);
+    protected static final PropertyHolder createSubRule(String template, Style sub) {
+        return PropertyHolder.create(template, sub);
     }
 
     /**
