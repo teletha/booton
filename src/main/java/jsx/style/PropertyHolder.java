@@ -164,6 +164,20 @@ public class PropertyHolder {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder(selector);
+        builder.append("{");
+        for (int i = 0, size = properties.size(); i < size; i++) {
+            builder.append(properties.key(i)).append(":").append(properties.value(i)).append(";");
+        }
+        builder.append("}");
+        return super.toString();
+    }
+
+    /**
      * <p>
      * Create {@link PropertyHolder} from the specified object. (e.g. {@link Style},
      * {@link RuntimeStyle} )
