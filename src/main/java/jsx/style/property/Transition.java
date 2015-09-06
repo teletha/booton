@@ -13,7 +13,7 @@ import static jsx.style.value.Unit.*;
 import jsx.style.PropertyDefinition;
 import jsx.style.Style;
 import jsx.style.StyleId;
-import jsx.style.StyleRule;
+import jsx.style.PropertySet;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 
@@ -300,7 +300,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * </p>
      */
     private void when(String selector, Style sub) {
-        StyleRule rule = createSubRule(selector, sub);
+        PropertySet rule = createSubRule(selector, sub);
 
         value("transition-property", join(rule.properties.keys(), v -> v));
         value("transition-duration", join(rule.properties.keys(), v -> duration));

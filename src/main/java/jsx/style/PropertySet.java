@@ -23,10 +23,10 @@ import kiss.I;
 /**
  * @version 2014/11/13 15:49:15
  */
-public class StyleRule {
+public class PropertySet {
 
     /** The list of rules. */
-    public static final List<StyleRule> rules = new ArrayList();
+    public static final List<PropertySet> rules = new ArrayList();
 
     /** The selector. */
     public final String selector;
@@ -41,7 +41,7 @@ public class StyleRule {
      * 
      * @param name An actual selector.
      */
-    public StyleRule() {
+    public PropertySet() {
         this("");
     }
 
@@ -52,7 +52,7 @@ public class StyleRule {
      * 
      * @param name An actual selector.
      */
-    StyleRule(String selector) {
+    PropertySet(String selector) {
         this.selector = selector;
         this.properties = new DualList();
     }
@@ -64,7 +64,7 @@ public class StyleRule {
      *
      * @param name An actual selector.
      */
-    StyleRule(DualList<String, String> properties) {
+    PropertySet(DualList<String, String> properties) {
         this.selector = "";
         this.properties = properties;
     }
@@ -161,16 +161,16 @@ public class StyleRule {
 
     /**
      * <p>
-     * Create {@link StyleRule} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
+     * Create {@link PropertySet} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
      * )
      * </p>
      * 
      * @param object A style description.
-     * @return A create new {@link StyleRule}.
+     * @return A create new {@link PropertySet}.
      */
-    public static StyleRule create(String template, Style style) {
+    public static PropertySet create(String template, Style style) {
         // store parent rule
-        StyleRule parent = PropertyDefinition.declarable;
+        PropertySet parent = PropertyDefinition.declarable;
 
         // compute selector
         String selector;
@@ -193,7 +193,7 @@ public class StyleRule {
         }
 
         // create child rule
-        StyleRule child = new StyleRule(selector);
+        PropertySet child = new PropertySet(selector);
 
         // swap context rule and execute it
         PropertyDefinition.declarable = child;
