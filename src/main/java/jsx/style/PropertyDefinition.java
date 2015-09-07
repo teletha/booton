@@ -28,7 +28,7 @@ import js.lang.NativeArray;
 public class PropertyDefinition<T> {
 
     /** The current processing property holder. */
-    protected static PropertyHolder properties;
+    protected static StyleRule properties;
 
     /** The property name. */
     private final String name;
@@ -330,8 +330,8 @@ public class PropertyDefinition<T> {
      * @param template A selector template.
      * @param sub A sub style descriptor.
      */
-    protected static final PropertyHolder createSubRule(String template, Style sub) {
-        return PropertyHolder.create(template, sub);
+    protected static final StyleRule createSubRule(String template, Style sub) {
+        return StyleRule.create(template, sub);
     }
 
     /**

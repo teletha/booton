@@ -27,10 +27,10 @@ import kiss.I;
  * 
  * @version 2015/09/06 10:58:56
  */
-public class PropertyHolder {
+public class StyleRule {
 
     /** The list of rules. */
-    public static final List<PropertyHolder> holders = new ArrayList();
+    public static final List<StyleRule> holders = new ArrayList();
 
     /** The selector. */
     public final String selector;
@@ -45,7 +45,7 @@ public class PropertyHolder {
      * 
      * @param name An actual selector.
      */
-    public PropertyHolder() {
+    public StyleRule() {
         this("");
     }
 
@@ -56,7 +56,7 @@ public class PropertyHolder {
      * 
      * @param name An actual selector.
      */
-    PropertyHolder(String selector) {
+    StyleRule(String selector) {
         this.selector = selector;
         this.properties = new DualList();
     }
@@ -68,7 +68,7 @@ public class PropertyHolder {
      *
      * @param name An actual selector.
      */
-    PropertyHolder(DualList<String, String> properties) {
+    StyleRule(DualList<String, String> properties) {
         this.selector = "";
         this.properties = properties;
     }
@@ -179,16 +179,16 @@ public class PropertyHolder {
 
     /**
      * <p>
-     * Create {@link PropertyHolder} from the specified object. (e.g. {@link Style},
+     * Create {@link StyleRule} from the specified object. (e.g. {@link Style},
      * {@link RuntimeStyle} )
      * </p>
      * 
      * @param object A style description.
-     * @return A create new {@link PropertyHolder}.
+     * @return A create new {@link StyleRule}.
      */
-    public static PropertyHolder create(String template, Style style) {
+    public static StyleRule create(String template, Style style) {
         // store parent rule
-        PropertyHolder parent = PropertyDefinition.properties;
+        StyleRule parent = PropertyDefinition.properties;
 
         // compute selector
         String selector;
@@ -211,7 +211,7 @@ public class PropertyHolder {
         }
 
         // create child rule
-        PropertyHolder child = new PropertyHolder(selector);
+        StyleRule child = new StyleRule(selector);
 
         // swap context rule and execute it
         PropertyDefinition.properties = child;

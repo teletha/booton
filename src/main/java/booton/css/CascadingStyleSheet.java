@@ -19,7 +19,7 @@ import java.util.Set;
 import booton.BootonConfiguration;
 import jsx.style.Style;
 import jsx.style.StyleId;
-import jsx.style.PropertyHolder;
+import jsx.style.StyleRule;
 import jsx.style.value.Font;
 import kiss.I;
 import kiss.Manageable;
@@ -51,11 +51,11 @@ public class CascadingStyleSheet {
 
         // parse all styles and create rules.
         for (Style style : styles) {
-            PropertyHolder.create("$", style);
+            StyleRule.create("$", style);
         }
 
         // write rules
-        for (PropertyHolder rule : PropertyHolder.holders) {
+        for (StyleRule rule : StyleRule.holders) {
             if (rule.properties.size() != 0) {
                 // write requested properties only.
                 root.write(rule.selector, "{");

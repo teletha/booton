@@ -53,7 +53,7 @@ public class ContextualizableStyle<T> implements Style {
     @Override
     public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
         WidgetLog.InlineStyleWithContext.start();
-        PropertyHolder style = new PropertyHolder(inlines);
+        StyleRule style = new StyleRule(inlines);
 
         // swap context rule and execute it
         PropertyDefinition.properties = style;
