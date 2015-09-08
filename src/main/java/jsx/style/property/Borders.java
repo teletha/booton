@@ -23,7 +23,7 @@ public class Borders extends BorderList {
      * border-top-style, and border-top-width. These properties describe the top border of elements.
      * </p>
      */
-    public final Border top = new Single("top");
+    public final Border top = new Single("top-");
 
     /**
      * <p>
@@ -32,7 +32,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border bottom = new Single("bottom");
+    public final Border bottom = new Single("bottom-");
 
     /**
      * <p>
@@ -41,7 +41,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border left = new Single("left");
+    public final Border left = new Single("left-");
 
     /**
      * <p>
@@ -50,7 +50,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border right = new Single("right");
+    public final Border right = new Single("right-");
 
     /**
      * <p>
@@ -70,7 +70,7 @@ public class Borders extends BorderList {
      * 
      */
     public Borders() {
-        use(top, right, bottom, left);
+        use(new Single(""));
     }
 
     /**
@@ -94,19 +94,19 @@ public class Borders extends BorderList {
         @Override
         public Border radius(Numeric size) {
             switch (side.length()) {
-            case 3: // top
+            case 4: // top-
                 value("border-top-right-radius", size);
                 break;
 
-            case 5: // right
+            case 6: // right-
                 value("border-bottom-right-radius", size);
                 break;
 
-            case 6: // bottom
+            case 7: // bottom-
                 value("border-bottom-left-radius", size);
                 break;
 
-            case 4: // left
+            case 5: // left-
                 value("border-top-left-radius", size);
                 break;
             }
@@ -118,7 +118,7 @@ public class Borders extends BorderList {
          */
         @Override
         public Border width(Numeric size) {
-            return value("border-" + side + "-width", size);
+            return value("border-" + side + "width", size);
         }
 
         /**
@@ -126,7 +126,7 @@ public class Borders extends BorderList {
          */
         @Override
         public Border color(Color color) {
-            return value("border-" + side + "-color", color);
+            return value("border-" + side + "color", color);
         }
 
         /**
@@ -134,7 +134,7 @@ public class Borders extends BorderList {
          */
         @Override
         protected Border style(String style) {
-            return value("border-" + side + "-style", style);
+            return value("border-" + side + "style", style);
         }
     }
 }

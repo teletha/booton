@@ -9,9 +9,10 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
+import jsx.style.value.Color;
 
 /**
  * @version 2014/11/13 14:19:33
@@ -47,14 +48,27 @@ public class BorderTest extends StyleTester {
     }
 
     @Test
-    public void all() {
+    public void allWidth() {
         ValidatableStyle parsed = style(() -> {
             border.width(2, px);
         });
-        assert parsed.property("border-top-width", "2px");
-        assert parsed.property("border-bottom-width", "2px");
-        assert parsed.property("border-right-width", "2px");
-        assert parsed.property("border-left-width", "2px");
+        assert parsed.property("border", "2px");
+    }
+
+    @Test
+    public void allStyle() {
+        ValidatableStyle parsed = style(() -> {
+            border.solid();
+        });
+        assert parsed.property("border", "solid");
+    }
+
+    @Test
+    public void allColor() {
+        ValidatableStyle parsed = style(() -> {
+            border.color(Color.White);
+        });
+        assert parsed.property("border", "white");
     }
 
     @Test
@@ -63,6 +77,5 @@ public class BorderTest extends StyleTester {
             border.top.radius(1, px);
         });
         assert parsed.property("border-top-right-radius", "1px");
-        assert parsed.property("border-top-left-radius", "1px");
     }
 }
