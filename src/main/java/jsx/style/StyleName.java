@@ -24,7 +24,7 @@ import booton.translator.Translator;
 /**
  * @version 2014/10/31 9:51:37
  */
-public class StyleId {
+public class StyleName {
 
     /** The configuration. */
     private static final BootonConfiguration config = I.make(BootonConfiguration.class);
@@ -89,7 +89,7 @@ public class StyleId {
      * @version 2014/10/31 9:54:35
      */
     @SuppressWarnings("unused")
-    private static class Coder extends Translator<StyleId> {
+    private static class Coder extends Translator<StyleName> {
 
         /**
          * <p>

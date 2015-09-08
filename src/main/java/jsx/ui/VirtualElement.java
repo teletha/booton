@@ -16,7 +16,7 @@ import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.style.Style;
-import jsx.style.StyleId;
+import jsx.style.StyleName;
 
 /**
  * @version 2014/10/07 12:49:29
@@ -160,7 +160,7 @@ public class VirtualElement extends VirtualNode<Element> {
             builder.append(" class=\"");
 
             for (int i = 0; i < element.classList.length(); i++) {
-                builder.append(StyleId.of(element.classList.get(i))).append(" ");
+                builder.append(StyleName.of(element.classList.get(i))).append(" ");
             }
             builder.append("\"");
         }

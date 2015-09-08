@@ -18,7 +18,7 @@ import java.util.Set;
 
 import booton.BootonConfiguration;
 import jsx.style.Style;
-import jsx.style.StyleId;
+import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.value.Font;
 import kiss.I;
@@ -92,7 +92,7 @@ public class CascadingStyleSheet {
             if (!styles.contains(style)) {
                 styles.add(style);
             }
-            return StyleId.of(style);
+            return StyleName.of(style);
         } catch (Exception e) {
             throw I.quiet(e);
         }

@@ -13,7 +13,7 @@ import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 
 /**
- * @version 2014/10/29 9:59:22
+ * @version 2015/09/08 13:20:50
  */
 public class Borders extends BorderList {
 
@@ -23,7 +23,7 @@ public class Borders extends BorderList {
      * border-top-style, and border-top-width. These properties describe the top border of elements.
      * </p>
      */
-    public final Border top = new Single("top");
+    public final Border top = new Single(SideDirection.Top);
 
     /**
      * <p>
@@ -32,7 +32,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border bottom = new Single("bottom");
+    public final Border bottom = new Single(SideDirection.Bottom);
 
     /**
      * <p>
@@ -41,7 +41,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border left = new Single("left");
+    public final Border left = new Single(SideDirection.Left);
 
     /**
      * <p>
@@ -50,7 +50,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border right = new Single("right");
+    public final Border right = new Single(SideDirection.Right);
 
     /**
      * <p>
@@ -74,17 +74,17 @@ public class Borders extends BorderList {
     }
 
     /**
-     * @version 2014/10/29 10:03:31
+     * @version 2015/09/08 13:20:54
      */
     private class Single extends Border {
 
         /** The target side. */
-        private final String side;
+        private final SideDirection side;
 
         /**
          * @param side
          */
-        public Single(String side) {
+        public Single(SideDirection side) {
             this.side = side;
         }
 
@@ -94,24 +94,20 @@ public class Borders extends BorderList {
         @Override
         public Border radius(Numeric size) {
             switch (side) {
-            case "top":
-                value("border-top-left-radius", size);
+            case Top:
                 value("border-top-right-radius", size);
                 break;
 
-            case "right":
-                value("border-top-right-radius", size);
+            case Right:
                 value("border-bottom-right-radius", size);
                 break;
 
-            case "bottom":
+            case Bottom:
+                value("border-bottom-left-radius", size);
+                break;
+
+            case Left:
                 value("border-top-left-radius", size);
-                value("border-bottom-left-radius", size);
-                break;
-
-            case "left":
-                value("border-bottom-left-radius", size);
-                value("border-bottom-right-radius", size);
                 break;
             }
             return this;

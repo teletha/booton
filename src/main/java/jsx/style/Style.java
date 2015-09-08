@@ -36,7 +36,7 @@ public interface Style extends Locatable {
      * </p>
      * 
      * @return A style class name.
-     * @deprecated This method is internal API. Use {@link StyleId#of(Style)} instead.
+     * @deprecated This method is internal API. Use {@link StyleName#of(Style)} instead.
      */
     @Deprecated
     public default String className() {
