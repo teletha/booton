@@ -15,9 +15,9 @@ import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 
 /**
- * @version 2015/09/08 13:20:50
+ * @version 2015/09/09 14:52:21
  */
-public class Borders extends BorderList {
+public class Borders extends Border {
 
     /**
      * <p>
@@ -25,7 +25,7 @@ public class Borders extends BorderList {
      * border-top-style, and border-top-width. These properties describe the top border of elements.
      * </p>
      */
-    public final Border top = new Single("top-");
+    public final Border top = new Each("top");
 
     /**
      * <p>
@@ -34,7 +34,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border bottom = new Single("bottom-");
+    public final Border bottom = new Each("bottom");
 
     /**
      * <p>
@@ -43,7 +43,7 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border left = new Single("left-");
+    public final Border left = new Each("left");
 
     /**
      * <p>
@@ -52,42 +52,74 @@ public class Borders extends BorderList {
      * elements.
      * </p>
      */
-    public final Border right = new Single("right-");
-
-    /**
-     * <p>
-     * A shorthand that sets the values of border-right and border-left.
-     * </p>
-     */
-    public final Border horizontal = new BorderList().use(left, right);
+    public final Border right = new Each("right");
 
     /**
      * <p>
      * A shorthand that sets the values of border-top and border-bottom.
      * </p>
      */
-    public final Border vertical = new BorderList().use(top, bottom);
+    public final Border vertical = new Each("top", "bottom");
+
+    /**
+     * <p>
+     * A shorthand that sets the values of border-right and border-left.
+     * </p>
+     */
+    public final Border horizontal = new Each("right", "left");
 
     /**
      * 
      */
     public Borders() {
-        use(new All());
     }
 
     /**
-     * @version 2015/09/08 13:20:54
+     * {@inheritDoc}
      */
-    private class Single extends Border {
+    @Override
+    public Border radius(Numeric size) {
+        return value("border-radius", size);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Border width(Numeric size) {
+        return value("border", Arrays.asList(size), " ", 2);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Border color(Color color) {
+        return value("border", Arrays.asList(color), " ", 2);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Border style(String style) {
+        return value("border", Arrays.asList(style), " ", 2);
+    }
+
+    /**
+     * @version 2015/09/09 14:52:16
+     */
+    private static class Each extends Border {
 
         /** The target side. */
-        private final String side;
+        private final String[] sides;
 
         /**
-         * @param side
+         * 
+         * 
          */
-        public Single(String side) {
-            this.side = side;
+        public Each(String... sides) {
+            this.sides = sides;
         }
 
         /**
@@ -95,22 +127,24 @@ public class Borders extends BorderList {
          */
         @Override
         public Border radius(Numeric size) {
-            switch (side.length()) {
-            case 4: // top-
-                value("border-top-right-radius", size);
-                break;
+            for (String side : sides) {
+                switch (side.length()) {
+                case 3: // top
+                    value("border-top-right-radius", size);
+                    break;
 
-            case 6: // right-
-                value("border-bottom-right-radius", size);
-                break;
+                case 5: // right
+                    value("border-bottom-right-radius", size);
+                    break;
 
-            case 7: // bottom-
-                value("border-bottom-left-radius", size);
-                break;
+                case 6: // bottom
+                    value("border-bottom-left-radius", size);
+                    break;
 
-            case 5: // left-
-                value("border-top-left-radius", size);
-                break;
+                case 4: // left
+                    value("border-top-left-radius", size);
+                    break;
+                }
             }
             return this;
         }
@@ -120,7 +154,10 @@ public class Borders extends BorderList {
          */
         @Override
         public Border width(Numeric size) {
-            return value("border-" + side + "width", size);
+            for (String side : sides) {
+                value("border-" + side, Arrays.asList(size), " ", 2);
+            }
+            return this;
         }
 
         /**
@@ -128,7 +165,10 @@ public class Borders extends BorderList {
          */
         @Override
         public Border color(Color color) {
-            return value("border-" + side + "color", color);
+            for (String side : sides) {
+                value("border-" + side, Arrays.asList(color), " ", 2);
+            }
+            return this;
         }
 
         /**
@@ -136,45 +176,10 @@ public class Borders extends BorderList {
          */
         @Override
         protected Border style(String style) {
-            return value("border-" + side + "style", style);
-        }
-    }
-
-    /**
-     * @version 2015/09/09 10:48:19
-     */
-    private static class All extends Border {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Border radius(Numeric size) {
-            return value("border-radius", size);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Border width(Numeric size) {
-            return value("border", Arrays.asList(size), " ", 2);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected Border style(String style) {
-            return value("border", Arrays.asList(style), " ", 2);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Border color(Color color) {
-            return value("border", Arrays.asList(color), " ", 2);
+            for (String side : sides) {
+                value("border-" + side, Arrays.asList(style), " ", 2);
+            }
+            return this;
         }
     }
 }
