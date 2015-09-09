@@ -16,6 +16,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import jsx.collection.DualList;
 import kiss.I;
@@ -97,7 +98,7 @@ public class StyleRule {
      * @param override A flag for property override.
      * @param prefixes A list of vendors for property name.
      */
-    void property(String name, List values, String separator, boolean override, EnumSet<Vendor> prefixes) {
+    void property(String name, List values, String separator, int writeMode, EnumSet<Vendor> prefixes) {
         if (name != null && name.length() != 0 && values != null) {
             EnumMap<Vendor, List<String>> properties = new EnumMap(Vendor.class);
 
@@ -153,10 +154,24 @@ public class StyleRule {
 
                     String resolvedName = vendor + name;
 
-                    if (override) {
-                        this.properties.set(resolvedName, value);
-                    } else {
+                    switch (writeMode) {
+                    case 0: // addition
                         this.properties.add(resolvedName, value);
+                        break;
+
+                    case 1: // override
+                        this.properties.set(resolvedName, value);
+                        break;
+
+                    case 2: // append
+                        Optional<String> current = this.properties.get(resolvedName);
+
+                        if (current.isPresent()) {
+                            this.properties.set(resolvedName, current.get() + separator + value);
+                        } else {
+                            this.properties.add(resolvedName, value);
+                        }
+                        break;
                     }
                 }
             }
@@ -179,8 +194,8 @@ public class StyleRule {
 
     /**
      * <p>
-     * Create {@link StyleRule} from the specified object. (e.g. {@link Style},
-     * {@link RuntimeStyle} )
+     * Create {@link StyleRule} from the specified object. (e.g. {@link Style}, {@link RuntimeStyle}
+     * )
      * </p>
      * 
      * @param object A style description.

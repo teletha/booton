@@ -107,7 +107,7 @@ public class PropertyDefinition<T> {
      * @return Chainable API.
      */
     protected final T value(EnumSet<Vendor> vendors, Object value) {
-        return value(vendors, name, Arrays.asList(value), " ", false);
+        return value(vendors, name, Arrays.asList(value), " ", 0);
     }
 
     /**
@@ -219,7 +219,7 @@ public class PropertyDefinition<T> {
      * @return Chainable API.
      */
     protected final T value(String name, List values, String separator) {
-        return value(name, values, separator, false);
+        return value(name, values, separator, 0);
     }
 
     /**
@@ -230,11 +230,11 @@ public class PropertyDefinition<T> {
      * @param name A property name.
      * @param values A list of property values.
      * @param separator A value separator.
-     * @param override A value override mechanism.
+     * @param writeMode A value write mechanism.
      * @return Chainable API.
      */
-    protected final T value(String name, List values, String separator, boolean override) {
-        return value(EnumSet.noneOf(Vendor.class), name, values, separator, override);
+    protected final T value(String name, List values, String separator, int writeMode) {
+        return value(EnumSet.noneOf(Vendor.class), name, values, separator, writeMode);
     }
 
     /**
@@ -246,12 +246,13 @@ public class PropertyDefinition<T> {
      * @param name A property name.
      * @param values A list of property values.
      * @param separator A value separator.
-     * @param override A value override mechanism. @return Chainable API.
+     * @param writeMode A value write mechanism.
+     * @return Chainable API.
      */
-    protected final T value(EnumSet<Vendor> vendors, String name, List values, String separator, boolean override) {
+    protected final T value(EnumSet<Vendor> vendors, String name, List values, String separator, int writeMode) {
         vendors.addAll(this.vendors);
 
-        properties.property(name, values, separator, override, vendors);
+        properties.property(name, values, separator, writeMode, vendors);
 
         return context;
     }

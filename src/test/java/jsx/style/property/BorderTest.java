@@ -15,7 +15,7 @@ import jsx.style.StyleTester;
 import jsx.style.value.Color;
 
 /**
- * @version 2014/11/13 14:19:33
+ * @version 2015/09/09 10:54:08
  */
 public class BorderTest extends StyleTester {
 
@@ -69,6 +69,14 @@ public class BorderTest extends StyleTester {
             border.color(Color.White);
         });
         assert parsed.property("border", "white");
+    }
+
+    @Test
+    public void all() {
+        ValidatableStyle parsed = style(() -> {
+            border.color(Color.White).solid().width(1, px);
+        });
+        assert parsed.property("border", "white solid 1px");
     }
 
     @Test

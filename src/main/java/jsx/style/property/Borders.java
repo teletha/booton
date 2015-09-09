@@ -9,6 +9,8 @@
  */
 package jsx.style.property;
 
+import java.util.Arrays;
+
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 
@@ -70,7 +72,7 @@ public class Borders extends BorderList {
      * 
      */
     public Borders() {
-        use(new Single(""));
+        use(new All());
     }
 
     /**
@@ -135,6 +137,44 @@ public class Borders extends BorderList {
         @Override
         protected Border style(String style) {
             return value("border-" + side + "style", style);
+        }
+    }
+
+    /**
+     * @version 2015/09/09 10:48:19
+     */
+    private static class All extends Border {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Border radius(Numeric size) {
+            return value("border-radius", size);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Border width(Numeric size) {
+            return value("border", Arrays.asList(size), " ", 2);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected Border style(String style) {
+            return value("border", Arrays.asList(style), " ", 2);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Border color(Color color) {
+            return value("border", Arrays.asList(color), " ", 2);
         }
     }
 }

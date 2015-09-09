@@ -9,7 +9,6 @@
  */
 package jsx.style.property;
 
-import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 
@@ -212,43 +211,5 @@ public abstract class Border extends Colorable<Border> {
      */
     public final Border outset() {
         return style("outset");
-    }
-
-    /**
-     * @version 2015/09/08 16:53:18
-     */
-    static class All extends Border {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Border radius(Numeric size) {
-            return null;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Border width(Numeric size) {
-            return null;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected Border style(String style) {
-            return null;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Border color(Color color) {
-            return append("border", color);
-        }
     }
 }
