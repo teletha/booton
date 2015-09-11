@@ -44,14 +44,7 @@ public interface Style extends Locatable {
     }
 
     public default void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
-        WidgetLog.InlineStyle.start();
-        StyleRule style = new StyleRule(inlines);
-
-        // swap context rule and execute it
-        PropertyDefinition.properties = style;
-        declare();
-        PropertyDefinition.properties = null;
-        WidgetLog.InlineStyle.stop();
+        styles.push(this);
     }
 
     /**

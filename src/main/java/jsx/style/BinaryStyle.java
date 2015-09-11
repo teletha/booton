@@ -37,8 +37,6 @@ public interface BinaryStyle extends ValueStyle<Boolean> {
      * @return A specific {@link Style}.
      */
     default Style of(boolean state) {
-        return () -> {
-            declare(state);
-        };
+        return of(Boolean.valueOf(state));
     }
 }

@@ -9,27 +9,31 @@
  */
 package jsx.style;
 
+import static jsx.style.ValueStyleMemo.*;
+
+import kiss.I;
+
 /**
- * @version 2015/05/04 13:26:12
+ * @version 2015/09/11 16:52:29
  */
 public interface ValueStyle<V> {
 
     /**
      * <p>
-     * Declare styles.
+     * Declare styles for the specified value.
      * </p>
      */
     void declare(V value);
 
     /**
      * <p>
-     * Retrieve the specific {@link Style} of the specified state.
+     * Retrieve the refined {@link Style} of the specified value.
      * </p>
      * 
-     * @param value A value.
-     * @return A specific {@link Style}.
+     * @param value A conditional value.
+     * @return A refined {@link Style}.
      */
     default Style of(V value) {
-        return new ContextualizableStyle(value, this, () -> declare(value));
+        return cache.computeIfAbsent(I.pair(this, value), key -> new ContextualizableStyle(value, this, () -> declare(value)));
     }
 }

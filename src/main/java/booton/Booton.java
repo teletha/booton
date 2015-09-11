@@ -192,6 +192,7 @@ public class Booton {
         head.child("meta").attr("charset", "utf-8");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "normalize.css");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", config.root.relativize(css));
+        head.child("style");
 
         XML body = html.child("body");
         body.child("header").attr("id", "Header");

@@ -21,7 +21,7 @@ class MultipleStyle implements Style {
     private final Style base;
 
     /** The style contianer. */
-    private final NativeArray<Style> styles = new NativeArray();
+    final NativeArray<Style> styles = new NativeArray();
 
     /**
      * @param base
@@ -38,7 +38,9 @@ class MultipleStyle implements Style {
      */
     @Override
     public void declare() {
-        // do nothing
+        for (int i = 0, size = this.styles.length(); i < size; i++) {
+            this.styles.get(i).declare();
+        }
     }
 
     /**

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import js.lang.NativeArray;
 import jsx.collection.DualList;
 import kiss.I;
 
@@ -38,6 +39,9 @@ public class StyleRule {
 
     /** The property list. */
     public final DualList<String, String> properties;
+
+    /** The sub rules. */
+    public final NativeArray<StyleRule> children = new NativeArray();
 
     /**
      * <p>
@@ -189,7 +193,7 @@ public class StyleRule {
             builder.append(properties.key(i)).append(":").append(properties.value(i)).append(";");
         }
         builder.append("}");
-        return super.toString();
+        return builder.toString();
     }
 
     /**
@@ -232,6 +236,10 @@ public class StyleRule {
         PropertyDefinition.properties = child;
         style.declare();
         PropertyDefinition.properties = parent;
+
+        if (parent != null) {
+            parent.children.push(child);
+        }
 
         // assign rule
         holders.add(child);

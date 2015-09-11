@@ -27,6 +27,7 @@ import javafx.beans.value.ObservableValue;
 import js.lang.NativeString;
 import jsx.style.ContextualizedStyle;
 import jsx.style.Style;
+import jsx.style.StyleManager;
 import jsx.ui.ContextualizedEventListeners.EventListener;
 import kiss.NamedValue;
 
@@ -484,6 +485,8 @@ public final class VirtualStructure {
                     WidgetLog.Style.start();
                     style.assignTo(container.classList, container.inlines);
                     container.contextualized = createSpecifiedListenerDifinitions(style);
+
+                    StyleManager.add(style);
                     WidgetLog.Style.stop();
                 }
             }

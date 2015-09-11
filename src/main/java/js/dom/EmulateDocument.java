@@ -9,11 +9,13 @@
  */
 package js.dom;
 
+import org.w3c.dom.DOMException;
+
+import js.lang.NativeCSSStyleSheet;
+import js.lang.NativeCSSStyleSheetList;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-
-import org.w3c.dom.DOMException;
 
 /**
  * @version 2013/07/12 20:39:00
@@ -23,6 +25,9 @@ class EmulateDocument extends Document {
 
     /** The root element. */
     private final EmulateElement root = new EmulateElement("html");
+
+    /** The stylesheets. */
+    private static final NativeCSSStyleSheetList stylesheets = new BuiltinSheets();
 
     /**
      * {@inheritDoc}
@@ -188,6 +193,14 @@ class EmulateDocument extends Document {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public NativeCSSStyleSheetList styleSheets() {
+        return stylesheets;
+    }
+
+    /**
      * @version 2013/10/20 10:10:21
      */
     private static class EmulateEvent extends UIEvent {
@@ -204,6 +217,20 @@ class EmulateDocument extends Document {
             this.type = type;
             this.bubbles = bubbles;
             this.cancelabe = cancelable;
+        }
+    }
+
+    /**
+     * @version 2015/09/11 15:31:08
+     */
+    private static class BuiltinSheets extends NativeCSSStyleSheetList {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public NativeCSSStyleSheet item(int index) {
+            return new NativeCSSStyleSheet();
         }
     }
 }

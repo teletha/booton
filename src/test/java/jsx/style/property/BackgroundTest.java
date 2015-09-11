@@ -10,11 +10,11 @@
 package jsx.style.property;
 
 import static jsx.style.value.Color.*;
-import jsx.style.StyleTester;
-import jsx.style.property.Background.BackgroundImage;
-import jsx.style.value.LinearGradient;
 
 import org.junit.Test;
+
+import jsx.style.StyleTester;
+import jsx.style.property.Background.BackgroundImage;
 
 /**
  * @version 2014/11/13 14:19:22
@@ -72,12 +72,7 @@ public class BackgroundTest extends StyleTester {
     public void images() {
         ValidatableStyle parsed = style(() -> {
             BackgroundImage one = BackgroundImage.url("one").bottom().right();
-            BackgroundImage two = BackgroundImage.url("two")
-                    .horizontal(1, em)
-                    .vertical(2, percent)
-                    .noRepeat()
-                    .contain()
-                    .local();
+            BackgroundImage two = BackgroundImage.url("two").horizontal(1, em).vertical(2, percent).noRepeat().contain().local();
 
             background.image(one, two);
         });
@@ -91,7 +86,7 @@ public class BackgroundTest extends StyleTester {
     @Test
     public void imageGradient() throws Exception {
         ValidatableStyle parsed = style(() -> {
-            background.image(BackgroundImage.of(new LinearGradient().color(Black, White)));
+            background.image(BackgroundImage.of(linear().color(Black, White)));
         });
         assert parsed.property("background-image", "linear-gradient(black,white)", "-webkit-linear-gradient(black,white)");
     }
@@ -99,8 +94,9 @@ public class BackgroundTest extends StyleTester {
     @Test
     public void imageGradients() throws Exception {
         ValidatableStyle parsed = style(() -> {
-            background.image(BackgroundImage.of(new LinearGradient().color(Black, White)), BackgroundImage.of(new LinearGradient().color(White, Black)));
+            background.image(BackgroundImage.of(linear().color(Black, White)), BackgroundImage.of(linear().color(White, Black)));
         });
-        assert parsed.property("background-image", "linear-gradient(black,white),linear-gradient(white,black)", "-webkit-linear-gradient(black,white),-webkit-linear-gradient(white,black)");
+        assert parsed
+                .property("background-image", "linear-gradient(black,white),linear-gradient(white,black)", "-webkit-linear-gradient(black,white),-webkit-linear-gradient(white,black)");
     }
 }

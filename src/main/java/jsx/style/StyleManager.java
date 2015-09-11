@@ -9,16 +9,23 @@
  */
 package jsx.style;
 
-import java.util.ArrayList;
-import java.util.List;
+import static js.lang.Global.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import js.lang.NativeCSSStyleSheet;
+import jsx.ui.WidgetLog;
 
 /**
  * @version 2015/09/04 23:37:15
  */
-class StyleManager {
+public class StyleManager {
+
+    private static final NativeCSSStyleSheet stylesheet = document.styleSheets().item(2);
 
     /** The managed style list. */
-    private static final List<Style> styles = new ArrayList();
+    private static final Set<Style> styles = new HashSet();
 
     /**
      * <p>
@@ -27,22 +34,26 @@ class StyleManager {
      * 
      * @param style
      */
-    static void add(Style style) {
-        if (style != null && !styles.contains(style)) {
+    public static void add(Style style) {
+        if (style != null && styles.add(style)) {
+            WidgetLog.StyleDefinition.start();
 
+            if (style instanceof MultipleStyle) {
+                MultipleStyle multiple = (MultipleStyle) style;
+
+                for (int i = 0; i < multiple.styles.length(); i++) {
+                    define(multiple.styles.get(i));
+                }
+            } else {
+                define(style);
+            }
+            WidgetLog.StyleDefinition.stop();
         }
     }
 
-    /**
-     * <p>
-     * Remove the specified {@link Style}.
-     * </p>
-     * 
-     * @param style
-     */
-    static void remove(Style style) {
-        if (style != null) {
+    private static void define(Style style) {
+        StyleRule rule = StyleRule.create("$", style);
 
-        }
+        stylesheet.insertRule(rule.toString(), 0);
     }
 }
