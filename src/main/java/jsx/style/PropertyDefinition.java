@@ -103,41 +103,10 @@ public class PropertyDefinition<T> {
      * </p>
      * 
      * @param name A property name.
-     * @param value A property value.
-     * @return Chainable API.
-     */
-    protected final T value(EnumSet<Vendor> vendors, Object value) {
-        return value(vendors, name, Arrays.asList(value), " ", 0);
-    }
-
-    /**
-     * <p>
-     * Set property.
-     * </p>
-     * 
-     * @param name A property name.
      * @param values A list of property values.
      * @return Chainable API.
      */
     protected final T value(String name, int... values) {
-        List<String> list = new ArrayList();
-
-        for (int i = 0; i < values.length; i++) {
-            list.add(String.valueOf(values[i]));
-        }
-        return value(name, list, ",");
-    }
-
-    /**
-     * <p>
-     * Set property.
-     * </p>
-     * 
-     * @param name A property name.
-     * @param values A list of property values.
-     * @return Chainable API.
-     */
-    protected final T value(String name, long... values) {
         List<String> list = new ArrayList();
 
         for (int i = 0; i < values.length; i++) {
@@ -170,42 +139,11 @@ public class PropertyDefinition<T> {
      * </p>
      * 
      * @param name A property name.
-     * @param values A list of property values.
-     * @return Chainable API.
-     */
-    protected final T value(String name, double... values) {
-        List<String> list = new ArrayList();
-
-        for (int i = 0; i < values.length; i++) {
-            list.add(String.valueOf(values[i]));
-        }
-        return value(name, list, ",");
-    }
-
-    /**
-     * <p>
-     * Set property.
-     * </p>
-     * 
-     * @param name A property name.
      * @param value A property value.
      * @return Chainable API.
      */
     protected final T value(String name, Object value) {
-        return value(name, Arrays.asList(value));
-    }
-
-    /**
-     * <p>
-     * Set property.
-     * </p>
-     * 
-     * @param name A property name.
-     * @param values A list of property values.
-     * @return Chainable API.
-     */
-    protected final T value(String name, List values) {
-        return value(name, values, " ");
+        return value(name, Arrays.asList(value), " ");
     }
 
     /**

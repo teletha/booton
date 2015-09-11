@@ -81,7 +81,7 @@ public class Stroke extends Colorable<Stroke> {
      *            notes.
      * @return Chainable API.
      */
-    public Stroke dashArray(double... sizes) {
+    public Stroke dashArray(float... sizes) {
         return value("stroke-dasharray", sizes);
     }
 
