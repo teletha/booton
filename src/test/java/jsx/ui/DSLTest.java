@@ -7,12 +7,12 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.html;
+package jsx.ui;
 
 import org.junit.Test;
 
 /**
- * @version 2014/12/02 13:51:39
+ * @version 2015/09/12 23:19:08
  */
 public class DSLTest {
 
@@ -21,10 +21,17 @@ public class DSLTest {
         DSL dsl = new DSL() {
 
             {
-                div(title("Title"), () -> {
+                e("div", title("Title"), () -> {
                     text("Text");
                 });
             }
         };
+
+        VirtualElement root = dsl.items.get(0);
+        assert root.name.equals("div");
+        assert root.attributes.get("title").get().equals("Title");
+
+        VirtualNode child = root.items.get(0);
+        assert child.toString().equals("Text");
     }
 }
