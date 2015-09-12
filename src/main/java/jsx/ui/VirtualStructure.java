@@ -29,7 +29,6 @@ import jsx.style.ContextualizedStyle;
 import jsx.style.Style;
 import jsx.style.StyleManager;
 import jsx.ui.ContextualizedEventListeners.EventListener;
-import kiss.NamedValue;
 
 /**
  * @version 2014/09/13 1:52:02
@@ -300,31 +299,6 @@ public final class VirtualStructure {
      * @param localId A local id for the container element.
      * @return A descriptor of the container element.
      */
-    public final ContainerDescriptor e(String name, String... attributes) {
-        ContainerDescriptor container = new ContainerDescriptor(name, null);
-        VirtualElement element = container.container(0, null);
-
-        for (int i = 0; i < attributes.length; i++) {
-            element.attributes.add(attributes[i], attributes[++i]);
-        }
-
-        if (name.equals("svg")) {
-            element.attributes.add("version", "1.1");
-            element.attributes.add("preserveAspectRatio", "xMidYMid meet");
-        }
-
-        return container;
-    }
-
-    /**
-     * <p>
-     * Define element with some attributes.
-     * </p>
-     * 
-     * @param name A element name.
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     */
     public final ContainerDescriptor e(String name, Style style, Object... attributes) {
         ContainerDescriptor container = new ContainerDescriptor(name, null);
         VirtualElement element = container.container(0, style);
@@ -338,26 +312,6 @@ public final class VirtualStructure {
         if (name.equals("svg")) {
             element.attributes.add("version", "1.1");
             element.attributes.add("preserveAspectRatio", "xMidYMid meet");
-        }
-
-        return container;
-    }
-
-    /**
-     * <p>
-     * Define element with some attributes.
-     * </p>
-     * 
-     * @param name A element name.
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     */
-    public final ContainerDescriptor e(String name, Style style, NamedValue... attributes) {
-        ContainerDescriptor container = new ContainerDescriptor(name, null);
-        VirtualElement element = container.container(0, style);
-
-        for (NamedValue attribute : attributes) {
-            element.attributes.add(attribute.name(), String.valueOf(attribute.value()));
         }
 
         return container;

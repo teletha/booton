@@ -52,11 +52,6 @@ public class Select<M> extends Widget {
     @Override
     protected void virtualize(VirtualStructure 〡) {
         〡.vbox.〡(() -> {
-            〡.hbox.〡(() -> {
-                〡.e("s:svg", "width", "20", "height", "20").〡(() -> {
-                    〡.e("s:circle", "cx", "10", "cy", "10", "r", "10", "fill", "red");
-                });
-            });
             〡.vbox.〡(ViewableArea.with(shown), () -> {
                 〡.hbox.〡(Slider, () -> {
                     〡.vbox.〡(null, values, value -> {

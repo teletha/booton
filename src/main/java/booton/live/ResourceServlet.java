@@ -88,7 +88,7 @@ public class ResourceServlet extends HttpServlet {
             Path deployed = root.resolve(path);
 
             if (Files.exists(resource)) {
-                if (Files.getLastModifiedTime(resource) != Files.getLastModifiedTime(deployed)) {
+                if (Files.notExists(deployed) || Files.getLastModifiedTime(resource) != Files.getLastModifiedTime(deployed)) {
                     I.copy(resource, deployed);
                 }
             }

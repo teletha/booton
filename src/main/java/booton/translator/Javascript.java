@@ -577,6 +577,10 @@ public class Javascript {
         if (!dependency.isAnnotationPresent(Unnecessary.class)) {
             Javascript context = CompilerRecorder.getScript();
 
+            if (context == null) {
+                System.out.println(dependency);
+            }
+
             if (context.source != dependency) {
                 context.dependencies.add(dependency);
             }
