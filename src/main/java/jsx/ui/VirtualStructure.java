@@ -87,9 +87,6 @@ public final class VirtualStructure {
     /** The descriptor of properties. */
     public final AttributeDescriptor attr = new AttributeDescriptor();
 
-    /** The descriptor of properties. */
-    public final StyleDescriptor style = new StyleDescriptor();
-
     /** The latest context line number. */
     protected int latestContextId;
 
@@ -401,7 +398,8 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
+                : context, listeners);
     }
 
     /**
@@ -746,31 +744,6 @@ public final class VirtualStructure {
                 return 〡(name, String.valueOf(value.getValue()));
             }
         }
-    }
-
-    /**
-     * @version 2015/01/21 13:18:17
-     */
-    public class StyleDescriptor {
-
-        public StyleDescriptor 〡(Style style) {
-            style.assignTo(latest.classList, latest.inlines);
-            return this;
-        }
-
-        /**
-         * <p>
-         * Add {@link Style} if the given codition is true.
-         * </p>
-         * 
-         * @param condition A style condition.
-         * @param style A target style to apply.
-         */
-        public void 〡(Style style, boolean condition) {
-            if (condition) {
-                style.assignTo(latest.classList, latest.inlines);
-            }
-        }
 
         /**
          * <p>
@@ -780,11 +753,12 @@ public final class VirtualStructure {
          * @param value An attribute value.
          * @param style A target style to apply.
          */
-        public void 〡(Style style, String name, String value) {
+        public AttributeDescriptor 〡(String name, String value, Style style) {
             if (name != null && name.length() != 0 && value != null && value.length() != 0) {
                 style.assignTo(latest.classList, latest.inlines);
                 latest.attributes.add(name, value);
             }
+            return this;
         }
     }
 

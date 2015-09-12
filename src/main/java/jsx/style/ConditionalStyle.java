@@ -20,7 +20,7 @@ import jsx.collection.DualList;
 class ConditionalStyle implements Style {
 
     /** The style declaration. */
-    private final Style style;
+    final Style style;
 
     /** The condition. */
     private final ObservableBooleanValue condition;
@@ -40,6 +40,14 @@ class ConditionalStyle implements Style {
     @Override
     public void declare() {
         style.declare();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String className() {
+        return style.className();
     }
 
     /**

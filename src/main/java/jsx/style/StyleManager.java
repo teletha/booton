@@ -18,7 +18,7 @@ import js.lang.NativeCSSStyleSheet;
 import jsx.ui.WidgetLog;
 
 /**
- * @version 2015/09/04 23:37:15
+ * @version 2015/09/11 22:40:12
  */
 public class StyleManager {
 
@@ -42,18 +42,25 @@ public class StyleManager {
                 MultipleStyle multiple = (MultipleStyle) style;
 
                 for (int i = 0; i < multiple.styles.length(); i++) {
-                    define(multiple.styles.get(i));
+                    add(multiple.styles.get(i));
                 }
+            } else if (style instanceof ConditionalStyle) {
+                add(((ConditionalStyle) style).style);
             } else {
-                define(style);
+                StyleRule rule = StyleRule.create("$", style);
+
+                add(rule);
             }
+
             WidgetLog.StyleDefinition.stop();
         }
     }
 
-    private static void define(Style style) {
-        StyleRule rule = StyleRule.create("$", style);
-
+    private static void add(StyleRule rule) {
         stylesheet.insertRule(rule.toString(), 0);
+
+        for (int i = 0; i < rule.children.length(); i++) {
+            add(rule.children.get(i));
+        }
     }
 }

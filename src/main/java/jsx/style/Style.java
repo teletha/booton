@@ -15,7 +15,6 @@ import javafx.beans.value.ObservableBooleanValue;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import jsx.ui.WidgetLog;
 import kiss.Events;
 
 /**
@@ -57,6 +56,22 @@ public interface Style extends Locatable {
      */
     public default Style with(Style other) {
         return new MultipleStyle(this, other);
+    }
+
+    /**
+     * <p>
+     * Compose this style and the specified style.
+     * </p>
+     * 
+     * @param other An other style to compose.
+     * @return A composed style.
+     */
+    public default Style with(Style other, boolean condition) {
+        if (condition) {
+            return new MultipleStyle(this, other);
+        } else {
+            return this;
+        }
     }
 
     /**
