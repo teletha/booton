@@ -34,6 +34,7 @@ import jsx.ui.piece.Output;
 import jsx.ui.piece.UI;
 import jsx.ui.samaple.todo.TodoTasks.Task;
 import jsx.ui.samaple.todo.TodoUI.Text;
+import kiss.Extensible;
 
 /**
  * @version 2014/09/01 15:14:06
@@ -229,7 +230,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
      * @version 2015/06/10 10:08:11
      */
     @Necessary
-    public static class Text extends TextLocalizer {
+    public static class Text extends TextLocalizer implements Extensible {
 
         /**
          * <p>
