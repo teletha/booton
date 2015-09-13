@@ -9,7 +9,9 @@
  */
 package jsx.ui.samaple.todo;
 
+import static jsx.style.StyleRuleDescriptor.*;
 import static jsx.ui.FunctionHelper.*;
+import static jsx.ui.FunctionHelper.not;
 import static jsx.ui.samaple.todo.TodoUISkin.*;
 
 import java.util.function.Predicate;
@@ -124,9 +126,9 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
     protected void virtualize(VirtualStructure 〡) {
         〡.〡(input);
         〡.vbox.〡(ITEMS, Item.class, todos.list);
-        〡.hbox.〡(FOTTER, () -> {
+        〡.nbox.〡(FOTTER, () -> {
             〡.〡(text.leftTaskIs(todos.incompletedSize));
-            〡.hbox.〡(BUTTONS, all, active, completed);
+            〡.nbox.〡(BUTTONS, all, active, completed);
             〡.〡(clear);
         });
     }
@@ -160,7 +162,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
                 if (editing.get()) {
                     $〡.〡(edit);
                 } else {
-                    $〡.hbox.〡(null, complete, text, delete);
+                    $〡.nbox.〡(HBox, complete, text, delete);
                 }
             }
         }

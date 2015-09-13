@@ -77,10 +77,10 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     @Test
     public void hboxTextChange() {
         VirtualStructure prev〡 = new VirtualStructure();
-        prev〡.hbox.〡(null, "text");
+        prev〡.nbox.〡(null, "text");
 
         VirtualStructure next〡 = new VirtualStructure();
-        next〡.hbox.〡(null, "change");
+        next〡.nbox.〡(null, "change");
 
         assertDiff(prev〡, next〡, 1);
     }
@@ -103,7 +103,7 @@ public class VirtualStructureDiffTest extends DiffTestBase {
         if (condition) {
             $〡.vbox.〡(null, "text");
         } else {
-            $〡.hbox.〡(null, "text");
+            $〡.nbox.〡(null, "text");
         }
         return $〡;
     }

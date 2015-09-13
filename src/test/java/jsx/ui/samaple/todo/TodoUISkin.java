@@ -20,7 +20,7 @@ import jsx.ui.samaple.todo.TodoUI.Filter;
 public class TodoUISkin extends StyleRuleDescriptor {
 
     static Style FOTTER = () -> {
-
+        display.flex();
     };
 
     static Style ITEMS = () -> {
@@ -28,6 +28,7 @@ public class TodoUISkin extends StyleRuleDescriptor {
     };
 
     static Style BUTTONS = () -> {
+        display.flex();
     };
 
     static Style CLEAR = () -> {

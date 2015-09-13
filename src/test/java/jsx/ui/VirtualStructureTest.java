@@ -13,10 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import jsx.style.Style;
-
 import org.junit.Ignore;
 import org.junit.Test;
+
+import jsx.style.Style;
 
 /**
  * @version 2014/09/11 14:57:41
@@ -79,11 +79,11 @@ public class VirtualStructureTest {
     @Test
     public void boxText() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, "text");
+        root〡.nbox.〡(style, "text");
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsElement(root, 0, "hbox", e -> {
+        assertAsElement(root, 0, "span", e -> {
             assertAsText(e.items.get(0), "text");
         });
     }
@@ -91,15 +91,15 @@ public class VirtualStructureTest {
     @Test
     public void boxTextSequentialCall() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, "first");
-        root〡.hbox.〡(style, "second");
+        root〡.nbox.〡(style, "first");
+        root〡.nbox.〡(style, "second");
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 2;
-        assertAsElement(root, 0, "hbox", e -> {
+        assertAsElement(root, 0, "span", e -> {
             assertAsText(e.items.get(0), "first");
         });
-        assertAsElement(root, 1, "hbox", e -> {
+        assertAsElement(root, 1, "span", e -> {
             assertAsText(e.items.get(0), "second");
         });
     }
@@ -107,14 +107,14 @@ public class VirtualStructureTest {
     @Test
     public void boxTextNestedCall() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, () -> {
-            root〡.hbox.〡(style, "nested text");
+        root〡.nbox.〡(style, () -> {
+            root〡.nbox.〡(style, "nested text");
         });
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsElement(root, 0, "hbox", e -> {
-            assertAsElement(e, 0, "hbox", text -> {
+        assertAsElement(root, 0, "span", e -> {
+            assertAsElement(e, 0, "span", text -> {
                 assertAsText(text.items.get(0), "nested text");
             });
         });
@@ -123,15 +123,15 @@ public class VirtualStructureTest {
     @Test
     public void boxWidgetText() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, widget(sub〡 -> {
-            sub〡.hbox.〡(style, "nested text");
+        root〡.nbox.〡(style, widget(sub〡 -> {
+            sub〡.nbox.〡(style, "nested text");
         }));
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsElement(root, 0, "hbox", e -> {
+        assertAsElement(root, 0, "span", e -> {
             assertAsElement(e, 0, "widget", w -> {
-                assertAsElement(w, 0, "hbox", nest -> {
+                assertAsElement(w, 0, "span", nest -> {
                     assertAsText(nest.items.get(0), "nested text");
                 });
             });
@@ -143,11 +143,11 @@ public class VirtualStructureTest {
         List<String> items = Arrays.asList("first", "second", "third");
 
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, StringWidget.class, items);
+        root〡.nbox.〡(style, StringWidget.class, items);
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsElement(root, 0, "hbox", e -> {
+        assertAsElement(root, 0, "span", e -> {
             assert e.items.length() == 3;
             assertAsElement(e, 0, "widget", text -> {
                 assertAsText(text.items.get(0), "first");
@@ -164,13 +164,13 @@ public class VirtualStructureTest {
     @Test
     public void range() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
-        root〡.hbox.〡(style, 3, i -> {
+        root〡.nbox.〡(style, 3, i -> {
             root〡.vbox.〡(style, "text" + i);
         });
 
         VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsElement(root, 0, "hbox", e -> {
+        assertAsElement(root, 0, "span", e -> {
             assert e.items.length() == 3;
 
             assertAsElement(e, 0, "vbox", child -> {

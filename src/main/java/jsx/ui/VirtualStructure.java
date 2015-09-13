@@ -37,30 +37,6 @@ public final class VirtualStructure {
 
     /**
      * <p>
-     * Define horizontal container and get the descriptor of the container element.
-     * </p>
-     * <p>
-     * This field is equivalent to the method call <code>hbox(auto-assignment-id)</code>.
-     * </p>
-     * 
-     * @see #hbox(int)
-     */
-    public final ContainerDescriptor hbox = new ContainerDescriptor("hbox", HBOX);
-
-    /**
-     * <p>
-     * Define vertiacal container and get the descriptor of the container element.
-     * </p>
-     * <p>
-     * This field is equivalent to the method call <code>vbox(auto-assignment-id)</code>.
-     * </p>
-     * 
-     * @see #vbox(int)
-     */
-    public final ContainerDescriptor sbox = new ContainerDescriptor("sbox", SBOX);
-
-    /**
-     * <p>
      * Define stackable container and get the descriptor of the container element.
      * </p>
      * <p>
@@ -220,20 +196,6 @@ public final class VirtualStructure {
 
     /**
      * <p>
-     * Define horizontal container with local id.
-     * </p>
-     * 
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     * @see #hbox
-     */
-    public final ContainerDescriptor hbox(int localId) {
-        hbox.localId = localId;
-        return hbox;
-    }
-
-    /**
-     * <p>
      * Define vertical container with local id.
      * </p>
      * 
@@ -244,20 +206,6 @@ public final class VirtualStructure {
     public final ContainerDescriptor vbox(int localId) {
         vbox.localId = localId;
         return vbox;
-    }
-
-    /**
-     * <p>
-     * Define stackable container with local id.
-     * </p>
-     * 
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     * @see #sbox
-     */
-    public final ContainerDescriptor sbox(int localId) {
-        sbox.localId = localId;
-        return sbox;
     }
 
     /**
@@ -286,6 +234,31 @@ public final class VirtualStructure {
     public final ContainerDescriptor e(String name, int localId) {
         ContainerDescriptor container = new ContainerDescriptor(name, null);
         container.localId = localId;
+
+        return container;
+    }
+
+    /**
+     * <p>
+     * Define element with some attributes.
+     * </p>
+     * 
+     * @param name A element name.
+     * @param localId A local id for the container element.
+     * @return A descriptor of the container element.
+     */
+    public final ContainerDescriptor e(String name, String... attributes) {
+        ContainerDescriptor container = new ContainerDescriptor(name, null);
+        VirtualElement element = container.container(0, null);
+
+        for (int i = 0; i < attributes.length; i++) {
+            element.attributes.add(attributes[i], attributes[++i]);
+        }
+
+        if (name.equals("svg")) {
+            element.attributes.add("version", "1.1");
+            element.attributes.add("preserveAspectRatio", "xMidYMid meet");
+        }
 
         return container;
     }
@@ -480,6 +453,18 @@ public final class VirtualStructure {
             // leave from the child node
             parents.pollLast();
             latest = parents.peekLast();
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child nodes.
+         */
+        public final void 〡(Style style) {
+            // store the current context
+            container(LocalId.findContextLineNumber(), style);
         }
 
         /**

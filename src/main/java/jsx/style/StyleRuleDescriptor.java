@@ -10,6 +10,7 @@
 package jsx.style;
 
 import static jsx.style.value.Color.*;
+
 import jsx.style.property.Transition;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
@@ -18,6 +19,29 @@ import jsx.style.value.Numeric;
  * @version 2014/10/21 16:48:37
  */
 public class StyleRuleDescriptor extends StyleDescriptor {
+
+    /** The built-in style. */
+    public static Style NBox = () -> {
+    };
+
+    /** The built-in style. */
+    public static Style HBox = () -> {
+        display.flex();
+    };
+
+    /** The built-in style. */
+    public static Style VBox = () -> {
+        display.flex().direction.column();
+    };
+
+    /** The built-in style. */
+    public static Style SBox = () -> {
+        position.relative();
+
+        children(() -> {
+            position.absolute();
+        });
+    };
 
     /**
      * <p>

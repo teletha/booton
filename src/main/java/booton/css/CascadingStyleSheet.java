@@ -93,6 +93,18 @@ public class CascadingStyleSheet {
                 styles.add(style);
             }
             return StyleName.of(style);
+        } catch (NoSuchFieldException e) {
+            try {
+                Field field = clazz.getField(fieldName);
+                Style style = (Style) field.get(null);
+
+                if (!styles.contains(style)) {
+                    styles.add(style);
+                }
+                return StyleName.of(style);
+            } catch (Exception ee) {
+                throw I.quiet(e);
+            }
         } catch (Exception e) {
             throw I.quiet(e);
         }
