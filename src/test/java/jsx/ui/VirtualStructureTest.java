@@ -165,7 +165,7 @@ public class VirtualStructureTest {
     public void range() throws Exception {
         VirtualStructure root〡 = new VirtualStructure();
         root〡.nbox.〡(style, 3, i -> {
-            root〡.vbox.〡(style, "text" + i);
+            root〡.nbox.〡(style, "text" + i);
         });
 
         VirtualElement root = root〡.getRoot();
@@ -173,13 +173,13 @@ public class VirtualStructureTest {
         assertAsElement(root, 0, "span", e -> {
             assert e.items.length() == 3;
 
-            assertAsElement(e, 0, "vbox", child -> {
+            assertAsElement(e, 0, "span", child -> {
                 assertAsText(child.items.get(0), "text0");
             });
-            assertAsElement(e, 1, "vbox", child -> {
+            assertAsElement(e, 1, "span", child -> {
                 assertAsText(child.items.get(0), "text1");
             });
-            assertAsElement(e, 2, "vbox", child -> {
+            assertAsElement(e, 2, "span", child -> {
                 assertAsText(child.items.get(0), "text2");
             });
         });

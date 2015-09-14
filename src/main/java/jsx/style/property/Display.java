@@ -184,4 +184,30 @@ public final class Display extends PropertyDefinition<Display> {
     public Display none() {
         return value("none");
     }
+
+    /**
+     * <p>
+     * Alias for <code>display.flex()</code>.
+     * </p>
+     * <p>
+     * The element behaves like a block element and lays out its content according to the horizontal
+     * flexbox model.
+     * </p>
+     */
+    public Flex horizontalBox() {
+        return flex();
+    }
+
+    /**
+     * <p>
+     * Alias for <code>display.flex().direction.column()</code>.
+     * </p>
+     * <p>
+     * The element behaves like a block element and lays out its content according to the vertical
+     * flexbox model.
+     * </p>
+     */
+    public Flex verticalBox() {
+        return flex().direction.column();
+    }
 }

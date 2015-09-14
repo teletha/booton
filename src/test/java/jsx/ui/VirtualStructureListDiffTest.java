@@ -170,7 +170,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
             List<String> items = Arrays.asList(model1 + "A", model1 + "B");
 
             $〡.nbox.〡(style, SingleBox.class, items);
-            $〡.vbox.〡(style, SingleBox.class, items);
+            $〡.nbox.〡(style, SingleBox.class, items);
         }
     }
 

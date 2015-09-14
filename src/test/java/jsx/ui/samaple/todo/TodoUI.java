@@ -125,7 +125,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
     @Override
     protected void virtualize(VirtualStructure 〡) {
         〡.〡(input);
-        〡.vbox.〡(ITEMS, Item.class, todos.list);
+        〡.nbox.〡(ITEMS, Item.class, todos.list);
         〡.nbox.〡(FOTTER, () -> {
             〡.〡(text.leftTaskIs(todos.incompletedSize));
             〡.nbox.〡(BUTTONS, all, active, completed);

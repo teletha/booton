@@ -18,6 +18,8 @@ import jsx.style.StyleRuleDescriptor;
 class SlidableViewStyle extends StyleRuleDescriptor {
 
     static Style ViewableArea = () -> {
+        display.verticalBox();
+
         // In firefox, "overflow : hidden" will render dirty, so don't use it.
         overflow.y.hidden();
 

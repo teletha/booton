@@ -53,9 +53,9 @@ public class Select<M> extends Widget {
     @Override
     protected void virtualize(VirtualStructure 〡) {
         〡.nbox.〡(VBox, () -> {
-            〡.vbox.〡(ViewableArea.with(shown), () -> {
+            〡.nbox.〡(ViewableArea.with(shown), () -> {
                 〡.nbox.〡(Slider, () -> {
-                    〡.vbox.〡(null, values, value -> {
+                    〡.nbox.〡(HBox, values, value -> {
                         〡.nbox.〡(null, value);
                     });
                 });

@@ -101,7 +101,7 @@ public class VirtualStructureDiffTest extends DiffTestBase {
     private <T> VirtualStructure change(boolean condition) {
         VirtualStructure $〡 = new VirtualStructure();
         if (condition) {
-            $〡.vbox.〡(null, "text");
+            $〡.nbox.〡(null, "text");
         } else {
             $〡.nbox.〡(null, "text");
         }

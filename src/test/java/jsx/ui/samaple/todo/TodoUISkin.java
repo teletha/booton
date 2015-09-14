@@ -24,7 +24,7 @@ public class TodoUISkin extends StyleRuleDescriptor {
     };
 
     static Style ITEMS = () -> {
-
+        display.verticalBox();
     };
 
     static Style BUTTONS = () -> {

@@ -45,18 +45,6 @@ public final class VirtualStructure {
      * 
      * @see #sbox(int)
      */
-    public final ContainerDescriptor vbox = new ContainerDescriptor("vbox", VBOX);
-
-    /**
-     * <p>
-     * Define stackable container and get the descriptor of the container element.
-     * </p>
-     * <p>
-     * This field is equivalent to the method call <code>sbox(auto-assignment-id)</code>.
-     * </p>
-     * 
-     * @see #sbox(int)
-     */
     public final ContainerDescriptor nbox = new ContainerDescriptor("span", NBOX);
 
     /** The descriptor of properties. */
@@ -196,20 +184,6 @@ public final class VirtualStructure {
 
     /**
      * <p>
-     * Define vertical container with local id.
-     * </p>
-     * 
-     * @param localId A local id for the container element.
-     * @return A descriptor of the container element.
-     * @see #vbox
-     */
-    public final ContainerDescriptor vbox(int localId) {
-        vbox.localId = localId;
-        return vbox;
-    }
-
-    /**
-     * <p>
      * Define stackable container with local id.
      * </p>
      * 
@@ -325,8 +299,7 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
-                : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
     }
 
     /**

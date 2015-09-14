@@ -99,7 +99,7 @@ public class VirtualStructureReferenceCheckTest {
         protected void virtualize(VirtualStructure $〡) {
             $〡.nbox.〡(style, () -> {
                 for (int i = 1; i <= property.get(); i++) {
-                    $〡.vbox(i).〡(null, "Text" + i);
+                    $〡.nbox(i).〡(null, "Text" + i);
                 }
             });
         }
