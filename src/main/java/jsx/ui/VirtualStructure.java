@@ -63,7 +63,7 @@ public final class VirtualStructure {
     private final Widget widget;
 
     /** The latest element. */
-    private static VirtualElement latest;
+    private VirtualElement latest;
 
     /** The context object. */
     private Object context;
@@ -295,7 +295,8 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
+                : context, listeners);
     }
 
     /**
@@ -1097,11 +1098,26 @@ public final class VirtualStructure {
         }
 
         private static void element(String name, Declarable... declarables) {
+            element(0, name, declarables);
+        }
 
+        private static void element(int id, String name, Declarable... declarables) {
+            VirtualElement element = new VirtualElement(id, name);
+
+            // enter into the child node
+            // parents.addLast(latest = element);
+            //
+            // for (int i = 0, length = declarables.length; i < length; i++) {
+            // declarables[i].declare();
+            // }
+            //
+            // // leave from the child node
+            // parents.pollLast();
+            // latest = parents.peekLast();
         }
 
         public static Declarable clazz(Style style) {
-            return null;
+            return new StyleClass(style);
         }
 
         /**
@@ -1160,6 +1176,31 @@ public final class VirtualStructure {
              */
             @Override
             public void declare() {
+                // latest.attributes.add(name, value);
+            }
+        }
+
+        /**
+         * @version 2015/09/14 21:50:25
+         */
+        private static class StyleClass implements Declarable {
+
+            /** The style. */
+            private final Style style;
+
+            /**
+             * @param style
+             */
+            private StyleClass(Style style) {
+                this.style = style;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void declare() {
+                // latest.classList.push(style);
             }
         }
     }
