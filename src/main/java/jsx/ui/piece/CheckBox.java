@@ -11,6 +11,7 @@ package jsx.ui.piece;
 
 import static js.dom.UIAction.*;
 import static jsx.style.StyleRuleDescriptor.*;
+import static jsx.ui.VirtualStructure.Declarables.*;
 import static jsx.ui.piece.FormStyle.*;
 
 import javafx.beans.property.BooleanProperty;
@@ -56,7 +57,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
     @Override
     protected void virtualize(VirtualStructure 〡) {
         〡.nbox.〡(HBox, () -> {
-            〡.svg().style(CheckBoxSVG).viewBox(0, 0, 100, 100).$(() -> {
+            svg(clazz(CheckBoxSVG), viewBox(0, 0, 100, 100), () -> {
                 〡.rect().style(CheckBox).size(90, 90).position(5, 5);
                 〡.path()
                         .style(CheckMark.of(check))

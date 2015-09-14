@@ -63,7 +63,7 @@ public final class VirtualStructure {
     private final Widget widget;
 
     /** The latest element. */
-    private VirtualElement latest;
+    private static VirtualElement latest;
 
     /** The context object. */
     private Object context;
@@ -93,11 +93,7 @@ public final class VirtualStructure {
         root.contextualized = createSpecifiedListenerDifinitions(WidgetStyle.Root);
     }
 
-    public SVG svg() {
-        return svg(LocalId.findContextLineNumber());
-    }
-
-    private SVG svg(int id) {
+    public final SVG svg(int id) {
         return new SVG(id);
     }
 
@@ -702,8 +698,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void $(Class<? extends Widget1<T>> childType, T child) {
-            $(childType, Arrays.asList(child));
+        public final <T> void 〡(Class<? extends Widget1<T>> childType, T child) {
+            〡(childType, Arrays.asList(child));
         }
 
         /**
@@ -713,8 +709,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void $(Class<? extends Widget1<T>> childType, T[] children) {
-            $(childType, Arrays.asList(children));
+        public final <T> void 〡(Class<? extends Widget1<T>> childType, T[] children) {
+            〡(childType, Arrays.asList(children));
         }
 
         /**
@@ -724,8 +720,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void $(Class<? extends Widget1<T>> childType, Collection<T> children) {
-            $(() -> {
+        public final <T> void 〡(Class<? extends Widget1<T>> childType, Collection<T> children) {
+            〡(() -> {
                 for (T child : children) {
                     Widget widget = Widget.of(childType, child);
 
@@ -748,11 +744,11 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void $(T[] items, Consumer<T> child) {
+        public final <T> void 〡(T[] items, Consumer<T> child) {
             〡(Arrays.asList(items), child);
         }
 
-        public void $(Runnable children) {
+        public void 〡(Runnable children) {
             parents.add(latest = this);
 
             children.run();
@@ -769,8 +765,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void $(Collection<T> items, Consumer<T> child) {
-            $(() -> {
+        public final <T> void 〡(Collection<T> items, Consumer<T> child) {
+            〡(() -> {
                 for (T item : items) {
                     modifier = item.hashCode();
                     child.accept(item);
@@ -785,8 +781,8 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
-        public final <T> void $(int size, IntConsumer child) {
-            $(() -> {
+        public final <T> void 〡(int size, IntConsumer child) {
+            〡(() -> {
                 for (int i = 0; i < size; i++) {
                     modifier = (i + 117 + latestContextId) * 31;
                     child.accept(i);
@@ -1088,6 +1084,83 @@ public final class VirtualStructure {
          */
         private final NativeString command(String command) {
             return new NativeString(" ").concat(relativeMode ? command.toLowerCase() : command).concat(" ");
+        }
+    }
+
+    /**
+     * @version 2015/09/14 16:51:36
+     */
+    public static class Declarables {
+
+        public static void svg(Declarable... declarables) {
+            element("svg", declarables);
+        }
+
+        private static void element(String name, Declarable... declarables) {
+
+        }
+
+        public static Declarable clazz(Style style) {
+            return null;
+        }
+
+        /**
+         * <p>
+         * The viewBox attribute allows to specify that a given set of graphics stretch to fit a
+         * particular container element.
+         * </p>
+         * <p>
+         * The value of the viewBox attribute is a list of four numbers min-x, min-y, width and
+         * height, separated by whitespace and/or a comma, which specify a rectangle in user space
+         * which should be mapped to the bounds of the viewport established by the given element,
+         * taking into account attribute preserveAspectRatio.
+         * </p>
+         * <p>
+         * Negative values for width or height are not permitted and a value of zero disables
+         * rendering of the element.
+         * </p>
+         * 
+         * @param minX
+         * @param minY
+         * @param width
+         * @param height
+         */
+        public static Declarable viewBox(int minX, int minY, int width, int height) {
+            return new Attribute("viewBox", new NativeString(minX).concat(" ")
+                    .concat(minY)
+                    .concat(" ")
+                    .concat(width)
+                    .concat(" ")
+                    .concat(height)
+                    .toString());
+        }
+
+        /**
+         * @version 2015/09/14 16:56:21
+         */
+        private static class Attribute implements Declarable {
+
+            /** The attribute name. */
+            private final String name;
+
+            /** The attribute value. */
+            private final String value;
+
+            /**
+             * @param name
+             * @param value
+             */
+            private Attribute(String name, String value) {
+                this.name = name;
+                this.value = value;
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void declare() {
+            }
         }
     }
 }

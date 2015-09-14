@@ -36,6 +36,18 @@ public class TodoTasks {
     public final IntegerExpression incompletedSize = BindingHelper.filter(list, not(Task::isCompleted)).sizeProperty();
 
     /**
+     * 
+     */
+    public TodoTasks() {
+        list.add(new Task("Test1"));
+        list.add(new Task("Test2"));
+
+        Task task = new Task("Test3");
+        task.completed.set(true);
+        list.add(task);
+    }
+
+    /**
      * Make complete all tasks.
      */
     public void makeAllComplete() {
