@@ -9,9 +9,7 @@
  */
 package jsx.ui.i18n;
 
-import javafx.beans.binding.StringExpression;
-import javafx.beans.property.SimpleStringProperty;
-
+import js.lang.NativeString;
 import kiss.Manageable;
 import kiss.Singleton;
 
@@ -29,12 +27,12 @@ public abstract class TextLocalizer {
      * @param texts
      * @return
      */
-    protected StringExpression $(Object... texts) {
-        StringExpression label = new SimpleStringProperty("");
+    protected String $(Object... texts) {
+        NativeString builder = new NativeString();
 
         for (Object text : texts) {
-            label = label.concat(text);
+            builder = builder.concat(String.valueOf(text));
         }
-        return label;
+        return builder.toString();
     }
 }

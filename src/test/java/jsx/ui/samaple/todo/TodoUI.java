@@ -17,7 +17,6 @@ import static jsx.ui.VirtualStructure.Declarables.*;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.IntegerExpression;
-import javafx.beans.binding.StringExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -127,14 +126,12 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        〡.〡(input);
-        〡.nbox.〡($.ITEMS, Item.class, todos.list);
-        〡.nbox.〡($.FOTTER, () -> {
-            〡.〡(text.leftTaskIs(todos.incompletedSize));
-            div($.BUTTONS, () -> {
-                contents(all, active, completed);
-            });
-            contents(clear);
+        con(input);
+        box($.ITEMS, Item.class, todos.list);
+        box($.FOTTER, () -> {
+            con(text.leftTaskIs(todos.incompletedSize));
+            box($.BUTTONS, all, active, completed);
+            con(clear);
         });
     }
 
@@ -165,9 +162,9 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
         protected void virtualize(VirtualStructure $〡) {
             if (filter.getValue().test(model1)) {
                 if (editing.get()) {
-                    $〡.〡(edit);
+                    con(edit);
                 } else {
-                    $〡.nbox.〡(HBox, complete, text, delete);
+                    box(HBox, complete, text, delete);
                 }
             }
         }
@@ -276,8 +273,8 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
          * @param size
          * @return
          */
-        public StringExpression leftTaskIs(IntegerExpression size) {
-            return $(size, " ", size.get() < 2 ? "item" : "items", " left");
+        public String leftTaskIs(IntegerExpression size) {
+            return $(size.getValue(), " ", size.get() < 2 ? "item" : "items", " left");
         }
 
         /**
@@ -288,8 +285,8 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
          * @param size A number of completed items.
          * @return
          */
-        public StringExpression clearCompleted(IntegerExpression size) {
-            return $("Clear completed (", size, ")");
+        public String clearCompleted(IntegerExpression size) {
+            return $("Clear completed (", size.getValue(), ")");
         }
 
         /**
@@ -326,16 +323,16 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
              * {@inheritDoc}
              */
             @Override
-            public StringExpression leftTaskIs(IntegerExpression size) {
-                return $("残りのタスク ", size);
+            public String leftTaskIs(IntegerExpression size) {
+                return $("残りのタスク ", size.getValue());
             }
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public StringExpression clearCompleted(IntegerExpression size) {
-                return $("完了済みタスク(", size, ")を消去");
+            public String clearCompleted(IntegerExpression size) {
+                return $("完了済みタスク(", size.getValue(), ")を消去");
             }
         }
     }

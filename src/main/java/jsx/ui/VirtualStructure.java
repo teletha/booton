@@ -295,7 +295,8 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
+                : context, listeners);
     }
 
     /**
@@ -1092,8 +1093,23 @@ public final class VirtualStructure {
      */
     public static class Declarables {
 
-        public static void div(Declarable... declarables) {
+        public static void box(Declarable... declarables) {
             element("div", declarables);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public static <T> void box(Declarable style, Class<? extends Widget1<T>> childType, List<T> children) {
+            element(0, "div", new Declarable[] {style}, () -> {
+                for (T child : children) {
+                    Widget.of(childType, child).declare();
+                }
+            });
         }
 
         public static void svg(Declarable... declarables) {
@@ -1108,13 +1124,10 @@ public final class VirtualStructure {
             element("s:path", declarables);
         }
 
-        public static void contents(Object... contents) {
+        public static void con(Object... contents) {
             for (Object content : contents) {
-                if (content instanceof Widget) {
-                    Widget widget = (Widget) content;
-                    VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
-                    latest.items.push(virtualize);
-                    widget.assemble(new VirtualStructure(widget, virtualize));
+                if (content instanceof Declarable) {
+                    ((Declarable) content).declare();
                 } else if (content instanceof String && content.equals("\r\n")) {
                     latest.items.push(new VirtualElement(0, "br"));
                 } else {
@@ -1124,10 +1137,10 @@ public final class VirtualStructure {
         }
 
         public static void element(String name, Declarable... declarables) {
-            element(0, name, declarables);
+            element(0, name, declarables, null);
         }
 
-        private static void element(int id, String name, Declarable... declarables) {
+        private static void element(int id, String name, Declarable[] declarables, Runnable process) {
             VirtualElement element = new VirtualElement(id, name);
 
             // enter into the child node (store context)
@@ -1136,6 +1149,10 @@ public final class VirtualStructure {
 
             for (int i = 0, length = declarables.length; i < length; i++) {
                 if (declarables[i] != null) declarables[i].define();
+            }
+
+            if (process != null) {
+                process.run();
             }
 
             // leave from the child node (revert context)

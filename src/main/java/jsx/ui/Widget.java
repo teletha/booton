@@ -48,7 +48,7 @@ import kiss.Observer;
  * @version 2015/05/29 15:48:14
  */
 @Manageable(lifestyle = VirtualStructureHierarchy.class)
-public abstract class Widget {
+public abstract class Widget implements Declarable {
 
     /** The re-rendering queue. */
     private static final Set<Rendering> update = new HashSet();
@@ -85,6 +85,21 @@ public abstract class Widget {
                 contexts.get(i).register(root);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final void declare() {
+        // create virtual element for this widget
+        VirtualWidget virtualize = new VirtualWidget(id, this);
+
+        // mount virtual element on virtual structure
+        VirtualStructure.latest.items.push(virtualize);
+
+        // process child nodes
+        assemble(new VirtualStructure(this, virtualize));
     }
 
     protected boolean shouldUpdate() {
