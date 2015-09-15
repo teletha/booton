@@ -12,7 +12,7 @@ package jsx.ui.samaple.todo;
 import static jsx.style.StyleRuleDescriptor.*;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.FunctionHelper.not;
-import static jsx.ui.samaple.todo.TodoUISkin.*;
+import static jsx.ui.VirtualStructure.Declarables.*;
 
 import java.util.function.Predicate;
 
@@ -24,6 +24,9 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import booton.Necessary;
+import jsx.style.Style;
+import jsx.style.StyleRuleDescriptor;
+import jsx.style.ValueStyle;
 import jsx.ui.Key;
 import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
@@ -58,19 +61,19 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
-    final Button all = UI.button().label(text.selectAll()).click(this::showAll).style(SELECTED_FILTER.when(filter.isEqualTo(Filter.All)));
+    final Button all = UI.button().label(text.selectAll()).click(this::showAll).style($.SELECTED_FILTER.when(filter.isEqualTo(Filter.All)));
 
     /** The filter button. */
     final Button active = UI.button()
             .label(text.selectIncompleted())
             .click(this::showActive)
-            .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.Active)));
+            .style($.SELECTED_FILTER.when(filter.isEqualTo(Filter.Active)));
 
     /** The filter button. */
     final Button completed = UI.button()
             .label(text.selectCompleted())
             .click(this::showCompleted)
-            .style(SELECTED_FILTER.when(filter.isEqualTo(Filter.Completed)));
+            .style($.SELECTED_FILTER.when(filter.isEqualTo(Filter.Completed)));
 
     /** The clear button. */
     final Button clear = UI.button()
@@ -125,11 +128,13 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
     @Override
     protected void virtualize(VirtualStructure 〡) {
         〡.〡(input);
-        〡.nbox.〡(ITEMS, Item.class, todos.list);
-        〡.nbox.〡(FOTTER, () -> {
+        〡.nbox.〡($.ITEMS, Item.class, todos.list);
+        〡.nbox.〡($.FOTTER, () -> {
             〡.〡(text.leftTaskIs(todos.incompletedSize));
-            〡.nbox.〡(BUTTONS, all, active, completed);
-            〡.〡(clear);
+            div($.BUTTONS, () -> {
+                contents(all, active, completed);
+            });
+            contents(clear);
         });
     }
 
@@ -334,4 +339,35 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
             }
         }
     }
+
+    /**
+     * @version 2015/09/15 16:07:02
+     */
+    private static class $ extends StyleRuleDescriptor {
+
+        static Style FOTTER = () -> {
+            display.flex();
+        };
+
+        static Style ITEMS = () -> {
+            display.verticalBox();
+        };
+
+        static Style BUTTONS = () -> {
+            display.flex();
+        };
+
+        static Style CLEAR = () -> {
+
+        };
+
+        public static Style SELECTED_FILTER = () -> {
+            font.weight.bold();
+        };
+
+        static ValueStyle<Filter> FILTER = filter -> {
+
+        };
+    }
+
 }

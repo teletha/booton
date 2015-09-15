@@ -1092,6 +1092,10 @@ public final class VirtualStructure {
      */
     public static class Declarables {
 
+        public static void div(Declarable... declarables) {
+            element("div", declarables);
+        }
+
         public static void svg(Declarable... declarables) {
             element("s:svg", declarables);
         }
@@ -1104,8 +1108,19 @@ public final class VirtualStructure {
             element("s:path", declarables);
         }
 
-        public static void text(String text) {
-            latest.items.push(new VirtualText(text));
+        public static void contents(Object... contents) {
+            for (Object content : contents) {
+                if (content instanceof Widget) {
+                    Widget widget = (Widget) content;
+                    VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+                    latest.items.push(virtualize);
+                    widget.assemble(new VirtualStructure(widget, virtualize));
+                } else if (content instanceof String && content.equals("\r\n")) {
+                    latest.items.push(new VirtualElement(0, "br"));
+                } else {
+                    latest.items.push(new VirtualText(String.valueOf(content)));
+                }
+            }
         }
 
         public static void element(String name, Declarable... declarables) {
