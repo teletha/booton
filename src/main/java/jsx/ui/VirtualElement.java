@@ -30,7 +30,7 @@ public class VirtualElement extends VirtualNode<Element> {
     final DualList<String, String> attributes = new DualList();
 
     /** The class attributes. */
-    final NativeArray<Style> classList = new NativeArray();
+    public final NativeArray<Style> classList = new NativeArray();
 
     /** The The inline styles. */
     final DualList<String, String> inlines = new DualList();

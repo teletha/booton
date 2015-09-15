@@ -9,6 +9,8 @@
  */
 package jsx.ui.piece;
 
+import static jsx.ui.VirtualStructure.Declarables.*;
+
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -16,7 +18,7 @@ import jsx.ui.LowLevelWidget;
 import jsx.ui.VirtualStructure;
 
 /**
- * @version 2014/08/21 17:09:43
+ * @version 2015/09/15 15:35:18
  */
 public class Button extends LowLevelWidget<Button> {
 
@@ -57,6 +59,8 @@ public class Button extends LowLevelWidget<Button> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        〡.e("button", 0).〡(rootStyle.getValue(), label.get());
+        element("button", rootStyle.getValue(), () -> {
+            text(label.get());
+        });
     }
 }

@@ -63,7 +63,7 @@ public final class VirtualStructure {
     private final Widget widget;
 
     /** The latest element. */
-    private VirtualElement latest;
+    public static VirtualElement latest;
 
     /** The context object. */
     private Object context;
@@ -295,8 +295,7 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
-                : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
     }
 
     /**
@@ -1094,30 +1093,42 @@ public final class VirtualStructure {
     public static class Declarables {
 
         public static void svg(Declarable... declarables) {
-            element("svg", declarables);
+            element("s:svg", declarables);
         }
 
-        private static void element(String name, Declarable... declarables) {
+        public static void rect(Declarable... declarables) {
+            element("s:rect", declarables);
+        }
+
+        public static void path(Declarable... declarables) {
+            element("s:path", declarables);
+        }
+
+        public static void text(String text) {
+            latest.items.push(new VirtualText(text));
+        }
+
+        public static void element(String name, Declarable... declarables) {
             element(0, name, declarables);
         }
 
         private static void element(int id, String name, Declarable... declarables) {
             VirtualElement element = new VirtualElement(id, name);
 
-            // enter into the child node
-            // parents.addLast(latest = element);
-            //
-            // for (int i = 0, length = declarables.length; i < length; i++) {
-            // declarables[i].declare();
-            // }
-            //
-            // // leave from the child node
-            // parents.pollLast();
-            // latest = parents.peekLast();
-        }
+            // enter into the child node (store context)
+            VirtualElement parent = latest;
+            latest = element;
 
-        public static Declarable clazz(Style style) {
-            return new StyleClass(style);
+            for (int i = 0, length = declarables.length; i < length; i++) {
+                if (declarables[i] != null) declarables[i].define();
+            }
+
+            // leave from the child node (revert context)
+            latest = parent;
+
+            if (latest != null) {
+                latest.items.push(element);
+            }
         }
 
         /**
@@ -1142,7 +1153,7 @@ public final class VirtualStructure {
          * @param height
          */
         public static Declarable viewBox(int minX, int minY, int width, int height) {
-            return new Attribute("viewBox", new NativeString(minX).concat(" ")
+            return attr("viewBox", new NativeString(minX).concat(" ")
                     .concat(minY)
                     .concat(" ")
                     .concat(width)
@@ -1151,57 +1162,267 @@ public final class VirtualStructure {
                     .toString());
         }
 
-        /**
-         * @version 2015/09/14 16:56:21
-         */
-        private static class Attribute implements Declarable {
+        public static Declarable position(double x, double y) {
+            return () -> {
+                latest.attributes.add("x", String.valueOf(x));
+                latest.attributes.add("y", String.valueOf(y));
+            };
+        }
 
-            /** The attribute name. */
-            private final String name;
+        public static Declarable size(double width, double height) {
+            return () -> {
+                latest.attributes.add("width", String.valueOf(width));
+                latest.attributes.add("height", String.valueOf(height));
+            };
+        }
 
-            /** The attribute value. */
-            private final String value;
-
-            /**
-             * @param name
-             * @param value
-             */
-            private Attribute(String name, String value) {
-                this.name = name;
-                this.value = value;
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void declare() {
-                // latest.attributes.add(name, value);
-            }
+        public static SVGPath d() {
+            return new SVGPath();
         }
 
         /**
-         * @version 2015/09/14 21:50:25
+         * <p>
+         * Declare "placeholder" attribute with the specified value.
+         * </p>
+         * 
+         * @param type A value of "placeholder" attribute.
+         * @return An attribute declaration.
          */
-        private static class StyleClass implements Declarable {
+        public static Declarable placeholder(String placeholder) {
+            return attr("placeholder", placeholder);
+        }
 
-            /** The style. */
-            private final Style style;
+        /**
+         * <p>
+         * Declare "type" attribute with the specified value.
+         * </p>
+         * 
+         * @param type A value of "type" attribute.
+         * @return An attribute declaration.
+         */
+        public static Declarable type(String type) {
+            return attr("type", type);
+        }
 
-            /**
-             * @param style
-             */
-            private StyleClass(Style style) {
-                this.style = style;
-            }
+        /**
+         * <p>
+         * Declare "value" attribute with the specified value.
+         * </p>
+         * 
+         * @param type A value of "value" attribute.
+         * @return An attribute declaration.
+         */
+        public static Declarable value(String value) {
+            return attr("value", value);
+        }
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public void declare() {
-                // latest.classList.push(style);
-            }
+        /**
+         * <p>
+         * General attribute definition method.
+         * </p>
+         * 
+         * @param name An attribute name.
+         * @param value An attribute value.
+         * @return
+         */
+        public static Declarable attr(String name, String value) {
+            return name == null || name.length() == 0 || value == null || value.length() == 0 ? null : () -> {
+                latest.attributes.add(name, value);
+            };
+        }
+    }
+
+    /**
+     * @version 2015/09/15 11:18:03
+     */
+    public static class SVGPath implements Declarable {
+
+        /** The current draw mode. */
+        private boolean relativeMode = false;
+
+        /** The buffer. */
+        private StringBuilder builder = new StringBuilder();
+
+        /**
+         * 
+         */
+        private SVGPath() {
+            super();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void declare() {
+            latest.attributes.add("d", builder.toString());
+        }
+
+        /**
+         * <p>
+         * Set the start position to draw.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public SVGPath moveTo(double x, double y) {
+            command("M").append(x).append(" ").append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw line to the specified position.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public SVGPath lineTo(double x, double y) {
+            command("L").append(x).append(" ").append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw horizontal line to the specified position.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @return Chainable API.
+         */
+        public SVGPath hlineTo(double x) {
+            command("H").append(x);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw vertical line to the specified position.
+         * </p>
+         * 
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public SVGPath vlineTo(double y) {
+            command("V").append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Close the current path.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public SVGPath end() {
+            command("Z");
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw cubic Bézier curve to the path. It requires three points. The first two points are
+         * control points and the third one is the end point. The starting point is the last point
+         * in the current path, which can be changed using moveTo() before creating the Bézier
+         * curve.
+         * </p>
+         * 
+         * @param cp1x The x axis of the coordinate for the first control point.
+         * @param cp1y The y axis of the coordinate for first control point.
+         * @param cp2x The x axis of the coordinate for the second control point.
+         * @param cp2y The y axis of the coordinate for the second control point.
+         * @param x The x axis of the coordinate for the end point.
+         * @param y The y axis of the coordinate for the end point.
+         * @return Chainable API.
+         */
+        public SVGPath curveTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
+            command("C").append(cp1x)
+                    .append(" ")
+                    .append(cp1y)
+                    .append(" ")
+                    .append(cp2x)
+                    .append(" ")
+                    .append(cp2y)
+                    .append(" ")
+                    .append(x)
+                    .append(" ")
+                    .append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw cubic Bézier curve to the path. It requires three points. The first two points are
+         * control points and the third one is the end point. The starting point is the last point
+         * in the current path, which can be changed using moveTo() before creating the Bézier
+         * curve.
+         * </p>
+         * 
+         * @param cp1x The x axis of the coordinate for the first control point.
+         * @param cp1y The y axis of the coordinate for first control point.
+         * @param cp2x The x axis of the coordinate for the second control point.
+         * @param cp2y The y axis of the coordinate for the second control point.
+         * @param x The x axis of the coordinate for the end point.
+         * @param y The y axis of the coordinate for the end point.
+         * @return Chainable API.
+         */
+        public SVGPath curveRelativeTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
+            command("C").append(cp1x)
+                    .append(" ")
+                    .append(cp1y)
+                    .append(" ")
+                    .append(cp2x)
+                    .append(" ")
+                    .append(cp2y)
+                    .append(" ")
+                    .append(x)
+                    .append(" ")
+                    .append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make drawing context relative.
+         * </p>
+         * 
+         * @return
+         */
+        public final SVGPath relatively() {
+            relativeMode = true;
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make drawing context relative.
+         * </p>
+         * 
+         * @return
+         */
+        public final SVGPath absolutely() {
+            relativeMode = false;
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make command expression.
+         * </p>
+         * 
+         * @param command
+         * @return
+         */
+        private final StringBuilder command(String command) {
+            builder.append(" ").append(relativeMode ? command.toLowerCase() : command).append(" ");
+            return builder;
         }
     }
 }

@@ -9,25 +9,15 @@
  */
 package jsx.style;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableBooleanValue;
-
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import kiss.Events;
+import jsx.ui.Declarable;
+import jsx.ui.VirtualStructure;
 
 /**
- * @version 2015/01/29 10:00:25
+ * @version 2015/09/15 15:00:09
  */
-public interface Style extends Locatable {
-
-    /**
-     * <p>
-     * Declare styles.
-     * </p>
-     */
-    void declare();
+public interface Style extends Locatable, Declarable {
 
     /**
      * <p>
@@ -44,6 +34,15 @@ public interface Style extends Locatable {
 
     public default void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
         styles.push(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default void define() {
+        VirtualStructure.latest.classList.push(this);
+        StyleManager.add(this);
     }
 
     /**
@@ -72,44 +71,6 @@ public interface Style extends Locatable {
         } else {
             return this;
         }
-    }
-
-    /**
-     * <p>
-     * Return the conditional style which is applied only when the specified condition is true.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @return A conditional {@link Style}.
-     */
-    public default Style when(boolean condition) {
-        return when(new SimpleBooleanProperty(condition));
-    }
-
-    /**
-     * <p>
-     * Return the conditional style which is applied only when the specified condition is true.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @return A conditional {@link Style}.
-     */
-    public default Style when(Events<Boolean> condition) {
-        BooleanProperty property = new SimpleBooleanProperty();
-        condition.to(property::setValue);
-        return when(property);
-    }
-
-    /**
-     * <p>
-     * Return the conditional style which is applied only when the specified condition is true.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @return A conditional {@link Style}.
-     */
-    public default Style when(ObservableBooleanValue condition) {
-        return new ConditionalStyle(this, condition);
     }
 
     public default Style of(Object context) {

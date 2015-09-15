@@ -24,7 +24,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
-import jsx.style.Style;
 import kiss.Disposable;
 import kiss.Events;
 
@@ -38,7 +37,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
 
     private BooleanProperty hover;
 
-    protected final Property<Style> rootStyle = new SimpleObjectProperty();
+    protected final Property<Declarable> rootStyle = new SimpleObjectProperty();
 
     public BooleanProperty hover() {
         if (hover == null) {
@@ -140,7 +139,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         return (T) this;
     }
 
-    public T style(Style style) {
+    public T style(Declarable style) {
         rootStyle.setValue(style);
 
         return (T) this;

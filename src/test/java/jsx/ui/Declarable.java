@@ -16,11 +16,23 @@ import javafx.beans.value.ObservableBooleanValue;
 import kiss.Events;
 
 /**
- * @version 2015/09/14 17:03:51
+ * @version 2015/09/15 14:54:27
  */
 public interface Declarable {
 
+    /**
+     * <p>
+     * Declare the definition.
+     * </p>
+     */
     void declare();
+
+    /**
+     * Define the declaration.
+     */
+    default void define() {
+        declare();
+    }
 
     /**
      * <p>

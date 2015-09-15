@@ -9,6 +9,8 @@
  */
 package jsx.ui.piece;
 
+import static jsx.ui.VirtualStructure.Declarables.*;
+
 import java.util.function.Function;
 
 import javafx.beans.binding.IntegerExpression;
@@ -67,6 +69,6 @@ public class Output extends LowLevelWidget<Output> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        〡.nbox.〡(null, text.get());
+        text(text.get());
     }
 }

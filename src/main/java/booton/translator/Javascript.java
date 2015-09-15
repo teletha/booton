@@ -279,60 +279,63 @@ public class Javascript {
      * @param defined
      */
     private void write(Appendable output, Set<Class> defined) {
-        BootonLog.WriteJS.start(source, () -> {
-            // record compile route
-            CompilerRecorder.startCompiling(this);
+        BootonLog.WriteJS.start(source);
 
-            try {
-                // compile script
-                compile();
+        // record compile route
+        CompilerRecorder.startCompiling(this);
 
-                // write super class and interfaces
-                if (source != RootClass && !isEnumSubType(source)) {
-                    BootonLog.WriteSuperClass.start(source, () -> {
-                        write(output, defined, source.getSuperclass());
-                    });
+        try {
+            // compile script
+            compile();
 
-                    BootonLog.WriteInterface.start(source, () -> {
-                        for (Class interfaceType : source.getInterfaces()) {
-                            write(output, defined, interfaceType);
-                        }
-                    });
-                }
-                if (defined.add(source)) {
-                    // write sub type enum class
-                    if (source.getSuperclass() == Enum.class) {
-                        for (Object constant : source.getEnumConstants()) {
-                            Class sub = constant.getClass();
+            // write super class and interfaces
+            if (source != RootClass && !isEnumSubType(source)) {
+                BootonLog.WriteSuperClass.start(source, () -> {
+                    write(output, defined, source.getSuperclass());
+                });
 
-                            if (sub != source) {
-                                write(output, defined, sub);
-                            }
-                        }
+                BootonLog.WriteInterface.start(source, () -> {
+
+                    for (Class interfaceType : source.getInterfaces()) {
+                        write(output, defined, interfaceType);
                     }
-
-                    // write this class
-                    try {
-                        BootonLog.WriteJSActually.start(source);
-                        output.append(code);
-                    } catch (IOException e) {
-                        throw I.quiet(e);
-                    } finally {
-                        BootonLog.WriteJSActually.stop();
-                    }
-
-                    // write dependency classes
-                    BootonLog.WriteDependency.start(source, () -> {
-                        for (Class dependency : dependencies) {
-                            write(output, defined, dependency);
-                        }
-                    });
-                }
-            } finally {
-                // record compile route
-                CompilerRecorder.finishCompiling(this);
+                });
             }
-        });
+            if (defined.add(source)) {
+                // write sub type enum class
+                if (source.getSuperclass() == Enum.class) {
+                    for (Object constant : source.getEnumConstants()) {
+                        Class sub = constant.getClass();
+
+                        if (sub != source) {
+                            write(output, defined, sub);
+                        }
+                    }
+                }
+
+                // write this class
+                try {
+                    BootonLog.WriteJSActually.start(source);
+                    output.append(code);
+                } catch (IOException e) {
+                    throw I.quiet(e);
+                } finally {
+                    BootonLog.WriteJSActually.stop();
+                }
+
+                // write dependency classes
+                BootonLog.WriteDependency.start(source, () -> {
+                    for (Class dependency : dependencies) {
+                        write(output, defined, dependency);
+                    }
+                });
+            }
+        } finally {
+            // record compile route
+            CompilerRecorder.finishCompiling(this);
+
+            BootonLog.WriteJS.stop();
+        }
     }
 
     private boolean isEnumSubType(Class type) {

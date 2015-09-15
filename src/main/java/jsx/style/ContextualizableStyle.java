@@ -17,15 +17,18 @@ import jsx.collection.DualList;
  */
 public class ContextualizableStyle<T> implements Style {
 
+    private final T value;
+
     private final ValueStyle base;
 
-    private final Style style;
+    final Style style;
 
     /**
      * @param value
      * @param style
      */
     public ContextualizableStyle(T value, ValueStyle base, Style style) {
+        this.value = value;
         this.base = base;
         this.style = style;
     }
