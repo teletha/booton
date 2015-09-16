@@ -65,6 +65,8 @@ public final class VirtualStructure {
     /** The latest element. */
     public static VirtualElement latest;
 
+    public static Object CONTEXT;
+
     /** The context object. */
     private Object context;
 
@@ -291,7 +293,8 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
+                : context, listeners);
     }
 
     /**
@@ -1088,37 +1091,6 @@ public final class VirtualStructure {
      */
     public static class Declarables {
 
-        public static void box(Declarable... declarables) {
-            element("span", declarables);
-        }
-
-        /**
-         * <p>
-         * Define children.
-         * </p>
-         * 
-         * @param children A list of child widget.
-         */
-        public static <T> void box(Declarable style, Class<? extends Widget1<T>> childType, List<T> children) {
-            element(0, "span", new Declarable[] {style}, () -> {
-                for (T child : children) {
-                    Widget.of(childType, child).declare();
-                }
-            });
-        }
-
-        public static void svg(Declarable... declarables) {
-            element("s:svg", declarables);
-        }
-
-        public static void rect(Declarable... declarables) {
-            element("s:rect", declarables);
-        }
-
-        public static void path(Declarable... declarables) {
-            element("s:path", declarables);
-        }
-
         public static void con(Object... contents) {
             for (Object content : contents) {
                 if (content instanceof Declarable) {
@@ -1131,11 +1103,42 @@ public final class VirtualStructure {
             }
         }
 
-        public static void element(String name, Declarable... declarables) {
-            element(0, name, declarables, null);
+        public static void text(Object text) {
+            latest.items.push(new VirtualText(String.valueOf(text)));
         }
 
-        private static void element(int id, String name, Declarable[] declarables, Runnable process) {
+        public static void text(Style style, Object... texts) {
+            textInternal(LocalId.findContextLineNumber(), style, texts);
+        }
+
+        private static void textInternal(int id, Style style, Object... texts) {
+            elementInternal(id, "span", new Declarable[] {style}, () -> {
+                NativeString values = new NativeString();
+
+                for (Object text : texts) {
+                    values = values.concat(String.valueOf(text));
+                }
+                latest.items.push(new VirtualText(values.toString()));
+            });
+        }
+
+        public static void box(Declarable... declarables) {
+            boxInternal(LocalId.findContextLineNumber(), declarables);
+        }
+
+        private static void boxInternal(int id, Declarable... declarables) {
+            elementInternal(id, "span", declarables);
+        }
+
+        public static void element(String name, Declarable... declarables) {
+            elementInternal(LocalId.findContextLineNumber(), name, declarables);
+        }
+
+        private static void elementInternal(int id, String name, Declarable... declarables) {
+            elementInternal(LocalId.findContextLineNumber(), name, declarables, null);
+        }
+
+        private static void elementInternal(int id, String name, Declarable[] declarables, Runnable process) {
             VirtualElement element = new VirtualElement(id, name);
 
             // enter into the child node (store context)
@@ -1257,6 +1260,18 @@ public final class VirtualStructure {
 
         /**
          * <p>
+         * Declare "title" attribute with the specified value.
+         * </p>
+         * 
+         * @param title A value of "title" attribute.
+         * @return An attribute declaration.
+         */
+        public static Declarable title(String title) {
+            return attr("title", title);
+        }
+
+        /**
+         * <p>
          * Declare "xlink:href" attribute with the specified value.
          * </p>
          * 
@@ -1279,6 +1294,67 @@ public final class VirtualStructure {
         public static Declarable attr(String name, String value) {
             return name == null || name.length() == 0 || value == null || value.length() == 0 ? null : () -> {
                 latest.attributes.add(name, value);
+            };
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public static <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
+            return () -> {
+                for (T child : children) {
+                    Widget.of(childType, child).declare();
+                }
+            };
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public static <T> Declarable contents(T[] children, Consumer<T> process) {
+            return contents(Arrays.asList(children), process);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public static <T> Declarable contents(List<T> children, Consumer<T> process) {
+            return () -> {
+                Object stored = CONTEXT;
+
+                for (T child : children) {
+                    CONTEXT = child;
+                    process.accept(child);
+                }
+
+                CONTEXT = stored;
+            };
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public static <T> Declarable contents(int size, IntConsumer process) {
+            return () -> {
+                for (int i = 0; i < size; i++) {
+                    process.accept(i);
+                }
             };
         }
     }

@@ -46,6 +46,16 @@ class ConditionalStyle implements Style {
      * {@inheritDoc}
      */
     @Override
+    public void define() {
+        if (condition.get()) {
+            Style.super.define();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String className() {
         return style.className();
     }

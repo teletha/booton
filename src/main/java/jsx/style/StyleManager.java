@@ -57,7 +57,6 @@ public class StyleManager {
     }
 
     private static void add(StyleRule rule) {
-        System.out.println(rule.toString());
         stylesheet.insertRule(rule.toString(), 0);
 
         for (int i = 0; i < rule.children.length(); i++) {
