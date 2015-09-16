@@ -9,15 +9,20 @@
  */
 package jsx.style;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableBooleanValue;
+
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.ui.Declarable;
 import jsx.ui.VirtualStructure;
+import kiss.Events;
 
 /**
  * @version 2015/09/15 15:00:09
  */
-public interface Style extends Locatable, Declarable {
+public interface Style extends Declarable {
 
     /**
      * <p>
@@ -43,6 +48,10 @@ public interface Style extends Locatable, Declarable {
     default void define() {
         VirtualStructure.latest.classList.push(this);
         StyleManager.add(this);
+    }
+
+    default Object locator() {
+        return this;
     }
 
     /**
@@ -75,5 +84,49 @@ public interface Style extends Locatable, Declarable {
 
     public default Style of(Object context) {
         return new ContextualizedStyle(this, context);
+    }
+
+    /**
+     * <p>
+     * Return the conditional {@link Declarable} which is applied only when the specified condition
+     * is true.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @return A conditional {@link Declarable}.
+     */
+    @Override
+    public default Style when(boolean condition) {
+        return when(new SimpleBooleanProperty(condition));
+    }
+
+    /**
+     * <p>
+     * Return the conditional {@link Declarable} which is applied only when the specified condition
+     * is true.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @return A conditional {@link Declarable}.
+     */
+    @Override
+    public default Style when(Events<Boolean> condition) {
+        BooleanProperty property = new SimpleBooleanProperty();
+        condition.to(property::setValue);
+        return when(property);
+    }
+
+    /**
+     * <p>
+     * Return the conditional {@link Declarable} which is applied only when the specified condition
+     * is true.
+     * </p>
+     * 
+     * @param condition A condition.
+     * @return A conditional {@link Declarable}.
+     */
+    @Override
+    public default Style when(ObservableBooleanValue condition) {
+        return new ConditionalStyle(this, condition);
     }
 }

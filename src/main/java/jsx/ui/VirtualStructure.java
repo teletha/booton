@@ -93,10 +93,6 @@ public final class VirtualStructure {
         root.contextualized = createSpecifiedListenerDifinitions(WidgetStyle.Root);
     }
 
-    public final SVG svg(int id) {
-        return new SVG(id);
-    }
-
     /**
      * @return
      */
@@ -295,8 +291,7 @@ public final class VirtualStructure {
             return null;
         }
 
-        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context
-                : context, listeners);
+        return new ContextualizedEventListeners(style instanceof ContextualizedStyle ? ((ContextualizedStyle) style).context : context, listeners);
     }
 
     /**
@@ -1094,7 +1089,7 @@ public final class VirtualStructure {
     public static class Declarables {
 
         public static void box(Declarable... declarables) {
-            element("div", declarables);
+            element("span", declarables);
         }
 
         /**
@@ -1105,7 +1100,7 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public static <T> void box(Declarable style, Class<? extends Widget1<T>> childType, List<T> children) {
-            element(0, "div", new Declarable[] {style}, () -> {
+            element(0, "span", new Declarable[] {style}, () -> {
                 for (T child : children) {
                     Widget.of(childType, child).declare();
                 }
@@ -1241,11 +1236,35 @@ public final class VirtualStructure {
          * Declare "value" attribute with the specified value.
          * </p>
          * 
-         * @param type A value of "value" attribute.
+         * @param value A value of "value" attribute.
          * @return An attribute declaration.
          */
         public static Declarable value(String value) {
             return attr("value", value);
+        }
+
+        /**
+         * <p>
+         * Declare "id" attribute with the specified value.
+         * </p>
+         * 
+         * @param id A value of "id" attribute.
+         * @return An attribute declaration.
+         */
+        public static Declarable id(String id) {
+            return attr("id", id);
+        }
+
+        /**
+         * <p>
+         * Declare "xlink:href" attribute with the specified value.
+         * </p>
+         * 
+         * @param id A value of "xlink:href" attribute.
+         * @return An attribute declaration.
+         */
+        public static Declarable xlink(String href) {
+            return attr("xlink:href", href);
         }
 
         /**
