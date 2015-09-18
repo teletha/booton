@@ -95,8 +95,10 @@ public interface Style extends Declarable {
      * @param condition A condition.
      * @return A conditional {@link Declarable}.
      */
-    @Override
     public default Style when(boolean condition) {
+        if (condition == false) {
+            return null;
+        }
         return when(new SimpleBooleanProperty(condition));
     }
 
@@ -109,7 +111,6 @@ public interface Style extends Declarable {
      * @param condition A condition.
      * @return A conditional {@link Declarable}.
      */
-    @Override
     public default Style when(Events<Boolean> condition) {
         BooleanProperty property = new SimpleBooleanProperty();
         condition.to(property::setValue);
@@ -125,7 +126,6 @@ public interface Style extends Declarable {
      * @param condition A condition.
      * @return A conditional {@link Declarable}.
      */
-    @Override
     public default Style when(ObservableBooleanValue condition) {
         return new ConditionalStyle(this, condition);
     }

@@ -1091,12 +1091,23 @@ public final class VirtualStructure {
      */
     public static class Declarables {
 
+        private static final Declarable NOP = () -> {
+        };
+
+        private static int latestContextId;
+
+        private static int modifier = 31;
+
         public static void con(Object... contents) {
+            con(LocalId.findContextLineNumber(), contents);
+        }
+
+        private static void con(int id, Object... contents) {
             for (Object content : contents) {
                 if (content instanceof Declarable) {
                     ((Declarable) content).declare();
                 } else if (content instanceof String && content.equals("\r\n")) {
-                    latest.items.push(new VirtualElement(0, "br"));
+                    latest.items.push(new VirtualElement(id, "br"));
                 } else {
                     latest.items.push(new VirtualText(String.valueOf(content)));
                 }
@@ -1104,15 +1115,19 @@ public final class VirtualStructure {
         }
 
         public static void text(Object text) {
+            text(LocalId.findContextLineNumber(), text);
+        }
+
+        private static void text(int id, Object text) {
             latest.items.push(new VirtualText(String.valueOf(text)));
         }
 
         public static void text(Style style, Object... texts) {
-            textInternal(LocalId.findContextLineNumber(), style, texts);
+            text(LocalId.findContextLineNumber(), style, texts);
         }
 
-        private static void textInternal(int id, Style style, Object... texts) {
-            elementInternal(id, "span", new Declarable[] {style}, () -> {
+        private static void text(int id, Style style, Object... texts) {
+            element(id, "span", new Declarable[] {style}, () -> {
                 NativeString values = new NativeString();
 
                 for (Object text : texts) {
@@ -1123,27 +1138,28 @@ public final class VirtualStructure {
         }
 
         public static void box(Declarable... declarables) {
-            boxInternal(LocalId.findContextLineNumber(), declarables);
+            box(LocalId.findContextLineNumber(), declarables);
         }
 
-        private static void boxInternal(int id, Declarable... declarables) {
-            elementInternal(id, "span", declarables);
+        private static void box(int id, Declarable... declarables) {
+            element(id, "span", declarables);
         }
 
         public static void element(String name, Declarable... declarables) {
-            elementInternal(LocalId.findContextLineNumber(), name, declarables);
+            element(LocalId.findContextLineNumber(), name, declarables);
         }
 
-        private static void elementInternal(int id, String name, Declarable... declarables) {
-            elementInternal(LocalId.findContextLineNumber(), name, declarables, null);
+        private static void element(int id, String name, Declarable... declarables) {
+            element(id, name, declarables, null);
         }
 
-        private static void elementInternal(int id, String name, Declarable[] declarables, Runnable process) {
-            VirtualElement element = new VirtualElement(id, name);
+        private static void element(int id, String name, Declarable[] declarables, Runnable process) {
+            VirtualElement element = new VirtualElement((31 + id) ^ modifier, name);
 
             // enter into the child node (store context)
             VirtualElement parent = latest;
             latest = element;
+            latestContextId = element.id;
 
             for (int i = 0, length = declarables.length; i < length; i++) {
                 if (declarables[i] != null) declarables[i].define();
@@ -1292,8 +1308,22 @@ public final class VirtualStructure {
          * @return
          */
         public static Declarable attr(String name, String value) {
-            return name == null || name.length() == 0 || value == null || value.length() == 0 ? null : () -> {
+            return name == null || name.length() == 0 || value == null || value.length() == 0 ? NOP : () -> {
                 latest.attributes.add(name, value);
+            };
+        }
+
+        public static Declarable If(String condition, Declarable... declarables) {
+            return If(condition != null && condition.length() != 0, declarables);
+        }
+
+        public static Declarable If(boolean condition, Declarable... declarables) {
+            return () -> {
+                if (condition) {
+                    for (Declarable declarable : declarables) {
+                        declarable.define();
+                    }
+                }
             };
         }
 
@@ -1351,9 +1381,21 @@ public final class VirtualStructure {
          * @param children A list of child widget.
          */
         public static <T> Declarable contents(int size, IntConsumer process) {
+            return contents(0, size, process);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public static <T> Declarable contents(int initial, int size, IntConsumer process) {
             return () -> {
                 for (int i = 0; i < size; i++) {
-                    process.accept(i);
+                    modifier = (i + 117 + latestContextId) * 31;
+                    process.accept(i + initial);
                 }
             };
         }

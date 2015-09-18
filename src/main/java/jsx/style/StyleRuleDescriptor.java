@@ -237,6 +237,18 @@ public class StyleRuleDescriptor extends StyleDescriptor {
 
     /**
      * <p>
+     * The :not(:first-child) CSS pseudo-class represents any element that is NOT the first child
+     * element of its parent.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void notFirstChild(Style sub) {
+        PropertyDefinition.createSubRule("$:not(:first-child)", sub);
+    }
+
+    /**
+     * <p>
      * The :first-of-type CSS pseudo-class represents the first sibling of its type in the list of
      * children of its parent element.
      * </p>
@@ -257,6 +269,18 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      */
     protected static final void lastChild(Style sub) {
         PropertyDefinition.createSubRule("$:last-child", sub);
+    }
+
+    /**
+     * <p>
+     * The :not(:last-child) CSS pseudo-class represents any element that is NOT the last child
+     * element of its parent.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void notLastChild(Style sub) {
+        PropertyDefinition.createSubRule("$:not(:last-child)", sub);
     }
 
     /**
@@ -286,6 +310,18 @@ public class StyleRuleDescriptor extends StyleDescriptor {
 
     /**
      * <p>
+     * The :not(:only-child) CSS pseudo-class represents any element which is NOT the only child of
+     * its parent.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void notOnlyChild(Style sub) {
+        PropertyDefinition.createSubRule("$:not(:only-child)", sub);
+    }
+
+    /**
+     * <p>
      * The :only-of-type CSS pseudo-class represents any element that has no siblings of the given
      * type.
      * </p>
@@ -310,6 +346,18 @@ public class StyleRuleDescriptor extends StyleDescriptor {
 
     /**
      * <p>
+     * The :not(:nth-child) CSS pseudo-class matches elements except that has an+b-1 siblings before
+     * it in the document tree, for a given positive or zero value for n, and has a parent element.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void notNthChild(String pattern, Style sub) {
+        PropertyDefinition.createSubRule("$:not(:nth-child(" + pattern + "))", sub);
+    }
+
+    /**
+     * <p>
      * The :nth-last-child CSS pseudo-class matches an element that has an+b-1 siblings after it in
      * the document tree, for a given positive or zero value for n, and has a parent element. See
      * :nth-child for a more thorough description of the syntax of its argument.
@@ -319,6 +367,19 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      */
     protected static final void nthLastChild(String pattern, Style sub) {
         PropertyDefinition.createSubRule("$:nth-last-child(" + pattern + ")", sub);
+    }
+
+    /**
+     * <p>
+     * The :not(:nth-last-child) CSS pseudo-class matches elements except that has an+b-1 siblings
+     * after it in the document tree, for a given positive or zero value for n, and has a parent
+     * element. See :nth-child for a more thorough description of the syntax of its argument.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void notNthLastChild(String pattern, Style sub) {
+        PropertyDefinition.createSubRule("$:not(:nth-last-child(" + pattern + "))", sub);
     }
 
     /**
@@ -362,6 +423,19 @@ public class StyleRuleDescriptor extends StyleDescriptor {
      */
     protected static final void empty(Style sub) {
         PropertyDefinition.createSubRule("$:empty", sub);
+    }
+
+    /**
+     * <p>
+     * The :not(:empty) pseudo-class represents any element that has some children. Only element
+     * nodes and text (including whitespace) are considered. Comments or processing instructions do
+     * not affect whether an element is considered empty or not.
+     * </p>
+     * 
+     * @return
+     */
+    protected static final void notEmpty(Style sub) {
+        PropertyDefinition.createSubRule("$:not(:empty)", sub);
     }
 
     /**
