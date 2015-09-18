@@ -60,7 +60,7 @@ public class Button extends LowLevelWidget<Button> {
     @Override
     protected void virtualize(VirtualStructure 〡) {
         element("button", rootStyle.getValue(), () -> {
-            con(label.get());
+            text(label.get());
         });
     }
 }

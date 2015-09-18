@@ -30,6 +30,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 
 import js.dom.Element;
+import js.dom.EventTarget;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
@@ -78,13 +79,6 @@ public abstract class Widget implements Declarable {
 
         rendering = new Rendering(this, root);
         rendering.willExecute();
-
-        // register event listener
-        if (contexts != null) {
-            for (int i = 0, length = contexts.length(); i < length; i++) {
-                contexts.get(i).register(root);
-            }
-        }
     }
 
     /**
@@ -280,8 +274,8 @@ public abstract class Widget implements Declarable {
 
     private NativeArray<EventContext> contexts;
 
-    protected final <V> Events<V> when(UIAction actionType, Style locator, Class<V> contextType) {
-        EventContext context = new EventContext(actionType, locator, contextType);
+    protected final <V> Events<V> when(UIAction actionType, ValueStyle<V> locator) {
+        EventContext context = new EventContext(actionType, locator, true);
 
         if (contexts == null) {
             contexts = new NativeArray();
@@ -289,6 +283,32 @@ public abstract class Widget implements Declarable {
         contexts.push(context);
 
         return context.events;
+    }
+
+    protected final <V> Events<V> when(UIAction actionType, Style locator, Class<V> contextType) {
+        EventContext context = new EventContext(actionType, locator, true);
+
+        if (contexts == null) {
+            contexts = new NativeArray();
+        }
+        contexts.push(context);
+
+        return context.events;
+    }
+
+    /**
+     * @param style
+     */
+    void registerEventListener(Style style, EventTarget target, Object object) {
+        if (contexts != null) {
+            for (int i = 0, length = contexts.length(); i < length; i++) {
+                EventContext context = contexts.get(i);
+
+                if (context.locator == style.locator()) {
+                    context.register(target, object);
+                }
+            }
+        }
     }
 
     /**
@@ -303,15 +323,15 @@ public abstract class Widget implements Declarable {
     /**
      * @version 2015/08/19 21:32:14
      */
-    private static class EventContext<V> {
+    public static class EventContext<V> {
 
         private final UIAction actionType;
 
-        private final Style locator;
-
-        private final Class<V> contextType;
+        private final Locatable locator;
 
         private final Events<V> events;
+
+        private final boolean useContext;
 
         /** The actual listeners. */
         private final NativeArray<Observer> observers = new NativeArray();
@@ -319,12 +339,11 @@ public abstract class Widget implements Declarable {
         /**
          * @param actionType
          * @param locator
-         * @param contextType
          */
-        private EventContext(UIAction actionType, Style locator, Class<V> contextType) {
+        private EventContext(UIAction actionType, Locatable<V> locator, boolean useContext) {
             this.actionType = actionType;
             this.locator = locator;
-            this.contextType = contextType;
+            this.useContext = useContext;
             this.events = new Events<V>(observer -> {
                 observers.push(observer);
 
@@ -339,16 +358,16 @@ public abstract class Widget implements Declarable {
          * Register event listener to the specified {@link Element}.
          * </p>
          * 
-         * @param element
+         * @param target
          */
-        private void register(Element element) {
-            element.addEventListener(actionType.name, new NativeFunction<UIEvent>(event -> {
+        private void register(EventTarget target, Object object) {
+            target.addEventListener(actionType.name, new NativeFunction<UIEvent>(event -> {
                 if (actionType == UIAction.ClickRight) {
                     event.preventDefault();
                 }
 
                 for (int i = 0, length = observers.length(); i < length; i++) {
-                    System.out.println(event.target);
+                    observers.get(i).accept(useContext ? object : event);
                 }
             }));
         }

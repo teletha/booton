@@ -13,16 +13,18 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableBooleanValue;
 
+import js.dom.UIEvent;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.ui.Declarable;
+import jsx.ui.Locatable;
 import jsx.ui.VirtualStructure;
 import kiss.Events;
 
 /**
  * @version 2015/09/15 15:00:09
  */
-public interface Style extends Declarable {
+public interface Style extends Declarable, Locatable<UIEvent> {
 
     /**
      * <p>
@@ -48,10 +50,6 @@ public interface Style extends Declarable {
     default void define() {
         VirtualStructure.latest.classList.push(this);
         StyleManager.add(this);
-    }
-
-    default Object locator() {
-        return this;
     }
 
     /**

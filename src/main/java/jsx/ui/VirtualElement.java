@@ -38,7 +38,12 @@ public class VirtualElement extends VirtualNode<Element> {
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
 
+    Object context;
+
     ContextualizedEventListeners contextualized;
+
+    /** The parent widget. */
+    Widget widget;
 
     /**
      * @param id
@@ -49,6 +54,18 @@ public class VirtualElement extends VirtualNode<Element> {
         super(id);
 
         this.name = name;
+    }
+
+    /**
+     * @param id
+     * @param name
+     * @param namespace
+     */
+    VirtualElement(int id, String name, Widget widget) {
+        super(id);
+
+        this.name = name;
+        this.widget = widget;
     }
 
     /**
@@ -74,8 +91,28 @@ public class VirtualElement extends VirtualNode<Element> {
             }
         }
 
-        // assign classes
-        dom.add(classList.toArray(new Style[classList.length()]));
+        // assign classes and event listener
+        for (int i = 0, length = classList.length(); i < length; i++) {
+            Style style = classList.get(i);
+
+            // style class
+            dom.classList().add(style);
+
+            // event listener
+            if (widget != null) {
+                widget.registerEventListener(style, dom, context);
+            }
+
+            // dom.addEventListener(listener.action.name, new NativeFunction<UIEvent>(event -> {
+            // if (listener.action == UIAction.ClickRight) {
+            // event.preventDefault();
+            // }
+            //
+            // for (Observer observer : listener.observers) {
+            // observer.accept(value == null ? event : value);
+            // }
+            // }));
+        }
 
         // assign inline style
         int size = inlines.size();

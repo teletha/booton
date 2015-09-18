@@ -81,7 +81,7 @@ public final class VirtualStructure {
      * 
      */
     public VirtualStructure(Widget widget) {
-        this(widget, new VirtualElement(0, "div"));
+        this(widget, latest = new VirtualElement(0, "div"), false);
     }
 
     /**
@@ -91,6 +91,18 @@ public final class VirtualStructure {
         parents.add(latest = root);
 
         this.widget = widget;
+
+        root.contextualized = createSpecifiedListenerDifinitions(WidgetStyle.Root);
+    }
+
+    /**
+     * 
+     */
+    public VirtualStructure(Widget widget, VirtualElement root, boolean dummy) {
+        parents.add(root);
+
+        this.widget = widget;
+        Declarables.latestWidget = widget;
 
         root.contextualized = createSpecifiedListenerDifinitions(WidgetStyle.Root);
     }
@@ -1094,24 +1106,35 @@ public final class VirtualStructure {
         private static final Declarable NOP = () -> {
         };
 
+        public static Widget latestWidget;
+
+        private static Object context;
+
         private static int latestContextId;
 
         private static int modifier = 31;
 
-        public static void con(Object... contents) {
-            con(LocalId.findContextLineNumber(), contents);
+        public static void widget(Widget widget) {
+            widget(LocalId.findContextLineNumber(), widget);
         }
 
-        private static void con(int id, Object... contents) {
-            for (Object content : contents) {
-                if (content instanceof Declarable) {
-                    ((Declarable) content).declare();
-                } else if (content instanceof String && content.equals("\r\n")) {
-                    latest.items.push(new VirtualElement(id, "br"));
-                } else {
-                    latest.items.push(new VirtualText(String.valueOf(content)));
-                }
-            }
+        private static void widget(int id, Widget widget) {
+            // store parent widget
+            Widget parent = latestWidget;
+            latestWidget = widget;
+
+            // create virtual element for this widget
+            VirtualWidget virtualize = new VirtualWidget(widget.id, widget);
+            virtualize.context = context;
+
+            // mount virtual element on virtual structure
+            VirtualStructure.latest.items.push(virtualize);
+
+            // process child nodes
+            widget.assemble(new VirtualStructure(widget, virtualize, false));
+
+            // restore parent widget
+            latestWidget = parent;
         }
 
         public static void text(Object text) {
@@ -1119,7 +1142,11 @@ public final class VirtualStructure {
         }
 
         private static void text(int id, Object text) {
-            latest.items.push(new VirtualText(String.valueOf(text)));
+            if ("\r\n".equals(text)) {
+                latest.items.push(new VirtualElement(id, "br", latestWidget));
+            } else {
+                latest.items.push(new VirtualText(String.valueOf(text)));
+            }
         }
 
         public static void text(Style style, Object... texts) {
@@ -1154,7 +1181,8 @@ public final class VirtualStructure {
         }
 
         private static void element(int id, String name, Declarable[] declarables, Runnable process) {
-            VirtualElement element = new VirtualElement((31 + id) ^ modifier, name);
+            VirtualElement element = new VirtualElement((31 + id) ^ modifier, name, latestWidget);
+            element.context = context;
 
             // enter into the child node (store context)
             VirtualElement parent = latest;
@@ -1334,11 +1362,28 @@ public final class VirtualStructure {
          * 
          * @param children A list of child widget.
          */
+        public static <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
+            return contents(childType, Arrays.asList(children));
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
         public static <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
             return () -> {
+                Object parent = context;
+
                 for (T child : children) {
-                    Widget.of(childType, child).declare();
+                    context = child;
+                    modifier = Objects.hash(child);
+                    widget(Widget.of(childType, child));
                 }
+
+                context = parent;
             };
         }
 
@@ -1362,14 +1407,14 @@ public final class VirtualStructure {
          */
         public static <T> Declarable contents(List<T> children, Consumer<T> process) {
             return () -> {
-                Object stored = CONTEXT;
+                Object stored = context;
 
                 for (T child : children) {
-                    CONTEXT = child;
+                    context = child;
                     process.accept(child);
                 }
 
-                CONTEXT = stored;
+                context = stored;
             };
         }
 

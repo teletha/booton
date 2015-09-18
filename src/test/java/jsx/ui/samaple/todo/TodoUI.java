@@ -126,12 +126,12 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        con(input);
+        widget(input);
         box($.ITEMS, contents(Item.class, todos.list));
         box($.FOTTER, () -> {
-            con(text.leftTaskIs(todos.incompletedSize));
+            text(text.leftTaskIs(todos.incompletedSize));
             box($.BUTTONS, all, active, completed);
-            con(clear);
+            widget(clear);
         });
     }
 
@@ -162,7 +162,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
         protected void virtualize(VirtualStructure $〡) {
             if (filter.getValue().test(model1)) {
                 if (editing.get()) {
-                    con(edit);
+                    widget(edit);
                 } else {
                     box(HBox, complete, text, delete);
                 }

@@ -12,7 +12,7 @@ package jsx.ui;
 /**
  * @version 2015/09/16 9:10:52
  */
-public interface Locatable {
+public interface Locatable<T> {
 
     /**
      * <p>
@@ -21,15 +21,17 @@ public interface Locatable {
      * 
      * @return A location identifier.
      */
-    String locate();
+    default Object locator() {
+        return this;
+    }
 
-    /**
-     * <p>
-     * Test whether the specified {@link Locatable} matches this {@link Locatable} or not.
-     * </p>
-     * 
-     * @param locatable
-     * @return
-     */
-    boolean matche(Locatable locatable);
+    // /**
+    // * <p>
+    // * Test whether the specified {@link Locatable} matches this {@link Locatable} or not.
+    // * </p>
+    // *
+    // * @param locatable
+    // * @return
+    // */
+    // boolean matche(Locatable locatable);
 }

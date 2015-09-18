@@ -69,6 +69,6 @@ public class Output extends LowLevelWidget<Output> {
      */
     @Override
     protected void virtualize(VirtualStructure 〡) {
-        con(text.get());
+        text(text.get());
     }
 }
