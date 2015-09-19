@@ -30,6 +30,6 @@ public abstract class Widget1<First> extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
+    protected void virtualize2() {
     }
 }

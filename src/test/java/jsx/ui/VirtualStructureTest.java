@@ -194,7 +194,7 @@ public class VirtualStructureTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(VirtualStructure $〡) {
+        protected void virtualize2() {
             $〡.〡(model1);
         }
     }
@@ -281,7 +281,7 @@ public class VirtualStructureTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(VirtualStructure $〡) {
+        protected void virtualize2() {
             delegator.accept($〡);
         }
     }

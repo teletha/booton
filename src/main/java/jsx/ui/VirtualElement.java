@@ -11,7 +11,6 @@ package jsx.ui;
 
 import static js.lang.Global.*;
 
-import js.dom.CSSStyleDeclaration;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
@@ -32,15 +31,10 @@ public class VirtualElement extends VirtualNode<Element> {
     /** The class attributes. */
     public final NativeArray<Style> classList = new NativeArray();
 
-    /** The The inline styles. */
-    final DualList<String, String> inlines = new DualList();
-
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
 
     Object context;
-
-    ContextualizedEventListeners contextualized;
 
     /** The parent widget. */
     Widget widget;
@@ -73,6 +67,8 @@ public class VirtualElement extends VirtualNode<Element> {
      */
     @Override
     Element materialize() {
+        WidgetLog.MaterializeElement.start();
+
         if (name.startsWith("s:")) {
             dom = document.createElementNS("http://www.w3.org/2000/svg", name.substring(2));
         } else {
@@ -102,37 +98,14 @@ public class VirtualElement extends VirtualNode<Element> {
             if (widget != null) {
                 widget.registerEventListener(style, dom, context);
             }
-
-            // dom.addEventListener(listener.action.name, new NativeFunction<UIEvent>(event -> {
-            // if (listener.action == UIAction.ClickRight) {
-            // event.preventDefault();
-            // }
-            //
-            // for (Observer observer : listener.observers) {
-            // observer.accept(value == null ? event : value);
-            // }
-            // }));
-        }
-
-        // assign inline style
-        int size = inlines.size();
-
-        if (size != 0) {
-            CSSStyleDeclaration style = dom.style();
-
-            for (int i = 0; i < size; i++) {
-                style.set(inlines.key(i), inlines.value(i));
-            }
-        }
-
-        if (contextualized != null) {
-            contextualized.assign(dom);
         }
 
         // assign children nodes
         for (int i = 0, length = items.length(); i < length; i++) {
             dom.append(items.get(i).materialize());
         }
+
+        WidgetLog.MaterializeElement.stop();
 
         // API definition
         return dom;

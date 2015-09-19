@@ -9,13 +9,12 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.VirtualStructure.Declarables.*;
+import static jsx.ui.Declarables.*;
 
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure;
 
 /**
  * @version 2015/09/15 15:35:18
@@ -58,7 +57,7 @@ public class Button extends LowLevelWidget<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure 〡) {
+    protected void virtualize2() {
         element("button", rootStyle.getValue(), () -> {
             text(label.get());
         });

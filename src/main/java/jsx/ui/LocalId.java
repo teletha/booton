@@ -14,13 +14,13 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import booton.translator.Translator;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import kiss.I;
-import booton.translator.Translator;
 
 /**
  * @version 2014/09/13 9:44:24
@@ -28,7 +28,7 @@ import booton.translator.Translator;
 class LocalId {
 
     /** The class name. */
-    private static final String CLASS = VirtualStructure.class.getName() + "$";
+    private static final String CLASS = Declarables.class.getName();
 
     /**
      * <p>
@@ -155,7 +155,7 @@ class LocalId {
     private static class MethodLineSearch extends MethodVisitor {
 
         /** Reusable type. */
-        private static final Type VirtualStructure = Type.getType(VirtualStructure.class);
+        private static final Type Declarables = Type.getType(Declarables.class);
 
         /** The line mapping. */
         private final Map<Integer, Integer> lines;
@@ -180,7 +180,7 @@ class LocalId {
          */
         @Override
         public void visitFieldInsn(int opcode, String owner, String name, String desc) {
-            if (opcode == GETFIELD && owner.equals(VirtualStructure.getInternalName())) {
+            if (opcode == GETFIELD && owner.equals(Declarables.getInternalName())) {
                 this.latestFieldAccessLineNumber = latestLineNumber;
             }
         }
@@ -198,7 +198,7 @@ class LocalId {
          */
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean interfaceOwner) {
-            if (owner.startsWith(VirtualStructure.getInternalName().concat("$"))) {
+            if (owner.startsWith(Declarables.getInternalName())) {
                 lines.put(latestLineNumber, latestFieldAccessLineNumber);
             }
         }

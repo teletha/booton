@@ -74,7 +74,6 @@ class PatchDiff {
         List<Patch> patches = new ArrayList();
         patches.addAll(diff(next.dom, prev.attributes, next.attributes));
         patches.addAll(diff(next.dom, prev.classList, next.classList));
-        patches.addAll(diffInlineStyle(next.dom, prev.inlines, next.inlines));
         patches.addAll(diff(next.dom, prev, next));
 
         return patches;

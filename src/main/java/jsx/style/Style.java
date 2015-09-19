@@ -17,8 +17,8 @@ import js.dom.UIEvent;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.ui.Declarable;
+import jsx.ui.Declarables;
 import jsx.ui.Locatable;
-import jsx.ui.VirtualStructure;
 import kiss.Events;
 
 /**
@@ -48,7 +48,7 @@ public interface Style extends Declarable, Locatable<UIEvent> {
      */
     @Override
     default void define() {
-        VirtualStructure.latest.classList.push(this);
+        Declarables.latestElement.classList.push(this);
         StyleManager.add(this);
     }
 

@@ -9,7 +9,7 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.VirtualStructure.Declarables.*;
+import static jsx.ui.Declarables.*;
 
 import java.util.function.Function;
 
@@ -18,7 +18,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure;
 import kiss.I;
 
 /**
@@ -68,7 +67,7 @@ public class Output extends LowLevelWidget<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure 〡) {
+    protected void virtualize2() {
         text(text.get());
     }
 }

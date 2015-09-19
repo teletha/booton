@@ -10,9 +10,9 @@
 package jsx.ui.samaple.todo;
 
 import static jsx.style.StyleRuleDescriptor.*;
+import static jsx.ui.Declarables.*;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.FunctionHelper.not;
-import static jsx.ui.VirtualStructure.Declarables.*;
 
 import java.util.function.Predicate;
 
@@ -27,7 +27,6 @@ import jsx.style.Style;
 import jsx.style.StyleRuleDescriptor;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
-import jsx.ui.VirtualStructure;
 import jsx.ui.Widget1;
 import jsx.ui.Widgety;
 import jsx.ui.i18n.TextLocalizer;
@@ -125,12 +124,16 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure 〡) {
+    protected void virtualize2() {
         widget(input);
         box($.ITEMS, contents(Item.class, todos.list));
         box($.FOTTER, () -> {
             text(text.leftTaskIs(todos.incompletedSize));
-            box($.BUTTONS, all, active, completed);
+            box($.BUTTONS, () -> {
+                widget(all);
+                widget(active);
+                widget(completed);
+            });
             widget(clear);
         });
     }
@@ -159,12 +162,16 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize(VirtualStructure $〡) {
+        protected void virtualize2() {
             if (filter.getValue().test(model1)) {
                 if (editing.get()) {
                     widget(edit);
                 } else {
-                    box(HBox, complete, text, delete);
+                    box(HBox, () -> {
+                        widget(complete);
+                        widget(text);
+                        widget(delete);
+                    });
                 }
             }
         }

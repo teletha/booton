@@ -11,7 +11,6 @@ package jsx.ui.piece;
 
 import static js.lang.Global.*;
 
-import jsx.ui.VirtualStructure;
 import jsx.ui.Widget;
 
 /**
@@ -99,6 +98,6 @@ public class SlidableView extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure $〡) {
+    protected void virtualize2() {
     }
 }

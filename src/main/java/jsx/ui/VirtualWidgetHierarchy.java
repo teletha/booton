@@ -15,9 +15,9 @@ import java.util.Map;
 import kiss.Prototype;
 
 /**
- * @version 2014/09/20 16:49:00
+ * @version 2015/09/19 14:12:08
  */
-class VirtualStructureHierarchy extends Prototype<Widget> {
+class VirtualWidgetHierarchy extends Prototype<Widget> {
 
     /** The hierarchy manager. */
     static final Map<Class, Widget> hierarchy = new HashMap();
@@ -28,7 +28,7 @@ class VirtualStructureHierarchy extends Prototype<Widget> {
     /**
      * @param modelClass
      */
-    protected VirtualStructureHierarchy(Class modelClass) {
+    protected VirtualWidgetHierarchy(Class modelClass) {
         super(modelClass);
 
         this.widgetClass = modelClass;

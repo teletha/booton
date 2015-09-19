@@ -11,8 +11,8 @@ package jsx.ui.piece;
 
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
+import static jsx.ui.Declarables.*;
 import static jsx.ui.FunctionHelper.*;
-import static jsx.ui.VirtualStructure.Declarables.*;
 import static jsx.ui.piece.PieceStyle.*;
 
 import java.util.function.Predicate;
@@ -26,7 +26,6 @@ import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure;
 import kiss.Events;
 import kiss.I;
 
@@ -53,9 +52,10 @@ public class Input extends LowLevelWidget<Input> {
         this.value = value;
 
         // user input functionality
-        Events<UIEvent> functionInput = on(Paste, Cut);
-        Events<UIEvent> keybordInput = on(KeyUp);
-        functionInput.merge(keybordInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
+        Events<UIEvent> pasteInput = when(Paste, InputForm);
+        Events<UIEvent> cutInput = when(Cut, InputForm);
+        Events<UIEvent> keybordInput = when(KeyUp, InputForm);
+        keybordInput.merge(pasteInput, cutInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
     }
 
     /**
@@ -151,7 +151,7 @@ public class Input extends LowLevelWidget<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure 〡) {
-        element("input", InputForm, type("text"), value(value.get()), attr("placeholder", placeholder.get()));
+    protected void virtualize2() {
+        element("input", InputForm, rootStyle.getValue(), type("text"), value(value.get()), attr("placeholder", placeholder.get()));
     }
 }

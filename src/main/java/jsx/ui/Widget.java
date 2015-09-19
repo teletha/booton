@@ -15,11 +15,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -34,22 +32,19 @@ import js.dom.EventTarget;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
-import js.lang.NativeFunction;
 import jsx.debug.Profile;
 import jsx.style.Style;
 import jsx.style.ValueStyle;
-import jsx.ui.ContextualizedEventListeners.EventListener;
 import jsx.ui.piece.Input;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
-import kiss.Observer;
 
 /**
  * @version 2015/05/29 15:48:14
  */
-@Manageable(lifestyle = VirtualStructureHierarchy.class)
-public abstract class Widget implements Declarable {
+@Manageable(lifestyle = VirtualWidgetHierarchy.class)
+public abstract class Widget {
 
     /** The re-rendering queue. */
     private static final Set<Rendering> update = new HashSet();
@@ -81,21 +76,6 @@ public abstract class Widget implements Declarable {
         rendering.willExecute();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final void declare() {
-        // create virtual element for this widget
-        VirtualWidget virtualize = new VirtualWidget(id, this);
-
-        // mount virtual element on virtual structure
-        VirtualStructure.latest.items.push(virtualize);
-
-        // process child nodes
-        assemble(new VirtualStructure(this, virtualize));
-    }
-
     protected boolean shouldUpdate() {
         return true;
     }
@@ -104,10 +84,8 @@ public abstract class Widget implements Declarable {
      * <p>
      * Create virtual elements of this {@link Widget}.
      * </p>
-     * 
-     * @param $〡 Domain Specific Language for virtual elements.
      */
-    protected abstract void virtualize(VirtualStructure $〡);
+    protected abstract void virtualize2();
 
     /**
      * <p>
@@ -119,162 +97,28 @@ public abstract class Widget implements Declarable {
      * </p>
      */
     protected VirtualElement virtualize() {
-        VirtualStructure structure = new VirtualStructure(this);
+        VirtualElement element = new VirtualElement(0, "div");
 
-        // assemble the virtual structure
-        assemble(structure);
+        Declarables.latestElement = element;
+        Declarables.widget(this);
 
-        // API definition
-        return structure.getRoot();
-    }
-
-    /**
-     * <p>
-     * This is internal API.
-     * </p>
-     * <p>
-     * Assemble the virtual structure for this {@link Widget}.
-     * </p>
-     * 
-     * @param structure A current processing structure which has the parent container.
-     */
-    final void assemble(VirtualStructure structure) {
-        Class clazz = getClass();
-
-        /**
-         * <p>
-         * Enter the hierarchy of {@link VirtualStructure}.
-         * </p>
-         */
-        Widget previous = VirtualStructureHierarchy.hierarchy.putIfAbsent(clazz, this);
-
-        if (previous != null) {
-            throw new IllegalStateException(clazz + " is a nest in virtual structure.");
-        }
-
-        /**
-         * Assemble {@link VirtualStructure} actually.
-         */
-        WidgetLog.Virtualize.start();
-        virtualize(structure);
-        WidgetLog.Virtualize.stop();
-
-        /**
-         * <p>
-         * Leave the hierarchy of {@link VirtualStructure}.
-         * </p>
-         */
-        VirtualStructureHierarchy.hierarchy.remove(clazz);
-    }
-
-    private Map<Object, List<EventListener>> byLocation;
-
-    /**
-     * <p>
-     * Retrieve the specified event stream on this {@link Widget}.
-     * </p>
-     * 
-     * @param action A target event type to listen.
-     * @return An event stream.
-     */
-    protected final Events<UIEvent> on(UIAction... actions) {
-        Events<UIEvent> events = null;
-
-        for (int i = 0; i < actions.length; i++) {
-            if (events == null) {
-                events = on(actions[i], WidgetStyle.Root, null);
-            } else {
-                events = events.merge(on(actions[i], WidgetStyle.Root, null));
-            }
-        }
-        return events;
-    }
-
-    /**
-     * <p>
-     * Retrieve the specified event stream on the specified location.
-     * </p>
-     * 
-     * @param action An event type to listen.
-     * @param locator An event location to listen.
-     * @return An event stream.
-     */
-    protected final <V> Events<V> on(UIAction action, ValueStyle<V> locator) {
-        return on(action, locator, null);
-    }
-
-    /**
-     * <p>
-     * Retrieve the specified event stream on the specified location.
-     * </p>
-     * 
-     * @param action An event type to listen.
-     * @param locator An event location to listen.
-     * @return An event stream.
-     */
-    protected final Events<UIEvent> on(UIAction action, Style locator) {
-        return on(action, locator, null);
-    }
-
-    /**
-     * @param action
-     * @param locator
-     * @param type
-     * @param converter
-     * @param listener
-     * @return
-     */
-    protected final <S, V> Events<V> on(UIAction action, Object locator, Class<S> type) {
-        if (byLocation == null) {
-            byLocation = new HashMap();
-        }
-
-        List<EventListener> byAction = byLocation.computeIfAbsent(locator, key -> {
-            List<EventListener> list = new CopyOnWriteArrayList();
-
-            return list;
-        });
-
-        for (EventListener listener : byAction) {
-            if (listener.action == action) {
-                return listener.event;
-            }
-        }
-
-        EventListener listener = new EventListener(action);
-        byAction.add(listener);
-
-        return listener.event;
-    }
-
-    /**
-     * @param style
-     */
-    public List<EventListener> getEventListenersFor(Object style) {
-        return byLocation == null ? null : byLocation.get(style);
-    }
-
-    /**
-     * @param action
-     */
-    public void publish(UIEvent event) {
-        List<EventListener> listeners = getEventListenersFor(WidgetStyle.Root);
-
-        if (listeners != null) {
-            for (EventListener<?, ?> listener : listeners) {
-                if (listener.action == event.action) {
-                    for (Observer observer : listener.observers) {
-                        observer.accept(event);
-                    }
-                    return;
-                }
-            }
-        }
+        return element;
     }
 
     private NativeArray<EventContext> contexts;
 
     protected final <V> Events<V> when(UIAction actionType, ValueStyle<V> locator) {
+        EventContext context = new EventContext(actionType, locator, true);
+
+        if (contexts == null) {
+            contexts = new NativeArray();
+        }
+        contexts.push(context);
+
+        return context.events;
+    }
+
+    protected final Events<UIEvent> when(UIAction actionType, Style locator) {
         EventContext context = new EventContext(actionType, locator, true);
 
         if (contexts == null) {
@@ -318,59 +162,6 @@ public abstract class Widget implements Declarable {
      */
     protected final void update() {
         rendering.willExecute();
-    }
-
-    /**
-     * @version 2015/08/19 21:32:14
-     */
-    public static class EventContext<V> {
-
-        private final UIAction actionType;
-
-        private final Locatable locator;
-
-        private final Events<V> events;
-
-        private final boolean useContext;
-
-        /** The actual listeners. */
-        private final NativeArray<Observer> observers = new NativeArray();
-
-        /**
-         * @param actionType
-         * @param locator
-         */
-        private EventContext(UIAction actionType, Locatable<V> locator, boolean useContext) {
-            this.actionType = actionType;
-            this.locator = locator;
-            this.useContext = useContext;
-            this.events = new Events<V>(observer -> {
-                observers.push(observer);
-
-                return () -> {
-                    observers.remove(observers.indexOf(observer));
-                };
-            });
-        }
-
-        /**
-         * <p>
-         * Register event listener to the specified {@link Element}.
-         * </p>
-         * 
-         * @param target
-         */
-        private void register(EventTarget target, Object object) {
-            target.addEventListener(actionType.name, new NativeFunction<UIEvent>(event -> {
-                if (actionType == UIAction.ClickRight) {
-                    event.preventDefault();
-                }
-
-                for (int i = 0, length = observers.length(); i < length; i++) {
-                    observers.get(i).accept(useContext ? object : event);
-                }
-            }));
-        }
     }
 
     /**

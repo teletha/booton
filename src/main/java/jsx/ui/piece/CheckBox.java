@@ -10,7 +10,7 @@
 package jsx.ui.piece;
 
 import static js.dom.UIAction.*;
-import static jsx.ui.VirtualStructure.Declarables.*;
+import static jsx.ui.Declarables.*;
 import static jsx.ui.piece.FormStyle.*;
 
 import javafx.beans.property.BooleanProperty;
@@ -19,7 +19,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import jsx.ui.LowLevelWidget;
-import jsx.ui.VirtualStructure;
 
 /**
  * @version 2014/10/04 10:26:04
@@ -47,14 +46,14 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
         this.check = value;
         this.label = label;
 
-        on(Click).to(e -> check.set(!check.get()));
+        when(Click, CheckBoxSVG).to(e -> check.set(!check.get()));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize(VirtualStructure 〡) {
+    protected void virtualize2() {
         element("s:svg", CheckBoxSVG, viewBox(0, 0, 100, 100), () -> {
             element("s:rect", CheckBox, size(90, 90), position(5, 5));
             element("s:path", CheckMark.of(check), d().moveTo(16.667, 62.167)

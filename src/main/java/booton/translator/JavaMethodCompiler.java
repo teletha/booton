@@ -45,9 +45,7 @@ import js.lang.NativeObject;
 import jsx.bwt.Input;
 import jsx.style.StaticStyle;
 import jsx.style.Style;
-import jsx.ui.VirtualStructure;
-import jsx.ui.VirtualStructure.ContainerDescriptor;
-import jsx.ui.VirtualStructure.Declarables;
+import jsx.ui.Declarables;
 import kiss.I;
 import kiss.model.ClassUtil;
 
@@ -485,15 +483,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETFIELD:
-            if (owner == VirtualStructure.class && name
-                    .endsWith("box") && script.source != VirtualStructure.class && script.source != ContainerDescriptor.class) {
-                ArrayList<Operand> context = new ArrayList();
-                context.add(current.remove(0)); // "this" context
-                context.add(new OperandNumber(virtualStructureLocalId.getAndIncrement()));
-                current.addOperand(translator.translateMethod(owner, name, "(I)".concat(desc), new Class[] {int.class}, context), type);
-            } else {
-                current.addOperand(translator.translateField(owner, name, current.remove(0)), type);
-            }
+            current.addOperand(translator.translateField(owner, name, current.remove(0)), type);
             break;
 
         case PUTSTATIC:
@@ -1634,15 +1624,6 @@ class JavaMethodCompiler extends MethodVisitor {
             // push "this" operand
             contexts.add(0, current.remove(0));
 
-            // if (owner == VirtualStructure.class && parameters.length == 0 && returnType !=
-            // VirtualElement.class) {
-            // parameters = new Class[] {int.class};
-            // current.addOperand(translator
-            // .translateMethod(owner, methodName, "(I".concat(desc.substring(1)), parameters,
-            // contexts), returnType);
-            // return;
-            // }
-
             // translate
             current.addOperand(translator.translateMethod(owner, methodName, desc, parameters, contexts), returnType);
             break;
@@ -1662,7 +1643,6 @@ class JavaMethodCompiler extends MethodVisitor {
                     fixed[0] = int.class;
                     System.arraycopy(parameters, 0, fixed, 1, parameters.length);
                     contexts.add(0, new OperandNumber(virtualStructureLocalId.getAndIncrement()));
-
                     contexts.add(0, new OperandExpression(Javascript.computeClassName(owner, true)));
 
                     current.addOperand(translator

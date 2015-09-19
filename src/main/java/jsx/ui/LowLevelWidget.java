@@ -43,15 +43,15 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         if (hover == null) {
             hover = new SimpleBooleanProperty(false);
 
-            on(MouseEnter).to(v -> hover.set(true));
-            on(MouseLeave).to(v -> hover.set(false));
+            when(MouseEnter, WidgetStyle.Root).to(v -> hover.set(true));
+            when(MouseLeave, WidgetStyle.Root).to(v -> hover.set(false));
         }
         return hover;
     }
 
-    private final Events<UIEvent> click = on(Click).filter(this::isValid);
+    private final Events<UIEvent> click = when(Click, WidgetStyle.Root).filter(this::isValid);
 
-    private final Events<UIEvent> dbclick = on(DoubleClick).filter(this::isValid);
+    private final Events<UIEvent> dbclick = when(DoubleClick, WidgetStyle.Root).filter(this::isValid);
 
     /**
      * @return
@@ -102,8 +102,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = on(KeyPress).filter(byKey);
-            Events<UIEvent> keyUp = on(KeyUp).filter(byKey);
+            Events<UIEvent> keyPress = when(KeyPress, WidgetStyle.Root).filter(byKey);
+            Events<UIEvent> keyUp = when(KeyUp, WidgetStyle.Root).filter(byKey);
             // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
