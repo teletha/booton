@@ -18,7 +18,7 @@ import jsx.style.value.Color;
 /**
  * @version 2014/11/13 13:22:44
  */
-public class StyleTester extends StyleRuleDescriptor {
+public class StyleTester extends StyleDescriptor {
 
     protected ValidatableStyle style(Style style) {
         // empty style sheet

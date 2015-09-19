@@ -10,7 +10,6 @@
 package jsx.style;
 
 import static jsx.style.StyleDescriptor.*;
-import static jsx.style.StyleRuleDescriptor.*;
 
 import org.junit.Test;
 

@@ -10,7 +10,7 @@
 package jsx.ui.piece;
 
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Font;
@@ -20,7 +20,7 @@ import jsx.style.value.Shadow;
 /**
  * @version 2014/11/18 15:21:09
  */
-public class PieceStyle extends StyleRuleDescriptor {
+public class PieceStyle extends StyleDescriptor {
 
     // ===========================================
     // Form Related Style

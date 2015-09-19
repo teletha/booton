@@ -10,12 +10,12 @@
 package jsx.bwt.view;
 
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 
 /**
  * @version 2014/11/08 10:49:40
  */
-class ScrollableListViewStyle extends StyleRuleDescriptor {
+class ScrollableListViewStyle extends StyleDescriptor {
 
     static Style ViewabletemView = () -> {
         display.block();

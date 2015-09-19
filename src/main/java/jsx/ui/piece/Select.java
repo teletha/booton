@@ -9,8 +9,10 @@
  */
 package jsx.ui.piece;
 
-import static jsx.style.StyleRuleDescriptor.*;
+import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.Declarables.*;
+import static jsx.ui.Declarables.box;
+import static jsx.ui.Declarables.text;
 import static jsx.ui.piece.SlidableViewStyle.*;
 
 import java.util.ArrayList;

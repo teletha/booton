@@ -9,8 +9,10 @@
  */
 package jsx.ui.samaple.todo;
 
-import static jsx.style.StyleRuleDescriptor.*;
+import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.Declarables.*;
+import static jsx.ui.Declarables.box;
+import static jsx.ui.Declarables.text;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.FunctionHelper.not;
 
@@ -24,7 +26,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import booton.Necessary;
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
 import jsx.ui.Widget1;
@@ -347,7 +349,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
     /**
      * @version 2015/09/15 16:07:02
      */
-    private static class $ extends StyleRuleDescriptor {
+    private static class $ extends StyleDescriptor {
 
         static Style FOTTER = () -> {
             display.flex();

@@ -10,7 +10,7 @@
 package jsx.bwt.view;
 
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
@@ -18,7 +18,7 @@ import jsx.style.value.Numeric;
 /**
  * @version 2013/06/09 18:48:17
  */
-public class PopupViewStyle extends StyleRuleDescriptor {
+public class PopupViewStyle extends StyleDescriptor {
 
     public static Style Show = () -> {
         box.opacity(1);

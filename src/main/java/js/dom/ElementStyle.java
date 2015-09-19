@@ -10,12 +10,12 @@
 package js.dom;
 
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 
 /**
  * @version 2014/11/15 14:07:18
  */
-class ElementStyle extends StyleRuleDescriptor {
+class ElementStyle extends StyleDescriptor {
 
     /**
      * <p>

@@ -10,12 +10,12 @@
 package jsx.bwt.view;
 
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 
 /**
  * @version 2014/11/08 10:49:26
  */
-class SlidableViewStyle extends StyleRuleDescriptor {
+class SlidableViewStyle extends StyleDescriptor {
 
     static Style ViewableArea = () -> {
         // In firefox, "overflow : hidden" will render dirty, so don't use it.

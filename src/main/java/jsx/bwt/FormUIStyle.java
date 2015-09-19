@@ -10,7 +10,7 @@
 package jsx.bwt;
 
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Font;
@@ -20,7 +20,7 @@ import jsx.style.value.Shadow;
 /**
  * @version 2014/11/11 21:54:39
  */
-class FormUIStyle extends StyleRuleDescriptor {
+class FormUIStyle extends StyleDescriptor {
 
     // ===========================================
     // Form Related Style
@@ -62,11 +62,7 @@ class FormUIStyle extends StyleRuleDescriptor {
     /** The general icon size. */
     protected static final Numeric IconSize = SingleLineFormHeight;
 
-    protected static final Shadow in = shadow()
-            .offset(0, 2, px)
-            .blurRadius(4, px)
-            .inset()
-            .color(Color.Black.opacify(-0.85));
+    protected static final Shadow in = shadow().offset(0, 2, px).blurRadius(4, px).inset().color(Color.Black.opacify(-0.85));
 
     protected static final Shadow out = shadow().offset(0, 1, px).blurRadius(2, px).color(Color.Black.opacify(-0.95));
 
@@ -197,10 +193,7 @@ class FormUIStyle extends StyleRuleDescriptor {
     };
 
     static Style InvalidInputForm = () -> {
-        Shadow shadow = shadow()
-                .offset(0, 0, px)
-                .blurRadius(8, px)
-                .color(BorderFocusColor.adjustHue(-180).opacify(-0.2));
+        Shadow shadow = shadow().offset(0, 0, px).blurRadius(8, px).color(BorderFocusColor.adjustHue(-180).opacify(-0.2));
 
         focus(() -> {
             border(BorderFocusColor.adjustHue(-180));

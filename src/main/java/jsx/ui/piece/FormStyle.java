@@ -11,13 +11,13 @@ package jsx.ui.piece;
 
 import jsx.style.BinaryStyle;
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 import jsx.style.value.Color;
 
 /**
  * @version 2015/03/22 16:46:20
  */
-public class FormStyle extends StyleRuleDescriptor {
+public class FormStyle extends StyleDescriptor {
 
     static Style CheckBoxRoot = () -> {
         position.relative();
@@ -34,9 +34,7 @@ public class FormStyle extends StyleRuleDescriptor {
 
     static BinaryStyle CheckMark = state -> {
         fill.none();
-        stroke.color(80, 80, 80).width(6, px).linecap.round().linejoin.round()
-                .dashArray(120, 130)
-                .dashOffset(state ? 0 : 121);
+        stroke.color(80, 80, 80).width(6, px).linecap.round().linejoin.round().dashArray(120, 130).dashOffset(state ? 0 : 121);
         transit().duration(0.2, s).easeInOut().whenever();
     };
 }

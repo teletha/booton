@@ -9,15 +9,14 @@
  */
 package jsx.style.property;
 
-import static jsx.style.value.Color.*;
-
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
+import jsx.style.value.Color;
 
 /**
  * @version 2015/05/24 18:00:10
  */
-class BuiltinStyle extends StyleRuleDescriptor {
+class BuiltinStyle extends StyleDescriptor {
 
     /**
      * Make text unselectable.
@@ -26,7 +25,7 @@ class BuiltinStyle extends StyleRuleDescriptor {
         cursor.defaults();
 
         selection(() -> {
-            background.color(Transparent);
+            background.color(Color.Transparent);
         });
     };
 

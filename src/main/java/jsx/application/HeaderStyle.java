@@ -10,11 +10,11 @@
 package jsx.application;
 
 import jsx.style.Style;
-import jsx.style.StyleRuleDescriptor;
+import jsx.style.StyleDescriptor;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 
-class HeaderStyle extends StyleRuleDescriptor {
+class HeaderStyle extends StyleDescriptor {
 
     /** The background color. */
     private static final Color LightBack = new Color(0, 0, 27);
@@ -76,9 +76,7 @@ class HeaderStyle extends StyleRuleDescriptor {
         border.bottom.width(1, px).solid().color(rgb(81, 81, 81));
 
         hover(() -> {
-            background
-                    .color(rgb(1, 134, 186))
-                    .image(BackgroundImage.of(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1))));
+            background.color(rgb(1, 134, 186)).image(BackgroundImage.of(linear(rgba(4, 172, 236, 1), rgba(1, 134, 186, 1))));
 
             firstChild(() -> {
                 border.top.radius(Radius, px);
