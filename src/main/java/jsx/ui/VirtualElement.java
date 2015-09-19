@@ -34,7 +34,7 @@ public class VirtualElement extends VirtualNode<Element> {
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
 
-    Object context;
+    final Object context;
 
     /** The parent widget. */
     Widget widget;
@@ -44,10 +44,11 @@ public class VirtualElement extends VirtualNode<Element> {
      * @param name
      * @param namespace
      */
-    VirtualElement(int id, String name) {
+    VirtualElement(int id, String name, Object context) {
         super(id);
 
         this.name = name;
+        this.context = context;
     }
 
     /**
@@ -55,10 +56,11 @@ public class VirtualElement extends VirtualNode<Element> {
      * @param name
      * @param namespace
      */
-    VirtualElement(int id, String name, Widget widget) {
+    VirtualElement(int id, String name, Object context, Widget widget) {
         super(id);
 
         this.name = name;
+        this.context = context;
         this.widget = widget;
     }
 

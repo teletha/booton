@@ -97,7 +97,7 @@ public abstract class Widget {
      * </p>
      */
     protected VirtualElement virtualize() {
-        VirtualElement element = new VirtualElement(0, "div");
+        VirtualElement element = new VirtualElement(0, "div", null);
 
         Declarables.latestElement = element;
         Declarables.widget(this);
@@ -290,7 +290,7 @@ public abstract class Widget {
          */
         private Rendering(Widget widget, Element root) {
             this.widget = widget;
-            this.virtual = new VirtualElement(0, "div");
+            this.virtual = new VirtualElement(0, "div", null);
             this.virtual.dom = root;
 
             Class type = widget.getClass();
