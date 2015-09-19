@@ -107,30 +107,49 @@ public abstract class Widget {
 
     private NativeArray<EventContext> contexts;
 
+    /**
+     * @param actionType
+     * @param locator
+     * @return
+     */
     protected final <V> Events<V> when(UIAction actionType, ValueStyle<V> locator) {
-        EventContext context = new EventContext(actionType, locator, true);
-
-        if (contexts == null) {
-            contexts = new NativeArray();
-        }
-        contexts.push(context);
-
-        return context.events;
+        return when(actionType, locator, true);
     }
 
+    /**
+     * @param actionType
+     * @param locator
+     * @return
+     */
     protected final Events<UIEvent> when(UIAction actionType, Style locator) {
-        EventContext context = new EventContext(actionType, locator, true);
-
-        if (contexts == null) {
-            contexts = new NativeArray();
-        }
-        contexts.push(context);
-
-        return context.events;
+        return when(actionType, locator, true);
     }
 
+    /**
+     * <p>
+     * </p>
+     * 
+     * @param actionType
+     * @param locator
+     * @param contextType
+     * @return
+     */
     protected final <V> Events<V> when(UIAction actionType, Style locator, Class<V> contextType) {
-        EventContext context = new EventContext(actionType, locator, true);
+        return when(actionType, locator, contextType);
+    }
+
+    /**
+     * <p>
+     * Register the event listener.
+     * </p>
+     * 
+     * @param action
+     * @param locatable
+     * @param event
+     * @return
+     */
+    private <V> Events<V> when(UIAction action, Locatable locatable, boolean event) {
+        EventContext context = new EventContext(action, locatable, event);
 
         if (contexts == null) {
             contexts = new NativeArray();

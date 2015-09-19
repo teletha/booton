@@ -21,7 +21,7 @@ import kiss.Observer;
 /**
  * @version 2015/08/19 21:32:14
  */
-public class EventContext<V> {
+class EventContext<V> {
 
     private final UIAction actionType;
 

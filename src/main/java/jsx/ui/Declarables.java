@@ -19,7 +19,7 @@ import js.lang.NativeString;
 import jsx.style.Style;
 
 /**
- * @version 2015/09/14 16:51:36
+ * @version 2015/09/19 21:45:20
  */
 public class Declarables {
 
