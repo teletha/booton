@@ -37,21 +37,7 @@ public class StyleManager {
     public static void add(Style style) {
         if (style != null && styles.add(style)) {
             WidgetLog.StyleDefinition.start();
-
-            if (style instanceof MultipleStyle) {
-                MultipleStyle multiple = (MultipleStyle) style;
-
-                for (int i = 0; i < multiple.styles.length(); i++) {
-                    add(multiple.styles.get(i));
-                }
-            } else if (style instanceof ConditionalStyle) {
-                add(((ConditionalStyle) style).style);
-            } else {
-                StyleRule rule = StyleRule.create("$", style);
-
-                add(rule);
-            }
-
+            add(StyleRule.create("$", style));
             WidgetLog.StyleDefinition.stop();
         }
     }

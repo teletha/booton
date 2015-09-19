@@ -9,20 +9,13 @@
  */
 package jsx.style;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableBooleanValue;
-
 import js.dom.UIEvent;
-import js.lang.NativeArray;
-import jsx.collection.DualList;
 import jsx.ui.Declarable;
 import jsx.ui.Declarables;
 import jsx.ui.Locatable;
-import kiss.Events;
 
 /**
- * @version 2015/09/15 15:00:09
+ * @version 2015/09/19 14:37:52
  */
 public interface Style extends Declarable, Locatable<UIEvent> {
 
@@ -39,10 +32,6 @@ public interface Style extends Declarable, Locatable<UIEvent> {
         return "STYLE" + hashCode();
     }
 
-    public default void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
-        styles.push(this);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -50,81 +39,5 @@ public interface Style extends Declarable, Locatable<UIEvent> {
     default void define() {
         Declarables.latestElement.classList.push(this);
         StyleManager.add(this);
-    }
-
-    /**
-     * <p>
-     * Compose this style and the specified style.
-     * </p>
-     * 
-     * @param other An other style to compose.
-     * @return A composed style.
-     */
-    public default Style with(Style other) {
-        return new MultipleStyle(this, other);
-    }
-
-    /**
-     * <p>
-     * Compose this style and the specified style.
-     * </p>
-     * 
-     * @param other An other style to compose.
-     * @return A composed style.
-     */
-    public default Style with(Style other, boolean condition) {
-        if (condition) {
-            return new MultipleStyle(this, other);
-        } else {
-            return this;
-        }
-    }
-
-    public default Style of(Object context) {
-        return new ContextualizedStyle(this, context);
-    }
-
-    /**
-     * <p>
-     * Return the conditional {@link Declarable} which is applied only when the specified condition
-     * is true.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @return A conditional {@link Declarable}.
-     */
-    public default Style when(boolean condition) {
-        if (condition == false) {
-            return null;
-        }
-        return when(new SimpleBooleanProperty(condition));
-    }
-
-    /**
-     * <p>
-     * Return the conditional {@link Declarable} which is applied only when the specified condition
-     * is true.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @return A conditional {@link Declarable}.
-     */
-    public default Style when(Events<Boolean> condition) {
-        BooleanProperty property = new SimpleBooleanProperty();
-        condition.to(property::setValue);
-        return when(property);
-    }
-
-    /**
-     * <p>
-     * Return the conditional {@link Declarable} which is applied only when the specified condition
-     * is true.
-     * </p>
-     * 
-     * @param condition A condition.
-     * @return A conditional {@link Declarable}.
-     */
-    public default Style when(ObservableBooleanValue condition) {
-        return new ConditionalStyle(this, condition);
     }
 }

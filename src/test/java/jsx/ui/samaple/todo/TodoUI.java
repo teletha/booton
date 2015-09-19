@@ -59,19 +59,19 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
-    final Button all = UI.button().label(text.selectAll()).click(this::showAll).style($.SELECTED_FILTER.when(filter.isEqualTo(Filter.All)));
+    final Button all = UI.button().label(text.selectAll()).click(this::showAll).styleIf(filter.isEqualTo(Filter.All), $.SELECTED_FILTER);
 
     /** The filter button. */
     final Button active = UI.button()
             .label(text.selectIncompleted())
             .click(this::showActive)
-            .style($.SELECTED_FILTER.when(filter.isEqualTo(Filter.Active)));
+            .styleIf(filter.isEqualTo(Filter.Active), $.SELECTED_FILTER);
 
     /** The filter button. */
     final Button completed = UI.button()
             .label(text.selectCompleted())
             .click(this::showCompleted)
-            .style($.SELECTED_FILTER.when(filter.isEqualTo(Filter.Completed)));
+            .styleIf(filter.isEqualTo(Filter.Completed), $.SELECTED_FILTER);
 
     /** The clear button. */
     final Button clear = UI.button()

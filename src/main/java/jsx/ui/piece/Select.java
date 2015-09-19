@@ -53,7 +53,7 @@ public class Select<M> extends Widget {
     @Override
     protected void virtualize2() {
         box(VBox, () -> {
-            box(ViewableArea.with(shown), () -> {
+            box(ViewableArea, shown, () -> {
                 box(Slider, () -> {
                     box(HBox, contents(values, value -> {
                         text(value);

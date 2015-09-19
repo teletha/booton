@@ -9,13 +9,10 @@
  */
 package jsx.style;
 
-import js.lang.NativeArray;
-import jsx.collection.DualList;
-
 /**
  * @version 2015/05/27 18:12:21
  */
-public class ContextualizableStyle<T> implements Style {
+class ValuedStyle<T> implements Style {
 
     private final T value;
 
@@ -27,7 +24,7 @@ public class ContextualizableStyle<T> implements Style {
      * @param value
      * @param style
      */
-    public ContextualizableStyle(T value, ValueStyle base, Style style) {
+    ValuedStyle(T value, ValueStyle base, Style style) {
         this.value = value;
         this.base = base;
         this.style = style;
@@ -47,13 +44,5 @@ public class ContextualizableStyle<T> implements Style {
     @Override
     public Object locator() {
         return base;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
-        styles.push(this);
     }
 }

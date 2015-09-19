@@ -17,6 +17,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -24,6 +25,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
+import jsx.style.Style;
 import kiss.Disposable;
 import kiss.Events;
 
@@ -139,8 +141,13 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         return (T) this;
     }
 
-    public T style(Declarable style) {
+    public T style(Style style) {
         rootStyle.setValue(style);
+
+        return (T) this;
+    }
+
+    public T styleIf(BooleanBinding condition, Style style) {
 
         return (T) this;
     }

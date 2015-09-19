@@ -35,6 +35,6 @@ public interface ValueStyle<V> extends Locatable<V> {
      * @return A refined {@link Style}.
      */
     default Style of(V value) {
-        return cache.computeIfAbsent(I.pair(this, value), key -> new ContextualizableStyle(value, this, () -> declare(value)));
+        return cache.computeIfAbsent(I.pair(this, value), key -> new ValuedStyle(value, this, () -> declare(value)));
     }
 }

@@ -39,18 +39,6 @@ public class StyleProperty implements Style, Disposable {
         // do nothing
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void assignTo(NativeArray<Style> styles, DualList<String, String> inlines) {
-        for (int i = 0, size = this.styles.size(); i < size; i++) {
-            if (this.styles.value(i)) {
-                this.styles.key(i).assignTo(styles, inlines);
-            }
-        }
-    }
-
     public void toggle() {
         NativeArray<Boolean> values = styles.values();
 
