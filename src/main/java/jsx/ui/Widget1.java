@@ -25,11 +25,4 @@ public abstract class Widget1<First> extends Widget {
     protected Widget1() {
         this.model1 = (First) loophole[0];
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualize2() {
-    }
 }

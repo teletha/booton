@@ -85,7 +85,7 @@ public abstract class Widget {
      * Create virtual elements of this {@link Widget}.
      * </p>
      */
-    protected abstract void virtualize2();
+    protected abstract Declarables virtualize2();
 
     /**
      * <p>
@@ -113,7 +113,7 @@ public abstract class Widget {
      * @return
      */
     protected final <V> Events<V> when(UIAction actionType, ValueStyle<V> locator) {
-        return when(actionType, locator, true);
+        return when(actionType, locator, false);
     }
 
     /**
@@ -122,7 +122,7 @@ public abstract class Widget {
      * @return
      */
     protected final Events<UIEvent> when(UIAction actionType, Style locator) {
-        return when(actionType, locator, true);
+        return when(actionType, locator, false);
     }
 
     /**
@@ -135,7 +135,7 @@ public abstract class Widget {
      * @return
      */
     protected final <V> Events<V> when(UIAction actionType, Style locator, Class<V> contextType) {
-        return when(actionType, locator, contextType);
+        return when(actionType, locator, true);
     }
 
     /**

@@ -11,6 +11,7 @@ package jsx.ui.piece;
 
 import static js.lang.Global.*;
 
+import jsx.ui.Declarables;
 import jsx.ui.Widget;
 
 /**
@@ -98,6 +99,12 @@ public class SlidableView extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected Declarables virtualize2() {
+        return new Declarables() {
+
+            {
+
+            }
+        };
     }
 }

@@ -41,7 +41,7 @@ public class Declarables {
      * 
      * @param widget A widget to define.
      */
-    public static void widget(Widget widget) {
+    protected static void widget(Widget widget) {
         widget(LocalId.findContextLineNumber(), widget);
     }
 
@@ -104,7 +104,7 @@ public class Declarables {
         WidgetLog.CreateWidget.stop();
     }
 
-    public static void text(Object text) {
+    protected static void text(Object text) {
         text(LocalId.findContextLineNumber(), text);
     }
 
@@ -120,7 +120,7 @@ public class Declarables {
         WidgetLog.CreateText.stop();
     }
 
-    public static void text(Style style, Object... texts) {
+    protected static void text(Style style, Object... texts) {
         text(LocalId.findContextLineNumber(), style, texts);
     }
 
@@ -146,7 +146,7 @@ public class Declarables {
      * 
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    public static void box(Declarable... declarables) {
+    protected static void box(Declarable... declarables) {
         box(LocalId.findContextLineNumber(), declarables);
     }
 
@@ -170,7 +170,7 @@ public class Declarables {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    public static void element(String name, Declarable... declarables) {
+    protected static void element(String name, Declarable... declarables) {
         element(LocalId.findContextLineNumber(), name, declarables);
     }
 
@@ -241,7 +241,7 @@ public class Declarables {
      * @param width
      * @param height
      */
-    public static Declarable viewBox(int minX, int minY, int width, int height) {
+    protected static Declarable viewBox(int minX, int minY, int width, int height) {
         return attr("viewBox", new NativeString(minX).concat(" ")
                 .concat(minY)
                 .concat(" ")
@@ -251,21 +251,21 @@ public class Declarables {
                 .toString());
     }
 
-    public static Declarable position(double x, double y) {
+    protected static Declarable position(double x, double y) {
         return () -> {
             latestElement.attributes.add("x", String.valueOf(x));
             latestElement.attributes.add("y", String.valueOf(y));
         };
     }
 
-    public static Declarable size(double width, double height) {
+    protected static Declarable size(double width, double height) {
         return () -> {
             latestElement.attributes.add("width", String.valueOf(width));
             latestElement.attributes.add("height", String.valueOf(height));
         };
     }
 
-    public static Declarables.SVGPath d() {
+    protected static Declarables.SVGPath d() {
         return new Declarables.SVGPath();
     }
 
@@ -277,7 +277,7 @@ public class Declarables {
      * @param type A value of "placeholder" attribute.
      * @return An attribute declaration.
      */
-    public static Declarable placeholder(String placeholder) {
+    protected static Declarable placeholder(String placeholder) {
         return attr("placeholder", placeholder);
     }
 
@@ -289,7 +289,7 @@ public class Declarables {
      * @param type A value of "type" attribute.
      * @return An attribute declaration.
      */
-    public static Declarable type(String type) {
+    protected static Declarable type(String type) {
         return attr("type", type);
     }
 
@@ -301,7 +301,7 @@ public class Declarables {
      * @param value A value of "value" attribute.
      * @return An attribute declaration.
      */
-    public static Declarable value(String value) {
+    protected static Declarable value(String value) {
         return attr("value", value);
     }
 
@@ -313,7 +313,7 @@ public class Declarables {
      * @param id A value of "id" attribute.
      * @return An attribute declaration.
      */
-    public static Declarable id(String id) {
+    protected static Declarable id(String id) {
         return attr("id", id);
     }
 
@@ -325,7 +325,7 @@ public class Declarables {
      * @param title A value of "title" attribute.
      * @return An attribute declaration.
      */
-    public static Declarable title(String title) {
+    protected static Declarable title(String title) {
         return attr("title", title);
     }
 
@@ -337,7 +337,7 @@ public class Declarables {
      * @param id A value of "xlink:href" attribute.
      * @return An attribute declaration.
      */
-    public static Declarable xlink(String href) {
+    protected static Declarable xlink(String href) {
         return attr("xlink:href", href);
     }
 
@@ -350,17 +350,17 @@ public class Declarables {
      * @param value An attribute value.
      * @return
      */
-    public static Declarable attr(String name, String value) {
+    protected static Declarable attr(String name, String value) {
         return name == null || name.length() == 0 || value == null || value.length() == 0 ? null : () -> {
             latestElement.attributes.add(name, value);
         };
     }
 
-    public static Declarable If(String condition, Declarable... declarables) {
+    protected static Declarable If(String condition, Declarable... declarables) {
         return If(condition != null && condition.length() != 0, declarables);
     }
 
-    public static Declarable If(boolean condition, Declarable... declarables) {
+    protected static Declarable If(boolean condition, Declarable... declarables) {
         return () -> {
             if (condition) {
                 for (Declarable declarable : declarables) {
@@ -377,7 +377,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
+    protected static <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
         return contents(childType, Arrays.asList(children));
     }
 
@@ -388,7 +388,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
+    protected static <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
         return () -> {
             WidgetLog.CreateContents.start();
 
@@ -415,7 +415,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(T[] children, Consumer<T> process) {
+    protected static <T> Declarable contents(T[] children, Consumer<T> process) {
         return contents(Arrays.asList(children), process);
     }
 
@@ -426,7 +426,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(List<T> children, Consumer<T> process) {
+    protected static <T> Declarable contents(List<T> children, Consumer<T> process) {
         return () -> {
             WidgetLog.CreateContents.start();
 
@@ -454,7 +454,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(int size, IntConsumer process) {
+    protected static <T> Declarable contents(int size, IntConsumer process) {
         return contents(LocalId.findContextLineNumber(), size, process);
     }
 
@@ -465,7 +465,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(int initial, int size, IntConsumer process) {
+    protected static <T> Declarable contents(int initial, int size, IntConsumer process) {
         return () -> {
             WidgetLog.CreateContents.start();
 
@@ -481,7 +481,7 @@ public class Declarables {
     /**
      * @version 2015/09/15 11:18:03
      */
-    public static class SVGPath implements Declarable {
+    protected static class SVGPath implements Declarable {
 
         /** The current draw mode. */
         private boolean relativeMode = false;

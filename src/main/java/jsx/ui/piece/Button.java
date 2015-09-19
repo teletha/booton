@@ -9,11 +9,10 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.Declarables.*;
-
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
+import jsx.ui.Declarables;
 import jsx.ui.LowLevelWidget;
 
 /**
@@ -57,9 +56,14 @@ public class Button extends LowLevelWidget<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
-        element("button", rootStyle.getValue(), () -> {
-            text(label.get());
-        });
+    protected Declarables virtualize2() {
+        return new Declarables() {
+
+            {
+                element("button", rootStyle.getValue(), () -> {
+                    text(label.get());
+                });
+            }
+        };
     }
 }

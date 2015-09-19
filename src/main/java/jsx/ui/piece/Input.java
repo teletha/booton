@@ -11,7 +11,6 @@ package jsx.ui.piece;
 
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
-import static jsx.ui.Declarables.*;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.piece.PieceStyle.*;
 
@@ -25,6 +24,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
+import jsx.ui.Declarables;
 import jsx.ui.LowLevelWidget;
 import kiss.Events;
 import kiss.I;
@@ -151,7 +151,12 @@ public class Input extends LowLevelWidget<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
-        element("input", InputForm, rootStyle.getValue(), type("text"), value(value.get()), attr("placeholder", placeholder.get()));
+    protected Declarables virtualize2() {
+        return new Declarables() {
+
+            {
+                element("input", InputForm, rootStyle.getValue(), type("text"), value(value.get()), attr("placeholder", placeholder.get()));
+            }
+        };
     }
 }

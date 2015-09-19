@@ -10,9 +10,6 @@
 package jsx.ui.piece;
 
 import static jsx.style.StyleDescriptor.*;
-import static jsx.ui.Declarables.*;
-import static jsx.ui.Declarables.box;
-import static jsx.ui.Declarables.text;
 import static jsx.ui.piece.SlidableViewStyle.*;
 
 import java.util.ArrayList;
@@ -21,6 +18,7 @@ import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.scene.control.SingleSelectionModel;
 
+import jsx.ui.Declarables;
 import jsx.ui.Widget;
 
 /**
@@ -53,16 +51,21 @@ public class Select<M> extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
-        box(VBox, () -> {
-            box(ViewableArea, shown, () -> {
-                box(Slider, () -> {
-                    box(HBox, contents(values, value -> {
-                        text(value);
-                    }));
+    protected Declarables virtualize2() {
+        return new Declarables() {
+
+            {
+                box(VBox, () -> {
+                    box(ViewableArea, shown, () -> {
+                        box(Slider, () -> {
+                            box(HBox, contents(values, value -> {
+                                text(value);
+                            }));
+                        });
+                    });
                 });
-            });
-        });
+            }
+        };
     }
 
     /**
