@@ -234,7 +234,7 @@ public class StyleRule {
 
         // swap context rule and execute it
         PropertyDefinition.properties = child;
-        style.declare();
+        style.style();
         PropertyDefinition.properties = parent;
 
         if (parent != null) {

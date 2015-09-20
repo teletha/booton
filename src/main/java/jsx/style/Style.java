@@ -36,8 +36,15 @@ public interface Style extends Declarable, Locatable<UIEvent> {
      * {@inheritDoc}
      */
     @Override
-    default void define() {
+    default void declare() {
         Declarables.latestElement.classList.push(this);
         StyleManager.add(this);
     }
+
+    /**
+     * <p>
+     * Define the style declaration.
+     * </p>
+     */
+    void style();
 }

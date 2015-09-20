@@ -207,7 +207,7 @@ public class Declarables {
         parentElement.items.push(latestElement = new VirtualElement((31 + id) ^ localContextIdModifier, name, localContext, latestWidget));
 
         for (Declarable declarable : declarables) {
-            if (declarable != null) declarable.define();
+            if (declarable != null) declarable.declare();
         }
 
         if (process != null) {
@@ -364,7 +364,7 @@ public class Declarables {
         return () -> {
             if (condition) {
                 for (Declarable declarable : declarables) {
-                    declarable.define();
+                    declarable.declare();
                 }
             }
         };

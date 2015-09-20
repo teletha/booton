@@ -285,7 +285,7 @@ public final class Position extends PropertyDefinition<Position> {
      * @return
      */
     public Position center() {
-        BuiltinStyle.centering.declare();
+        BuiltinStyle.centering.style();
         return this;
     }
 }

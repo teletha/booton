@@ -34,8 +34,8 @@ class ValuedStyle<T> implements Style {
      * {@inheritDoc}
      */
     @Override
-    public void declare() {
-        style.declare();
+    public void style() {
+        style.style();
     }
 
     /**

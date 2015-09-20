@@ -154,7 +154,7 @@ public class Text extends PropertyDefinition<Text> {
         value("-ms-user-select", "none");
         value("-webkit-user-select", "none");
 
-        BuiltinStyle.unselectable.declare();
+        BuiltinStyle.unselectable.style();
 
         return this;
     }

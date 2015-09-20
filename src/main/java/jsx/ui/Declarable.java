@@ -10,7 +10,7 @@
 package jsx.ui;
 
 /**
- * @version 2015/09/15 14:54:27
+ * @version 2015/09/20 9:55:42
  */
 public interface Declarable {
 
@@ -20,11 +20,4 @@ public interface Declarable {
      * </p>
      */
     void declare();
-
-    /**
-     * Define the declaration.
-     */
-    default void define() {
-        declare();
-    }
 }

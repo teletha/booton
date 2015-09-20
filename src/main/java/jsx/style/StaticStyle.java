@@ -41,7 +41,7 @@ public class StaticStyle implements Style {
      * {@inheritDoc}
      */
     @Override
-    public void declare() {
+    public void style() {
         // do nothing
     }
 

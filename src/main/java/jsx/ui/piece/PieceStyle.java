@@ -107,7 +107,7 @@ public class PieceStyle extends StyleDescriptor {
      * @version 2013/04/22 9:42:41
      */
     static Style BorderedFormBase = () -> {
-        FormBase.declare();
+        FormBase.style();
         border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
         focus(() -> {
@@ -123,12 +123,12 @@ public class PieceStyle extends StyleDescriptor {
      * @version 2013/04/22 9:42:41
      */
     static Style InputBase = () -> {
-        BorderedFormBase.declare();
+        BorderedFormBase.style();
         box.width(SingleLineFormWidth);
     };
 
     static Style InputForm = () -> {
-        InputBase.declare();
+        InputBase.style();
     };
 
     static Style SpriteBackground = () -> {

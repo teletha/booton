@@ -35,7 +35,7 @@ public class StyleProperty implements Style, Disposable {
      * {@inheritDoc}
      */
     @Override
-    public void declare() {
+    public void style() {
         // do nothing
     }
 
