@@ -29,10 +29,10 @@ public class Declarables {
     private static Widget latestWidget;
 
     /** The context object to propagate implicitly. */
-    private Object localContext;
+    private static Object localContext;
 
     /** The modifier of context id. */
-    private int localContextIdModifier = 31;
+    private static int localContextIdModifier = 31;
 
     protected Declarables() {
 
@@ -49,7 +49,7 @@ public class Declarables {
      * 
      * @param widget A widget to define.
      */
-    protected void widget(Widget widget) {
+    protected static void widget(Widget widget) {
         widget(LocalId.findContextLineNumber(), widget);
     }
 
@@ -61,7 +61,7 @@ public class Declarables {
      * @param id A local id.
      * @param widget A widget to define.
      */
-    private void widget(int id, Widget widget) {
+    private static void widget(int id, Widget widget) {
         // store parent
         Widget parentWidget = latestWidget;
         VirtualElement parentElement = latestElement;
@@ -142,8 +142,8 @@ public class Declarables {
      * 
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    protected void box(Declarable... declarables) {
-        box(LocalId.findContextLineNumber(), declarables);
+    protected Box box(Declarable... declarables) {
+        return box(LocalId.findContextLineNumber(), declarables);
     }
 
     /**
@@ -154,8 +154,8 @@ public class Declarables {
      * @param id A local id.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private void box(int id, Declarable... declarables) {
-        element(id, "span", declarables, null);
+    private Box box(int id, Declarable... declarables) {
+        return element(id, "span", declarables, null);
     }
 
     /**
@@ -166,8 +166,8 @@ public class Declarables {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    protected void element(String name, Declarable... declarables) {
-        element(LocalId.findContextLineNumber(), name, declarables);
+    protected Box element(String name, Declarable... declarables) {
+        return element(LocalId.findContextLineNumber(), name, declarables);
     }
 
     /**
@@ -179,8 +179,8 @@ public class Declarables {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private void element(int id, String name, Declarable... declarables) {
-        element(id, name, declarables, null);
+    private Box element(int id, String name, Declarable... declarables) {
+        return element(id, name, declarables, null);
     }
 
     /**
@@ -193,12 +193,13 @@ public class Declarables {
      * @param declarables A list of contents (attributes, children nodes etc).
      * @param process
      */
-    private void element(int id, String name, Declarable[] declarables, Runnable process) {
+    private Box element(int id, String name, Declarable[] declarables, Runnable process) {
         // enter into the child node (store context)
         VirtualElement parentElement = latestElement;
 
         // create element and connect it to the parent element
-        parentElement.items.push(latestElement = new VirtualElement((31 + id) ^ localContextIdModifier, name, localContext, latestWidget));
+        VirtualElement element = new VirtualElement((31 + id) ^ localContextIdModifier, name, localContext, latestWidget);
+        parentElement.items.push(latestElement = element);
 
         for (Declarable declarable : declarables) {
             if (declarable != null) {
@@ -212,6 +213,8 @@ public class Declarables {
 
         // leave from the child node (revert context)
         latestElement = parentElement;
+
+        return element;
     }
 
     /**
@@ -364,26 +367,129 @@ public class Declarables {
         };
     }
 
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     * 
-     * @param children A list of child widget.
-     */
-    protected <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
-        return contents(childType, Arrays.asList(children));
-    }
+    // /**
+    // * <p>
+    // * Define children.
+    // * </p>
+    // *
+    // * @param children A list of child widget.
+    // */
+    // protected <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
+    // return contents(childType, Arrays.asList(children));
+    // }
+    //
+    // /**
+    // * <p>
+    // * Define children.
+    // * </p>
+    // *
+    // * @param children A list of child widget.
+    // */
+    // protected <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
+    // return () -> {
+    // // store parent context
+    // Object parentContext = localContext;
+    //
+    // for (T child : children) {
+    // localContext = child;
+    // localContextIdModifier = Objects.hash(child);
+    // widget(Widget.of(childType, child));
+    // }
+    //
+    // // restore parent context
+    // localContext = parentContext;
+    // };
+    // }
+
+    // /**
+    // * <p>
+    // * Define children.
+    // * </p>
+    // *
+    // * @param children A list of child widget.
+    // */
+    // protected <T> Declarable contents(T[] children, Consumer<T> process) {
+    // return contents(Arrays.asList(children), process);
+    // }
+    //
+    // /**
+    // * <p>
+    // * Define children.
+    // * </p>
+    // *
+    // * @param children A list of child widget.
+    // */
+    // protected <T> Declarable contents(List<T> children, Consumer<T> process) {
+    // return () -> {
+    // // store parent context
+    // Object parentContext = localContext;
+    //
+    // for (T child : children) {
+    // if (child != null) {
+    // localContext = child;
+    // process.accept(child);
+    // }
+    // }
+    //
+    // // restore parent context
+    // localContext = parentContext;
+    // };
+    // }
+
+    // /**
+    // * <p>
+    // * Define children.
+    // * </p>
+    // *
+    // * @param children A list of child widget.
+    // */
+    // protected <T> Declarable contents(int size, IntConsumer process) {
+    // return contents(LocalId.findContextLineNumber(), size, process);
+    // }
+    //
+    // /**
+    // * <p>
+    // * Define children.
+    // * </p>
+    // *
+    // * @param children A list of child widget.
+    // */
+    // protected <T> Declarable contents(int initial, int size, IntConsumer process) {
+    // return () -> {
+    // for (int i = 0; i < size; i++) {
+    // localContextIdModifier = (i + 117 + latestElement.id) * 31;
+    // process.accept(i + initial);
+    // }
+    // };
+    // }
 
     /**
-     * <p>
-     * Define children.
-     * </p>
-     * 
-     * @param children A list of child widget.
+     * @version 2015/09/20 16:25:19
      */
-    protected <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
-        return () -> {
+    public interface Box {
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        default <T> void contents(Class<? extends Widget1<T>> childType, T[] children) {
+            contents(childType, Arrays.asList(children));
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        default <T> void contents(Class<? extends Widget1<T>> childType, List<T> children) {
+            VirtualElement parentElement = latestElement;
+            latestElement = (VirtualElement) this;
+
             // store parent context
             Object parentContext = localContext;
 
@@ -395,31 +501,34 @@ public class Declarables {
 
             // restore parent context
             localContext = parentContext;
-        };
-    }
 
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     * 
-     * @param children A list of child widget.
-     */
-    protected <T> Declarable contents(T[] children, Consumer<T> process) {
-        return contents(Arrays.asList(children), process);
-    }
+            latestElement = parentElement;
+        }
 
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     * 
-     * @param children A list of child widget.
-     */
-    protected <T> Declarable contents(List<T> children, Consumer<T> process) {
-        return () -> {
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public default <T> void contents(T[] children, Consumer<T> process) {
+            contents(Arrays.asList(children), process);
+        }
+
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        public default <T> void contents(List<T> children, Consumer<T> process) {
             // store parent context
+            VirtualElement parentElement = latestElement;
             Object parentContext = localContext;
+
+            latestElement = (VirtualElement) this;
 
             for (T child : children) {
                 if (child != null) {
@@ -429,35 +538,39 @@ public class Declarables {
             }
 
             // restore parent context
+            latestElement = parentElement;
             localContext = parentContext;
         };
-    }
 
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     * 
-     * @param children A list of child widget.
-     */
-    protected <T> Declarable contents(int size, IntConsumer process) {
-        return contents(LocalId.findContextLineNumber(), size, process);
-    }
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        default <T> void contents(int size, IntConsumer process) {
+            contents(LocalId.findContextLineNumber(), size, process);
+        }
 
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     * 
-     * @param children A list of child widget.
-     */
-    protected <T> Declarable contents(int initial, int size, IntConsumer process) {
-        return () -> {
+        /**
+         * <p>
+         * Define children.
+         * </p>
+         * 
+         * @param children A list of child widget.
+         */
+        default <T> void contents(int initial, int size, IntConsumer process) {
+            VirtualElement parentElement = latestElement;
+            latestElement = (VirtualElement) this;
+
             for (int i = 0; i < size; i++) {
                 localContextIdModifier = (i + 117 + latestElement.id) * 31;
                 process.accept(i + initial);
             }
-        };
+
+            latestElement = parentElement;
+        }
     }
 
     /**

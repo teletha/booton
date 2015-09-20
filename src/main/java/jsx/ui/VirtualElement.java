@@ -16,11 +16,12 @@ import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.style.Style;
 import jsx.style.StyleName;
+import jsx.ui.Declarables.Box;
 
 /**
  * @version 2014/10/07 12:49:29
  */
-public class VirtualElement extends VirtualNode<Element> {
+public class VirtualElement extends VirtualNode<Element>implements Box {
 
     /** The node name. */
     final String name;
