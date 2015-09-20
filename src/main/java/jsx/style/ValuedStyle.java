@@ -9,10 +9,16 @@
  */
 package jsx.style;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * @version 2015/05/27 18:12:21
+ * @version 2015/09/20 10:13:46
  */
 class ValuedStyle<T> implements Style {
+
+    /** The cache repository. */
+    static final Map<Object, Style> cache = new HashMap();
 
     private final T value;
 

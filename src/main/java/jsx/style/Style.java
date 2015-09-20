@@ -11,13 +11,19 @@ package jsx.style;
 
 import js.dom.UIEvent;
 import jsx.ui.Declarable;
-import jsx.ui.Declarables;
 import jsx.ui.Locatable;
 
 /**
  * @version 2015/09/19 14:37:52
  */
 public interface Style extends Declarable, Locatable<UIEvent> {
+
+    /**
+     * <p>
+     * Define the style declaration.
+     * </p>
+     */
+    void style();
 
     /**
      * <p>
@@ -37,14 +43,6 @@ public interface Style extends Declarable, Locatable<UIEvent> {
      */
     @Override
     default void declare() {
-        Declarables.latestElement.classList.push(this);
-        StyleManager.add(this);
+        StyleRepository.register(this);
     }
-
-    /**
-     * <p>
-     * Define the style declaration.
-     * </p>
-     */
-    void style();
 }

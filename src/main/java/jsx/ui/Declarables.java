@@ -24,7 +24,7 @@ import jsx.style.Style;
 public class Declarables {
 
     /** The latest element. */
-    public static VirtualElement latestElement;
+    static VirtualElement latestElement;
 
     private static Widget latestWidget;
 
@@ -207,7 +207,13 @@ public class Declarables {
         parentElement.items.push(latestElement = new VirtualElement((31 + id) ^ localContextIdModifier, name, localContext, latestWidget));
 
         for (Declarable declarable : declarables) {
-            if (declarable != null) declarable.declare();
+            if (declarable != null) {
+                declarable.declare();
+
+                if (declarable instanceof Style) {
+                    latestElement.classList.push((Style) declarable);
+                }
+            }
         }
 
         if (process != null) {
