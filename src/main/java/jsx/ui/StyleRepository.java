@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style;
+package jsx.ui;
 
 import static js.lang.Global.*;
 
@@ -15,7 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import js.lang.NativeCSSStyleSheet;
-import jsx.ui.WidgetLog;
+import jsx.style.Style;
+import jsx.style.StyleRule;
 
 /**
  * @version 2015/09/20 10:15:40
@@ -35,19 +36,19 @@ class StyleRepository {
      * 
      * @param style
      */
-    static void register(Style style) {
+    static void define(Style style) {
         if (style != null && styles.add(style)) {
             WidgetLog.StyleDefinition.start();
-            register(StyleRule.create("$", style));
+            define(StyleRule.create("$", style));
             WidgetLog.StyleDefinition.stop();
         }
     }
 
-    private static void register(StyleRule rule) {
+    private static void define(StyleRule rule) {
         stylesheet.insertRule(rule.toString(), 0);
 
         for (int i = 0; i < rule.children.length(); i++) {
-            register(rule.children.get(i));
+            define(rule.children.get(i));
         }
     }
 }

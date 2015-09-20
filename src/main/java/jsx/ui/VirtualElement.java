@@ -29,7 +29,7 @@ public class VirtualElement extends VirtualNode<Element> {
     final DualList<String, String> attributes = new DualList();
 
     /** The class attributes. */
-    final NativeArray<Style> classList = new NativeArray();
+    public final NativeArray<Style> classList = new NativeArray();
 
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
@@ -95,6 +95,9 @@ public class VirtualElement extends VirtualNode<Element> {
 
             // style class
             dom.classList().add(style);
+
+            // define style if needed
+            StyleRepository.define(style);
 
             // event listener
             if (widget != null) {

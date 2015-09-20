@@ -99,8 +99,8 @@ public abstract class Widget {
     protected VirtualElement virtualize() {
         VirtualElement element = new VirtualElement(0, "div", null);
 
-        Declarables.latestElement = element;
-        Declarables.widget(this);
+        Declarables declarables = new Declarables(element);
+        declarables.widget(this);
 
         return element;
     }

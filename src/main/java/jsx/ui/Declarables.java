@@ -24,15 +24,23 @@ import jsx.style.Style;
 public class Declarables {
 
     /** The latest element. */
-    static VirtualElement latestElement;
+    public static VirtualElement latestElement;
 
     private static Widget latestWidget;
 
     /** The context object to propagate implicitly. */
-    private static Object localContext;
+    private Object localContext;
 
     /** The modifier of context id. */
-    private static int localContextIdModifier = 31;
+    private int localContextIdModifier = 31;
+
+    protected Declarables() {
+
+    }
+
+    protected Declarables(VirtualElement root) {
+        latestElement = root;
+    }
 
     /**
      * <p>
@@ -41,7 +49,7 @@ public class Declarables {
      * 
      * @param widget A widget to define.
      */
-    protected static void widget(Widget widget) {
+    protected void widget(Widget widget) {
         widget(LocalId.findContextLineNumber(), widget);
     }
 
@@ -53,9 +61,7 @@ public class Declarables {
      * @param id A local id.
      * @param widget A widget to define.
      */
-    private static void widget(int id, Widget widget) {
-        WidgetLog.CreateWidget.start();
-
+    private void widget(int id, Widget widget) {
         // store parent
         Widget parentWidget = latestWidget;
         VirtualElement parentElement = latestElement;
@@ -100,42 +106,32 @@ public class Declarables {
         // restore parent
         latestWidget = parentWidget;
         latestElement = parentElement;
-
-        WidgetLog.CreateWidget.stop();
     }
 
-    protected static void text(Object text) {
+    protected void text(Object text) {
         text(LocalId.findContextLineNumber(), text);
     }
 
-    private static void text(int id, Object text) {
-        WidgetLog.CreateText.start();
-
+    private void text(int id, Object text) {
         if ("\r\n".equals(text)) {
             latestElement.items.push(new VirtualElement(id, "br", latestWidget));
         } else {
             latestElement.items.push(new VirtualText(String.valueOf(text)));
         }
-
-        WidgetLog.CreateText.stop();
     }
 
-    protected static void text(Style style, Object... texts) {
+    protected void text(Style style, Object... texts) {
         text(LocalId.findContextLineNumber(), style, texts);
     }
 
-    private static void text(int id, Style style, Object... texts) {
+    private void text(int id, Style style, Object... texts) {
         element(id, "span", new Declarable[] {style}, () -> {
-            WidgetLog.CreateText.start();
-
             NativeString values = new NativeString();
 
             for (Object text : texts) {
                 values = values.concat(String.valueOf(text));
             }
             latestElement.items.push(new VirtualText(values.toString()));
-
-            WidgetLog.CreateText.stop();
         });
     }
 
@@ -146,7 +142,7 @@ public class Declarables {
      * 
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    protected static void box(Declarable... declarables) {
+    protected void box(Declarable... declarables) {
         box(LocalId.findContextLineNumber(), declarables);
     }
 
@@ -158,7 +154,7 @@ public class Declarables {
      * @param id A local id.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private static void box(int id, Declarable... declarables) {
+    private void box(int id, Declarable... declarables) {
         element(id, "span", declarables, null);
     }
 
@@ -170,7 +166,7 @@ public class Declarables {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    protected static void element(String name, Declarable... declarables) {
+    protected void element(String name, Declarable... declarables) {
         element(LocalId.findContextLineNumber(), name, declarables);
     }
 
@@ -183,7 +179,7 @@ public class Declarables {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private static void element(int id, String name, Declarable... declarables) {
+    private void element(int id, String name, Declarable... declarables) {
         element(id, name, declarables, null);
     }
 
@@ -197,9 +193,7 @@ public class Declarables {
      * @param declarables A list of contents (attributes, children nodes etc).
      * @param process
      */
-    private static void element(int id, String name, Declarable[] declarables, Runnable process) {
-        WidgetLog.CreateElement.start();
-
+    private void element(int id, String name, Declarable[] declarables, Runnable process) {
         // enter into the child node (store context)
         VirtualElement parentElement = latestElement;
 
@@ -209,10 +203,6 @@ public class Declarables {
         for (Declarable declarable : declarables) {
             if (declarable != null) {
                 declarable.declare();
-
-                if (declarable instanceof Style) {
-                    latestElement.classList.push((Style) declarable);
-                }
             }
         }
 
@@ -222,8 +212,6 @@ public class Declarables {
 
         // leave from the child node (revert context)
         latestElement = parentElement;
-
-        WidgetLog.CreateElement.stop();
     }
 
     /**
@@ -247,7 +235,7 @@ public class Declarables {
      * @param width
      * @param height
      */
-    protected static Declarable viewBox(int minX, int minY, int width, int height) {
+    protected Declarable viewBox(int minX, int minY, int width, int height) {
         return attr("viewBox", new NativeString(minX).concat(" ")
                 .concat(minY)
                 .concat(" ")
@@ -257,21 +245,21 @@ public class Declarables {
                 .toString());
     }
 
-    protected static Declarable position(double x, double y) {
+    protected Declarable position(double x, double y) {
         return () -> {
             latestElement.attributes.add("x", String.valueOf(x));
             latestElement.attributes.add("y", String.valueOf(y));
         };
     }
 
-    protected static Declarable size(double width, double height) {
+    protected Declarable size(double width, double height) {
         return () -> {
             latestElement.attributes.add("width", String.valueOf(width));
             latestElement.attributes.add("height", String.valueOf(height));
         };
     }
 
-    protected static Declarables.SVGPath d() {
+    protected Declarables.SVGPath d() {
         return new Declarables.SVGPath();
     }
 
@@ -283,7 +271,7 @@ public class Declarables {
      * @param type A value of "placeholder" attribute.
      * @return An attribute declaration.
      */
-    protected static Declarable placeholder(String placeholder) {
+    protected Declarable placeholder(String placeholder) {
         return attr("placeholder", placeholder);
     }
 
@@ -295,7 +283,7 @@ public class Declarables {
      * @param type A value of "type" attribute.
      * @return An attribute declaration.
      */
-    protected static Declarable type(String type) {
+    protected Declarable type(String type) {
         return attr("type", type);
     }
 
@@ -307,7 +295,7 @@ public class Declarables {
      * @param value A value of "value" attribute.
      * @return An attribute declaration.
      */
-    protected static Declarable value(String value) {
+    protected Declarable value(String value) {
         return attr("value", value);
     }
 
@@ -319,7 +307,7 @@ public class Declarables {
      * @param id A value of "id" attribute.
      * @return An attribute declaration.
      */
-    protected static Declarable id(String id) {
+    protected Declarable id(String id) {
         return attr("id", id);
     }
 
@@ -331,7 +319,7 @@ public class Declarables {
      * @param title A value of "title" attribute.
      * @return An attribute declaration.
      */
-    protected static Declarable title(String title) {
+    protected Declarable title(String title) {
         return attr("title", title);
     }
 
@@ -343,7 +331,7 @@ public class Declarables {
      * @param id A value of "xlink:href" attribute.
      * @return An attribute declaration.
      */
-    protected static Declarable xlink(String href) {
+    protected Declarable xlink(String href) {
         return attr("xlink:href", href);
     }
 
@@ -356,17 +344,17 @@ public class Declarables {
      * @param value An attribute value.
      * @return
      */
-    protected static Declarable attr(String name, String value) {
+    protected Declarable attr(String name, String value) {
         return name == null || name.length() == 0 || value == null || value.length() == 0 ? null : () -> {
             latestElement.attributes.add(name, value);
         };
     }
 
-    protected static Declarable If(String condition, Declarable... declarables) {
+    protected Declarable If(String condition, Declarable... declarables) {
         return If(condition != null && condition.length() != 0, declarables);
     }
 
-    protected static Declarable If(boolean condition, Declarable... declarables) {
+    protected Declarable If(boolean condition, Declarable... declarables) {
         return () -> {
             if (condition) {
                 for (Declarable declarable : declarables) {
@@ -383,7 +371,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    protected static <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
+    protected <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
         return contents(childType, Arrays.asList(children));
     }
 
@@ -394,10 +382,8 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    protected static <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
+    protected <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
         return () -> {
-            WidgetLog.CreateContents.start();
-
             // store parent context
             Object parentContext = localContext;
 
@@ -409,8 +395,6 @@ public class Declarables {
 
             // restore parent context
             localContext = parentContext;
-
-            WidgetLog.CreateContents.stop();
         };
     }
 
@@ -421,7 +405,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    protected static <T> Declarable contents(T[] children, Consumer<T> process) {
+    protected <T> Declarable contents(T[] children, Consumer<T> process) {
         return contents(Arrays.asList(children), process);
     }
 
@@ -432,10 +416,8 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    protected static <T> Declarable contents(List<T> children, Consumer<T> process) {
+    protected <T> Declarable contents(List<T> children, Consumer<T> process) {
         return () -> {
-            WidgetLog.CreateContents.start();
-
             // store parent context
             Object parentContext = localContext;
 
@@ -448,8 +430,6 @@ public class Declarables {
 
             // restore parent context
             localContext = parentContext;
-
-            WidgetLog.CreateContents.stop();
         };
     }
 
@@ -460,7 +440,7 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    protected static <T> Declarable contents(int size, IntConsumer process) {
+    protected <T> Declarable contents(int size, IntConsumer process) {
         return contents(LocalId.findContextLineNumber(), size, process);
     }
 
@@ -471,23 +451,19 @@ public class Declarables {
      * 
      * @param children A list of child widget.
      */
-    protected static <T> Declarable contents(int initial, int size, IntConsumer process) {
+    protected <T> Declarable contents(int initial, int size, IntConsumer process) {
         return () -> {
-            WidgetLog.CreateContents.start();
-
             for (int i = 0; i < size; i++) {
                 localContextIdModifier = (i + 117 + latestElement.id) * 31;
                 process.accept(i + initial);
             }
-
-            WidgetLog.CreateContents.stop();
         };
     }
 
     /**
      * @version 2015/09/15 11:18:03
      */
-    protected static class SVGPath implements Declarable {
+    protected class SVGPath implements Declarable {
 
         /** The current draw mode. */
         private boolean relativeMode = false;
