@@ -20,7 +20,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 import js.lang.NativeObject;
-import jsx.style.Style;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * <p>

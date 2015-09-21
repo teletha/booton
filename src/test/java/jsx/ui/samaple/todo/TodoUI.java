@@ -10,6 +10,7 @@
 package jsx.ui.samaple.todo;
 
 import static jsx.ui.FunctionHelper.*;
+import static jsx.ui.StructureDescriptor.*;
 
 import java.util.function.Predicate;
 
@@ -20,11 +21,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import booton.Necessary;
-import jsx.style.Style;
 import jsx.style.StyleDescriptor;
 import jsx.style.ValueStyle;
-import jsx.ui.Declarables;
 import jsx.ui.Key;
+import jsx.ui.StructureDescriptor.Style;
 import jsx.ui.Widget1;
 import jsx.ui.Widgety;
 import jsx.ui.i18n.TextLocalizer;
@@ -123,23 +123,18 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
      * {@inheritDoc}
      */
     @Override
-    protected Declarables virtualize2() {
-        return new Declarables() {
-
-            {
-                widget(input);
-                box($.ITEMS, contents(Item.class, todos.list));
-                box($.FOTTER, () -> {
-                    text(text.leftTaskIs(todos.incompletedSize));
-                    box($.BUTTONS, () -> {
-                        widget(all);
-                        widget(active);
-                        widget(completed);
-                    });
-                    widget(clear);
-                });
-            }
-        };
+    protected void virtualize2() {
+        widget(input);
+        box($.ITEMS, contents(Item.class, todos.list));
+        box($.FOTTER, () -> {
+            text(text.leftTaskIs(todos.incompletedSize));
+            box($.BUTTONS, () -> {
+                widget(all);
+                widget(active);
+                widget(completed);
+            });
+            widget(clear);
+        });
     }
 
     /**
@@ -166,23 +161,18 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
          * {@inheritDoc}
          */
         @Override
-        protected Declarables virtualize2() {
-            return new Declarables() {
-
-                {
-                    if (filter.getValue().test(model1)) {
-                        if (editing.get()) {
-                            widget(edit);
-                        } else {
-                            box($.HBox, () -> {
-                                widget(complete);
-                                widget(text);
-                                widget(delete);
-                            });
-                        }
-                    }
+        protected void virtualize2() {
+            if (filter.getValue().test(model1)) {
+                if (editing.get()) {
+                    widget(edit);
+                } else {
+                    box($.HBox, () -> {
+                        widget(complete);
+                        widget(text);
+                        widget(delete);
+                    });
                 }
-            };
+            }
         }
 
         /**

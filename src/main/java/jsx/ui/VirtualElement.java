@@ -14,8 +14,8 @@ import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import jsx.style.Style;
 import jsx.style.StyleName;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/10/07 12:49:29

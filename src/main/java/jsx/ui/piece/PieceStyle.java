@@ -9,13 +9,13 @@
  */
 package jsx.ui.piece;
 
-import jsx.style.Style;
 import jsx.style.StyleDescriptor;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Font;
 import jsx.style.value.Numeric;
 import jsx.style.value.Shadow;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/11/18 15:21:09

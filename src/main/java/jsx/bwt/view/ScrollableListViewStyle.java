@@ -9,8 +9,8 @@
  */
 package jsx.bwt.view;
 
-import jsx.style.Style;
 import jsx.style.StyleDescriptor;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/11/08 10:49:40

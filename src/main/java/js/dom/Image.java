@@ -10,7 +10,8 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import jsx.style.Style;
+
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2013/07/01 2:12:00
@@ -107,9 +108,7 @@ public class Image {
      * @return
      */
     public Image saturate(double amount) {
-        return applyFilter(document.createElementNS(SVG, "feColorMatrix")
-                .attr("type", "saturate")
-                .attr("values", amount));
+        return applyFilter(document.createElementNS(SVG, "feColorMatrix").attr("type", "saturate").attr("values", amount));
     }
 
     /**

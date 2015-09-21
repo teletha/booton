@@ -9,10 +9,10 @@
  */
 package js.dom;
 
-import jsx.style.Style;
-import jsx.style.StyleName;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import jsx.style.StyleName;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/11/13 9:44:11

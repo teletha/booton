@@ -9,9 +9,9 @@
  */
 package js.dom;
 
-import jsx.style.Style;
-
 import org.junit.Test;
+
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2013/07/11 16:24:56
@@ -117,7 +117,7 @@ public class EnhancedElementTest {
     @Test
     public void addClass() throws Exception {
         Element element = new EmulateElement();
-        assert !element.has(CSS1);
+        assert!element.has(CSS1);
 
         element.add(CSS1);
         assert element.has(CSS1);
@@ -126,7 +126,7 @@ public class EnhancedElementTest {
     @Test
     public void addClasses() throws Exception {
         Element element = new EmulateElement();
-        assert !element.has(CSS1);
+        assert!element.has(CSS1);
 
         element.add(CSS1, CSS2);
         assert element.has(CSS1);
@@ -140,7 +140,7 @@ public class EnhancedElementTest {
         assert element.has(CSS1);
 
         element.remove(CSS1);
-        assert !element.has(CSS1);
+        assert!element.has(CSS1);
     }
 
     // @Test
@@ -158,8 +158,8 @@ public class EnhancedElementTest {
         Element element = new EmulateElement();
         element.add(CSS1);
         assert element.has(CSS1);
-        assert !element.has(CSS1, CSS2);
-        assert !element.has(CSS2);
+        assert!element.has(CSS1, CSS2);
+        assert!element.has(CSS2);
     }
 
     private static Style CSS1 = () -> {

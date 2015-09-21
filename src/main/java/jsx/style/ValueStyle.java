@@ -12,6 +12,7 @@ package jsx.style;
 import static jsx.style.ValuedStyle.*;
 
 import jsx.ui.Locatable;
+import jsx.ui.StructureDescriptor.Style;
 import kiss.I;
 
 /**

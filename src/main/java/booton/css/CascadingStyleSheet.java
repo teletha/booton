@@ -17,10 +17,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import booton.BootonConfiguration;
-import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.value.Font;
+import jsx.ui.StructureDescriptor.Style;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;

@@ -10,12 +10,13 @@
 package jsx.style.property;
 
 import static jsx.style.value.Unit.*;
+
 import jsx.style.PropertyDefinition;
-import jsx.style.Style;
 import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/10/29 23:29:19

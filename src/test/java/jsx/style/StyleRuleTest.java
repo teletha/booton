@@ -13,6 +13,8 @@ import static jsx.style.StyleDescriptor.*;
 
 import org.junit.Test;
 
+import jsx.ui.StructureDescriptor.Style;
+
 /**
  * @version 2015/09/11 11:26:47
  */

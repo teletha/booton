@@ -15,16 +15,17 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
+import js.dom.UIEvent;
 import js.lang.NativeString;
-import jsx.style.Style;
+import jsx.style.StyleName;
 
 /**
- * @version 2015/09/19 21:45:20
+ * @version 2015/09/21 15:58:55
  */
-public class Declarables {
+public class StructureDescriptor {
 
     /** The latest element. */
-    public static VirtualElement latestElement;
+    private static VirtualElement latestElement;
 
     private static Widget latestWidget;
 
@@ -54,6 +55,18 @@ public class Declarables {
      * @param widget A widget to define.
      */
     private static void widget(int id, Widget widget) {
+        createWidget(id, widget);
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param id A local id.
+     * @param widget A widget to define.
+     */
+    static VirtualWidget createWidget(int id, Widget widget) {
         // store parent
         Widget parentWidget = latestWidget;
         VirtualElement parentElement = latestElement;
@@ -62,7 +75,9 @@ public class Declarables {
         VirtualWidget virtualize = new VirtualWidget(widget.id, widget, localContext);
 
         // mount virtual element on virtual structure
-        latestElement.items.push(virtualize);
+        if (latestElement != null) {
+            latestElement.items.push(virtualize);
+        }
 
         latestWidget = widget;
         latestElement = virtualize;
@@ -98,6 +113,9 @@ public class Declarables {
         // restore parent
         latestWidget = parentWidget;
         latestElement = parentElement;
+
+        // API definition
+        return virtualize;
     }
 
     public static void text(Object text) {
@@ -451,6 +469,40 @@ public class Declarables {
                 process.accept(i + initial);
             }
         };
+    }
+
+    /**
+     * @version 2015/09/21 16:12:55
+     */
+    public static interface Style extends Declarable, Locatable<UIEvent> {
+
+        /**
+         * <p>
+         * Define the style declaration.
+         * </p>
+         */
+        void style();
+
+        /**
+         * <p>
+         * Compute style class name.
+         * </p>
+         * 
+         * @return A style class name.
+         * @deprecated This method is internal API. Use {@link StyleName#of(Style)} instead.
+         */
+        @Deprecated
+        public default String className() {
+            return "STYLE" + hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default void declare() {
+            latestElement.classList.push(this);
+        }
     }
 
     /**

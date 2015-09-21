@@ -9,11 +9,11 @@
  */
 package jsx.bwt.view;
 
-import jsx.style.Style;
 import jsx.style.StyleDescriptor;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2013/06/09 18:48:17

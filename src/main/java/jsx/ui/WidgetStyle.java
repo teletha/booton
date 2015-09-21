@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import jsx.style.Style;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2015/05/29 9:57:32

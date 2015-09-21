@@ -9,8 +9,8 @@
  */
 package js.dom;
 
-import jsx.style.Style;
 import jsx.style.StyleDescriptor;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/11/15 14:07:18

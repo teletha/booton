@@ -14,17 +14,17 @@ import static js.lang.Global.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsx.style.Style;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2013/07/04 20:41:55
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "Node")
-public abstract class Node<T extends Node<T>> extends EventTarget<T> implements JavascriptNative {
+public abstract class Node<T extends Node<T>> extends EventTarget<T>implements JavascriptNative {
 
     /**
      * <p>

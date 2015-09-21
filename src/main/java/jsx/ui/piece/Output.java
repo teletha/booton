@@ -9,13 +9,14 @@
  */
 package jsx.ui.piece;
 
+import static jsx.ui.StructureDescriptor.*;
+
 import java.util.function.Function;
 
 import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.ui.Declarables;
 import jsx.ui.LowLevelWidget;
 import kiss.I;
 
@@ -66,12 +67,7 @@ public class Output extends LowLevelWidget<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected Declarables virtualize2() {
-        return new Declarables() {
-
-            {
-                text(text.get());
-            }
-        };
+    protected void virtualize2() {
+        text(text.get());
     }
 }

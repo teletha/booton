@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 
 import booton.sample.Person;
 import booton.soeur.ScriptRunner;
-import jsx.style.Style;
 
 /**
  * @version 2014/09/13 14:10:28

@@ -9,9 +9,9 @@
  */
 package js.dom;
 
-import jsx.style.Style;
-
 import org.junit.Test;
+
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/11/13 9:36:37
@@ -22,7 +22,7 @@ public class DOMTokenListTest {
     public void add() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        assert !list.contains(CSS1);
+        assert!list.contains(CSS1);
 
         list.add(CSS1);
         assert list.contains(CSS1);
@@ -32,12 +32,12 @@ public class DOMTokenListTest {
     public void addMultiple() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        assert !list.contains(CSS1);
-        assert !list.contains(CSS2);
+        assert!list.contains(CSS1);
+        assert!list.contains(CSS2);
 
         list.add(CSS1);
         assert list.contains(CSS1);
-        assert !list.contains(CSS2);
+        assert!list.contains(CSS2);
         assert list.length() == 1;
 
         list.add(CSS2);
@@ -50,7 +50,7 @@ public class DOMTokenListTest {
     public void addDuplicated() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
 
-        assert !list.contains(CSS1);
+        assert!list.contains(CSS1);
 
         list.add(CSS1);
         assert list.contains(CSS1);
@@ -92,7 +92,7 @@ public class DOMTokenListTest {
         assert list.contains(CSS1);
 
         list.remove(CSS1);
-        assert !list.contains(CSS1);
+        assert!list.contains(CSS1);
         assert list.length() == 0;
     }
 
@@ -125,7 +125,7 @@ public class DOMTokenListTest {
         assert list.contains(CSS1);
 
         list.toggle(CSS1);
-        assert !list.contains(CSS1);
+        assert!list.contains(CSS1);
         assert list.length() == 0;
     }
 

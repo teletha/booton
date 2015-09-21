@@ -16,8 +16,6 @@ import java.util.function.Consumer;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import jsx.style.Style;
-
 /**
  * @version 2014/09/11 14:57:41
  */

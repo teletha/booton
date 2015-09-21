@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.Style;
 import jsx.style.StyleDescriptor;
 import jsx.style.value.Color;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2015/05/24 18:00:10

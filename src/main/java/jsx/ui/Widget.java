@@ -33,8 +33,8 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import jsx.debug.Profile;
-import jsx.style.Style;
 import jsx.style.ValueStyle;
+import jsx.ui.StructureDescriptor.Style;
 import jsx.ui.piece.Input;
 import kiss.Events;
 import kiss.I;
@@ -85,24 +85,7 @@ public abstract class Widget {
      * Create virtual elements of this {@link Widget}.
      * </p>
      */
-    protected abstract Declarables virtualize2();
-
-    /**
-     * <p>
-     * This is internal API.
-     * </p>
-     * <p>
-     * Create the virtual elements of this {@link Widget} and return the root {@link VirtualElement}
-     * if present .
-     * </p>
-     */
-    protected VirtualElement virtualize() {
-        VirtualElement element = new VirtualElement(0, "div", null);
-        Declarables.latestElement = element;
-        Declarables.widget(this);
-
-        return element;
-    }
+    protected abstract void virtualize2();
 
     private NativeArray<EventContext> contexts;
 
@@ -428,7 +411,7 @@ public abstract class Widget {
          */
         private void execute() {
             // create new virtual element
-            VirtualElement next = widget.virtualize();
+            VirtualElement next = StructureDescriptor.createWidget(0, widget);
 
             // create patch to manipulate DOM and apply it
             WidgetLog.Diff.start();

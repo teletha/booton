@@ -11,7 +11,7 @@ package jsx.ui.piece;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import jsx.style.Style;
+import jsx.ui.StructureDescriptor.Style;
 import kiss.Disposable;
 
 /**

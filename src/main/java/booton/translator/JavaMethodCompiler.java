@@ -44,8 +44,8 @@ import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
 import jsx.style.StaticStyle;
-import jsx.style.Style;
-import jsx.ui.Declarables;
+import jsx.ui.StructureDescriptor;
+import jsx.ui.StructureDescriptor.Style;
 import kiss.I;
 import kiss.model.ClassUtil;
 
@@ -1638,7 +1638,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     owner = owner.getSuperclass();
                 }
 
-                if (owner == Declarables.class && returnType == void.class && !desc.startsWith("(I")) {
+                if (owner == StructureDescriptor.class && returnType == void.class && !desc.startsWith("(I")) {
                     Class[] fixed = new Class[parameters.length + 1];
                     fixed[0] = int.class;
                     System.arraycopy(parameters, 0, fixed, 1, parameters.length);

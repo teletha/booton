@@ -10,9 +10,9 @@
 package jsx.ui.piece;
 
 import jsx.style.BinaryStyle;
-import jsx.style.Style;
 import jsx.style.StyleDescriptor;
 import jsx.style.value.Color;
+import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2015/03/22 16:46:20

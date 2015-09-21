@@ -11,8 +11,8 @@ package js.dom;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import jsx.style.Style;
 import jsx.style.StyleName;
+import jsx.ui.StructureDescriptor.Style;
 import kiss.I;
 
 /**
