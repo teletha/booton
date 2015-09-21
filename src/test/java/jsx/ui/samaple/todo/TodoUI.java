@@ -128,7 +128,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
 
             {
                 widget(input);
-                box($.ITEMS).contents(Item.class, todos.list);
+                box($.ITEMS, contents(Item.class, todos.list));
                 box($.FOTTER, () -> {
                     text(text.leftTaskIs(todos.incompletedSize));
                     box($.BUTTONS, () -> {

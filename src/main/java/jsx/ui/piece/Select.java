@@ -58,9 +58,9 @@ public class Select<M> extends Widget {
                 box(VBox, () -> {
                     box(ViewableArea, shown, () -> {
                         box(Slider, () -> {
-                            box(HBox).contents(values, value -> {
+                            box(HBox, contents(values, value -> {
                                 text(value);
-                            });
+                            }));
                         });
                     });
                 });
