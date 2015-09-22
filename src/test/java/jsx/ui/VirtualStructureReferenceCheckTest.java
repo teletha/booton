@@ -62,7 +62,7 @@ public class VirtualStructureReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             $〡.〡(property);
         }
     }
@@ -95,7 +95,7 @@ public class VirtualStructureReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             $〡.nbox.〡(style, () -> {
                 for (int i = 1; i <= property.get(); i++) {
                     $〡.nbox(i).〡(null, "Text" + i);
@@ -132,7 +132,7 @@ public class VirtualStructureReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             $〡.〡(input);
         }
     }

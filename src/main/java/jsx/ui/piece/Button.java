@@ -57,7 +57,7 @@ public class Button extends LowLevelWidget<Button> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected void virtualize() {
         element("button", rootStyle.getValue(), () -> {
             text(label.get());
         });

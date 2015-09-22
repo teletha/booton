@@ -67,7 +67,7 @@ public class Output extends LowLevelWidget<Output> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected void virtualize() {
         text(text.get());
     }
 }

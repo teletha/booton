@@ -123,7 +123,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected void virtualize() {
         widget(input);
         box($.ITEMS, contents(Item.class, todos.list));
         box($.FOTTER, () -> {
@@ -161,7 +161,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             if (filter.getValue().test(model1)) {
                 if (editing.get()) {
                     widget(edit);

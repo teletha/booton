@@ -53,7 +53,7 @@ public class Select<M> extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected void virtualize() {
         box(VBox, () -> {
             box(ViewableArea, shown, () -> {
                 box(Slider, () -> {

@@ -98,6 +98,6 @@ public class SlidableView extends Widget {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected void virtualize() {
     }
 }

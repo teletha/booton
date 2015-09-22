@@ -20,7 +20,7 @@ import jsx.ui.StructureDescriptor.Style;
 /**
  * @version 2014/10/07 12:49:29
  */
-public class VirtualElement extends VirtualNode<Element> {
+class VirtualElement extends VirtualNode<Element> {
 
     /** The node name. */
     final String name;
@@ -165,7 +165,7 @@ public class VirtualElement extends VirtualNode<Element> {
      */
     private static String format(VirtualElement element, int indentSize) {
         StringBuilder builder = new StringBuilder();
-        builder.append("<").append(element.name);
+        builder.append("<").append(element.name).append(" vid=\"").append(element.id).append("\"");
 
         for (int i = 0; i < element.attributes.size(); i++) {
             builder.append(" ").append(element.attributes.key(i)).append("=\"").append(element.attributes.value(i)).append("\"");

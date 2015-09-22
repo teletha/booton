@@ -13,9 +13,7 @@ import static js.lang.Global.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -62,6 +60,9 @@ public abstract class Widget {
     /** The {@link Widget} rendering machine. */
     private Rendering rendering;
 
+    /** The event context holder. */
+    private NativeArray<EventContext> contexts;
+
     /**
      * <p>
      * Render UI {@link Widget} on the specified {@link Element}.
@@ -76,6 +77,13 @@ public abstract class Widget {
         rendering.willExecute();
     }
 
+    /**
+     * <p>
+     * Validate a state of this widget.
+     * </p>
+     * 
+     * @return
+     */
     protected boolean shouldUpdate() {
         return true;
     }
@@ -85,9 +93,7 @@ public abstract class Widget {
      * Create virtual elements of this {@link Widget}.
      * </p>
      */
-    protected abstract void virtualize2();
-
-    private NativeArray<EventContext> contexts;
+    protected abstract void virtualize();
 
     /**
      * @param actionType
@@ -174,10 +180,8 @@ public abstract class Widget {
      * @return A widget with the specified models.
      */
     public static final <W extends Widget> W of(Class<W> widgetType) {
-        return (W) widgets.computeIfAbsent(Objects.hash(widgetType), key -> create(widgetType, new Object[0]));
+        return create(widgetType, new Object[0]);
     }
-
-    private static Map<Integer, Widget> widgets = new HashMap();
 
     /**
      * <p>
@@ -189,7 +193,7 @@ public abstract class Widget {
      * @return A widget with the specified models.
      */
     public static final <W extends Widget1<First>, First> W of(Class<W> widgetType, First model1) {
-        return (W) widgets.computeIfAbsent(Objects.hash(widgetType, model1), key -> create(widgetType, new Object[] {model1}));
+        return create(widgetType, new Object[] {model1});
     }
 
     /**

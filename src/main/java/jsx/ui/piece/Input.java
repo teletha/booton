@@ -151,7 +151,7 @@ public class Input extends LowLevelWidget<Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected void virtualize() {
         element("input", InputForm, rootStyle.getValue(), type("text"), value(value.get()), attr("placeholder", placeholder.get()));
     }
 }

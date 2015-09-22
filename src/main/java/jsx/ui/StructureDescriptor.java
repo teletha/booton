@@ -100,7 +100,7 @@ public class StructureDescriptor {
          * Assemble {@link VirtualStructure} actually.
          */
         WidgetLog.Virtualize.start();
-        widget.virtualize2();
+        widget.virtualize();
         WidgetLog.Virtualize.stop();
 
         /**
@@ -397,6 +397,7 @@ public class StructureDescriptor {
         return () -> {
             // store parent context
             Object parentContext = localContext;
+            int parentModifier = localContextIdModifier;
 
             for (T child : children) {
                 localContext = child;
@@ -406,6 +407,7 @@ public class StructureDescriptor {
 
             // restore parent context
             localContext = parentContext;
+            localContextIdModifier = parentModifier;
         };
     }
 
@@ -433,10 +435,8 @@ public class StructureDescriptor {
             Object parentContext = localContext;
 
             for (T child : children) {
-                if (child != null) {
-                    localContext = child;
-                    process.accept(child);
-                }
+                localContext = child;
+                process.accept(child);
             }
 
             // restore parent context
@@ -464,10 +464,16 @@ public class StructureDescriptor {
      */
     public static <T> Declarable contents(int initial, int size, IntConsumer process) {
         return () -> {
+            // store parent context
+            int parentModifier = localContextIdModifier;
+
             for (int i = 0; i < size; i++) {
                 localContextIdModifier = (i + 117 + latestElement.id) * 31;
                 process.accept(i + initial);
             }
+
+            // restore parent context
+            localContextIdModifier = parentModifier;
         };
     }
 

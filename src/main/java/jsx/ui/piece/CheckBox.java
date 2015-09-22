@@ -53,7 +53,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize2() {
+    protected void virtualize() {
         element("s:svg", CheckBoxSVG, viewBox(0, 0, 100, 100), () -> {
             element("s:rect", CheckBox, size(90, 90), position(5, 5));
             element("s:path", CheckMark.of(check), d().moveTo(16.667, 62.167)

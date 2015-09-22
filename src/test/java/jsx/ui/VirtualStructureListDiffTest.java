@@ -106,7 +106,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             $〡.nbox.〡(style, model1);
         }
     }
@@ -135,7 +135,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             $〡.nbox.〡(style, model1 + "1");
             $〡.nbox.〡(style, model1 + "2");
         }
@@ -165,7 +165,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             List<String> items = Arrays.asList(model1 + "A", model1 + "B");
 
             $〡.nbox.〡(style, SingleBox.class, items);
@@ -209,7 +209,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize2() {
+        protected void virtualize() {
             $〡.nbox.〡(style, model1.getName(), " is ", model1.getAge(), " years old.");
         }
     }
