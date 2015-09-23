@@ -82,7 +82,6 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
      */
     private void add() {
         String value = input.value.get();
-        System.out.println("add " + value);
 
         if (value != null && value.length() != 0) {
             todos.list.add(new Task(value));

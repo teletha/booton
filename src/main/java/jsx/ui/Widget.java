@@ -206,7 +206,6 @@ public abstract class Widget {
         WidgetLog.Diff.stop();
 
         Profile.show();
-        System.out.println("diff");
 
         // update to new virtual element
         virtual = next;
