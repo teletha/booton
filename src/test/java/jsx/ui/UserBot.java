@@ -19,7 +19,7 @@ import jsx.ui.piece.Input;
 /**
  * @version 2014/08/22 7:44:00
  */
-public class User {
+public class UserBot {
 
     /**
      * <p>

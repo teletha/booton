@@ -11,41 +11,29 @@ package jsx.ui;
 
 import static js.lang.Global.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 
 import js.dom.Element;
 import js.dom.EventTarget;
 import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
+import js.lang.NativeFunction;
 import jsx.debug.Profile;
 import jsx.style.ValueStyle;
 import jsx.ui.StructureDescriptor.Style;
-import jsx.ui.piece.Input;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
+import kiss.Observer;
 
 /**
  * @version 2015/05/29 15:48:14
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public abstract class Widget {
-
-    /** The re-rendering queue. */
-    private static final Set<Rendering> update = new HashSet();
 
     static {
         I.load(Widget.class, true);
@@ -57,8 +45,8 @@ public abstract class Widget {
     /** The identifier of this {@link Widget}. */
     int id = loophole == null ? hashCode() : Objects.hash(loophole);
 
-    /** The {@link Widget} rendering machine. */
-    private Rendering rendering;
+    /** The root widget. */
+    protected Widget root;
 
     /** The event context holder. */
     private NativeArray<EventContext> contexts;
@@ -73,8 +61,10 @@ public abstract class Widget {
     public final void renderIn(Element root) {
         Objects.nonNull(root);
 
-        rendering = new Rendering(this, root);
-        rendering.willExecute();
+        this.root = this;
+        this.virtual = new VirtualElement(0, "div", null);
+        this.virtual.dom = root;
+        willUpdateUI();
     }
 
     /**
@@ -162,13 +152,64 @@ public abstract class Widget {
         }
     }
 
+    protected final void update() {
+        root.willUpdateUI();
+    }
+
     /**
      * <p>
      * Update this widget by manual.
      * </p>
      */
-    protected final void update() {
-        rendering.willExecute();
+    protected final <V> Observer<V> update(Observer<V> action) {
+        return v -> {
+            root.willUpdateUI();
+            action.accept(v);
+        };
+    }
+
+    private static Set<Widget> updater = new HashSet();
+
+    /**
+     * <p>
+     * Try to render UI in the future.
+     * </p>
+     */
+    private void willUpdateUI() {
+        updater.add(this);
+
+        if (updater.size() == 1) {
+            requestAnimationFrame(() -> {
+                for (Widget widget : updater) {
+                    widget.updateUI();
+                }
+                updater.clear();
+                System.out.println("Run Rendering on RAF timing.");
+            });
+        }
+    }
+
+    private VirtualElement virtual;
+
+    /**
+     * <p>
+     * Render UI if needed.
+     * </p>
+     */
+    private void updateUI() {
+        // create new virtual element
+        VirtualElement next = StructureDescriptor.createWidget(0, this);
+
+        // create patch to manipulate DOM and apply it
+        WidgetLog.Diff.start();
+        PatchDiff.apply(virtual, next);
+        WidgetLog.Diff.stop();
+
+        Profile.show();
+        System.out.println("diff");
+
+        // update to new virtual element
+        virtual = next;
     }
 
     /**
@@ -280,152 +321,123 @@ public abstract class Widget {
     }
 
     /**
-     * @version 2014/10/07 12:49:44
+     * @version 2015/08/19 21:32:14
      */
-    private static class Rendering implements Runnable, ListChangeListener, ChangeListener, InvalidationListener {
+    private class EventContext<V> {
 
-        /** The associated widget. */
-        private final Widget widget;
+        /** The action type. */
+        private final UIAction actionType;
 
-        /** The virtual root element. */
-        private VirtualElement virtual;
+        private final Locatable locator;
 
-        /**
-         * @param root A target to DOM element to render widget.
-         */
-        private Rendering(Widget widget, Element root) {
-            this.widget = widget;
-            this.virtual = new VirtualElement(0, "div", null);
-            this.virtual.dom = root;
+        private final Events<V> events;
 
-            Class type = widget.getClass();
+        private final boolean useContext;
 
-            try {
-                while (type != Widget.class) {
-                    for (Field field : type.getDeclaredFields()) {
-                        Class fieldType = field.getType();
-
-                        if (field.getName().startsWith("model") || Input.class.isAssignableFrom(fieldType)) {
-                            inspect(field.get(widget));
-                        } else if (Observable.class.isAssignableFrom(fieldType)) {
-                            ((Observable) field.get(widget)).addListener(this);
-                        }
-                    }
-                    type = type.getSuperclass();
-                }
-            } catch (Exception e) {
-                throw I.quiet(e);
-            }
-        }
+        /** The holder of actual event listeners. */
+        private final NativeArray<Observer> observers = new NativeArray();
 
         /**
-         * Inspect the specified model.
-         * 
-         * @param property
+         * @param actionType
+         * @param locator
          */
-        private void inspect(Object model) {
-            try {
-                for (Field field : model.getClass().getFields()) {
-                    if (Modifier.isFinal(field.getModifiers())) {
-                        Class type = field.getType();
+        private EventContext(UIAction actionType, Locatable<V> locator, boolean useContext) {
+            this.actionType = actionType;
+            this.locator = locator;
+            this.useContext = useContext;
+            this.events = new Events<V>(observer -> {
+                observers.push(observer);
 
-                        if (ListProperty.class.isAssignableFrom(type)) {
-                            inspect((ListProperty) field.get(model));
-                        } else if (Property.class.isAssignableFrom(type)) {
-                            inspect((Property) field.get(model));
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                throw I.quiet(e);
-            }
-        }
-
-        /**
-         * Inspect the specified {@link Property}.
-         * 
-         * @param property
-         */
-        private void inspect(ListProperty property) {
-            property.addListener((ListChangeListener) this);
-        }
-
-        /**
-         * Inspect the specified {@link Property}.
-         * 
-         * @param property
-         */
-        private void inspect(Property property) {
-            property.addListener((ChangeListener) this);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void invalidated(Observable observable) {
-            willExecute();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-            willExecute();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void onChanged(Change change) {
-            willExecute();
+                return () -> {
+                    observers.remove(observers.indexOf(observer));
+                };
+            });
         }
 
         /**
          * <p>
-         * Try to render UI in the future.
+         * Register event listener to the specified {@link Element}.
          * </p>
+         * 
+         * @param target An event target.
+         * @param context A context object.
          */
-        private void willExecute() {
-            update.add(this);
+        private void register(EventTarget target, Object context) {
+            target.addEventListener(actionType.name, new NativeFunction<UIEvent>(event -> {
+                if (actionType == UIAction.ClickRight) {
+                    event.preventDefault();
+                }
 
-            if (update.size() == 1) {
-                requestAnimationFrame(this);
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            for (Rendering rendering : update) {
-                rendering.execute();
-            }
-            update.clear();
-            System.out.println("Run Rendering on RAF timing.");
-        }
-
-        /**
-         * <p>
-         * Render UI if needed.
-         * </p>
-         */
-        private void execute() {
-            // create new virtual element
-            VirtualElement next = StructureDescriptor.createWidget(0, widget);
-
-            // create patch to manipulate DOM and apply it
-            WidgetLog.Diff.start();
-            PatchDiff.apply(virtual, next);
-            WidgetLog.Diff.stop();
-
-            Profile.show();
-
-            // update to new virtual element
-            virtual = next;
+                for (int i = 0, length = observers.length(); i < length; i++) {
+                    observers.get(i).accept(useContext ? context : event);
+                }
+            }));
         }
     }
+
+    // /**
+    // * @version 2014/10/07 12:49:44
+    // */
+    // private static class Rendering implements Runnable {
+    //
+    // /** The associated widget. */
+    // private final Widget widget;
+    //
+    // /** The virtual root element. */
+    // private VirtualElement virtual;
+    //
+    // // /**
+    // // * @param root A target to DOM element to render widget.
+    // // */
+    // // private Rendering(Widget widget, Element root) {
+    // // this.widget = widget;
+    // // this.virtual = new VirtualElement(0, "div", null);
+    // // this.virtual.dom = root;
+    // // }
+    //
+    // // /**
+    // // * <p>
+    // // * Try to render UI in the future.
+    // // * </p>
+    // // */
+    // // private void willExecute() {
+    // // update.add(this);
+    // //
+    // // if (update.size() == 1) {
+    // // requestAnimationFrame(this);
+    // // }
+    // // }
+    //
+    // // /**
+    // // * {@inheritDoc}
+    // // */
+    // // @Override
+    // // public void run() {
+    // // for (Rendering rendering : update) {
+    // // rendering.execute();
+    // // }
+    // // update.clear();
+    // // System.out.println("Run Rendering on RAF timing.");
+    // // }
+    //
+    // // /**
+    // // * <p>
+    // // * Render UI if needed.
+    // // * </p>
+    // // */
+    // // private void execute() {
+    // // // create new virtual element
+    // // VirtualElement next = StructureDescriptor.createWidget(0, widget);
+    // //
+    // // // create patch to manipulate DOM and apply it
+    // // WidgetLog.Diff.start();
+    // // PatchDiff.apply(virtual, next);
+    // // WidgetLog.Diff.stop();
+    // //
+    // // Profile.show();
+    // //
+    // // // update to new virtual element
+    // // virtual = next;
+    // // }
+    // }
 }

@@ -9,7 +9,6 @@
  */
 package jsx.ui.piece;
 
-import static java.util.concurrent.TimeUnit.*;
 import static js.dom.UIAction.*;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.StructureDescriptor.*;
@@ -55,7 +54,7 @@ public class Input extends LowLevelWidget<Input> {
         Events<UIEvent> pasteInput = when(Paste, InputForm);
         Events<UIEvent> cutInput = when(Cut, InputForm);
         Events<UIEvent> keybordInput = when(KeyUp, InputForm);
-        keybordInput.merge(pasteInput, cutInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(value::set);
+        keybordInput.merge(pasteInput, cutInput).map(UIEvent::value).diff().to(value::set);
     }
 
     /**
@@ -70,6 +69,7 @@ public class Input extends LowLevelWidget<Input> {
 
         // clear value
         value.setValue("");
+        System.out.println("clear");
 
         // API definition
         return current;
@@ -152,6 +152,7 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected void virtualize() {
-        element("input", InputForm, rootStyle.getValue(), type("text"), value(value.get()), attr("placeholder", placeholder.get()));
+        element("input", $.Root, InputForm, rootStyle
+                .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
     }
 }

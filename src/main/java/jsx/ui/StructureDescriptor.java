@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
+import java.util.function.Supplier;
+
+import javafx.beans.property.Property;
 
 import js.dom.UIEvent;
 import js.lang.NativeString;
@@ -70,6 +73,8 @@ public class StructureDescriptor {
         // store parent
         Widget parentWidget = latestWidget;
         VirtualElement parentElement = latestElement;
+
+        widget.root = parentWidget == null ? widget : parentWidget.root;
 
         // create virtual element for this widget
         VirtualWidget virtualize = new VirtualWidget(widget.id, widget, localContext);
@@ -288,18 +293,6 @@ public class StructureDescriptor {
 
     /**
      * <p>
-     * Declare "type" attribute with the specified value.
-     * </p>
-     * 
-     * @param type A value of "type" attribute.
-     * @return An attribute declaration.
-     */
-    public static Declarable type(String type) {
-        return attr("type", type);
-    }
-
-    /**
-     * <p>
      * Declare "value" attribute with the specified value.
      * </p>
      * 
@@ -355,8 +348,47 @@ public class StructureDescriptor {
      * @param value An attribute value.
      * @return
      */
+    public static Declarable attr(String name, Object value) {
+        return value == null ? null : attr(name, value.toString());
+    }
+
+    /**
+     * <p>
+     * General attribute definition method.
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @param value An attribute value.
+     * @return
+     */
+    public static Declarable attr(String name, Supplier value) {
+        return value == null ? null : attr(name, value.get());
+    }
+
+    /**
+     * <p>
+     * General attribute definition method.
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @param value An attribute value.
+     * @return
+     */
+    public static Declarable attr(String name, Property value) {
+        return value == null ? null : attr(name, value.getValue());
+    }
+
+    /**
+     * <p>
+     * General attribute definition method.
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @param value An attribute value.
+     * @return
+     */
     public static Declarable attr(String name, String value) {
-        return name == null || name.length() == 0 || value == null || value.length() == 0 ? null : () -> {
+        return name == null || name.length() == 0 || value == null ? null : () -> {
             latestElement.attributes.add(name, value);
         };
     }

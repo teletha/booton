@@ -12,7 +12,7 @@ package jsx.ui.samaple.todo;
 import org.junit.Test;
 
 import jsx.ui.Key;
-import jsx.ui.User;
+import jsx.ui.UserBot;
 import jsx.ui.Widget;
 import jsx.ui.WidgetQuery;
 import jsx.ui.samaple.todo.TodoTasks.Task;
@@ -32,7 +32,7 @@ public class TodoUITest {
         assert w.todos.completedSize.get() == 0;
         assert w.todos.incompletedSize.get() == 0;
 
-        User.input(w.input, "text", Key.Enter).willBeEmpty();
+        UserBot.input(w.input, "text", Key.Enter).willBeEmpty();
 
         assert todos.list.size() == 1;
         assert w.todos.completedSize.get() == 0;
@@ -48,9 +48,9 @@ public class TodoUITest {
         TodoUI w = Widget.of(TodoUI.class, todos);
         Item item = WidgetQuery.findFirst(w, Item.class);
 
-        User.click(item.delete);
+        UserBot.click(item.delete);
         assert todos.list.size() == 0;
 
-        User.click(w.input);
+        UserBot.click(w.input);
     }
 }
