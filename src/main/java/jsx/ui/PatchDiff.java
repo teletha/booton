@@ -27,7 +27,6 @@ import jsx.ui.Patch.RemoveInlineStyle;
 import jsx.ui.Patch.ReplaceChild;
 import jsx.ui.Patch.ReplaceText;
 import jsx.ui.Patch.SetInlineStyle;
-import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2015/03/04 11:20:53

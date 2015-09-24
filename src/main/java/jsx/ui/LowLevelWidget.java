@@ -26,7 +26,6 @@ import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
 import jsx.style.StyleDescriptor;
-import jsx.ui.StructureDescriptor.Style;
 import kiss.Disposable;
 import kiss.Events;
 

@@ -23,7 +23,6 @@ import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import jsx.debug.Profile;
 import jsx.style.ValueStyle;
-import jsx.ui.StructureDescriptor.Style;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;

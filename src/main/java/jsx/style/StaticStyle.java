@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import booton.Necessary;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2015/01/28 2:25:04

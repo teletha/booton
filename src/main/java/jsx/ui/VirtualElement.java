@@ -15,12 +15,14 @@ import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
 import jsx.style.StyleName;
-import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/10/07 12:49:29
  */
 class VirtualElement extends VirtualNode<Element> {
+
+    /** The namespace uri. */
+    final String ns;
 
     /** The node name. */
     final String name;
@@ -47,6 +49,7 @@ class VirtualElement extends VirtualNode<Element> {
     VirtualElement(int id, String name, Object context) {
         super(id);
 
+        this.ns = StructureDescriptor.HTML;
         this.name = name;
         this.context = context;
     }
@@ -56,9 +59,10 @@ class VirtualElement extends VirtualNode<Element> {
      * @param name
      * @param namespace
      */
-    VirtualElement(int id, String name, Object context, Widget widget) {
+    VirtualElement(int id, String ns, String name, Object context, Widget widget) {
         super(id);
 
+        this.ns = ns;
         this.name = name;
         this.context = context;
         this.widget = widget;
@@ -71,11 +75,8 @@ class VirtualElement extends VirtualNode<Element> {
     Element materialize() {
         WidgetLog.MaterializeElement.start();
 
-        if (name.startsWith("s:")) {
-            dom = document.createElementNS("http://www.w3.org/2000/svg", name.substring(2));
-        } else {
-            dom = document.createElement(name);
-        }
+        // create DOM
+        dom = document.createElementNS(ns, name);
 
         // assign attributes
         for (int i = 0; i < attributes.size(); i++) {

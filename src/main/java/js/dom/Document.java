@@ -13,7 +13,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 import js.lang.NativeCSSStyleSheetList;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * <p>

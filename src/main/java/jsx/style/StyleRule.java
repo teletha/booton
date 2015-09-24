@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 import kiss.I;
 
 /**

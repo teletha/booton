@@ -14,7 +14,6 @@ import static jsx.ui.StructureDescriptor.*;
 
 import java.util.function.Predicate;
 
-import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -24,9 +23,8 @@ import booton.Necessary;
 import jsx.style.StyleDescriptor;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 import jsx.ui.Widget1;
-import jsx.ui.Widgety;
 import jsx.ui.i18n.TextLocalizer;
 import jsx.ui.piece.Button;
 import jsx.ui.piece.CheckBox;
@@ -34,13 +32,16 @@ import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.piece.UI;
 import jsx.ui.samaple.todo.TodoTasks.Task;
-import jsx.ui.samaple.todo.TodoUI.Text;
 import kiss.Extensible;
+import kiss.I;
 
 /**
  * @version 2014/09/01 15:14:06
  */
-public class TodoUI extends Widgety<TodoTasks, Text> {
+public class TodoUI extends Widget1<TodoTasks> {
+
+    /** The localization. */
+    final Text text = I.i18n(Text.class);
 
     /** Reassign to meaningful name. */
     final TodoTasks todos = model1;
@@ -73,8 +74,8 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
 
     /** The clear button. */
     final Button clear = UI.button()
-            .label(text.clearCompleted(todos.completedSize))
-            .showIf(todos.completedSize.greaterThan(0))
+            .label(text.clearCompleted(todos.countCompleted()))
+            // .showIf(todos.completedSize.greaterThan(0))
             .click(todos::removeCompleted);
 
     /**
@@ -127,7 +128,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
         widget(input);
         box($.ITEMS, contents(Item.class, todos.list));
         box($.FOTTER, () -> {
-            text(text.leftTaskIs(todos.incompletedSize));
+            text(text.leftTaskIs(todos.countIncompleted()));
             box($.BUTTONS, () -> {
                 widget(all);
                 widget(active);
@@ -155,7 +156,7 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
         final Button delete = UI.button().label("×").click($(todos.list::remove, model1));
 
         /** The editable todo text. */
-        final Input edit = UI.input(model1.contents.get()).shortcut(Key.Enter, this::finishEdit);
+        final Input edit = UI.input(model1.contents).shortcut(Key.Enter, this::finishEdit);
 
         /**
          * {@inheritDoc}
@@ -279,8 +280,8 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
          * @param size
          * @return
          */
-        public String leftTaskIs(IntegerExpression size) {
-            return $(size.getValue(), " ", size.get() < 2 ? "item" : "items", " left");
+        public String leftTaskIs(long size) {
+            return $(size, " ", size < 2 ? "item" : "items", " left");
         }
 
         /**
@@ -291,8 +292,8 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
          * @param size A number of completed items.
          * @return
          */
-        public String clearCompleted(IntegerExpression size) {
-            return $("Clear completed (", size.getValue(), ")");
+        public String clearCompleted(long size) {
+            return $("Clear completed (", size, ")");
         }
 
         /**
@@ -329,16 +330,16 @@ public class TodoUI extends Widgety<TodoTasks, Text> {
              * {@inheritDoc}
              */
             @Override
-            public String leftTaskIs(IntegerExpression size) {
-                return $("残りのタスク ", size.getValue());
+            public String leftTaskIs(long size) {
+                return $("残りのタスク ", size);
             }
 
             /**
              * {@inheritDoc}
              */
             @Override
-            public String clearCompleted(IntegerExpression size) {
-                return $("完了済みタスク(", size.getValue(), ")を消去");
+            public String clearCompleted(long size) {
+                return $("完了済みタスク(", size, ")を消去");
             }
         }
     }

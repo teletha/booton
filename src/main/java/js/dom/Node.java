@@ -18,7 +18,7 @@ import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2013/07/04 20:41:55

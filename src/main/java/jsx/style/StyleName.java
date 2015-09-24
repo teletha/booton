@@ -19,7 +19,7 @@ import java.util.Set;
 import booton.BootonConfiguration;
 import booton.translator.Javascript;
 import booton.translator.Translator;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 import kiss.I;
 
 /**

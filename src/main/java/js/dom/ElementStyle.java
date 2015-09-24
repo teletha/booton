@@ -10,7 +10,7 @@
 package js.dom;
 
 import jsx.style.StyleDescriptor;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2014/11/15 14:07:18

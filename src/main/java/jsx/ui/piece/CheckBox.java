@@ -54,9 +54,9 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
      */
     @Override
     protected void virtualize() {
-        element("s:svg", CheckBoxSVG, viewBox(0, 0, 100, 100), () -> {
-            element("s:rect", CheckBox, size(90, 90), position(5, 5));
-            element("s:path", CheckMark.of(check), d().moveTo(16.667, 62.167)
+        element(SVG, "svg", CheckBoxSVG, viewBox(0, 0, 100, 100), () -> {
+            element(SVG, "rect", CheckBox, size(90, 90), position(5, 5));
+            element(SVG, "path", CheckMark.of(check), d().moveTo(16.667, 62.167)
                     .relatively()
                     .curveTo(3.109, 5.55, 7.217, 10.591, 10.926, 15.75)
                     .curveTo(2.614, 3.636, 5.149, 7.519, 8.161, 10.853)

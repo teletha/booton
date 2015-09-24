@@ -38,7 +38,7 @@ import jsx.style.value.Numeric;
 import jsx.style.value.RadialGradient;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2014/10/25 11:22:51

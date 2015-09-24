@@ -18,17 +18,24 @@ import java.util.function.Supplier;
 
 import javafx.beans.property.Property;
 
-import js.dom.UIEvent;
 import js.lang.NativeString;
-import jsx.style.StyleName;
 
 /**
  * @version 2015/09/21 15:58:55
  */
 public class StructureDescriptor {
 
+    /** The namespace uri for HTML. */
+    public static final String HTML = "http://www.w3.org/1999/xhtml";
+
+    /** The namespace uri for SVG. */
+    public static final String SVG = "http://www.w3.org/2000/svg";
+
+    /** The namespace uri for XLINK. */
+    public static final String XLINK = "http://www.w3.org/1999/xlink";
+
     /** The latest element. */
-    private static VirtualElement latestElement;
+    static VirtualElement latestElement;
 
     private static Widget latestWidget;
 
@@ -140,7 +147,7 @@ public class StructureDescriptor {
     }
 
     private static void text(int id, Style style, Object... texts) {
-        element(id, "span", new Declarable[] {style}, () -> {
+        element(id, HTML, "span", new Declarable[] {style}, () -> {
             NativeString values = new NativeString();
 
             for (Object text : texts) {
@@ -170,7 +177,7 @@ public class StructureDescriptor {
      * @param declarables A list of contents (attributes, children nodes etc).
      */
     private static void box(int id, Declarable... declarables) {
-        element(id, "span", declarables, null);
+        element(id, "span", declarables);
     }
 
     /**
@@ -195,7 +202,20 @@ public class StructureDescriptor {
      * @param declarables A list of contents (attributes, children nodes etc).
      */
     private static void element(int id, String name, Declarable... declarables) {
-        element(id, name, declarables, null);
+        element(id, HTML, name, declarables, null);
+    }
+
+    /**
+     * <p>
+     * Declara element definition with the specified name.
+     * </p>
+     * 
+     * @param ns A namespace uri.
+     * @param name A name of element.
+     * @param declarables A list of contents (attributes, children nodes etc).
+     */
+    public static void element(String ns, String name, Declarable... declarables) {
+        element(LocalId.findContextLineNumber(), ns, name, declarables);
     }
 
     /**
@@ -206,14 +226,28 @@ public class StructureDescriptor {
      * @param id A local id.
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
+     */
+    private static void element(int id, String ns, String name, Declarable... declarables) {
+        element(id, ns, name, declarables, null);
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param id A local id.
+     * @param ns A namespace uri.
+     * @param name A name of element.
+     * @param declarables A list of contents (attributes, children nodes etc).
      * @param process
      */
-    private static void element(int id, String name, Declarable[] declarables, Runnable process) {
+    private static void element(int id, String ns, String name, Declarable[] declarables, Runnable process) {
         // enter into the child node (store context)
         VirtualElement parentElement = latestElement;
 
         // create element and connect it to the parent element
-        VirtualElement element = new VirtualElement((31 + id) ^ localContextIdModifier, name, localContext, latestWidget);
+        VirtualElement element = new VirtualElement((31 + id) ^ localContextIdModifier, ns, name, localContext, latestWidget);
         parentElement.items.push(latestElement = element);
 
         for (Declarable declarable : declarables) {
@@ -277,30 +311,6 @@ public class StructureDescriptor {
 
     public static SVGPath d() {
         return new SVGPath();
-    }
-
-    /**
-     * <p>
-     * Declare "placeholder" attribute with the specified value.
-     * </p>
-     * 
-     * @param type A value of "placeholder" attribute.
-     * @return An attribute declaration.
-     */
-    public static Declarable placeholder(String placeholder) {
-        return attr("placeholder", placeholder);
-    }
-
-    /**
-     * <p>
-     * Declare "value" attribute with the specified value.
-     * </p>
-     * 
-     * @param value A value of "value" attribute.
-     * @return An attribute declaration.
-     */
-    public static Declarable value(String value) {
-        return attr("value", value);
     }
 
     /**
@@ -507,40 +517,6 @@ public class StructureDescriptor {
             // restore parent context
             localContextIdModifier = parentModifier;
         };
-    }
-
-    /**
-     * @version 2015/09/21 16:12:55
-     */
-    public static interface Style extends Declarable, Locatable<UIEvent> {
-
-        /**
-         * <p>
-         * Define the style declaration.
-         * </p>
-         */
-        void style();
-
-        /**
-         * <p>
-         * Compute style class name.
-         * </p>
-         * 
-         * @return A style class name.
-         * @deprecated This method is internal API. Use {@link StyleName#of(Style)} instead.
-         */
-        @Deprecated
-        public default String className() {
-            return "STYLE" + hashCode();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        default void declare() {
-            latestElement.classList.push(this);
-        }
     }
 
     /**

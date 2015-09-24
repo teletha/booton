@@ -10,7 +10,7 @@
 package jsx.bwt;
 
 import jsx.style.value.Color;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2014/11/11 21:54:51

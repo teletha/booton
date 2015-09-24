@@ -12,7 +12,7 @@ package js.dom;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import jsx.style.StyleName;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 import kiss.I;
 
 /**

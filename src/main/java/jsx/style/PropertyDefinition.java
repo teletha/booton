@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 import booton.util.Strings;
 import js.lang.NativeArray;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2014/11/13 15:49:09

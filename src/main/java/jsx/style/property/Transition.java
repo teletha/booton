@@ -16,7 +16,7 @@ import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2014/10/29 23:29:19

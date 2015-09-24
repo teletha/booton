@@ -45,7 +45,7 @@ import js.lang.NativeObject;
 import jsx.bwt.Input;
 import jsx.style.StaticStyle;
 import jsx.ui.StructureDescriptor;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 import kiss.I;
 import kiss.model.ClassUtil;
 

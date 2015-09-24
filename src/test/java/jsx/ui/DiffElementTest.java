@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2014/09/05 9:24:53

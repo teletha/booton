@@ -12,7 +12,7 @@ package jsx.ui.piece;
 import jsx.style.BinaryStyle;
 import jsx.style.StyleDescriptor;
 import jsx.style.value.Color;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2015/03/22 16:46:20

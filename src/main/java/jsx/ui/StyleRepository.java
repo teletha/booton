@@ -16,7 +16,6 @@ import java.util.Set;
 
 import js.lang.NativeCSSStyleSheet;
 import jsx.style.StyleRule;
-import jsx.ui.StructureDescriptor.Style;
 
 /**
  * @version 2015/09/20 10:15:40

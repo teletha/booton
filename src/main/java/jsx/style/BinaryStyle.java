@@ -11,7 +11,7 @@ package jsx.style;
 
 import javafx.beans.property.BooleanProperty;
 
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2015/05/04 13:33:36

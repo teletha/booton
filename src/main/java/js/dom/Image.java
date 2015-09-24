@@ -11,7 +11,7 @@ package js.dom;
 
 import static js.lang.Global.*;
 
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2013/07/01 2:12:00

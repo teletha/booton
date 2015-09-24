@@ -12,7 +12,7 @@ package js.dom;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import jsx.style.StyleName;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2014/11/13 9:44:11

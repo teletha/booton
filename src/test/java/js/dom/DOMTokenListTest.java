@@ -11,7 +11,7 @@ package js.dom;
 
 import org.junit.Test;
 
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2014/11/13 9:36:37

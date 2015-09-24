@@ -12,7 +12,7 @@ package jsx.style;
 import java.util.HashMap;
 import java.util.Map;
 
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 
 /**
  * @version 2015/09/20 10:13:46

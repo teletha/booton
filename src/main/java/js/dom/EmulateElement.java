@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import js.lang.NativeFunction;
-import jsx.ui.StructureDescriptor.Style;
+import jsx.ui.Style;
 import kiss.I;
 import kiss.XML;
 
