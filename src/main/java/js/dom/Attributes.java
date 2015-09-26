@@ -9,12 +9,15 @@
  */
 package js.dom;
 
+import booton.translator.JavascriptAPIProvider;
+import booton.translator.JavascriptNative;
 import booton.translator.Translator;
 
 /**
  * @version 2015/01/13 12:33:49
  */
-public abstract class Attributes {
+@JavascriptAPIProvider(targetJavaScriptClassName = "Attributes")
+public abstract class Attributes implements JavascriptNative {
 
     /**
      * <p>

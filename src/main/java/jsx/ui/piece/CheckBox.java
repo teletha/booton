@@ -46,7 +46,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
         this.check = value;
         this.label = label;
 
-        when(Click, CheckBoxSVG).to(update(e -> check.set(!check.get())));
+        when(Click).at(CheckBoxSVG).to(update(e -> check.set(!check.get())));
     }
 
     /**

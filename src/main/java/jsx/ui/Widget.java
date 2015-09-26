@@ -27,6 +27,7 @@ import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Observer;
+import kiss.model.ClassUtil;
 
 /**
  * @version 2015/05/29 15:48:14
@@ -85,55 +86,23 @@ public abstract class Widget {
     protected abstract void virtualize();
 
     /**
-     * @param actionType
-     * @param locator
-     * @return
-     */
-    protected final <V> Events<V> when(UIAction actionType, ValueStyle<V> locator) {
-        return when(actionType, locator, false);
-    }
-
-    /**
-     * @param actionType
-     * @param locator
-     * @return
-     */
-    protected final Events<UIEvent> when(UIAction actionType, Style locator) {
-        return when(actionType, locator, false);
-    }
-
-    /**
      * <p>
+     * Register the specified event listener.
      * </p>
      * 
-     * @param actionType
-     * @param locator
-     * @param contextType
-     * @return
+     * @param actionTypes A list of action types.
+     * @return A location descriptor.
      */
-    protected final <V> Events<V> when(UIAction actionType, Style locator, Class<V> contextType) {
-        return when(actionType, locator, true);
-    }
-
-    /**
-     * <p>
-     * Register the event listener.
-     * </p>
-     * 
-     * @param action
-     * @param locatable
-     * @param event
-     * @return
-     */
-    private <V> Events<V> when(UIAction action, Locatable locatable, boolean event) {
-        EventContext context = new EventContext(action, locatable, event);
+    protected final Locator when(UIAction... actionTypes) {
+        EventContext context = new EventContext(actionTypes);
 
         if (contexts == null) {
             contexts = new NativeArray();
         }
         contexts.push(context);
 
-        return context.events;
+        // API definition
+        return context;
     }
 
     /**
@@ -319,31 +288,73 @@ public abstract class Widget {
     }
 
     /**
-     * @version 2015/08/19 21:32:14
+     * @version 2015/09/26 13:24:45
      */
-    private class EventContext<V> {
+    private class EventContext<V> implements Locator {
 
-        /** The action type. */
-        private final UIAction actionType;
+        /** The action types. */
+        private UIAction[] actions;
 
-        private final Locatable locator;
+        private Locatable locator;
 
-        private final Events<V> events;
-
-        private final boolean useContext;
+        private boolean useContext;
 
         /** The holder of actual event listeners. */
         private final NativeArray<Observer> observers = new NativeArray();
 
         /**
-         * @param actionType
-         * @param locator
+         * 
          */
-        private EventContext(UIAction actionType, Locatable<V> locator, boolean useContext) {
-            this.actionType = actionType;
+        private EventContext(UIAction... actions) {
+            this.actions = actions;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T> Events<T> at(ValueStyle<T> locator) {
             this.locator = locator;
-            this.useContext = useContext;
-            this.events = new Events<V>(observer -> {
+            this.useContext = true;
+
+            return new Events<T>(observer -> {
+                observers.push(observer);
+
+                return () -> {
+                    observers.remove(observers.indexOf(observer));
+                };
+            });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T> Events<T> at(Locatable<T> locatable) {
+            this.locator = locatable;
+            Class class1 = ClassUtil.getParameter(locatable.getClass(), Locatable.class)[0];
+            this.useContext = class1 != UIEvent.class;
+
+            System.out.println(class1 + "   " + UIEvent.class);
+
+            return new Events<T>(observer -> {
+                observers.push(observer);
+
+                return () -> {
+                    observers.remove(observers.indexOf(observer));
+                };
+            });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T> Events<T> at(Locatable locator, Class<T> type) {
+            this.locator = locator;
+            this.useContext = true;
+
+            return new Events<T>(observer -> {
                 observers.push(observer);
 
                 return () -> {
@@ -361,15 +372,17 @@ public abstract class Widget {
          * @param context A context object.
          */
         private void register(EventTarget target, Object context) {
-            target.addEventListener(actionType.name, new NativeFunction<UIEvent>(event -> {
-                if (actionType == UIAction.ClickRight) {
-                    event.preventDefault();
-                }
+            for (UIAction action : actions) {
+                target.addEventListener(action.name, new NativeFunction<UIEvent>(event -> {
+                    if (action == UIAction.ClickRight) {
+                        event.preventDefault();
+                    }
 
-                for (int i = 0, length = observers.length(); i < length; i++) {
-                    observers.get(i).accept(useContext ? context : event);
-                }
-            }));
+                    for (int i = 0, length = observers.length(); i < length; i++) {
+                        observers.get(i).accept(useContext ? context : event);
+                    }
+                }));
+            }
         }
     }
 

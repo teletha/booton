@@ -26,7 +26,6 @@ import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
 import jsx.ui.LowLevelWidget;
-import kiss.Events;
 import kiss.I;
 
 /**
@@ -52,10 +51,7 @@ public class Input extends LowLevelWidget<Input> {
         this.value = value;
 
         // user input functionality
-        Events<UIEvent> pasteInput = when(Paste, InputForm);
-        Events<UIEvent> cutInput = when(Cut, InputForm);
-        Events<UIEvent> keybordInput = when(KeyUp, InputForm);
-        keybordInput.merge(pasteInput, cutInput).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
+        when(KeyUp, Cut, Paste).at(InputForm).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
     }
 
     /**
