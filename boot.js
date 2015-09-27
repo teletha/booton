@@ -282,6 +282,17 @@ function boot(global) {
 
         if (clazz) {
           define(clazz.prototype, Class.prototype);
+          
+          // FIXME: Object.$ causes "too much recursion error".
+          // This is temporary solution.
+          if (clazz !== Object) {
+            Object.defineProperty(clazz, "$", {
+              configurable: true,
+              get: function() {
+                return Class.$;
+              }
+            });
+          }
 
           // define function uses not "for-in loop" but "Object.keys" to enumerate properties,
           // so Class.prototype property hides prototype chained properties.

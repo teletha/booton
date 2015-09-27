@@ -22,7 +22,6 @@ import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import jsx.debug.Profile;
-import jsx.style.ValueStyle;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
@@ -30,7 +29,7 @@ import kiss.Observer;
 import kiss.model.ClassUtil;
 
 /**
- * @version 2015/05/29 15:48:14
+ * @version 2015/09/27 11:52:23
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public abstract class Widget {
@@ -49,7 +48,7 @@ public abstract class Widget {
     protected Widget root;
 
     /** The event context holder. */
-    private NativeArray<EventContext> contexts;
+    private NativeArray<Location> contexts;
 
     /**
      * <p>
@@ -87,14 +86,14 @@ public abstract class Widget {
 
     /**
      * <p>
-     * Register the specified event listener.
+     * Register the {@link Events} listener for the specified action type.
      * </p>
      * 
      * @param actionTypes A list of action types.
      * @return A location descriptor.
      */
-    protected final Locator when(UIAction... actionTypes) {
-        EventContext context = new EventContext(actionTypes);
+    protected final Location when(UIAction... actionTypes) {
+        Location context = new Location(actionTypes);
 
         if (contexts == null) {
             contexts = new NativeArray();
@@ -111,9 +110,9 @@ public abstract class Widget {
     void registerEventListener(Style style, EventTarget target, Object object) {
         if (contexts != null) {
             for (int i = 0, length = contexts.length(); i < length; i++) {
-                EventContext context = contexts.get(i);
+                Location context = contexts.get(i);
 
-                if (context.locator == style.locator()) {
+                if (context.locatable == style.locator()) {
                     context.register(target, object);
                 }
             }
@@ -288,77 +287,70 @@ public abstract class Widget {
     }
 
     /**
-     * @version 2015/09/26 13:24:45
+     * @version 2015/09/27 11:02:28
      */
-    private class EventContext<V> implements Locator {
+    public static class Location {
 
         /** The action types. */
-        private UIAction[] actions;
+        private final UIAction[] actions;
 
-        private Locatable locator;
+        /** The actual location. */
+        private Locatable locatable;
 
-        private boolean useContext;
+        /** The flag whether listener requires {@link UIEvent} or the context specific object. */
+        private boolean useUIEvent;
 
         /** The holder of actual event listeners. */
-        private final NativeArray<Observer> observers = new NativeArray();
+        private NativeArray<Observer> observers;
 
         /**
+         * <p>
+         * Setup {@link Events} context.
+         * </p>
          * 
+         * @param actions
          */
-        private EventContext(UIAction... actions) {
+        private Location(UIAction... actions) {
             this.actions = actions;
         }
 
         /**
-         * {@inheritDoc}
+         * <p>
+         * Locate the specified point in {@link Widget}.
+         * </p>
+         * 
+         * @param locatable A locator object with the bound context type.
+         * @return A user intent {@link Events}.
          */
-        @Override
-        public <T> Events<T> at(ValueStyle<T> locator) {
-            this.locator = locator;
-            this.useContext = true;
-
-            return new Events<T>(observer -> {
-                observers.push(observer);
-
-                return () -> {
-                    observers.remove(observers.indexOf(observer));
-                };
-            });
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
         public <T> Events<T> at(Locatable<T> locatable) {
-            this.locator = locatable;
-            Class class1 = ClassUtil.getParameter(locatable.getClass(), Locatable.class)[0];
-            this.useContext = class1 != UIEvent.class;
-
-            System.out.println(class1 + "   " + UIEvent.class);
-
-            return new Events<T>(observer -> {
-                observers.push(observer);
-
-                return () -> {
-                    observers.remove(observers.indexOf(observer));
-                };
-            });
+            return at(locatable, ClassUtil.getParameter(locatable.getClass(), Locatable.class)[0]);
         }
 
         /**
-         * {@inheritDoc}
+         * <p>
+         * Locate the specified point in {@link Widget}.
+         * </p>
+         * 
+         * @param locatable A locator object.
+         * @param type A context type.
+         * @return A user intent {@link Events}.
          */
-        @Override
-        public <T> Events<T> at(Locatable locator, Class<T> type) {
-            this.locator = locator;
-            this.useContext = true;
+        public <T> Events<T> at(Locatable locatable, Class<T> type) {
+            this.locatable = locatable;
+            this.useUIEvent = type == UIEvent.class || type == Object.class;
 
             return new Events<T>(observer -> {
+                if (observers == null) {
+                    observers = new NativeArray();
+                }
                 observers.push(observer);
 
                 return () -> {
                     observers.remove(observers.indexOf(observer));
+
+                    if (observers.length() == 0) {
+                        observers = null;
+                    }
                 };
             });
         }
@@ -379,7 +371,7 @@ public abstract class Widget {
                     }
 
                     for (int i = 0, length = observers.length(); i < length; i++) {
-                        observers.get(i).accept(useContext ? context : event);
+                        observers.get(i).accept(useUIEvent ? event : context);
                     }
                 }));
             }
