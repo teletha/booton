@@ -21,7 +21,6 @@ import booton.translator.Translator;
 import js.dom.Document;
 import js.dom.History;
 import js.dom.Location;
-import js.dom.CSSStyleSheet;
 import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
@@ -46,9 +45,6 @@ public class Global {
 
     /** The root document in web environment. */
     public static Document document = emulate(Document.class);
-
-    /** The root stylesheet in booton envitonment. */
-    public static CSSStyleSheet stylesheet = document.styleSheets().item(2);
 
     /**
      * <p>
@@ -454,7 +450,7 @@ public class Global {
     static native NativeError error();
 
     /**
-     * @version 2013/07/30 19:34:33
+     * @version 2015/09/29 2:59:31
      */
     @SuppressWarnings("unused")
     private static class Coder extends Translator<Global> {
@@ -467,9 +463,6 @@ public class Global {
 
         /** The root document. */
         public String document = "document";
-
-        /** The root stylesheet in booton envitonment. */
-        public String stylesheet = "document.styleSheets.item(0)";
 
         /** The root document. */
         public String history = "history";
