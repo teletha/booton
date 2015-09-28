@@ -38,6 +38,9 @@ public abstract class Widget {
         I.load(Widget.class, true);
     }
 
+    /** The update scheduler. */
+    static Set<Widget> updater = new HashSet();
+
     /** The model loophole to CHEAT. */
     static Object[] loophole;
 
@@ -49,6 +52,9 @@ public abstract class Widget {
 
     /** The event context holder. */
     private NativeArray<Location> contexts;
+
+    /** The virtual root element. */
+    private VirtualElement virtual;
 
     /**
      * <p>
@@ -63,7 +69,7 @@ public abstract class Widget {
         this.root = this;
         this.virtual = new VirtualElement(0, "div", null);
         this.virtual.dom = root;
-        willUpdateUI();
+        update();
     }
 
     /**
@@ -119,63 +125,46 @@ public abstract class Widget {
         }
     }
 
-    protected final void update() {
-        root.willUpdateUI();
-    }
-
     /**
      * <p>
-     * Update this widget by manual.
+     * Try to re-render UI in the future.
      * </p>
      */
     protected final <V> Observer<V> update(Observer<V> action) {
         return v -> {
-            root.willUpdateUI();
             action.accept(v);
+            root.update();
         };
     }
 
-    private static Set<Widget> updater = new HashSet();
-
     /**
      * <p>
-     * Try to render UI in the future.
+     * Try to re-render UI in the future.
      * </p>
      */
-    private void willUpdateUI() {
+    protected final void update() {
         updater.add(this);
 
         if (updater.size() == 1) {
             requestAnimationFrame(() -> {
                 for (Widget widget : updater) {
-                    widget.updateUI();
+                    // create new virtual element
+                    VirtualElement next = StructureDescriptor.createWidget(0, widget);
+
+                    // create patch to manipulate DOM and apply it
+                    WidgetLog.Diff.start();
+                    PatchDiff.apply(widget.virtual, next);
+                    WidgetLog.Diff.stop();
+
+                    Profile.show();
+
+                    // update to new virtual element
+                    widget.virtual = next;
                 }
                 updater.clear();
-                System.out.println("Run Rendering on RAF timing.");
+                System.out.println("Run rendering on RAF timing.");
             });
         }
-    }
-
-    private VirtualElement virtual;
-
-    /**
-     * <p>
-     * Render UI if needed.
-     * </p>
-     */
-    private void updateUI() {
-        // create new virtual element
-        VirtualElement next = StructureDescriptor.createWidget(0, this);
-
-        // create patch to manipulate DOM and apply it
-        WidgetLog.Diff.start();
-        PatchDiff.apply(virtual, next);
-        WidgetLog.Diff.stop();
-
-        Profile.show();
-
-        // update to new virtual element
-        virtual = next;
     }
 
     /**
