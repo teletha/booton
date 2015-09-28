@@ -32,7 +32,7 @@ import kiss.model.ClassUtil;
  * @version 2015/09/27 11:52:23
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
-public abstract class Widget {
+public abstract class Widget implements Declarable {
 
     static {
         I.load(Widget.class, true);
@@ -165,6 +165,14 @@ public abstract class Widget {
                 System.out.println("Run rendering on RAF timing.");
             });
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void declare() {
+        StructureDescriptor.createWidget(id, this);
     }
 
     /**

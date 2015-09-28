@@ -129,11 +129,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         box($.ITEMS, contents(Item.class, todos.list));
         box($.FOTTER, () -> {
             text(text.leftTaskIs(todos.countIncompleted()));
-            box($.BUTTONS, () -> {
-                widget(all);
-                widget(active);
-                widget(completed);
-            });
+            box($.BUTTONS, all, active, completed);
             widget(clear);
         });
     }
