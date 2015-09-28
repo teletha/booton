@@ -11,7 +11,6 @@ package js.dom;
 
 import org.w3c.dom.DOMException;
 
-import js.lang.NativeCSSStyleSheet;
 import js.lang.NativeCSSStyleSheetList;
 import kiss.I;
 import kiss.Manageable;
@@ -221,7 +220,7 @@ class EmulateDocument extends Document {
     }
 
     /**
-     * @version 2015/09/11 15:31:08
+     * @version 2015/09/29 2:06:35
      */
     private static class BuiltinSheets extends NativeCSSStyleSheetList {
 
@@ -229,8 +228,8 @@ class EmulateDocument extends Document {
          * {@inheritDoc}
          */
         @Override
-        public NativeCSSStyleSheet item(int index) {
-            return new NativeCSSStyleSheet();
+        public CSSStyleSheet item(int index) {
+            return new EmulateCSSStyleSheet();
         }
     }
 }

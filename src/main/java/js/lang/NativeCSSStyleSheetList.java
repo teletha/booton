@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import booton.translator.Translator;
+import js.dom.CSSStyleSheet;
 
 /**
  * <p>
@@ -24,7 +25,7 @@ import booton.translator.Translator;
 public class NativeCSSStyleSheetList {
 
     /** The stylesheet holder. */
-    final List<NativeCSSStyleSheet> list = new ArrayList();
+    final List<CSSStyleSheet> list = new ArrayList();
 
     /**
      * <p>
@@ -47,7 +48,7 @@ public class NativeCSSStyleSheetList {
      * @return The style sheet at the index position in the StyleSheetList, or null if that is not a
      *         valid index.
      */
-    public NativeCSSStyleSheet item(int index) {
+    public CSSStyleSheet item(int index) {
         return list.get(index);
     }
 

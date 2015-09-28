@@ -51,7 +51,7 @@ public abstract class Widget implements Declarable {
     protected Widget root;
 
     /** The event context holder. */
-    private NativeArray<Location> contexts;
+    private NativeArray<Locator> locators;
 
     /** The virtual root element. */
     private VirtualElement virtual;
@@ -98,13 +98,13 @@ public abstract class Widget implements Declarable {
      * @param actionTypes A list of action types.
      * @return A location descriptor.
      */
-    protected final Location when(UIAction... actionTypes) {
-        Location context = new Location(actionTypes);
+    protected final Locator when(UIAction... actionTypes) {
+        Locator context = new Locator(actionTypes);
 
-        if (contexts == null) {
-            contexts = new NativeArray();
+        if (locators == null) {
+            locators = new NativeArray();
         }
-        contexts.push(context);
+        locators.push(context);
 
         // API definition
         return context;
@@ -114,12 +114,12 @@ public abstract class Widget implements Declarable {
      * @param style
      */
     void registerEventListener(Style style, EventTarget target, Object object) {
-        if (contexts != null) {
-            for (int i = 0, length = contexts.length(); i < length; i++) {
-                Location context = contexts.get(i);
+        if (locators != null) {
+            for (int i = 0, length = locators.length(); i < length; i++) {
+                Locator locator = locators.get(i);
 
-                if (context.locatable == style.locator()) {
-                    context.register(target, object);
+                if (locator.locatable == style.locator()) {
+                    locator.register(target, object);
                 }
             }
         }
@@ -171,7 +171,7 @@ public abstract class Widget implements Declarable {
      * {@inheritDoc}
      */
     @Override
-    public void declare() {
+    public final void declare() {
         StructureDescriptor.createWidget(id, this);
     }
 
@@ -286,7 +286,7 @@ public abstract class Widget implements Declarable {
     /**
      * @version 2015/09/27 11:02:28
      */
-    public static class Location {
+    public static class Locator {
 
         /** The action types. */
         private final UIAction[] actions;
@@ -307,7 +307,7 @@ public abstract class Widget implements Declarable {
          * 
          * @param actions
          */
-        private Location(UIAction... actions) {
+        private Locator(UIAction... actions) {
             this.actions = actions;
         }
 

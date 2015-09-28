@@ -20,7 +20,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import booton.css.CascadingStyleSheet;
 import booton.live.LiveCoding;
 import booton.live.LiveCodingServlet;
 import booton.live.ResourceServlet;
@@ -32,7 +31,7 @@ import kiss.I;
 import kiss.XML;
 
 /**
- * @version 2014/03/09 13:08:45
+ * @version 2015/09/29 1:24:39
  */
 public class Booton {
 
@@ -50,9 +49,6 @@ public class Booton {
 
     /** The javascript file. */
     private Path js;
-
-    /** The cascading stylesheet file. */
-    private Path css;
 
     /**
      * <p>
@@ -137,7 +133,6 @@ public class Booton {
 
         this.html = root.resolve("application.html");
         this.js = root.resolve("application.js");
-        this.css = root.resolve("application.css");
 
         BootonLog.LoadLibrary.start(() -> {
             // load booton extensions
@@ -166,9 +161,6 @@ public class Booton {
             // Don't build live coding script out of build process, because all scripts must share
             // compiled and obfuscated class information.
             Javascript.getScript(LiveCoding.class).writeTo(root.resolve("live.js"), set);
-
-            // build css file
-            I.make(CascadingStyleSheet.class).write(css);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         } finally {
@@ -191,7 +183,6 @@ public class Booton {
         XML head = html.child("head");
         head.child("meta").attr("charset", "utf-8");
         head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", "normalize.css");
-        head.child("link").attr("type", "text/css").attr("rel", "stylesheet").attr("href", config.root.relativize(css));
         head.child("style");
 
         XML body = html.child("body");

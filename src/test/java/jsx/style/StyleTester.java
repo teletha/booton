@@ -17,25 +17,19 @@ import jsx.style.value.Color;
 import jsx.ui.Style;
 
 /**
- * @version 2014/11/13 13:22:44
+ * @version 2015/09/28 22:16:53
  */
 public class StyleTester extends StyleDescriptor {
 
     protected ValidatableStyle style(Style style) {
         // empty style sheet
-        StyleRule.create("$", style);
+        StyleRule rule = StyleRule.create("$", style);
 
         // search specified rule
         String name = "." + StyleName.of(style);
 
-        for (StyleRule rule : StyleRule.holders) {
-            if (rule.selector.equals(name)) {
-                return new ValidatableStyle(rule);
-            }
-        }
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        assert rule.selector.equals(name);
+        return new ValidatableStyle(rule);
     }
 
     /**
@@ -91,6 +85,10 @@ public class StyleTester extends StyleDescriptor {
         }
 
         /**
+         * <p>
+         * Helper method to find {@link StyleRule} for the specified combinator or pseudo selector.
+         * </p>
+         * 
          * @param selector
          * @return
          */
@@ -98,14 +96,37 @@ public class StyleTester extends StyleDescriptor {
             String combinator = rules.selector + ":" + selector;
             String pseudo = rules.selector + "::" + selector;
 
-            for (StyleRule rule : StyleRule.holders) {
-                selector = rule.selector;
+            ValidatableStyle found = find(rules, combinator, pseudo);
 
-                if (selector.equals(combinator) || selector.equals(pseudo)) {
-                    return new ValidatableStyle(rule);
-                }
+            if (found != null) {
+                return found;
             }
             throw new AssertionError("The rule[" + combinator + "] or [" + pseudo + "] is not found.");
+        }
+
+        /**
+         * <p>
+         * Helper method to find {@link StyleRule} for the specified combinator or pseudo selector.
+         * </p>
+         * 
+         * @param rule A target {@link StyleRule}.
+         * @param combinator A selector pattern.
+         * @param pseudo A selector pattern.
+         * @return A result.
+         */
+        private ValidatableStyle find(StyleRule rule, String combinator, String pseudo) {
+            if (rule.selector.equals(combinator) || rule.selector.equals(pseudo)) {
+                return new ValidatableStyle(rule);
+            }
+
+            for (int i = 0; i < rule.children.length(); i++) {
+                ValidatableStyle found = find(rule.children.get(i), combinator, pseudo);
+
+                if (found != null) {
+                    return found;
+                }
+            }
+            return null;
         }
 
         /**

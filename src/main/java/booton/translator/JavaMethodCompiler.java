@@ -31,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import booton.Obfuscator;
-import booton.css.CascadingStyleSheet;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
 import jdk.internal.org.objectweb.asm.AnnotationVisitor;
@@ -43,9 +42,7 @@ import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
 import jsx.bwt.Input;
-import jsx.style.StaticStyle;
 import jsx.ui.StructureDescriptor;
-import jsx.ui.Style;
 import kiss.I;
 import kiss.model.ClassUtil;
 
@@ -57,15 +54,12 @@ import kiss.model.ClassUtil;
  * completely, garbage goto code will remain.
  * </p>
  * 
- * @version 2014/07/05 19:05:52
+ * @version 2015/09/28 21:55:35
  */
 class JavaMethodCompiler extends MethodVisitor {
 
     /** The description of {@link Debugger}. */
     private static final String DEBUGGER = Type.getType(Debuggable.class).getDescriptor();
-
-    /** The description of {@link Style}. */
-    private static final String STYLE = Type.getType(Style.class).getDescriptor();
 
     /**
      * Represents an expanded frame. See {@link ClassReader#EXPAND_FRAMES}.
@@ -523,12 +517,7 @@ class JavaMethodCompiler extends MethodVisitor {
             break;
 
         case GETSTATIC:
-            if (desc.equals(STYLE)) {
-                String cssClassName = "\"" + I.make(CascadingStyleSheet.class).register(owner, name) + "\"";
-                current.addOperand(new OperandExpression(Javascript.writeMethodCode(StaticStyle.class, "of", String.class, cssClassName)));
-            } else {
-                current.addOperand(translator.translateStaticField(owner, name), type);
-            }
+            current.addOperand(translator.translateStaticField(owner, name), type);
             break;
         }
     }

@@ -15,7 +15,7 @@ import jsx.style.StyleName;
 import jsx.ui.Style;
 
 /**
- * @version 2014/11/13 9:44:11
+ * @version 2015/09/29 2:55:30
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "DOMTokenList")
 public class DOMTokenList implements JavascriptNative {
@@ -37,6 +37,8 @@ public class DOMTokenList implements JavascriptNative {
      * @param style A class name to add.
      */
     public void add(Style style) {
+        CSSStyleSheet.define(style);
+
         add(StyleName.of(style));
     }
 
@@ -79,6 +81,8 @@ public class DOMTokenList implements JavascriptNative {
      * @param style A class name to toggle.
      */
     public boolean toggle(Style style) {
+        CSSStyleSheet.define(style);
+
         return toggle(StyleName.of(style));
     }
 

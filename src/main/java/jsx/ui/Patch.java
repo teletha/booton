@@ -351,7 +351,7 @@ abstract class Patch {
     }
 
     /**
-     * @version 2014/08/31 8:20:20
+     * @version 2015/09/28 21:31:57
      */
     static class AddClass extends ClassPatch {
 
@@ -373,8 +373,6 @@ abstract class Patch {
         @Override
         public void apply() {
             parent.classList().add(style);
-
-            StyleRepository.define(style);
         }
     }
 

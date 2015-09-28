@@ -28,12 +28,9 @@ import kiss.I;
  * This class is CSSStyleRule which represents a single CSS style rule.
  * </p>
  * 
- * @version 2015/09/06 10:58:56
+ * @version 2015/09/28 22:18:13
  */
 public class StyleRule {
-
-    /** The list of rules. */
-    public static final List<StyleRule> holders = new ArrayList();
 
     /** The selector. */
     public final String selector;
@@ -242,9 +239,7 @@ public class StyleRule {
             parent.children.push(child);
         }
 
-        // assign rule
-        holders.add(child);
-
+        // API definition
         return child;
     }
 }

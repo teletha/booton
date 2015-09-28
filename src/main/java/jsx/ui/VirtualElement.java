@@ -31,7 +31,7 @@ class VirtualElement extends VirtualNode<Element> {
     final DualList<String, String> attributes = new DualList();
 
     /** The class attributes. */
-    public final NativeArray<Style> classList = new NativeArray();
+    final NativeArray<Style> classList = new NativeArray();
 
     /** The items nodes. */
     final NativeArray<VirtualNode> items = new NativeArray();
@@ -97,13 +97,8 @@ class VirtualElement extends VirtualNode<Element> {
             // style class
             dom.classList().add(style);
 
-            // define style if needed
-            StyleRepository.define(style);
-
             // event listener
-            if (widget != null) {
-                widget.registerEventListener(style, dom, context);
-            }
+            widget.registerEventListener(style, dom, context);
         }
 
         // assign children nodes

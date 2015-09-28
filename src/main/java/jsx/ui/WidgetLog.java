@@ -12,8 +12,8 @@ package jsx.ui;
 import jsx.debug.Profile;
 
 /**
- * @version 2015/02/06 9:21:47
+ * @version 2015/09/29 2:54:26
  */
 public enum WidgetLog implements Profile {
-    Others, Virtualize, Diff, Make, GetWidget, Style, ContextualizedStyle, StyleDefinition, MaterializeElement, Declare;
+    Others, Virtualize, Diff, Make, GetWidget, Style, ContextualizedStyle, DefineStyle, DefineFont, MaterializeElement, Declare;
 }

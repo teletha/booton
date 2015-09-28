@@ -16,14 +16,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.w3c.dom.DocumentFragment;
-
 import booton.translator.Javascript;
 import booton.translator.Translator;
 import js.dom.Document;
-import js.dom.Element;
 import js.dom.History;
 import js.dom.Location;
+import js.dom.CSSStyleSheet;
 import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
@@ -36,7 +34,7 @@ import kiss.Singleton;
  * Define global objects and static methods in Booton environment.
  * </p>
  * 
- * @version 2013/12/18 1:42:55
+ * @version 2015/09/29 0:52:18
  */
 public class Global {
 
@@ -48,6 +46,9 @@ public class Global {
 
     /** The root document in web environment. */
     public static Document document = emulate(Document.class);
+
+    /** The root stylesheet in booton envitonment. */
+    public static CSSStyleSheet stylesheet = document.styleSheets().item(2);
 
     /**
      * <p>
@@ -467,6 +468,9 @@ public class Global {
         /** The root document. */
         public String document = "document";
 
+        /** The root stylesheet in booton envitonment. */
+        public String stylesheet = "document.styleSheets.item(0)";
+
         /** The root document. */
         public String history = "history";
 
@@ -507,92 +511,6 @@ public class Global {
 
         /** The performance API. */
         public String performance = "performance";
-
-        /**
-         * <p>
-         * Provide JQuery support.
-         * </p>
-         * 
-         * @param expression
-         * @return A empty {@link jQuery} instance.
-         */
-        public String $() {
-            return "$()";
-        }
-
-        /**
-         * <p>
-         * Provide JQuery support.
-         * </p>
-         * 
-         * @param expression
-         * @return
-         */
-        public String $(String expression) {
-            return "$(" + param(0) + ")";
-        }
-
-        /**
-         * <p>
-         * Provide JQuery support.
-         * </p>
-         * 
-         * @param expression
-         * @return
-         */
-        public String $(Element element) {
-            return "$(" + param(0) + ")";
-        }
-
-        /**
-         * <p>
-         * Provide JQuery support.
-         * </p>
-         * 
-         * @param object
-         * @return
-         */
-        public String $(Document object) {
-            return "$(" + param(0) + ")";
-        }
-
-        /**
-         * <p>
-         * Provide JQuery support.
-         * </p>
-         * 
-         * @param document
-         * @return
-         */
-        public String $(DocumentFragment document) {
-            return "$(" + param(0) + ")";
-        }
-
-        /**
-         * <p>
-         * Provide Raphael support.
-         * </p>
-         * 
-         * @param parent
-         * @param width
-         * @param height
-         * @return
-         */
-        public String $(Element parent, int width, int height) {
-            return "Raphael(" + param(0) + "," + param(1) + "," + param(2) + ")";
-        }
-
-        /**
-         * <p>
-         * Provide JQuery support.
-         * </p>
-         * 
-         * @param object
-         * @return
-         */
-        public String $(Window object) {
-            return "$(" + param(0) + ")";
-        }
 
         /**
          * <p>
