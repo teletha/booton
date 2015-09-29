@@ -16,7 +16,7 @@ import jsx.ui.Style;
 import kiss.I;
 
 /**
- * @version 2015/09/20 10:13:35
+ * @version 2015/09/29 10:21:36
  */
 public interface ValueStyle<V> extends Locatable<V> {
 
@@ -36,6 +36,6 @@ public interface ValueStyle<V> extends Locatable<V> {
      * @return A refined {@link Style}.
      */
     default Style of(V value) {
-        return cache.computeIfAbsent(I.pair(this, value), key -> new ValuedStyle(value, this, () -> style(value)));
+        return cache.computeIfAbsent(I.pair(this, value), key -> new ValuedStyle(this, value));
     }
 }

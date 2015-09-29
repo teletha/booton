@@ -14,16 +14,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.StringJoiner;
 
+import booton.translator.Translator;
+import booton.util.Strings;
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import kiss.I;
-import booton.translator.Translator;
-import booton.util.Strings;
 
 /**
- * @version 2014/10/28 22:38:23
+ * @version 2015/09/29 10:00:38
  */
 public class Font extends Colorable<Font> {
 
@@ -117,6 +117,33 @@ public class Font extends Colorable<Font> {
      */
     public Font weight(int size) {
         return weight.number(size);
+    }
+
+    /**
+     * <p>
+     * The font-family CSS property allows for a prioritized list of font family names and/or
+     * generic family names to be specified for the selected element. Unlike most other CSS
+     * properties, values are separated by a comma to indicate that they are alternatives. The
+     * browser will select the first font on the list that is installed on the computer, or that can
+     * be downloaded using the information provided by a @font-face at-rule.
+     * </p>
+     * <p>
+     * Web authors should always add at least one generic family in a font-family list, since
+     * there's no guarantee that a specific font is intalled on the computer or can be downloaded
+     * using a @font-face at-rule. The generic family lets the browser select an acceptable fallback
+     * font when needed.
+     * </p>
+     * 
+     * @param persons
+     * @return
+     */
+    public Family family(jsx.style.value.Font... fonts) {
+        String[] names = new String[fonts.length];
+
+        for (int i = 0; i < fonts.length; i++) {
+            names[i] = fonts[i].name;
+        }
+        return family(names);
     }
 
     /**
@@ -453,7 +480,7 @@ public class Font extends Colorable<Font> {
     }
 
     /**
-     * @version 2014/10/29 2:16:13
+     * @version 2015/09/29 10:08:07
      */
     public class Family extends PropertyDefinition<Font> {
 
@@ -531,6 +558,14 @@ public class Font extends Colorable<Font> {
             return value(join("monospace"));
         }
 
+        /**
+         * <p>
+         * Helper method to join font name.
+         * </p>
+         * 
+         * @param addition
+         * @return
+         */
         private String join(String addition) {
             StringJoiner joiner = new StringJoiner(",");
 

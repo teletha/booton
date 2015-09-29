@@ -15,27 +15,34 @@ import java.util.Map;
 import jsx.ui.Style;
 
 /**
- * @version 2015/09/20 10:13:46
+ * <p>
+ * {@link Style} with the context value.
+ * </p>
+ * 
+ * @version 2015/09/29 10:16:23
  */
-class ValuedStyle<T> implements Style {
+class ValuedStyle<V> implements Style {
 
     /** The cache repository. */
     static final Map<Object, Style> cache = new HashMap();
 
-    private final T value;
+    /** The original {@link ValueStyle}. */
+    private final ValueStyle<V> base;
 
-    private final ValueStyle base;
-
-    final Style style;
+    /** The context value. */
+    private final V value;
 
     /**
-     * @param value
-     * @param style
+     * <p>
+     * Create {@link Style} with the context value.
+     * </p>
+     * 
+     * @param base A original style.
+     * @param value A context value.
      */
-    ValuedStyle(T value, ValueStyle base, Style style) {
+    ValuedStyle(ValueStyle<V> base, V value) {
         this.value = value;
         this.base = base;
-        this.style = style;
     }
 
     /**
@@ -43,7 +50,7 @@ class ValuedStyle<T> implements Style {
      */
     @Override
     public void style() {
-        style.style();
+        base.style(value);
     }
 
     /**
