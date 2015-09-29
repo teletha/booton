@@ -48,32 +48,9 @@ public class StyleRule {
      * 
      * @param name An actual selector.
      */
-    public StyleRule() {
-        this("");
-    }
-
-    /**
-     * <p>
-     * Define style rule.
-     * </p>
-     * 
-     * @param name An actual selector.
-     */
     StyleRule(String selector) {
         this.selector = selector;
         this.properties = new DualList();
-    }
-
-    /**
-     * <p>
-     * Define style rule.
-     * </p>
-     *
-     * @param name An actual selector.
-     */
-    StyleRule(DualList<String, String> properties) {
-        this.selector = "";
-        this.properties = properties;
     }
 
     /**
