@@ -973,8 +973,11 @@ public class StyleDescriptor {
         // require dropping the whole rule when encountering an invalid pseudo-element, two separate
         // rules must be written: ::-moz-selection, ::selection {...}. The rule would be dropped on
         // non-Gecko browsers as ::-moz-selection is invalid on them.
-        PropertyDefinition.createSubRule("$::selection", sub);
-        PropertyDefinition.createSubRule("$::-moz-selection", sub);
+        if (Vendor.isMozilla) {
+            PropertyDefinition.createSubRule("$::-moz-selection", sub);
+        } else {
+            PropertyDefinition.createSubRule("$::selection", sub);
+        }
     }
 
     protected static final void children(Style sub) {

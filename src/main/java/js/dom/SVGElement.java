@@ -11,6 +11,7 @@ package js.dom;
 
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import jsx.ui.Style;
 
 /**
  * @version 2014/11/18 12:57:59
@@ -62,6 +63,18 @@ public abstract class SVGElement extends Element implements JavascriptNative {
         setAttributeNS(namespace, name, String.valueOf(value));
 
         // API definition
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element add(Style... classes) {
+        for (Style style : classes) {
+            CSSStyleSheet.define(style);
+            attr("class", style.className());
+        }
         return this;
     }
 }

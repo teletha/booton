@@ -95,7 +95,7 @@ class VirtualElement extends VirtualNode<Element> {
             Style style = classList.get(i);
 
             // style class
-            dom.classList().add(style);
+            dom.add(style);
 
             // event listener
             widget.registerEventListener(style, dom, context);

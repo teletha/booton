@@ -9,8 +9,10 @@
  */
 package jsx.style;
 
+import js.lang.builtin.CSS;
+
 /**
- * @version 2013/07/23 23:12:12
+ * @version 2015/09/29 22:52:35
  */
 public enum Vendor {
 
@@ -28,6 +30,32 @@ public enum Vendor {
 
     /** Standard */
     Standard("");
+
+    /** The current vendor in this environment. */
+    public static final Vendor Current;
+
+    /** The current vendor state in this environment. */
+    public static final boolean isMozilla;
+
+    /** The current vendor state in this environment. */
+    public static final boolean isWebkit;
+
+    // initialization
+    static {
+        if (CSS.supports("-moz-appearance", "none")) {
+            Current = Mozilla;
+            isMozilla = true;
+            isWebkit = false;
+        } else if (CSS.supports("-moz-appearance", "none")) {
+            Current = Webkit;
+            isMozilla = false;
+            isWebkit = true;
+        } else {
+            Current = IE;
+            isMozilla = false;
+            isWebkit = false;
+        }
+    }
 
     /** The prefix. */
     private final String prefix;

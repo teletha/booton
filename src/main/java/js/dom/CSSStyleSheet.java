@@ -30,7 +30,7 @@ import jsx.ui.WidgetLog;
 public class CSSStyleSheet implements JavascriptNative {
 
     /** The base stylesheet. */
-    private static final CSSStyleSheet base = document.styleSheets().item(0);
+    private static final CSSStyleSheet base = document.styleSheets().item(1);
 
     /** The style manager. */
     private static final Set<Style> styles = new HashSet();
@@ -86,11 +86,7 @@ public class CSSStyleSheet implements JavascriptNative {
      * @param rule A target style rule to define.
      */
     private static void define(StyleRule rule) {
-        try {
-            base.insertRule(rule.toString(), base.cssRules.length());
-        } catch (Throwable e) {
-            // ignore error
-        }
+        base.insertRule(rule.toString(), base.cssRules.length());
 
         for (int i = 0; i < rule.children.length(); i++) {
             define(rule.children.get(i));
