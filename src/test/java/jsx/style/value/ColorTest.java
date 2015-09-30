@@ -9,12 +9,12 @@
  */
 package jsx.style.value;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
 
+import jsx.style.StyleTester;
+
 /**
- * @version 2014/11/13 15:53:30
+ * @version 2015/10/01 0:53:27
  */
 public class ColorTest extends StyleTester {
 
@@ -56,5 +56,42 @@ public class ColorTest extends StyleTester {
             font.color(255, 255, 255, 0);
         });
         assert style.property("color", "hsla(0,0%,100%,0)");
+    }
+
+    @Test
+    public void hex3() throws Exception {
+        Color color = Color.rgb("#d3a");
+        assert color.equals(Color.rgb(221, 51, 170));
+    }
+
+    @Test
+    public void hex6() throws Exception {
+        Color color = Color.rgb("#459F2D");
+        assert color.equals(Color.rgb(69, 159, 45));
+        assert color.alpha == 1;
+        assert color.hue == 107;
+        assert color.saturation == 56;
+        assert color.lightness == 40;
+    }
+
+    @Test
+    public void withoutSharp() throws Exception {
+        Color color = Color.rgb("459F2D");
+        assert color.equals(Color.rgb(69, 159, 45));
+
+        color = Color.rgb("d3a");
+        assert color.equals(Color.rgb(221, 51, 170));
+    }
+
+    @Test
+    public void invalidHex() throws Exception {
+        Color color = Color.rgb("");
+        assert color == Color.Transparent;
+
+        color = Color.rgb("#123456789");
+        assert color == Color.Transparent;
+
+        color = Color.rgb("#12");
+        assert color == Color.Transparent;
     }
 }

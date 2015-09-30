@@ -10,7 +10,7 @@
 package jsx.style.value;
 
 /**
- * @version 2014/10/28 20:36:28
+ * @version 2015/10/01 0:36:38
  */
 public class Color {
 
@@ -137,7 +137,6 @@ public class Color {
      * <p>
      * Converts a color to grayscale. This is qeuivalent to the following method call:
      * </p>
-     * 
      * <pre>
      * color.saturate(-100);
      * </pre>
@@ -152,7 +151,6 @@ public class Color {
      * <p>
      * Returns the complement of a color. This is qeuivalent to the following method call:
      * </p>
-     * 
      * <pre>
      * color.adjustHue(180);
      * </pre>
@@ -161,6 +159,27 @@ public class Color {
      */
     public Color complement() {
         return adjustHue(180);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return hue + (saturation << 8) + (lightness << 16) + ((int) (alpha * 100) << 24);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Color == false) {
+            return false;
+        }
+
+        Color other = (Color) obj;
+        return hue == other.hue && saturation == other.saturation && lightness == other.lightness && alpha == other.alpha;
     }
 
     /**
@@ -179,6 +198,40 @@ public class Color {
             return "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
         } else {
             return "hsla(" + hue + "," + saturation + "%," + lightness + "%," + (alpha == 0 ? "0" : alpha) + ")";
+        }
+    }
+
+    /**
+     * <p>
+     * Create Color from hex color code.
+     * </p>
+     * 
+     * @param code A hex color code (accpect "#" prefix). A illegal color code will return
+     *            {@value #Transparent}.
+     * @return A new color.
+     */
+    public static Color rgb(String code) {
+        if (code == null) {
+            return Transparent;
+        }
+
+        if (code.startsWith("#")) {
+            code = code.substring(1);
+        }
+
+        switch (code.length()) {
+        case 3:
+            String red = "" + code.charAt(0) + code.charAt(0);
+            String green = "" + code.charAt(1) + code.charAt(1);
+            String blue = "" + code.charAt(2) + code.charAt(2);
+            return rgb(Integer.parseInt(red, 16), Integer.parseInt(green, 16), Integer.parseInt(blue, 16));
+
+        case 6:
+            return rgb(Integer.parseInt(code.substring(0, 2), 16), Integer.parseInt(code.substring(2, 4), 16), Integer
+                    .parseInt(code.substring(4), 16));
+
+        default:
+            return Transparent;
         }
     }
 
