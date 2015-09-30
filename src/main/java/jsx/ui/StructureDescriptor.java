@@ -21,7 +21,7 @@ import javafx.beans.property.Property;
 import js.lang.NativeString;
 
 /**
- * @version 2015/09/21 15:58:55
+ * @version 2015/09/30 21:50:25
  */
 public class StructureDescriptor {
 
@@ -30,9 +30,6 @@ public class StructureDescriptor {
 
     /** The namespace uri for SVG. */
     public static final String SVG = "http://www.w3.org/2000/svg";
-
-    /** The namespace uri for XLINK. */
-    public static final String XLINK = "http://www.w3.org/1999/xlink";
 
     /** The latest element. */
     static VirtualElement latestElement;

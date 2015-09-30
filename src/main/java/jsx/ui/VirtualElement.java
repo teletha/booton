@@ -79,14 +79,7 @@ class VirtualElement extends VirtualNode<Element> {
 
         // assign attributes
         for (int i = 0; i < attributes.size(); i++) {
-            String name = attributes.key(i);
-            String value = attributes.value(i);
-
-            if (name.startsWith("xlink:")) {
-                dom.attr("http://www.w3.org/1999/xlink", name.substring(6), value);
-            } else {
-                dom.attr(name, value);
-            }
+            dom.attr(attributes.key(i), attributes.value(i));
         }
 
         // assign classes and event listener

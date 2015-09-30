@@ -12,7 +12,7 @@ package jsx.ui;
 import js.dom.UIEvent;
 
 /**
- * @version 2015/09/21 16:12:55
+ * @version 2015/09/30 17:37:09
  */
 public interface Style extends Declarable, Locatable<UIEvent> {
 
@@ -30,9 +30,8 @@ public interface Style extends Declarable, Locatable<UIEvent> {
      * 
      * @return A style class name.
      */
-    @Deprecated
     public default String className() {
-        return "STYLE" + hashCode();
+        return "Style" + hashCode();
     }
 
     /**

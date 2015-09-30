@@ -20,6 +20,9 @@ import jsx.ui.Style;
 @JavascriptAPIProvider(targetJavaScriptClassName = "SVGElement")
 public abstract class SVGElement extends Element implements JavascriptNative {
 
+    /** The namespace uri for XLINK. */
+    private static final String XLINK = "http://www.w3.org/1999/xlink";
+
     /** The class manager. */
     private NativeArray<String> classes;
 
@@ -33,7 +36,11 @@ public abstract class SVGElement extends Element implements JavascriptNative {
      */
     @Override
     public String attr(String name) {
-        return String.valueOf(getAttribute(name));
+        if (name.startsWith("xlink:")) {
+            return getAttributeNS(XLINK, name.substring(6));
+        } else {
+            return getAttribute(name);
+        }
     }
 
     /**
@@ -47,8 +54,11 @@ public abstract class SVGElement extends Element implements JavascriptNative {
      */
     @Override
     public SVGElement attr(String name, Object value) {
-        setAttribute(name, String.valueOf(value));
-
+        if (name.startsWith("xlink:")) {
+            attr(XLINK, name.substring(6), value);
+        } else {
+            setAttribute(name, String.valueOf(value));
+        }
         return this;
     }
 
