@@ -10,7 +10,6 @@
 package jsx.ui;
 
 import js.dom.UIEvent;
-import jsx.style.StyleName;
 
 /**
  * @version 2015/09/21 16:12:55
@@ -30,7 +29,6 @@ public interface Style extends Declarable, Locatable<UIEvent> {
      * </p>
      * 
      * @return A style class name.
-     * @deprecated This method is internal API. Use {@link StyleName#of(Style)} instead.
      */
     @Deprecated
     public default String className() {

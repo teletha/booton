@@ -26,7 +26,7 @@ public class StyleTester extends StyleDescriptor {
         StyleRule rule = StyleRule.create("$", style);
 
         // search specified rule
-        String name = "." + StyleName.of(style);
+        String name = "." + style.className();
 
         assert rule.selector.equals(name);
         return new ValidatableStyle(rule);

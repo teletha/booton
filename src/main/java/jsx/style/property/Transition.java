@@ -12,7 +12,6 @@ package jsx.style.property;
 import static jsx.style.value.Unit.*;
 
 import jsx.style.PropertyDefinition;
-import jsx.style.StyleName;
 import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
@@ -171,7 +170,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * @param sub A style of this effect.
      */
     public void when(Style other, Style sub) {
-        when("$." + StyleName.of(other), sub);
+        when("$." + other.className(), sub);
     }
 
     /**
@@ -182,7 +181,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * @param sub A style of this effect.
      */
     public void whenIn(Style other, Style sub) {
-        when("." + StyleName.of(other) + " $", sub);
+        when("." + other.className() + " $", sub);
     }
 
     /**
@@ -193,7 +192,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * @param sub A style of this effect.
      */
     public void whenWith(Style other, Style sub) {
-        when("." + StyleName.of(other) + "$", sub);
+        when("." + other.className() + "$", sub);
     }
 
     /**

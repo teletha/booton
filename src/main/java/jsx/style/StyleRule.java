@@ -188,7 +188,7 @@ public class StyleRule {
         String selector;
 
         if (parent == null) {
-            selector = "." + StyleName.of(style);
+            selector = "." + style.className();
         } else {
             // check pseudo element
             String pseudo;

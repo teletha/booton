@@ -20,7 +20,6 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 import js.lang.NativeObject;
-import jsx.style.StyleName;
 import jsx.ui.Style;
 
 /**
@@ -43,7 +42,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      */
     public Element add(Style style) {
         CSSStyleSheet.define(style);
-        classList().add(StyleName.of(style));
+        classList().add(style.className());
 
         // API definition
         return this;
@@ -184,7 +183,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return A result.
      */
     public boolean has(Style style) {
-        return classList().contains(StyleName.of(style));
+        return classList().contains(style.className());
     }
 
     /**
@@ -307,7 +306,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return Chainable API.
      */
     public Element remove(Style style) {
-        classList().remove(StyleName.of(style));
+        classList().remove(style.className());
 
         // API definition
         return this;
@@ -341,7 +340,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      */
     public Element toggle(Style style) {
         CSSStyleSheet.define(style);
-        classList().toggle(StyleName.of(style));
+        classList().toggle(style.className());
 
         // API definition
         return this;

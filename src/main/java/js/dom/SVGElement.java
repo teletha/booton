@@ -12,7 +12,6 @@ package js.dom;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import js.lang.NativeArray;
-import jsx.style.StyleName;
 import jsx.ui.Style;
 
 /**
@@ -77,7 +76,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
     @Override
     public Element add(Style style) {
         NativeArray<String> classes = classes();
-        String name = StyleName.of(style);
+        String name = style.className();
         int index = classes.indexOf(name);
 
         if (index == -1) {
@@ -96,7 +95,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
      */
     @Override
     public boolean has(Style style) {
-        return classes().indexOf(StyleName.of(style)) != -1;
+        return classes().indexOf(style.className()) != -1;
     }
 
     /**
@@ -105,7 +104,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
     @Override
     public Element remove(Style style) {
         NativeArray<String> classes = classes();
-        String name = StyleName.of(style);
+        String name = style.className();
         int index = classes.indexOf(name);
 
         if (index != -1) {
@@ -123,7 +122,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
     @Override
     public Element toggle(Style style) {
         NativeArray<String> classes = classes();
-        String name = StyleName.of(style);
+        String name = style.className();
         int index = classes.indexOf(name);
 
         if (index == -1) {
