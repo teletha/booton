@@ -11,12 +11,11 @@ package js.dom;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import jsx.style.StyleName;
-import jsx.ui.Style;
 import kiss.I;
 
 /**
- * @version 2014/11/13 9:44:22
+ * 
+ * @version 2015/09/30 13:37:47
  */
 class EmulateDOMTokenList extends DOMTokenList {
 
@@ -35,32 +34,8 @@ class EmulateDOMTokenList extends DOMTokenList {
      * {@inheritDoc}
      */
     @Override
-    public void add(Style className) {
-        if (className == null) {
-            add((String) null);
-        } else {
-            add(StyleName.of(className));
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void remove(String className) {
         classes.remove(normalize(className));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void remove(Style className) {
-        if (className == null) {
-            remove((String) null);
-        } else {
-            remove(StyleName.of(className));
-        }
     }
 
     /**
@@ -81,32 +56,8 @@ class EmulateDOMTokenList extends DOMTokenList {
      * {@inheritDoc}
      */
     @Override
-    public boolean toggle(Style className) {
-        if (className == null) {
-            return toggle((String) null);
-        } else {
-            return toggle(StyleName.of(className));
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean contains(String className) {
         return classes.contains(normalize(className));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean contains(Style className) {
-        if (className == null) {
-            return contains((String) null);
-        } else {
-            return contains(StyleName.of(className));
-        }
     }
 
     /**

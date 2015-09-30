@@ -20,6 +20,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 import js.lang.NativeObject;
+import jsx.style.StyleName;
 import jsx.ui.Style;
 
 /**
@@ -37,12 +38,28 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * Adds the specified class(es) to this elements.
      * </p>
      * 
-     * @param classes A list of class names to assign.
+     * @param style A style to assign.
      * @return Chainable API.
      */
-    public Element add(Style... classes) {
-        for (Style clazz : classes) {
-            classList().add(clazz);
+    public Element add(Style style) {
+        CSSStyleSheet.define(style);
+        classList().add(StyleName.of(style));
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Adds the specified class(es) to this elements.
+     * </p>
+     * 
+     * @param styles A list of class names to assign.
+     * @return Chainable API.
+     */
+    public final Element add(Style... styles) {
+        for (Style style : styles) {
+            add(style);
         }
 
         // API definition
@@ -160,15 +177,27 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
 
     /**
      * <p>
-     * Determine whether any of this element is assigned the given class.
+     * Determine whether this element has the specified {@link Style} or not.
      * </p>
      * 
-     * @param classes A list of class names to check.
+     * @param style A {@link Style} to check.
      * @return A result.
      */
-    public boolean has(Style... classes) {
-        for (Style clazz : classes) {
-            if (!classList().contains(clazz)) {
+    public boolean has(Style style) {
+        return classList().contains(StyleName.of(style));
+    }
+
+    /**
+     * <p>
+     * Determine whether any of this element is assigned the given {@link Style}.
+     * </p>
+     * 
+     * @param styles A list of {@link Style} to check.
+     * @return A result.
+     */
+    public boolean has(Style... styles) {
+        for (Style style : styles) {
+            if (!has(style)) {
                 return false;
             }
         }
@@ -271,15 +300,30 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
 
     /**
      * <p>
-     * Remove a single class, multiple classes, or all classes from this element.
+     * Remove the specified {@link Style} from this element.
      * </p>
      * 
-     * @param classes A list of class names to remove.
+     * @param style A {@link Style} to remove.
      * @return Chainable API.
      */
-    public Element remove(Style... classes) {
-        for (Style clazz : classes) {
-            classList().remove(clazz);
+    public Element remove(Style style) {
+        classList().remove(StyleName.of(style));
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Remove the specified {@link Style} from this element.
+     * </p>
+     * 
+     * @param styles A list of {@link Style} to remove.
+     * @return Chainable API.
+     */
+    public final Element remove(Style... styles) {
+        for (Style style : styles) {
+            remove(style);
         }
 
         // API definition
@@ -296,7 +340,8 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return Chainable API.
      */
     public Element toggle(Style style) {
-        classList().toggle(style);
+        CSSStyleSheet.define(style);
+        classList().toggle(StyleName.of(style));
 
         // API definition
         return this;
@@ -425,7 +470,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return
      */
     @JavascriptNativePropertyAccessor()
-    public abstract DOMTokenList classList();
+    protected abstract DOMTokenList classList();
 
     /**
      * <p>

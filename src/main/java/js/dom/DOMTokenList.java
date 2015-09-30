@@ -11,11 +11,10 @@ package js.dom;
 
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
-import jsx.style.StyleName;
-import jsx.ui.Style;
 
 /**
- * @version 2015/09/29 2:55:30
+ * 
+ * @version 2015/09/30 13:33:35
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "DOMTokenList")
 public class DOMTokenList implements JavascriptNative {
@@ -31,36 +30,12 @@ public class DOMTokenList implements JavascriptNative {
 
     /**
      * <p>
-     * Add class.
-     * </p>
-     * 
-     * @param style A class name to add.
-     */
-    public void add(Style style) {
-        CSSStyleSheet.define(style);
-
-        add(StyleName.of(style));
-    }
-
-    /**
-     * <p>
      * Remove class.
      * </p>
      * 
      * @param className A class name to remove.
      */
     public native void remove(String className);
-
-    /**
-     * <p>
-     * Remove class.
-     * </p>
-     * 
-     * @param style A class name to remove.
-     */
-    public void remove(Style style) {
-        remove(StyleName.of(style));
-    }
 
     /**
      * <p>
@@ -74,37 +49,12 @@ public class DOMTokenList implements JavascriptNative {
 
     /**
      * <p>
-     * Removes class from string and returns false. If class doesn't exist it's added and the
-     * function returns true.
-     * </p>
-     * 
-     * @param style A class name to toggle.
-     */
-    public boolean toggle(Style style) {
-        CSSStyleSheet.define(style);
-
-        return toggle(StyleName.of(style));
-    }
-
-    /**
-     * <p>
      * Test class.
      * </p>
      * 
      * @param className A class name to test.
      */
     public native boolean contains(String className);
-
-    /**
-     * <p>
-     * Test class.
-     * </p>
-     * 
-     * @param style A class name to test.
-     */
-    public boolean contains(Style style) {
-        return contains(StyleName.of(style));
-    }
 
     /**
      * <p>

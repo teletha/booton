@@ -395,7 +395,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public DOMTokenList classList() {
+    protected DOMTokenList classList() {
         return attributes.classes;
     }
 
@@ -816,13 +816,13 @@ class EmulateElement extends Element implements EmulateNodable {
      */
     private class ByClassNameCollection extends NodeList<Element> {
 
-        private Style className;
+        private Style style;
 
         /**
-         * @param className
+         * @param style
          */
-        private ByClassNameCollection(Style className) {
-            this.className = className;
+        private ByClassNameCollection(Style style) {
+            this.style = style;
         }
 
         /**
@@ -835,10 +835,10 @@ class EmulateElement extends Element implements EmulateNodable {
             for (int i = 0; i < nodes.elementCount; i++) {
                 Element element = nodes.getElement(i);
 
-                if (element.classList().contains(className)) {
+                if (element.has(style)) {
                     count++;
                 }
-                count += element.getElementsByClassName(className).length();
+                count += element.getElementsByClassName(style).length();
             }
             return count;
         }
@@ -853,13 +853,13 @@ class EmulateElement extends Element implements EmulateNodable {
             for (int i = 0; i < nodes.elementCount; i++) {
                 Element element = nodes.getElement(i);
 
-                if (element.classList().contains(className)) {
+                if (element.has(style)) {
                     if (index == count) {
                         return element;
                     }
                     count++;
                 }
-                count += element.getElementsByClassName(className).length();
+                count += element.getElementsByClassName(style).length();
             }
             throw new IndexOutOfBoundsException();
         }

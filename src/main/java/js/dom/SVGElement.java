@@ -11,13 +11,18 @@ package js.dom;
 
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import js.lang.NativeArray;
+import jsx.style.StyleName;
 import jsx.ui.Style;
 
 /**
- * @version 2014/11/18 12:57:59
+ * @version 2015/09/30 14:06:23
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "SVGElement")
 public abstract class SVGElement extends Element implements JavascriptNative {
+
+    /** The class manager. */
+    private NativeArray<String> classes;
 
     /**
      * <p>
@@ -70,11 +75,80 @@ public abstract class SVGElement extends Element implements JavascriptNative {
      * {@inheritDoc}
      */
     @Override
-    public Element add(Style... classes) {
-        for (Style style : classes) {
+    public Element add(Style style) {
+        NativeArray<String> classes = classes();
+        String name = StyleName.of(style);
+        int index = classes.indexOf(name);
+
+        if (index == -1) {
+            classes.push(name);
+            attr("class", classes.join(" "));
+
             CSSStyleSheet.define(style);
-            attr("class", style.className());
         }
+
+        // API definition
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean has(Style style) {
+        return classes().indexOf(StyleName.of(style)) != -1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element remove(Style style) {
+        NativeArray<String> classes = classes();
+        String name = StyleName.of(style);
+        int index = classes.indexOf(name);
+
+        if (index != -1) {
+            classes.remove(index);
+            attr("class", classes.join(" "));
+        }
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element toggle(Style style) {
+        NativeArray<String> classes = classes();
+        String name = StyleName.of(style);
+        int index = classes.indexOf(name);
+
+        if (index == -1) {
+            classes.push(name);
+            CSSStyleSheet.define(style);
+        } else {
+            classes.remove(index);
+        }
+        attr("class", classes.join(" "));
+
+        // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Helper method to create
+     * </p>
+     * 
+     * @return
+     */
+    private NativeArray<String> classes() {
+        if (classes == null) {
+            classes = new NativeArray();
+        }
+        return classes;
     }
 }
