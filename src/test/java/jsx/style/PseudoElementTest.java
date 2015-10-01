@@ -83,8 +83,6 @@ public class PseudoElementTest extends StyleTester {
                 display.inline();
             });
         });
-
-        assert style.sub("selection").property("display", "inline");
         assert style.sub("-moz-selection").property("display", "inline");
     }
 

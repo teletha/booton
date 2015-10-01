@@ -9,10 +9,7 @@
  */
 package jsx.ui.piece;
 
-import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.StructureDescriptor.*;
-import static jsx.ui.StructureDescriptor.box;
-import static jsx.ui.StructureDescriptor.text;
 import static jsx.ui.piece.SlidableViewStyle.*;
 
 import java.util.ArrayList;
@@ -21,6 +18,8 @@ import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.scene.control.SingleSelectionModel;
 
+import jsx.style.value.Color;
+import jsx.ui.Style;
 import jsx.ui.Widget;
 
 /**
@@ -54,12 +53,15 @@ public class Select<M> extends Widget {
      */
     @Override
     protected void virtualize() {
-        box(VBox, () -> {
-            box(ViewableArea, shown, () -> {
-                box(Slider, () -> {
-                    box(HBox, contents(values, value -> {
-                        text(value);
-                    }));
+        box($.FormBox, () -> {
+            element("select", $.Select, contents(values, value -> {
+                element("option", () -> {
+                    text(value);
+                });
+            }));
+            element(SVG, "svg", $.SVGRoot, size(16, 16), position(0, 0), viewBox(0, 0, 16, 16), () -> {
+                element(SVG, "g", () -> {
+                    element(SVG, "polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
                 });
             });
         });
@@ -114,5 +116,31 @@ public class Select<M> extends Widget {
         protected M getModelItem(int index) {
             return items.get(index);
         }
+    }
+
+    /**
+     * @version 2015/09/30 23:58:56
+     */
+    private static class $ extends EnhancedFormStyle {
+
+        static Style Select = () -> {
+            PieceStyle.InputBase.style();
+            cursor.pointer();
+        };
+
+        static Style SVGRoot = () -> {
+            position.centerVertically().right(16, px);
+            box.size(16, px);
+            cursor.pointer();
+            pointerEvents.none();
+        };
+
+        static Style Mark = () -> {
+            fill.color("#2C97DE");
+
+            ancestorHover(FormBox, () -> {
+                fill.color(Color.Black);
+            });
+        };
     }
 }

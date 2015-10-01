@@ -11,6 +11,7 @@ package jsx.style;
 
 import static jsx.style.value.Color.*;
 
+import jsx.style.property.Appearance;
 import jsx.style.property.Background;
 import jsx.style.property.Borders;
 import jsx.style.property.Box;
@@ -44,6 +45,15 @@ import jsx.ui.Style;
  * @version 2014/10/25 11:22:51
  */
 public class StyleDescriptor {
+
+    /**
+     * <p>
+     * This unit represents the font-size of the root element (e.g. the font-size of the
+     * <html> element). When used on the font-size on this root element, it represents its initial
+     * value.
+     * </p>
+     */
+    public static final Unit rem = Unit.rem;
 
     /**
      * <p>
@@ -155,6 +165,14 @@ public class StyleDescriptor {
      * </p>
      */
     public static final Unit percent = Unit.percent;
+
+    /**
+     * <p>
+     * The appearance CSS property is used in Gecko (Firefox) to display an element using a
+     * platform-native styling based on the operating system's theme.
+     * </p>
+     */
+    public static final Appearance appearance = new Appearance();
 
     /**
      * <p>
@@ -998,6 +1016,20 @@ public class StyleDescriptor {
      */
     protected static final void parentHover(Style sub) {
         PropertyDefinition.createSubRule("*:hover>$", sub);
+    }
+
+    /**
+     * <p>
+     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
+     * device, but does not necessarily activate it. This style may be overridden by any other
+     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
+     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
+     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
+     * — :hover — :active.
+     * </p>
+     */
+    protected static final void ancestorHover(Style ancestor, Style sub) {
+        PropertyDefinition.createSubRule("." + ancestor.className() + ":hover $", sub);
     }
 
     /**

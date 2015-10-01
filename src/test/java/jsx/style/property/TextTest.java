@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/10/28 18:02:01
@@ -62,7 +62,7 @@ public class TextTest extends StyleTester {
         assert parsed.property("-webkit-user-select", "none");
         assert parsed.property("cursor", "default");
 
-        ValidatableStyle selection = parsed.sub("selection");
+        ValidatableStyle selection = parsed.sub("-moz-selection");
         assert selection.property("background-color", "transparent");
     }
 

@@ -9,10 +9,10 @@
  */
 package jsx.style.property;
 
+import org.junit.Test;
+
 import jsx.style.StyleTester;
 import jsx.style.value.Numeric;
-
-import org.junit.Test;
 
 /**
  * @version 2014/11/15 10:44:14
@@ -65,8 +65,8 @@ public class TransformTest extends StyleTester {
             transform.translate(10, px);
         });
 
-        assert style.property("-webkit-transform", "translate(10px)");
-        assert style.property("transform", "translate(10px)");
+        assert style.property("-webkit-transform", "translate(10px,10px)");
+        assert style.property("transform", "translate(10px,10px)");
     }
 
     @Test
@@ -194,7 +194,7 @@ public class TransformTest extends StyleTester {
             transform.translate(new Numeric(1, px).add(new Numeric(2, em)));
         });
 
-        assert style.property("-webkit-transform", "translate(-webkit-calc(1px + 2em))");
-        assert style.property("transform", "translate(calc(1px + 2em))");
+        assert style.property("-webkit-transform", "translate(-webkit-calc(1px + 2em),-webkit-calc(1px + 2em))");
+        assert style.property("transform", "translate(calc(1px + 2em),calc(1px + 2em))");
     }
 }

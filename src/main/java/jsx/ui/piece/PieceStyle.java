@@ -70,7 +70,7 @@ public class PieceStyle extends StyleDescriptor {
         Shadow in = shadow().inset().offset(-1, 1, px).blurRadius(1, px).color(BorderInsetShadow);
         Shadow out = shadow().offset(0, 0, px).blurRadius(8, px).color(color.opacify(-0.2));
 
-        border.color(color);
+        border.color(color).width(BorderWidth).solid();
         box.shadow(in, out);
     }
 

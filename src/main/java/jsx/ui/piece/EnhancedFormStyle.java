@@ -7,25 +7,18 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.style.property;
+package jsx.ui.piece;
 
 import jsx.style.StyleDescriptor;
-import jsx.style.value.Color;
 import jsx.ui.Style;
 
 /**
- * @version 2015/05/24 18:00:10
+ * @version 2015/09/30 23:57:58
  */
-class BuiltinStyle extends StyleDescriptor {
+class EnhancedFormStyle extends StyleDescriptor {
 
-    /**
-     * Make text unselectable.
-     */
-    static final Style unselectable = () -> {
-        cursor.defaults();
-
-        selection(() -> {
-            background.color(Color.Transparent);
-        });
+    static Style FormBox = () -> {
+        display.inlineBlock();
+        position.relative();
     };
 }

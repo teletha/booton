@@ -22,7 +22,7 @@ import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 
 /**
- * @version 2014/10/29 12:59:12
+ * @version 2015/10/01 11:36:45
  */
 public class Transform extends PropertyDefinition<Transform> {
 
@@ -385,8 +385,9 @@ public class Transform extends PropertyDefinition<Transform> {
 
     /**
      * <p>
-     * The translateX() CSS function moves horizontally the element on the plane. This
-     * transformation is characterized by a <length> defining how much it moves horizontally.
+     * The translate() CSS function moves the position of the element on the plane. This
+     * transformation is characterized by a vector whose coordinates define how much it moves in
+     * each direction.
      * </p>
      * 
      * @param size The abscissa of the translating vector.
@@ -394,20 +395,53 @@ public class Transform extends PropertyDefinition<Transform> {
      * @return Chainable API.
      */
     public Transform translate(double size, Unit unit) {
-        return translate(new Numeric(size, unit));
+        return translate(size, unit, size, unit);
     }
 
     /**
      * <p>
-     * The translateX() CSS function moves horizontally the element on the plane. This
-     * transformation is characterized by a <length> defining how much it moves horizontally.
+     * The translate() CSS function moves the position of the element on the plane. This
+     * transformation is characterized by a vector whose coordinates define how much it moves in
+     * each direction.
+     * </p>
+     * 
+     * @param translateX The abscissa of the translating vector.
+     * @param unitX The unit of the translating vector.
+     * @param translateY The abscissa of the translating vector.
+     * @param unitY The unit of the translating vector.
+     * @return Chainable API.
+     */
+    public Transform translate(double translateX, Unit unitX, double translateY, Unit unitY) {
+        return translate(new Numeric(translateX, unitX), new Numeric(translateY, unitY));
+    }
+
+    /**
+     * <p>
+     * The translate() CSS function moves the position of the element on the plane. This
+     * transformation is characterized by a vector whose coordinates define how much it moves in
+     * each direction.
      * </p>
      * 
      * @param value The abscissa of the translating vector.
      * @return Chainable API.
      */
     public Transform translate(Numeric value) {
-        return new Transform(this, "translate", value);
+        return translate(value, value);
+    }
+
+    /**
+     * <p>
+     * The translate() CSS function moves the position of the element on the plane. This
+     * transformation is characterized by a vector whose coordinates define how much it moves in
+     * each direction.
+     * </p>
+     * 
+     * @param translateX The abscissa of the translating vector.
+     * @param translateY The abscissa of the translating vector.
+     * @return Chainable API.
+     */
+    public Transform translate(Numeric translateX, Numeric translateY) {
+        return new Transform(this, new Function("translate", new Parameter(translateX), new Parameter(translateY)));
     }
 
     /**

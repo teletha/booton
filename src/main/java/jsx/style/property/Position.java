@@ -9,6 +9,8 @@
  */
 package jsx.style.property;
 
+import static jsx.style.StyleDescriptor.*;
+
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
@@ -282,10 +284,39 @@ public final class Position extends PropertyDefinition<Position> {
      * Extended property for centering the box against the parent box.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public Position center() {
-        BuiltinStyle.centering.style();
+        position.absolute().bottom(50, percent).right(50, percent);
+        transform.translate(50, percent);
+        return this;
+    }
+
+    /**
+     * <p>
+     * Extended property for centering the box vertically against the parent box.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public Position centerVertically() {
+        position.absolute().bottom(50, percent);
+        transform.translateY(50, percent);
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Extended property for centering the box horizontally against the parent box.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public Position centerHorizontally() {
+        position.absolute().right(50, percent);
+        transform.translateX(50, percent);
+
         return this;
     }
 }
