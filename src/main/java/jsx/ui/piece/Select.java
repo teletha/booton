@@ -18,7 +18,6 @@ import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.scene.control.SingleSelectionModel;
 
-import jsx.style.value.Color;
 import jsx.ui.Style;
 import jsx.ui.Widget;
 
@@ -53,7 +52,7 @@ public class Select<M> extends Widget {
      */
     @Override
     protected void virtualize() {
-        box($.FormBox, () -> {
+        box($.Root, () -> {
             element("select", $.Select, contents(values, value -> {
                 element("option", () -> {
                     text(value);
@@ -121,25 +120,28 @@ public class Select<M> extends Widget {
     /**
      * @version 2015/09/30 23:58:56
      */
-    private static class $ extends EnhancedFormStyle {
+    private static class $ extends PieceStyle {
 
-        static Style Select = () -> {
-            PieceStyle.InputBase.style();
-            cursor.pointer();
+        static Style Root = () -> {
+            display.inlineBlock();
+            position.relative();
         };
 
-        static Style SVGRoot = () -> {
-            position.centerVertically().right(16, px);
-            box.size(16, px);
+        static Style Select = InputBase.with(() -> {
             cursor.pointer();
+        });
+
+        static Style SVGRoot = () -> {
+            position.centerVertically().right(FormHorizontalPadding);
+            box.size(16, px);
             pointerEvents.none();
         };
 
         static Style Mark = () -> {
-            fill.color("#2C97DE");
+            fill.color(BorderColor);
 
-            ancestorHover(FormBox, () -> {
-                fill.color(Color.Black);
+            ancestorHover(Root, () -> {
+                fill.color(BorderColorFocused);
             });
         };
     }

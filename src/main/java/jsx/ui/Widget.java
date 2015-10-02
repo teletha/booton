@@ -22,6 +22,7 @@ import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import jsx.debug.Profile;
+import jsx.ui.Style.MultiStyle;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
@@ -113,13 +114,15 @@ public abstract class Widget implements Declarable {
     /**
      * @param style
      */
-    void registerEventListener(Style style, EventTarget target, Object object) {
+    void registerEventListener(Set<Locator> collector, Locatable style, EventTarget target, Object object) {
         if (locators != null) {
             for (int i = 0, length = locators.length(); i < length; i++) {
                 Locator locator = locators.get(i);
 
-                if (locator.locatable == style.locator()) {
-                    locator.register(target, object);
+                for (Locatable locatable : locator.locatables) {
+                    if (locatable == style) {
+                        collector.add(locator);
+                    }
                 }
             }
         }
@@ -292,7 +295,7 @@ public abstract class Widget implements Declarable {
         private final UIAction[] actions;
 
         /** The actual location. */
-        private Locatable locatable;
+        private Locatable[] locatables;
 
         /** The flag whether listener requires {@link UIEvent} or the context specific object. */
         private boolean useUIEvent;
@@ -333,7 +336,7 @@ public abstract class Widget implements Declarable {
          * @return A user intent {@link Events}.
          */
         public <T> Events<T> at(Locatable locatable, Class<T> type) {
-            this.locatable = locatable;
+            this.locatables = locatable instanceof MultiStyle ? ((MultiStyle) locatable).styles : new Locatable[] {locatable};
             this.useUIEvent = type == UIEvent.class || type == Object.class;
 
             return new Events<T>(observer -> {
@@ -360,7 +363,7 @@ public abstract class Widget implements Declarable {
          * @param target An event target.
          * @param context A context object.
          */
-        private void register(EventTarget target, Object context) {
+        void register(EventTarget target, Object context) {
             for (UIAction action : actions) {
                 target.addEventListener(action.name, new NativeFunction<UIEvent>(event -> {
                     if (action == UIAction.ClickRight) {
@@ -374,70 +377,4 @@ public abstract class Widget implements Declarable {
             }
         }
     }
-
-    // /**
-    // * @version 2014/10/07 12:49:44
-    // */
-    // private static class Rendering implements Runnable {
-    //
-    // /** The associated widget. */
-    // private final Widget widget;
-    //
-    // /** The virtual root element. */
-    // private VirtualElement virtual;
-    //
-    // // /**
-    // // * @param root A target to DOM element to render widget.
-    // // */
-    // // private Rendering(Widget widget, Element root) {
-    // // this.widget = widget;
-    // // this.virtual = new VirtualElement(0, "div", null);
-    // // this.virtual.dom = root;
-    // // }
-    //
-    // // /**
-    // // * <p>
-    // // * Try to render UI in the future.
-    // // * </p>
-    // // */
-    // // private void willExecute() {
-    // // update.add(this);
-    // //
-    // // if (update.size() == 1) {
-    // // requestAnimationFrame(this);
-    // // }
-    // // }
-    //
-    // // /**
-    // // * {@inheritDoc}
-    // // */
-    // // @Override
-    // // public void run() {
-    // // for (Rendering rendering : update) {
-    // // rendering.execute();
-    // // }
-    // // update.clear();
-    // // System.out.println("Run Rendering on RAF timing.");
-    // // }
-    //
-    // // /**
-    // // * <p>
-    // // * Render UI if needed.
-    // // * </p>
-    // // */
-    // // private void execute() {
-    // // // create new virtual element
-    // // VirtualElement next = StructureDescriptor.createWidget(0, widget);
-    // //
-    // // // create patch to manipulate DOM and apply it
-    // // WidgetLog.Diff.start();
-    // // PatchDiff.apply(virtual, next);
-    // // WidgetLog.Diff.stop();
-    // //
-    // // Profile.show();
-    // //
-    // // // update to new virtual element
-    // // virtual = next;
-    // // }
-    // }
 }

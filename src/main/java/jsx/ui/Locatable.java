@@ -21,17 +21,7 @@ public interface Locatable<T> {
      * 
      * @return A location identifier.
      */
-    default Object locator() {
+    default Locatable locator() {
         return this;
     }
-
-    // /**
-    // * <p>
-    // * Test whether the specified {@link Locatable} matches this {@link Locatable} or not.
-    // * </p>
-    // *
-    // * @param locatable
-    // * @return
-    // */
-    // boolean matche(Locatable locatable);
 }

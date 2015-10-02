@@ -33,11 +33,13 @@ public class PieceStyle extends StyleDescriptor {
 
     protected static final Numeric BorderRadius = new Numeric(3, px);
 
+    /** The border color. */
     protected static final Color BorderColor = new Color(0, 0, 80);
 
-    protected static final Color BorderInsetShadow = new Color(0, 0, 0, 0.1);
+    /** The focused border color. */
+    protected static final Color BorderColorFocused = new Color(206, 79, 62, 0.8);
 
-    protected static final Color BorderFocusColor = new Color(206, 79, 62, 0.8);
+    protected static final Color BorderInsetShadow = new Color(0, 0, 0, 0.1);
 
     /** The general single line form width. */
     protected static final Numeric SingleLineFormWidth = new Numeric(185, px);
@@ -59,28 +61,7 @@ public class PieceStyle extends StyleDescriptor {
     /** The general icon size. */
     protected static final Numeric IconSize = SingleLineFormHeight;
 
-    /**
-     * <p>
-     * Helper method to write border.
-     * </p>
-     * 
-     * @param color A border bolor.
-     */
-    protected static final void border(Color color) {
-        Shadow in = shadow().inset().offset(-1, 1, px).blurRadius(1, px).color(BorderInsetShadow);
-        Shadow out = shadow().offset(0, 0, px).blurRadius(8, px).color(color.opacify(-0.2));
-
-        border.color(color).width(BorderWidth).solid();
-        box.shadow(in, out);
-    }
-
-    /**
-     * <p>
-     * Abstract base style of form element.
-     * </p>
-     * 
-     * @version 2013/04/22 9:42:41
-     */
+    /** Abstract base style of form element. */
     static Style FormBase = () -> {
         // Required property for single line form.
         box.height(SingleLineFormHeight);
@@ -96,21 +77,18 @@ public class PieceStyle extends StyleDescriptor {
         padding.vertical(FormVerticalPadding).horizontal(FormHorizontalPadding);
     };
 
-    /**
-     * <p>
-     * Abstract base style of form element.
-     * </p>
-     * 
-     * @version 2013/04/22 9:42:41
-     */
-    static Style BorderedFormBase = () -> {
-        FormBase.style();
+    /** Abstract base style of form element. */
+    static Style BorderedFormBase = FormBase.with(() -> {
         border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
         focus(() -> {
-            border(BorderFocusColor);
+            Shadow in = shadow().inset().offset(-1, 1, px).blurRadius(1, px).color(BorderInsetShadow);
+            Shadow out = shadow().offset(0, 0, px).blurRadius(8, px).color(BorderColorFocused.opacify(-0.2));
+
+            border.color(BorderColorFocused).width(BorderWidth).solid();
+            box.shadow(in, out);
         });
-    };
+    });
 
     /**
      * <p>
@@ -119,14 +97,9 @@ public class PieceStyle extends StyleDescriptor {
      * 
      * @version 2013/04/22 9:42:41
      */
-    static Style InputBase = () -> {
-        BorderedFormBase.style();
+    static Style InputBase = BorderedFormBase.with(() -> {
         box.width(SingleLineFormWidth);
-    };
-
-    static Style InputForm = () -> {
-        InputBase.style();
-    };
+    });
 
     static Style SpriteBackground = () -> {
         background.image(BackgroundImage.none().cover().borderBox().noRepeat());
