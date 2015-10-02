@@ -28,6 +28,14 @@ public interface ValueStyle<V> extends Locatable<V> {
     void style(V value);
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String name() {
+        return "Value" + hashCode();
+    }
+
+    /**
      * <p>
      * Retrieve the refined {@link Style} of the specified value.
      * </p>

@@ -11,6 +11,7 @@ package jsx.ui;
 
 import java.util.LinkedHashSet;
 
+import js.dom.CSSStyleSheet;
 import js.dom.UIEvent;
 
 /**
@@ -26,17 +27,6 @@ public interface Style extends Declarable, Locatable<UIEvent> {
     void style();
 
     /**
-     * <p>
-     * Compute style class name.
-     * </p>
-     * 
-     * @return A style class name.
-     */
-    public default String className() {
-        return "Style" + hashCode();
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -44,10 +34,14 @@ public interface Style extends Declarable, Locatable<UIEvent> {
         StructureDescriptor.latestElement.classList.push(this);
     }
 
-    public default void define() {
-        StyleRepository.define(this);
-    }
-
+    /**
+     * <p>
+     * Combine this {@link Style} and the specified {@link Style}.
+     * </p>
+     * 
+     * @param style A style to combine.
+     * @return A combined {@link Style}.
+     */
     default Style with(Style style) {
         return MultiStyle.of(this, style);
     }
@@ -60,6 +54,9 @@ public interface Style extends Declarable, Locatable<UIEvent> {
         /** The aggregation. */
         final Style[] styles;
 
+        /** The name list. */
+        final String[] names;
+
         /**
          * Hide constructor.
          * 
@@ -67,6 +64,14 @@ public interface Style extends Declarable, Locatable<UIEvent> {
          */
         private MultiStyle(Style[] styles) {
             this.styles = styles;
+            this.names = new String[styles.length + 1];
+
+            for (int i = 0; i < names.length - 1; i++) {
+                names[i] = styles[i].name();
+
+                CSSStyleSheet.define(styles[i]);
+            }
+            names[names.length - 1] = name();
         }
 
         /**
@@ -106,30 +111,23 @@ public interface Style extends Declarable, Locatable<UIEvent> {
          * {@inheritDoc}
          */
         @Override
+        public String name() {
+            return "Multi" + hashCode();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String[] names() {
+            return names;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
         public void style() {
-            // If this exception will be thrown, it is bug of this program. So we must rethrow the
-            // wrapped error in here.
-            throw new Error();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void declare() {
-            for (Style style : styles) {
-                style.declare();
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void define() {
-            for (Style style : styles) {
-                style.define();
-            }
         }
     }
 }

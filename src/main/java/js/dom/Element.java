@@ -20,6 +20,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 import js.lang.NativeObject;
+import jsx.ui.Locatable;
 import jsx.ui.Style;
 
 /**
@@ -42,7 +43,10 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      */
     public Element add(Style style) {
         CSSStyleSheet.define(style);
-        classList().add(style.className());
+
+        for (String name : style.names()) {
+            classList().add(name);
+        }
 
         // API definition
         return this;
@@ -62,6 +66,32 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
         }
 
         // API definition
+        return this;
+    }
+
+    /**
+     * <p>
+     * Get the value of the specified attribute.
+     * </p>
+     * 
+     * @param name The name of the attribute to get.
+     * @return The specified attribute value.
+     */
+    public Object property(String name) {
+        return ((NativeObject) (Object) this).getProperty(name);
+    }
+
+    /**
+     * <p>
+     * Get the value of the specified attribute.
+     * </p>
+     * 
+     * @param name The name of the attribute to get.
+     * @return The specified attribute value.
+     */
+    public Element property(String name, Object value) {
+        ((NativeObject) (Object) this).setProperty(name, value);
+
         return this;
     }
 
@@ -182,8 +212,8 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @param style A {@link Style} to check.
      * @return A result.
      */
-    public boolean has(Style style) {
-        return classList().contains(style.className());
+    public boolean has(Locatable style) {
+        return classList().contains(style.name());
     }
 
     /**
@@ -306,7 +336,9 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return Chainable API.
      */
     public Element remove(Style style) {
-        classList().remove(style.className());
+        for (String name : style.names()) {
+            classList().remove(name);
+        }
 
         // API definition
         return this;
@@ -339,8 +371,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return Chainable API.
      */
     public Element toggle(Style style) {
-        CSSStyleSheet.define(style);
-        classList().toggle(style.className());
+        classList().toggle(style.name());
 
         // API definition
         return this;
@@ -469,7 +500,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return
      */
     @JavascriptNativePropertyAccessor()
-    protected abstract DOMTokenList classList();
+    public abstract DOMTokenList classList();
 
     /**
      * <p>

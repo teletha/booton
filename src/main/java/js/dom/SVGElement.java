@@ -12,6 +12,7 @@ package js.dom;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import js.lang.NativeArray;
+import jsx.ui.Locatable;
 import jsx.ui.Style;
 
 /**
@@ -86,14 +87,16 @@ public abstract class SVGElement extends Element implements JavascriptNative {
     @Override
     public Element add(Style style) {
         NativeArray<String> classes = classes();
-        String name = style.className();
-        int index = classes.indexOf(name);
 
-        if (index == -1) {
-            classes.push(name);
-            attr("class", classes.join(" "));
+        for (String name : style.names()) {
+            int index = classes.indexOf(name);
 
-            CSSStyleSheet.define(style);
+            if (index == -1) {
+                classes.push(name);
+                attr("class", classes.join(" "));
+
+                CSSStyleSheet.define(style);
+            }
         }
 
         // API definition
@@ -104,8 +107,8 @@ public abstract class SVGElement extends Element implements JavascriptNative {
      * {@inheritDoc}
      */
     @Override
-    public boolean has(Style style) {
-        return classes().indexOf(style.className()) != -1;
+    public boolean has(Locatable locatable) {
+        return classes().indexOf(locatable.name()) != -1;
     }
 
     /**
@@ -114,12 +117,14 @@ public abstract class SVGElement extends Element implements JavascriptNative {
     @Override
     public Element remove(Style style) {
         NativeArray<String> classes = classes();
-        String name = style.className();
-        int index = classes.indexOf(name);
 
-        if (index != -1) {
-            classes.remove(index);
-            attr("class", classes.join(" "));
+        for (String name : style.names()) {
+            int index = classes.indexOf(name);
+
+            if (index != -1) {
+                classes.remove(index);
+                attr("class", classes.join(" "));
+            }
         }
 
         // API definition
@@ -132,7 +137,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
     @Override
     public Element toggle(Style style) {
         NativeArray<String> classes = classes();
-        String name = style.className();
+        String name = style.name();
         int index = classes.indexOf(name);
 
         if (index == -1) {

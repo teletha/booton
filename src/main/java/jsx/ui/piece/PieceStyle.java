@@ -79,6 +79,7 @@ public class PieceStyle extends StyleDescriptor {
 
     /** Abstract base style of form element. */
     static Style BorderedFormBase = FormBase.with(() -> {
+        box.width(SingleLineFormWidth);
         border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
         focus(() -> {
@@ -90,14 +91,8 @@ public class PieceStyle extends StyleDescriptor {
         });
     });
 
-    /**
-     * <p>
-     * Abstract base style of form element.
-     * </p>
-     * 
-     * @version 2013/04/22 9:42:41
-     */
-    static Style InputBase = BorderedFormBase.with(() -> {
+    /** Abstract base style of form element. */
+    static Style SingleLineFormBase = BorderedFormBase.with(() -> {
         box.width(SingleLineFormWidth);
     });
 

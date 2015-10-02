@@ -51,7 +51,7 @@ public class Input extends LowLevelWidget<Input> {
         this.value = value;
 
         // user input functionality
-        when(KeyUp, Cut, Paste).at(InputBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
+        when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
     }
 
     /**
@@ -148,7 +148,7 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected void virtualize() {
-        element("input", $.Root, InputBase, rootStyle
+        element("input", $.Root, SingleLineFormBase, rootStyle
                 .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
     }
 }

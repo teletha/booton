@@ -127,7 +127,7 @@ public class Select<M> extends Widget {
             position.relative();
         };
 
-        static Style Select = InputBase.with(() -> {
+        static Style Select = SingleLineFormBase.with(() -> {
             cursor.pointer();
         });
 

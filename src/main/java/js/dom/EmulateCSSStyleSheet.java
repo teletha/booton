@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import js.lang.NativeCSSRule;
+import js.lang.NativeCSSRuleList;
 
 /**
  * @version 2015/09/29 1:54:10
@@ -21,6 +22,10 @@ class EmulateCSSStyleSheet extends CSSStyleSheet {
 
     /** The rule list. */
     private final List<NativeCSSRule> rules = new ArrayList();
+
+    {
+        cssRules = new NativeCSSRuleList();
+    }
 
     /**
      * <p>

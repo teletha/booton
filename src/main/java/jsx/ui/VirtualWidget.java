@@ -9,6 +9,8 @@
  */
 package jsx.ui;
 
+import js.dom.Element;
+
 /**
  * @version 2015/01/20 11:11:42
  */
@@ -25,5 +27,17 @@ class VirtualWidget extends VirtualElement {
         super(id, "widget", context);
 
         this.widget = widget;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    Element materialize() {
+        Element element = super.materialize();
+
+        widget.register(dom);
+
+        return element;
     }
 }

@@ -11,13 +11,9 @@ package jsx.ui;
 
 import static js.lang.Global.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import jsx.ui.Widget.Locator;
 
 /**
  * @version 2014/10/07 12:49:29
@@ -86,22 +82,11 @@ class VirtualElement extends VirtualNode<Element> {
             dom.attr(attributes.key(i), attributes.value(i));
         }
 
-        Set<Locator> locators = new HashSet();
-
-        // assign classes and event listener
+        // assign classes
         for (int i = 0, length = classList.length(); i < length; i++) {
-            Style style = classList.get(i);
-
-            // style class
-            dom.add(style);
-
-            // event listener
-            widget.registerEventListener(locators, style.locator(), dom, context);
+            dom.add(classList.get(i));
         }
-
-        for (Locator locator : locators) {
-            locator.register(dom, context);
-        }
+        dom.property("aa", context);
 
         // assign children nodes
         for (int i = 0, length = items.length(); i < length; i++) {
@@ -173,7 +158,7 @@ class VirtualElement extends VirtualNode<Element> {
             builder.append(" class=\"");
 
             for (int i = 0; i < element.classList.length(); i++) {
-                builder.append(element.classList.get(i).className()).append(" ");
+                builder.append(element.classList.get(i).name()).append(" ");
             }
             builder.append("\"");
         }

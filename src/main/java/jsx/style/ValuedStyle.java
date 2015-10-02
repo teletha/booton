@@ -12,7 +12,6 @@ package jsx.style;
 import java.util.HashMap;
 import java.util.Map;
 
-import jsx.ui.Locatable;
 import jsx.ui.Style;
 
 /**
@@ -50,15 +49,23 @@ class ValuedStyle<V> implements Style {
      * {@inheritDoc}
      */
     @Override
-    public void style() {
-        base.style(value);
+    public String name() {
+        return "Valued" + hashCode();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Locatable locator() {
-        return base;
+    public String[] names() {
+        return new String[] {base.name(), name()};
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void style() {
+        base.style(value);
     }
 }

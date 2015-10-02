@@ -1029,7 +1029,7 @@ public class StyleDescriptor {
      * </p>
      */
     protected static final void ancestorHover(Style ancestor, Style sub) {
-        PropertyDefinition.createSubRule("." + ancestor.className() + ":hover $", sub);
+        PropertyDefinition.createSubRule("." + ancestor.name() + ":hover $", sub);
     }
 
     /**
@@ -1074,7 +1074,7 @@ public class StyleDescriptor {
      * @return
      */
     protected static final void not(Style style, Style sub) {
-        PropertyDefinition.createSubRule("$:not(." + style.className() + ")", sub);
+        PropertyDefinition.createSubRule("$:not(." + style.name() + ")", sub);
     }
 
     /**
@@ -1087,7 +1087,7 @@ public class StyleDescriptor {
      * @return
      */
     protected static final void inBackOf(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style.className() + "+$", sub);
+        PropertyDefinition.createSubRule("." + style.name() + "+$", sub);
     }
 
     /**
@@ -1100,7 +1100,7 @@ public class StyleDescriptor {
      * @return
      */
     protected static final void insideOf(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style.className() + " $", sub);
+        PropertyDefinition.createSubRule("." + style.name() + " $", sub);
     }
 
     /**
@@ -1113,7 +1113,7 @@ public class StyleDescriptor {
      * @return
      */
     protected static final void with(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style.className() + "$", sub);
+        PropertyDefinition.createSubRule("." + style.name() + "$", sub);
     }
 
     /**

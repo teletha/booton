@@ -10,18 +10,29 @@
 package jsx.ui;
 
 /**
- * @version 2015/09/16 9:10:52
+ * @version 2015/10/03 0:19:01
  */
 public interface Locatable<T> {
 
     /**
      * <p>
-     * Retrieve the location identifier.
+     * Compute location name.
      * </p>
      * 
-     * @return A location identifier.
+     * @return A location name.
      */
-    default Locatable locator() {
-        return this;
+    default String name() {
+        return "location" + hashCode();
+    }
+
+    /**
+     * <p>
+     * Compute location name.
+     * </p>
+     * 
+     * @return A location name.
+     */
+    default String[] names() {
+        return new String[] {name()};
     }
 }

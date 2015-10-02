@@ -22,7 +22,6 @@ import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import jsx.debug.Profile;
-import jsx.ui.Style.MultiStyle;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
@@ -62,14 +61,16 @@ public abstract class Widget implements Declarable {
      * Render UI {@link Widget} on the specified {@link Element}.
      * </p>
      * 
-     * @param root A target to DOM element to render widget.
+     * @param rootElement A target to DOM element to render widget.
      */
-    public final void renderIn(Element root) {
-        Objects.nonNull(root);
+    public final void renderIn(Element rootElement) {
+        Objects.nonNull(rootElement);
 
         this.root = this;
-        this.virtual = new VirtualElement(0, "div", null);
-        this.virtual.dom = root;
+        this.virtual = new VirtualElement(-1, "init", null);
+        this.virtual.dom = rootElement;
+
+        register(rootElement);
         update();
     }
 
@@ -111,18 +112,25 @@ public abstract class Widget implements Declarable {
         return context;
     }
 
-    /**
-     * @param style
-     */
-    void registerEventListener(Set<Locator> collector, Locatable style, EventTarget target, Object object) {
+    void register(EventTarget target) {
         if (locators != null) {
-            for (int i = 0, length = locators.length(); i < length; i++) {
+            for (int i = 0; i < locators.length(); i++) {
                 Locator locator = locators.get(i);
 
-                for (Locatable locatable : locator.locatables) {
-                    if (locatable == style) {
-                        collector.add(locator);
-                    }
+                for (UIAction action : locator.actions) {
+                    target.addEventListener(action.name, new NativeFunction<UIEvent>(event -> {
+
+                        if (event.target.matches("." + locator.locatable.name() + ", ." + locator.locatable.name() + " *")) {
+                            if (action == UIAction.ClickRight) {
+                                event.preventDefault();
+                            }
+
+                            for (int j = 0, length = locator.observers.length(); j < length; j++) {
+                                locator.observers.get(j).accept(locator.useUIEvent ? event : event.target.property("aa"));
+                            }
+                            return;
+                        }
+                    }));
                 }
             }
         }
@@ -295,7 +303,7 @@ public abstract class Widget implements Declarable {
         private final UIAction[] actions;
 
         /** The actual location. */
-        private Locatable[] locatables;
+        private Locatable locatable;
 
         /** The flag whether listener requires {@link UIEvent} or the context specific object. */
         private boolean useUIEvent;
@@ -336,7 +344,7 @@ public abstract class Widget implements Declarable {
          * @return A user intent {@link Events}.
          */
         public <T> Events<T> at(Locatable locatable, Class<T> type) {
-            this.locatables = locatable instanceof MultiStyle ? ((MultiStyle) locatable).styles : new Locatable[] {locatable};
+            this.locatable = locatable;
             this.useUIEvent = type == UIEvent.class || type == Object.class;
 
             return new Events<T>(observer -> {
@@ -353,28 +361,6 @@ public abstract class Widget implements Declarable {
                     }
                 };
             });
-        }
-
-        /**
-         * <p>
-         * Register event listener to the specified {@link Element}.
-         * </p>
-         * 
-         * @param target An event target.
-         * @param context A context object.
-         */
-        void register(EventTarget target, Object context) {
-            for (UIAction action : actions) {
-                target.addEventListener(action.name, new NativeFunction<UIEvent>(event -> {
-                    if (action == UIAction.ClickRight) {
-                        event.preventDefault();
-                    }
-
-                    for (int i = 0, length = observers.length(); i < length; i++) {
-                        observers.get(i).accept(useUIEvent ? event : context);
-                    }
-                }));
-            }
         }
     }
 }
