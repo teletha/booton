@@ -120,7 +120,12 @@ public abstract class Widget implements Declarable {
                 for (UIAction action : locator.actions) {
                     target.addEventListener(action.name, new NativeFunction<UIEvent>(event -> {
 
-                        if (event.target.matches("." + locator.locatable.name() + ", ." + locator.locatable.name() + " *")) {
+                        if (match(event.target, event.currentTarget, locator.locatable)) {
+                            //
+                            // }
+                            //
+                            // if (event.target.matches("." + locator.locatable.name() + ", ." +
+                            // locator.locatable.name() + " *")) {
                             if (action == UIAction.ClickRight) {
                                 event.preventDefault();
                             }
@@ -134,6 +139,21 @@ public abstract class Widget implements Declarable {
                 }
             }
         }
+    }
+
+    private boolean match(Element from, Element to, Location location) {
+        if (from.locations != null && from.locations.indexOf(location) != -1) {
+            return true;
+        }
+
+        while (from != to) {
+            from = from.parent();
+
+            if (from.locations != null && from.locations.indexOf(location) != -1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
