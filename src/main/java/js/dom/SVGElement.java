@@ -12,7 +12,7 @@ package js.dom;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import js.lang.NativeArray;
-import jsx.ui.Locatable;
+import jsx.ui.Location;
 import jsx.ui.Style;
 
 /**
@@ -107,7 +107,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
      * {@inheritDoc}
      */
     @Override
-    public boolean has(Locatable locatable) {
+    public boolean has(Location locatable) {
         return classes().indexOf(locatable.name()) != -1;
     }
 

@@ -12,7 +12,7 @@ package jsx.ui;
 /**
  * @version 2015/10/03 0:19:01
  */
-public interface Locatable<T> {
+public interface Location<T> {
 
     /**
      * <p>

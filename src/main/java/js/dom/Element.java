@@ -19,7 +19,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 import js.lang.NativeObject;
-import jsx.ui.Locatable;
+import jsx.ui.Location;
 import jsx.ui.Style;
 
 /**
@@ -207,7 +207,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @param style A {@link Style} to check.
      * @return A result.
      */
-    public boolean has(Locatable style) {
+    public boolean has(Location style) {
         return classList().contains(style.name());
     }
 

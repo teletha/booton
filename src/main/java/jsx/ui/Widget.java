@@ -303,7 +303,7 @@ public abstract class Widget implements Declarable {
         private final UIAction[] actions;
 
         /** The actual location. */
-        private Locatable locatable;
+        private Location locatable;
 
         /** The flag whether listener requires {@link UIEvent} or the context specific object. */
         private boolean useUIEvent;
@@ -330,8 +330,8 @@ public abstract class Widget implements Declarable {
          * @param locatable A locator object with the bound context type.
          * @return A user intent {@link Events}.
          */
-        public <T> Events<T> at(Locatable<T> locatable) {
-            return at(locatable, ClassUtil.getParameter(locatable.getClass(), Locatable.class)[0]);
+        public <T> Events<T> at(Location<T> locatable) {
+            return at(locatable, ClassUtil.getParameter(locatable.getClass(), Location.class)[0]);
         }
 
         /**
@@ -343,7 +343,7 @@ public abstract class Widget implements Declarable {
          * @param type A context type.
          * @return A user intent {@link Events}.
          */
-        public <T> Events<T> at(Locatable locatable, Class<T> type) {
+        public <T> Events<T> at(Location locatable, Class<T> type) {
             this.locatable = locatable;
             this.useUIEvent = type == UIEvent.class || type == Object.class;
 

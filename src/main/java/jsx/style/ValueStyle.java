@@ -11,14 +11,14 @@ package jsx.style;
 
 import static jsx.style.ValuedStyle.*;
 
-import jsx.ui.Locatable;
+import jsx.ui.Location;
 import jsx.ui.Style;
 import kiss.I;
 
 /**
  * @version 2015/09/29 10:21:36
  */
-public interface ValueStyle<V> extends Locatable<V> {
+public interface ValueStyle<V> extends Location<V> {
 
     /**
      * <p>

@@ -17,7 +17,7 @@ import js.dom.UIEvent;
 /**
  * @version 2015/09/30 17:37:09
  */
-public interface Style extends Declarable, Locatable<UIEvent> {
+public interface Style extends Declarable, Location<UIEvent> {
 
     /**
      * <p>
