@@ -11,8 +11,8 @@ package jsx.application;
 
 import static js.lang.Global.*;
 import static jsx.application.HeaderStyle.*;
+
 import js.dom.Element;
-import jsx.bwt.Select;
 
 /**
  * @version 2013/07/30 21:32:12
@@ -44,10 +44,6 @@ public class Header {
         return new Menu(item);
     }
 
-    public void add(Select select) {
-
-    }
-
     /**
      * @version 2013/07/30 21:32:24
      */
@@ -57,8 +53,8 @@ public class Header {
         private final Element container;
 
         /**
-     * 
-     */
+        * 
+        */
         private Menu(Element root) {
             this.container = root.child("ul").add(SubMenuGroup);
         }

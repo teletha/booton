@@ -18,7 +18,9 @@ import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.UIAction;
+import js.dom.UIEvent;
 import js.lang.NativeArray;
+import js.lang.NativeFunction;
 import jsx.ui.Widget;
 import kiss.Codec;
 import kiss.I;
@@ -67,9 +69,9 @@ public abstract class Application {
         }
 
         // Activate router system.
-        window.observe(UIAction.HashChange).to(event -> {
+        window.addEventListener(UIAction.HashChange.name, new NativeFunction<UIEvent>(event -> {
             dispatch(location.hash);
-        });
+        }));
     }
 
     /**

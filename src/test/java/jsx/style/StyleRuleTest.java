@@ -29,7 +29,7 @@ public class StyleRuleTest {
         };
 
         StyleRule rule = StyleRule.create("$", style);
-        assert rule.selector.equals("." + style.className());
+        assert rule.selector.equals("." + style.name());
         assert rule.properties.get("display").get().equals("block");
     }
 
@@ -44,12 +44,12 @@ public class StyleRuleTest {
         };
 
         StyleRule rule = StyleRule.create("$", style);
-        assert rule.selector.equals("." + style.className());
+        assert rule.selector.equals("." + style.name());
         assert rule.properties.get("display").get().equals("block");
         assert rule.children.length() == 1;
 
         StyleRule child = rule.children.get(0);
-        assert child.selector.equals("." + style.className() + ":hover");
+        assert child.selector.equals("." + style.name() + ":hover");
         assert child.properties.get("text-decoration").get().equals("underline");
     }
 }

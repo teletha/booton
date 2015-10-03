@@ -9,7 +9,6 @@
  */
 package js.dom;
 
-import static js.dom.ElementStyle.*;
 import static js.lang.Global.*;
 
 import java.util.ArrayList;
@@ -194,10 +193,6 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return Chainable API.
      */
     public Element empty() {
-        for (Element child : getElementsByClassName(EventListenable)) {
-            child.unsubscribe();
-        }
-
         textContent("");
 
         // API definition
@@ -296,11 +291,6 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return
      */
     public Element remove() {
-        for (Element child : getElementsByClassName(EventListenable)) {
-            child.unsubscribe();
-        }
-        unsubscribe();
-
         // parent node exist surely
         Node parent = parent();
 
@@ -412,30 +402,6 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
 
         // API definition
         return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void startListening(Object type) {
-        super.startListening(type);
-
-        if (type == Object.class) {
-            add(EventListenable);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void stopListening(Object type) {
-        super.stopListening(type);
-
-        if (type == Object.class) {
-            remove(EventListenable);
-        }
     }
 
     /**

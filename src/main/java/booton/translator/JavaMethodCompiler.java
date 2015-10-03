@@ -41,10 +41,8 @@ import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
-import jsx.bwt.Input;
 import jsx.ui.StructureDescriptor;
 import kiss.I;
-import kiss.model.ClassUtil;
 
 /**
  * <p>
@@ -1573,26 +1571,8 @@ class JavaMethodCompiler extends MethodVisitor {
             } else {
                 // constructor
                 if (countInitialization != 0) {
-                    if (className.equals(Type.getType(Input.class).getInternalName())) {
-                        String model = "";
-                        String path = contexts.remove(1).toString();
-                        int index = path.indexOf('.', path.startsWith("this.") ? 5 : 0);
-
-                        if (index != -1) {
-                            model = path.substring(0, index);
-                            path = path.substring(index + 1);
-                        }
-                        contexts.add(new OperandExpression(Javascript.computeClass(ClassUtil.wrap(parameters[0]))));
-                        contexts.add(new OperandExpression(model));
-                        contexts.add(new OperandString(path));
-
-                        current.addOperand(translator
-                                .translateConstructor(owner, "(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)V", new Class[] {
-                                        Class.class, Object.class, String.class}, contexts), owner);
-                    } else {
-                        // instance initialization method invocation
-                        current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts), owner);
-                    }
+                    // instance initialization method invocation
+                    current.addOperand(translator.translateConstructor(owner, desc, parameters, contexts), owner);
 
                     countInitialization--;
 
