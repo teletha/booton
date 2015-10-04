@@ -12,9 +12,13 @@ package js.dom;
 import org.junit.Test;
 
 /**
- * @version 2014/11/13 9:36:37
+ * @version 2015/10/04 22:20:00
  */
 public class DOMTokenListTest {
+
+    private static String CSS1 = "class1";
+
+    private static String CSS2 = "class2";
 
     @Test
     public void add() throws Exception {
@@ -145,8 +149,4 @@ public class DOMTokenListTest {
         DOMTokenList list = new EmulateDOMTokenList();
         list.contains("space ");
     }
-
-    private static String CSS1 = "class1";
-
-    private static String CSS2 = "class2";
 }

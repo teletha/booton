@@ -517,6 +517,21 @@ public class StructureDescriptor {
     }
 
     /**
+     * <p>
+     * Define children.
+     * </p>
+     *
+     * @param texts A list of child text contents.
+     */
+    public static Declarable contents(Object... texts) {
+        return () -> {
+            for (Object text : texts) {
+                text(text);
+            }
+        };
+    }
+
+    /**
      * @version 2015/09/15 11:18:03
      */
     public static class SVGPath implements Declarable {

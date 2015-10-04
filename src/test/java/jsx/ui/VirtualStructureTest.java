@@ -9,17 +9,21 @@
  */
 package jsx.ui;
 
+import static jsx.ui.StructureDescriptor.*;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/09/11 14:57:41
+ * @version 2015/10/04 23:56:49
  */
-// @RunWith(ScriptRunner.class)
+@RunWith(ScriptRunner.class)
 public class VirtualStructureTest {
 
     /** Empty style. */
@@ -27,47 +31,35 @@ public class VirtualStructureTest {
     };
 
     @Test
-    public void text() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.〡("text");
+    public void textContents() throws Exception {
+        VirtualWidget root = make(() -> {
+            text("test");
+        });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsText(root.items.get(0), "text");
-    }
-
-    @Test
-    public void texts() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.〡("first", "second");
-
-        VirtualElement root = root〡.getRoot();
-        assert root.items.length() == 2;
-        assertAsText(root.items.get(0), "first");
-        assertAsText(root.items.get(1), "second");
+        assertAsText(root.items.get(0), "test");
     }
 
     @Test
     public void textSequencialCall() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.〡("first");
-        root〡.〡("second");
+        VirtualWidget root = make(() -> {
+            text("first");
+            text("second");
+        });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 2;
         assertAsText(root.items.get(0), "first");
         assertAsText(root.items.get(1), "second");
     }
 
     @Test
-    @Ignore
     public void widgetText() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.〡(widget(sub〡 -> {
-            sub〡.〡("widget text");
-        }));
+        VirtualWidget root = make(() -> {
+            widget(make(Sub1.class, () -> {
+                text("widget text");
+            }));
+        });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
         assertAsElement(root, 0, "widget", c -> {
             assertAsText(c.items.get(0), "widget text");
@@ -76,23 +68,24 @@ public class VirtualStructureTest {
 
     @Test
     public void boxText() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.nbox.〡(style, "text");
+        VirtualWidget root = make(() -> {
+            box(style, contents("text", "contents"));
+        });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
         assertAsElement(root, 0, "span", e -> {
             assertAsText(e.items.get(0), "text");
+            assertAsText(e.items.get(1), "contents");
         });
     }
 
     @Test
     public void boxTextSequentialCall() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.nbox.〡(style, "first");
-        root〡.nbox.〡(style, "second");
+        VirtualWidget root = make(() -> {
+            box(style, contents("first"));
+            box(style, contents("second"));
+        });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 2;
         assertAsElement(root, 0, "span", e -> {
             assertAsText(e.items.get(0), "first");
@@ -104,12 +97,12 @@ public class VirtualStructureTest {
 
     @Test
     public void boxTextNestedCall() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.nbox.〡(style, () -> {
-            root〡.nbox.〡(style, "nested text");
+        VirtualWidget root = make(() -> {
+            box(style, () -> {
+                box(style, contents("nested text"));
+            });
         });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
         assertAsElement(root, 0, "span", e -> {
             assertAsElement(e, 0, "span", text -> {
@@ -120,18 +113,16 @@ public class VirtualStructureTest {
 
     @Test
     public void boxWidgetText() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.nbox.〡(style, widget(sub〡 -> {
-            sub〡.nbox.〡(style, "nested text");
-        }));
+        VirtualWidget root = make(() -> {
+            widget(make(Sub1.class, () -> {
+                box(style, contents("nested text"));
+            }));
+        });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
-        assertAsElement(root, 0, "span", e -> {
-            assertAsElement(e, 0, "widget", w -> {
-                assertAsElement(w, 0, "span", nest -> {
-                    assertAsText(nest.items.get(0), "nested text");
-                });
+        assertAsElement(root, 0, "widget", e -> {
+            assertAsElement(e, 0, "span", nest -> {
+                assertAsText(nest.items.get(0), "nested text");
             });
         });
     }
@@ -140,10 +131,10 @@ public class VirtualStructureTest {
     public void group() throws Exception {
         List<String> items = Arrays.asList("first", "second", "third");
 
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.nbox.〡(style, StringWidget.class, items);
+        VirtualWidget root = make(() -> {
+            box(contents(SubString.class, items));
+        });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
         assertAsElement(root, 0, "span", e -> {
             assert e.items.length() == 3;
@@ -161,12 +152,12 @@ public class VirtualStructureTest {
 
     @Test
     public void range() throws Exception {
-        VirtualStructure root〡 = new VirtualStructure();
-        root〡.nbox.〡(style, 3, i -> {
-            root〡.nbox.〡(style, "text" + i);
+        VirtualWidget root = make(() -> {
+            box(contents(0, 3, i -> {
+                text(style, "text" + i);
+            }));
         });
 
-        VirtualElement root = root〡.getRoot();
         assert root.items.length() == 1;
         assertAsElement(root, 0, "span", e -> {
             assert e.items.length() == 3;
@@ -181,20 +172,6 @@ public class VirtualStructureTest {
                 assertAsText(child.items.get(0), "text2");
             });
         });
-    }
-
-    /**
-     * @version 2014/09/13 12:18:58
-     */
-    private static class StringWidget extends Widget1<String> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
-            $〡.〡(model1);
-        }
     }
 
     /**
@@ -251,36 +228,66 @@ public class VirtualStructureTest {
 
     /**
      * <p>
-     * Helper method to create widget.
+     * Create {@link VirtualWidget}.
      * </p>
      * 
-     * @param dsl
+     * @param writer
      * @return
      */
-    private static Widget widget(Consumer<VirtualStructure> dsl) {
-        return new WidgetDelegator(dsl);
+    protected final VirtualWidget make(Runnable writer) {
+        return createWidget(0, make(DSLWidget.class, writer));
     }
 
     /**
-     * @version 2014/09/13 2:07:14
+     * <p>
+     * Create sub widget with DSL.
+     * </p>
+     * 
+     * @param type
+     * @param dsl
+     * @return
      */
-    private static class WidgetDelegator extends Widget {
+    protected final Widget make(Class<? extends DSLWidget> type, Runnable dsl) {
+        DSLWidget widget = Widget.of(type);
+        widget.dsl = dsl;
 
-        private final Consumer<VirtualStructure> delegator;
+        return widget;
+    }
 
-        /**
-         * @param delegator
-         */
-        private WidgetDelegator(Consumer<VirtualStructure> delegator) {
-            this.delegator = delegator;
-        }
+    /**
+     * @version 2015/10/04 22:38:07
+     */
+    private static class DSLWidget extends Widget {
+
+        /** The actual dsl. */
+        private Runnable dsl;
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected void virtualize() {
-            delegator.accept($〡);
+            dsl.run();
+        }
+    }
+
+    /**
+     * @version 2015/10/04 23:32:12
+     */
+    private static class Sub1 extends DSLWidget {
+    }
+
+    /**
+     * @version 2015/10/04 23:50:43
+     */
+    private static class SubString extends Widget1<String> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
+            text(model1);
         }
     }
 }
