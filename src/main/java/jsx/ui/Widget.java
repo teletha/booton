@@ -14,6 +14,7 @@ import static js.lang.Global.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import js.dom.Element;
 import js.dom.EventTarget;
@@ -32,6 +33,9 @@ import kiss.Observer;
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public abstract class Widget implements Declarable {
+
+    /** The property key to store context object. */
+    static final String CONTEXT_KEY = EventContext.class.getName();
 
     static {
         I.load(Widget.class, true);
@@ -124,25 +128,7 @@ public abstract class Widget implements Declarable {
                 EventContext context = locators.get(i);
 
                 for (UIAction action : context.actions) {
-                    target.addEventListener(action.name, new NativeFunction<UIEvent>(event -> {
-                        String name = context.name;
-                        Element current = event.target;
-                        Element limit = event.currentTarget;
-
-                        if (current.has(name)) {
-                            context.fire(action, event, current);
-                            return;
-                        } else {
-                            while (current != limit) {
-                                current = current.parent();
-
-                                if (current.has(name)) {
-                                    context.fire(action, event, current);
-                                    return;
-                                }
-                            }
-                        }
-                    }));
+                    target.addEventListener(action.name, context.listener);
                 }
             }
         }
@@ -309,10 +295,13 @@ public abstract class Widget implements Declarable {
     /**
      * @version 2015/10/04 14:43:31
      */
-    private static class EventContext implements Locator {
+    private static class EventContext implements Locator, Consumer<UIEvent> {
 
         /** The action types. */
         private final UIAction[] actions;
+
+        /** The re-usable native event listener. */
+        private final NativeFunction<UIEvent> listener;
 
         /** The location name. */
         private String name;
@@ -332,6 +321,7 @@ public abstract class Widget implements Declarable {
          */
         private EventContext(UIAction... actions) {
             this.actions = actions;
+            this.listener = new NativeFunction(this).bind(this);
         }
 
         /**
@@ -359,21 +349,43 @@ public abstract class Widget implements Declarable {
         }
 
         /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(UIEvent event) {
+            Element current = event.target;
+            Element limit = event.currentTarget;
+
+            if (current.has(name)) {
+                fire(event, current);
+                return;
+            } else {
+                while (current != limit) {
+                    current = current.parent();
+
+                    if (current.has(name)) {
+                        fire(event, current);
+                        return;
+                    }
+                }
+            }
+        }
+
+        /**
          * <p>
          * Invoke actual event listeners.
          * </p>
          * 
-         * @param action
          * @param event
          * @param element
          */
-        private void fire(UIAction action, UIEvent event, Element element) {
-            if (action == UIAction.ClickRight) {
+        private void fire(UIEvent event, Element element) {
+            if (UIAction.ClickRight.name.equals(event.type)) {
                 event.preventDefault();
             }
 
             for (int i = 0, length = observers.length(); i < length; i++) {
-                observers.get(i).accept(useUIEvent ? event : element.property("aa"));
+                observers.get(i).accept(useUIEvent ? event : element.property(CONTEXT_KEY));
             }
         }
     }

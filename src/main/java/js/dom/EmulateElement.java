@@ -19,7 +19,7 @@ import kiss.I;
 import kiss.XML;
 
 /**
- * @version 2014/08/31 13:35:05
+ * @version 2015/10/04 22:06:26
  */
 class EmulateElement extends Element implements EmulateNodable {
 
@@ -395,7 +395,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public DOMTokenList classList() {
+    protected DOMTokenList classList() {
         return attributes.classes;
     }
 
@@ -419,7 +419,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public Element firstElementChild() {
+    protected Element firstElementChild() {
         for (int i = 0; i < nodes.size(); i++) {
             Node node = nodes.getNode(i);
 
@@ -434,7 +434,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public Element lastElementChild() {
+    protected Element lastElementChild() {
         for (int i = nodes.size() - 1; 0 <= i; i--) {
             Node node = nodes.getNode(i);
 
@@ -525,7 +525,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public NodeList<Element> getElementsByClassName(Style className) {
+    protected NodeList<Element> getElementsByClassName(Style className) {
         return new ByClassNameCollection(className);
     }
 
@@ -533,7 +533,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public Element querySelector(String selector) {
+    protected Element querySelector(String selector) {
         NodeList<Element> query = querySelectorAll(selector);
 
         if (query.length() == 0) {
@@ -546,7 +546,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public NodeList<Element> querySelectorAll(String selector) {
+    protected NodeList<Element> querySelectorAll(String selector) {
         return new JavaNonLiveNodeList(I.xml(new JavaElement(this)).find(selector));
     }
 
@@ -554,7 +554,7 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(String selector) {
+    protected boolean matches(String selector) {
         Element root = this;
 
         while (root.parent() != null) {

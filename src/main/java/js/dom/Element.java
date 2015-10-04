@@ -19,7 +19,6 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
 import js.lang.NativeObject;
-import jsx.ui.Location;
 import jsx.ui.Style;
 
 /**
@@ -27,7 +26,7 @@ import jsx.ui.Style;
  * Enhanced {@link org.w3c.dom.Element} for web platform.
  * </p>
  * 
- * @version 2013/07/30 19:05:51
+ * @version 2015/10/04 22:02:52
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "Element")
 public abstract class Element extends Node<Element>implements JavascriptNative {
@@ -76,34 +75,8 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @param name The name of the attribute to get.
      * @return The specified attribute value.
      */
-    public Object property(String name) {
-        return ((NativeObject) (Object) this).getProperty(name);
-    }
-
-    /**
-     * <p>
-     * Get the value of the specified attribute.
-     * </p>
-     * 
-     * @param name The name of the attribute to get.
-     * @return The specified attribute value.
-     */
-    public Element property(String name, Object value) {
-        ((NativeObject) (Object) this).setProperty(name, value);
-
-        return this;
-    }
-
-    /**
-     * <p>
-     * Get the value of the specified attribute.
-     * </p>
-     * 
-     * @param name The name of the attribute to get.
-     * @return The specified attribute value.
-     */
     public String attr(String name) {
-        return String.valueOf(((NativeObject) (Object) this).getProperty(name));
+        return String.valueOf(property(name));
     }
 
     /**
@@ -116,9 +89,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return A chainable API.
      */
     public Element attr(String name, Object value) {
-        ((NativeObject) (Object) this).setProperty(name, value);
-
-        return this;
+        return property(name, value);
     }
 
     /**
@@ -219,8 +190,8 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @param style A {@link Style} to check.
      * @return A result.
      */
-    public boolean has(Location style) {
-        return classList().contains(style.name());
+    public boolean has(Style style) {
+        return has(style.name());
     }
 
     /**
@@ -231,7 +202,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @param styles A list of {@link Style} to check.
      * @return A result.
      */
-    public boolean has(Style... styles) {
+    public final boolean has(Style... styles) {
         for (Style style : styles) {
             if (!has(style)) {
                 return false;
@@ -292,6 +263,33 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      */
     public Element prev() {
         return nextElementSibling();
+    }
+
+    /**
+     * <p>
+     * Get the specified property.
+     * </p>
+     * 
+     * @param name The name of the property to get.
+     * @return The specified property value.
+     */
+    public Object property(String name) {
+        return ((NativeObject) (Object) this).getProperty(name);
+    }
+
+    /**
+     * <p>
+     * Set the specified property for this element.
+     * </p>
+     * 
+     * @param name An property name.
+     * @param value An property value.
+     * @return A chainable API.
+     */
+    public Element property(String name, Object value) {
+        ((NativeObject) (Object) this).setProperty(name, value);
+
+        return this;
     }
 
     /**
@@ -478,7 +476,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return
      */
     @JavascriptNativePropertyAccessor()
-    public abstract DOMTokenList classList();
+    protected abstract DOMTokenList classList();
 
     /**
      * <p>
@@ -510,7 +508,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return The first child that is an element, and null otherwise.
      */
     @JavascriptNativePropertyAccessor
-    public abstract Element firstElementChild();
+    protected abstract Element firstElementChild();
 
     /**
      * <p>
@@ -520,7 +518,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return The last child that is an element, and null otherwise.
      */
     @JavascriptNativePropertyAccessor
-    public abstract Element lastElementChild();
+    protected abstract Element lastElementChild();
 
     /**
      * <p>
@@ -658,7 +656,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return
      */
     @JavascriptNativeProperty
-    public native Element querySelector(String selector);
+    protected native Element querySelector(String selector);
 
     /**
      * <p>
@@ -670,7 +668,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return
      */
     @JavascriptNativeProperty
-    public native NodeList<Element> querySelectorAll(String selector);
+    protected native NodeList<Element> querySelectorAll(String selector);
 
     /**
      * <p>
@@ -682,7 +680,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return A result.
      */
     @JavascriptNativeProperty
-    public native boolean matches(String selector);
+    protected native boolean matches(String selector);
 
     /**
      * <p>
@@ -696,7 +694,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return A HTMLCollection of found elements.
      */
     @JavascriptNativeProperty
-    public abstract NodeList<Element> getElementsByClassName(Style className);
+    protected abstract NodeList<Element> getElementsByClassName(Style className);
 
     /**
      * <p>
@@ -712,7 +710,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      *         appear in the tree.
      */
     @JavascriptNativeProperty
-    public final native NodeList<Element> getElementsByTagName(String tagName);
+    protected final native NodeList<Element> getElementsByTagName(String tagName);
 
     /**
      * <p>
@@ -724,7 +722,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      *         in the document.
      */
     @JavascriptNativeProperty
-    public final native Element getElementById(String id);
+    protected final native Element getElementById(String id);
 
     /**
      * <p>
@@ -732,6 +730,6 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * </p>
      */
     @JavascriptNativeProperty
-    public final native void scrollIntoView();
+    protected final native void scrollIntoView();
 
 }

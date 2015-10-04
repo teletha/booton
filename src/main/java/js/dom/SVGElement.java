@@ -15,7 +15,7 @@ import js.lang.NativeArray;
 import jsx.ui.Style;
 
 /**
- * @version 2015/09/30 14:06:23
+ * @version 2015/10/04 22:06:31
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "SVGElement")
 public abstract class SVGElement extends Element implements JavascriptNative {

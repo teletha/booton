@@ -86,7 +86,7 @@ class VirtualElement extends VirtualNode<Element> {
         for (int i = 0, length = classList.length(); i < length; i++) {
             dom.add(classList.get(i));
         }
-        dom.property("aa", context);
+        dom.property(Widget.CONTEXT_KEY, context);
 
         // assign children nodes
         for (int i = 0, length = items.length(); i < length; i++) {
