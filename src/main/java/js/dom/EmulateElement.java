@@ -10,8 +10,10 @@
 package js.dom;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import js.lang.NativeFunction;
 import jsx.ui.Style;
@@ -19,7 +21,7 @@ import kiss.I;
 import kiss.XML;
 
 /**
- * @version 2015/10/04 22:06:26
+ * @version 2015/10/05 0:05:55
  */
 class EmulateElement extends Element implements EmulateNodable {
 
@@ -28,6 +30,9 @@ class EmulateElement extends Element implements EmulateNodable {
 
     /** The original element name. */
     final String nameOriginal;
+
+    /** The element namespace. */
+    private final String ns;
 
     /** The element name. */
     private final String name;
@@ -50,6 +55,9 @@ class EmulateElement extends Element implements EmulateNodable {
     /** The form value. */
     private String value;
 
+    /** The property holder. */
+    private Map<String, Object> properties = new HashMap();
+
     /**
      * 
      */
@@ -65,7 +73,19 @@ class EmulateElement extends Element implements EmulateNodable {
      * @param name
      */
     public EmulateElement(String name) {
+        this("", name);
+    }
+
+    /**
+     * <p>
+     * Create new element.
+     * </p>
+     * 
+     * @param name
+     */
+    public EmulateElement(String ns, String name) {
         this.nameOriginal = name;
+        this.ns = ns;
         this.name = name.toUpperCase();
     }
 
@@ -111,6 +131,24 @@ class EmulateElement extends Element implements EmulateNodable {
         setAttributeNS(namespace, name, String.valueOf(value));
 
         // API definition
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object property(String name) {
+        return properties.get(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element property(String name, Object value) {
+        properties.put(name, value);
+
         return this;
     }
 

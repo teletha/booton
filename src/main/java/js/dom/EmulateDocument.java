@@ -17,7 +17,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 
 /**
- * @version 2013/07/12 20:39:00
+ * @version 2015/10/05 0:05:50
  */
 @Manageable(lifestyle = Singleton.class)
 class EmulateDocument extends Document {
@@ -178,6 +178,14 @@ class EmulateDocument extends Document {
     @Override
     public Element createElement(String name) {
         return new EmulateElement(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element createElementNS(String ns, String name) {
+        return new EmulateElement(ns, name);
     }
 
     /**
