@@ -16,7 +16,7 @@ import js.lang.NativeArray;
 import jsx.collection.DualList;
 
 /**
- * @version 2014/10/07 12:49:29
+ * @version 2015/10/04 22:16:29
  */
 class VirtualElement extends VirtualNode<Element> {
 
@@ -77,8 +77,11 @@ class VirtualElement extends VirtualNode<Element> {
         // create DOM
         dom = document.createElementNS(ns, name);
 
+        // assign context object
+        dom.property(Widget.CONTEXT_KEY, context);
+
         // assign attributes
-        for (int i = 0; i < attributes.size(); i++) {
+        for (int i = 0, length = attributes.size(); i < length; i++) {
             dom.attr(attributes.key(i), attributes.value(i));
         }
 
@@ -86,7 +89,6 @@ class VirtualElement extends VirtualNode<Element> {
         for (int i = 0, length = classList.length(); i < length; i++) {
             dom.add(classList.get(i));
         }
-        dom.property(Widget.CONTEXT_KEY, context);
 
         // assign children nodes
         for (int i = 0, length = items.length(); i < length; i++) {

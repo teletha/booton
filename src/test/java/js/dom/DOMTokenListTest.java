@@ -11,8 +11,6 @@ package js.dom;
 
 import org.junit.Test;
 
-import jsx.ui.Style;
-
 /**
  * @version 2014/11/13 9:36:37
  */
@@ -67,9 +65,6 @@ public class DOMTokenListTest {
 
         list.add((String) null);
         assert list.contains("null");
-
-        list.add((Style) null);
-        assert list.contains("null");
     }
 
     @Test(expected = EmulateDOMError.class)
@@ -100,8 +95,6 @@ public class DOMTokenListTest {
     public void removeNull() throws Exception {
         DOMTokenList list = new EmulateDOMTokenList();
         list.remove((String) null);
-        list.remove((Style) null);
-
         // no error
     }
 
@@ -153,9 +146,7 @@ public class DOMTokenListTest {
         list.contains("space ");
     }
 
-    private static Style CSS1 = () -> {
-    };
+    private static String CSS1 = "class1";
 
-    private static Style CSS2 = () -> {
-    };
+    private static String CSS2 = "class2";
 }
