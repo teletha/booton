@@ -178,14 +178,7 @@ public class StructureDescriptor {
      * @param texts A list of text contents.
      */
     private static void text(int id, Style style, Object... texts) {
-        element(id, HTML, "span", new Declarable[] {style}, () -> {
-            NativeString values = new NativeString();
-
-            for (Object text : texts) {
-                values = values.concat(String.valueOf(text));
-            }
-            latestElement.items.push(new VirtualText(values.toString()));
-        });
+        element(id, HTML, "span", style, contents(texts));
     }
 
     /**
@@ -559,9 +552,7 @@ public class StructureDescriptor {
      */
     public static Declarable contents(Object... texts) {
         return () -> {
-            for (Object text : texts) {
-                text(text);
-            }
+            text(texts);
         };
     }
 

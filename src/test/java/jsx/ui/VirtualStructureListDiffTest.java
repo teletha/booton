@@ -9,6 +9,8 @@
  */
 package jsx.ui;
 
+import static jsx.ui.StructureDescriptor.*;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,14 +21,10 @@ import booton.sample.Person;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/09/13 14:10:28
+ * @version 2015/10/05 0:54:19
  */
 @RunWith(ScriptRunner.class)
 public class VirtualStructureListDiffTest extends DiffTestBase {
-
-    /** Empty style. */
-    private static final Style style = () -> {
-    };
 
     @Test
     public void add() {
@@ -58,28 +56,13 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
 
         person.setName("Yukina");
         person.setAge(14);
-        VirtualStructure prev = bean(person);
+        VirtualWidget prev = bean(person);
 
         person.setName("Asagi");
         person.setAge(15);
-        VirtualStructure next = bean(person);
+        VirtualWidget next = bean(person);
 
         assertDiff(prev, next, 2);
-    }
-
-    @Test
-    public void changeBeanObject() {
-        Person person = new Person();
-        person.setName("Yukina");
-        person.setAge(14);
-        VirtualStructure prev = bean(person);
-
-        person = new Person();
-        person.setName("Asagi");
-        person.setAge(15);
-        VirtualStructure next = bean(person);
-
-        assertDiff(prev, next, 1);
     }
 
     /**
@@ -90,15 +73,14 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure single(List<String> items) {
-        VirtualStructure $〡 = new VirtualStructure();
-        $〡.nbox.〡(style, SingleBox.class, items);
-
-        return $〡;
+    private <T> VirtualWidget single(List<String> items) {
+        return make(() -> {
+            box(style, contents(SingleBox.class, items));
+        });
     }
 
     /**
-     * @version 2014/09/13 14:11:31
+     * @version 2015/10/05 0:48:29
      */
     private static class SingleBox extends Widget1<String> {
 
@@ -107,7 +89,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          */
         @Override
         protected void virtualize() {
-            $〡.nbox.〡(style, model1);
+            text(style, model1);
         }
     }
 
@@ -115,19 +97,18 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * <p>
      * Create structure for multi box list.
      * </p>
-     * 
+     *
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure multi(List<String> items) {
-        VirtualStructure $〡 = new VirtualStructure();
-        $〡.nbox.〡(style, MultiBox.class, items);
-
-        return $〡;
+    private <T> VirtualWidget multi(List<String> items) {
+        return make(() -> {
+            box(style, contents(MultiBox.class, items));
+        });
     }
 
     /**
-     * @version 2014/09/13 14:11:31
+     * @version 2015/10/05 0:50:19
      */
     private static class MultiBox extends Widget1<String> {
 
@@ -136,8 +117,8 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          */
         @Override
         protected void virtualize() {
-            $〡.nbox.〡(style, model1 + "1");
-            $〡.nbox.〡(style, model1 + "2");
+            text(style, model1 + "1");
+            text(style, model1 + "2");
         }
     }
 
@@ -145,19 +126,18 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * <p>
      * Create structure for nest box list.
      * </p>
-     * 
+     *
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure nest(List<String> items) {
-        VirtualStructure $〡 = new VirtualStructure();
-        $〡.nbox.〡(style, NestBox.class, items);
-
-        return $〡;
+    private <T> VirtualWidget nest(List<String> items) {
+        return make(() -> {
+            box(style, contents(NestBox.class, items));
+        });
     }
 
     /**
-     * @version 2014/09/13 14:11:31
+     * @version 2015/10/05 0:51:22
      */
     private static class NestBox extends Widget1<String> {
 
@@ -168,8 +148,8 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
         protected void virtualize() {
             List<String> items = Arrays.asList(model1 + "A", model1 + "B");
 
-            $〡.nbox.〡(style, SingleBox.class, items);
-            $〡.nbox.〡(style, SingleBox.class, items);
+            box(style, contents(SingleBox.class, items));
+            box(style, contents(SingleBox.class, items));
         }
     }
 
@@ -177,11 +157,11 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * <p>
      * Create structure for bean box list.
      * </p>
-     * 
+     *
      * @param item A bean item.
      * @return A created structure.
      */
-    private <T> VirtualStructure bean(Person item) {
+    private <T> VirtualWidget bean(Person item) {
         return bean(Arrays.asList(item));
     }
 
@@ -189,19 +169,18 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
      * <p>
      * Create structure for bean box list.
      * </p>
-     * 
+     *
      * @param items A list items.
      * @return A created structure.
      */
-    private <T> VirtualStructure bean(List<Person> items) {
-        VirtualStructure $〡 = new VirtualStructure();
-        $〡.nbox.〡(style, PersonBox.class, items);
-
-        return $〡;
+    private <T> VirtualWidget bean(List<Person> items) {
+        return make(() -> {
+            box(style, contents(PersonBox.class, items));
+        });
     }
 
     /**
-     * @version 2014/09/13 14:11:31
+     * @version 2015/10/05 0:53:14
      */
     private static class PersonBox extends Widget1<Person> {
 
@@ -210,7 +189,7 @@ public class VirtualStructureListDiffTest extends DiffTestBase {
          */
         @Override
         protected void virtualize() {
-            $〡.nbox.〡(style, model1.getName(), " is ", model1.getAge(), " years old.");
+            text(style, model1.getName(), " is ", model1.getAge(), " years old.");
         }
     }
 }

@@ -81,7 +81,6 @@ public class DiffTestBase {
         }
 
         String message = message(prevNode, nextNode, ops, ops.size());
-
         assert expectedOperationCount == ops.size() : message;
 
         try {
