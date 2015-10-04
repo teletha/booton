@@ -36,7 +36,7 @@ class VirtualWidget extends VirtualElement {
     Element materialize() {
         Element element = super.materialize();
 
-        widget.register(dom);
+        widget.initializeEventListeners(dom);
 
         return element;
     }

@@ -26,7 +26,6 @@ import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Observer;
-import kiss.model.ClassUtil;
 
 /**
  * @version 2015/09/27 11:52:23
@@ -51,7 +50,7 @@ public abstract class Widget implements Declarable {
     protected Widget root;
 
     /** The event context holder. */
-    private NativeArray<Locator> locators;
+    private NativeArray<EventContext> locators;
 
     /** The virtual root element. */
     private VirtualElement virtual;
@@ -70,7 +69,7 @@ public abstract class Widget implements Declarable {
         this.virtual = new VirtualElement(-1, "init", null);
         this.virtual.dom = rootElement;
 
-        register(rootElement);
+        initializeEventListeners(rootElement);
         update();
     }
 
@@ -101,7 +100,7 @@ public abstract class Widget implements Declarable {
      * @return A location descriptor.
      */
     protected final Locator when(UIAction... actionTypes) {
-        Locator context = new Locator(actionTypes);
+        EventContext context = new EventContext(actionTypes);
 
         if (locators == null) {
             locators = new NativeArray();
@@ -112,48 +111,41 @@ public abstract class Widget implements Declarable {
         return context;
     }
 
-    void register(EventTarget target) {
+    /**
+     * <p>
+     * Initialize event listeners on this {@link Widget}.
+     * </p>
+     * 
+     * @param target A event target.
+     */
+    void initializeEventListeners(EventTarget target) {
         if (locators != null) {
             for (int i = 0; i < locators.length(); i++) {
-                Locator locator = locators.get(i);
+                EventContext context = locators.get(i);
 
-                for (UIAction action : locator.actions) {
+                for (UIAction action : context.actions) {
                     target.addEventListener(action.name, new NativeFunction<UIEvent>(event -> {
+                        String name = context.name;
+                        Element current = event.target;
+                        Element limit = event.currentTarget;
 
-                        if (match(event.target, event.currentTarget, locator.locatable)) {
-                            //
-                            // }
-                            //
-                            // if (event.target.matches("." + locator.locatable.name() + ", ." +
-                            // locator.locatable.name() + " *")) {
-                            if (action == UIAction.ClickRight) {
-                                event.preventDefault();
-                            }
-
-                            for (int j = 0, length = locator.observers.length(); j < length; j++) {
-                                locator.observers.get(j).accept(locator.useUIEvent ? event : event.target.property("aa"));
-                            }
+                        if (current.has(name)) {
+                            context.fire(action, event, current);
                             return;
+                        } else {
+                            while (current != limit) {
+                                current = current.parent();
+
+                                if (current.has(name)) {
+                                    context.fire(action, event, current);
+                                    return;
+                                }
+                            }
                         }
                     }));
                 }
             }
         }
-    }
-
-    private boolean match(Element from, Element to, Location location) {
-        if (from.locations != null && from.locations.indexOf(location) != -1) {
-            return true;
-        }
-
-        while (from != to) {
-            from = from.parent();
-
-            if (from.locations != null && from.locations.indexOf(location) != -1) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -315,15 +307,15 @@ public abstract class Widget implements Declarable {
     }
 
     /**
-     * @version 2015/09/27 11:02:28
+     * @version 2015/10/04 14:43:31
      */
-    public static class Locator {
+    private static class EventContext implements Locator {
 
         /** The action types. */
         private final UIAction[] actions;
 
-        /** The actual location. */
-        private Location locatable;
+        /** The location name. */
+        private String name;
 
         /** The flag whether listener requires {@link UIEvent} or the context specific object. */
         private boolean useUIEvent;
@@ -336,35 +328,18 @@ public abstract class Widget implements Declarable {
          * Setup {@link Events} context.
          * </p>
          * 
-         * @param actions
+         * @param actions A list of event types.
          */
-        private Locator(UIAction... actions) {
+        private EventContext(UIAction... actions) {
             this.actions = actions;
         }
 
         /**
-         * <p>
-         * Locate the specified point in {@link Widget}.
-         * </p>
-         * 
-         * @param locatable A locator object with the bound context type.
-         * @return A user intent {@link Events}.
+         * {@inheritDoc}
          */
-        public <T> Events<T> at(Location<T> locatable) {
-            return at(locatable, ClassUtil.getParameter(locatable.getClass(), Location.class)[0]);
-        }
-
-        /**
-         * <p>
-         * Locate the specified point in {@link Widget}.
-         * </p>
-         * 
-         * @param locatable A locator object.
-         * @param type A context type.
-         * @return A user intent {@link Events}.
-         */
+        @Override
         public <T> Events<T> at(Location locatable, Class<T> type) {
-            this.locatable = locatable;
+            this.name = locatable.name();
             this.useUIEvent = type == UIEvent.class || type == Object.class;
 
             return new Events<T>(observer -> {
@@ -381,6 +356,25 @@ public abstract class Widget implements Declarable {
                     }
                 };
             });
+        }
+
+        /**
+         * <p>
+         * Invoke actual event listeners.
+         * </p>
+         * 
+         * @param action
+         * @param event
+         * @param element
+         */
+        private void fire(UIAction action, UIEvent event, Element element) {
+            if (action == UIAction.ClickRight) {
+                event.preventDefault();
+            }
+
+            for (int i = 0, length = observers.length(); i < length; i++) {
+                observers.get(i).accept(useUIEvent ? event : element.property("aa"));
+            }
         }
     }
 }

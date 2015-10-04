@@ -201,6 +201,18 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
 
     /**
      * <p>
+     * Determine whether this element has the specified class name or not.
+     * </p>
+     * 
+     * @param className A class name to check.
+     * @return A result.
+     */
+    public boolean has(String className) {
+        return classList().contains(className);
+    }
+
+    /**
+     * <p>
      * Determine whether this element has the specified {@link Style} or not.
      * </p>
      * 

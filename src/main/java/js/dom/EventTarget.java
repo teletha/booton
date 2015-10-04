@@ -11,7 +11,6 @@ package js.dom;
 
 import booton.translator.JavascriptNative;
 import js.lang.NativeFunction;
-import jsx.ui.Locatable;
 
 /**
  * <p>
@@ -20,7 +19,7 @@ import jsx.ui.Locatable;
  * 
  * @version 2015/10/03 9:50:23
  */
-public abstract class EventTarget<T extends EventTarget<T>> extends Locatable implements JavascriptNative {
+public abstract class EventTarget<T extends EventTarget<T>> implements JavascriptNative {
 
     /**
      * <p>
