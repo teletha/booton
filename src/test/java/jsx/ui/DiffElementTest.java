@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2014/09/05 9:24:53
+ * @version 2015/10/05 0:13:16
  */
 @RunWith(ScriptRunner.class)
 public class DiffElementTest extends DiffTestBase {

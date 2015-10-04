@@ -24,11 +24,7 @@ import booton.soeur.ScriptRunner;
  * @version 2015/10/04 23:56:49
  */
 @RunWith(ScriptRunner.class)
-public class VirtualStructureTest {
-
-    /** Empty style. */
-    private static final Style style = () -> {
-    };
+public class StructureDescriptorTest extends DiffTestBase {
 
     @Test
     public void textContents() throws Exception {
@@ -224,51 +220,6 @@ public class VirtualStructureTest {
         int index = virtual.attributes.key(name);
         assert index != -1;
         assert virtual.attributes.value(index).equals(value);
-    }
-
-    /**
-     * <p>
-     * Create {@link VirtualWidget}.
-     * </p>
-     * 
-     * @param writer
-     * @return
-     */
-    protected final VirtualWidget make(Runnable writer) {
-        return createWidget(0, make(DSLWidget.class, writer));
-    }
-
-    /**
-     * <p>
-     * Create sub widget with DSL.
-     * </p>
-     * 
-     * @param type
-     * @param dsl
-     * @return
-     */
-    protected final Widget make(Class<? extends DSLWidget> type, Runnable dsl) {
-        DSLWidget widget = Widget.of(type);
-        widget.dsl = dsl;
-
-        return widget;
-    }
-
-    /**
-     * @version 2015/10/04 22:38:07
-     */
-    private static class DSLWidget extends Widget {
-
-        /** The actual dsl. */
-        private Runnable dsl;
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
-            dsl.run();
-        }
     }
 
     /**

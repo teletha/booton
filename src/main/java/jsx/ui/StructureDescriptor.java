@@ -127,22 +127,56 @@ public class StructureDescriptor {
         return virtualize;
     }
 
-    public static void text(Object text) {
-        text(LocalId.findContextLineNumber(), text);
+    /**
+     * <p>
+     * Declare text contents.
+     * </p>
+     * 
+     * @param text A list of text contents.
+     */
+    public static void text(Object... texts) {
+        text(LocalId.findContextLineNumber(), texts);
     }
 
-    private static void text(int id, Object text) {
-        if ("\r\n".equals(text)) {
-            latestElement.items.push(new VirtualElement(id, "br", latestWidget));
-        } else {
-            latestElement.items.push(new VirtualText(String.valueOf(text)));
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param id A content id.
+     * @param text A content to append.
+     */
+    private static void text(int id, Object... texts) {
+        for (Object text : texts) {
+            if ("\r\n".equals(text)) {
+                latestElement.items.push(new VirtualElement(id, "br", latestWidget));
+            } else {
+                latestElement.items.push(new VirtualText(String.valueOf(text)));
+            }
         }
     }
 
+    /**
+     * <p>
+     * Declare text contents with the specified {@link Style} container.
+     * </p>
+     * 
+     * @param style A style of the parent container.
+     * @param texts A list of text contents.
+     */
     public static void text(Style style, Object... texts) {
         text(LocalId.findContextLineNumber(), style, texts);
     }
 
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param id A container id.
+     * @param style A style of the parent container.
+     * @param texts A list of text contents.
+     */
     private static void text(int id, Style style, Object... texts) {
         element(id, HTML, "span", new Declarable[] {style}, () -> {
             NativeString values = new NativeString();

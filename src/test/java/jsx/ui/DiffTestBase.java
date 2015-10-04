@@ -9,29 +9,49 @@
  */
 package jsx.ui;
 
+import static jsx.ui.StructureDescriptor.*;
+
 import java.util.List;
 
 import js.dom.Node;
 import js.dom.NodeComparator;
 
 /**
- * @version 2014/10/03 2:37:24
+ * @version 2015/10/05 0:15:02
  */
 public class DiffTestBase {
 
-    // /**
-    // * <p>
-    // * Assert structure diff.
-    // * </p>
-    // *
-    // * @param prev
-    // * @param next
-    // * @param expectedOperationCount
-    // */
-    // protected void assertDiff(VirtualStructure prev, VirtualStructure next, int
-    // expectedOperationCount) {
-    // assertDiff(prev.getRoot(), next.getRoot(), expectedOperationCount);
-    // }
+    /** Empty style. */
+    protected static final Style style = () -> {
+    };
+
+    /**
+     * <p>
+     * Create {@link VirtualWidget}.
+     * </p>
+     * 
+     * @param writer
+     * @return
+     */
+    protected final VirtualWidget make(Runnable writer) {
+        return createWidget(0, make(DSLWidget.class, writer));
+    }
+
+    /**
+     * <p>
+     * Create sub widget with DSL.
+     * </p>
+     * 
+     * @param type
+     * @param dsl
+     * @return
+     */
+    protected final Widget make(Class<? extends DSLWidget> type, Runnable dsl) {
+        DSLWidget widget = Widget.of(type);
+        widget.dsl = dsl;
+
+        return widget;
+    }
 
     /**
      * <p>
@@ -42,7 +62,7 @@ public class DiffTestBase {
      * @param next
      * @param expectedOperationCount
      */
-    protected void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
+    protected final void assertDiff(VirtualElement prev, VirtualElement next, int expectedOperationCount) {
         Node prevNode = prev.dom != null ? prev.dom : prev.materialize();
         Node nextNode = next.dom != null ? next.dom : next.materialize();
         clean(next);
@@ -120,5 +140,22 @@ public class DiffTestBase {
             }
         }
         return message.toString();
+    }
+
+    /**
+     * @version 2015/10/04 22:38:07
+     */
+    protected static class DSLWidget extends Widget {
+
+        /** The actual dsl. */
+        private Runnable dsl;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
+            dsl.run();
+        }
     }
 }

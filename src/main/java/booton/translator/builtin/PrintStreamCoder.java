@@ -114,7 +114,7 @@ public class PrintStreamCoder extends Translator<PrintStream> {
      * Prints a string. If the argument is <code>null</code> then the string <code>"null"</code> is
      * printed. Otherwise, the string's characters are converted into bytes according to the
      * platform's default character encoding, and these bytes are written in exactly the manner of
-     * the <code>{@link #make(int)}</code> method.
+     * the <code>{@link #write(int)}</code> method.
      * 
      * @param s The <code>String</code> to be printed
      */
@@ -152,9 +152,9 @@ public class PrintStreamCoder extends Translator<PrintStream> {
      * @throws java.util.IllegalFormatException If a format string contains an illegal syntax, a
      *             format specifier that is incompatible with the given arguments, insufficient
      *             arguments given the format string, or other illegal conditions. For specification
-     *             of all possible formatting errors, see the <a
-     *             href="../util/Formatter.html#detail">Details</a> section of the formatter class
-     *             specification.
+     *             of all possible formatting errors, see the
+     *             <a href="../util/Formatter.html#detail">Details</a> section of the formatter
+     *             class specification.
      * @throws NullPointerException If the <tt>format</tt> is <tt>null</tt>
      * @return This output stream
      * @since 1.5
