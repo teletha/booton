@@ -9,14 +9,12 @@
  */
 package jsx.ui.samaple.todo;
 
-import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.ui.BindingHelper;
 import kiss.I;
 
 /**

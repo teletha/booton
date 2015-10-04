@@ -30,7 +30,7 @@ import jsx.ui.piece.UI;
  * @version 2015/10/05 1:52:57
  */
 @RunWith(ScriptRunner.class)
-public class VirtualStructureReferenceCheckTest {
+public class ReferenceCheckTest {
 
     private static final Style style = () -> {
     };
