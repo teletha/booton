@@ -12,7 +12,6 @@ package js.dom;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import js.lang.NativeArray;
-import jsx.ui.Location;
 import jsx.ui.Style;
 
 /**
@@ -58,7 +57,13 @@ public abstract class SVGElement extends Element implements JavascriptNative {
         if (name.startsWith("xlink:")) {
             attr(XLINK, name.substring(6), value);
         } else {
-            setAttribute(name, String.valueOf(value));
+            String normalized = String.valueOf(value);
+
+            if (normalized.isEmpty()) {
+                removeAttribute(name);
+            } else {
+                setAttribute(name, String.valueOf(value));
+            }
         }
         return this;
     }
@@ -79,6 +84,14 @@ public abstract class SVGElement extends Element implements JavascriptNative {
 
         // API definition
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Element parent() {
+        return (Element) parentNode();
     }
 
     /**
@@ -107,8 +120,8 @@ public abstract class SVGElement extends Element implements JavascriptNative {
      * {@inheritDoc}
      */
     @Override
-    public boolean has(Location locatable) {
-        return classes().indexOf(locatable.name()) != -1;
+    public boolean has(String className) {
+        return classes().indexOf(className) != -1;
     }
 
     /**
