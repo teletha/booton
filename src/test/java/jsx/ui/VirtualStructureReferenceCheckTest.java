@@ -9,6 +9,8 @@
  */
 package jsx.ui;
 
+import static jsx.ui.StructureDescriptor.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,17 +27,16 @@ import jsx.ui.piece.Input;
 import jsx.ui.piece.UI;
 
 /**
- * @version 2014/10/06 23:29:29
+ * @version 2015/10/05 1:52:57
  */
 @RunWith(ScriptRunner.class)
 public class VirtualStructureReferenceCheckTest {
 
-    /** Empty style. */
     private static final Style style = () -> {
     };
 
     @Test
-    public void text() throws Exception {
+    public void textChange() throws Exception {
         SingleRootText widget = Widget.of(SingleRootText.class);
 
         VirtualNodeInfo info = new VirtualNodeInfo(widget);
@@ -52,7 +53,7 @@ public class VirtualStructureReferenceCheckTest {
     }
 
     /**
-     * @version 2014/10/06 23:42:12
+     * @version 2015/10/05 1:45:14
      */
     private static class SingleRootText extends Widget {
 
@@ -63,7 +64,7 @@ public class VirtualStructureReferenceCheckTest {
          */
         @Override
         protected void virtualize() {
-            $〡.〡(property);
+            text(property);
         }
     }
 
@@ -85,7 +86,7 @@ public class VirtualStructureReferenceCheckTest {
     }
 
     /**
-     * @version 2014/10/06 23:42:12
+     * @version 2015/10/05 1:50:40
      */
     private static class NestedElement extends Widget {
 
@@ -96,11 +97,9 @@ public class VirtualStructureReferenceCheckTest {
          */
         @Override
         protected void virtualize() {
-            $〡.nbox.〡(style, () -> {
-                for (int i = 1; i <= property.get(); i++) {
-                    $〡.nbox(i).〡(null, "Text" + i);
-                }
-            });
+            box(style, contents(1, property.get(), i -> {
+                text("Text" + i);
+            }));
         }
     }
 
@@ -122,7 +121,7 @@ public class VirtualStructureReferenceCheckTest {
     }
 
     /**
-     * @version 2014/10/06 23:42:12
+     * @version 2015/10/05 1:52:04
      */
     private static class SingleWidget extends Widget {
 
@@ -133,12 +132,12 @@ public class VirtualStructureReferenceCheckTest {
          */
         @Override
         protected void virtualize() {
-            $〡.〡(input);
+            box(input);
         }
     }
 
     /**
-     * @version 2014/10/07 10:27:26
+     * @version 2015/10/05 1:38:33
      */
     private static class VirtualNodeInfo {
 
@@ -157,7 +156,7 @@ public class VirtualStructureReferenceCheckTest {
          */
         private VirtualNodeInfo(Widget widget) {
             // virtualize element
-            this.root = widget.virtualize();
+            this.root = createWidget(0, widget);
 
             // collect all nodes to test
             collect(root);
@@ -182,7 +181,7 @@ public class VirtualStructureReferenceCheckTest {
          */
         private VirtualNodeInfo(Widget widget, VirtualNodeInfo previous) {
             // virtualize element
-            this.root = widget.virtualize();
+            this.root = createWidget(0, widget);
 
             // collect all nodes to test
             collect(root);

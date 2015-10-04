@@ -24,7 +24,7 @@ import booton.soeur.ScriptRunner;
  * @version 2015/10/05 0:54:19
  */
 @RunWith(ScriptRunner.class)
-public class VirtualStructureListDiffTest extends DiffTestBase {
+public class DiffListTest extends DiffTestBase {
 
     @Test
     public void add() {
