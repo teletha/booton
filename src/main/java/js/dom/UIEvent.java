@@ -9,18 +9,15 @@
  */
 package js.dom;
 
-import java.util.function.Supplier;
-
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
-import kiss.Disposable;
 
 /**
- * @version 2013/12/28 11:51:03
+ * @version 2015/10/05 8:11:29
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "Event")
-public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative {
+public class UIEvent implements JavascriptNative {
 
     /** The DOM element that initiated the event. */
     @JavascriptNativeProperty
@@ -66,18 +63,14 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
     @Deprecated
     public int deltaZ;
 
-    /**
-     * 
-     */
-    public UIEvent() {
-    }
-
     /** The mouse position relative to the left edge of the document. */
     @JavascriptNativeProperty
+    @Deprecated
     public int pageX;
 
     /** The mouse position relative to the top edge of the document. */
     @JavascriptNativeProperty
+    @Deprecated
     public int pageY;
 
     /**
@@ -95,10 +88,14 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
      * For key or mouse events, this property indicates the specific key or button that was pressed.
      */
     @JavascriptNativeProperty
+    @Deprecated
     public int which;
 
-    /** The user action type. */
-    public UIAction action;
+    /**
+     * 
+     */
+    public UIEvent() {
+    }
 
     /**
      * <p>
@@ -163,33 +160,6 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
     public native void stopImmediatePropagation();
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UIAction get() {
-        return action;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void dispose() {
-    }
-
-    /**
-     * <p>
-     * Access to the attribute or property of the current {@link EventTarget} by the specified name.
-     * </p>
-     * 
-     * @param name A name of attribute or property.
-     * @return A value of the specified attribute or property.
-     */
-    public String attr(String name) {
-        return target.attr(name);
-    }
-
-    /**
      * <p>
      * Retrieve the value property of the current {@link EventTarget}.
      * </p>
@@ -197,6 +167,6 @@ public class UIEvent implements Supplier<UIAction>, Disposable, JavascriptNative
      * @return A value property.
      */
     public String value() {
-        return target.attr("value");
+        return String.valueOf(target.property("value"));
     }
 }

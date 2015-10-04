@@ -21,7 +21,7 @@ import jsx.ui.Style;
 import jsx.ui.Widget;
 
 /**
- * @version 2015/10/03 10:13:46
+ * @version 2015/10/05 8:13:56
  */
 public class Select<M> extends Widget {
 
@@ -30,13 +30,6 @@ public class Select<M> extends Widget {
 
     /** The selection model. */
     public final SingleSelectionModel<M> selection;
-
-    /** The current slide state. */
-    public final StyleProperty shown = new StyleProperty($.Shown);
-
-    private final Input input = UI.input();
-
-    private final Button button = UI.button().label("↓").click(shown::toggle);
 
     /**
      * @param values
@@ -117,12 +110,9 @@ public class Select<M> extends Widget {
     }
 
     /**
-     * @version 2015/09/30 23:58:56
+     * @version 2015/10/05 8:14:05
      */
     private static class $ extends PieceStyle {
-
-        static Style Shown = () -> {
-        };
 
         static Style Root = () -> {
             display.inlineBlock();

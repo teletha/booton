@@ -67,7 +67,7 @@ public class UserBot {
 
         for (UIAction action : actions) {
             UIEvent event = new UIEventMockForInput(input);
-            event.action = action;
+            event.type = action.name;
             event.which = key.code;
 
             // input.publish(event);
@@ -85,7 +85,7 @@ public class UserBot {
         Objects.nonNull(button);
 
         UIEvent event = new UIEvent();
-        event.action = UIAction.Click;
+        event.type = UIAction.Click.name;
 
         // button.publish(event);
     }
@@ -101,7 +101,7 @@ public class UserBot {
         Objects.nonNull(button);
 
         UIEvent event = new UIEvent();
-        event.action = UIAction.Click;
+        event.type = UIAction.Click.name;
 
         // button.publish(event);
     }
