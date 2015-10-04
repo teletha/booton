@@ -17,7 +17,7 @@ import jsx.ui.piece.Button;
 import jsx.ui.piece.Input;
 
 /**
- * @version 2014/08/22 7:44:00
+ * @version 2015/10/05 2:00:58
  */
 public class UserBot {
 
@@ -70,7 +70,7 @@ public class UserBot {
             event.action = action;
             event.which = key.code;
 
-            input.publish(event);
+            // input.publish(event);
         }
     }
 
@@ -87,7 +87,7 @@ public class UserBot {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.publish(event);
+        // button.publish(event);
     }
 
     /**
@@ -103,7 +103,7 @@ public class UserBot {
         UIEvent event = new UIEvent();
         event.action = UIAction.Click;
 
-        button.publish(event);
+        // button.publish(event);
     }
 
     /**

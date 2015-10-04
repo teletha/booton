@@ -13,18 +13,18 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * @version 2014/10/10 9:28:00
+ * @version 2015/10/05 2:01:09
  */
 public class FunctionHelper {
 
     /** The reusable function. */
     public static final Predicate<String> Empty = value -> {
-        return value.isEmpty();
+        return value == null || value.isEmpty();
     };
 
     /** The reusable function. */
     public static final Predicate<String> NotEmpty = value -> {
-        return !value.isEmpty();
+        return value != null && !value.isEmpty();
     };
 
     /**

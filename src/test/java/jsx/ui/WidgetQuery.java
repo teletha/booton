@@ -9,11 +9,13 @@
  */
 package jsx.ui;
 
+import static jsx.ui.StructureDescriptor.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @version 2014/09/02 10:16:32
+ * @version 2015/10/05 2:01:20
  */
 public class WidgetQuery {
 
@@ -23,7 +25,7 @@ public class WidgetQuery {
      * @return
      */
     public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
-        VirtualElement root = widget.virtualize();
+        VirtualElement root = createWidget(widget.id, widget);
 
         List<T> list = new ArrayList();
         find(list, childWidgetType, root);
