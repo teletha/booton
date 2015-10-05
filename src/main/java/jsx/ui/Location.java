@@ -22,7 +22,7 @@ public interface Location<T> {
      * @return A location name.
      */
     default String name() {
-        return "location" + hashCode();
+        return "AT" + hashCode();
     }
 
     /**

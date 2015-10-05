@@ -28,14 +28,6 @@ public interface ValueStyle<V> extends Location<V> {
     void style(V value);
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    default String name() {
-        return "Value" + hashCode();
-    }
-
-    /**
      * <p>
      * Retrieve the refined {@link Style} of the specified value.
      * </p>

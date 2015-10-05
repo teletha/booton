@@ -100,6 +100,17 @@ public class UI {
 
     /**
      * <p>
+     * Create {@link Checkbox} with the specified label.
+     * </p>
+     * 
+     * @param label
+     */
+    public static final CheckBox checkbox(String label) {
+        return checkbox(null, new SimpleStringProperty(label));
+    }
+
+    /**
+     * <p>
      * Create {@link Checkbox} with the specified boolean value.
      * </p>
      * 

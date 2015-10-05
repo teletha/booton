@@ -78,14 +78,6 @@ class MultipleStyle implements Style {
      * {@inheritDoc}
      */
     @Override
-    public String name() {
-        return "Multi" + hashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String[] names() {
         return names;
     }

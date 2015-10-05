@@ -156,6 +156,20 @@ function boot(global) {
       return connection;
     }
   });
+  
+  
+  //====================================================================
+  // CSS Extensions
+  //====================================================================
+  window.CSS = window.CSS || {
+    supports: function(name, value) {
+      return false;
+    },
+    
+    escape: function(value) {
+      return value;
+    }
+  };
 
 
   //====================================================================

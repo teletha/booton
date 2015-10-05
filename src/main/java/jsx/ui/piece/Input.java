@@ -148,7 +148,7 @@ public class Input extends LowLevelWidget<Input> {
      */
     @Override
     protected void virtualize() {
-        element("input", $.Root, SingleLineFormBase, rootStyle
+        element("input", Root, SingleLineFormBase, rootStyle
                 .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
     }
 }

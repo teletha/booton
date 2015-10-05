@@ -25,7 +25,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
-import jsx.style.StyleDescriptor;
 import kiss.Disposable;
 import kiss.Events;
 
@@ -45,8 +44,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         if (hover == null) {
             hover = new SimpleBooleanProperty(false);
 
-            when(MouseEnter).at($.Root).to(v -> hover.set(true));
-            when(MouseLeave).at($.Root).to(v -> hover.set(false));
+            when(MouseEnter).at(Root).to(v -> hover.set(true));
+            when(MouseLeave).at(Root).to(v -> hover.set(false));
         }
         return hover;
     }
@@ -55,7 +54,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
      * @return
      */
     public T click(Runnable action) {
-        when(Click).at($.Root).filter(this::isValid).to(update(e -> action.run()));
+        when(Click).at(Root).filter(this::isValid).to(update(e -> action.run()));
 
         return (T) this;
     }
@@ -64,7 +63,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
      * @return
      */
     public T dbclick(Runnable action) {
-        when(DoubleClick).at($.Root).filter(this::isValid).to(update(e -> action.run()));
+        when(DoubleClick).at(Root).filter(this::isValid).to(update(e -> action.run()));
 
         return (T) this;
     }
@@ -100,8 +99,8 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = when(KeyPress).at($.Root).filter(byKey);
-            Events<UIEvent> keyUp = when(KeyUp).at($.Root).filter(byKey);
+            Events<UIEvent> keyPress = when(KeyPress).at(Root).filter(byKey);
+            Events<UIEvent> keyUp = when(KeyUp).at(Root).filter(byKey);
             // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
@@ -174,15 +173,5 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
      */
     protected boolean isValid(UIEvent e) {
         return true;
-    }
-
-    /**
-     * @version 2015/09/22 18:25:10
-     */
-    protected static final class $ extends StyleDescriptor {
-
-        /** The root locator. */
-        public static final Style Root = () -> {
-        };
     }
 }

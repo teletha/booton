@@ -49,14 +49,6 @@ class ValuedStyle<V> implements Style {
      * {@inheritDoc}
      */
     @Override
-    public String name() {
-        return "Valued" + hashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String[] names() {
         return new String[] {base.name(), name()};
     }

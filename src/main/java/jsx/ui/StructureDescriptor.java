@@ -448,6 +448,17 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
+    public static <T extends Enum> Declarable contents(Class<? extends Widget1<T>> childType, Class<T> children) {
+        return contents(childType, children.getEnumConstants());
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     *
+     * @param children A list of child widget.
+     */
     public static <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
         return contents(childType, Arrays.asList(children));
     }
@@ -481,28 +492,45 @@ public class StructureDescriptor {
      * <p>
      * Define children.
      * </p>
-     *
-     * @param children A list of child widget.
+     * 
+     * @param type A type of {@link Enum} contents.
+     * @param process A content writer.
+     * @return A declaration of contents.
      */
-    public static <T> Declarable contents(T[] children, Consumer<T> process) {
-        return contents(Arrays.asList(children), process);
+    public static <T extends Enum> Declarable contents(Class<T> type, Consumer<T> process) {
+        return contents(type.getEnumConstants(), process);
     }
 
     /**
      * <p>
      * Define children.
      * </p>
-     *
-     * @param children A list of child widget.
+     * 
+     * @param contents A list of contents.
+     * @param process A content writer.
+     * @return A declaration of contents.
      */
-    public static <T> Declarable contents(List<T> children, Consumer<T> process) {
+    public static <T> Declarable contents(T[] contents, Consumer<T> process) {
+        return contents(Arrays.asList(contents), process);
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     * 
+     * @param contents A list of contents.
+     * @param process A content writer.
+     * @return A declaration of contents.
+     */
+    public static <T> Declarable contents(List<T> contents, Consumer<T> process) {
         return () -> {
             // store parent context
             Object parentContext = localContext;
 
-            for (T child : children) {
-                localContext = child;
-                process.accept(child);
+            for (T content : contents) {
+                localContext = content;
+                process.accept(content);
             }
 
             // restore parent context

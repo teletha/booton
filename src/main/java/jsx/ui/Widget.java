@@ -34,6 +34,10 @@ import kiss.Observer;
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public abstract class Widget implements Declarable {
 
+    /** The root locator. */
+    protected static final Style Root = () -> {
+    };
+
     /** The property key to store context object. */
     static final String CONTEXT_KEY = EventContext.class.getName();
 
@@ -180,7 +184,7 @@ public abstract class Widget implements Declarable {
      * {@inheritDoc}
      */
     @Override
-    public final void declare() {
+    public void declare() {
         StructureDescriptor.createWidget(id, this);
     }
 
@@ -389,4 +393,5 @@ public abstract class Widget implements Declarable {
             }
         }
     }
+
 }
