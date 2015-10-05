@@ -300,8 +300,8 @@ public final class Position extends PropertyDefinition<Position> {
      * @return Chainable API.
      */
     public Position centerVertically() {
-        position.absolute().bottom(50, percent);
-        transform.translateY(50, percent);
+        position.absolute().top(50, percent);
+        transform.translateY(-50, percent);
 
         return this;
     }

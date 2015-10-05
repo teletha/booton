@@ -11,6 +11,7 @@ package jsx.style;
 
 import static jsx.style.value.Color.*;
 
+import jsx.style.property.Animation;
 import jsx.style.property.Appearance;
 import jsx.style.property.Background;
 import jsx.style.property.Borders;
@@ -165,6 +166,8 @@ public class StyleDescriptor {
      * </p>
      */
     public static final Unit percent = Unit.percent;
+
+    public static final Animation animation = new Animation();
 
     /**
      * <p>
@@ -1050,6 +1053,19 @@ public class StyleDescriptor {
 
     /**
      * <p>
+     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
+     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
+     * toggled to an on state. The user can change this state by clicking on the element, or
+     * selecting a different value, in which case the :checked pseudo-class no longer applies to
+     * this element, but will to the relevant one.
+     * </p>
+     */
+    protected static final void adjacentChecked(Style sub) {
+        PropertyDefinition.createSubRule("input:checked+$", sub);
+    }
+
+    /**
+     * <p>
      * The :hover CSS pseudo-class matches when the user designates an element with a pointing
      * device, but does not necessarily activate it. This style may be overridden by any other
      * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
@@ -1062,6 +1078,19 @@ public class StyleDescriptor {
      */
     protected static final void siblingHover(Style sub) {
         PropertyDefinition.createSubRule("*:hover~$", sub);
+    }
+
+    /**
+     * <p>
+     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
+     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
+     * toggled to an on state. The user can change this state by clicking on the element, or
+     * selecting a different value, in which case the :checked pseudo-class no longer applies to
+     * this element, but will to the relevant one.
+     * </p>
+     */
+    protected static final void siblingChecked(Style sub) {
+        PropertyDefinition.createSubRule("input:checked~$", sub);
     }
 
     /**

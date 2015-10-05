@@ -22,6 +22,9 @@ public class Fill extends Colorable<Fill> {
     @Override
     public Fill color(Color color) {
         value("fill", color.toString());
+        value("cx", 8);
+        value("cy, 8");
+        value("r", 3);
 
         return this;
     }

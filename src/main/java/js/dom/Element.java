@@ -76,7 +76,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return The specified attribute value.
      */
     public String attr(String name) {
-        return String.valueOf(property(name));
+        return getAttribute(name);
     }
 
     /**
@@ -89,7 +89,15 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return A chainable API.
      */
     public Element attr(String name, Object value) {
-        return property(name, value);
+        String normalized = String.valueOf(value);
+
+        if (normalized.isEmpty()) {
+            removeAttribute(name);
+        } else {
+            setAttribute(name, String.valueOf(value));
+        }
+
+        return this;
     }
 
     /**
