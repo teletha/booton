@@ -11,7 +11,9 @@ package jsx.style.property;
 
 import static jsx.style.value.Unit.*;
 
+import js.dom.CSSStyleSheet;
 import jsx.style.PropertyDefinition;
+import jsx.style.value.AnimationFrames;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 
@@ -61,6 +63,21 @@ public class Animation extends PropertyDefinition<Animation> {
         value("animation-play-state", play);
 
         return this;
+    }
+
+    /**
+     * <p>
+     * The animation-name CSS property specifies a list of animations that should be applied to the
+     * selected element. Each name indicates a @keyframes at-rule that defines the property values
+     * for the animation sequence.
+     * </p>
+     * 
+     * @return
+     */
+    public Animation name(AnimationFrames animation) {
+        CSSStyleSheet.define(animation);
+
+        return name(animation.name);
     }
 
     /**

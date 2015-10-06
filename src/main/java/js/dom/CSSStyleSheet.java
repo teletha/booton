@@ -19,6 +19,7 @@ import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import js.lang.NativeCSSRuleList;
 import jsx.style.StyleRule;
+import jsx.style.value.AnimationFrames;
 import jsx.style.value.Font;
 import jsx.ui.Style;
 import jsx.ui.WidgetLog;
@@ -38,6 +39,9 @@ public class CSSStyleSheet implements JavascriptNative {
     /** The fonts manager. */
     private static final Set<Font> fonts = new HashSet();
 
+    /** The animations manager. */
+    private static final Set<AnimationFrames> animations = new HashSet();
+
     /**
      * <p>
      * The list of all CSS rules contained within the style sheet. This includes both rule sets and
@@ -46,6 +50,22 @@ public class CSSStyleSheet implements JavascriptNative {
      */
     @JavascriptNativeProperty
     public NativeCSSRuleList cssRules;
+
+    /**
+     * <p>
+     * Define the specified {@link AnimationFrames}.
+     * </p>
+     * 
+     * @param animationFrame A target animationFrame to define.
+     */
+    public static void define(AnimationFrames animation) {
+        if (animation != null && animations.add(animation)) {
+            WidgetLog.DefineStyle.start();
+            System.out.println(animation.toString());
+            base.insertRule(animation.toString(), base.cssRules.length());
+            WidgetLog.DefineStyle.stop();
+        }
+    }
 
     /**
      * <p>
