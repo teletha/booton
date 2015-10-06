@@ -71,10 +71,10 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
     @Override
     protected void virtualize() {
         box(Root, $.Root, rootStyle.getValue(), If(check, $.Checked), () -> {
-            element("input", $.CheckBox, attr("type", "checkbox"), attr("id", id));
-            element("label", $.Label, attr("for", id), contents(label.get()));
-            element(SVG, "svg", $.SVG, () -> {
-                element(SVG, "circle", attr("fill", "#FFF"), attr("cx", checkSize.size / 2), attr("cy", checkSize.size / 2), attr("r", 3));
+            html("input", $.CheckBox, attr("type", "checkbox"), attr("id", id));
+            html("label", $.Label, attr("for", id), contents(label.get()));
+            svg("svg", $.SVG, () -> {
+                svg("circle", attr("fill", "#FFF"), attr("cx", checkSize.size / 2), attr("cy", checkSize.size / 2), attr("r", 3));
             });
         });
     }

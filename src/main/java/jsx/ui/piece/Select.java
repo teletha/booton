@@ -45,14 +45,14 @@ public class Select<M> extends Widget {
     @Override
     protected void virtualize() {
         box($.Root, () -> {
-            element("select", $.Select, contents(values, value -> {
-                element("option", () -> {
+            html("select", $.Select, contents(values, value -> {
+                html("option", () -> {
                     text(value);
                 });
             }));
-            element(SVG, "svg", $.SVGRoot, size(16, 16), position(0, 0), viewBox(0, 0, 16, 16), () -> {
-                element(SVG, "g", () -> {
-                    element(SVG, "polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
+            svg("svg", $.SVGRoot, size(16, 16), position(0, 0), viewBox(0, 0, 16, 16), () -> {
+                svg("g", () -> {
+                    svg("polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
                 });
             });
         });

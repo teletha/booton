@@ -27,10 +27,10 @@ import js.lang.NativeString;
 public class StructureDescriptor {
 
     /** The namespace uri for HTML. */
-    public static final String HTML = "http://www.w3.org/1999/xhtml";
+    static final String HTML = "http://www.w3.org/1999/xhtml";
 
     /** The namespace uri for SVG. */
-    public static final String SVG = "http://www.w3.org/2000/svg";
+    static final String SVG = "http://www.w3.org/2000/svg";
 
     /** The latest element. */
     static VirtualElement latestElement;
@@ -179,7 +179,7 @@ public class StructureDescriptor {
      * @param texts A list of text contents.
      */
     private static void text(int id, Style style, Object... texts) {
-        element(id, HTML, "span", style, contents(texts));
+        html(id, "span", style, contents(texts));
     }
 
     /**
@@ -202,7 +202,7 @@ public class StructureDescriptor {
      * @param declarables A list of contents (attributes, children nodes etc).
      */
     private static void box(int id, Declarable... declarables) {
-        element(id, "span", declarables);
+        html(id, "span", declarables);
     }
 
     /**
@@ -213,8 +213,8 @@ public class StructureDescriptor {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    public static void element(String name, Declarable... declarables) {
-        element(LocalId.findContextLineNumber(), name, declarables);
+    public static void html(String name, Declarable... declarables) {
+        html(LocalId.findContextLineNumber(), name, declarables);
     }
 
     /**
@@ -226,7 +226,7 @@ public class StructureDescriptor {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private static void element(int id, String name, Declarable... declarables) {
+    private static void html(int id, String name, Declarable... declarables) {
         element(id, HTML, name, declarables, null);
     }
 
@@ -235,12 +235,11 @@ public class StructureDescriptor {
      * Declara element definition with the specified name.
      * </p>
      * 
-     * @param ns A namespace uri.
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    public static void element(String ns, String name, Declarable... declarables) {
-        element(LocalId.findContextLineNumber(), ns, name, declarables);
+    public static void svg(String name, Declarable... declarables) {
+        html(LocalId.findContextLineNumber(), name, declarables);
     }
 
     /**
@@ -252,8 +251,8 @@ public class StructureDescriptor {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private static void element(int id, String ns, String name, Declarable... declarables) {
-        element(id, ns, name, declarables, null);
+    private static void svg(int id, String name, Declarable... declarables) {
+        element(id, SVG, name, declarables, null);
     }
 
     /**
