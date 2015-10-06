@@ -39,6 +39,9 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
     /** The associated label. */
     public final StringProperty label;
 
+    /** The checkbox id. */
+    private final String id;
+
     /**
      * <p>
      * Create Checkbox.
@@ -53,8 +56,13 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
 
         this.check = value;
         this.label = label;
+        this.id = "check" + check.hashCode();
 
-        when(Click).at($.Root).to(update(e -> check.set(!check.get())));
+        when(Click).at($.Root).to(update(e -> {
+            e.preventDefault();
+
+            check.set(!check.get());
+        }));
     }
 
     /**
@@ -62,9 +70,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
      */
     @Override
     protected void virtualize() {
-        String id = "checkbox" + hashCode();
-
-        box(Root, $.Root, rootStyle.getValue(), () -> {
+        box(Root, $.Root, rootStyle.getValue(), If(check, $.Checked), () -> {
             element("input", $.CheckBox, attr("type", "checkbox"), attr("id", id));
             element("label", $.Label, attr("for", id), contents(label.get()));
             element(SVG, "svg", $.SVG, () -> {
@@ -80,11 +86,11 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
 
         static Numeric labelGap = new Numeric(8, px);
 
-        static Numeric checkBorderWidth = new Numeric(1, px);
+        static Numeric markLineWidth = new Numeric(1, px);
 
-        static Color checkColor = Color.rgb("#CFD9DB");
+        static Color markColor = Color.rgb("#CFD9DB");
 
-        static Color checkColorFocus = Color.rgb("#2C97DE");
+        static Color markFocusColor = Color.rgb("#2C97DE");
 
         static AnimationFrames bounce = new AnimationFrames().frame(0, 100, () -> {
             transform.translateY(50, percent).scale(1);
@@ -92,10 +98,14 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
             transform.translateY(50, percent).scale(0.8);
         });
 
+        static Style Checked = () -> {
+        };
+
         static Style Root = () -> {
             display.inlineBlock();
             position.relative();
             text.unselectable();
+            cursor.pointer();
         };
 
         static Style CheckBox = () -> {
@@ -104,21 +114,20 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
 
         static Style Label = () -> {
             padding.left(checkSize.add(labelGap));
-            cursor.pointer();
 
             after(() -> {
                 content.text("");
                 display.block();
                 position.centerVertically().left(0, px);
 
-                border.width(checkBorderWidth).solid().color(checkColor).radius(50, percent);
+                border.width(markLineWidth).solid().color(markColor).radius(50, percent);
                 box.size(checkSize).shadow(shadow().blurRadius(0, px).offset(1, 1, px).inset().color(Color.rgba(0, 0, 0, 0.08)));
             });
 
-            adjacentChecked(() -> {
+            insideOf(Checked, () -> {
                 after(() -> {
-                    background.color(checkColorFocus);
-                    border.color(checkColorFocus);
+                    background.color(markFocusColor);
+                    border.color(markFocusColor);
                     box.shadow(shadow().blurRadius(6, px).offset(0, 0, px).color(Color.rgba(44, 151, 222, 0.4)));
 
                     animation.duration(0.3, s).name(bounce);
@@ -130,8 +139,9 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
             display.none();
             box.size(checkSize);
             position.centerVertically().left(0, px);
+            pointerEvents.none();
 
-            siblingChecked(() -> {
+            insideOf(Checked, () -> {
                 display.block();
                 animation.duration(0.3, s).name(bounce);
             });

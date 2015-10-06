@@ -61,7 +61,6 @@ public class CSSStyleSheet implements JavascriptNative {
     public static void define(AnimationFrames animation) {
         if (animation != null && animations.add(animation)) {
             WidgetLog.DefineStyle.start();
-            System.out.println(animation.toString());
             base.insertRule(animation.toString(), base.cssRules.length());
             WidgetLog.DefineStyle.stop();
         }
