@@ -239,7 +239,7 @@ public class StructureDescriptor {
      * @param declarables A list of contents (attributes, children nodes etc).
      */
     public static void svg(String name, Declarable... declarables) {
-        html(LocalId.findContextLineNumber(), name, declarables);
+        svg(LocalId.findContextLineNumber(), name, declarables);
     }
 
     /**
