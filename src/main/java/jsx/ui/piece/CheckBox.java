@@ -17,7 +17,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.style.StyleDescriptor;
 import jsx.style.value.AnimationFrames;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
@@ -82,7 +81,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
     /**
      * @version 2015/10/06 13:56:37
      */
-    private static class $ extends StyleDescriptor {
+    private static class $ extends PieceStyle {
 
         static Numeric labelGap = new Numeric(8, px);
 
@@ -114,6 +113,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
 
         static Style Label = () -> {
             padding.left(checkSize.add(labelGap));
+            cursor.pointer();
 
             after(() -> {
                 content.text("");
@@ -122,6 +122,8 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
 
                 border.width(markLineWidth).solid().color(markColor).radius(50, percent);
                 box.size(checkSize).shadow(shadow().blurRadius(0, px).offset(1, 1, px).inset().color(Color.rgba(0, 0, 0, 0.08)));
+
+                parentHover(FocusedBorder);
             });
 
             insideOf(Checked, () -> {

@@ -55,11 +55,21 @@ public class PieceStyle extends StyleDescriptor {
 
     protected static final Color SelectColor = new Color(206, 79, 62, 0.8);
 
-    // ===========================================
-    // Icon Related Style
-    // ===========================================
-    /** The general icon size. */
-    protected static final Numeric IconSize = SingleLineFormHeight;
+    /** The focused border style. */
+    private static final Shadow insideShadow = shadow().inset().offset(-1, 1, px).blurRadius(1, px).color(BorderInsetShadow);
+
+    /** The focused border style. */
+    private static final Shadow outsideShadow = shadow().offset(0, 0, px).blurRadius(8, px).color(BorderColorFocused.opacify(-0.2));
+
+    /**
+     * <p>
+     * Helper {@link Style} to apply style for the focused border style.
+     * </p>
+     */
+    protected static final Style FocusedBorder = () -> {
+        border.color(BorderColorFocused).width(BorderWidth).solid();
+        box.shadow(insideShadow, outsideShadow);
+    };
 
     /** Abstract base style of form element. */
     static Style FormBase = () -> {
@@ -82,13 +92,7 @@ public class PieceStyle extends StyleDescriptor {
         box.width(SingleLineFormWidth);
         border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
-        focus(() -> {
-            Shadow in = shadow().inset().offset(-1, 1, px).blurRadius(1, px).color(BorderInsetShadow);
-            Shadow out = shadow().offset(0, 0, px).blurRadius(8, px).color(BorderColorFocused.opacify(-0.2));
-
-            border.color(BorderColorFocused).width(BorderWidth).solid();
-            box.shadow(in, out);
-        });
+        focus(FocusedBorder);
     });
 
     /** Abstract base style of form element. */

@@ -12,7 +12,7 @@ package jsx.style.property;
 import jsx.style.value.Color;
 
 /**
- * @version 2015/03/23 16:59:38
+ * @version 2015/10/06 22:32:40
  */
 public class Fill extends Colorable<Fill> {
 
@@ -22,13 +22,17 @@ public class Fill extends Colorable<Fill> {
     @Override
     public Fill color(Color color) {
         value("fill", color.toString());
-        value("cx", 8);
-        value("cy, 8");
-        value("r", 3);
 
         return this;
     }
 
+    /**
+     * <p>
+     * Don't paint.
+     * </p>
+     * 
+     * @return
+     */
     public Fill none() {
         value("fill", "none");
 
