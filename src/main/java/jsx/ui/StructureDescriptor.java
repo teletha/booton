@@ -582,6 +582,21 @@ public class StructureDescriptor {
      *
      * @param texts A list of child text contents.
      */
+    public static Declarable contents(Widget... widgets) {
+        return () -> {
+            for (Widget widget : widgets) {
+                widget(widget);
+            }
+        };
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     *
+     * @param texts A list of child text contents.
+     */
     public static Declarable contents(Object... texts) {
         return () -> {
             text(texts);

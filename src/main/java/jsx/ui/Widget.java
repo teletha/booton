@@ -11,6 +11,7 @@ package jsx.ui;
 
 import static js.lang.Global.*;
 
+import java.lang.reflect.Array;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -146,7 +147,7 @@ public abstract class Widget implements Declarable {
     protected final <V> Observer<V> update(Observer<V> action) {
         return v -> {
             action.accept(v);
-            root.update();
+            if (root != null) root.update();
         };
     }
 
@@ -211,6 +212,24 @@ public abstract class Widget implements Declarable {
      */
     public static final <W extends Widget1<First>, First> W of(Class<W> widgetType, First model1) {
         return create(widgetType, new Object[] {model1});
+    }
+
+    /**
+     * <p>
+     * Create widgets which is associated with the specified models.
+     * </p>
+     * 
+     * @param widgetType A widget type.
+     * @param models An associated model.
+     * @return A list of widget with the specified models.
+     */
+    public static final <W extends Widget1<First>, First> W[] of(Class<W> widgetType, First[] models) {
+        W[] widgets = (W[]) Array.newInstance(widgetType, models.length);
+
+        for (int i = 0; i < models.length; i++) {
+            widgets[i] = of(widgetType, models[i]);
+        }
+        return widgets;
     }
 
     /**
