@@ -12,7 +12,10 @@ package jsx.ui;
 import static js.lang.Global.*;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -23,17 +26,22 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
+import js.util.HashMap;
 import jsx.debug.Profile;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Observer;
+import kiss.model.ClassUtil;
 
 /**
  * @version 2015/09/27 11:52:23
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public abstract class Widget implements Declarable {
+
+    /** The cache for widget metadata. */
+    private static final Map<Class, Metadata> metas = new HashMap();
 
     /** The root locator. */
     protected static final Style Root = () -> {
@@ -63,6 +71,106 @@ public abstract class Widget implements Declarable {
 
     /** The virtual root element. */
     private VirtualElement virtual;
+
+    /** The widget metadata. */
+    private final Metadata metadata;
+
+    /**
+     * <p>
+     * Initialization {@link Widget}.
+     * </p>
+     */
+    protected Widget() {
+        metadata = metas.computeIfAbsent(getClass(), Metadata::new);
+    }
+
+    /**
+     * <p>
+     * Lazy initializer.
+     * </p>
+     */
+    final void initialize() {
+        Metadata metadata = metas.computeIfAbsent(getClass(), Metadata::new);
+
+        for (Modeldata meta : metadata.models.values()) {
+            try {
+                Events events = (Events) meta.field.get(this);
+
+                if (events != null) {
+                    events.to(value -> {
+                        meta.latest = value;
+                    });
+                }
+            } catch (Exception e) {
+                throw I.quiet(e);
+            }
+        }
+    }
+
+    /**
+     * @version 2015/10/08 1:20:21
+     */
+    private static class Metadata {
+
+        /** The models. */
+        private final Map<String, Modeldata> models = new HashMap();
+
+        /** The virualize method. */
+        private Method virtualizer;
+
+        /**
+         * <p>
+         * Analyze widget.
+         * </p>
+         * 
+         * @param clazz A target widget.
+         */
+        private Metadata(Class clazz) {
+            for (Field field : clazz.getFields()) {
+                if (field.isAnnotationPresent(Model.class) && field.getType() == Events.class) {
+                    String name = field.getName();
+                    Class type = ClassUtil.getParameter(field.getGenericType(), Events.class)[0];
+
+                    models.put(name, new Modeldata(name, type, field));
+                }
+            }
+
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (method.getName().equals("virtualize")) {
+
+                }
+            }
+        }
+    }
+
+    /**
+     * @version 2015/10/08 3:06:58
+     */
+    private static class Modeldata {
+
+        /** The model name. */
+        private final String name;
+
+        /** The model type. */
+        private final Class type;
+
+        /** The accessor. */
+        private final Field field;
+
+        /** The latest value. */
+        private Object latest;
+
+        /**
+         * @param name
+         * @param type
+         * @param field
+         */
+        private Modeldata(String name, Class type, Field field) {
+            this.name = name;
+            this.type = type;
+            this.field = field;
+        }
+    }
 
     /**
      * <p>
@@ -309,6 +417,7 @@ public abstract class Widget implements Declarable {
         loophole = models;
         WidgetLog.Make.start();
         widget = I.make(widgetType);
+        widget.initialize();
         WidgetLog.Make.stop();
         loophole = null;
 

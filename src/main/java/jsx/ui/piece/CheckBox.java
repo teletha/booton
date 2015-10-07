@@ -12,6 +12,8 @@ package jsx.ui.piece;
 import static js.dom.UIAction.*;
 import static jsx.ui.StructureDescriptor.*;
 
+import java.util.function.Consumer;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,6 +25,7 @@ import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.Style;
+import kiss.I;
 
 /**
  * @version 2015/10/06 13:48:53
@@ -57,11 +60,17 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
         this.label = label;
         this.id = "check" + check.hashCode();
 
-        when(Click).at($.Root).to(e -> {
+        when(Click).at($.Root).to(update(e -> {
             e.preventDefault();
 
             check.set(!check.get());
-        });
+        }));
+    }
+
+    public CheckBox change(Consumer<Boolean> value) {
+        I.observe(check).to(value::accept);
+
+        return this;
     }
 
     /**
