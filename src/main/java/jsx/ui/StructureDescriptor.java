@@ -114,9 +114,9 @@ public class StructureDescriptor {
          */
         Widget previous = VirtualWidgetHierarchy.hierarchy.putIfAbsent(clazz, widget);
 
-        if (previous != null) {
-            throw new IllegalStateException(clazz + " is a nest in virtual structure.");
-        }
+        // if (previous != null) {
+        // throw new IllegalStateException(clazz + " is a nest in virtual structure.");
+        // }
 
         /**
          * Assemble {@link VirtualStructure} actually.

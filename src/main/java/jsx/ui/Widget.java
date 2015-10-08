@@ -13,7 +13,6 @@ import static js.lang.Global.*;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +20,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import javafx.beans.property.Property;
 
 import js.dom.Element;
 import js.dom.EventTarget;
@@ -34,7 +35,6 @@ import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Observer;
-import kiss.model.ClassUtil;
 
 /**
  * @version 2015/09/27 11:52:23
@@ -74,20 +74,46 @@ public abstract class Widget implements Declarable {
     /** The virtual root element. */
     private VirtualElement virtual;
 
+    /** The metadata for this {@link Widget}. */
+    private Modeldata modelData;
+
+    /**
+     * 
+     */
+    protected Widget() {
+        /**
+         * <p>
+         * Enter the hierarchy of {@link VirtualStructure}.
+         * </p>
+         */
+        Widget previous = VirtualWidgetHierarchy.hierarchy.putIfAbsent(getClass(), this);
+
+        // if (previous != null) {
+        // throw new IllegalStateException(getClass() + " is a nest in virtual structure.");
+        // }
+    }
+
     /**
      * <p>
      * Lazy initializer.
      * </p>
      */
     final void initialize() {
-        Modeldata metadata = metas.computeIfAbsent(getClass(), p -> new Modeldata(p));
+        /**
+         * <p>
+         * Leave the hierarchy of {@link VirtualStructure}.
+         * </p>
+         */
+        VirtualWidgetHierarchy.hierarchy.remove(getClass());
 
-        for (ModelParameter meta : metadata.models) {
+        modelData = metas.computeIfAbsent(getClass(), p -> new Modeldata(p));
+
+        for (ModelParameter meta : modelData.models) {
             try {
-                Events events = (Events) meta.field.get(this);
+                Property property = (Property) meta.field.get(this);
 
-                if (events != null) {
-                    events.to(value -> metadata.update(this, meta.index, value));
+                if (property != null) {
+                    property.addListener(value -> update());
                 }
             } catch (Exception e) {
                 throw I.quiet(e);
@@ -103,12 +129,6 @@ public abstract class Widget implements Declarable {
         /** The models. */
         private final List<ModelParameter> models = new ArrayList();
 
-        /** The current value list. */
-        private Object[] values;
-
-        /** The virualize method. */
-        private Method virtualizer;
-
         /**
          * <p>
          * Analyze widget.
@@ -117,64 +137,10 @@ public abstract class Widget implements Declarable {
          * @param clazz A target widget.
          */
         private Modeldata(Class clazz) {
-            int index = 0;
-
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(Model.class) && field.getType() == Events.class) {
-                    String name = field.getName();
-                    Class type = ClassUtil.getParameter(field.getGenericType(), Events.class)[0];
-
-                    models.add(new ModelParameter(index++, name, type, field));
+                if (field.isAnnotationPresent(Model.class) && Property.class.isAssignableFrom(field.getType())) {
+                    models.add(new ModelParameter(field.getName(), null, field));
                 }
-            }
-            values = new Object[models.size()];
-
-            for (Method method : clazz.getDeclaredMethods()) {
-                if (method.getName().equals("view")) {
-                    virtualizer = method;
-                    break;
-                }
-            }
-        }
-
-        /**
-         * <p>
-         * Update model parameter.
-         * </p>
-         * 
-         * @param index
-         * @param value
-         */
-        private void update(Widget instance, int index, Object value) {
-            values[index] = value;
-            System.out.println("update mode " + instance.getClass() + " at  " + index + " to  " + value);
-            updater.add(instance);
-
-            if (updater.size() == 1) {
-                requestAnimationFrame(() -> {
-                    for (Widget widget : updater) {
-                        // create new virtual element
-                        VirtualElement next = StructureDescriptor.createWidget(0, widget, () -> {
-                            try {
-                                virtualizer.invoke(widget, values);
-                            } catch (Exception e) {
-                                throw I.quiet(e);
-                            }
-                        });
-
-                        // create patch to manipulate DOM and apply it
-                        WidgetLog.Diff.start();
-                        PatchDiff.apply(widget.virtual, next);
-                        WidgetLog.Diff.stop();
-
-                        Profile.show();
-
-                        // update to new virtual element
-                        widget.virtual = next;
-                    }
-                    updater.clear();
-                    System.out.println("Run rendering on RAF timing2.");
-                });
             }
         }
     }
@@ -183,9 +149,6 @@ public abstract class Widget implements Declarable {
      * @version 2015/10/08 3:06:58
      */
     private static class ModelParameter {
-
-        /** The parameter position. */
-        private final int index;
 
         /** The model name. */
         private final String name;
@@ -201,8 +164,7 @@ public abstract class Widget implements Declarable {
          * @param type
          * @param field
          */
-        private ModelParameter(int index, String name, Class type, Field field) {
-            this.index = index;
+        private ModelParameter(String name, Class type, Field field) {
             this.name = name;
             this.type = type;
             this.field = field;

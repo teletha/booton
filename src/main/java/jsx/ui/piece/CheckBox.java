@@ -25,7 +25,6 @@ import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.Style;
-import kiss.I;
 
 /**
  * @version 2015/10/06 13:48:53
@@ -68,8 +67,9 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
     }
 
     public CheckBox change(Consumer<Boolean> value) {
-        I.observe(check).to(value::accept);
-
+        check.addListener((object, oldValue, newValue) -> {
+            value.accept(newValue);
+        });
         return this;
     }
 
