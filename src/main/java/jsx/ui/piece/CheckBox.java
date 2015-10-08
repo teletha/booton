@@ -60,11 +60,11 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
         this.label = label;
         this.id = "check" + check.hashCode();
 
-        when(Click).at($.Root).to(update(e -> {
+        when(Click).at($.Root).to(e -> {
             e.preventDefault();
 
             check.set(!check.get());
-        }));
+        });
     }
 
     public CheckBox change(Consumer<Boolean> value) {

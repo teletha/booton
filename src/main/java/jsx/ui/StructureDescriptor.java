@@ -75,6 +75,18 @@ public class StructureDescriptor {
      * @param widget A widget to define.
      */
     static VirtualWidget createWidget(int id, Widget widget) {
+        return createWidget(id, widget, widget::virtualize);
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param id A local id.
+     * @param widget A widget to define.
+     */
+    static VirtualWidget createWidget(int id, Widget widget, Runnable method) {
         // store parent
         Widget parentWidget = latestWidget;
         VirtualElement parentElement = latestElement;
@@ -110,7 +122,7 @@ public class StructureDescriptor {
          * Assemble {@link VirtualStructure} actually.
          */
         WidgetLog.Virtualize.start();
-        widget.virtualize();
+        method.run();
         WidgetLog.Virtualize.stop();
 
         /**
