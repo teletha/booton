@@ -63,7 +63,7 @@ public abstract class Widget implements Declarable {
     static Object[] loophole;
 
     /** The identifier of this {@link Widget}. */
-    int id = loophole == null ? hashCode() : Objects.hash(loophole);
+    public int id = loophole == null ? hashCode() : Objects.hash(loophole);
 
     /** The root widget. */
     protected Widget root;

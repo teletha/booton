@@ -52,6 +52,7 @@ public class CheckBox extends LowLevelWidget<CheckBox> {
      * @param label
      */
     public CheckBox(BooleanProperty value, StringProperty label) {
+        super();
         if (value == null) value = new SimpleBooleanProperty();
         if (label == null) label = new SimpleStringProperty();
 

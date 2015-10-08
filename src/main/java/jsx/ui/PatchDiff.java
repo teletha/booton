@@ -46,6 +46,7 @@ class PatchDiff {
 
         for (int i = 0; i < diff.size(); i++) {
             diff.get(i).apply();
+            System.out.println(diff.get(i));
         }
         prev.dispose();
     }

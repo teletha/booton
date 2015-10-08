@@ -10,6 +10,7 @@
 package jsx.ui.piece;
 
 import java.awt.Checkbox;
+import java.util.Objects;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -17,6 +18,7 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import jsx.ui.Widget;
 import kiss.I;
 
 /**
@@ -128,7 +130,10 @@ public class UI {
      * @param value
      */
     public static final CheckBox checkbox(BooleanProperty value, StringProperty label) {
-        return new CheckBox(value, label);
+        CheckBox box = new CheckBox(value, label);
+        ((Widget) box).id = Objects.hash(value, label);
+
+        return box;
     }
 
     /**
