@@ -9,38 +9,28 @@
  */
 package jsx.ui.piece;
 
-import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.StructureDescriptor.*;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 
 import jsx.style.value.Numeric;
-import jsx.ui.Style;
+import jsx.style.value.Unit;
 
 /**
- * @version 2015/10/09 15:09:05
+ * @version 2015/10/06 13:48:53
  */
-public class CheckBox extends MarkedButton<CheckBox> {
+public class RadioBox extends MarkedButton<RadioBox> {
 
     /** The radius. */
-    private static final Numeric Radius = new Numeric(0.25, em);
-
-    private static final Style CheckMark = () -> {
-        fill.none();
-        stroke.color("#FFF").width(2, px).linecap.square().miterLimit(10);
-    };
+    private static final Numeric Radius = new Numeric(50, Unit.percent);
 
     /**
-     * <p>
-     * Create Checkbox.
-     * </p>
-     * 
      * @param value
      * @param label
      */
-    public CheckBox(BooleanProperty value, StringProperty label) {
-        super("checkbox", null, value, label);
+    RadioBox(String group, BooleanProperty value, StringProperty label) {
+        super("radio", group, value, label);
     }
 
     /**
@@ -48,7 +38,7 @@ public class CheckBox extends MarkedButton<CheckBox> {
      */
     @Override
     protected void virtualizeMark() {
-        svg("polyline", CheckMark, attr("points", "4,7 6,9 10,5"));
+        svg("circle", attr("fill", "#FFF"), attr("cx", markSize.size / 2), attr("cy", markSize.size / 2), attr("r", 3));
     }
 
     /**

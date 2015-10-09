@@ -22,7 +22,7 @@ import jsx.ui.Widget;
 import kiss.I;
 
 /**
- * @version 2015/03/06 14:08:04
+ * @version 2015/10/09 15:28:40
  */
 public class UI {
 
@@ -131,6 +131,20 @@ public class UI {
      */
     public static final CheckBox checkbox(BooleanProperty value, StringProperty label) {
         CheckBox box = new CheckBox(value, label);
+        ((Widget) box).id = Objects.hash(value, label);
+
+        return box;
+    }
+
+    /**
+     * <p>
+     * Create {@link Checkbox} with the specified boolean value.
+     * </p>
+     * 
+     * @param value
+     */
+    public static final RadioBox radiobox(String group, BooleanProperty value, StringProperty label) {
+        RadioBox box = new RadioBox(group, value, label);
         ((Widget) box).id = Objects.hash(value, label);
 
         return box;

@@ -16,7 +16,6 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 
 import js.lang.NativeString;
@@ -443,8 +442,8 @@ public class StructureDescriptor {
         return If(condition != null && condition.length() != 0, declarables);
     }
 
-    public static Declarable If(BooleanProperty condition, Declarable... declarables) {
-        return If(condition != null && condition.get(), declarables);
+    public static Declarable If(Property<Boolean> condition, Declarable... declarables) {
+        return If(condition != null && condition.getValue() != null && condition.getValue(), declarables);
     }
 
     public static Declarable If(boolean condition, Declarable... declarables) {
