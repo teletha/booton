@@ -17,6 +17,7 @@ import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyProperty;
 
 import js.lang.NativeString;
 
@@ -442,7 +443,7 @@ public class StructureDescriptor {
         return If(condition != null && condition.length() != 0, declarables);
     }
 
-    public static Declarable If(Property<Boolean> condition, Declarable... declarables) {
+    public static Declarable If(ReadOnlyProperty<Boolean> condition, Declarable... declarables) {
         return If(condition != null && condition.getValue() != null && condition.getValue(), declarables);
     }
 

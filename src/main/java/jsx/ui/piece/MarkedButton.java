@@ -15,10 +15,10 @@ import static jsx.ui.StructureDescriptor.*;
 import java.util.function.Consumer;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.StringProperty;
 
+import js.lang.NativeBoolean;
 import jsx.style.ValueStyle;
 import jsx.style.value.AnimationFrames;
 import jsx.style.value.Color;
@@ -42,7 +42,7 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
     private final String name;
 
     /** The check status. */
-    public final BooleanProperty check;
+    public final ReadOnlyBooleanProperty check;
 
     /** The associated label. */
     public final StringProperty label;
@@ -59,9 +59,6 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
      * @param label
      */
     protected MarkedButton(String type, String name, BooleanProperty value, StringProperty label) {
-        if (value == null) value = new SimpleBooleanProperty();
-        if (label == null) label = new SimpleStringProperty();
-
         this.type = type;
         this.name = name;
         this.check = value;
@@ -75,8 +72,9 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
         // });
 
         when(Change).at($.Root).to(v -> {
-            Boolean state = (Boolean) v.target.property("checked");
+            NativeBoolean state = (NativeBoolean) v.target.property("checked");
             System.out.println("Value changed " + state);
+            value.set(state.booleanValue());
         });
     }
 

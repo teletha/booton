@@ -143,7 +143,7 @@ public class UI {
      * 
      * @param value
      */
-    public static final RadioBox radiobox(String group, BooleanProperty value, StringProperty label) {
+    public static final RadioBox radiobox(RadioGroup group, BooleanProperty value, StringProperty label) {
         RadioBox box = new RadioBox(group, value, label);
         ((Widget) box).id = Objects.hash(value, label);
 

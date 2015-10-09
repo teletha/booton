@@ -29,8 +29,8 @@ public class RadioBox extends MarkedButton<RadioBox> {
      * @param value
      * @param label
      */
-    RadioBox(String group, BooleanProperty value, StringProperty label) {
-        super("radio", group, value, label);
+    RadioBox(RadioGroup group, BooleanProperty value, StringProperty label) {
+        super("radio", "Radio" + group.hashCode(), value, label);
     }
 
     /**
