@@ -105,6 +105,7 @@ public class CSSStyleSheet implements JavascriptNative {
      * @param rule A target style rule to define.
      */
     private static void define(StyleRule rule) {
+        System.out.println(rule.toString());
         base.insertRule(rule.toString(), base.cssRules.length());
 
         for (int i = 0; i < rule.children.length(); i++) {

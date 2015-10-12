@@ -9,7 +9,8 @@
  */
 package jsx.ui;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import js.dom.CSSStyleSheet;
 
@@ -35,8 +36,6 @@ class MultipleStyle implements Style {
 
         for (int i = 0; i < names.length - 1; i++) {
             names[i] = styles[i].name();
-
-            CSSStyleSheet.define(styles[i]);
         }
         names[names.length - 1] = name();
     }
@@ -50,10 +49,10 @@ class MultipleStyle implements Style {
      * @return
      */
     static MultipleStyle of(Style... styles) {
-        LinkedHashSet<Style> set = new LinkedHashSet();
-        merge(set, styles);
+        List<Style> list = new ArrayList();
+        merge(list, styles);
 
-        return new MultipleStyle(set.toArray(new Style[set.size()]));
+        return new MultipleStyle(list.toArray(new Style[list.size()]));
     }
 
     /**
@@ -61,15 +60,16 @@ class MultipleStyle implements Style {
      * Helper method to create {@link MultipleStyle}.
      * </p>
      * 
-     * @param set
+     * @param list
      * @param styles
      */
-    private static void merge(LinkedHashSet<Style> set, Style... styles) {
+    private static void merge(List<Style> list, Style... styles) {
         for (Style style : styles) {
+            CSSStyleSheet.define(style);
             if (style instanceof MultipleStyle) {
-                merge(set, ((MultipleStyle) style).styles);
-            } else {
-                set.add(style);
+                merge(list, ((MultipleStyle) style).styles);
+            } else if (!list.contains(style)) {
+                list.add(style);
             }
         }
     }

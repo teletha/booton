@@ -188,8 +188,10 @@ public class StyleRule {
         String selector;
 
         if (parent == null) {
+            System.out.println("create ." + style.name());
             selector = "." + style.name();
         } else {
+            System.out.println("with parent  " + parent.selector);
             // check pseudo element
             String pseudo;
             int index = parent.selector.indexOf("::");

@@ -161,7 +161,7 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
                 position.centerVertically().left(0, px);
 
                 border.width(markLineWidth).solid().color(markColor).radius(radiusSize);
-                box.size(markSize).shadow(shadow().blurRadius(0, px).offset(1, 1, px).inset().color(Color.rgba(0, 0, 0, 0.08)));
+                box.size(14, px).shadow(shadow().blurRadius(0, px).offset(1, 1, px).inset().color(Color.rgba(0, 0, 0, 0.08)));
 
                 parentHover(FocusedBorder);
             });
