@@ -12,13 +12,11 @@ package jsx.ui.piece;
 import static js.dom.UIAction.*;
 import static jsx.ui.StructureDescriptor.*;
 
-import java.util.function.Consumer;
+import java.util.Objects;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.Property;
 
-import js.lang.NativeBoolean;
+import js.dom.UIEvent;
 import jsx.style.ValueStyle;
 import jsx.style.value.AnimationFrames;
 import jsx.style.value.Color;
@@ -28,12 +26,9 @@ import jsx.ui.LowLevelWidget;
 import jsx.ui.Style;
 
 /**
- * @version 2015/10/09 15:09:12
+ * @version 2015/10/12 11:18:05
  */
-abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T> {
-
-    /** The mark size. */
-    protected static final Numeric markSize = new Numeric(14, Unit.px);
+abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWidget<T> {
 
     /** The button type. */
     private final String type;
@@ -41,48 +36,36 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
     /** The group name. */
     private final String name;
 
-    /** The check status. */
-    public final ReadOnlyBooleanProperty check;
+    /** The associated value. */
+    protected final V value;
 
     /** The associated label. */
-    public final StringProperty label;
+    public final String label;
 
     /** The checkbox id. */
     private final String id;
 
     /**
      * <p>
-     * Create Checkbox.
+     * Create marked button.
      * </p>
      * 
+     * @param type
+     * @param name
      * @param value
      * @param label
      */
-    protected MarkedButton(String type, String name, BooleanProperty value, StringProperty label) {
+    protected MarkedButton(String type, Property group, V value, String label) {
+        Objects.nonNull(group);
+        Objects.nonNull(value);
+
         this.type = type;
-        this.name = name;
-        this.check = value;
+        this.name = "Group" + group.hashCode();
+        this.value = value;
         this.label = label;
-        this.id = "Mark" + check.hashCode();
+        this.id = "Mark" + hashCode();
 
-        // when(Click).at($.Root).to(e -> {
-        // // e.preventDefault();
-        //
-        // check.set(!check.get());
-        // });
-
-        when(Change).at($.Root).to(v -> {
-            NativeBoolean state = (NativeBoolean) v.target.property("checked");
-            System.out.println("Value changed " + state);
-            value.set(state.booleanValue());
-        });
-    }
-
-    public T change(Consumer<Boolean> value) {
-        check.addListener((object, oldValue, newValue) -> {
-            value.accept(newValue);
-        });
-        return (T) this;
+        when(Change).at($.Root).to(this::change);
     }
 
     /**
@@ -90,9 +73,9 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
      */
     @Override
     protected final void virtualize() {
-        box(Root, $.Root, rootStyle.getValue(), If(check, $.Checked), () -> {
+        box(Root, $.Root, rootStyle.getValue(), If(isMarked(), $.Checked), () -> {
             html("input", $.CheckBox, attr("type", type), attr("name", name), attr("id", id));
-            html("label", $.Label.of(radius()), attr("for", id), contents(label.get()));
+            html("label", $.Label.of(radius()), attr("for", id), contents(label));
             svg("svg", $.SVG, () -> {
                 virtualizeMark();
             });
@@ -116,9 +99,28 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
     protected abstract Numeric radius();
 
     /**
-     * @version 2015/10/06 13:56:37
+     * <p>
+     * Test whether this button is marked or not.
+     * </p>
+     * 
+     * @return
+     */
+    protected abstract boolean isMarked();
+
+    /**
+     * <p>
+     * Change the selection.
+     * </p>
+     */
+    protected abstract void change(UIEvent event);
+
+    /**
+     * @version 2015/10/12 11:17:56
      */
     protected static class $ extends PieceStyle {
+
+        /** The mark size. */
+        static Numeric markSize = new Numeric(14, Unit.px);
 
         static Numeric labelGap = new Numeric(8, px);
 
@@ -148,7 +150,8 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
             display.none(); // hide default UI
         };
 
-        static ValueStyle<Numeric> Label = radius -> {
+        static ValueStyle<Numeric> Label = radiusSize -> {
+            display.block();
             padding.left(markSize.add(labelGap));
             cursor.pointer();
 
@@ -157,7 +160,7 @@ abstract class MarkedButton<T extends MarkedButton<T>> extends LowLevelWidget<T>
                 display.block();
                 position.centerVertically().left(0, px);
 
-                border.width(markLineWidth).solid().color(markColor).radius(radius);
+                border.width(markLineWidth).solid().color(markColor).radius(radiusSize);
                 box.size(markSize).shadow(shadow().blurRadius(0, px).offset(1, 1, px).inset().color(Color.rgba(0, 0, 0, 0.08)));
 
                 parentHover(FocusedBorder);

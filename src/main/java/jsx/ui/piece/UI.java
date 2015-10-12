@@ -12,9 +12,10 @@ package jsx.ui.piece;
 import java.awt.Checkbox;
 import java.util.Objects;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -102,50 +103,28 @@ public class UI {
 
     /**
      * <p>
-     * Create {@link Checkbox} with the specified label.
-     * </p>
-     * 
-     * @param label
-     */
-    public static final CheckBox checkbox(String label) {
-        return checkbox(null, new SimpleStringProperty(label));
-    }
-
-    /**
-     * <p>
-     * Create {@link Checkbox} with the specified boolean value.
+     * Create {@link Checkbox} with the specified value.
      * </p>
      * 
      * @param value
      */
-    public static final CheckBox checkbox(BooleanProperty value) {
-        return checkbox(value, null);
-    }
-
-    /**
-     * <p>
-     * Create {@link Checkbox} with the specified boolean value.
-     * </p>
-     * 
-     * @param value
-     */
-    public static final CheckBox checkbox(BooleanProperty value, StringProperty label) {
-        CheckBox box = new CheckBox(value, label);
-        ((Widget) box).id = Objects.hash(value, label);
+    public static final <T> CheckBox checkbox(SetProperty<T> group, T value, String label) {
+        CheckBox box = new CheckBox(group, value, label);
+        ((Widget) box).id = Objects.hash(value);
 
         return box;
     }
 
     /**
      * <p>
-     * Create {@link Checkbox} with the specified boolean value.
+     * Create {@link RadioBox} with the specified value.
      * </p>
      * 
      * @param value
      */
-    public static final RadioBox radiobox(RadioGroup group, BooleanProperty value, StringProperty label) {
+    public static final <T> RadioBox<T> radiobox(Property<T> group, T value, String label) {
         RadioBox box = new RadioBox(group, value, label);
-        ((Widget) box).id = Objects.hash(value, label);
+        ((Widget) box).id = Objects.hashCode(value);
 
         return box;
     }

@@ -11,26 +11,36 @@ package jsx.ui.piece;
 
 import static jsx.ui.StructureDescriptor.*;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.Property;
 
+import js.dom.UIEvent;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 
 /**
- * @version 2015/10/06 13:48:53
+ * @version 2015/10/12 11:29:35
  */
-public class RadioBox extends MarkedButton<RadioBox> {
+public class RadioBox<V> extends MarkedButton<RadioBox<V>, V> {
 
     /** The radius. */
     private static final Numeric Radius = new Numeric(50, Unit.percent);
 
+    /** The selection manager. */
+    private final Property<V> selection;
+
     /**
+     * <p>
+     * Create RadioBox.
+     * </p>
+     * 
+     * @param selection
      * @param value
      * @param label
      */
-    RadioBox(RadioGroup group, BooleanProperty value, StringProperty label) {
-        super("radio", "Radio" + group.hashCode(), value, label);
+    RadioBox(Property<V> selection, V value, String label) {
+        super("radio", selection, value, label);
+
+        this.selection = selection;
     }
 
     /**
@@ -38,7 +48,7 @@ public class RadioBox extends MarkedButton<RadioBox> {
      */
     @Override
     protected void virtualizeMark() {
-        svg("circle", attr("fill", "#FFF"), attr("cx", markSize.size / 2), attr("cy", markSize.size / 2), attr("r", 3));
+        svg("circle", attr("fill", "#FFF"), attr("cx", $.markSize.size / 2), attr("cy", $.markSize.size / 2), attr("r", 3));
     }
 
     /**
@@ -47,5 +57,21 @@ public class RadioBox extends MarkedButton<RadioBox> {
     @Override
     protected Numeric radius() {
         return Radius;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isMarked() {
+        return selection.getValue() == value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void change(UIEvent event) {
+        selection.setValue(value);
     }
 }

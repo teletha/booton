@@ -12,35 +12,42 @@ package jsx.ui.piece;
 import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.StructureDescriptor.*;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SetProperty;
 
+import js.dom.UIEvent;
 import jsx.style.value.Numeric;
 import jsx.ui.Style;
 
 /**
- * @version 2015/10/09 15:09:05
+ * @version 2015/10/12 11:29:39
  */
-public class CheckBox extends MarkedButton<CheckBox> {
+public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
 
     /** The radius. */
     private static final Numeric Radius = new Numeric(0.25, em);
 
+    /** The mark style. */
     private static final Style CheckMark = () -> {
         fill.none();
         stroke.color("#FFF").width(2, px).linecap.square().miterLimit(10);
     };
+
+    /** The selection manager. */
+    private final SetProperty<V> selection;
 
     /**
      * <p>
      * Create Checkbox.
      * </p>
      * 
+     * @param selection
      * @param value
      * @param label
      */
-    public CheckBox(BooleanProperty value, StringProperty label) {
-        super("checkbox", null, value, label);
+    CheckBox(SetProperty selection, V value, String label) {
+        super("checkbox", selection, value, label);
+
+        this.selection = selection;
     }
 
     /**
@@ -57,5 +64,23 @@ public class CheckBox extends MarkedButton<CheckBox> {
     @Override
     protected Numeric radius() {
         return Radius;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isMarked() {
+        return selection.contains(value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void change(UIEvent event) {
+        if (!selection.add(value)) {
+            selection.remove(value);
+        }
     }
 }

@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyProperty;
 
 import js.dom.Element;
 import js.dom.EventTarget;
@@ -37,7 +37,7 @@ import kiss.Manageable;
 import kiss.Observer;
 
 /**
- * @version 2015/09/27 11:52:23
+ * @version 2015/10/12 10:44:58
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public abstract class Widget implements Declarable {
@@ -110,10 +110,12 @@ public abstract class Widget implements Declarable {
 
         for (ModelParameter meta : modelData.models) {
             try {
-                Property property = (Property) meta.field.get(this);
+                ReadOnlyProperty property = (ReadOnlyProperty) meta.field.get(this);
 
                 if (property != null) {
-                    property.addListener(value -> update());
+                    property.addListener((instance, oldValue, newValue) -> {
+                        update();
+                    });
                 }
             } catch (Exception e) {
                 throw I.quiet(e);
@@ -138,7 +140,7 @@ public abstract class Widget implements Declarable {
          */
         private Modeldata(Class clazz) {
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(Model.class) && Property.class.isAssignableFrom(field.getType())) {
+                if (field.isAnnotationPresent(Model.class) && ReadOnlyProperty.class.isAssignableFrom(field.getType())) {
                     models.add(new ModelParameter(field.getName(), null, field));
                 }
             }
