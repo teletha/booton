@@ -7,6 +7,18 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
+/* =========================================
+ * Define System Font
+ * ========================================= */
+@font-face {
+  font-family: "System";
+  src: local("-apple-system"),
+       local("Helvetica Neue"),
+       local("Noto Sans"),
+       local("Roboto"),
+       local("Segoe UI"),
+       local("Tahoma");
+}
 
 /* =========================================
  * Global
@@ -20,6 +32,7 @@
 	margin: 0;
 	padding: 0;
 	font: inherit;
+	font-family: "System", sans-serif;
 }
 
 html {
