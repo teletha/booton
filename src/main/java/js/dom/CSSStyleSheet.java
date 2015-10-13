@@ -89,10 +89,10 @@ public class CSSStyleSheet implements JavascriptNative {
      * 
      * @param style A target style to define.
      */
-    public static void define(Style style) {
+    public static void define(Style style, boolean root) {
         if (style != null && styles.add(style)) {
             WidgetLog.DefineStyle.start();
-            define(StyleRule.create("$", style));
+            define(StyleRule.create("$", style, root));
             WidgetLog.DefineStyle.stop();
         }
     }
@@ -105,7 +105,6 @@ public class CSSStyleSheet implements JavascriptNative {
      * @param rule A target style rule to define.
      */
     private static void define(StyleRule rule) {
-        System.out.println(rule.toString());
         base.insertRule(rule.toString(), base.cssRules.length());
 
         for (int i = 0; i < rule.children.length(); i++) {

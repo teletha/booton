@@ -40,7 +40,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * @return Chainable API.
      */
     public Element add(Style style) {
-        CSSStyleSheet.define(style);
+        CSSStyleSheet.define(style, false);
 
         for (String name : style.names()) {
             classList().add(name);

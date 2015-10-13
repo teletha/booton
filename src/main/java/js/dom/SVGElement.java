@@ -108,7 +108,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
                 classes.push(name);
                 attr("class", classes.join(" "));
 
-                CSSStyleSheet.define(style);
+                CSSStyleSheet.define(style, false);
             }
         }
 
@@ -155,7 +155,7 @@ public abstract class SVGElement extends Element implements JavascriptNative {
 
         if (index == -1) {
             classes.push(name);
-            CSSStyleSheet.define(style);
+            CSSStyleSheet.define(style, false);
         } else {
             classes.remove(index);
         }

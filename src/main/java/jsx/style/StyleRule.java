@@ -180,18 +180,16 @@ public class StyleRule {
      * @param object A style description.
      * @return A create new {@link StyleRule}.
      */
-    public static StyleRule create(String template, Style style) {
+    public static StyleRule create(String template, Style style, boolean root) {
         // store parent rule
         StyleRule parent = PropertyDefinition.properties;
 
         // compute selector
         String selector;
 
-        if (parent == null) {
-            System.out.println("create ." + style.name());
+        if (parent == null || root) {
             selector = "." + style.name();
         } else {
-            System.out.println("with parent  " + parent.selector);
             // check pseudo element
             String pseudo;
             int index = parent.selector.indexOf("::");

@@ -35,7 +35,10 @@ class MultipleStyle implements Style {
         this.names = new String[styles.length + 1];
 
         for (int i = 0; i < names.length - 1; i++) {
-            names[i] = styles[i].name();
+            Style style = styles[i];
+
+            names[i] = style.name();
+            CSSStyleSheet.define(style, true);
         }
         names[names.length - 1] = name();
     }
@@ -65,7 +68,6 @@ class MultipleStyle implements Style {
      */
     private static void merge(List<Style> list, Style... styles) {
         for (Style style : styles) {
-            CSSStyleSheet.define(style);
             if (style instanceof MultipleStyle) {
                 merge(list, ((MultipleStyle) style).styles);
             } else if (!list.contains(style)) {
