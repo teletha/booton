@@ -22,7 +22,7 @@ import javafx.beans.property.ReadOnlyProperty;
 import js.lang.NativeString;
 
 /**
- * @version 2015/09/30 21:50:25
+ * @version 2015/10/14 10:18:46
  */
 public class StructureDescriptor {
 
@@ -487,21 +487,9 @@ public class StructureDescriptor {
      * @param children A list of child widget.
      */
     public static <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
-        return () -> {
-            // store parent context
-            Object parentContext = localContext;
-            int parentModifier = localContextIdModifier;
-
-            for (T child : children) {
-                localContext = child;
-                localContextIdModifier = Objects.hash(child);
-                widget(Widget.of(childType, child));
-            }
-
-            // restore parent context
-            localContext = parentContext;
-            localContextIdModifier = parentModifier;
-        };
+        return contents(children, child -> {
+            widget(Widget.of(childType, child));
+        });
     }
 
     /**
@@ -543,14 +531,17 @@ public class StructureDescriptor {
         return () -> {
             // store parent context
             Object parentContext = localContext;
+            int parentModifier = localContextIdModifier;
 
             for (T content : contents) {
                 localContext = content;
+                localContextIdModifier = (Objects.hash(content) + 117) ^ 31;
                 process.accept(content);
             }
 
             // restore parent context
             localContext = parentContext;
+            localContextIdModifier = parentModifier;
         };
     }
 
