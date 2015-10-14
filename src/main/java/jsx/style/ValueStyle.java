@@ -11,9 +11,10 @@ package jsx.style;
 
 import static jsx.style.ValuedStyle.*;
 
+import java.util.HashMap;
+
 import jsx.ui.Location;
 import jsx.ui.Style;
-import kiss.I;
 
 /**
  * @version 2015/09/29 10:21:36
@@ -36,6 +37,6 @@ public interface ValueStyle<V> extends Location<V> {
      * @return A refined {@link Style}.
      */
     default Style of(V value) {
-        return cache.computeIfAbsent(I.pair(this, value), key -> new ValuedStyle(this, value));
+        return cache.computeIfAbsent(this, style -> new HashMap()).computeIfAbsent(value, key -> new ValuedStyle(this, key));
     }
 }

@@ -24,7 +24,7 @@ import jsx.ui.Style;
 class ValuedStyle<V> implements Style {
 
     /** The cache repository. */
-    static final Map<Object, Style> cache = new HashMap();
+    static final Map<ValueStyle, Map<Object, ValuedStyle>> cache = new HashMap();
 
     /** The original {@link ValueStyle}. */
     private final ValueStyle<V> base;
