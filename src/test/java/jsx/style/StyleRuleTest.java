@@ -28,7 +28,7 @@ public class StyleRuleTest {
 
         };
 
-        StyleRule rule = StyleRule.create("$", style);
+        StyleRule rule = StyleRule.create("$", style, false);
         assert rule.selector.equals("." + style.name());
         assert rule.properties.get("display").get().equals("block");
     }
@@ -43,7 +43,7 @@ public class StyleRuleTest {
             });
         };
 
-        StyleRule rule = StyleRule.create("$", style);
+        StyleRule rule = StyleRule.create("$", style, false);
         assert rule.selector.equals("." + style.name());
         assert rule.properties.get("display").get().equals("block");
         assert rule.children.length() == 1;

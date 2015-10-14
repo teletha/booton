@@ -146,7 +146,7 @@ public class TodoUI extends Widget1<TodoTasks> {
         final Output text = UI.output(model1.contents).dbclick(this::startEdit);
 
         /** The completion box. */
-        final CheckBox complete = UI.checkbox(model1.completed, text.text);
+        final CheckBox complete = UI.checkbox(null, model1, model1.contents.get());
 
         /** The remove button. */
         final Button delete = UI.button().label("×").click($(todos.list::remove, model1));

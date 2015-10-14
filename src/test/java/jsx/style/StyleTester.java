@@ -23,7 +23,7 @@ public class StyleTester extends StyleDescriptor {
 
     protected ValidatableStyle style(Style style) {
         // empty style sheet
-        StyleRule rule = StyleRule.create("$", style);
+        StyleRule rule = StyleRule.create("$", style, false);
 
         // search specified rule
         String name = "." + style.name();
