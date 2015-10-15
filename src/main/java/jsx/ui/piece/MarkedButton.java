@@ -56,6 +56,8 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
      * @param label
      */
     protected MarkedButton(String type, Property group, V value, String label) {
+        super(value);
+
         Objects.nonNull(group);
         Objects.nonNull(value);
 

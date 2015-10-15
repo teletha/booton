@@ -17,9 +17,9 @@ import java.lang.reflect.MalformedParameterizedTypeException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeObject;
-import booton.translator.JavaAPIProvider;
 
 /**
  * <p>
@@ -542,23 +542,23 @@ class JSField extends JSAccessibleObject {
      * Returns a string describing this {@code Field}. The format is the access modifiers for the
      * field, if any, followed by the field type, followed by a space, followed by the
      * fully-qualified name of the class declaring the field, followed by a period, followed by the
-     * name of the field. For example:
-     * 
-     * <pre>
+     * name of the field. For example: <pre>
      *    public static final int java.lang.Thread.MIN_PRIORITY
      *    private int java.io.FileDescriptor.fd
      * </pre>
      * <p>
-     * The modifiers are placed in canonical order as specified by
-     * "The Java Language Specification". This is {@code public}, {@code protected} or
-     * {@code private} first, and then other modifiers in the following order: {@code static},
-     * {@code final}, {@code transient}, {@code volatile}.
+     * The modifiers are placed in canonical order as specified by "The Java Language Specification"
+     * . This is {@code public}, {@code protected} or {@code private} first, and then other
+     * modifiers in the following order: {@code static}, {@code final}, {@code transient},
+     * {@code volatile}.
      * 
      * @return a string describing this {@code Field}
      * @jls 8.3.1 Field Modifiers
      */
+    @Override
     public String toString() {
         int mod = getModifiers();
-        return (((mod == 0) ? "" : (Modifier.toString(mod) + " ")) + getType().getTypeName() + " " + getDeclaringClass().getTypeName() + "." + getName());
+        return (((mod == 0) ? "" : (Modifier.toString(mod) + " ")) + getType().getTypeName() + " " + getDeclaringClass()
+                .getTypeName() + "." + getName());
     }
 }

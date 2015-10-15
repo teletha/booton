@@ -21,7 +21,7 @@ import js.lang.NativeFunction;
 import js.lang.reflect.Reflections;
 
 /**
- * @version 2013/10/02 23:00:25
+ * @version 2015/10/15 17:02:01
  */
 @JavaAPIProvider(MethodHandle.class)
 class JSMethodHandle {
@@ -91,7 +91,13 @@ class JSMethodHandle {
      *             method handle call
      */
     public Object invoke(Object context) throws Throwable {
-        return function.apply(context);
+        if (member instanceof Field) {
+            return ((Field) member).get(context);
+        } else if (member instanceof Method) {
+            return ((Method) member).invoke(context);
+        } else {
+            return function.apply(context);
+        }
     }
 
     /**

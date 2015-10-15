@@ -10,7 +10,6 @@
 package jsx.ui.piece;
 
 import java.awt.Checkbox;
-import java.util.Objects;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -19,7 +18,6 @@ import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.ui.Widget;
 import kiss.I;
 
 /**
@@ -110,7 +108,6 @@ public class UI {
      */
     public static final <T> CheckBox checkbox(SetProperty<T> group, T value, String label) {
         CheckBox box = new CheckBox(group, value, label);
-        ((Widget) box).id = Objects.hash(value);
 
         return box;
     }
@@ -124,7 +121,6 @@ public class UI {
      */
     public static final <T> RadioBox<T> radiobox(Property<T> group, T value, String label) {
         RadioBox box = new RadioBox(group, value, label);
-        ((Widget) box).id = Objects.hashCode(value);
 
         return box;
     }

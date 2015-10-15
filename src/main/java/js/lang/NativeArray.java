@@ -15,9 +15,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import kiss.I;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.Translator;
+import kiss.I;
 
 /**
  * @version 2015/01/13 10:48:46

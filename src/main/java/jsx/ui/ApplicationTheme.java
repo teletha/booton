@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.application;
+package jsx.ui;
 
 import jsx.style.value.Color;
 

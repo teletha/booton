@@ -14,14 +14,20 @@ import static js.lang.Global.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
+import javafx.beans.property.SetProperty;
 
 import js.dom.Element;
 import js.dom.EventTarget;
@@ -37,13 +43,13 @@ import kiss.Manageable;
 import kiss.Observer;
 
 /**
- * @version 2015/10/12 10:44:58
+ * @version 2015/10/15 15:32:02
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public abstract class Widget implements Declarable {
 
     /** The cache for widget metadata. */
-    private static final Map<Class, ModelManager> metas = new HashMap();
+    private static final Map<Class, WidgetModelManager> metas = new HashMap();
 
     /** The root locator. */
     protected static final Style Root = () -> {
@@ -63,10 +69,13 @@ public abstract class Widget implements Declarable {
     static Object[] loophole;
 
     /** The identifier of this {@link Widget}. */
-    public int id = loophole == null ? hashCode() : Objects.hash(loophole);
+    protected final int id;
 
     /** The root widget. */
     protected Widget root;
+
+    /** The metadata for this {@link Widget}. */
+    WidgetModelManager modelManager;
 
     /** The event context holder. */
     private NativeArray<EventContext> locators;
@@ -74,13 +83,19 @@ public abstract class Widget implements Declarable {
     /** The virtual root element. */
     private VirtualElement virtual;
 
-    /** The metadata for this {@link Widget}. */
-    private ModelManager modelManager;
-
     /**
      * 
      */
     protected Widget() {
+        this(0);
+    }
+
+    /**
+     * 
+     */
+    protected Widget(int id) {
+        this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
+
         /**
          * <p>
          * Enter the hierarchy of {@link VirtualStructure}.
@@ -106,9 +121,9 @@ public abstract class Widget implements Declarable {
          */
         VirtualWidgetHierarchy.hierarchy.remove(getClass());
 
-        modelManager = metas.computeIfAbsent(getClass(), p -> new ModelManager(p));
+        modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
 
-        for (ModelData meta : modelManager.models) {
+        for (ModelMetadata meta : modelManager.models) {
             try {
                 ReadOnlyProperty property = (ReadOnlyProperty) meta.field.get(this);
 
@@ -124,12 +139,34 @@ public abstract class Widget implements Declarable {
     }
 
     /**
+     * <p>
+     * Store all current values.
+     * </p>
+     */
+    final void store() throws Exception {
+        for (ModelMetadata meta : modelManager.models) {
+            meta.store(this);
+        }
+    }
+
+    /**
+     * <p>
+     * Restore all persisted values.
+     * </p>
+     */
+    final void restore() throws Exception {
+        for (ModelMetadata meta : modelManager.models) {
+            meta.restore(this);
+        }
+    }
+
+    /**
      * @version 2015/10/15 14:51:28
      */
-    private static class ModelManager {
+    class WidgetModelManager {
 
         /** The models. */
-        private final List<ModelData> models = new ArrayList();
+        private final List<ModelMetadata> models = new ArrayList();
 
         /**
          * <p>
@@ -138,19 +175,19 @@ public abstract class Widget implements Declarable {
          * 
          * @param clazz A target widget.
          */
-        private ModelManager(Class clazz) {
+        private WidgetModelManager(Class clazz) {
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(Model.class) && ReadOnlyProperty.class.isAssignableFrom(field.getType())) {
-                    models.add(new ModelData(field.getName(), null, field));
+                if (field.isAnnotationPresent(ModelValue.class) && Property.class.isAssignableFrom(field.getType())) {
+                    models.add(new ModelMetadata(field.getName(), null, field));
                 }
             }
         }
     }
 
     /**
-     * @version 2015/10/08 3:06:58
+     * @version 2015/10/15 17:18:43
      */
-    private static class ModelData {
+    private static class ModelMetadata {
 
         /** The model name. */
         private final String name;
@@ -161,15 +198,94 @@ public abstract class Widget implements Declarable {
         /** The accessor. */
         private final Field field;
 
+        /** The value extractor. */
+        private final Function<Property, Object> extractor;
+
+        /** The value injector. */
+        private final BiConsumer<Property, Object> injector;
+
+        /** The persistence area. */
+        private NativeArray values = new NativeArray();
+
         /**
          * @param name
          * @param type
          * @param field
          */
-        private ModelData(String name, Class type, Field field) {
+        private ModelMetadata(String name, Class type, Field field) {
             this.name = name;
             this.type = type;
             this.field = field;
+
+            if (SetProperty.class.isAssignableFrom(type)) {
+                this.extractor = this::collect;
+                this.injector = this::replenish;
+            } else if (ListProperty.class.isAssignableFrom(type)) {
+                this.extractor = this::collect;
+                this.injector = this::replenish;
+            } else {
+                this.extractor = Property::getValue;
+                this.injector = Property::setValue;
+            }
+        }
+
+        /**
+         * <p>
+         * Helper method to collect items from the specified {@link Collection}.
+         * </p>
+         * 
+         * @param collection An item container.
+         * @return A list of all items.
+         */
+        private Object collect(Property<Collection> collection) {
+            NativeArray array = new NativeArray();
+
+            for (Object object : collection.getValue()) {
+                array.push(object);
+            }
+            return array;
+        }
+
+        /**
+         * <p>
+         * Helper method to add items to the specified {@link Collection}.
+         * </p>
+         * 
+         * @param property An item container.
+         * @param items A list of items.
+         * @return A list of all items.
+         */
+        private void replenish(Property<Collection> property, Object items) {
+            Collection collection = property.getValue();
+            NativeArray arrays = (NativeArray) items;
+
+            for (int i = 0; i < arrays.length(); i++) {
+                collection.add(arrays.get(i));
+            }
+        }
+
+        /**
+         * <p>
+         * Store the current value.
+         * </p>
+         * 
+         * @param widget A target to store.
+         */
+        private void store(Widget widget) throws Exception {
+            values.push(extractor.apply((Property) field.get(widget)));
+            System.out.println("Store " + name + "  [" + values.get(values.length() - 1) + "]");
+        }
+
+        /**
+         * <p>
+         * Restore the persisted value.
+         * </p>
+         * 
+         * @param widget A target to restore.
+         */
+        private void restore(Widget widget) throws Exception {
+            injector.accept((Property) field.get(widget), values.pop());
+            System.out.println("Restore " + name + "  [" + field.get(widget) + "]");
         }
     }
 

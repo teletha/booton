@@ -16,10 +16,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2015/10/08 1:10:53
+ * @version 2015/08/18 10:37:26
  */
-@Documented
-@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Model {
+@Target(ElementType.METHOD)
+@Documented
+public @interface Route {
 }

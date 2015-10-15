@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.application;
+package jsx.ui;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -16,10 +16,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2015/08/18 10:37:26
+ * @version 2015/10/08 1:10:53
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 @Documented
-public @interface Route {
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ModelValue {
 }

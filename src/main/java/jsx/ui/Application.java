@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.application;
+package jsx.ui;
 
 import static js.lang.Global.*;
 
@@ -21,7 +21,6 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import jsx.ui.Widget;
 import kiss.Codec;
 import kiss.I;
 import kiss.Interceptor;
@@ -36,6 +35,9 @@ public abstract class Application {
 
     /** The path router. */
     private final NativeArray<PageRoute> router = new NativeArray();
+
+    /** The current displayed root widget. */
+    private Widget currentDisplayed;
 
     /**
      * Initialize application.
@@ -109,8 +111,6 @@ public abstract class Application {
             return;
         }
 
-        System.out.println("Change " + path);
-
         for (int i = 0; i < router.length(); i++) {
             Widget widget = router.get(i).dispatch(path);
 
@@ -118,7 +118,6 @@ public abstract class Application {
                 return;
             }
         }
-
         show(null);
     }
 
@@ -130,18 +129,31 @@ public abstract class Application {
      * @param widget
      */
     private void show(Widget widget) {
-        if (widget == null) {
-            widget = findDefault();
+        try {
+            if (widget == null) {
+                widget = findDefault();
+            }
+
+            if (currentDisplayed != null) {
+                currentDisplayed.store();
+
+                widget.restore();
+            }
+
+            // create element cradle
+            DocumentFragment cradle = document.createDocumentFragment();
+
+            // build page element
+            widget.renderIn(cradle.child("div"));
+
+            // clear old page and append new page
+            document.getElementById("Content").empty().append(cradle);
+
+            // manage page transition
+            currentDisplayed = widget;
+        } catch (Exception e) {
+            throw I.quiet(e);
         }
-
-        // create element cradle
-        DocumentFragment cradle = document.createDocumentFragment();
-
-        // build page element
-        widget.renderIn(cradle.child("div"));
-
-        // clear old page and append new page
-        document.getElementById("Content").empty().append(cradle);
     }
 
     /**

@@ -13,6 +13,7 @@ import static js.dom.UIAction.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -29,7 +30,7 @@ import kiss.Disposable;
 import kiss.Events;
 
 /**
- * @version 2014/10/10 9:24:46
+ * @version 2015/10/15 15:31:36
  */
 public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget {
 
@@ -39,6 +40,27 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
     private BooleanProperty hover;
 
     protected final Property<Declarable> rootStyle = new SimpleObjectProperty();
+
+    /**
+     * 
+     */
+    protected LowLevelWidget() {
+        super();
+    }
+
+    /**
+     * @param id
+     */
+    protected LowLevelWidget(int id) {
+        super(id);
+    }
+
+    /**
+     * @param id
+     */
+    protected LowLevelWidget(Object id) {
+        super(Objects.hash(id));
+    }
 
     public BooleanProperty hover() {
         if (hover == null) {
