@@ -217,10 +217,7 @@ public abstract class Widget implements Declarable {
             this.type = type;
             this.field = field;
 
-            if (SetProperty.class.isAssignableFrom(type)) {
-                this.extractor = this::collect;
-                this.injector = this::replenish;
-            } else if (ListProperty.class.isAssignableFrom(type)) {
+            if (SetProperty.class.isAssignableFrom(type) || ListProperty.class.isAssignableFrom(type)) {
                 this.extractor = this::collect;
                 this.injector = this::replenish;
             } else {

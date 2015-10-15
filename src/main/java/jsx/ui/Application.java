@@ -12,6 +12,8 @@ package jsx.ui;
 import static js.lang.Global.*;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,9 +37,6 @@ public abstract class Application {
 
     /** The path router. */
     private final NativeArray<PageRoute> router = new NativeArray();
-
-    /** The current displayed root widget. */
-    private Widget currentDisplayed;
 
     /**
      * Initialize application.
@@ -107,7 +106,7 @@ public abstract class Application {
         }
 
         if (path.length() == 0) {
-            show(null);
+            show(path, null);
             return;
         }
 
@@ -118,7 +117,7 @@ public abstract class Application {
                 return;
             }
         }
-        show(null);
+        show(path, null);
     }
 
     /**
@@ -126,34 +125,22 @@ public abstract class Application {
      * Show the specified {@link Widget}.
      * </p>
      * 
-     * @param widget
+     * @param path A client specified path.
+     * @param widget An associated widget of the specified path.
      */
-    private void show(Widget widget) {
-        try {
-            if (widget == null) {
-                widget = findDefault();
-            }
-
-            if (currentDisplayed != null) {
-                currentDisplayed.store();
-
-                widget.restore();
-            }
-
-            // create element cradle
-            DocumentFragment cradle = document.createDocumentFragment();
-
-            // build page element
-            widget.renderIn(cradle.child("div"));
-
-            // clear old page and append new page
-            document.getElementById("Content").empty().append(cradle);
-
-            // manage page transition
-            currentDisplayed = widget;
-        } catch (Exception e) {
-            throw I.quiet(e);
+    private void show(String path, Widget widget) {
+        if (widget == null) {
+            widget = findDefault();
         }
+
+        // create element cradle
+        DocumentFragment cradle = document.createDocumentFragment();
+
+        // build page element
+        widget.renderIn(cradle.child("div"));
+
+        // clear old page and append new page
+        document.getElementById("Content").empty().append(cradle);
     }
 
     /**
@@ -247,32 +234,43 @@ public abstract class Application {
      * @version 2015/08/18 16:48:41
      */
     @Manageable(lifestyle = Singleton.class)
-    static class Router extends Interceptor<Route> {
+    private static class Router extends Interceptor<Route> {
+
+        /** The cache for root widget. */
+        private final static Map<String, Object> cache = new HashMap();
 
         /**
          * {@inheritDoc}
          */
         @Override
         protected Object invoke(Object... params) {
-            Object widget = super.invoke(params);
+            // rebuild path
+            StringBuilder builder = new StringBuilder("#").append(name);
 
+            for (Object param : params) {
+                builder.append("/").append(I.find(Codec.class, param.getClass()).encode(param));
+            }
+
+            // update history if needed
+            String path = builder.toString();
+
+            // create widget for this path
+            Object widget;
+
+            if (annotation.cache()) {
+                widget = cache.computeIfAbsent(path, p -> super.invoke(params));
+            } else {
+                widget = super.invoke(params);
+            }
+
+            // validation
             if (that instanceof Application && widget instanceof Widget) {
-                // rebuild path
-                StringBuilder builder = new StringBuilder("#").append(name);
-
-                for (Object param : params) {
-                    builder.append("/").append(I.find(Codec.class, param.getClass()).encode(param));
-                }
-
-                // update history if needed
-                String path = builder.toString();
-
                 if (!location.hash.equals(path)) {
                     history.pushState("", "", path);
                 }
 
                 // render widget
-                ((Application) that).show((Widget) widget);
+                ((Application) that).show(path, (Widget) widget);
             }
             return widget;
         }

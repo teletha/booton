@@ -16,10 +16,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @version 2015/08/18 10:37:26
+ * @version 2015/10/15 22:31:56
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
 public @interface Route {
+
+    /**
+     * <p>
+     * Configure that the page is cached or not.
+     * </p>
+     * 
+     * @return
+     */
+    boolean cache() default true;
 }
