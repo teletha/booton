@@ -177,7 +177,7 @@ public abstract class Widget implements Declarable {
          */
         private WidgetModelManager(Class clazz) {
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(ModelValue.class) && Property.class.isAssignableFrom(field.getType())) {
+                if (field.isAnnotationPresent(ModelValue.class) && ReadOnlyProperty.class.isAssignableFrom(field.getType())) {
                     models.add(new ModelMetadata(field.getName(), null, field));
                 }
             }
