@@ -43,7 +43,7 @@ import kiss.Observer;
 public abstract class Widget implements Declarable {
 
     /** The cache for widget metadata. */
-    private static final Map<Class, Modeldata> metas = new HashMap();
+    private static final Map<Class, ModelManager> metas = new HashMap();
 
     /** The root locator. */
     protected static final Style Root = () -> {
@@ -75,7 +75,7 @@ public abstract class Widget implements Declarable {
     private VirtualElement virtual;
 
     /** The metadata for this {@link Widget}. */
-    private Modeldata modelData;
+    private ModelManager modelManager;
 
     /**
      * 
@@ -106,9 +106,9 @@ public abstract class Widget implements Declarable {
          */
         VirtualWidgetHierarchy.hierarchy.remove(getClass());
 
-        modelData = metas.computeIfAbsent(getClass(), p -> new Modeldata(p));
+        modelManager = metas.computeIfAbsent(getClass(), p -> new ModelManager(p));
 
-        for (ModelParameter meta : modelData.models) {
+        for (ModelData meta : modelManager.models) {
             try {
                 ReadOnlyProperty property = (ReadOnlyProperty) meta.field.get(this);
 
@@ -124,12 +124,12 @@ public abstract class Widget implements Declarable {
     }
 
     /**
-     * @version 2015/10/08 1:20:21
+     * @version 2015/10/15 14:51:28
      */
-    private static class Modeldata {
+    private static class ModelManager {
 
         /** The models. */
-        private final List<ModelParameter> models = new ArrayList();
+        private final List<ModelData> models = new ArrayList();
 
         /**
          * <p>
@@ -138,10 +138,10 @@ public abstract class Widget implements Declarable {
          * 
          * @param clazz A target widget.
          */
-        private Modeldata(Class clazz) {
+        private ModelManager(Class clazz) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(Model.class) && ReadOnlyProperty.class.isAssignableFrom(field.getType())) {
-                    models.add(new ModelParameter(field.getName(), null, field));
+                    models.add(new ModelData(field.getName(), null, field));
                 }
             }
         }
@@ -150,7 +150,7 @@ public abstract class Widget implements Declarable {
     /**
      * @version 2015/10/08 3:06:58
      */
-    private static class ModelParameter {
+    private static class ModelData {
 
         /** The model name. */
         private final String name;
@@ -166,7 +166,7 @@ public abstract class Widget implements Declarable {
          * @param type
          * @param field
          */
-        private ModelParameter(String name, Class type, Field field) {
+        private ModelData(String name, Class type, Field field) {
             this.name = name;
             this.type = type;
             this.field = field;
