@@ -10,10 +10,9 @@
 package jsx.ui;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
 import javafx.beans.property.Property;
@@ -464,7 +463,30 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <T extends Enum> Declarable contents(Class<? extends Widget1<T>> childType, Class<T> children) {
+    public static Declarable contents(int size, Consumer<Integer> process) {
+        return contents(0, size, process);
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     *
+     * @param children A list of child widget.
+     */
+    public static Declarable contents(int initial, int size, Consumer<Integer> process) {
+        // we can optimize code using IntConsumer, but the uniformity has high priority than that
+        return contents(new Range(initial, initial + size), process);
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     *
+     * @param children A list of child widget.
+     */
+    public static <E extends Enum> Declarable contents(Class<? extends Widget1<E>> childType, Class<E> children) {
         return contents(childType, children.getEnumConstants());
     }
 
@@ -475,7 +497,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(Class<? extends Widget1<T>> childType, T[] children) {
+    public static <C> Declarable contents(Class<? extends Widget1<C>> childType, C[] children) {
         return contents(childType, Arrays.asList(children));
     }
 
@@ -486,7 +508,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <T> Declarable contents(Class<? extends Widget1<T>> childType, List<T> children) {
+    public static <C> Declarable contents(Class<? extends Widget1<C>> childType, Iterable<C> children) {
         return contents(children, child -> {
             widget(Widget.of(childType, child));
         });
@@ -501,7 +523,7 @@ public class StructureDescriptor {
      * @param process A content writer.
      * @return A declaration of contents.
      */
-    public static <T extends Enum> Declarable contents(Class<T> type, Consumer<T> process) {
+    public static <E extends Enum> Declarable contents(Class<E> type, Consumer<E> process) {
         return contents(type.getEnumConstants(), process);
     }
 
@@ -514,7 +536,7 @@ public class StructureDescriptor {
      * @param process A content writer.
      * @return A declaration of contents.
      */
-    public static <T> Declarable contents(T[] contents, Consumer<T> process) {
+    public static <C> Declarable contents(C[] contents, Consumer<C> process) {
         return contents(Arrays.asList(contents), process);
     }
 
@@ -527,13 +549,13 @@ public class StructureDescriptor {
      * @param process A content writer.
      * @return A declaration of contents.
      */
-    public static <T> Declarable contents(List<T> contents, Consumer<T> process) {
+    public static <C> Declarable contents(Iterable<C> contents, Consumer<C> process) {
         return () -> {
             // store parent context
             Object parentContext = localContext;
             int parentModifier = localContextIdModifier;
 
-            for (T content : contents) {
+            for (C content : contents) {
                 localContext = content;
                 localContextIdModifier = (Objects.hash(content) + 117) ^ 31;
                 process.accept(content);
@@ -541,39 +563,6 @@ public class StructureDescriptor {
 
             // restore parent context
             localContext = parentContext;
-            localContextIdModifier = parentModifier;
-        };
-    }
-
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     *
-     * @param children A list of child widget.
-     */
-    public static <T> Declarable contents(int size, IntConsumer process) {
-        return contents(LocalId.findContextLineNumber(), size, process);
-    }
-
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     *
-     * @param children A list of child widget.
-     */
-    public static <T> Declarable contents(int initial, int size, IntConsumer process) {
-        return () -> {
-            // store parent context
-            int parentModifier = localContextIdModifier;
-
-            for (int i = 0; i < size; i++) {
-                localContextIdModifier = (i + 117 + latestElement.id) * 31;
-                process.accept(i + initial);
-            }
-
-            // restore parent context
             localContextIdModifier = parentModifier;
         };
     }
@@ -604,6 +593,51 @@ public class StructureDescriptor {
         return () -> {
             text(texts);
         };
+    }
+
+    /**
+     * @version 2015/10/16 10:19:45
+     */
+    private static class Range implements Iterator<Integer>, Iterable<Integer> {
+
+        /** The current number. */
+        private int current;
+
+        /** The end number. */
+        private final int end;
+
+        /**
+         * @param start
+         * @param end
+         */
+        private Range(int start, int end) {
+            this.current = start;
+            this.end = end;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext() {
+            return current < end;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Integer next() {
+            return current++;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Iterator<Integer> iterator() {
+            return this;
+        }
     }
 
     /**
