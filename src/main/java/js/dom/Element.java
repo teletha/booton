@@ -26,7 +26,7 @@ import jsx.ui.Style;
  * Enhanced {@link org.w3c.dom.Element} for web platform.
  * </p>
  * 
- * @version 2015/10/04 22:02:52
+ * @version 2015/10/16 15:04:24
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "Element")
 public abstract class Element extends Node<Element>implements JavascriptNative {
@@ -718,7 +718,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      *         appear in the tree.
      */
     @JavascriptNativeProperty
-    protected final native NodeList<Element> getElementsByTagName(String tagName);
+    protected native NodeList<Element> getElementsByTagName(String tagName);
 
     /**
      * <p>
@@ -730,7 +730,7 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      *         in the document.
      */
     @JavascriptNativeProperty
-    protected final native Element getElementById(String id);
+    protected native Element getElementById(String id);
 
     /**
      * <p>
@@ -738,6 +738,5 @@ public abstract class Element extends Node<Element>implements JavascriptNative {
      * </p>
      */
     @JavascriptNativeProperty
-    protected final native void scrollIntoView();
-
+    protected native void scrollIntoView();
 }

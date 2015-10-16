@@ -306,6 +306,21 @@ public abstract class Widget implements Declarable {
 
     /**
      * <p>
+     * Unrender UI {@link Widget} on the specified {@link Element}.
+     * </p>
+     * 
+     * @param rootElement
+     */
+    public final void renderOut(Element rootElement) {
+        disposeEventListeners(rootElement);
+
+        this.virtual.dom = null;
+        this.virtual = null;
+        this.root = null;
+    }
+
+    /**
+     * <p>
      * Validate a state of this widget.
      * </p>
      * 
@@ -356,6 +371,25 @@ public abstract class Widget implements Declarable {
 
                 for (UIAction action : context.actions) {
                     target.addEventListener(action.name, context.listener);
+                }
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Dispose event listeners on this {@link Widget}.
+     * </p>
+     * 
+     * @param target A event target.
+     */
+    void disposeEventListeners(EventTarget target) {
+        if (locators != null) {
+            for (int i = 0; i < locators.length(); i++) {
+                EventContext context = locators.get(i);
+
+                for (UIAction action : context.actions) {
+                    target.removeEventListener(action.name, context.listener);
                 }
             }
         }
@@ -599,6 +633,10 @@ public abstract class Widget implements Declarable {
          */
         @Override
         public void accept(UIEvent event) {
+            if (observers == null) {
+                return;
+            }
+
             Element current = event.target;
             Element limit = event.currentTarget;
 

@@ -45,6 +45,7 @@ class PatchDiff {
         List<Patch> diff = diff(prev, next);
 
         for (int i = 0; i < diff.size(); i++) {
+            System.out.println(diff.get(i));
             diff.get(i).apply();
         }
         prev.dispose();

@@ -20,7 +20,7 @@ import jsx.ui.Style;
  * Enhanced {@link org.w3c.dom.Document} for web platform.
  * </p>
  * 
- * @version 2013/07/30 21:22:36
+ * @version 2015/10/16 15:02:17
  */
 public abstract class Document extends Node implements JavascriptNative {
 
@@ -129,7 +129,7 @@ public abstract class Document extends Node implements JavascriptNative {
      * @return A HTMLCollection of found elements.
      */
     @JavascriptNativeProperty
-    public final native NodeList<Element> getElementsByClassName(Style className);
+    public native NodeList<Element> getElementsByClassName(Style className);
 
     /**
      * <p>
@@ -145,7 +145,7 @@ public abstract class Document extends Node implements JavascriptNative {
      *         appear in the tree.
      */
     @JavascriptNativeProperty
-    public final native NodeList<Element> getElementsByTagName(String tagName);
+    public native NodeList<Element> getElementsByTagName(String tagName);
 
     /**
      * <p>
@@ -157,7 +157,7 @@ public abstract class Document extends Node implements JavascriptNative {
      *         in the document.
      */
     @JavascriptNativeProperty
-    public final native Element getElementById(String id);
+    public native Element getElementById(String id);
 
     /**
      * <p>

@@ -571,6 +571,14 @@ class EmulateElement extends Element implements EmulateNodable {
      * {@inheritDoc}
      */
     @Override
+    protected Element getElementById(String id) {
+        return EmulateElement.convert(I.xml(new JavaElement(this)).find("#" + id));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected Element querySelector(String selector) {
         NodeList<Element> query = querySelectorAll(selector);
 

@@ -18,6 +18,7 @@ import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import jsx.ui.Widget;
 import kiss.I;
 
 /**
@@ -150,5 +151,17 @@ public class UI {
      */
     public static final <M> Select<M> select(ListProperty<M> values) {
         return new Select(values);
+    }
+
+    /**
+     * <p>
+     * Create {@link ModalWindow} for the specified {@link Widget}.
+     * </p>
+     * 
+     * @param widgetType
+     * @return
+     */
+    public static final <M extends Widget> ModalWindow<M> modal(Class<M> widgetType) {
+        return new ModalWindow(widgetType);
     }
 }
