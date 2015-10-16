@@ -11,7 +11,8 @@ package jsx.ui.piece;
 
 import static js.lang.Global.*;
 
-import javafx.beans.property.BooleanProperty;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import js.dom.Element;
 import jsx.style.StyleDescriptor;
@@ -33,16 +34,13 @@ public class ModalWindow<W extends Widget> extends Widget {
     /**
      * @param widgetType
      */
-    ModalWindow(Class<W> widgetType) {
-        this.contents = Widget.of(widgetType);
+    <S, H> ModalWindow(W widget, Events<S> show, Events<H> hide, BiConsumer<S, H> process) {
+        Objects.nonNull(widget);
+        Objects.nonNull(show);
+        Objects.nonNull(hide);
 
-        // lazy initialization
-        if (Modal == null) {
+        this.contents = widget;
 
-        }
-    }
-
-    public ModalWindow<W> showWhen(Events show) {
         show.to(v -> {
             Modal = document.createElement("div").add($.Modal);
 
@@ -54,31 +52,16 @@ public class ModalWindow<W extends Widget> extends Widget {
             contents.renderIn(Modal.add($.Show));
         });
 
-        // API definition
-        return this;
-    }
+        hide.to(v -> {
+            // hide modal
+            document.documentElement().remove($.Hide);
+            contents.renderOut(Modal.remove($.Show));
 
-    public ModalWindow<W> showIf(BooleanProperty condition) {
-        condition.addListener((object, oldValue, newValue) -> {
-            if (newValue) {
-                Modal = document.createElement("div").add($.Modal);
-
-                // insert into document
-                document.getElementById("Content").after(Modal);
-
-                // show modal
-                document.documentElement().add($.Hide);
-                contents.renderIn(Modal.add($.Show));
-            } else {
-                // hide modal
-                document.documentElement().remove($.Hide);
-                contents.renderOut(Modal.remove($.Show));
-
-                // remove modal element
-                Modal.remove();
-            }
+            // remove modal element
+            Modal.remove();
         });
-        return this;
+
+        show.combine(hide).to(v -> process.accept(v.a, v.e));
     }
 
     /**

@@ -122,9 +122,9 @@ public abstract class Widget implements Declarable {
         VirtualWidgetHierarchy.hierarchy.remove(getClass());
 
         modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
+        try {
+            for (ModelMetadata meta : modelManager.properties) {
 
-        for (ModelMetadata meta : modelManager.models) {
-            try {
                 ReadOnlyProperty property = (ReadOnlyProperty) meta.field.get(this);
 
                 if (property != null) {
@@ -132,9 +132,13 @@ public abstract class Widget implements Declarable {
                         update();
                     });
                 }
-            } catch (Exception e) {
-                throw I.quiet(e);
             }
+
+            for (Field field : modelManager.events) {
+                ((Events) field.get(this)).to(v -> update());
+            }
+        } catch (Exception e) {
+            throw I.quiet(e);
         }
     }
 
@@ -144,7 +148,7 @@ public abstract class Widget implements Declarable {
      * </p>
      */
     final void store() throws Exception {
-        for (ModelMetadata meta : modelManager.models) {
+        for (ModelMetadata meta : modelManager.properties) {
             meta.store(this);
         }
     }
@@ -155,7 +159,7 @@ public abstract class Widget implements Declarable {
      * </p>
      */
     final void restore() throws Exception {
-        for (ModelMetadata meta : modelManager.models) {
+        for (ModelMetadata meta : modelManager.properties) {
             meta.restore(this);
         }
     }
@@ -166,7 +170,10 @@ public abstract class Widget implements Declarable {
     class WidgetModelManager {
 
         /** The models. */
-        private final List<ModelMetadata> models = new ArrayList();
+        private final List<ModelMetadata> properties = new ArrayList();
+
+        /** The events. */
+        private final List<Field> events = new ArrayList();
 
         /**
          * <p>
@@ -177,8 +184,14 @@ public abstract class Widget implements Declarable {
          */
         private WidgetModelManager(Class clazz) {
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(ModelValue.class) && ReadOnlyProperty.class.isAssignableFrom(field.getType())) {
-                    models.add(new ModelMetadata(field.getName(), null, field));
+                if (field.isAnnotationPresent(ModelValue.class)) {
+                    Class type = field.getType();
+
+                    if (ReadOnlyProperty.class.isAssignableFrom(type)) {
+                        properties.add(new ModelMetadata(field.getName(), null, field));
+                    } else if (Events.class.isAssignableFrom(type)) {
+                        events.add(field);
+                    }
                 }
             }
         }

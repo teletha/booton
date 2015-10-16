@@ -9,7 +9,13 @@
  */
 package jsx.ui.piece;
 
+import static js.lang.Global.*;
+
 import java.awt.Checkbox;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -18,8 +24,18 @@ import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import js.dom.Element;
+import jsx.style.StyleDescriptor;
+import jsx.ui.Style;
 import jsx.ui.Widget;
+import jsx.ui.piece.UI.Modal.Builder;
+import jsx.ui.piece.UI.Modal.Closer;
+import jsx.ui.piece.UI.Modal.Opener;
+import jsx.ui.piece.UI.Modal.Processor;
+import kiss.Events;
 import kiss.I;
+import kiss.Observer;
+import kiss.Ternary;
 
 /**
  * @version 2015/10/09 15:28:40
@@ -161,7 +177,252 @@ public class UI {
      * @param widgetType
      * @return
      */
-    public static final <M extends Widget> ModalWindow<M> modal(Class<M> widgetType) {
-        return new ModalWindow(widgetType);
+    public static final Modal.Opener modal() {
+        return new ModalMaker();
+    }
+
+    /**
+     * @version 2015/10/16 23:15:05
+     */
+    interface Modal {
+
+        /**
+         * @version 2015/10/16 23:15:35
+         */
+        interface Opener {
+
+            /**
+             * <p>
+             * Alias method for {@link #openWhen(Events)}.
+             * </p>
+             * 
+             * @param opener A open timing for the modal contents.
+             * @return A contents builder.
+             */
+            default <O> Builder<O> open(Events<O> opener) {
+                return openWhen(opener);
+            }
+
+            /**
+             * <p>
+             * Configure the open timing for the modal contents.
+             * </p>
+             * 
+             * @param opener A open timing for the modal contents.
+             * @return A contents builder.
+             */
+            <O> Builder<O> openWhen(Events<O> opener);
+        }
+
+        /**
+         * @version 2015/10/16 23:17:32
+         */
+        interface Builder<O> {
+
+            /**
+             * <p>
+             * Configure the modal contents.
+             * </p>
+             * 
+             * @param builder
+             * @return
+             */
+            default <W extends Widget> Closer<O, W> contents(Class<W> contents) {
+                return contents(Widget.of(contents));
+            }
+
+            /**
+             * <p>
+             * Configure the modal contents.
+             * </p>
+             * 
+             * @param contents
+             * @return
+             */
+            default <W extends Widget> Closer<O, W> contents(W contents) {
+                return contents(o -> contents);
+            }
+
+            /**
+             * <p>
+             * Configure the modal contents.
+             * </p>
+             * 
+             * @param contents
+             * @return
+             */
+            <W extends Widget> Closer<O, W> contents(Function<O, W> contents);
+        }
+
+        /**
+         * @version 2015/10/16 23:19:22
+         */
+        interface Closer<O, W> {
+
+            /**
+             * <p>
+             * Alias method for {@link #closeWhen(Function)}.
+             * </p>
+             * 
+             * @param closer A close timing for the modal contents.
+             * @return A user action.
+             */
+            default <C> Processor<O, W, C> close(Events<C> closer) {
+                return closeWhen(closer);
+            }
+
+            /**
+             * <p>
+             * Alias method for {@link #closeWhen(Function)}.
+             * </p>
+             * 
+             * @param closer A close timing for the modal contents.
+             * @return A user action.
+             */
+            default <C> Processor<O, W, C> closeWhen(Events<C> closer) {
+                return closeWhen(w -> closer);
+            }
+
+            /**
+             * <p>
+             * Configure the close timing for the modal contents.
+             * </p>
+             * 
+             * @param closer A close timing for the modal contents.
+             * @return A user action.
+             */
+            <C> Processor<O, W, C> closeWhen(Function<W, Events<C>> closer);
+        }
+
+        /**
+         * @version 2015/10/16 23:20:30
+         */
+        interface Processor<O, W, C> {
+
+            /**
+             * <p>
+             * Configure the close action for the modal contents.
+             * </p>
+             * 
+             * @param process
+             * @return
+             */
+            Events<W> process(Consumer<Ternary<O, W, C>> process);
+        }
+    }
+
+    /**
+     * @version 2015/10/16 23:30:34
+     */
+    @SuppressWarnings("hiding")
+    private static class ModalMaker<O, W extends Widget, C> implements Opener, Builder<O>, Closer<O, W>, Processor<O, W, C> {
+
+        private Events<O> opener;
+
+        private Function<O, W> builder;
+
+        private Function<W, Events<C>> closer;
+
+        /** The special element for modal contents. */
+        private Element Modal;
+
+        private final List<Observer> observers = new ArrayList();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <T> Builder<T> openWhen(Events<T> opener) {
+            this.opener = (Events) opener;
+
+            return (Builder<T>) this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <W extends Widget> Closer<O, W> contents(Function<O, W> builder) {
+            this.builder = (Function) builder;
+
+            return (Closer<O, W>) this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public <C> Processor<O, W, C> closeWhen(Function<W, Events<C>> closer) {
+            this.closer = (Function) closer;
+
+            return (Processor<O, W, C>) this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Events<W> process(Consumer<Ternary<O, W, C>> processor) {
+            Events<W> events = new Events<W>(observer -> {
+                observers.add(observer);
+
+                return () -> {
+                    observers.remove(observer);
+                };
+            });
+
+            opener.to(opening -> {
+                Modal = document.createElement("div").add($.Modal);
+
+                // insert into document
+                document.getElementById("Content").after(Modal);
+
+                // show modal
+                document.documentElement().add($.Hide);
+
+                W widget = builder.apply(opening);
+                widget.renderIn(Modal.add($.Show));
+
+                closer.apply(widget).take(1).to(closing -> {
+                    // hide modal
+                    document.documentElement().remove($.Hide);
+                    widget.renderOut(Modal.remove($.Show));
+
+                    // remove modal element
+                    Modal.remove();
+
+                    processor.accept(I.pair(opening, widget, closing));
+
+                    for (Observer observer : observers) {
+                        observer.accept(widget);
+                    }
+                });
+            });
+            return events;
+        }
+
+        /**
+         * @version 2015/10/16 14:46:30
+         */
+        private static class $ extends StyleDescriptor {
+
+            static Style Modal = () -> {
+                display.none();
+            };
+
+            static Style Show = () -> {
+                display.flex().justifyContent.center();
+                box.size(100, percent).zIndex(100);
+                background.color(rgba(255, 255, 255, 0.9));
+                position.fixed().top(0, px).left(0, px);
+                overflow.y.auto();
+                pointerEvents.auto();
+                padding.vertical(2, em);
+            };
+
+            static Style Hide = () -> {
+                overflow.hidden();
+            };
+        }
     }
 }
