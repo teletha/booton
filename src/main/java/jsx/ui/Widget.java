@@ -327,7 +327,7 @@ public abstract class Widget implements Declarable {
     public final void renderOut(Element rootElement) {
         disposeEventListeners(rootElement);
 
-        this.virtual.dom = null;
+        // this.virtual.dom = null;
         this.virtual = null;
         this.root = null;
     }

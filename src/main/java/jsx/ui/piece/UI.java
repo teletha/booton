@@ -14,7 +14,7 @@ import static js.lang.Global.*;
 import java.awt.Checkbox;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Objects;
 import java.util.function.Function;
 
 import javafx.beans.property.IntegerProperty;
@@ -31,7 +31,7 @@ import jsx.ui.Widget;
 import jsx.ui.piece.UI.Modal.Builder;
 import jsx.ui.piece.UI.Modal.Closer;
 import jsx.ui.piece.UI.Modal.Opener;
-import jsx.ui.piece.UI.Modal.Processor;
+import kiss.Binary;
 import kiss.Events;
 import kiss.I;
 import kiss.Observer;
@@ -227,8 +227,8 @@ public class UI {
              * @param builder
              * @return
              */
-            default <W extends Widget> Closer<O, W> contents(Class<W> contents) {
-                return contents(Widget.of(contents));
+            default <W extends Widget> Closer<O, W> show(Class<W> contents) {
+                return show(Widget.of(contents));
             }
 
             /**
@@ -239,8 +239,8 @@ public class UI {
              * @param contents
              * @return
              */
-            default <W extends Widget> Closer<O, W> contents(W contents) {
-                return contents(o -> contents);
+            default <W extends Widget> Closer<O, W> show(W contents) {
+                return show(o -> contents);
             }
 
             /**
@@ -251,7 +251,7 @@ public class UI {
              * @param contents
              * @return
              */
-            <W extends Widget> Closer<O, W> contents(Function<O, W> contents);
+            <W extends Widget> Closer<O, W> show(Function<O, W> contents);
         }
 
         /**
@@ -267,7 +267,7 @@ public class UI {
              * @param closer A close timing for the modal contents.
              * @return A user action.
              */
-            default <C> Processor<O, W, C> close(Events<C> closer) {
+            default <C> Events<Ternary<O, W, C>> close(Events<C> closer) {
                 return closeWhen(closer);
             }
 
@@ -279,7 +279,7 @@ public class UI {
              * @param closer A close timing for the modal contents.
              * @return A user action.
              */
-            default <C> Processor<O, W, C> closeWhen(Events<C> closer) {
+            default <C> Events<Ternary<O, W, C>> closeWhen(Events<C> closer) {
                 return closeWhen(w -> closer);
             }
 
@@ -291,23 +291,7 @@ public class UI {
              * @param closer A close timing for the modal contents.
              * @return A user action.
              */
-            <C> Processor<O, W, C> closeWhen(Function<W, Events<C>> closer);
-        }
-
-        /**
-         * @version 2015/10/16 23:20:30
-         */
-        interface Processor<O, W, C> {
-
-            /**
-             * <p>
-             * Configure the close action for the modal contents.
-             * </p>
-             * 
-             * @param process
-             * @return
-             */
-            Events<W> process(Consumer<Ternary<O, W, C>> process);
+            <C> Events<Ternary<O, W, C>> closeWhen(Function<W, Events<C>> closer);
         }
     }
 
@@ -315,13 +299,11 @@ public class UI {
      * @version 2015/10/16 23:30:34
      */
     @SuppressWarnings("hiding")
-    private static class ModalMaker<O, W extends Widget, C> implements Opener, Builder<O>, Closer<O, W>, Processor<O, W, C> {
+    private static class ModalMaker<O, W extends Widget, C> implements Opener, Builder<O>, Closer<O, W> {
 
         private Events<O> opener;
 
         private Function<O, W> builder;
-
-        private Function<W, Events<C>> closer;
 
         /** The special element for modal contents. */
         private Element Modal;
@@ -333,7 +315,7 @@ public class UI {
          */
         @Override
         public <T> Builder<T> openWhen(Events<T> opener) {
-            this.opener = (Events) opener;
+            this.opener = (Events) Objects.requireNonNull(opener);
 
             return (Builder<T>) this;
         }
@@ -342,8 +324,8 @@ public class UI {
          * {@inheritDoc}
          */
         @Override
-        public <W extends Widget> Closer<O, W> contents(Function<O, W> builder) {
-            this.builder = (Function) builder;
+        public <W extends Widget> Closer<O, W> show(Function<O, W> builder) {
+            this.builder = (Function) Objects.requireNonNull(builder);
 
             return (Closer<O, W>) this;
         }
@@ -352,53 +334,113 @@ public class UI {
          * {@inheritDoc}
          */
         @Override
-        public <C> Processor<O, W, C> closeWhen(Function<W, Events<C>> closer) {
-            this.closer = (Function) closer;
+        public <C> Events<Ternary<O, W, C>> closeWhen(Function<W, Events<C>> closer) {
+            Objects.requireNonNull(closer);
 
-            return (Processor<O, W, C>) this;
+            Events<O> open = opener;
+            // Events<W> content = open.map(builder).sideEffect(this::open);
+            // Events<C> close = content.flatMap(closer).sideEffect(this::close);
+
+            Events<Binary<O, W>> content = open.map(v -> I.pair(v, builder.apply(v))).sideEffect(this::open);
+            Events<Ternary<O, W, C>> close = content.flatMap(v -> closer.apply(v.e).map(x -> v.ò(x)));
+            close.to(this::close);
+
+            return close;
+            // return open.combine(content, close);
+
+            // opener.to(opening -> {
+            // W widget = builder.apply(opening);
+            //
+            // open(widget);
+            //
+            // closer.apply(widget).take(1).to(closing -> {
+            // close(widget);
+            //
+            // Ternary<O, W, C> context = I.pair(opening, widget, closing);
+            //
+            // for (Observer observer : observers) {
+            // observer.accept(context);
+            // }
+            // });
+            // });
+            // return new Events(observers);
         }
 
         /**
-         * {@inheritDoc}
+         * <p>
+         * Open modal contents area.
+         * </p>
+         * 
+         * @param widget A contents.
          */
-        @Override
-        public Events<W> process(Consumer<Ternary<O, W, C>> processor) {
-            Events<W> events = new Events<W>(observer -> {
-                observers.add(observer);
+        private void open(Widget widget) {
+            Modal = document.createElement("div").add($.Modal);
 
-                return () -> {
-                    observers.remove(observer);
-                };
-            });
+            // insert into document
+            document.getElementById("Content").after(Modal);
 
-            opener.to(opening -> {
-                Modal = document.createElement("div").add($.Modal);
+            // show modal
+            document.documentElement().add($.Hide);
 
-                // insert into document
-                document.getElementById("Content").after(Modal);
+            widget.renderIn(Modal.add($.Show));
 
-                // show modal
-                document.documentElement().add($.Hide);
+            w = widget;
+        }
 
-                W widget = builder.apply(opening);
-                widget.renderIn(Modal.add($.Show));
+        /**
+         * <p>
+         * Open modal contents area.
+         * </p>
+         * 
+         * @param widget A contents.
+         */
+        private void open(Binary<O, W> widget) {
+            System.out.println("show modal " + widget.a + "  " + widget.e);
+            Modal = document.createElement("div").add($.Modal);
 
-                closer.apply(widget).take(1).to(closing -> {
-                    // hide modal
-                    document.documentElement().remove($.Hide);
-                    widget.renderOut(Modal.remove($.Show));
+            // insert into document
+            document.getElementById("Content").after(Modal);
 
-                    // remove modal element
-                    Modal.remove();
+            // show modal
+            document.documentElement().add($.Hide);
 
-                    processor.accept(I.pair(opening, widget, closing));
+            widget.e.renderIn(Modal.add($.Show));
+        }
 
-                    for (Observer observer : observers) {
-                        observer.accept(widget);
-                    }
-                });
-            });
-            return events;
+        Widget w;
+
+        /**
+         * <p>
+         * Close modal contents area.
+         * </p>
+         * 
+         * @param widget A contents.
+         */
+        private void close(Widget widget) {
+            // hide modal
+            document.documentElement().remove($.Hide);
+            widget.renderOut(Modal.remove($.Show));
+
+            // remove modal element
+            Modal.remove();
+        }
+
+        private <C> void close(C widget) {
+            // hide modal
+            document.documentElement().remove($.Hide);
+            w.renderOut(Modal.remove($.Show));
+
+            // remove modal element
+            Modal.remove();
+        }
+
+        private <C> void close(Ternary<O, W, C> widget) {
+            // hide modal
+            document.documentElement().remove($.Hide);
+            widget.e.renderOut(Modal.remove($.Show));
+
+            // remove modal element
+            Modal.remove();
         }
 
         /**
