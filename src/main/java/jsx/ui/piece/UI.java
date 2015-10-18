@@ -28,9 +28,6 @@ import js.dom.Element;
 import jsx.style.StyleDescriptor;
 import jsx.ui.Style;
 import jsx.ui.Widget;
-import jsx.ui.piece.UI.Modal.Builder;
-import jsx.ui.piece.UI.Modal.Closer;
-import jsx.ui.piece.UI.Modal.Opener;
 import kiss.Events;
 import kiss.I;
 import kiss.Observer;
@@ -175,129 +172,123 @@ public class UI {
      * 
      * @return Chainable API.
      */
-    public static final Modal.Opener modal() {
+    public static final ModalOpener modal() {
         return new ModalMaker();
     }
 
     /**
-     * @version 2015/10/16 23:15:05
+     * @version 2015/10/16 23:15:35
      */
-    interface Modal {
+    public interface ModalOpener {
 
         /**
-         * @version 2015/10/16 23:15:35
+         * <p>
+         * Alias method for {@link #openWhen(Events)}.
+         * </p>
+         * 
+         * @param opener A open timing for the modal contents.
+         * @return A contents builder.
          */
-        interface Opener {
-
-            /**
-             * <p>
-             * Alias method for {@link #openWhen(Events)}.
-             * </p>
-             * 
-             * @param opener A open timing for the modal contents.
-             * @return A contents builder.
-             */
-            default <O> Builder<O> open(Events<O> opener) {
-                return openWhen(opener);
-            }
-
-            /**
-             * <p>
-             * Configure the open timing for the modal contents.
-             * </p>
-             * 
-             * @param opener A open timing for the modal contents.
-             * @return A contents builder.
-             */
-            <O> Builder<O> openWhen(Events<O> opener);
+        default <O> ModalBuilder<O> open(Events<O> opener) {
+            return openWhen(opener);
         }
 
         /**
-         * @version 2015/10/16 23:17:32
+         * <p>
+         * Configure the open timing for the modal contents.
+         * </p>
+         * 
+         * @param opener A open timing for the modal contents.
+         * @return A contents builder.s
          */
-        interface Builder<O> {
+        <O> ModalBuilder<O> openWhen(Events<O> opener);
+    }
 
-            /**
-             * <p>
-             * Configure the modal contents.
-             * </p>
-             * 
-             * @param builder
-             * @return
-             */
-            default <W extends Widget> Closer<O, W> show(Class<W> contents) {
-                return show(Widget.of(contents));
-            }
+    /**
+     * @version 2015/10/16 23:17:32
+     */
+    public interface ModalBuilder<O> {
 
-            /**
-             * <p>
-             * Configure the modal contents.
-             * </p>
-             * 
-             * @param contents
-             * @return
-             */
-            default <W extends Widget> Closer<O, W> show(W contents) {
-                return show(o -> contents);
-            }
-
-            /**
-             * <p>
-             * Configure the modal contents.
-             * </p>
-             * 
-             * @param contents
-             * @return
-             */
-            <W extends Widget> Closer<O, W> show(Function<O, W> contents);
+        /**
+         * <p>
+         * Configure the modal contents.
+         * </p>
+         * 
+         * @param builder
+         * @return
+         */
+        default <W extends Widget> ModalCloser<O, W> show(Class<W> contents) {
+            return show(Widget.of(contents));
         }
 
         /**
-         * @version 2015/10/16 23:19:22
+         * <p>
+         * Configure the modal contents.
+         * </p>
+         * 
+         * @param contents
+         * @return
          */
-        interface Closer<O, W> {
-
-            /**
-             * <p>
-             * Alias method for {@link #closeWhen(Function)}.
-             * </p>
-             * 
-             * @param closer A close timing for the modal contents.
-             * @return A user action.
-             */
-            default <C> Events<Ternary<O, W, C>> close(Events<C> closer) {
-                return closeWhen(closer);
-            }
-
-            /**
-             * <p>
-             * Alias method for {@link #closeWhen(Function)}.
-             * </p>
-             * 
-             * @param closer A close timing for the modal contents.
-             * @return A user action.
-             */
-            default <C> Events<Ternary<O, W, C>> closeWhen(Events<C> closer) {
-                return closeWhen(w -> closer);
-            }
-
-            /**
-             * <p>
-             * Configure the close timing for the modal contents.
-             * </p>
-             * 
-             * @param closer A close timing for the modal contents.
-             * @return A user action.
-             */
-            <C> Events<Ternary<O, W, C>> closeWhen(Function<W, Events<C>> closer);
+        default <W extends Widget> ModalCloser<O, W> show(W contents) {
+            return show(o -> contents);
         }
+
+        /**
+         * <p>
+         * Configure the modal contents.
+         * </p>
+         * 
+         * @param contents
+         * @return
+         */
+        <W extends Widget> ModalCloser<O, W> show(Function<O, W> contents);
+    }
+
+    /**
+     * @version 2015/10/16 23:19:22
+     */
+    public interface ModalCloser<O, W> {
+
+        /**
+         * <p>
+         * Alias method for {@link #closeWhen(Function)}.
+         * </p>
+         * 
+         * @param closer A close timing for the modal contents.
+         * @return A user action.
+         */
+        default <C> Events<Ternary<O, W, C>> close(Events<C> closer) {
+            return closeWhen(closer);
+        }
+
+        /**
+         * <p>
+         * Alias method for {@link #closeWhen(Function)}.
+         * </p>
+         * 
+         * @param closer A close timing for the modal contents.
+         * @return A user action.
+         */
+        default <C> Events<Ternary<O, W, C>> closeWhen(Events<C> closer) {
+            return closeWhen(w -> closer);
+        }
+
+        /**
+         * <p>
+         * Configure the close timing for the modal contents.
+         * </p>
+         * 
+         * @param closer A close timing for the modal contents.
+         * @return A user action.
+         */
+        <C> Events<Ternary<O, W, C>> closeWhen(Function<W, Events<C>> closer);
     }
 
     /**
      * @version 2015/10/18 22:09:32
      */
     @SuppressWarnings("hiding")
-    private static class ModalMaker<O, W extends Widget, C> implements Opener, Builder<O>, Closer<O, W> {
+    private static class ModalMaker<O, W extends Widget, C> implements ModalOpener, ModalBuilder<O>, ModalCloser<O, W> {
 
         /** The open event. */
         private Events<O> opener;
@@ -315,20 +306,20 @@ public class UI {
          * {@inheritDoc}
          */
         @Override
-        public <T> Builder<T> openWhen(Events<T> opener) {
+        public <T> ModalBuilder<T> openWhen(Events<T> opener) {
             this.opener = (Events) Objects.requireNonNull(opener);
 
-            return (Builder<T>) this;
+            return (ModalBuilder<T>) this;
         }
 
         /**
          * {@inheritDoc}
          */
         @Override
-        public <W extends Widget> Closer<O, W> show(Function<O, W> builder) {
+        public <W extends Widget> ModalCloser<O, W> show(Function<O, W> builder) {
             this.builder = (Function) Objects.requireNonNull(builder);
 
-            return (Closer<O, W>) this;
+            return (ModalCloser<O, W>) this;
         }
 
         /**
