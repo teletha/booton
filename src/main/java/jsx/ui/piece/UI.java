@@ -31,7 +31,6 @@ import jsx.ui.Widget;
 import jsx.ui.piece.UI.Modal.Builder;
 import jsx.ui.piece.UI.Modal.Closer;
 import jsx.ui.piece.UI.Modal.Opener;
-import kiss.Binary;
 import kiss.Events;
 import kiss.I;
 import kiss.Observer;
@@ -338,15 +337,14 @@ public class UI {
             Objects.requireNonNull(closer);
 
             Events<O> open = opener;
-            // Events<W> content = open.map(builder).sideEffect(this::open);
-            // Events<C> close = content.flatMap(closer).sideEffect(this::close);
+            Events<W> build = open.map(builder);
+            Events<C> close = build.flatMapLatest(closer);
+            Events<Ternary<O, W, C>> modal = open.combine(build, close);
 
-            Events<Binary<O, W>> content = open.map(v -> I.pair(v, builder.apply(v))).sideEffect(this::open);
-            Events<Ternary<O, W, C>> close = content.flatMap(v -> closer.apply(v.e).map(x -> v.ò(x)));
-            close.to(this::close);
+            build.to(this::open);
+            modal.to(this::close);
 
-            return close;
-            // return open.combine(content, close);
+            return modal;
 
             // opener.to(opening -> {
             // W widget = builder.apply(opening);
@@ -383,31 +381,7 @@ public class UI {
             document.documentElement().add($.Hide);
 
             widget.renderIn(Modal.add($.Show));
-
-            w = widget;
         }
-
-        /**
-         * <p>
-         * Open modal contents area.
-         * </p>
-         * 
-         * @param widget A contents.
-         */
-        private void open(Binary<O, W> widget) {
-            System.out.println("show modal " + widget.a + "  " + widget.e);
-            Modal = document.createElement("div").add($.Modal);
-
-            // insert into document
-            document.getElementById("Content").after(Modal);
-
-            // show modal
-            document.documentElement().add($.Hide);
-
-            widget.e.renderIn(Modal.add($.Show));
-        }
-
-        Widget w;
 
         /**
          * <p>
@@ -425,15 +399,13 @@ public class UI {
             Modal.remove();
         }
 
-        private <C> void close(C widget) {
-            // hide modal
-            document.documentElement().remove($.Hide);
-            w.renderOut(Modal.remove($.Show));
-
-            // remove modal element
-            Modal.remove();
-        }
-
+        /**
+         * <p>
+         * Close modal contents area.
+         * </p>
+         * 
+         * @param widget A contents.
+         */
         private <C> void close(Ternary<O, W, C> widget) {
             // hide modal
             document.documentElement().remove($.Hide);

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -586,7 +587,7 @@ public abstract class Widget implements Declarable {
     }
 
     /**
-     * @version 2015/10/04 14:43:31
+     * @version 2015/10/18 14:44:25
      */
     private static class EventContext implements Locator, Consumer<UIEvent> {
 
@@ -603,7 +604,7 @@ public abstract class Widget implements Declarable {
         private boolean useUIEvent;
 
         /** The holder of actual event listeners. */
-        private NativeArray<Observer> observers;
+        private CopyOnWriteArrayList<Observer> observers;
 
         /**
          * <p>
@@ -627,14 +628,14 @@ public abstract class Widget implements Declarable {
 
             return new Events<T>(observer -> {
                 if (observers == null) {
-                    observers = new NativeArray();
+                    observers = new CopyOnWriteArrayList();
                 }
-                observers.push(observer);
+                observers.add(observer);
 
                 return () -> {
                     observers.remove(observers.indexOf(observer));
 
-                    if (observers.length() == 0) {
+                    if (observers.size() == 0) {
                         observers = null;
                     }
                 };
@@ -681,8 +682,8 @@ public abstract class Widget implements Declarable {
                 event.preventDefault();
             }
 
-            for (int i = 0, length = observers.length(); i < length; i++) {
-                observers.get(i).accept(useUIEvent ? event : element.property(CONTEXT_KEY));
+            for (Observer observer : observers) {
+                observer.accept(useUIEvent ? event : element.property(CONTEXT_KEY));
             }
         }
     }
