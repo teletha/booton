@@ -37,7 +37,7 @@ import kiss.Observer;
 import kiss.Ternary;
 
 /**
- * @version 2015/10/09 15:28:40
+ * @version 2015/10/18 22:10:18
  */
 public class UI {
 
@@ -170,11 +170,10 @@ public class UI {
 
     /**
      * <p>
-     * Create {@link ModalWindow} for the specified {@link Widget}.
+     * Create {@link Modal} area for the specified {@link Widget}.
      * </p>
      * 
-     * @param widgetType
-     * @return
+     * @return Chainable API.
      */
     public static final Modal.Opener modal() {
         return new ModalMaker();
@@ -295,18 +294,21 @@ public class UI {
     }
 
     /**
-     * @version 2015/10/16 23:30:34
+     * @version 2015/10/18 22:09:32
      */
     @SuppressWarnings("hiding")
     private static class ModalMaker<O, W extends Widget, C> implements Opener, Builder<O>, Closer<O, W> {
 
+        /** The open event. */
         private Events<O> opener;
 
+        /** The build event. */
         private Function<O, W> builder;
 
         /** The special element for modal contents. */
         private Element Modal;
 
+        /** The list of event listeners. */
         private final List<Observer> observers = new ArrayList();
 
         /**
@@ -336,32 +338,38 @@ public class UI {
         public <C> Events<Ternary<O, W, C>> closeWhen(Function<W, Events<C>> closer) {
             Objects.requireNonNull(closer);
 
-            Events<O> open = opener;
-            Events<W> build = open.map(builder);
-            Events<C> close = build.flatMapLatest(closer);
-            Events<Ternary<O, W, C>> modal = open.combine(build, close);
+            // =====================================
+            // Ideal Code
+            // =====================================
+            // Events<O> open = opener;
+            // Events<Binary<O, W>> build = open.map(v -> I.pair(v, builder.apply(v)));
+            // Events<Ternary<O, W, C>> close = build.flatMapLatest(v -> closer.apply(v.e).map(x ->
+            // v.ò(x)));
+            //
+            // build.to(v -> open(v.e));
+            // close.to(v -> close(v.e));
+            //
+            // return close;
 
-            build.to(this::open);
-            modal.to(this::close);
+            // =====================================
+            // Optimized Code
+            // =====================================
+            opener.to(opening -> {
+                W widget = builder.apply(opening);
 
-            return modal;
+                open(widget);
 
-            // opener.to(opening -> {
-            // W widget = builder.apply(opening);
-            //
-            // open(widget);
-            //
-            // closer.apply(widget).take(1).to(closing -> {
-            // close(widget);
-            //
-            // Ternary<O, W, C> context = I.pair(opening, widget, closing);
-            //
-            // for (Observer observer : observers) {
-            // observer.accept(context);
-            // }
-            // });
-            // });
-            // return new Events(observers);
+                closer.apply(widget).take(1).to(closing -> {
+                    close(widget);
+
+                    Ternary<O, W, C> context = I.pair(opening, widget, closing);
+
+                    for (Observer observer : observers) {
+                        observer.accept(context);
+                    }
+                });
+            });
+            return new Events(observers);
         }
 
         /**
@@ -394,22 +402,6 @@ public class UI {
             // hide modal
             document.documentElement().remove($.Hide);
             widget.renderOut(Modal.remove($.Show));
-
-            // remove modal element
-            Modal.remove();
-        }
-
-        /**
-         * <p>
-         * Close modal contents area.
-         * </p>
-         * 
-         * @param widget A contents.
-         */
-        private <C> void close(Ternary<O, W, C> widget) {
-            // hide modal
-            document.documentElement().remove($.Hide);
-            widget.e.renderOut(Modal.remove($.Show));
 
             // remove modal element
             Modal.remove();
