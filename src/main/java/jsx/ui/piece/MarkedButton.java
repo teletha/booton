@@ -67,7 +67,7 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
         this.label = label;
         this.id = "Mark" + hashCode();
 
-        when(Change).at($.Root).to(this::change);
+        when(Change).at($.Root).to(update(this::change));
     }
 
     /**

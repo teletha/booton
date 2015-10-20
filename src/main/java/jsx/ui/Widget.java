@@ -192,6 +192,8 @@ public abstract class Widget implements Declarable {
                         properties.add(new ModelMetadata(field.getName(), null, field));
                     } else if (Events.class.isAssignableFrom(type)) {
                         events.add(field);
+                    } else {
+
                     }
                 }
             }

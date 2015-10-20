@@ -9,10 +9,14 @@
  */
 package kiss;
 
+import static js.lang.Global.*;
+
 import booton.translator.JavaAPIProvider;
+import js.dom.UIAction;
+import js.lang.NativeFunction;
 
 /**
- * @version 2013/10/03 11:17:46
+ * @version 2015/10/20 2:07:28
  */
 @JavaAPIProvider(Preference.class)
 class JSPreference<M> extends Singleton<M> {
@@ -25,17 +29,20 @@ class JSPreference<M> extends Singleton<M> {
     protected JSPreference(Class<M> modelClass) {
         super(modelClass);
 
-        // this.path =
-        // I.$working.resolve("preferences").resolve(modelClass.getName().concat(".xml"));
-        //
-        // try {
-        // if (Files.exists(path) && Files.size(path) != 0) {
-        // I.read(path, instance);
-        // }
-        // } catch (Exception e) {
-        // throw I.quiet(e);
-        // }
-        //
-        // Runtime.getRuntime().addShutdownHook(new Thread(this));
+        String key = "PREFERENCE::" + modelClass.getName();
+
+        // restore
+        String json = localStorage.getItem(key);
+
+        if (json != null && !json.isEmpty()) {
+            I.read(json, instance);
+        }
+
+        // store
+        window.addEventListener(UIAction.BeforeUnload.name, new NativeFunction(() -> {
+            StringBuilder builder = new StringBuilder();
+            I.write(instance, builder, true);
+            localStorage.setItem(key, builder.toString());
+        }));
     }
 }

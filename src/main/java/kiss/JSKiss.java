@@ -826,8 +826,9 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
-                            .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
+                    InterceptorFunction function = new InterceptorFunction(method.getName(),
+                            MethodHandles.lookup().unreflect(method),
+                            annotations.toArray(new Annotation[annotations.size()]));
                     prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
                 }
             }

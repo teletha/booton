@@ -9,8 +9,9 @@
  */
 package js.util;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Locale.Category;
+import java.util.Map;
 
 import booton.translator.JavaAPIProvider;
 import js.lang.Global;
@@ -22,37 +23,37 @@ import js.lang.Global;
 class Locale {
 
     /** The availables. */
-    private static final List<Locale> locales = new ArrayList();
+    private static final Map<String, Locale> locales = new HashMap();
 
     /**
      * Useful constant for language.
      */
-    public static final Locale ENGLISH = new Locale("en", "");
+    public static final Locale ENGLISH = forLanguageTag("en");
 
     /**
      * Useful constant for language.
      */
-    public static final Locale FRENCH = new Locale("fr", "");
+    public static final Locale FRENCH = forLanguageTag("fr");
 
     /**
      * Useful constant for language.
      */
-    public static final Locale GERMAN = new Locale("de", "");
+    public static final Locale GERMAN = forLanguageTag("de");
 
     /**
      * Useful constant for language.
      */
-    public static final Locale ITALIAN = new Locale("it", "");
+    public static final Locale ITALIAN = forLanguageTag("it");
 
     /**
      * Useful constant for language.
      */
-    public static final Locale JAPANESE = new Locale("ja", "");
+    public static final Locale JAPANESE = forLanguageTag("ja");
 
     /**
      * Useful constant for language.
      */
-    public static final Locale KOREAN = new Locale("ko", "");
+    public static final Locale KOREAN = forLanguageTag("ko");
 
     /**
      * Useful constant for language.
@@ -62,37 +63,37 @@ class Locale {
     /**
      * Useful constant for language.
      */
-    public static final Locale SIMPLIFIED_CHINESE = new Locale("zh", "CN");
+    public static final Locale SIMPLIFIED_CHINESE = forLanguageTag("zh-CN");
 
     /**
      * Useful constant for language.
      */
-    public static final Locale TRADITIONAL_CHINESE = new Locale("zh", "TW");
+    public static final Locale TRADITIONAL_CHINESE = forLanguageTag("zh-TW");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale FRANCE = new Locale("fr", "FR");
+    public static final Locale FRANCE = forLanguageTag("fr-FR");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale GERMANY = new Locale("de", "DE");
+    public static final Locale GERMANY = forLanguageTag("de-DE");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale ITALY = new Locale("it", "IT");
+    public static final Locale ITALY = forLanguageTag("it-IT");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale JAPAN = new Locale("ja", "JP");
+    public static final Locale JAPAN = forLanguageTag("ja-JP");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale KOREA = new Locale("ko", "KR");
+    public static final Locale KOREA = forLanguageTag("ko-KR");
 
     /**
      * Useful constant for country.
@@ -112,22 +113,22 @@ class Locale {
     /**
      * Useful constant for country.
      */
-    public static final Locale UK = new Locale("en", "GB");
+    public static final Locale UK = forLanguageTag("en-GB");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale US = new Locale("en", "US");
+    public static final Locale US = forLanguageTag("en-US");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale CANADA = new Locale("en", "CA");
+    public static final Locale CANADA = forLanguageTag("en-CA");
 
     /**
      * Useful constant for country.
      */
-    public static final Locale CANADA_FRENCH = new Locale("fr", "CA");
+    public static final Locale CANADA_FRENCH = forLanguageTag("fr-CA");
 
     /**
      * Useful constant for the root locale. The root locale is the locale whose language, country,
@@ -228,6 +229,8 @@ class Locale {
         this.language = language;
         this.country = country;
         this.variant = variant;
+
+        locales.put(toLanguageTag(), this);
     }
 
     /**
@@ -383,6 +386,49 @@ class Locale {
     }
 
     /**
+     * Returns a string representation of this <code>Locale</code> object, consisting of language,
+     * country, variant, script, and extensions as below: <blockquote> language + "_" + country +
+     * "_" + (variant + "_#" | "#") + script + "-" + extensions </blockquote> Language is always
+     * lower case, country is always upper case, script is always title case, and extensions are
+     * always lower case. Extensions and private use subtags will be in canonical order as explained
+     * in {@link #toLanguageTag}.
+     * <p>
+     * When the locale has neither script nor extensions, the result is the same as in Java 6 and
+     * prior.
+     * <p>
+     * If both the language and country fields are missing, this function will return the empty
+     * string, even if the variant, script, or extensions field is present (you can't have a locale
+     * with just a variant, the variant must accompany a well-formed language or country code).
+     * <p>
+     * If script or extensions are present and variant is missing, no underscore is added before the
+     * "#".
+     * <p>
+     * This behavior is designed to support debugging and to be compatible with previous uses of
+     * <code>toString</code> that expected language, country, and variant fields only. To represent
+     * a Locale as a String for interchange purposes, use {@link #toLanguageTag}.
+     * <p>
+     * Examples:
+     * <ul>
+     * <li><tt>en</tt></li>
+     * <li><tt>de_DE</tt></li>
+     * <li><tt>_GB</tt></li>
+     * <li><tt>en_US_WIN</tt></li>
+     * <li><tt>de__POSIX</tt></li>
+     * <li><tt>zh_CN_#Hans</tt></li>
+     * <li><tt>zh_TW_#Hant-x-java</tt></li>
+     * <li><tt>th_TH_TH_#u-nu-thai</tt></li>
+     * </ul>
+     *
+     * @return A string representation of the Locale, for debugging.
+     * @see #getDisplayName
+     * @see #toLanguageTag
+     */
+    @Override
+    public final String toString() {
+        return language;
+    }
+
+    /**
      * Gets the current value of the default locale for this instance of the Java Virtual Machine.
      * <p>
      * The Java Virtual Machine sets the default locale during startup based on the host
@@ -425,7 +471,8 @@ class Locale {
      * @return An array of installed locales.
      */
     public static Locale[] getAvailableLocales() {
-        return locales.toArray(new Locale[locales.size()]);
+        Collection<Locale> values = locales.values();
+        return values.toArray(new Locale[values.size()]);
     }
 
     /**
@@ -641,13 +688,14 @@ class Locale {
      * @since 1.7
      */
     public static Locale forLanguageTag(String languageTag) {
-        int index = languageTag.indexOf('-');
+        return locales.computeIfAbsent(languageTag, tag -> {
+            int index = languageTag.indexOf('-');
 
-        if (index == -1) {
-            return new Locale(languageTag, null);
-        } else {
-            return new Locale(languageTag.substring(0, index), languageTag.substring(index + 1));
-        }
+            if (index == -1) {
+                return new Locale(languageTag, "");
+            } else {
+                return new Locale(languageTag.substring(0, index), languageTag.substring(index + 1));
+            }
+        });
     }
-
 }

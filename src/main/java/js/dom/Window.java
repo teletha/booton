@@ -35,7 +35,7 @@ public abstract class Window extends EventTarget<Window>implements JavascriptNat
      * </p>
      */
     @JavascriptNativeProperty
-    public String language;
+    public String language = "en";
 
     /**
      * <p>

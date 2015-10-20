@@ -54,10 +54,7 @@ public enum UIAction implements Predicate<UIEvent> {
     Unload(0),
 
     /** The ui event type. */
-    PageLoad(0),
-
-    /** The ui event type. */
-    PageUnload(0),
+    BeforeUnload(0),
 
     /** The ui event type. */
     Close,
