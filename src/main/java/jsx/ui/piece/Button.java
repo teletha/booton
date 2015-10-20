@@ -14,10 +14,12 @@ import static jsx.ui.StructureDescriptor.*;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
+import jsx.style.value.Color;
 import jsx.ui.LowLevelWidget;
+import jsx.ui.Style;
 
 /**
- * @version 2015/09/15 15:35:18
+ * @version 2015/10/21 3:00:41
  */
 public class Button extends LowLevelWidget<Button> {
 
@@ -58,8 +60,23 @@ public class Button extends LowLevelWidget<Button> {
      */
     @Override
     protected void virtualize() {
-        html("button", rootStyle.getValue(), Root, () -> {
+        html("button", $.Button, rootStyle.getValue(), Root, () -> {
             text(label.get());
+        });
+    }
+
+    /**
+     * @version 2015/10/12 11:17:56
+     */
+    protected static class $ extends PieceStyle {
+
+        static Style Button = SingleLineFormBase.with(() -> {
+            background.color(Color.Transparent);
+            cursor.pointer();
+
+            hover(() -> {
+                background.color(BorderColor.opacify(-0.75));
+            });
         });
     }
 }

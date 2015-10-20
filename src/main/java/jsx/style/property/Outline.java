@@ -53,6 +53,19 @@ public class Outline extends Colorable<Outline> {
 
     /**
      * <p>
+     * Set the offset of this border.
+     * </p>
+     * 
+     * @param size A width to set.
+     * @param unit A width unit to set.
+     * @return Chainable API.
+     */
+    public final Outline offset(double size, Unit unit) {
+        return value("outline-offset", new Numeric(size, unit));
+    }
+
+    /**
+     * <p>
      * Set the style of this border.
      * </p>
      * 

@@ -15,28 +15,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.Property;
 import javafx.scene.control.SingleSelectionModel;
 
+import js.dom.UIAction;
 import jsx.ui.Style;
 import jsx.ui.Widget;
 
 /**
- * @version 2015/10/05 8:13:56
+ * @version 2015/10/20 16:02:38
  */
 public class Select<M> extends Widget {
 
     /** The selectable values. */
-    public final ListProperty<M> values;
+    private final ListProperty<M> values;
 
     /** The selection model. */
-    public final SingleSelectionModel<M> selection;
+    private final Property<M> selection;
 
     /**
+     * @param selection
      * @param values
      */
-    Select(ListProperty<M> values) {
+    Select(Property<M> selection, ListProperty<M> values) {
         this.values = values;
-        this.selection = new SingleSelectionProperty(values);
+        this.selection = selection;
+
+        when(UIAction.Change).at($.Select).to(update(e -> selection.setValue(values.get(Integer.valueOf(e.value())))));
     }
 
     /**
@@ -45,8 +50,10 @@ public class Select<M> extends Widget {
     @Override
     protected void virtualize() {
         box($.Root, () -> {
-            html("select", $.Select, contents(values, value -> {
-                html("option", () -> {
+            html("select", $.Select, contents(values.size(), i -> {
+                M value = values.get(i);
+
+                html("option", attr("value", i), If(selection.getValue().equals(value), attr("selected", "selected")), () -> {
                     text(value);
                 });
             }));

@@ -134,7 +134,15 @@ class JSMethodHandle {
      *             method handle call
      */
     public Object invoke(Object context, Object param1) throws Throwable {
-        return function.apply(context, param1);
+        if (member instanceof Field) {
+            ((Field) member).set(context, param1);
+
+            return param1;
+        } else if (member instanceof Method) {
+            return ((Method) member).invoke(context, param1);
+        } else {
+            return function.apply(context, param1);
+        }
     }
 
     /**

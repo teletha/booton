@@ -766,7 +766,11 @@ class JSKiss {
             }
 
             if (inputModel.type == String.class && outputCodec != null) {
-                return outputCodec.decode((String) input);
+                try {
+                    return outputCodec.decode((String) input);
+                } catch (Exception e) {
+                    // ignore
+                }
             }
             return (M) input;
         }
@@ -944,14 +948,16 @@ class JSKiss {
             Object value;
             Property property = model.getProperty(name);
 
-            if (property.isAttribute()) {
-                value = transform(js.getProperty(property.name), property.model.type);
-            } else {
-                value = read(property.model, make(property.model.type), js.getPropertyAs(NativeObject.class, property.name));
-            }
+            if (property != null) {
+                if (property.isAttribute()) {
+                    value = transform(js.getProperty(property.name), property.model.type);
+                } else {
+                    value = read(property.model, make(property.model.type), js.getPropertyAs(NativeObject.class, property.name));
+                }
 
-            // assign value
-            model.set(java, property, value);
+                // assign value
+                model.set(java, property, value);
+            }
         }
         return java;
     }

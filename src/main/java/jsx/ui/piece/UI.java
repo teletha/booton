@@ -145,13 +145,13 @@ public class UI {
      * 
      * @param values
      */
-    public static final <E extends Enum> Select<E> select(Class<E> enumClass) {
+    public static final <E extends Enum> Select<E> select(Property<E> selection, Class<E> enumClass) {
         ListProperty<E> items = I.make(ListProperty.class);
 
         for (Enum constant : enumClass.getEnumConstants()) {
             items.add((E) constant);
         }
-        return select(items);
+        return select(selection, items);
     }
 
     /**
@@ -161,8 +161,24 @@ public class UI {
      * 
      * @param values
      */
-    public static final <M> Select<M> select(ListProperty<M> values) {
-        return new Select(values);
+    public static final <M> Select<M> select(Property<M> selection, M[] values) {
+        ListProperty<M> items = I.make(ListProperty.class);
+
+        for (M item : values) {
+            items.add(item);
+        }
+        return select(selection, items);
+    }
+
+    /**
+     * <p>
+     * Create {@link Select} box with the specified values.
+     * </p>
+     * 
+     * @param values
+     */
+    public static final <M> Select<M> select(Property<M> selection, ListProperty<M> values) {
+        return new Select(selection, values);
     }
 
     /**
