@@ -41,7 +41,7 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
 
     protected final Property<Declarable> rootStyle = new SimpleObjectProperty();
 
-    protected ObservableValue<Boolean> disable = new SimpleBooleanProperty();
+    protected SimpleBooleanProperty disable = new SimpleBooleanProperty();
 
     /**
      * 
@@ -144,8 +144,16 @@ public abstract class LowLevelWidget<T extends LowLevelWidget<T>> extends Widget
         return (T) this;
     }
 
-    public T disableIf(ObservableValue<Boolean> condition) {
-        this.disable = condition;
+    Events<Boolean> disabled = Events.from(false);
+
+    // public T disableIf(ObservableValue<Boolean> condition) {
+    // this.disable = condition;
+    // return (T) this;
+    // }
+
+    public T disableIf(Events<Boolean> condition) {
+        disabled = disabled.combineLatest(condition, (a, b) -> a || b);
+
         return (T) this;
     }
 

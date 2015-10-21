@@ -15,29 +15,40 @@ import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.StructureDescriptor.*;
 import static jsx.ui.piece.PieceStyle.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javafx.beans.binding.StringExpression;
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
 import jsx.ui.LowLevelWidget;
+import jsx.ui.Widget;
+import jsx.ui.Widget1;
+import jsx.ui.Widget2;
+import kiss.Events;
 import kiss.I;
 
 /**
- * @version 2015/10/05 8:12:41
+ * @version 2015/10/21 14:50:30
  */
 public class Input extends LowLevelWidget<Input> {
 
     /** The current input value. */
     public final StringProperty value;
 
-    /** The input value validity. */
-    public final ReadOnlySetProperty<String> invalid = I.make(SetProperty.class);
+    /** The valid property. */
+    public final Events<Boolean> valid;
+
+    /** The invalid property. */
+    public final Events<Boolean> invalid;
+
+    /** The managed validation. */
+    private List<Validation> validations;
 
     /** The placeholder value. */
     private Supplier<String> placeholder;
@@ -49,6 +60,19 @@ public class Input extends LowLevelWidget<Input> {
      */
     Input(StringProperty value) {
         this.value = value;
+        this.valid = I.observe(value).map(input -> {
+            if (validations == null) {
+                return true;
+            }
+
+            for (Validation validation : validations) {
+                if (validation.condition.test(input)) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        this.invalid = valid.map(v -> !v);
 
         // user input functionality
         when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
@@ -108,39 +132,68 @@ public class Input extends LowLevelWidget<Input> {
      * @return Chainable API.
      */
     public Input require() {
-        return validate(NotEmpty, "The input value is empty.");
+        return invalidIf(NotEmpty, "The input value is empty.");
     }
 
     /**
      * <p>
-     * Validate the input value.
+     * Declare the invalid condition and error message.
      * </p>
      * 
-     * @param prerequisite A necessary condition of the input value.
+     * @param condition A necessary condition of the input value.
      * @param message A message when the input value doesn't fulfill.
      * @return Chainable API.
      */
-    public Input validate(Predicate<String> prerequisite, String message) {
-        disposeLater(I.observe(value).to(input -> {
-            if (prerequisite.test(input)) {
-                invalid.remove(message);
-            } else {
-                invalid.add(message);
-            }
-        }));
-
-        return this;
+    public Input invalidIf(Predicate<String> condition, String message) {
+        return invalidIf(condition, value -> message);
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * Declare the invalid condition and error message.
+     * </p>
+     * 
+     * @param condition
+     * @param message
+     * @return
      */
-    @Override
-    protected boolean isValid(UIEvent e) {
-        if (!invalid.isEmpty()) {
-            return false;
+    public Input invalidIf(Predicate<String> condition, Function<String, String> message) {
+        return invalidWhen(condition, input -> Widget.of(InvalidMassage.class, input, message));
+    }
+
+    /**
+     * <p>
+     * Declare the invalid condition and error message.
+     * </p>
+     * 
+     * @param condition
+     * @param message
+     * @return
+     */
+    public Input invalidIf(Predicate<String> condition, Class<? extends Widget1<String>> message) {
+        return invalidWhen(condition, input -> {
+            return Widget.of(message, input);
+        });
+    }
+
+    /**
+     * <p>
+     * Declare the invalid condition and error message.
+     * </p>
+     * 
+     * @param condition
+     * @param message
+     * @return
+     */
+    private Input invalidWhen(Predicate<String> condition, Function<String, Widget> message) {
+        if (validations == null) {
+            validations = new ArrayList();
         }
-        return super.isValid(e);
+
+        validations.add(new Validation(condition, message));
+
+        // API definition
+        return this;
     }
 
     /**
@@ -150,5 +203,40 @@ public class Input extends LowLevelWidget<Input> {
     protected void virtualize() {
         html("input", Root, SingleLineFormBase, rootStyle
                 .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
+    }
+
+    /**
+     * @version 2015/10/21 15:00:43
+     */
+    private static class Validation {
+
+        /** The condition. */
+        private final Predicate<String> condition;
+
+        /** The erro message. */
+        private final Function<String, Widget> message;
+
+        /**
+         * @param condition
+         * @param message
+         */
+        private Validation(Predicate<String> condition, Function<String, Widget> message) {
+            this.condition = condition;
+            this.message = message;
+        }
+    }
+
+    /**
+     * @version 2015/10/21 13:40:36
+     */
+    private static class InvalidMassage<C> extends Widget2<String, Function<String, String>> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
+            text(model2.apply(model1));
+        }
     }
 }
