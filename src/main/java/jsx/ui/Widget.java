@@ -38,6 +38,7 @@ import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;
 import jsx.debug.Profile;
+import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
@@ -586,6 +587,32 @@ public abstract class Widget implements Declarable {
         loophole = null;
 
         return widget;
+    }
+
+    private Map<Events, ValueContext> values = new HashMap();
+
+    <V> V value(Events<V> events) {
+        return (V) values.computeIfAbsent(events, e -> new ValueContext<V>(e)).value;
+    }
+
+    /**
+     * @version 2015/10/22 11:58:15
+     */
+    private class ValueContext<V> {
+
+        V value;
+
+        final Disposable disposable;
+
+        /**
+         * @param events
+         */
+        private ValueContext(Events<V> events) {
+            disposable = events.to(value -> {
+                this.value = value;
+                // update();
+            });
+        }
     }
 
     /**

@@ -60,7 +60,7 @@ public class Button extends LowLevelWidget<Button> {
      */
     @Override
     protected void virtualize() {
-        html("button", $.Button, rootStyle.getValue(), Root, If(disable.getValue(), attr("disabled", "disabled")), () -> {
+        html("button", $.Button, rootStyle.getValue(), Root, If(disabled, attr("disabled", "disabled")), () -> {
             text(label.get());
         });
     }

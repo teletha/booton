@@ -19,6 +19,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 
 import js.lang.NativeString;
+import kiss.Events;
 
 /**
  * @version 2015/10/14 10:18:46
@@ -449,6 +450,16 @@ public class StructureDescriptor {
     public static Declarable If(boolean condition, Declarable... declarables) {
         return () -> {
             if (condition) {
+                for (Declarable declarable : declarables) {
+                    declarable.declare();
+                }
+            }
+        };
+    }
+
+    public static Declarable If(Events<Boolean> condition, Declarable... declarables) {
+        return () -> {
+            if (latestWidget.value(condition)) {
                 for (Declarable declarable : declarables) {
                     declarable.declare();
                 }
