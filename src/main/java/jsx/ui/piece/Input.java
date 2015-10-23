@@ -65,6 +65,8 @@ public class Input extends LowLevelWidget<Input> {
 
         // user input functionality
         when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
+
+        disableIf(invalid);
     }
 
     private boolean validate(String input) {

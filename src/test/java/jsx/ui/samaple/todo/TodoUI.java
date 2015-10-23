@@ -55,6 +55,7 @@ public class TodoUI extends Widget1<TodoTasks> {
             .shortcut(Key.Enter, this::add)
             .require()
             .invalidIf(input -> 15 < input.length(), "15文字以内でお願いします")
+            .invalidIf(input -> isValidTaskSize(), "要件は10件まで")
             .placeholder(() -> isValidTaskSize() ? "新しい要件" : "要件は10件まで");
 
     /** The filter button. */
@@ -82,12 +83,10 @@ public class TodoUI extends Widget1<TodoTasks> {
      * Add todo task.
      */
     private void add() {
-        String value = input.value.get();
+        String value = input.clear();
 
         if (value != null && value.length() != 0) {
             todos.list.add(new Task(value));
-
-            input.clear();
         }
     }
 
@@ -95,7 +94,7 @@ public class TodoUI extends Widget1<TodoTasks> {
      * @return
      */
     private boolean isValidTaskSize() {
-        return todos.list.size() <= 10;
+        return todos.list.size() <= 4;
     }
 
     /**
