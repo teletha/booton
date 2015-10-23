@@ -12,14 +12,14 @@ package jsx.ui.piece;
 import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.StructureDescriptor.*;
 
+import javafx.beans.property.Property;
 import javafx.beans.property.SetProperty;
 
-import js.dom.UIEvent;
 import jsx.style.value.Numeric;
 import jsx.ui.Style;
 
 /**
- * @version 2015/10/12 11:29:39
+ * @version 2015/10/24 3:13:35
  */
 public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
 
@@ -32,9 +32,6 @@ public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
         stroke.color("#FFF").width(2, px).linecap.square().miterLimit(10);
     };
 
-    /** The selection manager. */
-    private final SetProperty<V> selection;
-
     /**
      * <p>
      * Create Checkbox.
@@ -45,9 +42,24 @@ public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
      * @param label
      */
     CheckBox(SetProperty selection, V value, String label) {
-        super("checkbox", selection, value, label);
+        super("checkbox", selection, value, label, () -> selection.contains(value), event -> {
+            if (!selection.add(value)) {
+                selection.remove(value);
+            }
+        });
+    }
 
-        this.selection = selection;
+    /**
+     * <p>
+     * Create Checkbox.
+     * </p>
+     * 
+     * @param selection
+     * @param value
+     * @param label
+     */
+    CheckBox(Property<Boolean> selection, V value, String label) {
+        super("checkbox", selection, value, label, selection::getValue, event -> selection.setValue(!selection.getValue()));
     }
 
     /**
@@ -64,23 +76,5 @@ public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
     @Override
     protected Numeric radius() {
         return Radius;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean isMarked() {
-        return selection.contains(value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void change(UIEvent event) {
-        if (!selection.add(value)) {
-            selection.remove(value);
-        }
     }
 }

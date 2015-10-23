@@ -131,6 +131,19 @@ public class UI {
 
     /**
      * <p>
+     * Create {@link Checkbox} with the specified value.
+     * </p>
+     * 
+     * @param value
+     */
+    public static final <T> CheckBox checkbox(Property<Boolean> group, T value, String label) {
+        CheckBox box = new CheckBox(group, value, label);
+
+        return box;
+    }
+
+    /**
+     * <p>
      * Create {@link RadioBox} with the specified value.
      * </p>
      * 

@@ -13,6 +13,8 @@ import static js.dom.UIAction.*;
 import static jsx.ui.StructureDescriptor.*;
 
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javafx.beans.property.Property;
 
@@ -26,7 +28,7 @@ import jsx.ui.LowLevelWidget;
 import jsx.ui.Style;
 
 /**
- * @version 2015/10/12 11:18:05
+ * @version 2015/10/24 3:13:40
  */
 abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWidget<T> {
 
@@ -45,6 +47,9 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
     /** The checkbox id. */
     private final String id;
 
+    /** The selection manager. */
+    private final Supplier<Boolean> isMarked;
+
     /**
      * <p>
      * Create marked button.
@@ -55,7 +60,7 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
      * @param value
      * @param label
      */
-    protected MarkedButton(String type, Property group, V value, String label) {
+    protected MarkedButton(String type, Property group, V value, String label, Supplier<Boolean> isMarked, Consumer<UIEvent> changeListener) {
         super(value);
 
         Objects.nonNull(group);
@@ -66,8 +71,9 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
         this.value = value;
         this.label = label;
         this.id = "Mark" + hashCode();
+        this.isMarked = isMarked;
 
-        when(Change).at($.Root).to(update(this::change));
+        when(Change).at($.Root).to(update(changeListener::accept));
     }
 
     /**
@@ -75,7 +81,7 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
      */
     @Override
     protected final void virtualize() {
-        box(Root, $.Root, rootStyle.getValue(), If(isMarked(), $.Checked), () -> {
+        box(Root, $.Root, rootStyle.getValue(), If(isMarked.get(), $.Checked), () -> {
             html("input", $.CheckBox, attr("type", type), attr("name", name), attr("id", id));
             html("label", $.Label.of(radius()), attr("for", id), contents(label));
             svg("svg", $.SVG, () -> {
@@ -99,22 +105,6 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
      * @return
      */
     protected abstract Numeric radius();
-
-    /**
-     * <p>
-     * Test whether this button is marked or not.
-     * </p>
-     * 
-     * @return
-     */
-    protected abstract boolean isMarked();
-
-    /**
-     * <p>
-     * Change the selection.
-     * </p>
-     */
-    protected abstract void change(UIEvent event);
 
     /**
      * @version 2015/10/12 11:17:56
