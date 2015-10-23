@@ -34,6 +34,7 @@ import booton.Necessary;
 import booton.Unnecessary;
 import jdk.internal.org.objectweb.asm.ClassReader;
 import jdk.internal.org.objectweb.asm.Type;
+import js.dom.InputElement;
 import js.lang.Global;
 import js.lang.NativeString;
 import kiss.ClassListener;
@@ -858,6 +859,10 @@ public class Javascript {
 
         /** The extensions. */
         private final Set<Class> classes = new HashSet();
+
+        private NecessaryManager() {
+            classes.add(InputElement.class);
+        }
 
         /**
          * {@inheritDoc}

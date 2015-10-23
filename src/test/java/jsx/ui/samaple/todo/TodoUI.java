@@ -165,7 +165,6 @@ public class TodoUI extends Widget1<TodoTasks> {
                 } else {
                     box($.HBox, () -> {
                         widget(complete);
-                        widget(text);
                         widget(delete);
                     });
                 }

@@ -39,7 +39,7 @@ import kiss.I;
 public class Input extends LowLevelWidget<Input> {
 
     /** The current input value. */
-    public final Events<String> value;
+    public final StringProperty value;
 
     /** The valid property. */
     public final Events<Boolean> valid;
@@ -59,13 +59,12 @@ public class Input extends LowLevelWidget<Input> {
      * </p>
      */
     Input(StringProperty value) {
-        this.value = when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff();
+        this.value = value;
         this.valid = I.observe(value).map(input -> validate(input));
         this.invalid = I.observe(value).map(input -> !validate(input));
 
         // user input functionality
-        // when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100,
-        // MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
+        when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
     }
 
     private boolean validate(String input) {

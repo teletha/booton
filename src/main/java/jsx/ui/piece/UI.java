@@ -120,6 +120,10 @@ public class UI {
      * @param value
      */
     public static final <T> CheckBox checkbox(SetProperty<T> group, T value, String label) {
+        if (group == null) {
+            group = I.make(SetProperty.class);
+        }
+
         CheckBox box = new CheckBox(group, value, label);
 
         return box;
