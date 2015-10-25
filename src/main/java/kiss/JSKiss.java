@@ -970,7 +970,7 @@ class JSKiss {
      * @param task A task to execute.
      */
     public static Future<?> schedule(Runnable task) {
-        return schedule(0, null, true, task);
+        return schedule(0, TimeUnit.MILLISECONDS, true, task);
     }
 
     /**
