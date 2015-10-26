@@ -23,7 +23,6 @@ import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -92,6 +92,9 @@ class JSKiss {
     /** The task manager. */
     private static final ScheduledExecutorService parallel = Executors.newScheduledThreadPool(4);
 
+    /** The associatable object holder. */
+    private static final WeakHashMap<Object, WeakHashMap> associatables = new WeakHashMap();
+
     static {
         // built-in lifestyles
         lifestyles.put(List.class, new Prototype(ArrayList.class));
@@ -114,18 +117,26 @@ class JSKiss {
 
     /**
      * <p>
-     * Make the {@link Map} which has {@link Class} key be recognized to the module unloading event
-     * and disposes the key which is associated with the module automatically.
-     * </p>
-     * <p>
-     * This method has same syntax of {@link Collections#synchronizedMap(Map)}.
+     * Retrieve the associated value with the specified object by the specified type.
      * </p>
      * 
-     * @param map A target {@link Map} object to be aware of module unloading event.
-     * @return The given {@link Map} object.
+     * @param host A host object.
+     * @param type An association type.
+     * @return An associated value.
      */
-    public static <M extends Map<Class, ?>> M aware(M map) {
-        return map;
+    public static <V> V associate(Object host, Class<V> type) {
+        WeakHashMap association = associatables.get(host);
+
+        if (association == null) {
+            associatables.put(host, association = new WeakHashMap());
+        }
+
+        Object value = association.get(type);
+
+        if (value == null) {
+            association.put(type, value = I.make(type));
+        }
+        return (V) value;
     }
 
     /**
