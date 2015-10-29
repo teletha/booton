@@ -555,6 +555,17 @@ public class StructureDescriptor {
      * <p>
      * Define children.
      * </p>
+     *
+     * @param children A list of child widget.
+     */
+    public static <C> Declarable contents(Events<C> contents, Consumer<C> process) {
+        return contents(latestWidget.values(contents), process);
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
      * 
      * @param contents A list of contents.
      * @param process A content writer.
