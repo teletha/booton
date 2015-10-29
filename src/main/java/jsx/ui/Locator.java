@@ -10,7 +10,6 @@
 package jsx.ui;
 
 import kiss.Events;
-import kiss.model.ClassUtil;
 
 /**
  * @version 2015/10/04 14:39:49
@@ -25,9 +24,7 @@ public interface Locator {
      * @param locatable A locator object with the bound context type.
      * @return A user intent {@link Events}.
      */
-    default <T> Events<T> at(Location<T> locatable) {
-        return at(locatable, ClassUtil.getParameter(locatable.getClass(), Location.class)[0]);
-    }
+    <T> Events<T> at(Location<T> locatable);
 
     /**
      * <p>

@@ -651,9 +651,21 @@ public abstract class Widget implements Declarable {
          * {@inheritDoc}
          */
         @Override
+        public <T> Events<T> at(Location<T> locatable) {
+            return at(locatable, false);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
         public <T> Events<T> at(Location locatable, Class<T> type) {
+            return at(locatable, type == UIEvent.class || type == Object.class);
+        }
+
+        private <T> Events<T> at(Location locatable, boolean useUIEvent) {
             this.name = locatable.name();
-            this.useUIEvent = type == UIEvent.class || type == Object.class;
+            this.useUIEvent = useUIEvent;
 
             return new Events<T>(observer -> {
                 if (observers == null) {

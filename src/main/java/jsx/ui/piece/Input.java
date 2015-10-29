@@ -60,8 +60,8 @@ public class Input extends LowLevelWidget<Input> {
      */
     Input(StringProperty value) {
         this.value = value;
-        this.valid = I.observe(value).map(input -> validate(input));
-        this.invalid = I.observe(value).map(input -> !validate(input));
+        this.valid = I.observe(value).map(input -> validate(input)).startWith(true);
+        this.invalid = I.observe(value).map(input -> !validate(input)).startWith(false);
 
         // user input functionality
         when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
