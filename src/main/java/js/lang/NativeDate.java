@@ -41,6 +41,94 @@ public class NativeDate {
 
     /**
      * <p>
+     * The getFullYear() method returns the year of the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getFullYear() {
+        return calendar.get(Calendar.YEAR);
+    }
+
+    /**
+     * <p>
+     * Returns the month (0-11) in the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getMonth() {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    /**
+     * <p>
+     * Returns the day of the month (1-31) for the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getDate() {
+        return calendar.get(Calendar.DATE);
+    }
+
+    /**
+     * <p>
+     * Returns the hour (0-23) in the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getHours() {
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    /**
+     * <p>
+     * Returns the minutes (0-59) in the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getMinutes() {
+        return calendar.get(Calendar.MINUTE);
+    }
+
+    /**
+     * <p>
+     * Returns the seconds (0-59) in the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getSeconds() {
+        return calendar.get(Calendar.SECOND);
+    }
+
+    /**
+     * <p>
+     * Returns the milliseconds (0-999) in the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getMillseconds() {
+        return calendar.get(Calendar.MILLISECOND);
+    }
+
+    /**
+     * <p>
+     * Returns the day of the week (0-6) for the specified date according to local time.
+     * </p>
+     * 
+     * @return
+     */
+    public int getDay() {
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
+    /**
+     * <p>
      * Returns the numeric value corresponding to the time for the specified date according to
      * universal time.
      * </p>
@@ -84,6 +172,94 @@ public class NativeDate {
          */
         public String NativeDate(long time) {
             return "new Date(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * The getFullYear() method returns the year of the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getFullYear() {
+            return that + ".getFullYear()";
+        }
+
+        /**
+         * <p>
+         * Returns the month (0-11) in the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getMonth() {
+            return that + ".getMonth()";
+        }
+
+        /**
+         * <p>
+         * Returns the day of the month (1-31) for the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getDate() {
+            return that + ".getDate()";
+        }
+
+        /**
+         * <p>
+         * Returns the hour (0-23) in the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getHours() {
+            return that + ".getHours()";
+        }
+
+        /**
+         * <p>
+         * Returns the minutes (0-59) in the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getMinutes() {
+            return that + ".getMinutes()";
+        }
+
+        /**
+         * <p>
+         * Returns the seconds (0-59) in the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getSeconds() {
+            return that + ".getSeconds()";
+        }
+
+        /**
+         * <p>
+         * Returns the milliseconds (0-999) in the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getMillseconds() {
+            return that + ".getMillseconds()";
+        }
+
+        /**
+         * <p>
+         * Returns the day of the week (0-6) for the specified date according to local time.
+         * </p>
+         * 
+         * @return
+         */
+        public String getDay() {
+            return that + ".getDay()";
         }
 
         /**
