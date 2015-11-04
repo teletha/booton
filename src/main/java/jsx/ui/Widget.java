@@ -624,10 +624,9 @@ public abstract class Widget implements Declarable {
         private ValueContext(Events<V> events, List<V> list) {
             this.value = (V) list;
 
-            disposable = events.to(value -> {
+            disposable = events.to(update(value -> {
                 list.add(value);
-                // update();
-            });
+            }));
         }
     }
 
