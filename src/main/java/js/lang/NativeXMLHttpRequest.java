@@ -39,6 +39,32 @@ public class NativeXMLHttpRequest extends EventTarget {
     }
 
     /**
+     * 
+     */
+    public void withCredentials() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * <p>
+     * Sets the value of an HTTP request header. You must call setRequestHeader()after open(), but
+     * before send(). If this method is called several times with the same header, the values are
+     * merged into one single request header.
+     * </p>
+     * 
+     * @param name
+     * @param value
+     * @return
+     */
+    public void setRequestHeader(String name, String value) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * <p>
      * Initializes a request. This method is to be used from JavaScript code; to initialize a
      * request from native code, use openRequest() instead.
@@ -99,6 +125,28 @@ public class NativeXMLHttpRequest extends EventTarget {
          */
         public String NativeXMLHttpRequest() {
             return "new XMLHttpRequest()";
+        }
+
+        /**
+         * 
+         */
+        public String withCredentials() {
+            return that + ".withCredentials=true";
+        }
+
+        /**
+         * <p>
+         * Sets the value of an HTTP request header. You must call setRequestHeader()after open(),
+         * but before send(). If this method is called several times with the same header, the
+         * values are merged into one single request header.
+         * </p>
+         * 
+         * @param name
+         * @param value
+         * @return
+         */
+        public String setRequestHeader(String name, String value) {
+            return that + ".setRequestHeader(" + param(0) + "," + param(1) + ")";
         }
 
         /**
