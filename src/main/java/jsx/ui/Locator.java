@@ -9,6 +9,8 @@
  */
 package jsx.ui;
 
+import js.dom.UIEvent;
+import jsx.style.ValueStyle;
 import kiss.Events;
 
 /**
@@ -24,7 +26,19 @@ public interface Locator {
      * @param locatable A locator object with the bound context type.
      * @return A user intent {@link Events}.
      */
-    <T> Events<T> at(Location<T> locatable);
+    default Events<UIEvent> at(Style locatable) {
+        return at(locatable, UIEvent.class);
+    }
+
+    /**
+     * <p>
+     * Locate the specified point in {@link Widget}.
+     * </p>
+     * 
+     * @param locatable A locator object with the bound context type.
+     * @return A user intent {@link Events}.
+     */
+    <V> Events<V> at(ValueStyle<V> locatable);
 
     /**
      * <p>
@@ -36,5 +50,4 @@ public interface Locator {
      * @return A user intent {@link Events}.
      */
     <T> Events<T> at(Location locatable, Class<T> type);
-
 }

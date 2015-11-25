@@ -9,7 +9,7 @@
  */
 package jsx.style;
 
-import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 
 import jsx.ui.Style;
 
@@ -26,8 +26,8 @@ public interface BinaryStyle extends ValueStyle<Boolean> {
      * @param state A binary state.
      * @return A specific {@link Style}.
      */
-    default Style of(BooleanProperty state) {
-        return of(state == null ? false : state.get());
+    default Style of(Property state) {
+        return of(state == null ? false : Boolean.valueOf(String.valueOf(state.getValue())));
     }
 
     /**

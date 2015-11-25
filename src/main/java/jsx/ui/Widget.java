@@ -38,6 +38,7 @@ import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;
 import jsx.debug.Profile;
+import jsx.style.ValueStyle;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
@@ -666,7 +667,7 @@ public abstract class Widget implements Declarable {
          * {@inheritDoc}
          */
         @Override
-        public <T> Events<T> at(Location<T> locatable) {
+        public <T> Events<T> at(ValueStyle<T> locatable) {
             return at(locatable, false);
         }
 
