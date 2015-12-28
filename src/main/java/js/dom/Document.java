@@ -9,6 +9,7 @@
  */
 package js.dom;
 
+import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
@@ -20,9 +21,43 @@ import jsx.ui.Style;
  * Enhanced {@link org.w3c.dom.Document} for web platform.
  * </p>
  * 
- * @version 2015/10/16 15:02:17
+ * @version 2015/12/28 21:49:00
  */
+@JavascriptAPIProvider(targetJavaScriptClassName = "Document")
 public abstract class Document extends Node implements JavascriptNative {
+
+    /**
+     * <p>
+     * The Element that is the content area element of the document.
+     * </p>
+     * 
+     * @return
+     */
+    public Element contentElement() {
+        return getElementById("Content");
+    }
+
+    /**
+     * <p>
+     * The Element that is the header area element of the document.
+     * </p>
+     * 
+     * @return
+     */
+    public Element headerElement() {
+        return getElementById("Header");
+    }
+
+    /**
+     * <p>
+     * The Element that is the fotter area element of the document.
+     * </p>
+     * 
+     * @return
+     */
+    public Element footerElement() {
+        return getElementById("Footer");
+    }
 
     /**
      * <p>
