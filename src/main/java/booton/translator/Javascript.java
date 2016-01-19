@@ -29,6 +29,7 @@ import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import booton.BootonConfiguration;
 import booton.BootonLog;
 import booton.Necessary;
 import booton.Unnecessary;
@@ -92,6 +93,9 @@ public class Javascript {
 
     /** The local identifier counter for {@link Javascript}. */
     private static int counter = 0;
+
+    /** The build configuration. */
+    private static BootonConfiguration configuration = I.make(BootonConfiguration.class);
 
     // initialization
     static {
@@ -178,6 +182,17 @@ public class Javascript {
         }
 
         BootonLog.JavascriptConstructor.stop();
+    }
+
+    /**
+     * <p>
+     * Compute the unique name of this scripted class.
+     * </p>
+     * 
+     * @return
+     */
+    private String computeUniqueName() {
+        return configuration.compression ? mung32(id) : source.getName().replaceAll("\\.", "_");
     }
 
     /**
@@ -699,7 +714,7 @@ public class Javascript {
         if (script == null) {
             return clazz.getSimpleName();
         } else {
-            return prefix + mung32(script.id);
+            return prefix + script.computeUniqueName();
         }
     }
 

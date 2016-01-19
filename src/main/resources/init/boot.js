@@ -284,7 +284,7 @@ function boot(global) {
         configurable: true,
         get: function() {
           Object.defineProperty(Class, "$", {
-            value: new boot.A(name, prototype, metadata.$, superClass.$, metadata, 0)
+            value: new (boot.A || boot.js_lang_reflect_JSClass)(name, prototype, metadata.$, superClass.$, metadata, 0)
           });
           return Class["$"];
         }

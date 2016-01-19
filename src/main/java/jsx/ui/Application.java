@@ -140,7 +140,7 @@ public abstract class Application {
         widget.renderIn(cradle.child("div"));
 
         // clear old page and append new page
-        document.getElementById("Content").empty().append(cradle);
+        document.contentElement().empty().append(cradle);
     }
 
     /**
