@@ -18,8 +18,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Supplier;
 
 import booton.BootonConfiguration;
 import booton.BootonLog;
@@ -43,6 +46,7 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
+import kiss.model.ClassUtil;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -387,6 +391,7 @@ public class Javascript {
     private synchronized void compile() {
         if (code == null) {
             BootonLog.Compile.start(source, () -> {
+
                 ScriptWriter code = new ScriptWriter();
 
                 // compute related class names
@@ -917,6 +922,66 @@ public class Javascript {
                 }
             }
             return set;
+        }
+    }
+
+    /**
+     * @version 2016/01/19 15:17:07
+     */
+    @Manageable(lifestyle = Singleton.class)
+    private static class CompiledCodeRepository {
+
+        /** The cached codes. */
+        private Map<Class, CompiledCode> caches = new HashMap();
+
+        /**
+         * <p>
+         * Find cached code if it exists.
+         * </p>
+         * 
+         * @param clazz
+         * @return
+         */
+        private String findCodeBy(Class clazz, Supplier<String> coder) {
+            return caches.computeIfAbsent(clazz, c -> new CompiledCode()).getCode(clazz, coder);
+        }
+    }
+
+    /**
+     * @version 2016/01/19 15:18:17
+     */
+    private static class CompiledCode {
+
+        private FileTime modified;
+
+        private String code;
+
+        private String getCode(Class clazz, Supplier<String> coder) {
+            try {
+                Path archive = ClassUtil.getArchive(clazz);
+
+                if (Files.isDirectory(archive)) {
+                    // source files
+                    Path source = archive.resolve(clazz.getName().replaceAll("\\.", "/").concat(".class"));
+                    FileTime sourceTime = Files.getLastModifiedTime(source);
+
+                    if (!sourceTime.equals(modified)) {
+                        modified = sourceTime;
+                        code = coder.get();
+                    }
+                } else {
+                    // jar archive
+                    FileTime sourceTime = Files.getLastModifiedTime(archive);
+
+                    if (!sourceTime.equals(modified)) {
+                        modified = sourceTime;
+                        code = coder.get();
+                    }
+                }
+                return code;
+            } catch (IOException e) {
+                throw I.quiet(e);
+            }
         }
     }
 }
