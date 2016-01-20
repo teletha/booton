@@ -15,13 +15,21 @@ import booton.translator.JavaAPIProvider;
  * @version 2014/03/07 20:21:02
  */
 @JavaAPIProvider(Modules.class)
-class JSModules implements Codec<Class> {
+class JSModules implements Decoder<Class>, Encoder<Class> {
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Class decode(String value) {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String encode(Class value) {
         return null;
     }
 }

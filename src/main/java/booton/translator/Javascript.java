@@ -45,6 +45,7 @@ import kiss.ClassListener;
 import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
+import kiss.Preference;
 import kiss.Singleton;
 import kiss.model.ClassUtil;
 
@@ -100,6 +101,8 @@ public class Javascript {
 
     /** The build configuration. */
     private static BootonConfiguration configuration = I.make(BootonConfiguration.class);
+
+    private static CompiledCodeRepository repository = I.make(CompiledCodeRepository.class);
 
     // initialization
     static {
@@ -392,73 +395,75 @@ public class Javascript {
         if (code == null) {
             BootonLog.Compile.start(source, () -> {
 
-                ScriptWriter code = new ScriptWriter();
+                code = repository.findCodeBy(source, () -> {
+                    ScriptWriter code = new ScriptWriter();
 
-                // compute related class names
-                Class parent = source.getSuperclass();
-                String className = '"' + computeSimpleClassName(source) + '"';
-                String parentName = '"' + (parent == null || parent == Object.class ? "" : computeSimpleClassName(parent)) + '"';
-                StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
+                    // compute related class names
+                    Class parent = source.getSuperclass();
+                    String className = '"' + computeSimpleClassName(source) + '"';
+                    String parentName = '"' + (parent == null || parent == Object.class ? "" : computeSimpleClassName(parent)) + '"';
+                    StringJoiner interfaces = new StringJoiner(" ", "\"", "\"");
 
-                for (Class type : source.getInterfaces()) {
-                    interfaces.add(computeSimpleClassName(type));
-                }
+                    for (Class type : source.getInterfaces()) {
+                        interfaces.add(computeSimpleClassName(type));
+                    }
 
-                // write class definition
-                code.comment(source + " " + className);
-                code.append("boot.define(", className, ",", parentName, ",", interfaces, ",{");
+                    // write class definition
+                    code.comment(source + " " + className);
+                    code.append("boot.define(", className, ",", parentName, ",", interfaces, ",{");
 
-                // write constructors, fields and methods
-                try {
-                    if (source.isInterface() && !hasImplementation(source, true)) {
-                        if (source.isAnnotation()) {
-                            compileAnnotation(code);
+                    // write constructors, fields and methods
+                    try {
+                        if (source.isInterface() && !hasImplementation(source, true)) {
+                            if (source.isAnnotation()) {
+                                compileAnnotation(code);
+                            }
+                        } else if (TranslatorManager.hasTranslator(source)) {
+                            // do nothing
+                        } else {
+                            try {
+                                BootonLog.PraseByteCode.start(source);
+                                new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+                            } finally {
+                                BootonLog.PraseByteCode.stop();
+                            }
                         }
-                    } else if (TranslatorManager.hasTranslator(source)) {
-                        // do nothing
-                    } else {
-                        try {
-                            BootonLog.PraseByteCode.start(source);
-                            new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
-                        } finally {
-                            BootonLog.PraseByteCode.stop();
+                    } catch (TranslationError e) {
+                        e.write("\r\n");
+
+                        throw CompilerRecorder.rethrow(e);
+                    } catch (Throwable e) {
+                        TranslationError error = new TranslationError(e);
+                        error.write("Can't compile ", source.getName() + ".");
+
+                        throw CompilerRecorder.rethrow(error);
+                    }
+
+                    // write metadata
+                    code.append("},", new JavaMetadataCompiler(source));
+
+                    // write native class enhancement
+                    JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
+
+                    if (provider != null) {
+                        String JSClassName = provider.targetJavaScriptClassName();
+
+                        if (JSClassName.length() != 0) {
+                            code.append(",").string(JSClassName);
                         }
                     }
-                } catch (TranslationError e) {
-                    e.write("\r\n");
 
-                    throw CompilerRecorder.rethrow(e);
-                } catch (Throwable e) {
-                    TranslationError error = new TranslationError(e);
-                    error.write("Can't compile ", source.getName() + ".");
-
-                    throw CompilerRecorder.rethrow(error);
-                }
-
-                // write metadata
-                code.append("},", new JavaMetadataCompiler(source));
-
-                // write native class enhancement
-                JavascriptAPIProvider provider = source.getAnnotation(JavascriptAPIProvider.class);
-
-                if (provider != null) {
-                    String JSClassName = provider.targetJavaScriptClassName();
-
-                    if (JSClassName.length() != 0) {
-                        code.append(",").string(JSClassName);
+                    if (Extensible.class.isAssignableFrom(source)) {
+                        code.append(",").string("e");
                     }
-                }
 
-                if (Extensible.class.isAssignableFrom(source)) {
-                    code.append(",").string("e");
-                }
+                    // End class definition
+                    code.append(");");
+                    code.line();
 
-                // End class definition
-                code.append(");");
-                code.line();
-
-                // create cache
-                this.code = code.toString();
+                    // create cache
+                    return code.toString();
+                });
             });
         }
     }
@@ -928,11 +933,11 @@ public class Javascript {
     /**
      * @version 2016/01/19 15:17:07
      */
-    @Manageable(lifestyle = Singleton.class)
+    @Manageable(lifestyle = Preference.class)
     private static class CompiledCodeRepository {
 
         /** The cached codes. */
-        private Map<Class, CompiledCode> caches = new HashMap();
+        public Map<Class, CompiledCode> caches = new HashMap();
 
         /**
          * <p>
@@ -952,15 +957,17 @@ public class Javascript {
      */
     private static class CompiledCode {
 
-        private FileTime modified;
+        public FileTime modified;
 
-        private String code;
+        public String code;
 
         private String getCode(Class clazz, Supplier<String> coder) {
             try {
                 Path archive = ClassUtil.getArchive(clazz);
 
-                if (Files.isDirectory(archive)) {
+                if (archive == null) {
+                    code = coder.get();
+                } else if (Files.isDirectory(archive)) {
                     // source files
                     Path source = archive.resolve(clazz.getName().replaceAll("\\.", "/").concat(".class"));
                     FileTime sourceTime = Files.getLastModifiedTime(source);

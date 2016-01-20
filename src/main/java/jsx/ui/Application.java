@@ -23,7 +23,8 @@ import js.dom.UIAction;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import kiss.Codec;
+import kiss.Decoder;
+import kiss.Encoder;
 import kiss.I;
 import kiss.Interceptor;
 import kiss.Manageable;
@@ -53,19 +54,19 @@ public abstract class Application {
 
                 // All parameters must be decodable.
                 Class[] parameTypes = method.getParameterTypes();
-                Codec[] codecs = new Codec[parameTypes.length];
+                Decoder[] decoders = new Decoder[parameTypes.length];
 
-                for (int i = 0; i < codecs.length; i++) {
-                    Codec codec = I.find(Codec.class, parameTypes[i]);
+                for (int i = 0; i < decoders.length; i++) {
+                    Decoder decoder = I.find(Decoder.class, parameTypes[i]);
 
-                    if (codec == null) {
+                    if (decoder == null) {
                         continue root;
                     }
-                    codecs[i] = codec;
+                    decoders[i] = decoder;
                     pattern.append("/").append("([^/].+)");
                 }
 
-                router.push(new PageRoute(pattern.toString(), codecs, method));
+                router.push(new PageRoute(pattern.toString(), decoders, method));
             }
         }
 
@@ -188,19 +189,19 @@ public abstract class Application {
         private final Pattern pattern;
 
         /** The parameter pattern. */
-        private final Codec[] codecs;
+        private final Decoder[] decoders;
 
         /** The dispatch method. */
         private final Method method;
 
         /**
          * @param pattern
-         * @param codecs
+         * @param decoders
          * @param method
          */
-        private PageRoute(String pattern, Codec[] codecs, Method method) {
+        private PageRoute(String pattern, Decoder[] decoders, Method method) {
             this.pattern = Pattern.compile(pattern);
-            this.codecs = codecs;
+            this.decoders = decoders;
             this.method = method;
         }
 
@@ -212,14 +213,14 @@ public abstract class Application {
         private Widget dispatch(String path) {
             Matcher matcher = pattern.matcher(path);
 
-            if (!matcher.matches() || matcher.groupCount() != codecs.length) {
+            if (!matcher.matches() || matcher.groupCount() != decoders.length) {
                 return null;
             }
 
-            Object[] parameters = new Object[codecs.length];
+            Object[] parameters = new Object[decoders.length];
 
-            for (int i = 0; i < codecs.length; i++) {
-                parameters[i] = codecs[i].decode(matcher.group(i + 1));
+            for (int i = 0; i < decoders.length; i++) {
+                parameters[i] = decoders[i].decode(matcher.group(i + 1));
             }
 
             try {
@@ -248,7 +249,7 @@ public abstract class Application {
             StringBuilder builder = new StringBuilder("#").append(name);
 
             for (Object param : params) {
-                builder.append("/").append(I.find(Codec.class, param.getClass()).encode(param));
+                builder.append("/").append(I.find(Encoder.class, param.getClass()).encode(param));
             }
 
             // update history if needed

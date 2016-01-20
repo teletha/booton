@@ -755,8 +755,8 @@ class JSKiss {
             return (M) input;
         }
 
-        Codec inputCodec = inputModel.getCodec();
-        Codec<M> outputCodec = outputModel.getCodec();
+        Encoder inputCodec = inputModel.getEncoder();
+        Decoder<M> outputCodec = outputModel.getDecoder();
 
         // check whether each model are attribute model or not
         if (inputCodec == null && outputCodec == null) {
