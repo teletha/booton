@@ -45,7 +45,6 @@ import kiss.ClassListener;
 import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
-import kiss.Preference;
 import kiss.Singleton;
 import kiss.model.ClassUtil;
 
@@ -933,7 +932,6 @@ public class Javascript {
     /**
      * @version 2016/01/19 15:17:07
      */
-    @Manageable(lifestyle = Preference.class)
     private static class CompiledCodeRepository {
 
         /** The cached codes. */
