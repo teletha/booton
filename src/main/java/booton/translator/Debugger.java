@@ -42,7 +42,7 @@ public class Debugger extends AnnotationVisitor {
 
     // initialization
     static {
-        enable(".+\\$OffsetIdPrinterParser", "parse");
+        // enable(".+\\$OffsetIdPrinterParser", "parse");
 
         boolean flag = false;
 

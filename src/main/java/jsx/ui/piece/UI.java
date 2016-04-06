@@ -31,7 +31,7 @@ import jsx.ui.Widget;
 import kiss.Events;
 import kiss.I;
 import kiss.Observer;
-import kiss.Ternary;
+import kiss.Ⅲ;
 
 /**
  * @version 2015/10/18 22:10:18
@@ -290,7 +290,7 @@ public class UI {
          * @param closer A close timing for the modal contents.
          * @return A user action.
          */
-        default <C> Events<Ternary<O, W, C>> close(Events<C> closer) {
+        default <C> Events<Ⅲ<O, W, C>> close(Events<C> closer) {
             return closeWhen(closer);
         }
 
@@ -302,7 +302,7 @@ public class UI {
          * @param closer A close timing for the modal contents.
          * @return A user action.
          */
-        default <C> Events<Ternary<O, W, C>> closeWhen(Events<C> closer) {
+        default <C> Events<Ⅲ<O, W, C>> closeWhen(Events<C> closer) {
             return closeWhen(w -> closer);
         }
 
@@ -314,7 +314,7 @@ public class UI {
          * @param closer A close timing for the modal contents.
          * @return A user action.
          */
-        <C> Events<Ternary<O, W, C>> closeWhen(Function<W, Events<C>> closer);
+        <C> Events<Ⅲ<O, W, C>> closeWhen(Function<W, Events<C>> closer);
     }
 
     /**
@@ -359,7 +359,7 @@ public class UI {
          * {@inheritDoc}
          */
         @Override
-        public <C> Events<Ternary<O, W, C>> closeWhen(Function<W, Events<C>> closer) {
+        public <C> Events<Ⅲ<O, W, C>> closeWhen(Function<W, Events<C>> closer) {
             Objects.requireNonNull(closer);
 
             // =====================================
@@ -386,7 +386,7 @@ public class UI {
                 closer.apply(widget).take(1).to(closing -> {
                     close(widget);
 
-                    Ternary<O, W, C> context = I.pair(opening, widget, closing);
+                    Ⅲ<O, W, C> context = I.pair(opening, widget, closing);
 
                     for (Observer observer : observers) {
                         observer.accept(context);

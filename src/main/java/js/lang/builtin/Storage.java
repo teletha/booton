@@ -9,12 +9,11 @@
  */
 package js.lang.builtin;
 
-import js.lang.NativeObject;
-import kiss.I;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.JavascriptNativePropertyAccessor;
+import kiss.I;
 
 /**
  * <p>
@@ -27,7 +26,7 @@ import booton.translator.JavascriptNativePropertyAccessor;
  * @version 2013/10/04 11:24:39
  */
 @JavascriptAPIProvider(targetJavaScriptClassName = "Storage")
-public abstract class Storage extends NativeObject implements JavascriptNative {
+public abstract class Storage implements JavascriptNative {
 
     /**
      * <p>
@@ -130,7 +129,7 @@ public abstract class Storage extends NativeObject implements JavascriptNative {
     public void set(Object model) {
         if (model != null) {
             StringBuilder builder = new StringBuilder();
-            I.write(model, builder, true);
+            I.write(model, builder);
             setItem(model.getClass().getName(), builder.toString());
         }
     }

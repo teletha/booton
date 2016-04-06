@@ -40,12 +40,12 @@ import kiss.Table;
 final class ClassUtilJS {
 
     /** The list of primitive classes. (except for void type) */
-    public static final Class[] PRIMITIVES = {boolean.class, int.class, long.class, float.class, double.class,
-            byte.class, short.class, char.class};
+    public static final Class[] PRIMITIVES = {boolean.class, int.class, long.class, float.class, double.class, byte.class, short.class,
+            char.class};
 
     /** The list of wrapper classes. (except for void type) */
-    public static final Class[] WRAPPERS = {Boolean.class, Integer.class, Long.class, Float.class, Double.class,
-            Byte.class, Short.class, Character.class};
+    public static final Class[] WRAPPERS = {Boolean.class, Integer.class, Long.class, Float.class, Double.class, Byte.class, Short.class,
+            Character.class};
 
     /**
      * Avoid construction.
@@ -118,8 +118,8 @@ final class ClassUtilJS {
             for (Method method : type.getDeclaredMethods()) {
                 // exclude the method which is created by compiler
                 // exclude the private method which is not declared in the specified class
-                if (!method.isBridge() && !method.isSynthetic() && (((method.getModifiers() & Modifier.PRIVATE) == 0) || method
-                        .getDeclaringClass() == clazz)) {
+                if (!method.isBridge() && !method
+                        .isSynthetic() && (((method.getModifiers() & Modifier.PRIVATE) == 0) || method.getDeclaringClass() == clazz)) {
                     Annotation[] annotations = method.getAnnotations();
 
                     if (annotations.length != 0) {
@@ -155,8 +155,8 @@ final class ClassUtilJS {
 
                         // check method overriding
                         for (Method candidate : table.keySet()) {
-                            if (candidate.getName().equals(method.getName()) && Arrays.deepEquals(candidate
-                                    .getParameterTypes(), method.getParameterTypes())) {
+                            if (candidate.getName().equals(method.getName()) && Arrays
+                                    .deepEquals(candidate.getParameterTypes(), method.getParameterTypes())) {
                                 method = candidate; // detect overriding
                                 break;
                             }
@@ -242,7 +242,7 @@ final class ClassUtilJS {
         }
 
         // compute actual class
-        Class raw = clazz instanceof Class ? (Class) clazz : Model.load(clazz, base).type;
+        Class raw = clazz instanceof Class ? (Class) clazz : Model.of(clazz, base).type;
 
         // collect all types
         Set<Type> types = new HashSet();
@@ -266,7 +266,7 @@ final class ClassUtilJS {
 
                     for (int i = 0; i < args.length; i++) {
                         // resolve various type (TypeVariable, ParameterizedType and WildcardType)
-                        classes[i] = args[i] instanceof Class ? (Class) args[i] : Model.load(args[i], base).type;
+                        classes[i] = args[i] instanceof Class ? (Class) args[i] : Model.of(args[i], base).type;
                     }
                     return classes;
                 }

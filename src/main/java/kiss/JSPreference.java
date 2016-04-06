@@ -41,7 +41,7 @@ class JSPreference<M> extends Singleton<M> {
         // store
         window.addEventListener(UIAction.BeforeUnload.name, new NativeFunction(() -> {
             StringBuilder builder = new StringBuilder();
-            I.write(instance, builder, true);
+            I.write(instance, builder);
             localStorage.setItem(key, builder.toString());
         }));
     }

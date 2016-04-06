@@ -9,7 +9,6 @@
  */
 package js.util;
 
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -275,19 +274,19 @@ class TimeZone {
         }
     }
 
-    /**
-     * Converts this {@code TimeZone} object to a {@code ZoneId}.
-     *
-     * @return a {@code ZoneId} representing the same time zone as this {@code TimeZone}
-     * @since 1.8
-     */
-    public ZoneId toZoneId() {
-        String id = getID();
-        if ("EST".equals(id)) return ZoneId.of("America/New_York");
-        if ("MST".equals(id)) return ZoneId.of("America/Denver");
-        if ("HST".equals(id)) return ZoneId.of("America/Honolulu");
-        return ZoneId.of(id, ZoneId.SHORT_IDS);
-    }
+    // /**
+    // * Converts this {@code TimeZone} object to a {@code ZoneId}.
+    // *
+    // * @return a {@code ZoneId} representing the same time zone as this {@code TimeZone}
+    // * @since 1.8
+    // */
+    // public ZoneId toZoneId() {
+    // String id = getID();
+    // if ("EST".equals(id)) return ZoneId.of("America/New_York");
+    // if ("MST".equals(id)) return ZoneId.of("America/Denver");
+    // if ("HST".equals(id)) return ZoneId.of("America/Honolulu");
+    // return ZoneId.of(id, ZoneId.SHORT_IDS);
+    // }
 
     /**
      * Gets the default {@code TimeZone} of the Java virtual machine. If the cached default

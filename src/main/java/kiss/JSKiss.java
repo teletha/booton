@@ -37,6 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import javax.script.ScriptException;
 
@@ -64,7 +65,6 @@ import js.lang.reflect.Reflections;
 import kiss.model.ClassUtil;
 import kiss.model.Model;
 import kiss.model.Property;
-import kiss.model.PropertyWalker;
 
 /**
  * @version 2013/08/02 12:39:06
@@ -623,8 +623,8 @@ class JSKiss {
      * @param param1 A first parameter.
      * @return
      */
-    public static <Param1> Unary<Param1> pair(Param1 param1) {
-        return new Unary(param1);
+    public static <Param1> Ⅰ<Param1> pair(Param1 param1) {
+        return new Ⅰ(param1);
     }
 
     /**
@@ -636,8 +636,8 @@ class JSKiss {
      * @param param2 A second parameter.
      * @return
      */
-    public static <Param1, Param2> Binary<Param1, Param2> pair(Param1 param1, Param2 param2) {
-        return new Binary(param1, param2);
+    public static <Param1, Param2> Ⅱ<Param1, Param2> pair(Param1 param1, Param2 param2) {
+        return new Ⅱ(param1, param2);
     }
 
     /**
@@ -650,8 +650,8 @@ class JSKiss {
      * @param param3 A third parameter.
      * @return
      */
-    public static <Param1, Param2, Param3> Ternary<Param1, Param2, Param3> pair(Param1 param1, Param2 param2, Param3 param3) {
-        return new Ternary(param1, param2, param3);
+    public static <Param1, Param2, Param3> Ⅲ<Param1, Param2, Param3> pair(Param1 param1, Param2 param2, Param3 param3) {
+        return new Ⅲ(param1, param2, param3);
     }
 
     /**
@@ -747,16 +747,16 @@ class JSKiss {
             return null;
         }
 
-        Model inputModel = Model.load(input.getClass());
-        Model outputModel = Model.load(output);
+        Model inputModel = Model.of(input.getClass());
+        Model outputModel = Model.of(output);
 
         // no conversion
         if (inputModel == outputModel) {
             return (M) input;
         }
 
-        Encoder inputCodec = inputModel.getEncoder();
-        Decoder<M> outputCodec = outputModel.getDecoder();
+        Encoder inputCodec = inputModel.encoder();
+        Decoder<M> outputCodec = outputModel.decoder();
 
         // check whether each model are attribute model or not
         if (inputCodec == null && outputCodec == null) {
@@ -939,7 +939,7 @@ class JSKiss {
      */
     public static <M> M read(CharSequence input, M output) {
         try {
-            return read(Model.load(output.getClass()), output, Global.JSON.parse(input.toString()));
+            return read(Model.of(output.getClass()), output, Global.JSON.parse(input.toString()));
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -957,7 +957,7 @@ class JSKiss {
     private static <T> T read(Model model, T java, NativeObject js) throws Exception {
         for (String name : js.keys()) {
             Object value;
-            Property property = model.getProperty(name);
+            Property property = model.property(name);
 
             if (property != null) {
                 if (property.isAttribute()) {
@@ -1033,16 +1033,16 @@ class JSKiss {
      *            XML expression.
      * @throws NullPointerException If the input Java object or the output is <code>null</code> .
      */
-    public static void write(Object input, Appendable output, boolean json) {
+    public static void write(Object input, Appendable output) {
         if (output == null) {
             throw new NullPointerException();
         }
 
-        Model model = Model.load(input.getClass());
+        Model model = Model.of(input.getClass());
         Property property = new Property(model, model.name);
 
         // traverse configuration as json
-        new JSON(output).walk(model, property, input);
+        new JSON(output, 0).accept(I.pair(model, property, input));
     }
 
     /**
@@ -1082,7 +1082,7 @@ class JSKiss {
     /**
      * @version 2013/10/01 15:53:27
      */
-    private static class Copy implements PropertyWalker {
+    private static class Copy implements Consumer<Ⅲ<Model, Property, Object>> {
 
         /** The current model. */
         private Model model;
@@ -1103,11 +1103,11 @@ class JSKiss {
          * {@inheritDoc}
          */
         @Override
-        public void walk(Model model, Property property, Object node) {
-            Property dest = this.model.getProperty(property.name);
+        public void accept(Ⅲ<Model, Property, Object> t) {
+            Property dest = this.model.property(t.ⅱ.name);
 
             // never check null because PropertyWalker traverses existing properties
-            this.model.set(object, dest, I.transform(node, dest.model.type));
+            this.model.set(object, dest, I.transform(t.ⅲ, dest.model.type));
         }
     }
 }
