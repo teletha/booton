@@ -16,7 +16,7 @@ import js.dom.UIEvent;
 /**
  * @version 2013/10/20 10:02:05
  */
-public class TestUser {
+public class Tester {
 
     /**
      * <p>

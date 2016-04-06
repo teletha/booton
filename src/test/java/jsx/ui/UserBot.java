@@ -11,7 +11,7 @@ package jsx.ui;
 
 import java.util.Objects;
 
-import js.dom.UIAction;
+import js.dom.User;
 import js.dom.UIEvent;
 import jsx.ui.piece.Button;
 import jsx.ui.piece.Input;
@@ -63,9 +63,9 @@ public class UserBot {
      * @return
      */
     private static final void type(Input input, Key key) {
-        UIAction[] actions = {UIAction.KeyDown, UIAction.KeyPress, UIAction.KeyUp};
+        User[] actions = {User.KeyDown, User.KeyPress, User.KeyUp};
 
-        for (UIAction action : actions) {
+        for (User action : actions) {
             UIEvent event = new UIEventMockForInput(input);
             event.type = action.name;
             event.which = key.code;
@@ -85,7 +85,7 @@ public class UserBot {
         Objects.nonNull(button);
 
         UIEvent event = new UIEvent();
-        event.type = UIAction.Click.name;
+        event.type = User.Click.name;
 
         // button.publish(event);
     }
@@ -101,7 +101,7 @@ public class UserBot {
         Objects.nonNull(button);
 
         UIEvent event = new UIEvent();
-        event.type = UIAction.Click.name;
+        event.type = User.Click.name;
 
         // button.publish(event);
     }

@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
-import js.dom.UIAction;
+import js.dom.User;
 import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -71,7 +71,7 @@ public abstract class Application {
         }
 
         // Activate router system.
-        window.addEventListener(UIAction.HashChange.name, new NativeFunction<UIEvent>(event -> {
+        window.addEventListener(User.HashChange.name, new NativeFunction<UIEvent>(event -> {
             dispatch(location.hash);
         }));
     }

@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import js.dom.UIAction;
+import js.dom.User;
 
 /**
  * @version 2014/09/01 10:59:35
@@ -29,7 +29,7 @@ public class Key {
     /**
      * Constant for the {@code Enter} key.
      */
-    public static final Key Enter = new Key(13, "Enter", UIAction.Key_Enter);
+    public static final Key Enter = new Key(13, "Enter", User.Key_Enter);
 
     /**
      * Constant for the {@code Clear} key.
@@ -531,7 +531,7 @@ public class Key {
     public final int code;
 
     /** The event type. */
-    public final UIAction event;
+    public final User event;
 
     /**
      * @param code A native key code.
@@ -543,7 +543,7 @@ public class Key {
     /**
      * @param code A native key code.
      */
-    private Key(int code, String name, UIAction event) {
+    private Key(int code, String name, User event) {
         this.code = code;
         this.event = event;
     }

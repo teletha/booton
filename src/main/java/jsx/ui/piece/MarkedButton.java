@@ -9,7 +9,7 @@
  */
 package jsx.ui.piece;
 
-import static js.dom.UIAction.*;
+import static js.dom.User.*;
 import static jsx.ui.StructureDescriptor.*;
 
 import java.util.Objects;

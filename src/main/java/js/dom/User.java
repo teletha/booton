@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 /**
  * @version 2013/10/10 13:45:14
  */
-public enum UIAction implements Predicate<UIEvent> {
+public enum User implements Predicate<UIEvent> {
 
     /** The ui event type. */
     PointerDown,
@@ -353,21 +353,21 @@ public enum UIAction implements Predicate<UIEvent> {
     /**
      * 
      */
-    private UIAction() {
+    private User() {
         this(-1);
     }
 
     /**
      * @param name
      */
-    private UIAction(String name) {
+    private User(String name) {
         this(name, null);
     }
 
     /**
      * @param name
      */
-    private UIAction(String name, Predicate<UIEvent> condition) {
+    private User(String name, Predicate<UIEvent> condition) {
         this.code = -1;
         this.global = false;
         this.name = name;
@@ -381,7 +381,7 @@ public enum UIAction implements Predicate<UIEvent> {
      * 
      * @param code
      */
-    private UIAction(int code) {
+    private User(int code) {
         this.code = code;
         this.global = code == 0;
         this.name = 0 < code ? "keydown" : name().toLowerCase();

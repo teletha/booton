@@ -18,7 +18,7 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.scene.control.SingleSelectionModel;
 
-import js.dom.UIAction;
+import js.dom.User;
 import jsx.ui.Style;
 import jsx.ui.Widget;
 
@@ -41,7 +41,7 @@ public class Select<M> extends Widget {
         this.values = values;
         this.selection = selection;
 
-        when(UIAction.Change).at($.Select).to(update(e -> selection.setValue(values.get(Integer.valueOf(e.value())))));
+        when(User.Change).at($.Select).to(update(e -> selection.setValue(values.get(Integer.valueOf(e.value())))));
     }
 
     /**

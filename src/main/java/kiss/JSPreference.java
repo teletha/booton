@@ -12,7 +12,7 @@ package kiss;
 import static js.lang.Global.*;
 
 import booton.translator.JavaAPIProvider;
-import js.dom.UIAction;
+import js.dom.User;
 import js.lang.NativeFunction;
 
 /**
@@ -39,7 +39,7 @@ class JSPreference<M> extends Singleton<M> {
         }
 
         // store
-        window.addEventListener(UIAction.BeforeUnload.name, new NativeFunction(() -> {
+        window.addEventListener(User.BeforeUnload.name, new NativeFunction(() -> {
             StringBuilder builder = new StringBuilder();
             I.write(instance, builder);
             localStorage.setItem(key, builder.toString());

@@ -32,13 +32,12 @@ import javafx.beans.property.SetProperty;
 
 import js.dom.Element;
 import js.dom.EventTarget;
-import js.dom.UIAction;
 import js.dom.UIEvent;
+import js.dom.User;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;
 import jsx.debug.Profile;
-import jsx.style.ValueStyle;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
@@ -363,7 +362,7 @@ public abstract class Widget implements Declarable {
      * @param actionTypes A list of action types.
      * @return A location descriptor.
      */
-    protected final Locator when(UIAction... actionTypes) {
+    protected final Locator when(User... actionTypes) {
         EventContext context = new EventContext(actionTypes);
 
         if (locators == null) {
@@ -387,7 +386,7 @@ public abstract class Widget implements Declarable {
             for (int i = 0; i < locators.length(); i++) {
                 EventContext context = locators.get(i);
 
-                for (UIAction action : context.actions) {
+                for (User action : context.actions) {
                     target.addEventListener(action.name, context.listener);
                 }
             }
@@ -406,7 +405,7 @@ public abstract class Widget implements Declarable {
             for (int i = 0; i < locators.length(); i++) {
                 EventContext context = locators.get(i);
 
-                for (UIAction action : context.actions) {
+                for (User action : context.actions) {
                     target.removeEventListener(action.name, context.listener);
                 }
             }
@@ -637,7 +636,7 @@ public abstract class Widget implements Declarable {
     private static class EventContext implements Locator, Consumer<UIEvent> {
 
         /** The action types. */
-        private final UIAction[] actions;
+        private final User[] actions;
 
         /** The re-usable native event listener. */
         private final NativeFunction<UIEvent> listener;
@@ -658,17 +657,9 @@ public abstract class Widget implements Declarable {
          * 
          * @param actions A list of event types.
          */
-        private EventContext(UIAction... actions) {
+        private EventContext(User... actions) {
             this.actions = actions;
             this.listener = new NativeFunction(this).bind(this);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public <T> Events<T> at(ValueStyle<T> locatable) {
-            return at(locatable, false);
         }
 
         /**
@@ -735,7 +726,7 @@ public abstract class Widget implements Declarable {
          * @param element
          */
         private void fire(UIEvent event, Element element) {
-            if (UIAction.ClickRight.name.equals(event.type)) {
+            if (User.ClickRight.name.equals(event.type)) {
                 event.preventDefault();
             }
 
