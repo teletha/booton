@@ -14,6 +14,7 @@ import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import jsx.ui.flux.Interactive;
 
 /**
  * @version 2015/10/04 22:16:29
@@ -78,7 +79,7 @@ class VirtualElement extends VirtualNode<Element> {
         dom = document.createElementNS(ns, name);
 
         // assign context object
-        dom.property(Widget.CONTEXT_KEY, context);
+        dom.property(Interactive.class.getName(), context);
 
         // assign attributes
         for (int i = 0, length = attributes.size(); i < length; i++) {

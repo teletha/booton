@@ -12,7 +12,7 @@ package jsx.style;
 import javafx.beans.property.SimpleObjectProperty;
 
 import jsx.ui.Declarable;
-import jsx.ui.Location;
+import jsx.ui.flux.Location;
 
 /**
  * @version 2015/11/26 10:45:29

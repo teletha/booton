@@ -7,8 +7,10 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.flux;
 
+import jsx.ui.TypeStyle;
+import jsx.ui.Widget;
 import kiss.Events;
 
 /**
@@ -25,7 +27,19 @@ public interface Locator {
      * @return A user intent {@link Events}.
      */
     default <T> Events<T> at(Location<T> location) {
-        return at(location, null);
+        return at(location, (Class) null);
+    }
+
+    /**
+     * <p>
+     * Locate the specified point in {@link Widget}.
+     * </p>
+     * 
+     * @param location A locator object with the bound context type.
+     * @return A user intent {@link Events}.
+     */
+    default <T> Events<T> at(TypeStyle<T> location) {
+        return at(location, (Class) null);
     }
 
     /**

@@ -10,6 +10,7 @@
 package jsx.ui;
 
 import js.dom.UIEvent;
+import jsx.ui.flux.Location;
 
 /**
  * @version 2015/10/05 2:11:42

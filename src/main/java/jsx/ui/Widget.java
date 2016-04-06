@@ -38,6 +38,9 @@ import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;
 import jsx.debug.Profile;
+import jsx.ui.flux.Interactive;
+import jsx.ui.flux.Location;
+import jsx.ui.flux.Locator;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
@@ -56,9 +59,6 @@ public abstract class Widget implements Declarable {
     /** The root locator. */
     protected static final Style Root = () -> {
     };
-
-    /** The property key to store context object. */
-    static final String CONTEXT_KEY = EventContext.class.getName();
 
     static {
         I.load(Widget.class, true);
@@ -359,11 +359,11 @@ public abstract class Widget implements Declarable {
      * Register the {@link Events} listener for the specified action type.
      * </p>
      * 
-     * @param actionTypes A list of action types.
+     * @param actions A list of action types.
      * @return A location descriptor.
      */
-    protected final Locator when(User... actionTypes) {
-        EventContext context = new EventContext(actionTypes);
+    protected final Locator when(User... actions) {
+        EventContext context = new EventContext(actions);
 
         if (locators == null) {
             locators = new NativeArray();
@@ -667,12 +667,8 @@ public abstract class Widget implements Declarable {
          */
         @Override
         public <T> Events<T> at(Location locatable, Class<T> type) {
-            return at(locatable, type == UIEvent.class || type == Object.class);
-        }
-
-        private <T> Events<T> at(Location locatable, boolean useUIEvent) {
             this.name = locatable.name();
-            this.useUIEvent = useUIEvent;
+            this.useUIEvent = type == UIEvent.class || type == Object.class;
 
             return new Events<T>(observer -> {
                 if (observers == null) {
@@ -731,7 +727,7 @@ public abstract class Widget implements Declarable {
             }
 
             for (Observer observer : observers) {
-                observer.accept(useUIEvent ? event : element.property(CONTEXT_KEY));
+                observer.accept(useUIEvent ? event : element.property(Interactive.class.getName()));
             }
         }
     }

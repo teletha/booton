@@ -13,8 +13,8 @@ import static jsx.style.ValuedStyle.*;
 
 import java.util.HashMap;
 
-import jsx.ui.Location;
 import jsx.ui.Style;
+import jsx.ui.flux.Location;
 
 /**
  * @version 2015/09/29 10:21:36

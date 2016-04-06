@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.ui.flux;
 
 /**
  * @version 2015/10/03 0:19:01
