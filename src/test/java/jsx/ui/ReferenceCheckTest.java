@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import jsx.style.StyleDescriptor;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.UI;
 
@@ -55,7 +56,7 @@ public class ReferenceCheckTest {
     /**
      * @version 2015/10/05 1:45:14
      */
-    private static class SingleRootText extends Widget {
+    private static class SingleRootText extends Widget<StyleDescriptor> {
 
         private final StringProperty property = new SimpleStringProperty("base");
 
@@ -88,7 +89,7 @@ public class ReferenceCheckTest {
     /**
      * @version 2015/10/05 1:50:40
      */
-    private static class NestedElement extends Widget {
+    private static class NestedElement extends Widget<StyleDescriptor> {
 
         private final IntegerProperty property = new SimpleIntegerProperty(3);
 
@@ -123,7 +124,7 @@ public class ReferenceCheckTest {
     /**
      * @version 2015/10/05 1:52:04
      */
-    private static class SingleWidget extends Widget {
+    private static class SingleWidget extends Widget<StyleDescriptor> {
 
         private final Input input = UI.input();
 

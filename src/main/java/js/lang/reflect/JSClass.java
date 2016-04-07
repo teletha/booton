@@ -1407,7 +1407,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             fqcn = boot.getPropertyAs(NativeObject.class, "names").getPropertyAs(String.class, fqcn);
         }
 
-        // TODO FIXME
         if (fqcn.equals("NativeNumber")) {
             return Number.class;
         }

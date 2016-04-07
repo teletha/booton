@@ -15,6 +15,7 @@ import java.util.List;
 
 import js.dom.Node;
 import js.dom.NodeComparator;
+import jsx.style.StyleDescriptor;
 
 /**
  * @version 2015/10/05 0:15:02
@@ -144,7 +145,7 @@ public class DiffTestBase {
     /**
      * @version 2015/10/04 22:38:07
      */
-    protected static class DSLWidget extends Widget {
+    protected static class DSLWidget extends Widget<StyleDescriptor> {
 
         /** The actual dsl. */
         private Runnable dsl;

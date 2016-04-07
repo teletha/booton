@@ -102,7 +102,8 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
-        this.$ = (Styles) I.make(ClassUtil.getParameter(getClass(), Widget.class)[0]);
+        Class[] parameters = ClassUtil.getParameter(getClass(), Widget.class);
+        this.$ = (Styles) (parameters.length == 0 ? new StyleDescriptor() : I.make(parameters[0]));
 
         /**
          * <p>

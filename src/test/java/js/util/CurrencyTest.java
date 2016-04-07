@@ -31,7 +31,7 @@ public class CurrencyTest {
             String name = method.getName();
 
             if (name.startsWith("get") && method.getParameterCount() == 0) {
-                System.out.println(name.substring(3) + "  " + method.invoke(currency));
+                // System.out.println(name.substring(3) + " " + method.invoke(currency));
             }
         }
     }

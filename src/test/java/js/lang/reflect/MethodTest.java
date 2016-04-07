@@ -21,7 +21,7 @@ import booton.soeur.ScriptRunner;
 import booton.translator.annotation.PrimitiveMarker;
 
 /**
- * @version 2015/08/08 14:25:14
+ * @version 2016/04/07 21:17:58
  */
 @RunWith(ScriptRunner.class)
 public class MethodTest {
@@ -64,7 +64,7 @@ public class MethodTest {
         Method method = Methods.class.getMethod("publicMethod");
         assert method.getParameterCount() == 0;
 
-        method = Methods.class.getDeclaredMethod("privateMethod");
+        method = Methods.class.getDeclaredMethod("privateMethod", int.class);
         assert method.getParameterCount() == 1;
     }
 
@@ -184,7 +184,7 @@ public class MethodTest {
         assert method.isDefault();
 
         method = DefaultMethod.class.getDeclaredMethod("not");
-        assert!method.isDefault();
+        assert !method.isDefault();
     }
 
     /**

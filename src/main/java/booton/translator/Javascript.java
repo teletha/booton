@@ -198,7 +198,7 @@ public class Javascript {
      * @return
      */
     private String computeUniqueName() {
-        return configuration.compression ? mung32(id) : source.getName().replaceAll("\\.", "_");
+        return !configuration.compression ? mung32(id) : source.getName().replaceAll("\\.", "_");
     }
 
     /**
