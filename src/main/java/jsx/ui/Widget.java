@@ -50,10 +50,10 @@ import kiss.Observer;
 import kiss.model.ClassUtil;
 
 /**
- * @version 2015/10/15 15:32:02
+ * @version 2016/04/07 17:40:37
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
-public abstract class Widget<StyledLocations extends StyleDescriptor> implements Declarable {
+public abstract class Widget<Styles extends StyleDescriptor> implements Declarable {
 
     /** The cache for widget metadata. */
     private static final Map<Class, WidgetModelManager> metas = new HashMap();
@@ -79,7 +79,7 @@ public abstract class Widget<StyledLocations extends StyleDescriptor> implements
     protected Widget root;
 
     /** The styled location set. */
-    protected StyledLocations $;
+    protected Styles $;
 
     /** The metadata for this {@link Widget}. */
     WidgetModelManager modelManager;
@@ -102,7 +102,7 @@ public abstract class Widget<StyledLocations extends StyleDescriptor> implements
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
-        this.$ = (StyledLocations) I.make(ClassUtil.getParameter(getClass(), Widget.class)[0]);
+        this.$ = (Styles) I.make(ClassUtil.getParameter(getClass(), Widget.class)[0]);
 
         /**
          * <p>

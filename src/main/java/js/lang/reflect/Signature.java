@@ -82,8 +82,9 @@ class Signature {
             }
 
             if (c == '<') {
-                return new Parameterized(signature.substring(0, index), split(signature.substring(index + 1, signature
-                        .length() - 1), ','), declaration);
+                return new Parameterized(signature.substring(0, index),
+                        split(signature.substring(index + 1, signature.length() - 1), ','),
+                        declaration);
             }
         }
         return JSClass.forName(signature);
@@ -157,8 +158,7 @@ class Signature {
         }
 
         if (type instanceof Array) {
-            return (Class) (Object) ((JSClass) (Object) convert(((GenericArrayType) type).getGenericComponentType()))
-                    .getArrayClass();
+            return (Class) (Object) ((JSClass) (Object) convert(((GenericArrayType) type).getGenericComponentType())).getArrayClass();
         }
         return (Class) type;
     }
@@ -292,14 +292,38 @@ class Signature {
          * {@inheritDoc}
          */
         @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof TypeVariable) {
-                TypeVariable variable = (TypeVariable) obj;
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + getOuterType().hashCode();
+            result = prime * result + ((declaration == null) ? 0 : declaration.hashCode());
+            result = prime * result + ((name == null) ? 0 : name.hashCode());
+            return result;
+        }
 
-                return variable.getName().equals(name) && variable.getGenericDeclaration() == declaration && Arrays
-                        .equals(variable.getBounds(), bounds);
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Variable) {
+                Variable other = (Variable) obj;
+
+                return name.equals(other.name) && declaration.equals(other.declaration);
             }
             return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        private Signature getOuterType() {
+            return Signature.this;
         }
     }
 
@@ -354,6 +378,14 @@ class Signature {
         @Override
         public Type getOwnerType() {
             return owner;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return owner + Arrays.toString(arguments);
         }
     }
 

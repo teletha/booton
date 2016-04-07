@@ -498,7 +498,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <StyledLocations extends StyleDescriptor, E extends Enum> Declarable contents(Class<? extends Widget1<StyledLocations, E>> childType, Class<E> children) {
+    public static <Styles extends StyleDescriptor, E extends Enum> Declarable contents(Class<? extends Widget1<Styles, E>> childType, Class<E> children) {
         return contents(childType, children.getEnumConstants());
     }
 
@@ -509,7 +509,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <StyledLocations extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<StyledLocations, C>> childType, C[] children) {
+    public static <Styles extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, C[] children) {
         return contents(childType, Arrays.asList(children));
     }
 
@@ -520,7 +520,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <StyledLocations extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<StyledLocations, C>> childType, Iterable<C> children) {
+    public static <Styles extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
         return contents(children, child -> {
             widget(Widget.of(childType, child));
         });

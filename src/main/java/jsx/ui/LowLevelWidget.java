@@ -30,10 +30,9 @@ import kiss.Disposable;
 import kiss.Events;
 
 /**
- * @version 2015/10/15 15:31:36
+ * @version 2016/04/07 17:41:32
  */
-public abstract class LowLevelWidget<StyledLocations extends StyleDescriptor, T extends LowLevelWidget<StyledLocations, T>>
-        extends Widget<StyledLocations> {
+public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends LowLevelWidget<Styles, T>> extends Widget<Styles> {
 
     /** The disposable list. */
     private List<Disposable> disposables;
