@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @version 2013/10/10 2:03:44
+ * @version 2016/04/07 20:52:46
  */
 class Signature {
 
@@ -164,15 +164,15 @@ class Signature {
     }
 
     /**
-     * @version 2013/09/07 22:35:55
+     * @version 2016/04/07 20:52:24
      */
-    private class Variable implements TypeVariable {
+    private class Variable<D extends GenericDeclaration> implements TypeVariable<D> {
 
         /** The variable name. */
         private final String name;
 
         /** The declaring class, constructor or method. */
-        private final GenericDeclaration declaration;
+        private final D declaration;
 
         /** The upper bound of types. */
         private Type[] bounds;
@@ -180,7 +180,7 @@ class Signature {
         /**
          * 
          */
-        private Variable(String name, GenericDeclaration declaration) {
+        private Variable(String name, D declaration) {
             this.name = name;
             this.declaration = declaration;
         }
@@ -206,7 +206,7 @@ class Signature {
          * {@inheritDoc}
          */
         @Override
-        public GenericDeclaration getGenericDeclaration() {
+        public D getGenericDeclaration() {
             return declaration;
         }
 
