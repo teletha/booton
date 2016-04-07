@@ -32,13 +32,14 @@ import jsx.ui.piece.Input;
 import jsx.ui.piece.Output;
 import jsx.ui.piece.UI;
 import jsx.ui.samaple.todo.TodoTasks.Task;
+import jsx.ui.samaple.todo.TodoUI.Styles;
 import kiss.Extensible;
 import kiss.I;
 
 /**
  * @version 2015/10/05 2:01:04
  */
-public class TodoUI extends Widget1<TodoTasks> {
+public class TodoUI extends Widget1<Styles, TodoTasks> {
 
     /** The localization. */
     final Text text = I.i18n(Text.class);
@@ -136,7 +137,7 @@ public class TodoUI extends Widget1<TodoTasks> {
     /**
      * @version 2014/09/01 11:31:37
      */
-    class Item extends Widget1<Task> {
+    class Item extends Widget1<Styles, Task> {
 
         /** The edit mode. */
         final BooleanProperty editing = new SimpleBooleanProperty();
@@ -162,7 +163,7 @@ public class TodoUI extends Widget1<TodoTasks> {
                 if (editing.get()) {
                     widget(edit);
                 } else {
-                    box($.HBox, () -> {
+                    box(Styles.HBox, () -> {
                         widget(complete);
                         widget(delete);
                     });
@@ -341,29 +342,29 @@ public class TodoUI extends Widget1<TodoTasks> {
     /**
      * @version 2015/09/15 16:07:02
      */
-    private static class $ extends StyleDescriptor {
+    static class Styles extends StyleDescriptor {
 
-        static Style FOTTER = () -> {
+        Style FOTTER = () -> {
             display.flex();
         };
 
-        static Style ITEMS = () -> {
+        Style ITEMS = () -> {
             display.verticalBox();
         };
 
-        static Style BUTTONS = () -> {
+        Style BUTTONS = () -> {
             display.flex();
         };
 
-        static Style CLEAR = () -> {
+        Style CLEAR = () -> {
 
         };
 
-        public static Style SELECTED_FILTER = () -> {
+        Style SELECTED_FILTER = () -> {
             font.weight.bold();
         };
 
-        static ValueStyle<Filter> FILTER = filter -> {
+        ValueStyle<Filter> FILTER = filter -> {
 
         };
     }

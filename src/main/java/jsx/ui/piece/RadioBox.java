@@ -42,7 +42,7 @@ public class RadioBox<V> extends MarkedButton<RadioBox<V>, V> {
      */
     @Override
     protected void virtualizeMark() {
-        svg("circle", attr("fill", "#FFF"), attr("cx", $.markSize.size / 2), attr("cy", $.markSize.size / 2), attr("r", 3));
+        svg("circle", attr("fill", "#FFF"), attr("cx", Styles.markSize.size / 2), attr("cy", Styles.markSize.size / 2), attr("r", 3));
     }
 
     /**

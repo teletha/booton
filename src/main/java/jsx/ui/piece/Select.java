@@ -21,11 +21,12 @@ import javafx.scene.control.SingleSelectionModel;
 import js.dom.User;
 import jsx.ui.Style;
 import jsx.ui.Widget;
+import jsx.ui.piece.Select.$;
 
 /**
  * @version 2015/10/20 16:02:38
  */
-public class Select<M> extends Widget {
+public class Select<M> extends Widget<$> {
 
     /** The selectable values. */
     private final ListProperty<M> values;
@@ -119,24 +120,24 @@ public class Select<M> extends Widget {
     /**
      * @version 2015/10/05 8:14:05
      */
-    private static class $ extends PieceStyle {
+    static class $ extends PieceStyle {
 
-        static Style Root = () -> {
+        Style Root = () -> {
             display.inlineBlock();
             position.relative();
         };
 
-        static Style Select = SingleLineFormBase.with(() -> {
+        Style Select = SingleLineFormBase.with(() -> {
             cursor.pointer();
         });
 
-        static Style SVGRoot = () -> {
+        Style SVGRoot = () -> {
             position.centerVertically().right(FormHorizontalPadding);
             box.size(16, px);
             pointerEvents.none();
         };
 
-        static Style Mark = () -> {
+        Style Mark = () -> {
             fill.color(BorderColor);
 
             ancestorHover(Root, () -> {

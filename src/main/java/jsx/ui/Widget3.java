@@ -9,10 +9,12 @@
  */
 package jsx.ui;
 
+import jsx.style.StyleDescriptor;
+
 /**
  * @version 2014/08/21 13:31:25
  */
-public abstract class Widget3<First, Second, Third> extends Widget {
+public abstract class Widget3<StyledLocations extends StyleDescriptor, First, Second, Third> extends Widget<StyledLocations> {
 
     /** The first model associated with this {@link Widget}. */
     protected final First model1;

@@ -26,6 +26,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
+import jsx.style.StyleDescriptor;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.Widget;
 import jsx.ui.Widget1;
@@ -36,7 +37,7 @@ import kiss.I;
 /**
  * @version 2015/10/21 14:50:30
  */
-public class Input extends LowLevelWidget<Input> {
+public class Input extends LowLevelWidget<StyleDescriptor, Input> {
 
     /** The current input value. */
     public final StringProperty value;
@@ -174,7 +175,7 @@ public class Input extends LowLevelWidget<Input> {
      * @param message
      * @return
      */
-    public Input invalidIf(Predicate<String> condition, Class<? extends Widget1<String>> message) {
+    public Input invalidIf(Predicate<String> condition, Class<? extends Widget1<StyleDescriptor, String>> message) {
         return invalidWhen(condition, input -> {
             return Widget.of(message, input);
         });
@@ -233,7 +234,7 @@ public class Input extends LowLevelWidget<Input> {
     /**
      * @version 2015/10/21 13:40:36
      */
-    private static class InvalidMassage<C> extends Widget2<String, Function<String, String>> {
+    private static class InvalidMassage<C> extends Widget2<StyleDescriptor, String, Function<String, String>> {
 
         /**
          * {@inheritDoc}

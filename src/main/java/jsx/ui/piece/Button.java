@@ -17,11 +17,12 @@ import javafx.beans.property.SimpleStringProperty;
 import jsx.style.value.Color;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.Style;
+import jsx.ui.piece.Button.$;
 
 /**
  * @version 2015/10/21 3:00:41
  */
-public class Button extends LowLevelWidget<Button> {
+public class Button extends LowLevelWidget<$, Button> {
 
     /** The label text. */
     public StringExpression label;
@@ -70,7 +71,7 @@ public class Button extends LowLevelWidget<Button> {
      */
     protected static class $ extends PieceStyle {
 
-        static Style Button = SingleLineFormBase.with(() -> {
+        Style Button = SingleLineFormBase.with(() -> {
             background.color(Color.Transparent);
             cursor.pointer();
 

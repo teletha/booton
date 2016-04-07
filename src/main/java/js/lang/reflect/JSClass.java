@@ -29,10 +29,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import booton.translator.JavaAPIProvider;
 
 /**
  * <p>
@@ -221,9 +221,9 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
      *                following conditions is met:
      *                <ul>
-     *                <li> invocation of {@link SecurityManager#checkMemberAccess
-     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the constructor 
-     *                <li> the caller's class loader is not the same as or an ancestor of the class
+     *                <li>invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the constructor
+     *                <li>the caller's class loader is not the same as or an ancestor of the class
      *                loader for the current class and invocation of
      *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
      *                access to the package of this class
@@ -297,8 +297,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      *                </ul>
      * @since JDK1.1
      */
-    public Constructor<T> getDeclaredConstructor(Class<?>... parameterTypes) throws NoSuchMethodException,
-            SecurityException {
+    public Constructor<T> getDeclaredConstructor(Class<?>... parameterTypes) throws NoSuchMethodException, SecurityException {
         if (privateConstructors == null) {
             getDeclaredConstructors();
         }
@@ -334,9 +333,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
                 char ch = name.charAt(0);
 
                 if (ch == '$' && name.length() != 1) {
-                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, (Class) (Object) this, prototype, prototype
-                            .getPropertyAs(NativeFunction.class, name), definition
-                            .getPropertyAs(NativeArray.class, name));
+                    Constructor constructor = (Constructor) (Object) new JSConstructor(name,
+                            (Class) (Object) this,
+                            prototype,
+                            prototype.getPropertyAs(NativeFunction.class, name),
+                            definition.getPropertyAs(NativeArray.class, name));
                     privateConstructors.put(hash("", constructor.getParameterTypes()), constructor);
                 }
             }
@@ -389,10 +390,10 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @exception SecurityException If a security manager, <i>s</i>, is present and any of the
      *                following conditions is met:
      *                <ul>
-     *                <li> invocation of {@link SecurityManager#checkMemberAccess
-     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the method <li> the
-     *                caller's class loader is not the same as or an ancestor of the class loader
-     *                for the current class and invocation of
+     *                <li>invocation of {@link SecurityManager#checkMemberAccess
+     *                s.checkMemberAccess(this, Member.PUBLIC)} denies access to the method
+     *                <li>the caller's class loader is not the same as or an ancestor of the class
+     *                loader for the current class and invocation of
      *                {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies
      *                access to the package of this class
      *                </ul>
@@ -1406,6 +1407,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             fqcn = boot.getPropertyAs(NativeObject.class, "names").getPropertyAs(String.class, fqcn);
         }
 
+        // TODO FIXME
+        if (fqcn.equals("NativeNumber")) {
+            return Number.class;
+        }
+
         NativeObject definition = boot.getPropertyAs(NativeObject.class, fqcn);
 
         if (definition == null) {
@@ -1439,11 +1445,11 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * If {@code name} denotes an array class, the component type of the array class is loaded but
      * not initialized.
      * <p>
-     * For example, in an instance method the expression: <blockquote> {@code Class.forName("Foo")}
-     * </blockquote> is equivalent to: <blockquote>
-     * {@code Class.forName("Foo", true, this.getClass().getClassLoader())} </blockquote> Note that
-     * this method throws errors related to loading, linking or initializing as specified in
-     * Sections 12.2, 12.3 and 12.4 of <em>The
+     * For example, in an instance method the expression:
+     * <blockquote> {@code Class.forName("Foo")} </blockquote> is equivalent to:
+     * <blockquote> {@code Class.forName("Foo", true, this.getClass().getClassLoader())}
+     * </blockquote> Note that this method throws errors related to loading, linking or initializing
+     * as specified in Sections 12.2, 12.3 and 12.4 of <em>The
      * Java Language Specification</em>. Note that this method does not check whether the requested
      * class is accessible to its caller.
      * <p>

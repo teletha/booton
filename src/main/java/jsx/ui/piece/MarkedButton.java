@@ -26,11 +26,12 @@ import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.Style;
+import jsx.ui.piece.MarkedButton.Styles;
 
 /**
  * @version 2015/10/24 3:13:40
  */
-abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWidget<T> {
+abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWidget<Styles, T> {
 
     /** The button type. */
     private final String type;
@@ -109,7 +110,7 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
     /**
      * @version 2015/10/12 11:17:56
      */
-    protected static class $ extends PieceStyle {
+    protected static class Styles extends PieceStyle {
 
         /** The mark size. */
         static Numeric markSize = new Numeric(14, Unit.px);
@@ -128,21 +129,21 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
             transform.translateY(50, percent).scale(0.8);
         });
 
-        static Style Checked = () -> {
+        Style Checked = () -> {
         };
 
-        static Style Root = () -> {
+        Style Root = () -> {
             display.inlineBlock();
             position.relative();
             text.unselectable();
             cursor.pointer();
         };
 
-        static Style CheckBox = () -> {
+        Style CheckBox = () -> {
             display.none(); // hide default UI
         };
 
-        static ValueStyle<Numeric> Label = radiusSize -> {
+        ValueStyle<Numeric> Label = radiusSize -> {
             display.block();
             padding.left(markSize.add(labelGap));
             cursor.pointer();
@@ -169,7 +170,7 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
             });
         };
 
-        static Style SVG = () -> {
+        Style SVG = () -> {
             display.none();
             box.size(markSize);
             position.centerVertically().left(0, px);

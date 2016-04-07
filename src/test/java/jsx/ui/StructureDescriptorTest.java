@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import jsx.style.StyleDescriptor;
 
 /**
  * @version 2015/10/04 23:56:49
@@ -231,7 +232,7 @@ public class StructureDescriptorTest extends DiffTestBase {
     /**
      * @version 2015/10/04 23:50:43
      */
-    private static class SubString extends Widget1<String> {
+    private static class SubString extends Widget1<StyleDescriptor, String> {
 
         /**
          * {@inheritDoc}

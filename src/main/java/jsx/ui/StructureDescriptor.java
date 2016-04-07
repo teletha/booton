@@ -19,6 +19,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 
 import js.lang.NativeString;
+import jsx.style.StyleDescriptor;
 import kiss.Events;
 
 /**
@@ -35,7 +36,7 @@ public class StructureDescriptor {
     /** The latest element. */
     static VirtualElement latestElement;
 
-    private static Widget latestWidget;
+    private static Widget<?> latestWidget;
 
     /** The context object to propagate implicitly. */
     private static Object localContext;
@@ -497,7 +498,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <E extends Enum> Declarable contents(Class<? extends Widget1<E>> childType, Class<E> children) {
+    public static <StyledLocations extends StyleDescriptor, E extends Enum> Declarable contents(Class<? extends Widget1<StyledLocations, E>> childType, Class<E> children) {
         return contents(childType, children.getEnumConstants());
     }
 
@@ -508,7 +509,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <C> Declarable contents(Class<? extends Widget1<C>> childType, C[] children) {
+    public static <StyledLocations extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<StyledLocations, C>> childType, C[] children) {
         return contents(childType, Arrays.asList(children));
     }
 
@@ -519,7 +520,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <C> Declarable contents(Class<? extends Widget1<C>> childType, Iterable<C> children) {
+    public static <StyledLocations extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<StyledLocations, C>> childType, Iterable<C> children) {
         return contents(children, child -> {
             widget(Widget.of(childType, child));
         });

@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import booton.sample.Person;
 import booton.soeur.ScriptRunner;
+import jsx.style.StyleDescriptor;
 
 /**
  * @version 2015/10/05 0:54:19
@@ -82,7 +83,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:48:29
      */
-    private static class SingleBox extends Widget1<String> {
+    private static class SingleBox extends Widget1<StyleDescriptor, String> {
 
         /**
          * {@inheritDoc}
@@ -110,7 +111,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:50:19
      */
-    private static class MultiBox extends Widget1<String> {
+    private static class MultiBox extends Widget1<StyleDescriptor, String> {
 
         /**
          * {@inheritDoc}
@@ -139,7 +140,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:51:22
      */
-    private static class NestBox extends Widget1<String> {
+    private static class NestBox extends Widget1<StyleDescriptor, String> {
 
         /**
          * {@inheritDoc}
@@ -182,7 +183,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:53:14
      */
-    private static class PersonBox extends Widget1<Person> {
+    private static class PersonBox extends Widget1<StyleDescriptor, Person> {
 
         /**
          * {@inheritDoc}

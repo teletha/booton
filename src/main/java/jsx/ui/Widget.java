@@ -38,6 +38,7 @@ import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;
 import jsx.debug.Profile;
+import jsx.style.StyleDescriptor;
 import jsx.ui.flux.Interactive;
 import jsx.ui.flux.Location;
 import jsx.ui.flux.Locator;
@@ -46,12 +47,13 @@ import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Observer;
+import kiss.model.ClassUtil;
 
 /**
  * @version 2015/10/15 15:32:02
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
-public abstract class Widget implements Declarable {
+public abstract class Widget<StyledLocations extends StyleDescriptor> implements Declarable {
 
     /** The cache for widget metadata. */
     private static final Map<Class, WidgetModelManager> metas = new HashMap();
@@ -76,6 +78,9 @@ public abstract class Widget implements Declarable {
     /** The root widget. */
     protected Widget root;
 
+    /** The styled location set. */
+    protected StyledLocations $;
+
     /** The metadata for this {@link Widget}. */
     WidgetModelManager modelManager;
 
@@ -97,6 +102,7 @@ public abstract class Widget implements Declarable {
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
+        this.$ = (StyledLocations) I.make(ClassUtil.getParameter(getClass(), Widget.class)[0]);
 
         /**
          * <p>
@@ -169,7 +175,7 @@ public abstract class Widget implements Declarable {
     /**
      * @version 2015/10/15 14:51:28
      */
-    class WidgetModelManager {
+    static class WidgetModelManager {
 
         /** The models. */
         private final List<ModelMetadata> properties = new ArrayList();
@@ -483,7 +489,7 @@ public abstract class Widget implements Declarable {
      * @param model1 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <W extends Widget1<First>, First> W of(Class<W> widgetType, First model1) {
+    public static final <StyledLocations extends StyleDescriptor, W extends Widget1<StyledLocations, First>, First> W of(Class<W> widgetType, First model1) {
         return create(widgetType, new Object[] {model1});
     }
 
@@ -496,7 +502,7 @@ public abstract class Widget implements Declarable {
      * @param models An associated model.
      * @return A list of widget with the specified models.
      */
-    public static final <W extends Widget1<First>, First> W[] of(Class<W> widgetType, First[] models) {
+    public static final <StyledLocations extends StyleDescriptor, W extends Widget1<StyledLocations, First>, First> W[] of(Class<W> widgetType, First[] models) {
         W[] widgets = (W[]) Array.newInstance(widgetType, models.length);
 
         for (int i = 0; i < models.length; i++) {
@@ -515,7 +521,7 @@ public abstract class Widget implements Declarable {
      * @param model2 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <W extends Widget2<First, Second>, First, Second> W of(Class<W> widgetType, First model1, Second model2) {
+    public static final <StyledLocations extends StyleDescriptor, W extends Widget2<StyledLocations, First, Second>, First, Second> W of(Class<W> widgetType, First model1, Second model2) {
         return create(widgetType, new Object[] {model1, model2});
     }
 
@@ -530,7 +536,7 @@ public abstract class Widget implements Declarable {
      * @param model3 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <W extends Widget3<First, Second, Third>, First, Second, Third> W of(Class<W> widgetType, First model1, Second model2, Third model3) {
+    public static final <StyledLocations extends StyleDescriptor, W extends Widget3<StyledLocations, First, Second, Third>, First, Second, Third> W of(Class<W> widgetType, First model1, Second model2, Third model3) {
         return create(widgetType, new Object[] {model1, model2, model3});
     }
 
@@ -546,7 +552,7 @@ public abstract class Widget implements Declarable {
      * @param model4 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <W extends Widget4<First, Second, Third, Fourth>, First, Second, Third, Fourth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4) {
+    public static final <StyledLocations extends StyleDescriptor, W extends Widget4<StyledLocations, First, Second, Third, Fourth>, First, Second, Third, Fourth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4) {
         return create(widgetType, new Object[] {model1, model2, model3, model4});
     }
 
@@ -563,7 +569,7 @@ public abstract class Widget implements Declarable {
      * @param model5 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <W extends Widget5<First, Second, Third, Fourth, Fifth>, First, Second, Third, Fourth, Fifth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4, Fifth model5) {
+    public static final <StyledLocations extends StyleDescriptor, W extends Widget5<StyledLocations, First, Second, Third, Fourth, Fifth>, First, Second, Third, Fourth, Fifth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4, Fifth model5) {
         return create(widgetType, new Object[] {model1, model2, model3, model4, model5});
     }
 

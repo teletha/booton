@@ -17,13 +17,14 @@ import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import jsx.style.StyleDescriptor;
 import jsx.ui.LowLevelWidget;
 import kiss.I;
 
 /**
  * @version 2014/08/22 11:27:22
  */
-public class Output extends LowLevelWidget<Output> {
+public class Output extends LowLevelWidget<StyleDescriptor, Output> {
 
     /** The text contents. */
     public final StringProperty text;
