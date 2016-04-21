@@ -76,7 +76,7 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
      * @return
      */
     public T click(Runnable action) {
-        when(User.Click).at(Root).filter(this::isValid).to(update(e -> action.run()));
+        when(User.Click).at(Root).take(this::isValid).to(update(e -> action.run()));
 
         return (T) this;
     }
@@ -85,7 +85,7 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
      * @return
      */
     public T dbclick(Runnable action) {
-        when(User.DoubleClick).at(Root).filter(this::isValid).to(update(e -> action.run()));
+        when(User.DoubleClick).at(Root).take(this::isValid).to(update(e -> action.run()));
 
         return (T) this;
     }
@@ -121,14 +121,14 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = when(User.KeyPress).at(Root).filter(byKey);
-            Events<UIEvent> keyUp = when(User.KeyUp).at(Root).filter(byKey);
+            Events<UIEvent> keyPress = when(User.KeyPress).at(Root).take(byKey);
+            Events<UIEvent> keyUp = when(User.KeyUp).at(Root).take(byKey);
             // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
 
             // activate shortcut command
-            disposeLater(keyInput.filter(this::isValid).to(update(e -> action.run())));
+            disposeLater(keyInput.take(this::isValid).to(update(e -> action.run())));
         }
         return (T) this;
     }
