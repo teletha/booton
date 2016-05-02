@@ -13,6 +13,7 @@ import static js.lang.Global.*;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -102,8 +103,8 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
-        Class[] parameters = ClassUtil.getParameter(getClass(), Widget.class);
-        this.$ = (Styles) (parameters.length == 0 ? new StyleDescriptor() : I.make(parameters[0]));
+        Type[] parameters = ClassUtil.getParameter(getClass(), Widget.class);
+        this.$ = (Styles) (parameters.length == 0 ? new StyleDescriptor() : I.make((Class) parameters[0]));
 
         /**
          * <p>

@@ -44,7 +44,7 @@ public class JavascriptClassDefinition {
         protected <T> T cast(Object object, Class<T> type) {
             NativeObject base = (NativeObject) object;
             T instance = I.make(type);
-            Model model = Model.of(type);
+            Model<T> model = Model.of(type);
 
             for (Property property : model.properties) {
                 Object value = base.get(property.name);

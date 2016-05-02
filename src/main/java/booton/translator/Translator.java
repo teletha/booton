@@ -209,7 +209,7 @@ public class Translator<T> implements Extensible {
             return new CodeWriter(this, method);
         } catch (NoSuchMethodException e) {
             // Find translation class.
-            Class type = ClassUtil.getParameter(getClass(), Translator.class)[0];
+            Class type = (Class) ClassUtil.getParameter(getClass(), Translator.class)[0];
 
             // Search JavaAPIProvider.
             if (JavaAPIProviders.hasProvider(type)) {

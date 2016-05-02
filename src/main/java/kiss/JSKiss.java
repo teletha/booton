@@ -18,6 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
@@ -873,10 +874,10 @@ class JSKiss {
                 extensions.push(extensionPoint, extension);
 
                 // register extension key
-                Class[] params = ClassUtil.getParameter(extension, extensionPoint);
+                Type[] params = ClassUtil.getParameter(extension, extensionPoint);
 
                 if (params.length != 0 && params[0] != Object.class) {
-                    keys.push(extensionPoint.getName().concat(params[0].getName()), extension);
+                    keys.push(extensionPoint.getName().concat(((Class) params[0]).getName()), extension);
 
                     // The user has registered a newly custom lifestyle, so we should update
                     // lifestyle for this extension key class. Normally, when we update some data,
