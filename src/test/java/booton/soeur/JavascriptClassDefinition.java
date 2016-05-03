@@ -46,7 +46,7 @@ public class JavascriptClassDefinition {
             T instance = I.make(type);
             Model<T> model = Model.of(type);
 
-            for (Property property : model.properties) {
+            for (Property property : model.properties()) {
                 Object value = base.get(property.name);
 
                 if (value == null || value instanceof Undefined) {
