@@ -12,6 +12,7 @@ package kiss;
 import static js.lang.Global.*;
 
 import java.lang.annotation.Annotation;
+import java.lang.annotation.Repeatable;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -138,6 +141,113 @@ class JSKiss {
             association.put(type, value = I.make(type));
         }
         return (V) value;
+    }
+
+    /**
+     * <p>
+     * Collect all annotated methods and thire annotations.
+     * </p>
+     * 
+     * @param clazz A target class.
+     * @return A table of method and annnotations.
+     */
+    public static Table<Method, Annotation> collectAnnotationsOf(Class clazz) {
+        Table<Method, Annotation> table = new Table();
+
+        for (Class type : collectTypesOf(clazz)) {
+            for (Method method : type.getDeclaredMethods()) {
+                // exclude the method which is created by compiler
+                // exclude the private method which is not declared in the specified class
+                if (!method.isBridge() && !method
+                        .isSynthetic() && (((method.getModifiers() & Modifier.PRIVATE) == 0) || method.getDeclaringClass() == clazz)) {
+                    Annotation[] annotations = method.getAnnotations();
+
+                    if (annotations.length != 0) {
+                        List<Annotation> list = new ArrayList();
+
+                        // disclose container annotation
+                        for (Annotation annotation : annotations) {
+                            try {
+                                Class annotationType = annotation.annotationType();
+                                Method value = annotationType.getMethod("value");
+                                Class returnType = value.getReturnType();
+
+                                if (returnType.isArray()) {
+                                    Class<?> componentType = returnType.getComponentType();
+                                    Repeatable repeatable = componentType.getAnnotation(Repeatable.class);
+
+                                    if (repeatable != null && repeatable.value() == annotationType) {
+                                        value.setAccessible(true);
+
+                                        Collections.addAll(list, (Annotation[]) value.invoke(annotation));
+                                        continue;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                // do nothing
+                            }
+                            list.add(annotation);
+                        }
+
+                        // check method overriding
+                        for (Method candidate : table.keySet()) {
+                            if (candidate.getName().equals(method.getName()) && Arrays
+                                    .deepEquals(candidate.getParameterTypes(), method.getParameterTypes())) {
+                                method = candidate; // detect overriding
+                                break;
+                            }
+                        }
+
+                        add: for (Annotation annotation : list) {
+                            Class annotationType = annotation.annotationType();
+
+                            if (!annotationType.isAnnotationPresent(Repeatable.class)) {
+                                for (Annotation item : table.get(method)) {
+                                    if (item.annotationType() == annotationType) {
+                                        continue add;
+                                    }
+                                }
+                            }
+
+                            table.push(method, annotation);
+                        }
+                    }
+                }
+            }
+        }
+        return table;
+    }
+
+    /**
+     * <p>
+     * Collect all classes which are extended or implemented by the target class.
+     * </p>
+     * 
+     * @param clazz A target class. <code>null</code> will be return the empty set.
+     * @return A set of classes, with predictable bottom-up iteration order.
+     */
+    public static Set<Class<?>> collectTypesOf(Class clazz) {
+        // check null
+        if (clazz == null) {
+            return Collections.EMPTY_SET;
+        }
+
+        // container
+        Set<Class<?>> set = new LinkedHashSet(); // order is important
+
+        // add current class
+        set.add(clazz);
+
+        // add super class
+        set.addAll(collectTypesOf(clazz.getSuperclass()));
+
+        // add interface classes
+        for (Class c : clazz.getInterfaces()) {
+            set.addAll(collectTypesOf(c));
+        }
+
+        // API definition
+        return set;
     }
 
     /**
@@ -476,7 +586,7 @@ class JSKiss {
 
         // If this model is non-private or final class, we can extend it for interceptor mechanism.
         if (((Modifier.PRIVATE | Modifier.FINAL) & modifier) == 0) {
-            Table<Method, Annotation> interceptables = ClassUtil.getAnnotations(actualClass);
+            Table<Method, Annotation> interceptables = collectAnnotationsOf(actualClass);
 
             // Enhance the actual model class if needed.
             if (!interceptables.isEmpty()) {
@@ -842,9 +952,8 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    InterceptorFunction function = new InterceptorFunction(method.getName(),
-                            MethodHandles.lookup().unreflect(method),
-                            annotations.toArray(new Annotation[annotations.size()]));
+                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
+                            .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
                     prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
                 }
             }
@@ -868,7 +977,7 @@ class JSKiss {
 
     private static void load(Class extension) {
         // search and collect information for all extension points
-        for (Class extensionPoint : ClassUtil.getTypes(extension)) {
+        for (Class extensionPoint : collectTypesOf(extension)) {
             if (Arrays.asList(extensionPoint.getInterfaces()).contains(Extensible.class)) {
                 // register new extension
                 extensions.push(extensionPoint, extension);
