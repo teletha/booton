@@ -46,7 +46,6 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import kiss.model.ClassUtil;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -961,7 +960,7 @@ public class Javascript {
 
         private String getCode(Class clazz, Supplier<String> coder) {
             try {
-                Path archive = ClassUtil.getArchive(clazz);
+                Path archive = I.locate(clazz);
 
                 if (archive == null) {
                     code = coder.get();

@@ -25,7 +25,6 @@ import booton.Booton;
 import booton.util.HTMLWriter;
 import kiss.I;
 import kiss.XML;
-import kiss.model.ClassUtil;
 
 /**
  * @version 2014/03/07 10:22:55
@@ -43,7 +42,7 @@ public class ResourceServlet extends HttpServlet {
      * @param root
      */
     public ResourceServlet(Path root) {
-        Path resources = ClassUtil.getArchive(Booton.class);
+        Path resources = I.locate(Booton.class);
 
         if (Files.isRegularFile(resources)) {
             try {

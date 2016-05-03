@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 import jsx.debug.Profile;
-import kiss.model.ClassUtil;
+import kiss.I;
 
 /**
  * @version 2015/08/05 12:50:25
@@ -27,7 +27,7 @@ public enum BootonLog implements Profile<Class, Object, Object> {
      */
     @Override
     public String name(Class key1, Object key2, Object key3) {
-        Path archive = key1 == null ? null : ClassUtil.getArchive(key1);
+        Path archive = key1 == null ? null : I.locate(key1);
 
         return name() + "(" + (archive == null ? "JDK" : archive.getFileName()) + ")";
     }
@@ -37,7 +37,7 @@ public enum BootonLog implements Profile<Class, Object, Object> {
      */
     @Override
     public Object group(Class key1, Object key2, Object key3) {
-        Path archive = key1 == null ? null : ClassUtil.getArchive(key1);
+        Path archive = key1 == null ? null : I.locate(key1);
 
         return Objects.hash(name(key1, key2, key3), archive);
     }
