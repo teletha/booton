@@ -46,7 +46,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.script.ScriptException;
 
@@ -103,6 +106,14 @@ class JSKiss {
     /** The associatable object holder. */
     private static final WeakHashMap<Object, WeakHashMap> associatables = new WeakHashMap();
 
+    /** The list of primitive classes. (except for void type) */
+    private static final Class[] primitives = {boolean.class, int.class, long.class, float.class, double.class, byte.class, short.class,
+            char.class, void.class};
+
+    /** The list of wrapper classes. (except for void type) */
+    private static final Class[] wrappers = {Boolean.class, Integer.class, Long.class, Float.class, Double.class, Byte.class, Short.class,
+            Character.class, Void.class};
+
     static {
         // built-in lifestyles
         lifestyles.put(List.class, new Prototype(ArrayList.class));
@@ -133,18 +144,8 @@ class JSKiss {
      * @return An associated value.
      */
     public static <V> V associate(Object host, Class<V> type) {
-        WeakHashMap association = associatables.get(host);
-
-        if (association == null) {
-            associatables.put(host, association = new WeakHashMap());
-        }
-
-        Object value = association.get(type);
-
-        if (value == null) {
-            association.put(type, value = I.make(type));
-        }
-        return (V) value;
+        WeakHashMap<Class<V>, V> association = associatables.computeIfAbsent(host, key -> new WeakHashMap());
+        return association.computeIfAbsent(type, I::make);
     }
 
     /**
@@ -868,6 +869,30 @@ class JSKiss {
 
     /**
      * <p>
+     * Create paired value {@link Consumer}.
+     * </p>
+     * 
+     * @param consumer A {@link BiConsumer} to make parameters paired.
+     * @return A paired value {@link Consumer}.
+     */
+    public static <Param1, Param2> Consumer<Ⅱ<Param1, Param2>> pair(BiConsumer<Param1, Param2> consumer) {
+        return params -> consumer.accept(params.ⅰ, params.ⅱ);
+    }
+
+    /**
+     * <p>
+     * Create paired value {@link Function}.
+     * </p>
+     * 
+     * @param funtion A {@link BiFunction} to make parameters paired.
+     * @return A paired value {@link Function}.
+     */
+    public static <Param1, Param2, Return> Function<Ⅱ<Param1, Param2>, Return> pair(BiFunction<Param1, Param2, Return> funtion) {
+        return params -> funtion.apply(params.ⅰ, params.ⅱ);
+    }
+
+    /**
+     * <p>
      * Close the specified object quietly if it is {@link AutoCloseable}. Equivalent to
      * {@link AutoCloseable#close()}, except any exceptions will be ignored. This is typically used
      * in finally block like the following.
@@ -1225,6 +1250,27 @@ class JSKiss {
      */
     public static Future<?> schedule(long delay, long period, TimeUnit unit, boolean parallelExecution, Runnable task) {
         return parallel.scheduleAtFixedRate(task, delay, period, unit);
+    }
+
+    /**
+     * <p>
+     * Return a non-primitive {@link Class} of the specified {@link Class} object. <code>null</code>
+     * will be return <code>null</code>.
+     * </p>
+     * 
+     * @param type A {@link Class} object to convert to non-primitive class.
+     * @return A non-primitive {@link Class} object.
+     */
+    public static Class wrap(Class type) {
+        // check primitive classes
+        for (int i = 0; i < primitives.length; i++) {
+            if (primitives[i] == type) {
+                return wrappers[i];
+            }
+        }
+
+        // the specified class is not primitive
+        return type;
     }
 
     /**
