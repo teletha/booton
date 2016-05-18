@@ -48,7 +48,6 @@ import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Observer;
-import kiss.model.ClassUtil;
 
 /**
  * @version 2016/04/07 17:40:37
@@ -103,7 +102,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
-        Type[] parameters = ClassUtil.getParameter(getClass(), Widget.class);
+        Type[] parameters = I.collectParameters(getClass(), Widget.class);
         this.$ = (Styles) (parameters.length == 0 ? new StyleDescriptor() : I.make((Class) parameters[0]));
 
         /**
