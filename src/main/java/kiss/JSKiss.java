@@ -12,34 +12,26 @@ package kiss;
 import static js.lang.Global.*;
 
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Repeatable;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -146,210 +138,6 @@ class JSKiss {
     public static <V> V associate(Object host, Class<V> type) {
         WeakHashMap<Class<V>, V> association = associatables.computeIfAbsent(host, key -> new WeakHashMap());
         return association.computeIfAbsent(type, I::make);
-    }
-
-    /**
-     * <p>
-     * Collect all annotated methods and thire annotations.
-     * </p>
-     * 
-     * @param clazz A target class.
-     * @return A table of method and annnotations.
-     */
-    public static Table<Method, Annotation> collectAnnotatedMethods(Class clazz) {
-        Table<Method, Annotation> table = new Table();
-
-        for (Class type : collectTypes(clazz)) {
-            for (Method method : type.getDeclaredMethods()) {
-                // exclude the method which is created by compiler
-                // exclude the private method which is not declared in the specified class
-                if (!method.isBridge() && !method
-                        .isSynthetic() && (((method.getModifiers() & Modifier.PRIVATE) == 0) || method.getDeclaringClass() == clazz)) {
-                    Annotation[] annotations = method.getAnnotations();
-
-                    if (annotations.length != 0) {
-                        List<Annotation> list = new ArrayList();
-
-                        // disclose container annotation
-                        for (Annotation annotation : annotations) {
-                            try {
-                                Class annotationType = annotation.annotationType();
-                                Method value = annotationType.getMethod("value");
-                                Class returnType = value.getReturnType();
-
-                                if (returnType.isArray()) {
-                                    Class<?> componentType = returnType.getComponentType();
-                                    Repeatable repeatable = componentType.getAnnotation(Repeatable.class);
-
-                                    if (repeatable != null && repeatable.value() == annotationType) {
-                                        value.setAccessible(true);
-
-                                        Collections.addAll(list, (Annotation[]) value.invoke(annotation));
-                                        continue;
-                                    }
-                                }
-                            } catch (Exception e) {
-                                // do nothing
-                            }
-                            list.add(annotation);
-                        }
-
-                        // check method overriding
-                        for (Method candidate : table.keySet()) {
-                            if (candidate.getName().equals(method.getName()) && Arrays
-                                    .deepEquals(candidate.getParameterTypes(), method.getParameterTypes())) {
-                                method = candidate; // detect overriding
-                                break;
-                            }
-                        }
-
-                        add: for (Annotation annotation : list) {
-                            Class annotationType = annotation.annotationType();
-
-                            if (!annotationType.isAnnotationPresent(Repeatable.class)) {
-                                for (Annotation item : table.get(method)) {
-                                    if (item.annotationType() == annotationType) {
-                                        continue add;
-                                    }
-                                }
-                            }
-
-                            table.push(method, annotation);
-                        }
-                    }
-                }
-            }
-        }
-        return table;
-    }
-
-    /**
-     * <p>
-     * Collect all constructors which are defined in the specified {@link Class}. If the given class
-     * is interface, primitive types, array class or <code>void</code>, <code>empty array</code>
-     * will be return.
-     * </p>
-     * 
-     * @param <T> A class type.
-     * @param clazz A target class.
-     * @return A collected constructors.
-     */
-    public static <T> Constructor<T>[] collectConstructors(Class<T> clazz) {
-        Constructor[] constructors = clazz.getDeclaredConstructors();
-        Arrays.sort(constructors, Comparator.<Constructor> comparingInt(Constructor::getParameterCount));
-        return constructors;
-    }
-
-    /**
-     * <p>
-     * List up all target types which are implemented or extended by the specified class.
-     * </p>
-     * 
-     * @param type A class type which implements(extends) the specified target interface(class).
-     *            <code>null</code> will be return the zero-length array.
-     * @param target A target type to list up types. <code>null</code> will be return the
-     *            zero-length array.
-     * @return A list of actual types.
-     */
-    public static java.lang.reflect.Type[] collectParameters(java.lang.reflect.Type type, GenericDeclaration target) {
-        return collectParameters(type, target, type);
-    }
-
-    /**
-     * <p>
-     * List up all target types which are implemented or extended by the specified class.
-     * </p>
-     * 
-     * @param clazz A class type which implements(extends) the specified target interface(class).
-     *            <code>null</code> will be return the zero-length array.
-     * @param target A target type to list up types. <code>null</code> will be return the
-     *            zero-length array.
-     * @param base A base class type.
-     * @return A list of actual types.
-     */
-    private static java.lang.reflect.Type[] collectParameters(java.lang.reflect.Type clazz, GenericDeclaration target, java.lang.reflect.Type base) {
-        // check null
-        if (clazz == null || clazz == target) {
-            return new Class[0];
-        }
-
-        // compute actual class
-        Class raw = clazz instanceof Class ? (Class) clazz : Model.of(clazz, base).type;
-
-        // collect all types
-        Set<java.lang.reflect.Type> types = new HashSet();
-        types.add(clazz);
-        types.add(raw.getGenericSuperclass());
-        Collections.addAll(types, raw.getGenericInterfaces());
-
-        // check them all
-        for (java.lang.reflect.Type type : types) {
-            // check ParameterizedType
-            if (type instanceof ParameterizedType) {
-                ParameterizedType param = (ParameterizedType) type;
-
-                // check raw type
-                if (target == param.getRawType()) {
-                    java.lang.reflect.Type[] args = param.getActualTypeArguments();
-
-                    for (int i = 0; i < args.length; i++) {
-                        if (args[i] instanceof TypeVariable) {
-                            args[i] = Model.of(args[i], base).type;
-                        }
-                    }
-                    return args;
-                }
-            }
-        }
-
-        // search from superclass
-        java.lang.reflect.Type[] parameters = collectParameters(raw.getGenericSuperclass(), target, base);
-
-        if (parameters.length != 0) {
-            return parameters;
-        }
-
-        // search from interfaces
-        for (java.lang.reflect.Type type : raw.getInterfaces()) {
-            parameters = collectParameters(type, target, base);
-
-            if (parameters.length != 0) {
-                return parameters;
-            }
-        }
-        return parameters;
-    }
-
-    /**
-     * <p>
-     * Collect all classes which are extended or implemented by the target class.
-     * </p>
-     * 
-     * @param clazz A target class. <code>null</code> will be return the empty set.
-     * @return A set of classes, with predictable bottom-up iteration order.
-     */
-    public static Set<Class<?>> collectTypes(Class clazz) {
-        // check null
-        if (clazz == null) {
-            return Collections.EMPTY_SET;
-        }
-
-        // container
-        Set<Class<?>> set = new LinkedHashSet(); // order is important
-
-        // add current class
-        set.add(clazz);
-
-        // add super class
-        set.addAll(collectTypes(clazz.getSuperclass()));
-
-        // add interface classes
-        for (Class c : clazz.getInterfaces()) {
-            set.addAll(collectTypes(c));
-        }
-
-        // API definition
-        return set;
     }
 
     /**
@@ -688,7 +476,7 @@ class JSKiss {
 
         // If this model is non-private or final class, we can extend it for interceptor mechanism.
         if (((Modifier.PRIVATE | Modifier.FINAL) & modifier) == 0) {
-            Table<Method, Annotation> interceptables = collectAnnotatedMethods(actualClass);
+            Table<Method, Annotation> interceptables = Model.collectAnnotatedMethods(actualClass);
 
             // Enhance the actual model class if needed.
             if (!interceptables.isEmpty()) {
@@ -725,7 +513,7 @@ class JSKiss {
             }
 
             // Trace dependency graph to detect circular dependencies.
-            Constructor constructor = I.collectConstructors(actualClass)[0];
+            Constructor constructor = Model.collectConstructors(actualClass)[0];
 
             if (constructor != null) {
                 for (Class param : constructor.getParameterTypes()) {
@@ -1078,8 +866,9 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
-                            .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
+                    InterceptorFunction function = new InterceptorFunction(method.getName(),
+                            MethodHandles.lookup().unreflect(method),
+                            annotations.toArray(new Annotation[annotations.size()]));
                     prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
                 }
             }
@@ -1103,13 +892,13 @@ class JSKiss {
 
     private static void load(Class extension) {
         // search and collect information for all extension points
-        for (Class extensionPoint : collectTypes(extension)) {
+        for (Class extensionPoint : Model.collectTypes(extension)) {
             if (Arrays.asList(extensionPoint.getInterfaces()).contains(Extensible.class)) {
                 // register new extension
                 extensions.push(extensionPoint, extension);
 
                 // register extension key
-                Type[] params = I.collectParameters(extension, extensionPoint);
+                Type[] params = Model.collectParameters(extension, extensionPoint);
 
                 if (params.length != 0 && params[0] != Object.class) {
                     keys.push(extensionPoint.getName().concat(((Class) params[0]).getName()), extension);
