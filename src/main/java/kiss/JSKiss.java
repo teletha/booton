@@ -757,59 +757,28 @@ class JSKiss {
 
     /**
      * <p>
-     * Transform any type object into the specified type possible.
+     * Transform any type object into the specified type if possible.
      * </p>
      * 
-     * @param <M> A output type you want to transform into.
+     * @param <In> A input type you want to transform from.
+     * @param <Out> An output type you want to transform into.
      * @param input A target object.
      * @param output A target type.
      * @return A transformed object.
      * @throws NullPointerException If the output type is <code>null</code>.
      */
-    public static <M> M transform(Object input, Class<M> output) {
-        // check null
+    public static <In, Out> Out transform(In input, Class<Out> output) {
         if (input == null) {
             return null;
         }
 
-        Model inputModel = Model.of(input.getClass());
-        Model outputModel = Model.of(output);
+        String encoded = input instanceof String ? (String) input : find(Encoder.class, input.getClass()).encode(input);
 
-        // no conversion
-        if (inputModel == outputModel) {
-            return (M) input;
+        if (output == String.class) {
+            return (Out) encoded;
         }
 
-        Encoder inputCodec = inputModel.encoder();
-        Decoder<M> outputCodec = outputModel.decoder();
-
-        // check whether each model are attribute model or not
-        if (inputCodec == null && outputCodec == null) {
-            // we should copy property values
-
-            // create destination object
-            M m = make(output);
-
-            // copy actually
-            inputModel.walk(input, new Copy(m, outputModel));
-
-            // API definition
-            return m;
-        } else {
-            // type conversion
-            if (output == String.class) {
-                return (M) ((inputCodec != null) ? inputCodec.encode(input) : input.toString());
-            }
-
-            if (inputModel.type == String.class && outputCodec != null) {
-                try {
-                    return outputCodec.decode((String) input);
-                } catch (Exception e) {
-                    // ignore
-                }
-            }
-            return (M) input;
-        }
+        return ((Decoder<Out>) find(Decoder.class, output)).decode(encoded);
     }
 
     /**
@@ -866,9 +835,8 @@ class JSKiss {
                 List<Annotation> annotations = entry.getValue();
 
                 if (!annotations.isEmpty()) {
-                    InterceptorFunction function = new InterceptorFunction(method.getName(),
-                            MethodHandles.lookup().unreflect(method),
-                            annotations.toArray(new Annotation[annotations.size()]));
+                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
+                            .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
                     prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
                 }
             }

@@ -15,6 +15,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -104,6 +105,8 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
         Type[] parameters = Model.collectParameters(getClass(), Widget.class);
+        System.out.println(getClass());
+        System.out.println(Arrays.toString(parameters));
         this.$ = (Styles) (parameters.length == 0 ? new StyleDescriptor() : I.make((Class) parameters[0]));
 
         /**
