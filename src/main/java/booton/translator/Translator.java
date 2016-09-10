@@ -21,7 +21,7 @@ import js.lang.NativeFunction;
 import kiss.Extensible;
 import kiss.Manageable;
 import kiss.Singleton;
-import kiss.model.JSModel;
+import kiss.model.Model;
 
 /**
  * <p>
@@ -209,7 +209,7 @@ public class Translator<T> implements Extensible {
             return new CodeWriter(this, method);
         } catch (NoSuchMethodException e) {
             // Find translation class.
-            Class type = (Class) JSModel.collectParameters(getClass(), Translator.class)[0];
+            Class type = (Class) Model.collectParameters(getClass(), Translator.class)[0];
 
             // Search JavaAPIProvider.
             if (JavaAPIProviders.hasProvider(type)) {

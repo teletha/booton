@@ -190,9 +190,26 @@ class JSKiss {
     public static <E extends Extensible> E find(Class<E> extensionPoint, Class key) {
         initialize();
 
-        Class<E> clazz = keys.find(extensionPoint.getName().concat(key.getName()));
+        if (extensionPoint == null || key == null) {
+            return null;
+        }
 
-        return clazz == null ? null : make(clazz);
+        for (Class clazz : Model.collectTypes(key)) {
+            Class<E> supplier = keys.find(extensionPoint.getName().concat(clazz.getName()));
+
+            if (supplier != null) {
+                return make(supplier);
+            }
+        }
+
+        if (extensionPoint != ExtensionFactory.class) {
+            ExtensionFactory factory = find(ExtensionFactory.class, extensionPoint);
+
+            if (factory != null) {
+                return (E) factory.create(key);
+            }
+        }
+        return null;
     }
 
     /**
@@ -777,7 +794,6 @@ class JSKiss {
         if (output == String.class) {
             return (Out) encoded;
         }
-
         return ((Decoder<Out>) find(Decoder.class, output)).decode(encoded);
     }
 
@@ -932,7 +948,7 @@ class JSKiss {
      */
     public static <M> M read(CharSequence input, M output) {
         try {
-            return read(Model.of(output.getClass()), output, Global.JSON.parse(input.toString()));
+            return read(Model.of(output), output, Global.JSON.parse(input.toString()));
         } catch (Exception e) {
             throw I.quiet(e);
         }
@@ -1052,7 +1068,7 @@ class JSKiss {
             throw new NullPointerException();
         }
 
-        Model model = Model.of(input.getClass());
+        Model model = Model.of(input);
         Property property = new Property(model, model.name);
 
         // traverse configuration as json

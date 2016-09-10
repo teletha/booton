@@ -16,11 +16,10 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import booton.translator.JavascriptNativeProperty;
 import js.lang.NativeArray;
 import js.lang.NativeNumber;
 import js.lang.NativeObject;
-import kiss.model.JSModel;
-import booton.translator.JavascriptNativeProperty;
 
 /**
  * @version 2015/01/13 10:02:50

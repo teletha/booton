@@ -28,7 +28,7 @@ import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
 import kiss.Table;
-import kiss.model.JSModel;
+import kiss.model.Model;
 
 /**
  * @version 2013/11/22 13:19:38
@@ -70,7 +70,7 @@ class TranslatorManager {
      */
     private static void register(Class nativeClass) {
         if (natives.add(nativeClass)) {
-            for (Class type : JSModel.collectTypes(nativeClass)) {
+            for (Class type : Model.collectTypes(nativeClass)) {
                 for (Class interfaceType : type.getInterfaces()) {
                     if (interfaceType == JavascriptNative.class) {
                         // The current class implements it directly.
