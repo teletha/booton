@@ -17,10 +17,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * @version 2016/04/07 20:52:46
@@ -82,9 +82,8 @@ class Signature {
             }
 
             if (c == '<') {
-                return new Parameterized(signature.substring(0, index),
-                        split(signature.substring(index + 1, signature.length() - 1), ','),
-                        declaration);
+                return new Parameterized(signature
+                        .substring(0, index), split(signature.substring(index + 1, signature.length() - 1), ','), declaration);
             }
         }
         return JSClass.forName(signature);
@@ -142,7 +141,7 @@ class Signature {
 
     /**
      * <p>
-     * Helper method to conver {@link Type} to {@link Class}.
+     * Helper method to convert {@link Type} to {@link Class}.
      * </p>
      * 
      * @param types
@@ -319,6 +318,11 @@ class Signature {
          */
         @Override
         public String toString() {
+            // StringJoiner joiner = new StringJoiner(" & ", " extends ", "");
+            //
+            // for (Type bound : bounds) {
+            // joiner.add(bound.toString());
+            // }
             return name;
         }
 
@@ -333,7 +337,7 @@ class Signature {
     private class Parameterized implements ParameterizedType {
 
         /** The arugument types. */
-        private final Type[] arguments;
+        private final List<Type> arguments;
 
         /** The raw type. */
         private final Type raw;
@@ -349,10 +353,10 @@ class Signature {
         private Parameterized(String raw, String[] parameters, GenericDeclaration declaration) {
             this.raw = JSClass.forName(raw);
             this.owner = null;
-            this.arguments = new Type[parameters.length];
+            this.arguments = new ArrayList();
 
             for (int i = 0; i < parameters.length; i++) {
-                arguments[i] = parseType(parameters[i], declaration);
+                arguments.add(parseType(parameters[i], declaration));
             }
         }
 
@@ -361,7 +365,7 @@ class Signature {
          */
         @Override
         public Type[] getActualTypeArguments() {
-            return arguments;
+            return arguments.toArray(new Type[arguments.size()]);
         }
 
         /**
@@ -385,7 +389,12 @@ class Signature {
          */
         @Override
         public String toString() {
-            return owner + Arrays.toString(arguments);
+            StringJoiner joiner = new StringJoiner(", ", "<", ">");
+
+            for (Type type : arguments) {
+                joiner.add(type.toString());
+            }
+            return raw.getTypeName() + joiner.toString();
         }
     }
 

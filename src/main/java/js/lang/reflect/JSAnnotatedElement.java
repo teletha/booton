@@ -129,6 +129,7 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * @return This element's annotation for the specified annotation type if present on this
      *         element, else null.
      */
+    @Override
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         Objects.requireNonNull(annotationClass);
 
@@ -147,6 +148,7 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * 
      * @return All annotations present on this element.
      */
+    @Override
     public Annotation[] getAnnotations() {
         return getDeclaredAnnotations();
     }
@@ -162,6 +164,7 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * 
      * @return All annotations directly present on this element.
      */
+    @Override
     public final Annotation[] getDeclaredAnnotations() {
         if (privateAnnotations == null) {
             privateAnnotations = new HashMap();
@@ -169,7 +172,8 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
             for (String name : annotations.keys()) {
                 Class type = JSClass.forName(name);
 
-                privateAnnotations.put(type, (Annotation) Proxy.newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, annotations.getProperty(name))));
+                privateAnnotations.put(type, (Annotation) Proxy
+                        .newProxyInstance(null, new Class[] {type}, new AnnotationProxy(type, annotations.getProperty(name))));
             }
         }
         return privateAnnotations.values().toArray(new Annotation[privateAnnotations.size()]);
@@ -206,6 +210,7 @@ abstract class JSAnnotatedElement implements AnnotatedElement {
      * @throws NullPointerException if the given annotation class is null
      * @since 1.8
      */
+    @Override
     public <T extends Annotation> T[] getDeclaredAnnotationsByType(Class<T> annotationClass) {
         T[] annotations;
         T annotation = getDeclaredAnnotation(annotationClass);

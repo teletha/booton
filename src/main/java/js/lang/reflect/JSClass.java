@@ -333,11 +333,8 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
                 char ch = name.charAt(0);
 
                 if (ch == '$' && name.length() != 1) {
-                    Constructor constructor = (Constructor) (Object) new JSConstructor(name,
-                            (Class) (Object) this,
-                            prototype,
-                            prototype.getPropertyAs(NativeFunction.class, name),
-                            definition.getPropertyAs(NativeArray.class, name));
+                    Constructor constructor = (Constructor) (Object) new JSConstructor(name, (Class) (Object) this, prototype, prototype
+                            .getPropertyAs(NativeFunction.class, name), definition.getPropertyAs(NativeArray.class, name));
                     privateConstructors.put(hash("", constructor.getParameterTypes()), constructor);
                 }
             }

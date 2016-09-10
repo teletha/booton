@@ -19,7 +19,7 @@ import javax.script.ScriptException;
 import js.lang.NativeArray;
 import js.lang.NativeNumber;
 import js.lang.NativeObject;
-import kiss.model.Model;
+import kiss.model.JSModel;
 import booton.translator.JavascriptNativeProperty;
 
 /**
@@ -58,7 +58,7 @@ class EmulateJSON extends JSON {
 
     /**
      * <p>
-     * Helper method to traverse json structure using Java Object {@link Model}.
+     * Helper method to traverse json structure using Java Object {@link JSModel}.
      * </p>
      * 
      * @param <M> A current model type.
