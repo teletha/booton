@@ -9,6 +9,7 @@
  */
 package jsx.ui.flux;
 
+import js.dom.UIEvent;
 import jsx.ui.TypeStyle;
 import jsx.ui.Widget;
 import kiss.Events;
@@ -27,7 +28,7 @@ public interface Locator {
      * @return A user intent {@link Events}.
      */
     default <T> Events<T> at(Location<T> location) {
-        return at(location, (Class) null);
+        return at(location, (Class) UIEvent.class);
     }
 
     /**

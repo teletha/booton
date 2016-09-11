@@ -41,10 +41,13 @@ import jsx.style.value.RadialGradient;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
 import jsx.ui.Style;
+import kiss.Manageable;
+import kiss.Singleton;
 
 /**
  * @version 2014/10/25 11:22:51
  */
+@Manageable(lifestyle = Singleton.class)
 public class StyleDescriptor {
 
     /**
