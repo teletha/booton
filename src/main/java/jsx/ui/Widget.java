@@ -37,7 +37,6 @@ import js.dom.UIEvent;
 import js.dom.User;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import js.lang.builtin.Console;
 import js.util.HashMap;
 import jsx.debug.Profile;
 import jsx.style.StyleDescriptor;
@@ -706,12 +705,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
 
             Element current = event.target;
             Element limit = event.currentTarget;
-            System.out.println("Event " + name);
-            Console.log(event);
-            System.out.println("current");
-            Console.log(current);
-            System.out.println("limit");
-            Console.log(limit);
+
             if (current.has(name)) {
                 fire(event, current);
                 return;
