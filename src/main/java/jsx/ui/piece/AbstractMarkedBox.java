@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 import javafx.beans.property.Property;
 
 import js.dom.UIEvent;
+import jsx.style.BinaryStyle;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
@@ -47,7 +48,7 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
     private final String id;
 
     /** The selection manager. */
-    private final Supplier<Boolean> isMarked;
+    protected final Supplier<Boolean> isMarked;
 
     /**
      * <p>
@@ -82,7 +83,7 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
      */
     @Override
     protected final void virtualize() {
-        box(WidgetRoot, $.Root, userStyle.getValue(), If(isMarked.get(), $.Checked), () -> {
+        box(WidgetRoot, $.Root, userStyle.getValue(), If(isMarked, $.Checked), () -> {
             html("input", $.Input, attr("type", type), attr("name", name), attr("id", id));
             html("label", $.Label, attr("for", id), contents(label));
             svg("svg", $.SVG, attr("viewBox", "0 0 14 14"), () -> {
@@ -104,9 +105,7 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
     protected static class Styles extends PieceStyle {
 
         /** The mark size. */
-        static Numeric markSize = new Numeric(14, Unit.px);
-
-        static Color base = Color.Black.lighten(25);
+        Numeric markSize = new Numeric(14, Unit.px);
 
         Style Checked = () -> {
         };
@@ -137,14 +136,14 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
         /** The box style. */
         Style RadioBox = () -> {
             fill.color(Color.White);
-            stroke.color(Styles.base).width(2, px);
+            stroke.color(BorderColor).width(BorderWidth);
         };
 
         /** The mark style. */
         Style RadioMark = () -> {
-            fill.color(Styles.base.lighten(5)).opacity(0);
+            fill.color(BorderColor.lighten(5)).opacity(0);
 
-            transit().duration(500, ms).whenIn(Checked, () -> {
+            transit().duration(300, ms).whenIn(Checked, () -> {
                 fill.opacity(1);
             });
         };
@@ -152,20 +151,18 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
         /** The box style. */
         Style CheckBox = () -> {
             fill.color(Color.White);
-            stroke.color(Styles.base).width(2, px).linecap.square().miterLimit(1);
+            stroke.color(BorderColor).width(BorderWidth).linecap.square().miterLimit(1);
         };
 
         /** The mark style. */
-        Style CheckMark = () -> {
+        BinaryStyle CheckMark = on -> {
             fill.none();
-            stroke.color(Styles.base).width(2, px).linecap.square().miterLimit(1).opacity(0);
+            stroke.color(BorderColor).width(2, px).linecap.square().miterLimit(1).opacity(0);
+            transit().duration(300, ms).whenever();
 
-            transit().duration(500, ms).whenIn(Checked, () -> {
+            if (on) {
                 stroke.opacity(1);
-            });
-            transit().duration(100, ms).whenParentHover(Root, () -> {
-                stroke.opacity(0.5);
-            });
+            }
         };
     }
 }

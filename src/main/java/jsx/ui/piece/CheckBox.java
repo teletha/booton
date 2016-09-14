@@ -55,6 +55,6 @@ public class CheckBox<V> extends AbstractMarkedBox<CheckBox<V>, V> {
     @Override
     protected void virtualizeMark() {
         svg("rect", $.CheckBox, attr("x", 1), attr("y", 1), attr("width", 12), attr("height", 12), attr("rx", 2));
-        svg("polyline", $.CheckMark, attr("points", "4,7 6,9 10,5"));
+        svg("polyline", $.CheckMark.of(isMarked.get()), attr("points", "4,7 6,9 10,5"));
     }
 }

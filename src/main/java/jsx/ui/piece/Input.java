@@ -13,7 +13,6 @@ import static java.util.concurrent.TimeUnit.*;
 import static js.dom.User.*;
 import static jsx.ui.FunctionHelper.*;
 import static jsx.ui.StructureDescriptor.*;
-import static jsx.ui.piece.PieceStyle.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +34,9 @@ import kiss.Events;
 import kiss.I;
 
 /**
- * @version 2015/10/21 14:50:30
+ * @version 2016/09/15 8:42:32
  */
-public class Input extends LowLevelWidget<StyleDescriptor, Input> {
+public class Input extends LowLevelWidget<PieceStyle, Input> {
 
     /** The current input value. */
     public final StringProperty value;
@@ -65,7 +64,7 @@ public class Input extends LowLevelWidget<StyleDescriptor, Input> {
         this.invalid = I.observe(value).map(input -> !validate(input)).startWith(false);
 
         // user input functionality
-        when(KeyUp, Cut, Paste).at(SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
+        when(KeyUp, Cut, Paste).at($.SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
 
         disableIf(invalid);
     }
@@ -206,7 +205,7 @@ public class Input extends LowLevelWidget<StyleDescriptor, Input> {
      */
     @Override
     protected void virtualize() {
-        html("input", WidgetRoot, SingleLineFormBase, userStyle
+        html("input", WidgetRoot, $.SingleLineFormBase, userStyle
                 .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
     }
 

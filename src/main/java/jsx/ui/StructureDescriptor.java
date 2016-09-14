@@ -440,14 +440,54 @@ public class StructureDescriptor {
         };
     }
 
+    /**
+     * <p>
+     * Conditional expression.
+     * </p>
+     * 
+     * @param condition
+     * @param declarables
+     * @return
+     */
     public static Declarable If(String condition, Declarable... declarables) {
         return If(condition != null && condition.length() != 0, declarables);
     }
 
-    public static Declarable If(ReadOnlyProperty<Boolean> condition, Declarable... declarables) {
-        return If(condition != null && condition.getValue() != null && condition.getValue(), declarables);
+    /**
+     * <p>
+     * Conditional expression.
+     * </p>
+     * 
+     * @param condition
+     * @param declarables
+     * @return
+     */
+    public static Declarable If(Supplier<Boolean> condition, Declarable... declarables) {
+        return If(condition != null && Boolean.TRUE.equals(condition.get()), declarables);
     }
 
+    /**
+     * <p>
+     * Conditional expression.
+     * </p>
+     * 
+     * @param condition
+     * @param declarables
+     * @return
+     */
+    public static Declarable If(ReadOnlyProperty<Boolean> condition, Declarable... declarables) {
+        return If(condition != null && Boolean.TRUE.equals(condition.getValue()), declarables);
+    }
+
+    /**
+     * <p>
+     * Conditional expression.
+     * </p>
+     * 
+     * @param condition
+     * @param declarables
+     * @return
+     */
     public static Declarable If(boolean condition, Declarable... declarables) {
         return () -> {
             if (condition) {
@@ -458,6 +498,15 @@ public class StructureDescriptor {
         };
     }
 
+    /**
+     * <p>
+     * Conditional expression.
+     * </p>
+     * 
+     * @param condition
+     * @param declarables
+     * @return
+     */
     public static Declarable If(Events<Boolean> condition, Declarable... declarables) {
         return () -> {
             if (latestWidget.value(condition)) {
