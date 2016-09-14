@@ -24,12 +24,12 @@ import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.Style;
-import jsx.ui.piece.MarkedButton.Styles;
+import jsx.ui.piece.AbstractMarkedBox.Styles;
 
 /**
- * @version 2015/10/24 3:13:40
+ * @version 2016/09/15 0:14:26
  */
-abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWidget<Styles, T> {
+abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends LowLevelWidget<Styles, T> {
 
     /** The button type. */
     private final String type;
@@ -51,22 +51,24 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
 
     /**
      * <p>
-     * Create marked button.
+     * Create a marked button.
      * </p>
      * 
-     * @param type
-     * @param name
-     * @param value
-     * @param label
+     * @param type A button type for HTML.
+     * @param values The selected values for the value group.
+     * @param value An associated value.
+     * @param label An label name.
+     * @param isMarked An initial state.
+     * @param changeListener A change event listener.
      */
-    protected MarkedButton(String type, Property group, V value, String label, Supplier<Boolean> isMarked, Consumer<UIEvent> changeListener) {
+    protected AbstractMarkedBox(String type, Property values, V value, String label, Supplier<Boolean> isMarked, Consumer<UIEvent> changeListener) {
         super(value);
 
-        Objects.nonNull(group);
+        Objects.nonNull(values);
         Objects.nonNull(value);
 
         this.type = type;
-        this.name = "Group" + group.hashCode();
+        this.name = "Group" + values.hashCode();
         this.value = value;
         this.label = label;
         this.id = "Mark" + hashCode();

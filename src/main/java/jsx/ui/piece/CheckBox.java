@@ -17,7 +17,7 @@ import javafx.beans.property.SetProperty;
 /**
  * @version 2015/10/24 3:13:35
  */
-public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
+public class CheckBox<V> extends AbstractMarkedBox<CheckBox<V>, V> {
 
     /**
      * <p>

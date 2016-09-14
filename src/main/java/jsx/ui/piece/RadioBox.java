@@ -16,7 +16,7 @@ import javafx.beans.property.Property;
 /**
  * @version 2015/10/24 3:13:45
  */
-public class RadioBox<V> extends MarkedButton<RadioBox<V>, V> {
+public class RadioBox<V> extends AbstractMarkedBox<RadioBox<V>, V> {
 
     /**
      * <p>
