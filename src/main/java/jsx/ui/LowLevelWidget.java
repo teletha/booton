@@ -39,7 +39,7 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
 
     private BooleanProperty hover;
 
-    protected final Property<Declarable> rootStyle = new SimpleObjectProperty();
+    protected final Property<Declarable> userStyle = new SimpleObjectProperty();
 
     /**
      * 
@@ -66,8 +66,8 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
         if (hover == null) {
             hover = new SimpleBooleanProperty(false);
 
-            when(User.MouseEnter).at(Root).to(v -> hover.set(true));
-            when(User.MouseLeave).at(Root).to(v -> hover.set(false));
+            when(User.MouseEnter).at(WidgetRoot).to(v -> hover.set(true));
+            when(User.MouseLeave).at(WidgetRoot).to(v -> hover.set(false));
         }
         return hover;
     }
@@ -76,7 +76,7 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
      * @return
      */
     public T click(Runnable action) {
-        when(User.Click).at(Root).take(this::isValid).to(update(e -> action.run()));
+        when(User.Click).at(WidgetRoot).take(this::isValid).to(update(e -> action.run()));
 
         return (T) this;
     }
@@ -85,7 +85,7 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
      * @return
      */
     public T dbclick(Runnable action) {
-        when(User.DoubleClick).at(Root).take(this::isValid).to(update(e -> action.run()));
+        when(User.DoubleClick).at(WidgetRoot).take(this::isValid).to(update(e -> action.run()));
 
         return (T) this;
     }
@@ -121,8 +121,8 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = when(User.KeyPress).at(Root).take(byKey);
-            Events<UIEvent> keyUp = when(User.KeyUp).at(Root).take(byKey);
+            Events<UIEvent> keyPress = when(User.KeyPress).at(WidgetRoot).take(byKey);
+            Events<UIEvent> keyUp = when(User.KeyUp).at(WidgetRoot).take(byKey);
             // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
@@ -169,7 +169,7 @@ public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends L
     }
 
     public T style(Style style) {
-        rootStyle.setValue(style);
+        userStyle.setValue(style);
 
         return (T) this;
     }

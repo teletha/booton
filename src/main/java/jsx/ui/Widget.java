@@ -60,7 +60,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
     private static final Map<Class, WidgetModelManager> metas = new HashMap();
 
     /** The root locator. */
-    protected static final Style Root = () -> {
+    protected static final Style WidgetRoot = () -> {
     };
 
     static {

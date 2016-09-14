@@ -19,8 +19,6 @@ import java.util.function.Supplier;
 import javafx.beans.property.Property;
 
 import js.dom.UIEvent;
-import jsx.style.ValueStyle;
-import jsx.style.value.AnimationFrames;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
@@ -82,10 +80,10 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
      */
     @Override
     protected final void virtualize() {
-        box(Root, $.Root, rootStyle.getValue(), If(isMarked.get(), $.Checked), () -> {
-            html("input", $.CheckBox, attr("type", type), attr("name", name), attr("id", id));
-            html("label", $.Label.of(radius()), attr("for", id), contents(label));
-            svg("svg", $.SVG, () -> {
+        box(WidgetRoot, $.Root, userStyle.getValue(), If(isMarked.get(), $.Checked), () -> {
+            html("input", $.Input, attr("type", type), attr("name", name), attr("id", id));
+            html("label", $.Label, attr("for", id), contents(label));
+            svg("svg", $.SVG, attr("viewBox", "0 0 14 14"), () -> {
                 virtualizeMark();
             });
         });
@@ -99,15 +97,6 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
     protected abstract void virtualizeMark();
 
     /**
-     * <p>
-     * Calculate border radius.
-     * </p>
-     * 
-     * @return
-     */
-    protected abstract Numeric radius();
-
-    /**
      * @version 2015/10/12 11:17:56
      */
     protected static class Styles extends PieceStyle {
@@ -115,19 +104,7 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
         /** The mark size. */
         static Numeric markSize = new Numeric(14, Unit.px);
 
-        static Numeric labelGap = new Numeric(8, px);
-
-        static Numeric markLineWidth = new Numeric(1, px);
-
-        static Color markColor = Color.rgb("#CFD9DB");
-
-        static Color markFocusColor = Color.rgb("#2C97DE");
-
-        static AnimationFrames bounce = new AnimationFrames().frame(0, 100, () -> {
-            transform.translateY(50, percent).scale(1);
-        }).frame(50, () -> {
-            transform.translateY(50, percent).scale(0.8);
-        });
+        static Color base = Color.Black.lighten(25);
 
         Style Checked = () -> {
         };
@@ -139,46 +116,53 @@ abstract class MarkedButton<T extends MarkedButton<T, V>, V> extends LowLevelWid
             cursor.pointer();
         };
 
-        Style CheckBox = () -> {
+        Style Input = () -> {
             display.none(); // hide default UI
         };
 
-        ValueStyle<Numeric> Label = radiusSize -> {
+        Style Label = () -> {
             display.block();
-            padding.left(markSize.add(labelGap));
+            padding.left(markSize.add(8));
             cursor.pointer();
-
-            after(() -> {
-                content.text("");
-                display.block();
-                position.centerVertically().left(0, px);
-
-                border.width(markLineWidth).solid().color(markColor).radius(radiusSize);
-                box.size(14, px).shadow(shadow().blurRadius(0, px).offset(1, 1, px).inset().color(Color.rgba(0, 0, 0, 0.08)));
-
-                parentHover(FocusedBorder);
-            });
-
-            insideOf(Checked, () -> {
-                after(() -> {
-                    background.color(markFocusColor);
-                    border.color(markFocusColor);
-                    box.shadow(shadow().blurRadius(6, px).offset(0, 0, px).color(Color.rgba(44, 151, 222, 0.4)));
-
-                    animation.duration(0.3, s).name(bounce);
-                });
-            });
         };
 
         Style SVG = () -> {
-            display.none();
             box.size(markSize);
             position.centerVertically().left(0, px);
             pointerEvents.none();
+        };
 
-            insideOf(Checked, () -> {
-                display.block();
-                animation.duration(0.3, s).name(bounce);
+        /** The box style. */
+        Style RadioBox = () -> {
+            fill.color(Color.White);
+            stroke.color(Styles.base).width(2, px);
+        };
+
+        /** The mark style. */
+        Style RadioMark = () -> {
+            fill.color(Styles.base.lighten(5)).opacity(0);
+
+            transit().duration(500, ms).whenIn(Checked, () -> {
+                fill.opacity(1);
+            });
+        };
+
+        /** The box style. */
+        Style CheckBox = () -> {
+            fill.color(Color.White);
+            stroke.color(Styles.base).width(2, px).linecap.square().miterLimit(1);
+        };
+
+        /** The mark style. */
+        Style CheckMark = () -> {
+            fill.none();
+            stroke.color(Styles.base).width(2, px).linecap.square().miterLimit(1).opacity(0);
+
+            transit().duration(500, ms).whenIn(Checked, () -> {
+                stroke.opacity(1);
+            });
+            transit().duration(100, ms).whenParentHover(Root, () -> {
+                stroke.opacity(0.5);
             });
         };
     }

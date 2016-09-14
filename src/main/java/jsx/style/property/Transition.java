@@ -224,6 +224,17 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
+    public void whenParentHover(Style parent, Style sub) {
+        when("." + parent.name() + ":hover $", sub);
+    }
+
+    /**
+     * <p>
+     * Declare hover effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
     public void whenSiblingHover(Style sub) {
         when("*:hover~$", sub);
     }

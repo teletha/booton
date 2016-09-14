@@ -9,28 +9,15 @@
  */
 package jsx.ui.piece;
 
-import static jsx.style.StyleDescriptor.*;
 import static jsx.ui.StructureDescriptor.*;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SetProperty;
 
-import jsx.style.value.Numeric;
-import jsx.ui.Style;
-
 /**
  * @version 2015/10/24 3:13:35
  */
 public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
-
-    /** The radius. */
-    private static final Numeric Radius = new Numeric(0.25, em);
-
-    /** The mark style. */
-    private static final Style CheckMark = () -> {
-        fill.none();
-        stroke.color("#FFF").width(2, px).linecap.square().miterLimit(10);
-    };
 
     /**
      * <p>
@@ -67,14 +54,7 @@ public class CheckBox<V> extends MarkedButton<CheckBox<V>, V> {
      */
     @Override
     protected void virtualizeMark() {
-        svg("polyline", CheckMark, attr("points", "4,7 6,9 10,5"));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Numeric radius() {
-        return Radius;
+        svg("rect", $.CheckBox, attr("x", 1), attr("y", 1), attr("width", 12), attr("height", 12), attr("rx", 2));
+        svg("polyline", $.CheckMark, attr("points", "4,7 6,9 10,5"));
     }
 }

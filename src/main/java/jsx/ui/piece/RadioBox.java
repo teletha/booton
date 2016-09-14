@@ -13,16 +13,10 @@ import static jsx.ui.StructureDescriptor.*;
 
 import javafx.beans.property.Property;
 
-import jsx.style.value.Numeric;
-import jsx.style.value.Unit;
-
 /**
  * @version 2015/10/24 3:13:45
  */
 public class RadioBox<V> extends MarkedButton<RadioBox<V>, V> {
-
-    /** The radius. */
-    private static final Numeric Radius = new Numeric(50, Unit.percent);
 
     /**
      * <p>
@@ -42,14 +36,7 @@ public class RadioBox<V> extends MarkedButton<RadioBox<V>, V> {
      */
     @Override
     protected void virtualizeMark() {
-        svg("circle", attr("fill", "#FFF"), attr("cx", Styles.markSize.size / 2), attr("cy", Styles.markSize.size / 2), attr("r", 3));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Numeric radius() {
-        return Radius;
+        svg("circle", $.RadioBox, attr("cx", Styles.markSize.size / 2), attr("cy", Styles.markSize.size / 2), attr("r", 6));
+        svg("circle", $.RadioMark, attr("cx", Styles.markSize.size / 2), attr("cy", Styles.markSize.size / 2), attr("r", 3));
     }
 }

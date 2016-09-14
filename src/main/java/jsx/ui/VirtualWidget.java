@@ -27,7 +27,7 @@ class VirtualWidget extends VirtualElement {
         super(id, "widget", context);
 
         this.widget = widget;
-        this.classList.push(Widget.Root);
+        this.classList.push(Widget.WidgetRoot);
     }
 
     /**

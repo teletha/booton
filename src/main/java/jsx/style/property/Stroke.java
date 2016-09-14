@@ -102,6 +102,20 @@ public class Stroke extends Colorable<Stroke> {
     }
 
     /**
+     * <p>
+     * The stroke-opacity attribute specifies the opacity of the outline on the current object. Its
+     * default value is 1.
+     * </p>
+     * 
+     * @param opacity The opacity of the painting operation used to outline the current object, as a
+     *            number. Any values outside the range 0.0 (fully transparent) to 1.0 (fully opaque)
+     *            will be clamped to this range.
+     */
+    public Stroke opacity(double opacity) {
+        return value("stroke-opacity", opacity);
+    }
+
+    /**
      * @version 2015/03/23 17:03:00
      */
     public class Width extends PropertyDefinition<Stroke> {

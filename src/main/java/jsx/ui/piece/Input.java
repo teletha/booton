@@ -206,7 +206,7 @@ public class Input extends LowLevelWidget<StyleDescriptor, Input> {
      */
     @Override
     protected void virtualize() {
-        html("input", Root, SingleLineFormBase, rootStyle
+        html("input", WidgetRoot, SingleLineFormBase, userStyle
                 .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
     }
 
