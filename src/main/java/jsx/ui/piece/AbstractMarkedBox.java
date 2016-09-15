@@ -30,7 +30,7 @@ import jsx.ui.piece.AbstractMarkedBox.Styles;
 /**
  * @version 2016/09/15 0:14:26
  */
-abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends LowLevelWidget<Styles, T> {
+public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends LowLevelWidget<Styles, T> {
 
     /** The button type. */
     private final String type;
@@ -102,10 +102,10 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
     /**
      * @version 2016/09/15 9:27:11
      */
-    protected static class Styles extends PieceStyle {
+    public static class Styles extends PieceStyle {
 
         /** The mark size. */
-        static Numeric markSize = new Numeric(14, Unit.px);
+        public static Numeric markSize = new Numeric(14, Unit.px);
 
         Style Checked = () -> {
         };
@@ -134,13 +134,13 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
         };
 
         /** The box style. */
-        Style RadioBox = () -> {
+        public Style RadioBox = () -> {
             fill.color(Color.White);
             stroke.color(BorderColor).width(BorderWidth);
         };
 
         /** The mark style. */
-        Style RadioMark = () -> {
+        public Style RadioMark = () -> {
             fill.color(BorderColor.lighten(5)).opacity(0);
 
             transit().duration(300, ms).whenIn(Checked, () -> {
@@ -149,13 +149,13 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
         };
 
         /** The box style. */
-        Style CheckBox = () -> {
+        public Style CheckBox = () -> {
             fill.color(Color.White);
             stroke.color(BorderColor).width(BorderWidth).linecap.square().miterLimit(1);
         };
 
         /** The mark style. */
-        BinaryStyle CheckMark = on -> {
+        public BinaryStyle CheckMark = on -> {
             fill.none();
             stroke.color(BorderColor).width(2, px).linecap.square().miterLimit(1).opacity(0);
             transit().duration(300, ms).whenever();

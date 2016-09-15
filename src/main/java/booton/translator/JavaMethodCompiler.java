@@ -783,6 +783,20 @@ class JavaMethodCompiler extends MethodVisitor {
                 break;
             }
 
+            // Accessing the interface static field from the instance, compiler generates the
+            // byte code expressed in following ASM codes.
+            //
+            // visitFieldInsn(GETFIELD, "ConcreateClass", "FieldName", "signature");
+            // visitTypeInsn(CHECKCAST, "FieldType");
+            // visitInsn(POP);
+            //
+            // In Javascript runtime, it is a completely unnecessary code,
+            // so we should delete them unconditionally.
+            if (match(GETFIELD, CHECKCAST, POP)) {
+                current.remove(0);
+                break;
+            }
+
         case POP2:
             // One sequence of expressions was finished, so we must write out one remaining
             // operand. (e.g. Method invocation which returns some operands but it is not used ever)
