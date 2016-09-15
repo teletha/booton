@@ -576,12 +576,12 @@ public class ScriptTester {
                 // ========================
                 // SHORT
                 // ========================
-                assert((Short) java).doubleValue() == ((Double) js).doubleValue();
+                assert ((Short) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Byte.class) {
                 // ========================
                 // BYTE
                 // ========================
-                assert((Byte) java).doubleValue() == ((Double) js).doubleValue();
+                assert ((Byte) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Boolean.class) {
                 // ========================
                 // BOOLEAN
@@ -607,7 +607,7 @@ public class ScriptTester {
                     js = NativeObject.callMethod((NativeObject) js, Javascript
                             .computeMethodName(Object.class, "toString", "()Ljava/lang/String;"), new Object[] {});
                 }
-                assert((Character) java).toString().equals(js.toString());
+                assert ((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {
                 // ========================
                 // THROWABLE

@@ -24,25 +24,25 @@ public class PieceStyle extends StyleDescriptor {
     // ===========================================
     // Form Related Style
     // ===========================================
-    protected static final Numeric FormFontSize = new Numeric(14, px);
+    protected final Numeric FormFontSize = new Numeric(14, px);
 
     // ===========================================
     // Border Related Style
     // ===========================================
-    protected static final Numeric BorderWidth = new Numeric(1, px);
+    protected final Numeric BorderWidth = new Numeric(1, px);
 
-    protected static final Numeric BorderRadius = new Numeric(3, px);
+    protected final Numeric BorderRadius = new Numeric(3, px);
 
     /** The border color. */
-    protected static final Color BorderColor = new Color(0, 0, 80);
+    protected final Color BorderColor = new Color(0, 0, 80);
 
     /** The focused border color. */
-    protected static final Color BorderColorFocused = new Color(206, 79, 62, 0.8);
+    protected final Color BorderColorFocused = new Color(206, 79, 62, 0.8);
 
-    protected static final Color BorderInsetShadow = new Color(0, 0, 0, 0.1);
+    protected final Color BorderInsetShadow = new Color(0, 0, 0, 0.1);
 
     /** The general single line form width. */
-    protected static final Numeric SingleLineFormWidth = new Numeric(185, px);
+    protected final Numeric SingleLineFormWidth = new Numeric(185, px);
 
     /** The general single line form height. */
     protected final Numeric SingleLineFormHeight = new Numeric(28, px);

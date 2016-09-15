@@ -967,8 +967,7 @@ class JavaMethodCompiler extends MethodVisitor {
 
                 // remove empty node if needed
                 if (current.previous.stack.isEmpty()) dispose(current.previous);
-            } else
-                if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN)) {
+            } else if (match(JUMP, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN) || match(JUMP, LABEL, FRAME, ICONST_1, IRETURN, LABEL, FRAME, ICONST_0, IRETURN)) {
                 // Current operands is like the following, so we must remove four operands to
                 // represent boolean value.
                 //

@@ -280,6 +280,9 @@ class TranslatorManager {
     @Manageable(lifestyle = Singleton.class)
     private static class GeneralTranslator extends Translator<Object> {
 
+        /** The global jumper. */
+        private static final UnknownError DirtyFlowControl = new UnknownError();
+
         /**
          * {@inheritDoc}
          */
@@ -344,10 +347,27 @@ class TranslatorManager {
         @Override
         protected String translateStaticField(Class owner, String fieldName) {
             try {
+                if (owner == null || owner == Object.class) {
+                    throw DirtyFlowControl;
+                }
                 owner.getDeclaredField(fieldName);
                 return Javascript.computeClassName(owner, true) + "." + Javascript.computeFieldName(owner, fieldName);
             } catch (NoSuchFieldException e) {
-                return translateStaticField(owner.getSuperclass(), fieldName);
+                try {
+                    return translateStaticField(owner.getSuperclass(), fieldName);
+                } catch (UnknownError control) {
+                    for (Class type : owner.getInterfaces()) {
+                        try {
+                            return translateStaticField(type, fieldName);
+                        } catch (UnknownError flow) {
+                            // ignore
+                        }
+                    }
+
+                    // If this exception will be thrown, it is bug of this program. So we must
+                    // rethrow the wrapped error in here.
+                    throw new Error(owner + "." + fieldName + " is not found.");
+                }
             }
         }
     }

@@ -14,10 +14,10 @@ import static jdk.internal.org.objectweb.asm.Opcodes.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import booton.translator.Node.Switch;
 import jdk.internal.org.objectweb.asm.ClassVisitor;
 import jdk.internal.org.objectweb.asm.FieldVisitor;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
-import booton.translator.Node.Switch;
 
 /**
  * @version 2013/11/24 22:31:54
@@ -75,8 +75,7 @@ class JavaClassCompiler extends ClassVisitor {
                     break;
 
                 case "J": // long
-                    code.append(name, ":", computeClassName(PrimitiveLong), ".", computeFieldName(PrimitiveLong, "ZERO"))
-                            .separator();
+                    code.append(name, ":", computeClassName(PrimitiveLong), ".", computeFieldName(PrimitiveLong, "ZERO")).separator();
                     break;
 
                 case "C": // char

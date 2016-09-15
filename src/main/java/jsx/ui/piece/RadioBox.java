@@ -36,7 +36,7 @@ public class RadioBox<V> extends AbstractMarkedBox<RadioBox<V>, V> {
      */
     @Override
     protected void virtualizeMark() {
-        svg("circle", $.RadioBox, attr("cx", $.markSize.size / 2), attr("cy", $.markSize.size / 2), attr("r", 6));
-        svg("circle", $.RadioMark, attr("cx", $.markSize.size / 2), attr("cy", $.markSize.size / 2), attr("r", 3));
+        svg("circle", $.RadioBox, attr("cx", Styles.markSize.size / 2), attr("cy", Styles.markSize.size / 2), attr("r", 6));
+        svg("circle", $.RadioMark, attr("cx", Styles.markSize.size / 2), attr("cy", Styles.markSize.size / 2), attr("r", 3));
     }
 }

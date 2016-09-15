@@ -412,18 +412,16 @@ public class Javascript {
 
                     // write constructors, fields and methods
                     try {
-                        if (source.isInterface() && !hasImplementation(source, true)) {
+                        if (!TranslatorManager.hasTranslator(source)) {
                             if (source.isAnnotation()) {
                                 compileAnnotation(code);
-                            }
-                        } else if (TranslatorManager.hasTranslator(source)) {
-                            // do nothing
-                        } else {
-                            try {
-                                BootonLog.PraseByteCode.start(source);
-                                new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
-                            } finally {
-                                BootonLog.PraseByteCode.stop();
+                            } else {
+                                try {
+                                    BootonLog.PraseByteCode.start(source);
+                                    new ClassReader(source.getName()).accept(new JavaClassCompiler(this, code), 0);
+                                } finally {
+                                    BootonLog.PraseByteCode.stop();
+                                }
                             }
                         }
                     } catch (TranslationError e) {
@@ -494,28 +492,6 @@ public class Javascript {
                 }
             }
         });
-    }
-
-    /**
-     * <p>
-     * Check interface method
-     * </p>
-     * 
-     * @param type
-     * @param includeStatic
-     * @return
-     */
-    private boolean hasImplementation(Class type, boolean includeStatic) {
-        for (Method method : type.getDeclaredMethods()) {
-            if (method.isDefault()) {
-                return true;
-            }
-
-            if (includeStatic && Modifier.isStatic(method.getModifiers())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

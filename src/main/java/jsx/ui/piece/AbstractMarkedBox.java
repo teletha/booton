@@ -100,12 +100,12 @@ abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends L
     protected abstract void virtualizeMark();
 
     /**
-     * @version 2015/10/12 11:17:56
+     * @version 2016/09/15 9:27:11
      */
     protected static class Styles extends PieceStyle {
 
         /** The mark size. */
-        Numeric markSize = new Numeric(14, Unit.px);
+        static Numeric markSize = new Numeric(14, Unit.px);
 
         Style Checked = () -> {
         };
