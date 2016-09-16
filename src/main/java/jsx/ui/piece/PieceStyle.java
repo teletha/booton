@@ -68,13 +68,13 @@ public class PieceStyle extends StyleDescriptor {
      */
     protected final Style FocusedBorder = () -> {
         border.color(BorderColorFocused).width(BorderWidth).solid();
-        box.shadow(insideShadow, outsideShadow);
+        display.shadow(insideShadow, outsideShadow);
     };
 
     /** Abstract base style of form element. */
     Style FormBase = () -> {
         // Required property for single line form.
-        box.height(SingleLineFormHeight);
+        display.height(SingleLineFormHeight);
 
         // Required property for single line form.
         text.verticalAlign.middle();
@@ -89,7 +89,7 @@ public class PieceStyle extends StyleDescriptor {
 
     /** Abstract base style of form element. */
     Style BorderedFormBase = FormBase.with(() -> {
-        box.width(SingleLineFormWidth);
+        display.width(SingleLineFormWidth);
         border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
         focus(FocusedBorder);
@@ -97,7 +97,7 @@ public class PieceStyle extends StyleDescriptor {
 
     /** Abstract base style of form element. */
     Style SingleLineFormBase = BorderedFormBase.with(() -> {
-        box.width(SingleLineFormWidth);
+        display.width(SingleLineFormWidth);
     });
 
     Style SpriteBackground = () -> {

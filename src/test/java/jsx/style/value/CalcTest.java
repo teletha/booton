@@ -9,9 +9,9 @@
  */
 package jsx.style.value;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 14:08:05
@@ -25,7 +25,7 @@ public class CalcTest extends StyleTester {
     @Test
     public void none() throws Exception {
         ValidatableStyle style = style(() -> {
-            box.width(one);
+            display.width(one);
         });
         assert style.property("width", "1px");
     }
@@ -33,7 +33,7 @@ public class CalcTest extends StyleTester {
     @Test
     public void add() throws Exception {
         ValidatableStyle style = style(() -> {
-            box.width(one.add(two));
+            display.width(one.add(two));
         });
         assert style.property("width", "calc(1px + 2em)", "-webkit-calc(1px + 2em)");
     }

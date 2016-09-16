@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:32:10
@@ -21,7 +21,7 @@ public class OpacityTest extends StyleTester {
     @Test
     public void point() throws Exception {
         ValidatableStyle style = style(() -> {
-            box.opacity(0.5);
+            display.opacity(0.5);
         });
 
         assert style.property("opacity", "0.5");
@@ -30,7 +30,7 @@ public class OpacityTest extends StyleTester {
     @Test
     public void one() throws Exception {
         ValidatableStyle style = style(() -> {
-            box.opacity(1);
+            display.opacity(1);
         });
 
         assert style.property("opacity", "1");
@@ -39,7 +39,7 @@ public class OpacityTest extends StyleTester {
     @Test
     public void zero() throws Exception {
         ValidatableStyle style = style(() -> {
-            box.opacity(0);
+            display.opacity(0);
         });
 
         assert style.property("opacity", "0");

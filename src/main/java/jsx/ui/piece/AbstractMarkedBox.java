@@ -116,10 +116,7 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
         };
 
         Style Input = () -> {
-            box.opacity(0).zIndex(1);
-            position.absolute();
-            margin.top(4, px).left(-20, px);
-            padding.size(0, px);
+            display.none();
         };
 
         Style Label = () -> {
@@ -129,10 +126,9 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
 
             before(() -> {
                 content.text("");
-                display.inlineBlock();
-                position.absolute().left(0, px);
-                box.size(16, px);
-                border.solid().width(1, px).color("#ccc").radius(3, px);
+                display.inlineBlock().size(markSize);
+                position.absolute().left(0, px).top(0, px);
+                border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
 
                 transit().duration(300, ms).whenSiblingChecked(() -> {
                     background.color("#337ab7");
@@ -141,21 +137,20 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
             });
 
             after(() -> {
-                display.inlineBlock();
-                position.absolute().left(0, px).top(0, px);
-                box.size(16, px).opacity(0);
-                padding.left(3, px).top(2, px);
-                font.family(Font.Awesome).monospace().size(10, px).color("#fff");
                 content.text("\\f00c");
+                display.inlineBlock().size(markSize).opacity(0);
+                position.absolute().left(0, px).top(0, px);
+                padding.left(2, px).top(2, px);
+                font.family(Font.Awesome).monospace().size(10, px).color(Color.White);
 
                 transit().duration(300, ms).whenSiblingChecked(() -> {
-                    box.opacity(1);
+                    display.opacity(1);
                 });
             });
         };
 
         Style SVG = () -> {
-            box.size(markSize);
+            display.size(markSize);
             position.centerVertically().left(0, px);
             pointerEvents.none();
         };

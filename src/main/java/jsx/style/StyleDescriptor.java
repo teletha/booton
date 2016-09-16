@@ -1175,8 +1175,7 @@ public class StyleDescriptor {
 
         // write bubble border color
         before(() -> {
-            display.block();
-            box.size(0, px);
+            display.block().size(0, px);
             content.text("");
             position.absolute().left(50, percent).top(100, percent);
             margin.left(width.opposite());
@@ -1189,8 +1188,7 @@ public class StyleDescriptor {
             Numeric width2 = width.subtract(borderWidth.multiply(1.5));
 
             after(() -> {
-                display.block();
-                box.size(0, px);
+                display.block().size(0, px);
                 content.text("");
                 position.absolute().left(50, percent).top(100, percent);
                 margin.left(width2.opposite());
@@ -1216,8 +1214,7 @@ public class StyleDescriptor {
 
         // write bubble border color
         before(() -> {
-            display.block();
-            box.size(0, px);
+            display.block().size(0, px);
             content.text("");
             position.absolute().left(50, percent).bottom(100, percent);
             margin.left(width.opposite());
@@ -1230,8 +1227,7 @@ public class StyleDescriptor {
             Numeric borderWitdh = width.subtract(borderWidth.multiply(1.5));
 
             after(() -> {
-                display.block();
-                box.size(0, px);
+                display.block().size(0, px);
                 content.text("");
                 position.absolute().left(50, percent).bottom(100, percent);
                 margin.left(borderWitdh.opposite());

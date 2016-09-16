@@ -442,7 +442,7 @@ public class UI {
 
             static Style Show = () -> {
                 display.flex().justifyContent.center();
-                box.size(100, percent).zIndex(100);
+                display.size(100, percent).zIndex(100);
                 background.color(rgba(255, 255, 255, 0.9));
                 position.fixed().top(0, px).left(0, px);
                 overflow.y.auto();

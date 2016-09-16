@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 15:24:12
@@ -21,10 +21,10 @@ public class TransitionTest extends StyleTester {
     @Test
     public void transition() {
         ValidatableStyle parsed = style(() -> {
-            box.width(10, px);
+            display.width(10, px);
 
             transit().duration(1, s).whenHover(() -> {
-                box.width(20, px);
+                display.width(20, px);
             });
         });
         assert parsed.property("transition-property", "width");

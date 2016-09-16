@@ -133,7 +133,7 @@ public class Select<M> extends Widget<$> {
 
         Style SVGRoot = () -> {
             position.centerVertically().right(FormHorizontalPadding);
-            box.size(16, px);
+            display.size(16, px);
             pointerEvents.none();
         };
 
