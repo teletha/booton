@@ -16,6 +16,9 @@ import js.dom.CSSStyleSheet;
  */
 public class Font {
 
+    /** The built-in font. */
+    public static final Font Awesome = new Font("FontAwesome", "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css");
+
     /** The font name. */
     public final String name;
 

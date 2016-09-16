@@ -241,6 +241,17 @@ public class Transition extends PropertyDefinition<Transition> {
 
     /**
      * <p>
+     * Declare check effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void whenSiblingChecked(Style sub) {
+        when("*:checked~$", sub);
+    }
+
+    /**
+     * <p>
      * Declare hover effect.
      * </p>
      * 

@@ -12,6 +12,7 @@ package jsx.style.property;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 import booton.translator.Translator;
@@ -492,7 +493,7 @@ public class Font extends Colorable<Font> {
          */
         private Family(String[] fonts) {
             super("font-family", Font.this);
-
+            System.out.println(Arrays.toString(fonts));
             this.fonts = fonts;
         }
 

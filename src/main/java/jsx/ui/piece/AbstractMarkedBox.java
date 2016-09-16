@@ -21,6 +21,7 @@ import javafx.beans.property.Property;
 import js.dom.UIEvent;
 import jsx.style.BinaryStyle;
 import jsx.style.value.Color;
+import jsx.style.value.Font;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
@@ -86,9 +87,6 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
         box(WidgetRoot, $.Root, userStyle.getValue(), If(isMarked, $.Checked), () -> {
             html("input", $.Input, attr("type", type), attr("name", name), attr("id", id));
             html("label", $.Label, attr("for", id), contents(label));
-            svg("svg", $.SVG, attr("viewBox", "0 0 14 14"), () -> {
-                virtualizeMark();
-            });
         });
     }
 
@@ -118,13 +116,42 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
         };
 
         Style Input = () -> {
-            display.none(); // hide default UI
+            box.opacity(0).zIndex(1);
+            position.absolute();
+            margin.top(4, px).left(-20, px);
+            padding.size(0, px);
         };
 
         Style Label = () -> {
             display.block();
             padding.left(markSize.add(8));
             cursor.pointer();
+
+            before(() -> {
+                content.text("");
+                display.inlineBlock();
+                position.absolute().left(0, px);
+                box.size(16, px);
+                border.solid().width(1, px).color("#ccc").radius(3, px);
+
+                transit().duration(300, ms).whenSiblingChecked(() -> {
+                    background.color("#337ab7");
+                    border.color("#337ab7");
+                });
+            });
+
+            after(() -> {
+                display.inlineBlock();
+                position.absolute().left(0, px).top(0, px);
+                box.size(16, px).opacity(0);
+                padding.left(3, px).top(2, px);
+                font.family(Font.Awesome).monospace().size(10, px).color("#fff");
+                content.text("\\f00c");
+
+                transit().duration(300, ms).whenSiblingChecked(() -> {
+                    box.opacity(1);
+                });
+            });
         };
 
         Style SVG = () -> {
@@ -151,13 +178,13 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
         /** The box style. */
         public Style CheckBox = () -> {
             fill.color(Color.White);
-            stroke.color(BorderColor).width(BorderWidth).linecap.square().miterLimit(1);
+            stroke.color(BorderColor.lighten(-20)).width(BorderWidth).linecap.square().miterLimit(1);
         };
 
         /** The mark style. */
         public BinaryStyle CheckMark = on -> {
             fill.none();
-            stroke.color(BorderColor).width(2, px).linecap.square().miterLimit(1).opacity(0);
+            stroke.color(BorderColor.lighten(-10)).width(2, px).linecap.square().miterLimit(1).opacity(0);
             transit().duration(300, ms).whenever();
 
             if (on) {
