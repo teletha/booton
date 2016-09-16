@@ -12,10 +12,8 @@ package jsx.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import js.dom.CSSStyleSheet;
-
 /**
- * @version 2015/10/05 2:12:18
+ * @version 2016/09/15 12:53:24
  */
 class MultipleStyle implements Style {
 
@@ -35,10 +33,7 @@ class MultipleStyle implements Style {
         this.names = new String[styles.length + 1];
 
         for (int i = 0; i < names.length - 1; i++) {
-            Style style = styles[i];
-
-            names[i] = style.name();
-            CSSStyleSheet.define(style, true);
+            names[i] = styles[i].name();
         }
         names[names.length - 1] = name();
     }
@@ -89,5 +84,8 @@ class MultipleStyle implements Style {
      */
     @Override
     public void style() {
+        for (Style style : styles) {
+            style.style();
+        }
     }
 }
