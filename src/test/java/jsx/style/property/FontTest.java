@@ -9,9 +9,10 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
+import jsx.style.value.Font;
 
 /**
  * @version 2014/11/13 14:26:07
@@ -29,7 +30,7 @@ public class FontTest extends StyleTester {
     @Test
     public void family() {
         ValidatableStyle parsed = style(() -> {
-            font.family("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600").serif();
+            font.family("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600", Font.Serif);
         });
         assert parsed.property("font-family", "\"Source Sans Pro\",serif");
     }

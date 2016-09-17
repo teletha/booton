@@ -9,8 +9,6 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.StructureDescriptor.*;
-
 import javafx.beans.property.Property;
 
 /**
@@ -29,14 +27,5 @@ public class RadioBox<V> extends AbstractMarkedBox<RadioBox<V>, V> {
      */
     RadioBox(Property<V> selection, V value, String label) {
         super("radio", selection, value, label, () -> selection.getValue() == value, event -> selection.setValue(value));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualizeMark() {
-        svg("circle", $.RadioBox, attr("cx", $.markSize.size / 2), attr("cy", $.markSize.size / 2), attr("r", 6));
-        svg("circle", $.RadioMark, attr("cx", $.markSize.size / 2), attr("cy", $.markSize.size / 2), attr("r", 3));
     }
 }

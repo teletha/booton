@@ -23,7 +23,7 @@ public class TransitionTest extends StyleTester {
         ValidatableStyle parsed = style(() -> {
             display.width(10, px);
 
-            transit().duration(1, s).whenHover(() -> {
+            transit().duration(1, s).when().hover().style(() -> {
                 display.width(20, px);
             });
         });

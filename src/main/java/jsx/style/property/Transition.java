@@ -12,6 +12,7 @@ package jsx.style.property;
 import static jsx.style.value.Unit.*;
 
 import jsx.style.PropertyDefinition;
+import jsx.style.SelectorDescriptor;
 import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
@@ -162,6 +163,21 @@ public class Transition extends PropertyDefinition<Transition> {
         return this;
     }
 
+    public SelectorDescriptor when() {
+        return new SelectorDescriptor(this::when);
+    }
+
+    /**
+     * <p>
+     * Declare class change effect.
+     * </p>
+     * 
+     * @param sub A style of this effect.
+     */
+    public void when(SelectorDescriptor selector, Style sub) {
+        when(selector.toString(), sub);
+    }
+
     /**
      * <p>
      * Declare class change effect.
@@ -193,61 +209,6 @@ public class Transition extends PropertyDefinition<Transition> {
      */
     public void whenWith(Style other, Style sub) {
         when("." + other.name() + "$", sub);
-    }
-
-    /**
-     * <p>
-     * Declare hover effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenHover(Style sub) {
-        when("$:hover", sub);
-    }
-
-    /**
-     * <p>
-     * Declare hover effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenParentHover(Style sub) {
-        when("*:hover>$", sub);
-    }
-
-    /**
-     * <p>
-     * Declare hover effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenParentHover(Style parent, Style sub) {
-        when("." + parent.name() + ":hover $", sub);
-    }
-
-    /**
-     * <p>
-     * Declare hover effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenSiblingHover(Style sub) {
-        when("*:hover~$", sub);
-    }
-
-    /**
-     * <p>
-     * Declare check effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenSiblingChecked(Style sub) {
-        when("*:checked~$", sub);
     }
 
     /**

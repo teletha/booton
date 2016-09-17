@@ -9,8 +9,6 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.StructureDescriptor.*;
-
 import javafx.beans.property.Property;
 import javafx.beans.property.SetProperty;
 
@@ -47,14 +45,5 @@ public class CheckBox<V> extends AbstractMarkedBox<CheckBox<V>, V> {
      */
     CheckBox(Property<Boolean> selection, V value, String label) {
         super("checkbox", selection, value, label, selection::getValue, event -> selection.setValue(!selection.getValue()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualizeMark() {
-        svg("rect", $.CheckBox, attr("x", 1), attr("y", 1), attr("width", 1790), attr("height", 1790), attr("rx", 256));
-        svg("polyline", $.CheckMark.of(isMarked.get()), attr("points", "512,896 768,1152 1280,640"));
     }
 }

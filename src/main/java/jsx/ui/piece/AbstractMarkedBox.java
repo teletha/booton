@@ -19,7 +19,6 @@ import java.util.function.Supplier;
 import javafx.beans.property.Property;
 
 import js.dom.UIEvent;
-import jsx.style.BinaryStyle;
 import jsx.style.value.Color;
 import jsx.style.value.Font;
 import jsx.style.value.Numeric;
@@ -29,9 +28,9 @@ import jsx.ui.Style;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
 
 /**
- * @version 2016/09/15 0:14:26
+ * @version 2016/09/17 9:17:06
  */
-public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> extends LowLevelWidget<Styles, T> {
+class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWidget<Styles, W> {
 
     /** The button type. */
     private final String type;
@@ -91,19 +90,11 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
     }
 
     /**
-     * <p>
-     * Vritualize the mark of this button.
-     * </p>
-     */
-    protected abstract void virtualizeMark();
-
-    /**
      * @version 2016/09/15 9:27:11
      */
-    public static class Styles extends PieceStyle {
+    static class Styles extends PieceStyle {
 
-        /** The mark size. */
-        public static Numeric markSize = new Numeric(14, Unit.px);
+        Numeric boxSize = new Numeric(14, Unit.px);
 
         Style Checked = () -> {
         };
@@ -117,74 +108,47 @@ public abstract class AbstractMarkedBox<T extends AbstractMarkedBox<T, V>, V> ex
 
         Style Input = () -> {
             display.none();
+
         };
 
         Style Label = () -> {
             display.block();
-            padding.left(markSize.add(8));
+            padding.left(boxSize.add(8));
             cursor.pointer();
 
+            // write outline box
             before(() -> {
                 content.text("");
-                display.inlineBlock().size(markSize);
-                position.absolute().left(0, px).top(0, px);
-                border.solid().width(BorderWidth).color(BorderColor).radius(BorderRadius);
+                display.inlineBlock().size(boxSize);
+                position.absolute().left(0, em).top(0, em);
+                border.solid().width(BorderWidth).color(BorderColor);
 
-                transit().duration(300, ms).whenSiblingChecked(() -> {
+                previous().attribute("type").match("checkbox").style(() -> {
+                    border.radius(BorderRadius);
+                });
+
+                previous().attribute("type").match("radio").style(() -> {
+                    border.radius(boxSize.divide(2));
+                });
+
+                transit().duration(300, ms).when(previous().checked(), () -> {
                     background.color("#337ab7");
                     border.color("#337ab7");
                 });
             });
 
+            // write check mark
             after(() -> {
                 content.text("\\f00c");
-                display.inlineBlock().size(markSize).opacity(0);
+                display.inlineBlock().size(boxSize).opacity(0);
                 position.absolute().left(0, px).top(0, px);
-                padding.left(2, px).top(2, px);
-                font.family(Font.Awesome).monospace().size(10, px).color(Color.White);
+                padding.top(2, px).left(2, px);
+                font.family(Font.Awesome).size(10, px).color(Color.White);
 
-                transit().duration(300, ms).whenSiblingChecked(() -> {
+                transit().duration(300, ms).when(previous().checked(), () -> {
                     display.opacity(1);
                 });
             });
-        };
-
-        Style SVG = () -> {
-            display.size(markSize);
-            position.centerVertically().left(0, px);
-            pointerEvents.none();
-        };
-
-        /** The box style. */
-        public Style RadioBox = () -> {
-            fill.color(Color.White);
-            stroke.color(BorderColor).width(BorderWidth);
-        };
-
-        /** The mark style. */
-        public Style RadioMark = () -> {
-            fill.color(BorderColor.lighten(5)).opacity(0);
-
-            transit().duration(300, ms).whenIn(Checked, () -> {
-                fill.opacity(1);
-            });
-        };
-
-        /** The box style. */
-        public Style CheckBox = () -> {
-            fill.color(Color.White);
-            stroke.color(BorderColor.lighten(-20)).width(BorderWidth).linecap.square().miterLimit(1);
-        };
-
-        /** The mark style. */
-        public BinaryStyle CheckMark = on -> {
-            fill.none();
-            stroke.color(BorderColor.lighten(-10)).width(2, px).linecap.square().miterLimit(1).opacity(0);
-            transit().duration(300, ms).whenever();
-
-            if (on) {
-                stroke.opacity(1);
-            }
         };
     }
 }

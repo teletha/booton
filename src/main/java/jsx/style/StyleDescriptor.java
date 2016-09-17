@@ -1008,92 +1008,16 @@ public class StyleDescriptor {
         PropertyDefinition.createSubRule("$>*", sub);
     }
 
-    /**
-     * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void parentHover(Style sub) {
-        PropertyDefinition.createSubRule("*:hover>$", sub);
+    protected static final SelectorDescriptor previous() {
+        return new SelectorDescriptor().prev();
     }
 
-    /**
-     * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     */
-    protected static final void ancestorHover(Style ancestor, Style sub) {
-        PropertyDefinition.createSubRule("." + ancestor.name() + ":hover $", sub);
+    protected static final SelectorDescriptor parent() {
+        return new SelectorDescriptor().parent();
     }
 
-    /**
-     * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void adjacentHover(Style sub) {
-        PropertyDefinition.createSubRule("*:hover+$", sub);
-    }
-
-    /**
-     * <p>
-     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
-     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
-     * toggled to an on state. The user can change this state by clicking on the element, or
-     * selecting a different value, in which case the :checked pseudo-class no longer applies to
-     * this element, but will to the relevant one.
-     * </p>
-     */
-    protected static final void adjacentChecked(Style sub) {
-        PropertyDefinition.createSubRule("input:checked+$", sub);
-    }
-
-    /**
-     * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void siblingHover(Style sub) {
-        PropertyDefinition.createSubRule("*:hover~$", sub);
-    }
-
-    /**
-     * <p>
-     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
-     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
-     * toggled to an on state. The user can change this state by clicking on the element, or
-     * selecting a different value, in which case the :checked pseudo-class no longer applies to
-     * this element, but will to the relevant one.
-     * </p>
-     */
-    protected static final void siblingChecked(Style sub) {
-        PropertyDefinition.createSubRule("input:checked~$", sub);
+    protected static final SelectorDescriptor ancestor() {
+        return new SelectorDescriptor().ancestor();
     }
 
     /**
