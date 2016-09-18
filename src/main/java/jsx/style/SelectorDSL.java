@@ -11,7 +11,7 @@ package jsx.style;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import jsx.ui.Style;
 import jsx.ui.flux.Location;
@@ -1159,7 +1159,9 @@ public abstract class SelectorDSL {
      */
     abstract SelectorDSL pseudo(boolean element, String name);
 
-    abstract void style(Style sub);
+    void style(Style sub) {
+
+    }
 
     /**
      * <p>
@@ -1169,18 +1171,14 @@ public abstract class SelectorDSL {
      * @param processor A style creation process.
      * @return A created selector builder.
      */
-    public static final SelectorDSL create(BiConsumer<String, Style> processor) {
-        Selector selector = new Selector();
-        selector.process = processor;
-        selector.selectors.add("$");
-
-        return selector;
+    public static final SelectorDSL create(Consumer<StyleRule> processor) {
+        return new Selector(processor).basic("$");
     }
 
     /**
-     * @version 2016/09/17 16:20:33
+     * @version 2016/09/18 19:22:49
      */
-    public class Attribute {
+    public final class Attribute {
 
         /** An attribute name. */
         private final String name;
@@ -1445,7 +1443,8 @@ public abstract class SelectorDSL {
         /** The child selector. */
         private Selector child;
 
-        private BiConsumer<String, Style> process;
+        /** The style creation processor. */
+        private final Consumer<StyleRule> processor;
 
         /** The simple selector list. */
         private List<CharSequence> selectors = new ArrayList();
@@ -1460,10 +1459,21 @@ public abstract class SelectorDSL {
         private List<CharSequence> pseudoClasses = new ArrayList();
 
         /**
+         * <p>
+         * Create new selector.
+         * </p>
+         * 
+         * @param processor
+         */
+        private Selector(Consumer<StyleRule> processor) {
+            this.processor = processor;
+        }
+
+        /**
          * {@inheritDoc}
          */
         @Override
-        SelectorDSL basic(String selector) {
+        final SelectorDSL basic(String selector) {
             selectors.add(selector);
 
             return this;
@@ -1480,7 +1490,7 @@ public abstract class SelectorDSL {
          */
         @Override
         final SelectorDSL combine(String type, boolean forward) {
-            Selector created = new Selector();
+            Selector created = new Selector(processor);
 
             if (forward) {
                 child = created;
@@ -1489,7 +1499,6 @@ public abstract class SelectorDSL {
             } else {
                 created.child = this;
                 created.combinator = type;
-                created.process = process;
             }
             return created;
         }
@@ -1516,8 +1525,12 @@ public abstract class SelectorDSL {
          * {@inheritDoc}
          */
         @Override
-        void style(Style sub) {
-            root.process.accept(root.write(), sub);
+        final void style(Style sub) {
+            StyleRule rule = PropertyDefinition.createSubRule(root.write(), sub);
+
+            if (root.processor != null) {
+                root.processor.accept(rule);
+            }
         }
 
         /**

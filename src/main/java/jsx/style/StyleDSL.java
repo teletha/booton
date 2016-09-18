@@ -540,7 +540,7 @@ public class StyleDSL extends SelectorDSL {
      */
     @Override
     final SelectorDSL combine(String type, boolean forward) {
-        return SelectorDSL.create(PropertyDefinition::createSubRule).combine(type, forward);
+        return SelectorDSL.create(null).combine(type, forward);
     }
 
     /**
@@ -548,7 +548,7 @@ public class StyleDSL extends SelectorDSL {
      */
     @Override
     final SelectorDSL basic(String selector) {
-        return SelectorDSL.create(PropertyDefinition::createSubRule).basic(selector);
+        return SelectorDSL.create(null).basic(selector);
     }
 
     /**
@@ -556,17 +556,7 @@ public class StyleDSL extends SelectorDSL {
      */
     @Override
     final SelectorDSL pseudo(boolean isElement, String name) {
-        return SelectorDSL.create(PropertyDefinition::createSubRule).pseudo(isElement, name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    final void style(Style sub) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+        return SelectorDSL.create(null).pseudo(isElement, name);
     }
 
     /**

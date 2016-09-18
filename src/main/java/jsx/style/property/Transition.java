@@ -13,10 +13,8 @@ import static jsx.style.value.Unit.*;
 
 import jsx.style.PropertyDefinition;
 import jsx.style.SelectorDSL;
-import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
-import jsx.ui.Style;
 
 /**
  * @version 2014/10/29 23:29:19
@@ -163,112 +161,25 @@ public class Transition extends PropertyDefinition<Transition> {
         return this;
     }
 
+    /**
+     * <p>
+     * Declare change effect.
+     * </p>
+     */
     public SelectorDSL when() {
-        return SelectorDSL.create(this::when);
+        return SelectorDSL.create(rule -> {
+            value("transition-property", join(rule.properties.keys(), v -> v));
+            value("transition-duration", join(rule.properties.keys(), v -> duration));
+            value("transition-delay", join(rule.properties.keys(), v -> delay));
+            value("transition-timing-function", join(rule.properties.keys(), v -> timing));
+        });
     }
 
     /**
      * <p>
-     * Declare class change effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void when(SelectorDSL selector, Style sub) {
-        when(selector.toString(), sub);
-    }
-
-    /**
-     * <p>
-     * Declare class change effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void when(Style other, Style sub) {
-        when("$." + other.name(), sub);
-    }
-
-    /**
-     * <p>
-     * Declare class change effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenIn(Style other, Style sub) {
-        when("." + other.name() + " $", sub);
-    }
-
-    /**
-     * <p>
-     * Declare class change effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenWith(Style other, Style sub) {
-        when("." + other.name() + "$", sub);
-    }
-
-    /**
-     * <p>
-     * Declare hover effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenAdjacentHover(Style sub) {
-        when("*:hover+$", sub);
-    }
-
-    /**
-     * <p>
-     * Declare active effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenActive(Style sub) {
-        when("$:active", sub);
-    }
-
-    /**
-     * <p>
-     * Declare focus effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenFocus(Style sub) {
-        when("$:focus", sub);
-    }
-
-    /**
-     * <p>
-     * Declare check effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenCheck(Style sub) {
-        when("$:checked", sub);
-    }
-
-    /**
-     * <p>
-     * Create transitable sub rule and parse it.
+     * Declare change effect.
      * </p>
      */
-    private void when(String selector, Style sub) {
-        StyleRule rule = createSubRule(selector, sub);
-
-        value("transition-property", join(rule.properties.keys(), v -> v));
-        value("transition-duration", join(rule.properties.keys(), v -> duration));
-        value("transition-delay", join(rule.properties.keys(), v -> delay));
-        value("transition-timing-function", join(rule.properties.keys(), v -> timing));
-    }
-
     public void whenever() {
         value("transition-property", "all");
         value("transition-duration", duration);
