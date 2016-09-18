@@ -14,14 +14,14 @@ import jsx.style.value.Color;
 import jsx.ui.Style;
 
 /**
- * @version 2015/05/24 18:00:10
+ * @version 2016/09/18 11:46:20
  */
 class BuiltinStyle extends StyleDescriptor {
 
     /**
      * Make text unselectable.
      */
-    static final Style unselectable = () -> {
+    Style unselectable = () -> {
         cursor.defaults();
 
         selection(() -> {

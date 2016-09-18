@@ -16,9 +16,10 @@ import jsx.style.value.Color;
 import jsx.style.value.Numeric;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
+import kiss.I;
 
 /**
- * @version 2014/10/28 17:56:14
+ * @version 2016/09/18 11:46:14
  */
 public class Text extends PropertyDefinition<Text> {
 
@@ -154,7 +155,7 @@ public class Text extends PropertyDefinition<Text> {
         value("-ms-user-select", "none");
         value("-webkit-user-select", "none");
 
-        BuiltinStyle.unselectable.style();
+        I.make(BuiltinStyle.class).unselectable.style();
 
         return this;
     }

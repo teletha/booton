@@ -57,6 +57,22 @@ public abstract class SelectorDSL {
      * selectors.
      * </p>
      * 
+     * @param location A search location.
+     * @param sub A sub style.
+     */
+    public final void ancestorIs(Location location, Style sub) {
+        ancestor().at(location).style(sub);
+    }
+
+    /**
+     * <p>
+     * A descendant combinator — typically represented by a single space ( ) character in the form
+     * of selector₁ selector₂ — combines two selectors such that elements matched by the second
+     * selector (selector₂) are selected if they have an ancestor element matching the first
+     * selector (selector₁). Selectors that utilize a descendant combinator are called descendant
+     * selectors.
+     * </p>
+     * 
      * @return Chainable API.
      */
     public final SelectorDSL descendant() {
@@ -106,6 +122,22 @@ public abstract class SelectorDSL {
      */
     public final void parent(Style sub) {
         parent().style(sub);
+    }
+
+    /**
+     * <p>
+     * The > combinator separates two selectors and matches only those elements matched by the
+     * second selector that are direct children of elements matched by the first. By contrast, when
+     * two selectors are combined with the descendant selector, the combined selector expression
+     * matches those elements matched by the second selector for which there exists an ancestor
+     * element matched by the first selector, regardless of the number of "hops" up the DOM.
+     * </p>
+     * 
+     * @param location A search location.
+     * @return Chainable API.
+     */
+    public final void parentIs(Location location, Style sub) {
+        parent().at(location).style(sub);
     }
 
     /**
@@ -186,10 +218,23 @@ public abstract class SelectorDSL {
      * specified element that immediately follows the former specified element.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void prev(Style sub) {
         prev().style(sub);
+    }
+
+    /**
+     * <p>
+     * This is referred to as an adjacent selector or next-sibling selector. It will select only the
+     * specified element that immediately follows the former specified element.
+     * </p>
+     * 
+     * @param location A search location.
+     * @param sub A sub style.
+     */
+    public final void prevIs(Location location, Style sub) {
+        prev().at(location).style(sub);
     }
 
     /**
@@ -277,11 +322,37 @@ public abstract class SelectorDSL {
 
     /**
      * <p>
+     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
+     * used to add cosmetic content to an element, by using the content CSS property. This element
+     * is inline by default.
+     * </p>
+     * 
+     * @param sub A sub style.
+     */
+    public final void after(Style sub) {
+        pseudo(true, "after").style(sub);
+    }
+
+    /**
+     * <p>
+     * The CSS ::before creates a pseudo-element that is the first child of the element matched. It
+     * is often used to add cosmetic content to an element by using the content property. This
+     * element is inline by default.
+     * </p>
+     * 
+     * @param sub A sub style.
+     */
+    public final void before(Style sub) {
+        pseudo(true, "before").style(sub);
+    }
+
+    /**
+     * <p>
      * The ::first-letter CSS pseudo-element selects the first letter of the first line of a block,
      * if it is not preceded by any other content (such as images or inline tables) on its line.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void firstLetter(Style sub) {
         pseudo(true, "first-letter").style(sub);
@@ -295,10 +366,31 @@ public abstract class SelectorDSL {
      * the selectors containing ::first-line does not match any real HTML element.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void firstLine(Style sub) {
         pseudo(true, "first-line").style(sub);
+    }
+
+    /**
+     * <p>
+     * The ::selection CSS pseudo-element applies rules to the portion of a document that has been
+     * highlighted (e.g., selected with the mouse or another pointing device) by the user.
+     * </p>
+     * <p>
+     * Only a small subset of CSS properties can be used in a rule using ::selection in its
+     * selector: color, background, background-color and text-shadow. Note that, in particular,
+     * background-image is ignored, like any other property.
+     * </p>
+     * 
+     * @param sub A sub style.
+     */
+    public final void selection(Style sub) {
+        // Gecko is the only engine requiring the prefix. Due to the fact that the CSS parsing rules
+        // require dropping the whole rule when encountering an invalid pseudo-element, two separate
+        // rules must be written: ::-moz-selection, ::selection {...}. The rule would be dropped on
+        // non-Gecko browsers as ::-moz-selection is invalid on them.
+        pseudo(true, Vendor.isMozilla ? "-moz-selection" : "selection").style(sub);
     }
 
     /**
@@ -1012,6 +1104,14 @@ public abstract class SelectorDSL {
     public abstract AttributeSelector attribute(String name);
 
     public abstract SelectorDSL at(Location location);
+
+    /**
+     * @param location A search location.
+     * @return Chainable API.
+     */
+    public final void at(Location location, Style sub) {
+        at(location).style(sub);
+    }
 
     /**
      * <p>

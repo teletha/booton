@@ -528,102 +528,12 @@ public class StyleDescriptor extends SelectorDSL {
 
     /**
      * <p>
-     * The negation CSS pseudo-class, :not(X), is a functional notation taking a simple selector X
-     * as an argument. It matches an element that is not represented by the argument. X must not
-     * contain another negation selector, or any pseudo-elements.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void before(Style sub) {
-        PropertyDefinition.createSubRule("$::before", sub);
-    }
-
-    /**
-     * <p>
-     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
-     * used to add cosmetic content to an element, by using the content CSS property. This element
-     * is inline by default.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void after(Style sub) {
-        PropertyDefinition.createSubRule("$::after", sub);
-    }
-
-    /**
-     * <p>
-     * The ::selection CSS pseudo-element applies rules to the portion of a document that has been
-     * highlighted (e.g., selected with the mouse or another pointing device) by the user.
-     * </p>
-     * <p>
-     * Only a small subset of CSS properties can be used in a rule using ::selection in its
-     * selector: color, background, background-color and text-shadow. Note that, in particular,
-     * background-image is ignored, like any other property.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void selection(Style sub) {
-        // Gecko is the only engine requiring the prefix. Due to the fact that the CSS parsing rules
-        // require dropping the whole rule when encountering an invalid pseudo-element, two separate
-        // rules must be written: ::-moz-selection, ::selection {...}. The rule would be dropped on
-        // non-Gecko browsers as ::-moz-selection is invalid on them.
-        if (Vendor.isMozilla) {
-            PropertyDefinition.createSubRule("$::-moz-selection", sub);
-        } else {
-            PropertyDefinition.createSubRule("$::selection", sub);
-        }
-    }
-
-    /**
-     * <p>
-     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
-     * used to add cosmetic content to an element, by using the content CSS property. This element
-     * is inline by default.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void inBackOf(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style.name() + "+$", sub);
-    }
-
-    /**
-     * <p>
-     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
-     * used to add cosmetic content to an element, by using the content CSS property. This element
-     * is inline by default.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void insideOf(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style.name() + " $", sub);
-    }
-
-    /**
-     * <p>
-     * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
-     * used to add cosmetic content to an element, by using the content CSS property. This element
-     * is inline by default.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void with(Style style, Style sub) {
-        PropertyDefinition.createSubRule("." + style.name() + "$", sub);
-    }
-
-    /**
-     * <p>
      * Create transitable style rule.
      * </p>
      * 
      * @return
      */
-    protected static final Transition transit() {
+    public static final Transition transit() {
         return new Transition();
     }
 
@@ -655,8 +565,8 @@ public class StyleDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    SelectorDSL pseudo(boolean element, String name) {
-        return new SelectorDescriptor().pseudo(false, name);
+    SelectorDSL pseudo(boolean isElement, String name) {
+        return new SelectorDescriptor().pseudo(isElement, name);
     }
 
     /**
@@ -676,7 +586,7 @@ public class StyleDescriptor extends SelectorDSL {
      * 
      * @param bubbleHeight
      */
-    protected static final void createBottomBubble(int bubbleHeight, Numeric borderWidth, Color borderColor, Color boxBackColor) {
+    protected final void createBottomBubble(int bubbleHeight, Numeric borderWidth, Color borderColor, Color boxBackColor) {
         if (!position.isAbsolute() && !position.isRelative()) {
             position.relative();
         }
@@ -715,7 +625,7 @@ public class StyleDescriptor extends SelectorDSL {
      * 
      * @param bubbleHeight
      */
-    protected static final void createTopBubble(int bubbleHeight, Numeric borderWidth, Color borderColor, Color boxBackColor) {
+    protected final void createTopBubble(int bubbleHeight, Numeric borderWidth, Color borderColor, Color boxBackColor) {
         if (!position.isAbsolute() && !position.isRelative()) {
             position.relative();
         }
