@@ -9,6 +9,10 @@
  */
 package jsx.style;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
+
 import jsx.ui.Style;
 import jsx.ui.flux.Location;
 
@@ -35,29 +39,6 @@ public abstract class SelectorDSL {
     }
 
     /**
-     * <p>
-     * In an HTML document, CSS class selectors match an element based on the contents of the
-     * element's class attribute.
-     * </p>
-     * 
-     * @param location A class location.
-     * @return Chainable API.
-     */
-    public abstract SelectorDSL with(Location location);
-
-    /**
-     * <p>
-     * In an HTML document, CSS class selectors match an element based on the contents of the
-     * element's class attribute.
-     * </p>
-     * 
-     * @param location A class location.
-     */
-    public final void with(Location location, Style sub) {
-        with(location).style(sub);
-    }
-
-    /**
      * Write attribute selector pattern.
      * 
      * @param name An attribute name.
@@ -66,7 +47,7 @@ public abstract class SelectorDSL {
      * @param caseSensitive A flag for case sensitive.
      * @return Chainable API.
      */
-    private SelectorDSL basicAttribute(String name, String operator, String value, boolean caseSensitive) {
+    private SelectorDSL attr(String name, String operator, String value, boolean caseSensitive) {
         StringBuilder builder = new StringBuilder();
         builder.append("[").append(name);
 
@@ -80,6 +61,31 @@ public abstract class SelectorDSL {
         builder.append("]");
 
         return basic(builder.toString());
+    }
+
+    /**
+     * <p>
+     * In an HTML document, CSS class selectors match an element based on the contents of the
+     * element's class attribute.
+     * </p>
+     * 
+     * @param location A class location.
+     * @return Chainable API.
+     */
+    public final SelectorDSL with(Location location) {
+        return basic("." + location.name());
+    }
+
+    /**
+     * <p>
+     * In an HTML document, CSS class selectors match an element based on the contents of the
+     * element's class attribute.
+     * </p>
+     * 
+     * @param location A class location.
+     */
+    public final void with(Location location, Style sub) {
+        with(location).style(sub);
     }
 
     /**
@@ -1189,7 +1195,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL exist() {
-            return basicAttribute(name, null, null, true);
+            return attr(name, null, null, true);
         }
 
         /**
@@ -1220,7 +1226,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL is(String value) {
-            return basicAttribute(name, "", value, true);
+            return attr(name, "", value, true);
         }
 
         /**
@@ -1253,7 +1259,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL isSpace(String value) {
-            return basicAttribute(name, "~", value, true);
+            return attr(name, "~", value, true);
         }
 
         /**
@@ -1288,7 +1294,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL isHyphen(String value) {
-            return basicAttribute(name, "|", value, true);
+            return attr(name, "|", value, true);
         }
 
         /**
@@ -1323,7 +1329,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL startsWith(String value) {
-            return basicAttribute(name, "^", value, true);
+            return attr(name, "^", value, true);
         }
 
         /**
@@ -1357,7 +1363,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL endsWith(String value) {
-            return basicAttribute(name, "$", value, true);
+            return attr(name, "$", value, true);
         }
 
         /**
@@ -1391,7 +1397,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL contains(String value) {
-            return basicAttribute(name, "*", value, true);
+            return attr(name, "*", value, true);
         }
 
         /**
@@ -1411,4 +1417,151 @@ public abstract class SelectorDSL {
             contains(value).style(sub);
         }
     }
+
+    /**
+     * @version 2016/09/17 16:18:29
+     */
+    public static class SelectorDescriptor extends SelectorDSL {
+
+        /** The root selector. */
+        private Selector root = new Selector();
+
+        /** The current selector. */
+        private Selector current = root;
+
+        private BiConsumer<String, Style> process;
+
+        /**
+         * <p>
+         * Create blank selector descriptor.
+         * </p>
+         */
+        SelectorDescriptor() {
+            this(PropertyDefinition::createSubRule);
+        }
+
+        /**
+         * @param object
+         */
+        public SelectorDescriptor(BiConsumer<String, Style> process) {
+            this.process = process;
+
+            root.selectors.add("$");
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        SelectorDSL basic(String selector) {
+            current.selectors.add(selector);
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Write combinator.
+         * </p>
+         * 
+         * @param type A combinator type.
+         * @param forward A direction.
+         * @return
+         */
+        @Override
+        final SelectorDescriptor combine(String type, boolean forward) {
+            Selector e = current;
+
+            if (forward) {
+                e.sub = current = new Selector();
+                e.combinator = type;
+            } else {
+                root = current = new Selector();
+                root.sub = e;
+                root.combinator = type;
+            }
+            return this;
+        }
+
+        /**
+         * <p>
+         * Write pseudo class.
+         * </p>
+         * 
+         * @param name A pseudo class name.
+         * @return Chainable API.
+         */
+        @Override
+        final SelectorDescriptor pseudo(boolean isElement, String name) {
+            if (isElement) {
+                current.pseudoElement = name;
+            } else {
+                current.pseudoClasses.add(name);
+            }
+            return this;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        void style(Style sub) {
+            process.accept(root.toString(), sub);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return root.toString();
+        }
+
+        /**
+         * @version 2016/09/18 10:57:14
+         */
+        private static class Selector {
+
+            /** The simple selector list. */
+            private List<CharSequence> selectors = new ArrayList();
+
+            /** The combinator. */
+            private String combinator;
+
+            /** The pseudo element. */
+            private String pseudoElement;
+
+            /** The pseudo class list. */
+            private List<CharSequence> pseudoClasses = new ArrayList();
+
+            /** The sub selector. */
+            private Selector sub;
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public String toString() {
+                StringBuilder builder = new StringBuilder();
+
+                for (CharSequence selector : selectors) {
+                    builder.append(selector);
+                }
+
+                for (CharSequence pseudo : pseudoClasses) {
+                    builder.append(":").append(pseudo);
+                }
+
+                if (pseudoElement != null) {
+                    builder.append("::").append(pseudoElement);
+                }
+
+                if (combinator != null) {
+                    builder.append(combinator).append(sub);
+                }
+                return builder.toString();
+            }
+        }
+    }
+
 }

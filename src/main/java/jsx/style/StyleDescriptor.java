@@ -40,7 +40,6 @@ import jsx.style.value.RadialGradient;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
 import jsx.ui.Style;
-import jsx.ui.flux.Location;
 import kiss.Manageable;
 import kiss.Singleton;
 
@@ -542,14 +541,6 @@ public class StyleDescriptor extends SelectorDSL {
     @Override
     final SelectorDSL combine(String type, boolean forward) {
         return new SelectorDescriptor().combine(type, forward);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    final public SelectorDSL with(Location location) {
-        return new SelectorDescriptor().with(location);
     }
 
     /**
