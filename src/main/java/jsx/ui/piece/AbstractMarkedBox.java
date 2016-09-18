@@ -123,11 +123,11 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
                 position.absolute().left(0, em).top(0, em);
                 border.solid().width(BorderWidth).color(BorderColor);
 
-                prev().attribute("type").match("checkbox", () -> {
+                prev().attr("type").is("checkbox", () -> {
                     border.radius(BorderRadius);
                 });
 
-                prev().attribute("type").match("radio", () -> {
+                prev().attr("type").is("radio", () -> {
                     border.radius(boxSize.divide(2));
                 });
 

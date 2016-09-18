@@ -11,7 +11,6 @@ package jsx.style;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import jsx.ui.Style;
@@ -62,8 +61,10 @@ public class SelectorDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    public AttributeSelector attribute(String name) {
-        return new AttributeSelector(Objects.requireNonNull(name));
+    SelectorDSL basic(String selector) {
+        element.selectors.add(selector);
+
+        return this;
     }
 
     /**
@@ -125,72 +126,9 @@ public class SelectorDescriptor extends SelectorDSL {
     }
 
     /**
-     * @version 2016/09/17 16:20:33
-     */
-    public class AttributeSelector {
-
-        private final StringBuilder selector = new StringBuilder();
-
-        /**
-         * @param name
-         */
-        private AttributeSelector(String name) {
-            selector.append("[").append(name);
-
-            element.selectors.add(selector);
-        }
-
-        public SelectorDescriptor has() {
-            selector.append("]");
-
-            return SelectorDescriptor.this;
-        }
-
-        public SelectorDescriptor match(String value) {
-            selector.append("=").append(value).append("]");
-
-            return SelectorDescriptor.this;
-        }
-
-        public void match(String value, Style sub) {
-            match(value).style(sub);
-        }
-
-        public SelectorDescriptor matchWithSpace(String value) {
-            selector.append("~=").append(value).append("]");
-
-            return SelectorDescriptor.this;
-        }
-
-        public SelectorDescriptor matchWithHyphen(String value) {
-            selector.append("|=").append(value).append("]");
-
-            return SelectorDescriptor.this;
-        }
-
-        public SelectorDescriptor startsWith(String value) {
-            selector.append("^=").append(value).append("]");
-
-            return SelectorDescriptor.this;
-        }
-
-        public SelectorDescriptor endsWith(String value) {
-            selector.append("$=").append(value).append("]");
-
-            return SelectorDescriptor.this;
-        }
-
-        public SelectorDescriptor contains(String value) {
-            selector.append("*=").append(value).append("]");
-
-            return SelectorDescriptor.this;
-        }
-    }
-
-    /**
      * @version 2016/09/18 10:57:14
      */
-    public static class Element {
+    private static class Element {
 
         List<CharSequence> selectors = new ArrayList();
 

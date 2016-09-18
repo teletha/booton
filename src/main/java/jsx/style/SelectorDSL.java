@@ -9,7 +9,6 @@
  */
 package jsx.style;
 
-import jsx.style.SelectorDescriptor.AttributeSelector;
 import jsx.ui.Style;
 import jsx.ui.flux.Location;
 
@@ -31,7 +30,9 @@ public abstract class SelectorDSL {
      * @param name An attribute name.
      * @return Chainable API.
      */
-    public abstract AttributeSelector attribute(String name);
+    public final Attribute attr(String name) {
+        return new Attribute(name);
+    }
 
     /**
      * <p>
@@ -55,6 +56,41 @@ public abstract class SelectorDSL {
     public final void with(Location location, Style sub) {
         with(location).style(sub);
     }
+
+    /**
+     * Write attribute selector pattern.
+     * 
+     * @param name An attribute name.
+     * @param operator A operator.
+     * @param value An attribute value.
+     * @param caseSensitive A flag for case sensitive.
+     * @return Chainable API.
+     */
+    private SelectorDSL basicAttribute(String name, String operator, String value, boolean caseSensitive) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[").append(name);
+
+        if (operator != null) {
+            builder.append(operator).append("=\"").append(value).append('"');
+        }
+
+        if (!caseSensitive) {
+            builder.append(" i");
+        }
+        builder.append("]");
+
+        return basic(builder.toString());
+    }
+
+    /**
+     * <p>
+     * Write basic selector.
+     * </p>
+     * 
+     * @param selector A selector expression.
+     * @return Chainable API.
+     */
+    abstract SelectorDSL basic(String selector);
 
     // ===============================================================
     // Combinators
@@ -424,7 +460,7 @@ public abstract class SelectorDSL {
      * limited to just those.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void active(Style sub) {
         active().style(sub);
@@ -454,7 +490,7 @@ public abstract class SelectorDSL {
      * this element, but will to the relevant one.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void checked(Style sub) {
         checked().style(sub);
@@ -492,7 +528,7 @@ public abstract class SelectorDSL {
      * element also has an enabled state, in which it can be activated or accept focus.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void disabled(Style sub) {
         disabled().style(sub);
@@ -518,7 +554,7 @@ public abstract class SelectorDSL {
      * not affect whether an element is considered empty or not.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void empty(Style sub) {
         empty().style(sub);
@@ -544,7 +580,7 @@ public abstract class SelectorDSL {
      * also has an disabled state, in which it can't be activated or accept focus.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void enabled(Style sub) {
         enabled().style(sub);
@@ -568,7 +604,7 @@ public abstract class SelectorDSL {
      * its parent.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void firstChild(Style sub) {
         firstChild().style(sub);
@@ -592,7 +628,7 @@ public abstract class SelectorDSL {
      * children of its parent element.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void firstOfType(Style sub) {
         firstType().style(sub);
@@ -618,7 +654,7 @@ public abstract class SelectorDSL {
      * input).
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void focus(Style sub) {
         focus().style(sub);
@@ -650,7 +686,7 @@ public abstract class SelectorDSL {
      * — :hover — :active.
      * </p>
      * 
-     * @param A sub style rule.
+     * @param sub A sub style.
      */
     public final void hover(Style sub) {
         hover().style(sub);
@@ -672,7 +708,7 @@ public abstract class SelectorDSL {
      * The :indeterminate CSS pseudo-class represents:
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void indeterminate(Style sub) {
         indeterminate().style(sub);
@@ -698,7 +734,7 @@ public abstract class SelectorDSL {
      * adopt an appearance that helps the user identify and correct errors.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void invalid(Style sub) {
         invalid().style(sub);
@@ -722,7 +758,7 @@ public abstract class SelectorDSL {
      * parent.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void lastChild(Style sub) {
         lastChild().style(sub);
@@ -746,7 +782,7 @@ public abstract class SelectorDSL {
      * children of its parent element.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void lastOfType(Style sub) {
         lastType().style(sub);
@@ -778,7 +814,7 @@ public abstract class SelectorDSL {
      * or right after :hover, depending on the expected effect.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void link(Style sub) {
         link().style(sub);
@@ -805,7 +841,7 @@ public abstract class SelectorDSL {
      * contain another negation selector.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void not(SelectorDSL selector, Style sub) {
         not(selector).style(sub);
@@ -832,7 +868,7 @@ public abstract class SelectorDSL {
      * contain another negation selector.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void not(Style selector, Style sub) {
         not(selector).style(sub);
@@ -856,7 +892,7 @@ public abstract class SelectorDSL {
      * document tree, for a given positive or zero value for n, and has a parent element.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void nthChild(String pattern, Style sub) {
         nthChild(pattern).style(sub);
@@ -882,7 +918,7 @@ public abstract class SelectorDSL {
      * :nth-child for a more thorough description of the syntax of its argument.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void nthLastChild(String pattern, Style sub) {
         nthLastChild(pattern).style(sub);
@@ -914,7 +950,7 @@ public abstract class SelectorDSL {
      * different tags appear before it.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void nthOfType(String pattern, Style sub) {
         nthOfType(pattern).style(sub);
@@ -942,7 +978,7 @@ public abstract class SelectorDSL {
      * argument.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void nthLastOfType(String pattern, Style sub) {
         nthLastOfType(pattern).style(sub);
@@ -968,7 +1004,7 @@ public abstract class SelectorDSL {
      * with a lower specificity.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void onlyChild(Style sub) {
         onlyChild().style(sub);
@@ -992,7 +1028,7 @@ public abstract class SelectorDSL {
      * type.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void onlyOfType(Style sub) {
         onlyOfType().style(sub);
@@ -1018,7 +1054,7 @@ public abstract class SelectorDSL {
      * accordingly.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void optional(Style sub) {
         optional().style(sub);
@@ -1044,7 +1080,7 @@ public abstract class SelectorDSL {
      * form can be submitted.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void required(Style sub) {
         required().style(sub);
@@ -1070,7 +1106,7 @@ public abstract class SelectorDSL {
      * adopt an appearance that helps the user confirm that their data is formatted properly.
      * </p>
      * 
-     * @return Chainable API.
+     * @param sub A sub style.
      */
     public final void valid(Style sub) {
         valid().style(sub);
@@ -1100,7 +1136,7 @@ public abstract class SelectorDSL {
      * LVHA-order: :link — :visited — :hover — :active.
      * </p>
      * 
-     * @return
+     * @param sub A sub style.
      */
     public final void visited(Style sub) {
         visited().style(sub);
@@ -1118,4 +1154,261 @@ public abstract class SelectorDSL {
     abstract SelectorDSL pseudo(boolean element, String name);
 
     abstract void style(Style sub);
+
+    /**
+     * @version 2016/09/17 16:20:33
+     */
+    public class Attribute {
+
+        /** An attribute name. */
+        private final String name;
+
+        /**
+         * <p>
+         * Create attribute selector builder.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        private Attribute(String name) {
+            if (name == null || name.equals("")) {
+                throw new IllegalArgumentException("Specify attribute name.");
+            }
+            this.name = name;
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public SelectorDSL exist() {
+            return basicAttribute(name, null, null, true);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name.
+         * </p>
+         * 
+         * @param sub A sub style.
+         */
+        public void exist(Style sub) {
+            exist().style(sub);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name.
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @return Chainable API.
+         */
+        public SelectorDSL is(String value) {
+            return basicAttribute(name, "", value, true);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name.
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @param sub A sub style.
+         */
+        public void is(String value, Style sub) {
+            is(value).style(sub);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr whose value is a
+         * whitespace-separated list of words, one of which is exactly "value".
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @return Chainable API.
+         */
+        public SelectorDSL isSpace(String value) {
+            return basicAttribute(name, "~", value, true);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr whose value is a
+         * whitespace-separated list of words, one of which is exactly "value".
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @param sub A sub style.
+         */
+        public void isSpace(String value, Style sub) {
+            isSpace(value).style(sub);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr. Its value can be exactly “value” or
+         * can begin with “value” immediately followed by “-” (U+002D). It can be used for language
+         * subcode matches.
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @return Chainable API.
+         */
+        public SelectorDSL isHyphen(String value) {
+            return basicAttribute(name, "|", value, true);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr. Its value can be exactly “value” or
+         * can begin with “value” immediately followed by “-” (U+002D). It can be used for language
+         * subcode matches.
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @param sub A sub style.
+         */
+        public void isHyphen(String value, Style sub) {
+            isHyphen(value).style(sub);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr and whose first value is prefixed by
+         * "value".
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @return Chainable API.
+         */
+        public SelectorDSL startsWith(String value) {
+            return basicAttribute(name, "^", value, true);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr and whose first value is prefixed by
+         * "value".
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @param sub A sub style.
+         */
+        public void startsWith(String value, Style sub) {
+            startsWith(value).style(sub);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr and whose last value is suffixed by
+         * "value".
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @return Chainable API.
+         */
+        public SelectorDSL endsWith(String value) {
+            return basicAttribute(name, "$", value, true);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr and whose last value is suffixed by
+         * "value".
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @param sub A sub style.
+         */
+        public void endsWith(String value, Style sub) {
+            endsWith(value).style(sub);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr and whose value contains at least
+         * one occurrence of string "value" as substring.
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @return Chainable API.
+         */
+        public SelectorDSL contains(String value) {
+            return basicAttribute(name, "*", value, true);
+        }
+
+        /**
+         * <p>
+         * Attribute selectors select an element using the presence of a given attribute or
+         * attribute value.
+         * </p>
+         * <p>
+         * Represents an element with an attribute name of attr and whose value contains at least
+         * one occurrence of string "value" as substring.
+         * </p>
+         * 
+         * @param value An attribute value.
+         * @param sub A sub style.
+         */
+        public void contains(String value, Style sub) {
+            contains(value).style(sub);
+        }
+    }
 }

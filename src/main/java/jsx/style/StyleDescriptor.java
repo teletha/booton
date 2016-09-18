@@ -11,7 +11,6 @@ package jsx.style;
 
 import static jsx.style.value.Color.*;
 
-import jsx.style.SelectorDescriptor.AttributeSelector;
 import jsx.style.property.Animation;
 import jsx.style.property.Appearance;
 import jsx.style.property.Background;
@@ -541,7 +540,7 @@ public class StyleDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    SelectorDSL combine(String type, boolean forward) {
+    final SelectorDSL combine(String type, boolean forward) {
         return new SelectorDescriptor().combine(type, forward);
     }
 
@@ -549,7 +548,7 @@ public class StyleDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    public SelectorDSL with(Location location) {
+    final public SelectorDSL with(Location location) {
         return new SelectorDescriptor().with(location);
     }
 
@@ -557,15 +556,15 @@ public class StyleDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    public AttributeSelector attribute(String name) {
-        return new SelectorDescriptor().attribute(name);
+    final SelectorDSL basic(String selector) {
+        return new SelectorDescriptor().basic(selector);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    SelectorDSL pseudo(boolean isElement, String name) {
+    final SelectorDSL pseudo(boolean isElement, String name) {
         return new SelectorDescriptor().pseudo(isElement, name);
     }
 
@@ -573,7 +572,7 @@ public class StyleDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    void style(Style sub) {
+    final void style(Style sub) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
         throw new Error();
