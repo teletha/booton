@@ -560,6 +560,14 @@ public class StyleDSL extends SelectorDSL {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    final void declare(Style style) {
+        SelectorDSL.create(null).declare(style);
+    }
+
+    /**
      * <p>
      * Apply bubble border box style.
      * </p>

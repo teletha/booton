@@ -85,7 +85,7 @@ public abstract class SelectorDSL {
      * @param location A class location.
      */
     public final void with(Location location, Style sub) {
-        with(location).style(sub);
+        with(location).declare(sub);
     }
 
     /**
@@ -129,7 +129,7 @@ public abstract class SelectorDSL {
      * @param A sub style rule.
      */
     public final void ancestor(Style sub) {
-        ancestor().style(sub);
+        ancestor().declare(sub);
     }
 
     /**
@@ -159,7 +159,7 @@ public abstract class SelectorDSL {
      * @return Chainable API.
      */
     public final void descendant(Style sub) {
-        descendant().style(sub);
+        descendant().declare(sub);
     }
 
     /**
@@ -189,7 +189,7 @@ public abstract class SelectorDSL {
      * @return Chainable API.
      */
     public final void parent(Style sub) {
-        parent().style(sub);
+        parent().declare(sub);
     }
 
     /**
@@ -219,7 +219,7 @@ public abstract class SelectorDSL {
      * @return Chainable API.
      */
     public final void child(Style sub) {
-        child().style(sub);
+        child().declare(sub);
     }
 
     /**
@@ -249,7 +249,7 @@ public abstract class SelectorDSL {
      * @return Chainable API.
      */
     public final void children(Style sub) {
-        children().style(sub);
+        children().declare(sub);
     }
 
     /**
@@ -273,7 +273,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void prev(Style sub) {
-        prev().style(sub);
+        prev().declare(sub);
     }
 
     /**
@@ -297,7 +297,7 @@ public abstract class SelectorDSL {
      * @return Chainable API.
      */
     public final void next(Style sub) {
-        next().style(sub);
+        next().declare(sub);
     }
 
     /**
@@ -321,7 +321,7 @@ public abstract class SelectorDSL {
      * @return Chainable API.
      */
     public final void prevs(Style sub) {
-        prevs().style(sub);
+        prevs().declare(sub);
     }
 
     /**
@@ -345,7 +345,7 @@ public abstract class SelectorDSL {
      * @return Chainable API.
      */
     public final void nexts(Style sub) {
-        nexts().style(sub);
+        nexts().declare(sub);
     }
 
     /**
@@ -373,7 +373,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void after(Style sub) {
-        pseudo(true, "after").style(sub);
+        pseudo(true, "after").declare(sub);
     }
 
     /**
@@ -386,7 +386,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void before(Style sub) {
-        pseudo(true, "before").style(sub);
+        pseudo(true, "before").declare(sub);
     }
 
     /**
@@ -398,7 +398,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void firstLetter(Style sub) {
-        pseudo(true, "first-letter").style(sub);
+        pseudo(true, "first-letter").declare(sub);
     }
 
     /**
@@ -412,7 +412,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void firstLine(Style sub) {
-        pseudo(true, "first-line").style(sub);
+        pseudo(true, "first-line").declare(sub);
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class SelectorDSL {
         // require dropping the whole rule when encountering an invalid pseudo-element, two separate
         // rules must be written: ::-moz-selection, ::selection {...}. The rule would be dropped on
         // non-Gecko browsers as ::-moz-selection is invalid on them.
-        pseudo(true, Vendor.isMozilla ? "-moz-selection" : "selection").style(sub);
+        pseudo(true, Vendor.isMozilla ? "-moz-selection" : "selection").declare(sub);
     }
 
     // ===============================================================
@@ -469,7 +469,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void active(Style sub) {
-        active().style(sub);
+        active().declare(sub);
     }
 
     /**
@@ -499,7 +499,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void checked(Style sub) {
-        checked().style(sub);
+        checked().declare(sub);
     }
 
     /**
@@ -537,7 +537,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void disabled(Style sub) {
-        disabled().style(sub);
+        disabled().declare(sub);
     }
 
     /**
@@ -563,7 +563,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void empty(Style sub) {
-        empty().style(sub);
+        empty().declare(sub);
     }
 
     /**
@@ -589,7 +589,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void enabled(Style sub) {
-        enabled().style(sub);
+        enabled().declare(sub);
     }
 
     /**
@@ -613,7 +613,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void firstChild(Style sub) {
-        firstChild().style(sub);
+        firstChild().declare(sub);
     }
 
     /**
@@ -637,7 +637,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void firstOfType(Style sub) {
-        firstType().style(sub);
+        firstType().declare(sub);
     }
 
     /**
@@ -663,7 +663,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void focus(Style sub) {
-        focus().style(sub);
+        focus().declare(sub);
     }
 
     /**
@@ -695,7 +695,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void hover(Style sub) {
-        hover().style(sub);
+        hover().declare(sub);
     }
 
     /**
@@ -717,7 +717,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void indeterminate(Style sub) {
-        indeterminate().style(sub);
+        indeterminate().declare(sub);
     }
 
     /**
@@ -743,7 +743,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void invalid(Style sub) {
-        invalid().style(sub);
+        invalid().declare(sub);
     }
 
     /**
@@ -767,7 +767,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void lastChild(Style sub) {
-        lastChild().style(sub);
+        lastChild().declare(sub);
     }
 
     /**
@@ -791,7 +791,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void lastOfType(Style sub) {
-        lastType().style(sub);
+        lastType().declare(sub);
     }
 
     /**
@@ -823,7 +823,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void link(Style sub) {
-        link().style(sub);
+        link().declare(sub);
     }
 
     /**
@@ -850,7 +850,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void not(SelectorDSL selector, Style sub) {
-        not(selector).style(sub);
+        not(selector).declare(sub);
     }
 
     /**
@@ -877,7 +877,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void not(Style selector, Style sub) {
-        not(selector).style(sub);
+        not(selector).declare(sub);
     }
 
     /**
@@ -901,7 +901,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void nthChild(String pattern, Style sub) {
-        nthChild(pattern).style(sub);
+        nthChild(pattern).declare(sub);
     }
 
     /**
@@ -927,7 +927,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void nthLastChild(String pattern, Style sub) {
-        nthLastChild(pattern).style(sub);
+        nthLastChild(pattern).declare(sub);
     }
 
     /**
@@ -959,7 +959,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void nthOfType(String pattern, Style sub) {
-        nthOfType(pattern).style(sub);
+        nthOfType(pattern).declare(sub);
     }
 
     /**
@@ -987,7 +987,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void nthLastOfType(String pattern, Style sub) {
-        nthLastOfType(pattern).style(sub);
+        nthLastOfType(pattern).declare(sub);
     }
 
     /**
@@ -1013,7 +1013,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void onlyChild(Style sub) {
-        onlyChild().style(sub);
+        onlyChild().declare(sub);
     }
 
     /**
@@ -1037,7 +1037,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void onlyOfType(Style sub) {
-        onlyOfType().style(sub);
+        onlyOfType().declare(sub);
     }
 
     /**
@@ -1063,7 +1063,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void optional(Style sub) {
-        optional().style(sub);
+        optional().declare(sub);
     }
 
     /**
@@ -1089,7 +1089,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void required(Style sub) {
-        required().style(sub);
+        required().declare(sub);
     }
 
     /**
@@ -1115,7 +1115,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void valid(Style sub) {
-        valid().style(sub);
+        valid().declare(sub);
     }
 
     /**
@@ -1145,7 +1145,7 @@ public abstract class SelectorDSL {
      * @param sub A sub style.
      */
     public final void visited(Style sub) {
-        visited().style(sub);
+        visited().declare(sub);
     }
 
     /**
@@ -1159,9 +1159,14 @@ public abstract class SelectorDSL {
      */
     abstract SelectorDSL pseudo(boolean element, String name);
 
-    void style(Style sub) {
-
-    }
+    /**
+     * <p>
+     * Declare the specified new style with this selector expression.
+     * </p>
+     * 
+     * @param style A style declaration.
+     */
+    abstract void declare(Style style);
 
     /**
      * <p>
@@ -1224,7 +1229,7 @@ public abstract class SelectorDSL {
          * @param sub A sub style.
          */
         public void exist(Style sub) {
-            exist().style(sub);
+            exist().declare(sub);
         }
 
         /**
@@ -1256,7 +1261,7 @@ public abstract class SelectorDSL {
          * @param sub A sub style.
          */
         public void is(String value, Style sub) {
-            is(value).style(sub);
+            is(value).declare(sub);
         }
 
         /**
@@ -1290,7 +1295,7 @@ public abstract class SelectorDSL {
          * @param sub A sub style.
          */
         public void isSpace(String value, Style sub) {
-            isSpace(value).style(sub);
+            isSpace(value).declare(sub);
         }
 
         /**
@@ -1326,7 +1331,7 @@ public abstract class SelectorDSL {
          * @param sub A sub style.
          */
         public void isHyphen(String value, Style sub) {
-            isHyphen(value).style(sub);
+            isHyphen(value).declare(sub);
         }
 
         /**
@@ -1360,7 +1365,7 @@ public abstract class SelectorDSL {
          * @param sub A sub style.
          */
         public void startsWith(String value, Style sub) {
-            startsWith(value).style(sub);
+            startsWith(value).declare(sub);
         }
 
         /**
@@ -1394,7 +1399,7 @@ public abstract class SelectorDSL {
          * @param sub A sub style.
          */
         public void endsWith(String value, Style sub) {
-            endsWith(value).style(sub);
+            endsWith(value).declare(sub);
         }
 
         /**
@@ -1428,7 +1433,7 @@ public abstract class SelectorDSL {
          * @param sub A sub style.
          */
         public void contains(String value, Style sub) {
-            contains(value).style(sub);
+            contains(value).declare(sub);
         }
     }
 
@@ -1525,8 +1530,8 @@ public abstract class SelectorDSL {
          * {@inheritDoc}
          */
         @Override
-        final void style(Style sub) {
-            StyleRule rule = PropertyDefinition.createSubRule(root.write(), sub);
+        final void declare(Style style) {
+            StyleRule rule = PropertyDefinition.createSubRule(root.write(), style);
 
             if (root.processor != null) {
                 root.processor.accept(rule);
