@@ -21,7 +21,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void rotate() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.rotate(10, deg);
         });
 
@@ -31,7 +31,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void rotateX() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.rotateX(10, deg);
         });
 
@@ -41,7 +41,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void rotateY() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.rotateY(10, deg);
         });
 
@@ -51,7 +51,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void rotateZ() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.rotateZ(10, deg);
         });
 
@@ -61,7 +61,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void translate() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.translate(10, px);
         });
 
@@ -71,7 +71,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void translateX() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.translateX(10, px);
         });
 
@@ -81,7 +81,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void translateY() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.translateY(10, px);
         });
 
@@ -91,7 +91,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void translateZ() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.translateZ(10, px);
         });
 
@@ -101,7 +101,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void scale1() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.scale(10);
         });
 
@@ -111,7 +111,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void scale2() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.scale(10, 5);
         });
 
@@ -121,7 +121,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void scaleX() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.scaleX(10);
         });
 
@@ -131,7 +131,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void scaleY() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.scaleY(10);
         });
 
@@ -141,7 +141,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void scaleZ() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.scaleZ(10);
         });
 
@@ -151,7 +151,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void skew() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.skew(10, deg);
         });
 
@@ -161,7 +161,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void skewX() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.skewX(10, deg);
         });
 
@@ -171,7 +171,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void skewY() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.skewY(10, deg);
         });
 
@@ -181,7 +181,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void multi() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             transform.scale(1).skew(2, px);
         });
         assert parsed.property("-webkit-transform", "scale(1) skew(2px)");
@@ -190,7 +190,7 @@ public class TransformTest extends StyleTester {
 
     @Test
     public void calc() {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.translate(new Numeric(1, px).add(new Numeric(2, em)));
         });
 

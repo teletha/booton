@@ -20,7 +20,7 @@ public class OpacityTest extends StyleTester {
 
     @Test
     public void point() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.opacity(0.5);
         });
 
@@ -29,7 +29,7 @@ public class OpacityTest extends StyleTester {
 
     @Test
     public void one() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.opacity(1);
         });
 
@@ -38,7 +38,7 @@ public class OpacityTest extends StyleTester {
 
     @Test
     public void zero() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.opacity(0);
         });
 

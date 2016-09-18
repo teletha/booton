@@ -20,10 +20,10 @@ public class TransitionTest extends StyleTester {
 
     @Test
     public void transition() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             display.width(10, px);
 
-            transit().duration(1, s).when().hover().style(() -> {
+            transit().duration(1, s).when().hover(() -> {
                 display.width(20, px);
             });
         });

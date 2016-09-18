@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:13:06
@@ -20,7 +20,7 @@ public class FlexAlignContentTest extends StyleTester {
 
     @Test
     public void start() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().alignContent.start();
         });
 
@@ -30,7 +30,7 @@ public class FlexAlignContentTest extends StyleTester {
 
     @Test
     public void end() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().alignContent.end();
         });
 
@@ -40,7 +40,7 @@ public class FlexAlignContentTest extends StyleTester {
 
     @Test
     public void center() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().alignContent.center();
         });
 
@@ -50,7 +50,7 @@ public class FlexAlignContentTest extends StyleTester {
 
     @Test
     public void spaceAround() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().alignContent.spaceAround();
         });
 
@@ -60,7 +60,7 @@ public class FlexAlignContentTest extends StyleTester {
 
     @Test
     public void spaceBetween() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().alignContent.spaceBetween();
         });
 
@@ -70,7 +70,7 @@ public class FlexAlignContentTest extends StyleTester {
 
     @Test
     public void stretch() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().alignContent.stretch();
         });
 

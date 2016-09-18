@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:26:53
@@ -20,7 +20,7 @@ public class FlexItemTest extends StyleTester {
 
     @Test
     public void grow() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             flexItem.grow(2);
         });
 
@@ -30,7 +30,7 @@ public class FlexItemTest extends StyleTester {
 
     @Test
     public void shrink() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             flexItem.shrink(2);
         });
 
@@ -40,7 +40,7 @@ public class FlexItemTest extends StyleTester {
 
     @Test
     public void order() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             flexItem.order(2);
         });
 

@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 14:24:48
@@ -20,17 +20,17 @@ public class CursorTest extends StyleTester {
 
     @Test
     public void rgb() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             cursor.help();
         });
         assert parsed.property("cursor", "help");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             cursor.alias();
         });
         assert parsed.property("cursor", "alias");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             cursor.copy();
         });
         assert parsed.property("cursor", "copy");

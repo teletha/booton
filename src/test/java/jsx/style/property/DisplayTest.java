@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 15:56:01
@@ -20,7 +20,7 @@ public class DisplayTest extends StyleTester {
 
     @Test
     public void block() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.block();
         });
         assert style.property("display", "block");
@@ -28,7 +28,7 @@ public class DisplayTest extends StyleTester {
 
     @Test
     public void inline() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.inline();
         });
         assert style.property("display", "inline");
@@ -36,7 +36,7 @@ public class DisplayTest extends StyleTester {
 
     @Test
     public void inlineBlock() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.inlineBlock();
         });
         assert style.property("display", "inline-block");
@@ -44,7 +44,7 @@ public class DisplayTest extends StyleTester {
 
     @Test
     public void flex() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex();
         });
         assert style.property("display", "flex", "-webkit-flex");
@@ -52,7 +52,7 @@ public class DisplayTest extends StyleTester {
 
     @Test
     public void inlineFlex() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.inlineFlex();
         });
         assert style.property("display", "inline-flex", "-webkit-inline-flex");

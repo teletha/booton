@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:43:44
@@ -20,7 +20,7 @@ public class OverflowTest extends StyleTester {
 
     @Test
     public void normal() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             overflow.hidden();
         });
         assert style.property("overflow", "hidden");
@@ -28,7 +28,7 @@ public class OverflowTest extends StyleTester {
 
     @Test
     public void x() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             overflow.x.scroll();
         });
 
@@ -37,7 +37,7 @@ public class OverflowTest extends StyleTester {
 
     @Test
     public void y() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             overflow.y.visible();
         });
 
@@ -46,7 +46,7 @@ public class OverflowTest extends StyleTester {
 
     @Test
     public void xy() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             overflow.x.auto().y.hidden();
         });
 

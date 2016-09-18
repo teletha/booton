@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 15:24:30
@@ -20,17 +20,17 @@ public class VisibilityTest extends StyleTester {
 
     @Test
     public void visibility() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             visibility.collapse();
         });
         assert parsed.property("visibility", "collapse");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             visibility.hidden();
         });
         assert parsed.property("visibility", "hidden");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             visibility.visible();
         });
         assert parsed.property("visibility", "visible");

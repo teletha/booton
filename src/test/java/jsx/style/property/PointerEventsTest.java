@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 14:37:14
@@ -20,7 +20,7 @@ public class PointerEventsTest extends StyleTester {
 
     @Test
     public void none() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             pointerEvents.none();
         });
         assert parsed.property("pointer-events", "none");

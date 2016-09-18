@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 14:41:06
@@ -20,7 +20,7 @@ public class PositionTest extends StyleTester {
 
     @Test
     public void relative() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             position.relative();
 
             assert position.isRelative() == true;
@@ -31,7 +31,7 @@ public class PositionTest extends StyleTester {
 
     @Test
     public void absolute() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             position.absolute();
 
             assert position.isRelative() == false;
@@ -42,7 +42,7 @@ public class PositionTest extends StyleTester {
 
     @Test
     public void fixed() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             position.fixed();
 
             assert position.isRelative() == false;
@@ -53,7 +53,7 @@ public class PositionTest extends StyleTester {
 
     @Test
     public void position() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             position.top(1, px).right(2, px).bottom(3, px).left(4, px);
         });
         assert parsed.property("top", "1px");

@@ -20,7 +20,7 @@ import jsx.ui.flux.Location;
 /**
  * @version 2016/09/17 16:18:29
  */
-public class SelectorDescriptor {
+public class SelectorDescriptor extends SelectorDSL {
 
     /** The root element. */
     private Element root = new Element();
@@ -48,122 +48,22 @@ public class SelectorDescriptor {
         root.selectors.add("$");
     }
 
-    public SelectorDescriptor at(Location location) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SelectorDSL at(Location location) {
         element.selectors.add("." + location.name());
 
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public AttributeSelector attribute(String name) {
         return new AttributeSelector(Objects.requireNonNull(name));
-    }
-
-    /**
-     * <p>
-     * A descendant combinator — typically represented by a single space ( ) character in the form
-     * of selector₁ selector₂ — combines two selectors such that elements matched by the second
-     * selector (selector₂) are selected if they have an ancestor element matching the first
-     * selector (selector₁). Selectors that utilize a descendant combinator are called descendant
-     * selectors.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor ancestor() {
-        return combine(" ", false);
-    }
-
-    /**
-     * <p>
-     * A descendant combinator — typically represented by a single space ( ) character in the form
-     * of selector₁ selector₂ — combines two selectors such that elements matched by the second
-     * selector (selector₂) are selected if they have an ancestor element matching the first
-     * selector (selector₁). Selectors that utilize a descendant combinator are called descendant
-     * selectors.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor descendant() {
-        return combine(" ", true);
-    }
-
-    /**
-     * <p>
-     * The > combinator separates two selectors and matches only those elements matched by the
-     * second selector that are direct children of elements matched by the first. By contrast, when
-     * two selectors are combined with the descendant selector, the combined selector expression
-     * matches those elements matched by the second selector for which there exists an ancestor
-     * element matched by the first selector, regardless of the number of "hops" up the DOM.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor parent() {
-        return combine(">", false);
-    }
-
-    /**
-     * <p>
-     * The > combinator separates two selectors and matches only those elements matched by the
-     * second selector that are direct children of elements matched by the first. By contrast, when
-     * two selectors are combined with the descendant selector, the combined selector expression
-     * matches those elements matched by the second selector for which there exists an ancestor
-     * element matched by the first selector, regardless of the number of "hops" up the DOM.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor child() {
-        return combine(">", true);
-    }
-
-    /**
-     * <p>
-     * This is referred to as an adjacent selector or next-sibling selector. It will select only the
-     * specified element that immediately follows the former specified element.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor prev() {
-        return combine("+", false);
-    }
-
-    /**
-     * <p>
-     * This is referred to as an adjacent selector or next-sibling selector. It will select only the
-     * specified element that immediately follows the former specified element.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor next() {
-        return combine("+", true);
-    }
-
-    /**
-     * <p>
-     * This is referred to as an adjacent selector or next-sibling selector. It will select only the
-     * specified element that immediately follows the former specified element.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor prevs() {
-        return combine("~", false);
-    }
-
-    /**
-     * <p>
-     * This is referred to as an adjacent selector or next-sibling selector. It will select only the
-     * specified element that immediately follows the former specified element.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor nexts() {
-        return combine("~", true);
     }
 
     /**
@@ -175,7 +75,8 @@ public class SelectorDescriptor {
      * @param forward A direction.
      * @return
      */
-    private SelectorDescriptor combine(String type, boolean forward) {
+    @Override
+    final SelectorDescriptor combine(String type, boolean forward) {
         Element e = element;
 
         if (forward) {
@@ -191,49 +92,27 @@ public class SelectorDescriptor {
 
     /**
      * <p>
-     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
-     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
-     * toggled to an on state. The user can change this state by clicking on the element, or
-     * selecting a different value, in which case the :checked pseudo-class no longer applies to
-     * this element, but will to the relevant one.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor checked() {
-        return clazz("checked");
-    }
-
-    /**
-     * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public SelectorDescriptor hover() {
-        return clazz("hover");
-    }
-
-    /**
-     * <p>
      * Write pseudo class.
      * </p>
      * 
-     * @param clazz A pseudo class name.
+     * @param name A pseudo class name.
      * @return Chainable API.
      */
-    private SelectorDescriptor clazz(String clazz) {
-        element.pseudoClasses.add(clazz);
+    @Override
+    final SelectorDescriptor pseudo(boolean isElement, String name) {
+        if (isElement) {
+            element.pseudoElement = name;
+        } else {
+            element.pseudoClasses.add(name);
+        }
         return this;
     }
 
-    public void style(Style sub) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    void style(Style sub) {
         process.accept(root.toString(), sub);
     }
 
@@ -273,6 +152,10 @@ public class SelectorDescriptor {
             return SelectorDescriptor.this;
         }
 
+        public void match(String value, Style sub) {
+            match(value).style(sub);
+        }
+
         public SelectorDescriptor matchWithSpace(String value) {
             selector.append("~=").append(value).append("]");
 
@@ -304,11 +187,16 @@ public class SelectorDescriptor {
         }
     }
 
-    private static class Element {
+    /**
+     * @version 2016/09/18 10:57:14
+     */
+    public static class Element {
 
         List<CharSequence> selectors = new ArrayList();
 
         String combinator;
+
+        String pseudoElement;
 
         List<CharSequence> pseudoClasses = new ArrayList();
 
@@ -329,22 +217,14 @@ public class SelectorDescriptor {
                 builder.append(":").append(pseudo);
             }
 
+            if (pseudoElement != null) {
+                builder.append("::").append(pseudoElement);
+            }
+
             if (combinator != null) {
                 builder.append(combinator).append(sub);
             }
             return builder.toString();
         }
-    }
-
-    private static class Combinator {
-
-    }
-
-    private static class PseudoClass {
-
-    }
-
-    private static class PseudoElement {
-
     }
 }

@@ -15,13 +15,13 @@ import jsx.style.StyleTester;
 import jsx.style.value.Font;
 
 /**
- * @version 2014/11/13 14:26:07
+ * @version 2016/09/18 11:03:33
  */
 public class FontTest extends StyleTester {
 
     @Test
     public void rgb() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             font.color(255, 0, 0);
         });
         assert parsed.property("color", "rgb(255,0,0)");
@@ -29,7 +29,7 @@ public class FontTest extends StyleTester {
 
     @Test
     public void family() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             font.family("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600", Font.Serif);
         });
         assert parsed.property("font-family", "\"Source Sans Pro\",serif");

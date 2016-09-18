@@ -11,11 +11,11 @@ package jsx.style;
 
 import static jsx.style.value.Color.*;
 
+import jsx.style.SelectorDescriptor.AttributeSelector;
 import jsx.style.property.Animation;
 import jsx.style.property.Appearance;
 import jsx.style.property.Background;
 import jsx.style.property.Borders;
-import jsx.style.property.Box;
 import jsx.style.property.BoxLength;
 import jsx.style.property.Content;
 import jsx.style.property.Cursor;
@@ -41,6 +41,7 @@ import jsx.style.value.RadialGradient;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
 import jsx.ui.Style;
+import jsx.ui.flux.Location;
 import kiss.Manageable;
 import kiss.Singleton;
 
@@ -48,7 +49,7 @@ import kiss.Singleton;
  * @version 2014/10/25 11:22:51
  */
 @Manageable(lifestyle = Singleton.class)
-public class StyleDescriptor {
+public class StyleDescriptor extends SelectorDSL {
 
     /**
      * <p>
@@ -179,13 +180,6 @@ public class StyleDescriptor {
      * </p>
      */
     public static final Appearance appearance = new Appearance();
-
-    /**
-     * <p>
-     * The width, height and box-sizing property.
-     * </p>
-     */
-    public static final Box box = new Box();
 
     /**
      * <p>
@@ -376,21 +370,21 @@ public class StyleDescriptor {
     public static final Visibility visibility = new Visibility();
 
     /** The built-in style. */
-    public static Style NBox = () -> {
+    public final Style NBox = () -> {
     };
 
     /** The built-in style. */
-    public static Style HBox = () -> {
+    public final Style HBox = () -> {
         display.flex();
     };
 
     /** The built-in style. */
-    public static Style VBox = () -> {
+    public final Style VBox = () -> {
         display.flex().direction.column();
     };
 
     /** The built-in style. */
-    public static Style SBox = () -> {
+    public final Style SBox = () -> {
         position.relative();
 
         children(() -> {
@@ -534,401 +528,6 @@ public class StyleDescriptor {
 
     /**
      * <p>
-     * The :active CSS pseudo-class matches when an element is being activated by the user. It
-     * allows the page to give a feedback that the activation has been detected by the browser. When
-     * interacting with a mouse, this is typically the time between the user presses the mouse
-     * button and releases it. The :active pseudo-class is also typically matched when using the
-     * keyboard tab key. It is frequently used on <a> and <button> HTML elements, but may not be
-     * limited to just those.
-     * </p>
-     * <p>
-     * This style may be overridden by any other link-related pseudo-classes, that is :link, :hover,
-     * and :visited, appearing in subsequent rules. In order to style appropriately links, you need
-     * to put the :active rule after all the other link-related rules, as defined by the LVHA-order:
-     * :link — :visited — :hover — :active.
-     * </p>
-     */
-    protected static final void active(Style sub) {
-        PropertyDefinition.createSubRule("$:active", sub);
-    }
-
-    /**
-     * <p>
-     * The :checked CSS pseudo-class selector represents any radio (<input type="radio">), checkbox
-     * (<input type="checkbox">) or option (<option> in a <select>) element that is checked or
-     * toggled to an on state. The user can change this state by clicking on the element, or
-     * selecting a different value, in which case the :checked pseudo-class no longer applies to
-     * this element, but will to the relevant one.
-     * </p>
-     */
-    protected static final void checked(Style sub) {
-        PropertyDefinition.createSubRule("$:checked", sub);
-    }
-
-    /**
-     * <p>
-     * The :focus CSS pseudo-class is applied when a element has received focus, either from the
-     * user selecting it with the use of a keyboard or by activating with the mouse (e.g. a form
-     * input).
-     * </p>
-     */
-    protected static final void focus(Style sub) {
-        PropertyDefinition.createSubRule("$:focus", sub);
-    }
-
-    /**
-     * <p>
-     * The :hover CSS pseudo-class matches when the user designates an element with a pointing
-     * device, but does not necessarily activate it. This style may be overridden by any other
-     * link-related pseudo-classes, that is :link, :visited, and :active, appearing in subsequent
-     * rules. In order to style appropriately links, you need to put the :hover rule after the :link
-     * and :visited rules but before the :active one, as defined by the LVHA-order: :link — :visited
-     * — :hover — :active.
-     * </p>
-     */
-    protected static final void hover(Style sub) {
-        PropertyDefinition.createSubRule("$:hover", sub);
-    }
-
-    /**
-     * <p>
-     * The :link CSS pseudo-class lets you select links inside elements. This will select any link,
-     * even those already styled using selector with other link-related pseudo-classes like :hover,
-     * :active or :visited. In order to style only non-visited links, you need to put the :link rule
-     * before the other ones, as defined by the LVHA-order: :link — :visited — :hover — :active. The
-     * :focus pseudo-class is usually placed right before or right after :hover, depending of the
-     * expected effect.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void link(Style sub) {
-        PropertyDefinition.createSubRule("$:link", sub);
-    }
-
-    /**
-     * <p>
-     * The :visited CSS pseudo-class lets you select only links that have been visited. This style
-     * may be overridden by any other link-related pseudo-classes, that is :link, :hover, and
-     * :active, appearing in subsequent rules. In order to style appropriately links, you need to
-     * put the :visited rule after the :link rule but before the other ones, defined in the
-     * LVHA-order: :link — :visited — :hover — :active.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void visited(Style sub) {
-        PropertyDefinition.createSubRule("$:visited", sub);
-    }
-
-    /**
-     * <p>
-     * The :enabled CSS pseudo-class represents any enabled element. An element is enabled if it can
-     * be activated (e.g. selected, clicked on or accept text input) or accept focus. The element
-     * also has an disabled state, in which it can't be activated or accept focus.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void enabled(Style sub) {
-        PropertyDefinition.createSubRule("$:enabled", sub);
-    }
-
-    /**
-     * <p>
-     * The :disabled CSS pseudo-class represents any disabled element. An element is disabled if it
-     * can't be activated (e.g. selected, clicked on or accept text input) or accept focus. The
-     * element also has an enabled state, in which it can be activated or accept focus.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void disabled(Style sub) {
-        PropertyDefinition.createSubRule("$:disabled", sub);
-    }
-
-    /**
-     * <p>
-     * The :indeterminate CSS pseudo-class represents any <input type="checkbox"> element whose
-     * indeterminate DOM property is set to true by JavaScript. In addition, in some browsers, it
-     * can be used to match to <progress> elements in an indeterminate state.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void indeterminate(Style sub) {
-        PropertyDefinition.createSubRule("$:indeterminate", sub);
-    }
-
-    /**
-     * <p>
-     * The :required CSS pseudo-class represents any <input> element that has the required attribute
-     * set on it. This allows forms to easily indicate which fields must have valid data before the
-     * form can be submitted.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void required(Style sub) {
-        PropertyDefinition.createSubRule("$:required", sub);
-    }
-
-    /**
-     * <p>
-     * The :optional CSS pseudo-class represents any <input> element that does not have the required
-     * attribute set on it. This allows forms to easily indicate optional fields, and to style them
-     * accordingly.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void optional(Style sub) {
-        PropertyDefinition.createSubRule("$:optional", sub);
-    }
-
-    /**
-     * <p>
-     * The :valid CSS pseudo-class represents any <input> element whose content validates correctly
-     * according to the input's type setting. This allows to easily make valid fields adopt an
-     * appearance that helps the user confirm that their data is formatted properly.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void valid(Style sub) {
-        PropertyDefinition.createSubRule("$:valid", sub);
-    }
-
-    /**
-     * <p>
-     * The :invalid CSS pseudo-class represents any <input> or <form> element whose content fails to
-     * validate according to the input's type setting. This allows you to easily have invalid fields
-     * adopt an appearance that helps the user identify and correct errors.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void invalid(Style sub) {
-        PropertyDefinition.createSubRule("$:invalid", sub);
-    }
-
-    /**
-     * <p>
-     * The :first-child CSS pseudo-class represents any element that is the first child element of
-     * its parent.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void firstChild(Style sub) {
-        PropertyDefinition.createSubRule("$:first-child", sub);
-    }
-
-    /**
-     * <p>
-     * The :not(:first-child) CSS pseudo-class represents any element that is NOT the first child
-     * element of its parent.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void notFirstChild(Style sub) {
-        PropertyDefinition.createSubRule("$:not(:first-child)", sub);
-    }
-
-    /**
-     * <p>
-     * The :first-of-type CSS pseudo-class represents the first sibling of its type in the list of
-     * children of its parent element.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void firstOfType(Style sub) {
-        PropertyDefinition.createSubRule("$:first-of-type", sub);
-    }
-
-    /**
-     * <p>
-     * The :last-child CSS pseudo-class represents any element that is the last child element of its
-     * parent.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void lastChild(Style sub) {
-        PropertyDefinition.createSubRule("$:last-child", sub);
-    }
-
-    /**
-     * <p>
-     * The :not(:last-child) CSS pseudo-class represents any element that is NOT the last child
-     * element of its parent.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void notLastChild(Style sub) {
-        PropertyDefinition.createSubRule("$:not(:last-child)", sub);
-    }
-
-    /**
-     * <p>
-     * The :last-of-type CSS pseudo-class represents the last sibling of its type in the list of
-     * children of its parent element.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void lastOfType(Style sub) {
-        PropertyDefinition.createSubRule("$:last-of-type", sub);
-    }
-
-    /**
-     * <p>
-     * The :only-child CSS pseudo-class represents any element which is the only child of its
-     * parent. This is the same as :first-child:last-child or :nth-child(1):nth-last-child(1), but
-     * with a lower specificity.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void onlyChild(Style sub) {
-        PropertyDefinition.createSubRule("$:only-child", sub);
-    }
-
-    /**
-     * <p>
-     * The :not(:only-child) CSS pseudo-class represents any element which is NOT the only child of
-     * its parent.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void notOnlyChild(Style sub) {
-        PropertyDefinition.createSubRule("$:not(:only-child)", sub);
-    }
-
-    /**
-     * <p>
-     * The :only-of-type CSS pseudo-class represents any element that has no siblings of the given
-     * type.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void onlyOfType(Style sub) {
-        PropertyDefinition.createSubRule("$:only-of-type", sub);
-    }
-
-    /**
-     * <p>
-     * The :nth-child CSS pseudo-class matches an element that has an+b-1 siblings before it in the
-     * document tree, for a given positive or zero value for n, and has a parent element.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void nthChild(String pattern, Style sub) {
-        PropertyDefinition.createSubRule("$:nth-child(" + pattern + ")", sub);
-    }
-
-    /**
-     * <p>
-     * The :not(:nth-child) CSS pseudo-class matches elements except that has an+b-1 siblings before
-     * it in the document tree, for a given positive or zero value for n, and has a parent element.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void notNthChild(String pattern, Style sub) {
-        PropertyDefinition.createSubRule("$:not(:nth-child(" + pattern + "))", sub);
-    }
-
-    /**
-     * <p>
-     * The :nth-last-child CSS pseudo-class matches an element that has an+b-1 siblings after it in
-     * the document tree, for a given positive or zero value for n, and has a parent element. See
-     * :nth-child for a more thorough description of the syntax of its argument.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void nthLastChild(String pattern, Style sub) {
-        PropertyDefinition.createSubRule("$:nth-last-child(" + pattern + ")", sub);
-    }
-
-    /**
-     * <p>
-     * The :not(:nth-last-child) CSS pseudo-class matches elements except that has an+b-1 siblings
-     * after it in the document tree, for a given positive or zero value for n, and has a parent
-     * element. See :nth-child for a more thorough description of the syntax of its argument.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void notNthLastChild(String pattern, Style sub) {
-        PropertyDefinition.createSubRule("$:not(:nth-last-child(" + pattern + "))", sub);
-    }
-
-    /**
-     * <p>
-     * The :nth-of-type CSS pseudo-class matches an element that has an+b-1 siblings with the same
-     * element name before it in the document tree, for a given positive or zero value for n, and
-     * has a parent element. See :nth-child for a more thorough description of the syntax of its
-     * argument. This is a more flexible and useful pseudo selector if you want to ensure you're
-     * selecting the same type of tag no matter where it is inside the parent element, or what other
-     * different tags appear before it.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void nthOfType(String pattern, Style sub) {
-        PropertyDefinition.createSubRule("$:nth-of-type(" + pattern + ")", sub);
-    }
-
-    /**
-     * <p>
-     * The :nth-last-of-type CSS pseudo-class matches an element that has an+b-1 siblings with the
-     * same element name after it in the document tree, for a given positive or zero value for n,
-     * and has a parent element. See :nth-child for a more thorough description of the syntax of its
-     * argument.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void nthLastOfType(String pattern, Style sub) {
-        PropertyDefinition.createSubRule("$:nth-last-of-type(" + pattern + ")", sub);
-    }
-
-    /**
-     * <p>
-     * The :empty pseudo-class represents any element that has no children at all. Only element
-     * nodes and text (including whitespace) are considered. Comments or processing instructions do
-     * not affect whether an element is considered empty or not.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void empty(Style sub) {
-        PropertyDefinition.createSubRule("$:empty", sub);
-    }
-
-    /**
-     * <p>
-     * The :not(:empty) pseudo-class represents any element that has some children. Only element
-     * nodes and text (including whitespace) are considered. Comments or processing instructions do
-     * not affect whether an element is considered empty or not.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void notEmpty(Style sub) {
-        PropertyDefinition.createSubRule("$:not(:empty)", sub);
-    }
-
-    /**
-     * <p>
      * The negation CSS pseudo-class, :not(X), is a functional notation taking a simple selector X
      * as an argument. It matches an element that is not represented by the argument. X must not
      * contain another negation selector, or any pseudo-elements.
@@ -955,32 +554,6 @@ public class StyleDescriptor {
 
     /**
      * <p>
-     * The ::first-letter CSS pseudo-element selects the first letter of the first line of a block,
-     * if it is not preceded by any other content (such as images or inline tables) on its line.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void firstLetter(Style sub) {
-        PropertyDefinition.createSubRule("$::first-letter", sub);
-    }
-
-    /**
-     * <p>
-     * The ::first-line CSS pseudo-element applies styles only to the first line of an element. The
-     * amount of the text on the first line depends of numerous factors, like the width of the
-     * elements or of the document, but also of the font size of the text. As all pseudo-elements,
-     * the selectors containing ::first-line does not match any real HTML element.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void firstLine(Style sub) {
-        PropertyDefinition.createSubRule("$::first-line", sub);
-    }
-
-    /**
-     * <p>
      * The ::selection CSS pseudo-element applies rules to the portion of a document that has been
      * highlighted (e.g., selected with the mouse or another pointing device) by the user.
      * </p>
@@ -1002,35 +575,6 @@ public class StyleDescriptor {
         } else {
             PropertyDefinition.createSubRule("$::selection", sub);
         }
-    }
-
-    protected static final void children(Style sub) {
-        PropertyDefinition.createSubRule("$>*", sub);
-    }
-
-    protected static final SelectorDescriptor previous() {
-        return new SelectorDescriptor().prev();
-    }
-
-    protected static final SelectorDescriptor parent() {
-        return new SelectorDescriptor().parent();
-    }
-
-    protected static final SelectorDescriptor ancestor() {
-        return new SelectorDescriptor().ancestor();
-    }
-
-    /**
-     * <p>
-     * The :empty pseudo-class represents any element that has no children at all. Only element
-     * nodes and text (including whitespace) are considered. Comments or processing instructions do
-     * not affect whether an element is considered empty or not.
-     * </p>
-     * 
-     * @return
-     */
-    protected static final void not(Style style, Style sub) {
-        PropertyDefinition.createSubRule("$:not(." + style.name() + ")", sub);
     }
 
     /**
@@ -1081,6 +625,48 @@ public class StyleDescriptor {
      */
     protected static final Transition transit() {
         return new Transition();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    SelectorDSL combine(String type, boolean forward) {
+        return new SelectorDescriptor().combine(type, forward);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SelectorDSL at(Location location) {
+        return new SelectorDescriptor().at(location);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AttributeSelector attribute(String name) {
+        return new SelectorDescriptor().attribute(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    SelectorDSL pseudo(boolean element, String name) {
+        return new SelectorDescriptor().pseudo(false, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    void style(Style sub) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

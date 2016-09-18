@@ -20,7 +20,7 @@ public class TextTest extends StyleTester {
 
     @Test
     public void indent() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             text.indent(3, em);
         });
         assert parsed.property("text-indent", "3em");
@@ -28,7 +28,7 @@ public class TextTest extends StyleTester {
 
     @Test
     public void align() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             text.align.center().verticalAlign.bottom();
         });
         assert parsed.property("text-align", "center");
@@ -37,7 +37,7 @@ public class TextTest extends StyleTester {
 
     @Test
     public void decoration() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             text.decoration.underline();
         });
         assert parsed.property("text-decoration", "underline");
@@ -45,7 +45,7 @@ public class TextTest extends StyleTester {
 
     @Test
     public void overflow() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             text.overflow.ellipsis();
         });
         assert parsed.property("text-overflow", "ellipsis");
@@ -53,7 +53,7 @@ public class TextTest extends StyleTester {
 
     @Test
     public void unselectable() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             text.unselectable();
         });
         assert parsed.property("user-select", "none");
@@ -68,7 +68,7 @@ public class TextTest extends StyleTester {
 
     @Test
     public void shadowSingle() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             text.shadow(shadow().offset(2, 2, px).blurRadius(1, px).color(hsl(100, 100, 100)));
         });
         assert parsed.property("text-shadow", "2px 2px 1px hsl(100,100%,100%)");
@@ -76,7 +76,7 @@ public class TextTest extends StyleTester {
 
     @Test
     public void shadowMultiple() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             text.shadow(shadow().offset(2, 2, px), shadow().offset(1, 1, px));
         });
         assert parsed.property("text-shadow", "2px 2px,1px 1px");

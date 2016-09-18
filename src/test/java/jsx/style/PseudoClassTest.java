@@ -20,7 +20,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void interaction() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             hover(() -> {
                 font.size(1, px);
             });
@@ -39,8 +39,8 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void link() {
-        ValidatableStyle parsed = style(() -> {
+    public void Link() {
+        ValidatableStyle parsed = writeStyle(() -> {
             link(() -> {
                 font.size(1, px);
             });
@@ -55,7 +55,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void form() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             enabled(() -> {
                 font.size(1, px);
             });
@@ -100,8 +100,8 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void firstChild() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+    public void FirstChild() throws Exception {
+        ValidatableStyle parsed = writeStyle(() -> {
             firstChild(() -> {
                 font.size(1, px);
             });
@@ -110,8 +110,8 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void lastChild() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+    public void LastChild() throws Exception {
+        ValidatableStyle parsed = writeStyle(() -> {
             lastChild(() -> {
                 font.size(1, px);
             });
@@ -121,7 +121,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void nthChild() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             nthChild("1", () -> {
                 font.size(1, px);
             });
@@ -142,7 +142,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void nthLastChild() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             nthLastChild("1", () -> {
                 font.size(1, px);
             });
@@ -162,8 +162,8 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void firstType() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+    public void FirstType() throws Exception {
+        ValidatableStyle parsed = writeStyle(() -> {
             firstOfType(() -> {
                 font.size(1, px);
             });
@@ -173,8 +173,8 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void lastType() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+    public void LastType() throws Exception {
+        ValidatableStyle parsed = writeStyle(() -> {
             lastOfType(() -> {
                 font.size(1, px);
             });
@@ -185,7 +185,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void nthType() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             nthOfType("1", () -> {
                 font.size(1, px);
             });
@@ -206,7 +206,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void nthLastType() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             nthLastOfType("1", () -> {
                 font.size(1, px);
             });
@@ -226,8 +226,8 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void onlyChild() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+    public void OnlyChild() throws Exception {
+        ValidatableStyle parsed = writeStyle(() -> {
             onlyChild(() -> {
                 font.size(1, px);
             });
@@ -237,7 +237,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void onlyType() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             onlyOfType(() -> {
                 font.size(1, px);
             });
@@ -246,8 +246,8 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void empty() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+    public void Empty() throws Exception {
+        ValidatableStyle parsed = writeStyle(() -> {
             empty(() -> {
                 font.size(1, px);
             });
@@ -260,7 +260,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void not() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             not(E, () -> {
                 font.size(1, px);
             });
@@ -270,7 +270,7 @@ public class PseudoClassTest extends StyleTester {
 
     @Test
     public void nest() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             active(() -> {
                 invalid(() -> {
                     font.size(1, px);

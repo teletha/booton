@@ -12,6 +12,7 @@ package jsx.style.property;
 import static jsx.style.value.Unit.*;
 
 import jsx.style.PropertyDefinition;
+import jsx.style.SelectorDSL;
 import jsx.style.SelectorDescriptor;
 import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
@@ -174,7 +175,7 @@ public class Transition extends PropertyDefinition<Transition> {
      * 
      * @param sub A style of this effect.
      */
-    public void when(SelectorDescriptor selector, Style sub) {
+    public void when(SelectorDSL selector, Style sub) {
         when(selector.toString(), sub);
     }
 
@@ -253,28 +254,6 @@ public class Transition extends PropertyDefinition<Transition> {
      */
     public void whenCheck(Style sub) {
         when("$:checked", sub);
-    }
-
-    /**
-     * <p>
-     * Declare valid effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenValid(Style sub) {
-        when("$:valid", sub);
-    }
-
-    /**
-     * <p>
-     * Declare invalid effect.
-     * </p>
-     * 
-     * @param sub A style of this effect.
-     */
-    public void whenInvalid(Style sub) {
-        when("$:invalid", sub);
     }
 
     /**

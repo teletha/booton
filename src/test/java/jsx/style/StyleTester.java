@@ -17,11 +17,17 @@ import jsx.style.value.Color;
 import jsx.ui.Style;
 
 /**
- * @version 2015/09/28 22:16:53
+ * @version 2016/09/18 10:32:55
  */
 public class StyleTester extends StyleDescriptor {
 
-    protected ValidatableStyle style(Style style) {
+    /**
+     * Helper method to wirte test style.
+     * 
+     * @param style A test style.
+     * @return
+     */
+    protected final ValidatableStyle writeStyle(Style style) {
         // empty style sheet
         StyleRule rule = StyleRule.create("$", style, false);
 

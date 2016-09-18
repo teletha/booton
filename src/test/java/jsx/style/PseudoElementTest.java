@@ -18,7 +18,7 @@ public class PseudoElementTest extends StyleTester {
 
     @Test
     public void before() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             font.color(255, 255, 0);
 
             before(() -> {
@@ -40,7 +40,7 @@ public class PseudoElementTest extends StyleTester {
 
     @Test
     public void after() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             font.color(255, 255, 0);
 
             after(() -> {
@@ -62,7 +62,7 @@ public class PseudoElementTest extends StyleTester {
 
     @Test
     public void text() {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             firstLetter(() -> {
                 display.inline();
             });
@@ -78,7 +78,7 @@ public class PseudoElementTest extends StyleTester {
 
     @Test
     public void selection() {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             selection(() -> {
                 display.inline();
             });

@@ -144,8 +144,10 @@ public class Font extends Colorable<Font> {
             String name = font.toString();
 
             if (name.startsWith("http")) {
-                joiner.add(FontInfo.parse(name));
-            } else if (Strings.hasSpace(name)) {
+                name = FontInfo.parse(name);
+            }
+
+            if (Strings.hasSpace(name)) {
                 joiner.add("\"" + name + "\"");
             } else {
                 joiner.add(name);

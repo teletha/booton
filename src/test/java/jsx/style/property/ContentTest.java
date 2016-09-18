@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/13 14:23:53
@@ -20,12 +20,12 @@ public class ContentTest extends StyleTester {
 
     @Test
     public void rgb() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             content.text("test");
         });
         assert parsed.property("content", "'test'");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             content.attr("href");
         });
         assert parsed.property("content", "attr(href)");

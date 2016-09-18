@@ -9,10 +9,10 @@
  */
 package jsx.style.property;
 
+import org.junit.Test;
+
 import jsx.style.StyleTester;
 import jsx.style.value.Numeric;
-
-import org.junit.Test;
 
 /**
  * @version 2014/11/13 14:36:39
@@ -21,7 +21,7 @@ public class PaddingTest extends StyleTester {
 
     @Test
     public void each() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             padding.top(10, em);
             padding.bottom(20, px);
             padding.left(30, percent);
@@ -35,7 +35,7 @@ public class PaddingTest extends StyleTester {
 
     @Test
     public void auto() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             padding.auto();
         });
         assert parsed.property("padding-left", "auto");
@@ -44,19 +44,19 @@ public class PaddingTest extends StyleTester {
 
     @Test
     public void shorthand() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             padding.horizontal(1, em);
         });
         assert parsed.property("padding-left", "1em");
         assert parsed.property("padding-right", "1em");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             padding.vertical(1, em);
         });
         assert parsed.property("padding-top", "1em");
         assert parsed.property("padding-bottom", "1em");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             padding.size(1, em);
         });
         assert parsed.property("padding-left", "1em");

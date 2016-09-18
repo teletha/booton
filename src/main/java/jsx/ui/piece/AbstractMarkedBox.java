@@ -123,15 +123,15 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
                 position.absolute().left(0, em).top(0, em);
                 border.solid().width(BorderWidth).color(BorderColor);
 
-                previous().attribute("type").match("checkbox").style(() -> {
+                prev().attribute("type").match("checkbox", () -> {
                     border.radius(BorderRadius);
                 });
 
-                previous().attribute("type").match("radio").style(() -> {
+                prev().attribute("type").match("radio", () -> {
                     border.radius(boxSize.divide(2));
                 });
 
-                transit().duration(300, ms).when(previous().checked(), () -> {
+                transit().duration(300, ms).when().prev().checked(() -> {
                     background.color("#337ab7");
                     border.color("#337ab7");
                 });
@@ -145,7 +145,7 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
                 padding.top(2, px).left(2, px);
                 font.family(Font.Awesome).size(10, px).color(Color.White);
 
-                transit().duration(300, ms).when(previous().checked(), () -> {
+                transit().duration(300, ms).when().prev().checked(() -> {
                     display.opacity(1);
                 });
             });

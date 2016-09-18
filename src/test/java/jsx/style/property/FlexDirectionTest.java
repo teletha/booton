@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:25:04
@@ -20,7 +20,7 @@ public class FlexDirectionTest extends StyleTester {
 
     @Test
     public void row() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().direction.row();
         });
 
@@ -30,7 +30,7 @@ public class FlexDirectionTest extends StyleTester {
 
     @Test
     public void rowReverse() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().direction.rowReverse();
         });
 
@@ -40,7 +40,7 @@ public class FlexDirectionTest extends StyleTester {
 
     @Test
     public void colmun() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().direction.column();
         });
 
@@ -50,7 +50,7 @@ public class FlexDirectionTest extends StyleTester {
 
     @Test
     public void colmunReverse() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().direction.columnReverse();
         });
 

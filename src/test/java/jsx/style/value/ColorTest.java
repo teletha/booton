@@ -20,7 +20,7 @@ public class ColorTest extends StyleTester {
 
     @Test
     public void white() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             font.color(255, 255, 255);
         });
         assert style.property("color", "white");
@@ -28,7 +28,7 @@ public class ColorTest extends StyleTester {
 
     @Test
     public void black() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             font.color(0, 0, 0);
         });
         assert style.property("color", "black");
@@ -36,7 +36,7 @@ public class ColorTest extends StyleTester {
 
     @Test
     public void hsl() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             font.color(255, 0, 0);
         });
         assert style.property("color", "hsl(0,100%,50%)");
@@ -44,7 +44,7 @@ public class ColorTest extends StyleTester {
 
     @Test
     public void hsla() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             font.color(255, 255, 255, 0.9);
         });
         assert style.property("color", "hsla(0,0%,100%,0.9)");
@@ -52,7 +52,7 @@ public class ColorTest extends StyleTester {
 
     @Test
     public void zeroAlpha() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             font.color(255, 255, 255, 0);
         });
         assert style.property("color", "hsla(0,0%,100%,0)");

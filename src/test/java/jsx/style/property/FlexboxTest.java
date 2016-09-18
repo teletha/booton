@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:09:21
@@ -20,7 +20,7 @@ public class FlexboxTest extends StyleTester {
 
     @Test
     public void flex() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             display.flex().direction.row().alignContent.center().wrap.enable().justifyContent.center().alignItems.end();
         });
         assert parsed.property("display", "flex", "-webkit-flex");
@@ -39,7 +39,7 @@ public class FlexboxTest extends StyleTester {
 
     @Test
     public void item() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             flexItem.grow(2).shrink(2);
         });
         assert parsed.property("flex-grow", "2");

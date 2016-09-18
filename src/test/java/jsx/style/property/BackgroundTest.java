@@ -23,7 +23,7 @@ public class BackgroundTest extends StyleTester {
 
     @Test
     public void color() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             background.color(255, 0, 0);
         });
         assert parsed.property("background-color", "rgb(255,0,0)");
@@ -31,17 +31,17 @@ public class BackgroundTest extends StyleTester {
 
     @Test
     public void origin() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             background.contentBox();
         });
         assert parsed.property("background-origin", "content-box");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             background.paddingBox();
         });
         assert parsed.property("background-origin", "padding-box");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             background.borderBox();
         });
         assert parsed.property("background-origin", "border-box");
@@ -49,7 +49,7 @@ public class BackgroundTest extends StyleTester {
 
     @Test
     public void imageSingle() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             background.image("test").fixed().cover().repeatX();
         });
         assert parsed.property("background-image", "url(test)");
@@ -60,7 +60,7 @@ public class BackgroundTest extends StyleTester {
 
     @Test
     public void image() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             background.image(BackgroundImage.url("test").top().left().fixed().repeat().cover());
         });
         assert parsed.property("background-image", "url(test)");
@@ -70,7 +70,7 @@ public class BackgroundTest extends StyleTester {
 
     @Test
     public void images() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             BackgroundImage one = BackgroundImage.url("one").bottom().right();
             BackgroundImage two = BackgroundImage.url("two").horizontal(1, em).vertical(2, percent).noRepeat().contain().local();
 
@@ -85,7 +85,7 @@ public class BackgroundTest extends StyleTester {
 
     @Test
     public void imageGradient() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             background.image(BackgroundImage.of(linear().color(Black, White)));
         });
         assert parsed.property("background-image", "linear-gradient(black,white)", "-webkit-linear-gradient(black,white)");
@@ -93,7 +93,7 @@ public class BackgroundTest extends StyleTester {
 
     @Test
     public void imageGradients() throws Exception {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             background.image(BackgroundImage.of(linear().color(Black, White)), BackgroundImage.of(linear().color(White, Black)));
         });
         assert parsed

@@ -140,7 +140,7 @@ public class Select<M> extends Widget<$> {
         Style Mark = () -> {
             fill.color(BorderColor);
 
-            ancestor().at(Root).hover().style(() -> {
+            ancestor().at(Root).hover(() -> {
                 fill.color(BorderColorFocused);
             });
         };

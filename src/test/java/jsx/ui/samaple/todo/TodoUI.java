@@ -163,7 +163,7 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
                 if (editing.get()) {
                     widget(edit);
                 } else {
-                    box(Styles.HBox, () -> {
+                    box($.HBox, () -> {
                         widget(complete);
                         widget(delete);
                     });

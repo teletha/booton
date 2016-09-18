@@ -9,17 +9,14 @@
  */
 package jsx.style;
 
-import static jsx.style.StyleDescriptor.*;
-
 import org.junit.Test;
 
 import jsx.ui.Style;
 
 /**
- * @version 2015/09/11 11:26:47
+ * @version 2016/09/18 10:30:49
  */
-@SuppressWarnings("deprecation")
-public class StyleRuleTest {
+public class StyleRuleTest extends StyleTester {
 
     @Test
     public void single() {

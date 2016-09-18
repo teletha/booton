@@ -9,9 +9,9 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleTester;
-
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:30:57
@@ -20,7 +20,7 @@ public class FlexWrapTest extends StyleTester {
 
     @Test
     public void noWrap() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().wrap.disable();
         });
 
@@ -30,7 +30,7 @@ public class FlexWrapTest extends StyleTester {
 
     @Test
     public void wrap() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().wrap.enable();
         });
         assert style.property("flex-wrap", "wrap");
@@ -39,7 +39,7 @@ public class FlexWrapTest extends StyleTester {
 
     @Test
     public void wrapReverse() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.flex().wrap.reverse();
         });
 

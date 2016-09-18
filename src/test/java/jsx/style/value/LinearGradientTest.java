@@ -9,10 +9,10 @@
  */
 package jsx.style.value;
 
+import org.junit.Test;
+
 import jsx.style.StyleTester;
 import jsx.style.property.Background.BackgroundImage;
-
-import org.junit.Test;
 
 /**
  * @version 2014/11/13 14:09:21
@@ -29,43 +29,39 @@ public class LinearGradientTest extends StyleTester {
 
     @Test
     public void base() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new LinearGradient().color(black, white)));
         });
-        assert style
-                .property("background-image", "linear-gradient(black,white)", "-webkit-linear-gradient(black,white)");
+        assert style.property("background-image", "linear-gradient(black,white)", "-webkit-linear-gradient(black,white)");
     }
 
     @Test
     public void angle() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new LinearGradient().angle(10, deg).color(black, white)));
         });
-        assert style
-                .property("background-image", "linear-gradient(10deg,black,white)", "-webkit-linear-gradient(280deg,black,white)");
+        assert style.property("background-image", "linear-gradient(10deg,black,white)", "-webkit-linear-gradient(280deg,black,white)");
     }
 
     @Test
     public void colors() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new LinearGradient().color(black, white, black)));
         });
-        assert style
-                .property("background-image", "linear-gradient(black,white,black)", "-webkit-linear-gradient(black,white,black)");
+        assert style.property("background-image", "linear-gradient(black,white,black)", "-webkit-linear-gradient(black,white,black)");
     }
 
     @Test
     public void percentage() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new LinearGradient().color(black, 10).color(white, 90)));
         });
-        assert style
-                .property("background-image", "linear-gradient(black 10%,white 90%)", "-webkit-linear-gradient(black 10%,white 90%)");
+        assert style.property("background-image", "linear-gradient(black 10%,white 90%)", "-webkit-linear-gradient(black 10%,white 90%)");
     }
 
     @Test
     public void length() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new LinearGradient().color(black, one).color(white, two)));
         });
         assert style
@@ -74,7 +70,7 @@ public class LinearGradientTest extends StyleTester {
 
     @Test
     public void repeat() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new LinearGradient().repeat().color(black, white)));
         });
         assert style

@@ -24,7 +24,7 @@ public class CalcTest extends StyleTester {
 
     @Test
     public void none() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.width(one);
         });
         assert style.property("width", "1px");
@@ -32,7 +32,7 @@ public class CalcTest extends StyleTester {
 
     @Test
     public void add() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             display.width(one.add(two));
         });
         assert style.property("width", "calc(1px + 2em)", "-webkit-calc(1px + 2em)");
@@ -40,7 +40,7 @@ public class CalcTest extends StyleTester {
 
     @Test
     public void inPrefixedProperty() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.translateY(one.add(two));
         });
         assert style.property("-webkit-transform", "translateY(-webkit-calc(1px + 2em))");
@@ -49,7 +49,7 @@ public class CalcTest extends StyleTester {
 
     @Test
     public void noneInPrefixedProperty() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             transform.translateY(one);
         });
         assert style.property("-webkit-transform", "translateY(1px)");

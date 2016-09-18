@@ -10,9 +10,10 @@
 package jsx.style.property;
 
 import static jsx.style.value.Color.*;
-import jsx.style.StyleTester;
 
 import org.junit.Test;
+
+import jsx.style.StyleTester;
 
 /**
  * @version 2014/11/15 10:33:17
@@ -21,7 +22,7 @@ public class OutlineTest extends StyleTester {
 
     @Test
     public void width() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             outline.width(2, em);
         });
 
@@ -29,8 +30,8 @@ public class OutlineTest extends StyleTester {
     }
 
     @Test
-    public void style() throws Exception {
-        ValidatableStyle style = style(() -> {
+    public void style2() throws Exception {
+        ValidatableStyle style = writeStyle(() -> {
             outline.solid();
         });
 
@@ -39,7 +40,7 @@ public class OutlineTest extends StyleTester {
 
     @Test
     public void color() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             outline.color(White);
         });
 
@@ -48,7 +49,7 @@ public class OutlineTest extends StyleTester {
 
     @Test
     public void chain() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             outline.solid().width(2, em).color(Black);
         });
 

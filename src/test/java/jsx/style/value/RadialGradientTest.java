@@ -9,10 +9,10 @@
  */
 package jsx.style.value;
 
+import org.junit.Test;
+
 import jsx.style.StyleTester;
 import jsx.style.property.Background.BackgroundImage;
-
-import org.junit.Test;
 
 /**
  * @version 2014/11/13 14:14:04
@@ -31,34 +31,31 @@ public class RadialGradientTest extends StyleTester {
 
     @Test
     public void base() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new RadialGradient().color(black, white)));
         });
-        assert style
-                .property("background-image", "radial-gradient(black,white)", "-webkit-radial-gradient(black,white)");
+        assert style.property("background-image", "radial-gradient(black,white)", "-webkit-radial-gradient(black,white)");
     }
 
     @Test
     public void colors() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new RadialGradient().color(black, white, black)));
         });
-        assert style
-                .property("background-image", "radial-gradient(black,white,black)", "-webkit-radial-gradient(black,white,black)");
+        assert style.property("background-image", "radial-gradient(black,white,black)", "-webkit-radial-gradient(black,white,black)");
     }
 
     @Test
     public void percentage() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new RadialGradient().color(black, 10).color(white, 90)));
         });
-        assert style
-                .property("background-image", "radial-gradient(black 10%,white 90%)", "-webkit-radial-gradient(black 10%,white 90%)");
+        assert style.property("background-image", "radial-gradient(black 10%,white 90%)", "-webkit-radial-gradient(black 10%,white 90%)");
     }
 
     @Test
     public void length() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new RadialGradient().color(black, one).color(white, two)));
         });
         assert style
@@ -67,7 +64,7 @@ public class RadialGradientTest extends StyleTester {
 
     @Test
     public void repeat() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new RadialGradient().repeat().color(black, white)));
         });
         assert style
@@ -76,7 +73,7 @@ public class RadialGradientTest extends StyleTester {
 
     @Test
     public void position() throws Exception {
-        ValidatableStyle style = style(() -> {
+        ValidatableStyle style = writeStyle(() -> {
             background.image(BackgroundImage.of(new RadialGradient().position(pos).color(black, white)));
         });
         assert style

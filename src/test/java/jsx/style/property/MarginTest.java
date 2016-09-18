@@ -9,10 +9,10 @@
  */
 package jsx.style.property;
 
+import org.junit.Test;
+
 import jsx.style.StyleTester;
 import jsx.style.value.Numeric;
-
-import org.junit.Test;
 
 /**
  * @version 2014/11/13 14:28:51
@@ -21,7 +21,7 @@ public class MarginTest extends StyleTester {
 
     @Test
     public void each() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             margin.top(10, em);
             margin.bottom(20, px);
             margin.left(30, percent);
@@ -35,7 +35,7 @@ public class MarginTest extends StyleTester {
 
     @Test
     public void auto() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             margin.auto();
         });
         assert parsed.property("margin-left", "auto");
@@ -44,19 +44,19 @@ public class MarginTest extends StyleTester {
 
     @Test
     public void shorthand() {
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             margin.horizontal(1, em);
         });
         assert parsed.property("margin-left", "1em");
         assert parsed.property("margin-right", "1em");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             margin.vertical(1, em);
         });
         assert parsed.property("margin-top", "1em");
         assert parsed.property("margin-bottom", "1em");
 
-        parsed = style(() -> {
+        parsed = writeStyle(() -> {
             margin.size(1, em);
         });
         assert parsed.property("margin-left", "1em");
@@ -70,7 +70,7 @@ public class MarginTest extends StyleTester {
         Numeric one = new Numeric(1, em);
         Numeric two = new Numeric(2, px);
 
-        ValidatableStyle parsed = style(() -> {
+        ValidatableStyle parsed = writeStyle(() -> {
             margin.size(one.add(two));
         });
         assert parsed.property("margin-left", "calc(1em + 2px)", "-webkit-calc(1em + 2px)");
