@@ -224,36 +224,6 @@ public abstract class SelectorDSL {
 
     /**
      * <p>
-     * The > combinator separates two selectors and matches only those elements matched by the
-     * second selector that are direct children of elements matched by the first. By contrast, when
-     * two selectors are combined with the descendant selector, the combined selector expression
-     * matches those elements matched by the second selector for which there exists an ancestor
-     * element matched by the first selector, regardless of the number of "hops" up the DOM.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public final SelectorDSL children() {
-        return combine(">*", true);
-    }
-
-    /**
-     * <p>
-     * The > combinator separates two selectors and matches only those elements matched by the
-     * second selector that are direct children of elements matched by the first. By contrast, when
-     * two selectors are combined with the descendant selector, the combined selector expression
-     * matches those elements matched by the second selector for which there exists an ancestor
-     * element matched by the first selector, regardless of the number of "hops" up the DOM.
-     * </p>
-     * 
-     * @return Chainable API.
-     */
-    public final void children(Style sub) {
-        children().declare(sub);
-    }
-
-    /**
-     * <p>
      * This is referred to as an adjacent selector or next-sibling selector. It will select only the
      * specified element that immediately follows the former specified element.
      * </p>
@@ -1531,10 +1501,12 @@ public abstract class SelectorDSL {
          */
         @Override
         final void declare(Style style) {
-            StyleRule rule = PropertyDefinition.createSubRule(root.write(), style);
+            if (style != null) {
+                StyleRule rule = PropertyDefinition.createSubRule(toString(), style);
 
-            if (root.processor != null) {
-                root.processor.accept(rule);
+                if (root.processor != null) {
+                    root.processor.accept(rule);
+                }
             }
         }
 
@@ -1556,8 +1528,12 @@ public abstract class SelectorDSL {
         private String write() {
             StringBuilder builder = new StringBuilder();
 
-            for (CharSequence selector : selectors) {
-                builder.append(selector);
+            if (selectors.isEmpty()) {
+                builder.append("*");
+            } else {
+                for (CharSequence selector : selectors) {
+                    builder.append(selector);
+                }
             }
 
             for (CharSequence pseudo : pseudoClasses) {
@@ -1569,7 +1545,7 @@ public abstract class SelectorDSL {
             }
 
             if (combinator != null) {
-                builder.append(combinator).append(child);
+                builder.append(combinator).append(child.write());
             }
             return builder.toString();
         }

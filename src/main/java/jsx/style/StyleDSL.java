@@ -385,7 +385,7 @@ public class StyleDSL extends SelectorDSL {
     public final Style SBox = () -> {
         position.relative();
 
-        children(() -> {
+        child(() -> {
             position.absolute();
         });
     };
