@@ -18,6 +18,48 @@ import jsx.ui.flux.Location;
  */
 public abstract class SelectorDSL {
 
+    // ===============================================================
+    // Basic Selectors
+    // ===============================================================
+
+    /**
+     * <p>
+     * Attribute selectors select an element using the presence of a given attribute or attribute
+     * value.
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @return Chainable API.
+     */
+    public abstract AttributeSelector attribute(String name);
+
+    /**
+     * <p>
+     * In an HTML document, CSS class selectors match an element based on the contents of the
+     * element's class attribute.
+     * </p>
+     * 
+     * @param location A class location.
+     * @return Chainable API.
+     */
+    public abstract SelectorDSL with(Location location);
+
+    /**
+     * <p>
+     * In an HTML document, CSS class selectors match an element based on the contents of the
+     * element's class attribute.
+     * </p>
+     * 
+     * @param location A class location.
+     */
+    public final void with(Location location, Style sub) {
+        with(location).style(sub);
+    }
+
+    // ===============================================================
+    // Combinators
+    // ===============================================================
+
     /**
      * <p>
      * A descendant combinator — typically represented by a single space ( ) character in the form
@@ -46,22 +88,6 @@ public abstract class SelectorDSL {
      */
     public final void ancestor(Style sub) {
         ancestor().style(sub);
-    }
-
-    /**
-     * <p>
-     * A descendant combinator — typically represented by a single space ( ) character in the form
-     * of selector₁ selector₂ — combines two selectors such that elements matched by the second
-     * selector (selector₂) are selected if they have an ancestor element matching the first
-     * selector (selector₁). Selectors that utilize a descendant combinator are called descendant
-     * selectors.
-     * </p>
-     * 
-     * @param location A search location.
-     * @param sub A sub style.
-     */
-    public final void ancestorIs(Location location, Style sub) {
-        ancestor().at(location).style(sub);
     }
 
     /**
@@ -122,22 +148,6 @@ public abstract class SelectorDSL {
      */
     public final void parent(Style sub) {
         parent().style(sub);
-    }
-
-    /**
-     * <p>
-     * The > combinator separates two selectors and matches only those elements matched by the
-     * second selector that are direct children of elements matched by the first. By contrast, when
-     * two selectors are combined with the descendant selector, the combined selector expression
-     * matches those elements matched by the second selector for which there exists an ancestor
-     * element matched by the first selector, regardless of the number of "hops" up the DOM.
-     * </p>
-     * 
-     * @param location A search location.
-     * @return Chainable API.
-     */
-    public final void parentIs(Location location, Style sub) {
-        parent().at(location).style(sub);
     }
 
     /**
@@ -230,19 +240,6 @@ public abstract class SelectorDSL {
      * specified element that immediately follows the former specified element.
      * </p>
      * 
-     * @param location A search location.
-     * @param sub A sub style.
-     */
-    public final void prevIs(Location location, Style sub) {
-        prev().at(location).style(sub);
-    }
-
-    /**
-     * <p>
-     * This is referred to as an adjacent selector or next-sibling selector. It will select only the
-     * specified element that immediately follows the former specified element.
-     * </p>
-     * 
      * @return Chainable API.
      */
     public final SelectorDSL next() {
@@ -320,6 +317,10 @@ public abstract class SelectorDSL {
      */
     abstract SelectorDSL combine(String type, boolean forward);
 
+    // ===============================================================
+    // Pseudo Elements
+    // ===============================================================
+
     /**
      * <p>
      * The CSS :after pseudo-element matches a virtual last child of the selected element. Typically
@@ -392,6 +393,10 @@ public abstract class SelectorDSL {
         // non-Gecko browsers as ::-moz-selection is invalid on them.
         pseudo(true, Vendor.isMozilla ? "-moz-selection" : "selection").style(sub);
     }
+
+    // ===============================================================
+    // Pseudo Classes
+    // ===============================================================
 
     /**
      * <p>
@@ -1099,18 +1104,6 @@ public abstract class SelectorDSL {
      */
     public final void visited(Style sub) {
         visited().style(sub);
-    }
-
-    public abstract AttributeSelector attribute(String name);
-
-    public abstract SelectorDSL at(Location location);
-
-    /**
-     * @param location A search location.
-     * @return Chainable API.
-     */
-    public final void at(Location location, Style sub) {
-        at(location).style(sub);
     }
 
     /**

@@ -549,8 +549,8 @@ public class StyleDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    public SelectorDSL at(Location location) {
-        return new SelectorDescriptor().at(location);
+    public SelectorDSL with(Location location) {
+        return new SelectorDescriptor().with(location);
     }
 
     /**

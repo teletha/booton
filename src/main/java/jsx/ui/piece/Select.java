@@ -21,12 +21,12 @@ import javafx.scene.control.SingleSelectionModel;
 import js.dom.User;
 import jsx.ui.Style;
 import jsx.ui.Widget;
-import jsx.ui.piece.Select.$;
+import jsx.ui.piece.Select.Styles;
 
 /**
  * @version 2015/10/20 16:02:38
  */
-public class Select<M> extends Widget<$> {
+public class Select<M> extends Widget<Styles> {
 
     /** The selectable values. */
     private final ListProperty<M> values;
@@ -120,7 +120,7 @@ public class Select<M> extends Widget<$> {
     /**
      * @version 2015/10/05 8:14:05
      */
-    static class $ extends PieceStyle {
+    static class Styles extends PieceStyle {
 
         Style Root = () -> {
             display.inlineBlock();
@@ -140,7 +140,7 @@ public class Select<M> extends Widget<$> {
         Style Mark = () -> {
             fill.color(BorderColor);
 
-            ancestor().at(Root).hover(() -> {
+            ancestor().with(Root).hover(() -> {
                 fill.color(BorderColorFocused);
             });
         };

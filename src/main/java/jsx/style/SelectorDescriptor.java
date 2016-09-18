@@ -52,7 +52,7 @@ public class SelectorDescriptor extends SelectorDSL {
      * {@inheritDoc}
      */
     @Override
-    public SelectorDSL at(Location location) {
+    public SelectorDSL with(Location location) {
         element.selectors.add("." + location.name());
 
         return this;
