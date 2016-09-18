@@ -13,7 +13,6 @@ import static jsx.style.value.Unit.*;
 
 import jsx.style.PropertyDefinition;
 import jsx.style.SelectorDSL;
-import jsx.style.SelectorDSL.SelectorDescriptor;
 import jsx.style.StyleRule;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
@@ -165,7 +164,7 @@ public class Transition extends PropertyDefinition<Transition> {
     }
 
     public SelectorDSL when() {
-        return new SelectorDescriptor(this::when);
+        return SelectorDSL.create(this::when);
     }
 
     /**

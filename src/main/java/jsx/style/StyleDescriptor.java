@@ -540,7 +540,7 @@ public class StyleDescriptor extends SelectorDSL {
      */
     @Override
     final SelectorDSL combine(String type, boolean forward) {
-        return new SelectorDescriptor().combine(type, forward);
+        return SelectorDSL.create(PropertyDefinition::createSubRule).combine(type, forward);
     }
 
     /**
@@ -548,7 +548,7 @@ public class StyleDescriptor extends SelectorDSL {
      */
     @Override
     final SelectorDSL basic(String selector) {
-        return new SelectorDescriptor().basic(selector);
+        return SelectorDSL.create(PropertyDefinition::createSubRule).basic(selector);
     }
 
     /**
@@ -556,7 +556,7 @@ public class StyleDescriptor extends SelectorDSL {
      */
     @Override
     final SelectorDSL pseudo(boolean isElement, String name) {
-        return new SelectorDescriptor().pseudo(isElement, name);
+        return SelectorDSL.create(PropertyDefinition::createSubRule).pseudo(isElement, name);
     }
 
     /**

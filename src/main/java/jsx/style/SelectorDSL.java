@@ -1162,6 +1162,22 @@ public abstract class SelectorDSL {
     abstract void style(Style sub);
 
     /**
+     * <p>
+     * Create new selector builder.
+     * </p>
+     * 
+     * @param processor A style creation process.
+     * @return A created selector builder.
+     */
+    public static final SelectorDSL create(BiConsumer<String, Style> processor) {
+        Selector selector = new Selector();
+        selector.process = processor;
+        selector.selectors.add("$");
+
+        return selector;
+    }
+
+    /**
      * @version 2016/09/17 16:20:33
      */
     public class Attribute {
@@ -1419,42 +1435,36 @@ public abstract class SelectorDSL {
     }
 
     /**
-     * @version 2016/09/17 16:18:29
+     * @version 2016/09/18 18:59:10
      */
-    public static class SelectorDescriptor extends SelectorDSL {
+    private static class Selector extends SelectorDSL {
 
         /** The root selector. */
-        private Selector root = new Selector();
+        private Selector root = this;
 
-        /** The current selector. */
-        private Selector current = root;
+        /** The child selector. */
+        private Selector child;
 
         private BiConsumer<String, Style> process;
 
-        /**
-         * <p>
-         * Create blank selector descriptor.
-         * </p>
-         */
-        SelectorDescriptor() {
-            this(PropertyDefinition::createSubRule);
-        }
+        /** The simple selector list. */
+        private List<CharSequence> selectors = new ArrayList();
 
-        /**
-         * @param object
-         */
-        public SelectorDescriptor(BiConsumer<String, Style> process) {
-            this.process = process;
+        /** The combinator. */
+        private String combinator;
 
-            root.selectors.add("$");
-        }
+        /** The pseudo element. */
+        private String pseudoElement;
+
+        /** The pseudo class list. */
+        private List<CharSequence> pseudoClasses = new ArrayList();
 
         /**
          * {@inheritDoc}
          */
         @Override
         SelectorDSL basic(String selector) {
-            current.selectors.add(selector);
+            selectors.add(selector);
 
             return this;
         }
@@ -1469,18 +1479,19 @@ public abstract class SelectorDSL {
          * @return
          */
         @Override
-        final SelectorDescriptor combine(String type, boolean forward) {
-            Selector e = current;
+        final SelectorDSL combine(String type, boolean forward) {
+            Selector created = new Selector();
 
             if (forward) {
-                e.sub = current = new Selector();
-                e.combinator = type;
+                child = created;
+                combinator = type;
+                created.root = root;
             } else {
-                root = current = new Selector();
-                root.sub = e;
-                root.combinator = type;
+                created.child = this;
+                created.combinator = type;
+                created.process = process;
             }
-            return this;
+            return created;
         }
 
         /**
@@ -1492,11 +1503,11 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         @Override
-        final SelectorDescriptor pseudo(boolean isElement, String name) {
+        final SelectorDSL pseudo(boolean isElement, String name) {
             if (isElement) {
-                current.pseudoElement = name;
+                pseudoElement = name;
             } else {
-                current.pseudoClasses.add(name);
+                pseudoClasses.add(name);
             }
             return this;
         }
@@ -1506,7 +1517,7 @@ public abstract class SelectorDSL {
          */
         @Override
         void style(Style sub) {
-            process.accept(root.toString(), sub);
+            root.process.accept(root.write(), sub);
         }
 
         /**
@@ -1514,54 +1525,35 @@ public abstract class SelectorDSL {
          */
         @Override
         public String toString() {
-            return root.toString();
+            return root.write();
         }
 
         /**
-         * @version 2016/09/18 10:57:14
+         * <p>
+         * Write down this selector.
+         * </p>
+         * 
+         * @return A selector expression.
          */
-        private static class Selector {
+        private String write() {
+            StringBuilder builder = new StringBuilder();
 
-            /** The simple selector list. */
-            private List<CharSequence> selectors = new ArrayList();
-
-            /** The combinator. */
-            private String combinator;
-
-            /** The pseudo element. */
-            private String pseudoElement;
-
-            /** The pseudo class list. */
-            private List<CharSequence> pseudoClasses = new ArrayList();
-
-            /** The sub selector. */
-            private Selector sub;
-
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            public String toString() {
-                StringBuilder builder = new StringBuilder();
-
-                for (CharSequence selector : selectors) {
-                    builder.append(selector);
-                }
-
-                for (CharSequence pseudo : pseudoClasses) {
-                    builder.append(":").append(pseudo);
-                }
-
-                if (pseudoElement != null) {
-                    builder.append("::").append(pseudoElement);
-                }
-
-                if (combinator != null) {
-                    builder.append(combinator).append(sub);
-                }
-                return builder.toString();
+            for (CharSequence selector : selectors) {
+                builder.append(selector);
             }
+
+            for (CharSequence pseudo : pseudoClasses) {
+                builder.append(":").append(pseudo);
+            }
+
+            if (pseudoElement != null) {
+                builder.append("::").append(pseudoElement);
+            }
+
+            if (combinator != null) {
+                builder.append(combinator).append(child);
+            }
+            return builder.toString();
         }
     }
-
 }
