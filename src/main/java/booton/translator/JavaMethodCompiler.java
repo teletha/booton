@@ -41,7 +41,7 @@ import jdk.internal.org.objectweb.asm.Label;
 import jdk.internal.org.objectweb.asm.MethodVisitor;
 import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
-import jsx.ui.StructureDescriptor;
+import jsx.ui.StructureDSL;
 import kiss.I;
 
 /**
@@ -1620,7 +1620,7 @@ class JavaMethodCompiler extends MethodVisitor {
                     owner = owner.getSuperclass();
                 }
 
-                if (owner == StructureDescriptor.class && returnType == void.class && !desc.startsWith("(I")) {
+                if (owner == StructureDSL.class && returnType == void.class && !desc.startsWith("(I")) {
                     Class[] fixed = new Class[parameters.length + 1];
                     fixed[0] = int.class;
                     System.arraycopy(parameters, 0, fixed, 1, parameters.length);

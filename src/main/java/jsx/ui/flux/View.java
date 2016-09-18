@@ -9,13 +9,13 @@
  */
 package jsx.ui.flux;
 
-import jsx.style.StyleDescriptor;
-import jsx.ui.StructureDescriptor;
+import jsx.style.StyleDSL;
+import jsx.ui.StructureDSL;
 
 /**
  * @version 2016/04/07 12:08:10
  */
-public class View<Model, StyleDefinition extends StyleDescriptor> extends StructureDescriptor {
+public class View<Model, StyleDefinition extends StyleDSL> extends StructureDSL {
 
     StyleDefinition $;
 }

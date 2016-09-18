@@ -19,7 +19,7 @@ import jsx.ui.Style;
 /**
  * @version 2016/09/18 10:32:55
  */
-public class StyleTester extends StyleDescriptor {
+public class StyleTester extends StyleDSL {
 
     /**
      * Helper method to wirte test style.

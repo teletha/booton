@@ -29,7 +29,7 @@ public interface Style extends Declarable, Location<UIEvent> {
      */
     @Override
     default void declare() {
-        StructureDescriptor.latestElement.classList.push(this);
+        StructureDSL.latestElement.classList.push(this);
     }
 
     /**

@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import static jsx.ui.StructureDescriptor.*;
+import static jsx.ui.StructureDSL.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import jsx.ui.piece.Input;
 import jsx.ui.piece.UI;
 
@@ -56,7 +56,7 @@ public class ReferenceCheckTest {
     /**
      * @version 2015/10/05 1:45:14
      */
-    private static class SingleRootText extends Widget<StyleDescriptor> {
+    private static class SingleRootText extends Widget<StyleDSL> {
 
         private final StringProperty property = new SimpleStringProperty("base");
 
@@ -89,7 +89,7 @@ public class ReferenceCheckTest {
     /**
      * @version 2015/10/05 1:50:40
      */
-    private static class NestedElement extends Widget<StyleDescriptor> {
+    private static class NestedElement extends Widget<StyleDSL> {
 
         private final IntegerProperty property = new SimpleIntegerProperty(3);
 
@@ -124,7 +124,7 @@ public class ReferenceCheckTest {
     /**
      * @version 2015/10/05 1:52:04
      */
-    private static class SingleWidget extends Widget<StyleDescriptor> {
+    private static class SingleWidget extends Widget<StyleDSL> {
 
         private final Input input = UI.input();
 

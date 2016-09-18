@@ -9,14 +9,14 @@
  */
 package jsx.style.property;
 
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import jsx.style.value.Color;
 import jsx.ui.Style;
 
 /**
  * @version 2016/09/18 11:46:20
  */
-class BuiltinStyle extends StyleDescriptor {
+class BuiltinStyle extends StyleDSL {
 
     /**
      * Make text unselectable.

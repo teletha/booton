@@ -39,7 +39,7 @@ import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;
 import jsx.debug.Profile;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import jsx.ui.flux.Interactive;
 import jsx.ui.flux.Location;
 import jsx.ui.flux.Locator;
@@ -54,7 +54,7 @@ import kiss.model.Model;
  * @version 2016/04/07 17:40:37
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
-public abstract class Widget<Styles extends StyleDescriptor> implements Declarable {
+public abstract class Widget<Styles extends StyleDSL> implements Declarable {
 
     /** The cache for widget metadata. */
     private static final Map<Class, WidgetModelManager> metas = new HashMap();
@@ -104,7 +104,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
         Type[] parameters = Model.collectParameters(getClass(), Widget.class);
-        this.$ = (Styles) (parameters.length == 0 ? new StyleDescriptor() : I.make((Class) parameters[0]));
+        this.$ = (Styles) (parameters.length == 0 ? new StyleDSL() : I.make((Class) parameters[0]));
 
         /**
          * <p>
@@ -444,7 +444,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
             requestAnimationFrame(() -> {
                 for (Widget widget : updater) {
                     // create new virtual element
-                    VirtualElement next = StructureDescriptor.createWidget(0, widget);
+                    VirtualElement next = StructureDSL.createWidget(0, widget);
 
                     // create patch to manipulate DOM and apply it
                     WidgetLog.Diff.start();
@@ -467,7 +467,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      */
     @Override
     public void declare() {
-        StructureDescriptor.createWidget(id, this);
+        StructureDSL.createWidget(id, this);
     }
 
     /**
@@ -491,7 +491,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      * @param model1 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <StyledLocations extends StyleDescriptor, W extends Widget1<StyledLocations, First>, First> W of(Class<W> widgetType, First model1) {
+    public static final <StyledLocations extends StyleDSL, W extends Widget1<StyledLocations, First>, First> W of(Class<W> widgetType, First model1) {
         return create(widgetType, new Object[] {model1});
     }
 
@@ -504,7 +504,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      * @param models An associated model.
      * @return A list of widget with the specified models.
      */
-    public static final <StyledLocations extends StyleDescriptor, W extends Widget1<StyledLocations, First>, First> W[] of(Class<W> widgetType, First[] models) {
+    public static final <StyledLocations extends StyleDSL, W extends Widget1<StyledLocations, First>, First> W[] of(Class<W> widgetType, First[] models) {
         W[] widgets = (W[]) Array.newInstance(widgetType, models.length);
 
         for (int i = 0; i < models.length; i++) {
@@ -523,7 +523,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      * @param model2 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <StyledLocations extends StyleDescriptor, W extends Widget2<StyledLocations, First, Second>, First, Second> W of(Class<W> widgetType, First model1, Second model2) {
+    public static final <StyledLocations extends StyleDSL, W extends Widget2<StyledLocations, First, Second>, First, Second> W of(Class<W> widgetType, First model1, Second model2) {
         return create(widgetType, new Object[] {model1, model2});
     }
 
@@ -538,7 +538,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      * @param model3 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <StyledLocations extends StyleDescriptor, W extends Widget3<StyledLocations, First, Second, Third>, First, Second, Third> W of(Class<W> widgetType, First model1, Second model2, Third model3) {
+    public static final <StyledLocations extends StyleDSL, W extends Widget3<StyledLocations, First, Second, Third>, First, Second, Third> W of(Class<W> widgetType, First model1, Second model2, Third model3) {
         return create(widgetType, new Object[] {model1, model2, model3});
     }
 
@@ -554,7 +554,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      * @param model4 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <StyledLocations extends StyleDescriptor, W extends Widget4<StyledLocations, First, Second, Third, Fourth>, First, Second, Third, Fourth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4) {
+    public static final <StyledLocations extends StyleDSL, W extends Widget4<StyledLocations, First, Second, Third, Fourth>, First, Second, Third, Fourth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4) {
         return create(widgetType, new Object[] {model1, model2, model3, model4});
     }
 
@@ -571,7 +571,7 @@ public abstract class Widget<Styles extends StyleDescriptor> implements Declarab
      * @param model5 An associated model.
      * @return A widget with the specified models.
      */
-    public static final <StyledLocations extends StyleDescriptor, W extends Widget5<StyledLocations, First, Second, Third, Fourth, Fifth>, First, Second, Third, Fourth, Fifth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4, Fifth model5) {
+    public static final <StyledLocations extends StyleDSL, W extends Widget5<StyledLocations, First, Second, Third, Fourth, Fifth>, First, Second, Third, Fourth, Fifth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4, Fifth model5) {
         return create(widgetType, new Object[] {model1, model2, model3, model4, model5});
     }
 

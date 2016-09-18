@@ -9,7 +9,7 @@
  */
 package jsx.style.property;
 
-import static jsx.style.StyleDescriptor.*;
+import static jsx.style.StyleDSL.*;
 
 import jsx.style.PropertyDefinition;
 import jsx.style.value.Numeric;

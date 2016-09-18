@@ -25,14 +25,14 @@ import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
 import js.dom.User;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import kiss.Disposable;
 import kiss.Events;
 
 /**
  * @version 2016/04/07 17:41:32
  */
-public abstract class LowLevelWidget<Styles extends StyleDescriptor, T extends LowLevelWidget<Styles, T>> extends Widget<Styles> {
+public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevelWidget<Styles, T>> extends Widget<Styles> {
 
     /** The disposable list. */
     private List<Disposable> disposables;

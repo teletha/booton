@@ -44,10 +44,10 @@ import kiss.Manageable;
 import kiss.Singleton;
 
 /**
- * @version 2014/10/25 11:22:51
+ * @version 2016/09/18 19:02:34
  */
 @Manageable(lifestyle = Singleton.class)
-public class StyleDescriptor extends SelectorDSL {
+public class StyleDSL extends SelectorDSL {
 
     /**
      * <p>

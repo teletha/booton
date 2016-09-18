@@ -12,7 +12,7 @@ package jsx.ui.piece;
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.User.*;
 import static jsx.ui.FunctionHelper.*;
-import static jsx.ui.StructureDescriptor.*;
+import static jsx.ui.StructureDSL.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.Widget;
 import jsx.ui.Widget1;
@@ -174,7 +174,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      * @param message
      * @return
      */
-    public Input invalidIf(Predicate<String> condition, Class<? extends Widget1<StyleDescriptor, String>> message) {
+    public Input invalidIf(Predicate<String> condition, Class<? extends Widget1<StyleDSL, String>> message) {
         return invalidWhen(condition, input -> {
             return Widget.of(message, input);
         });
@@ -233,7 +233,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
     /**
      * @version 2015/10/21 13:40:36
      */
-    private static class InvalidMassage<C> extends Widget2<StyleDescriptor, String, Function<String, String>> {
+    private static class InvalidMassage<C> extends Widget2<StyleDSL, String, Function<String, String>> {
 
         /**
          * {@inheritDoc}

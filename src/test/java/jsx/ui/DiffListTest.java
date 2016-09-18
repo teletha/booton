@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import static jsx.ui.StructureDescriptor.*;
+import static jsx.ui.StructureDSL.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 
 import booton.sample.Person;
 import booton.soeur.ScriptRunner;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 
 /**
  * @version 2015/10/05 0:54:19
@@ -83,7 +83,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:48:29
      */
-    private static class SingleBox extends Widget1<StyleDescriptor, String> {
+    private static class SingleBox extends Widget1<StyleDSL, String> {
 
         /**
          * {@inheritDoc}
@@ -111,7 +111,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:50:19
      */
-    private static class MultiBox extends Widget1<StyleDescriptor, String> {
+    private static class MultiBox extends Widget1<StyleDSL, String> {
 
         /**
          * {@inheritDoc}
@@ -140,7 +140,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:51:22
      */
-    private static class NestBox extends Widget1<StyleDescriptor, String> {
+    private static class NestBox extends Widget1<StyleDSL, String> {
 
         /**
          * {@inheritDoc}
@@ -183,7 +183,7 @@ public class DiffListTest extends DiffTestBase {
     /**
      * @version 2015/10/05 0:53:14
      */
-    private static class PersonBox extends Widget1<StyleDescriptor, Person> {
+    private static class PersonBox extends Widget1<StyleDSL, Person> {
 
         /**
          * {@inheritDoc}

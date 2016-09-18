@@ -9,7 +9,7 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.StructureDescriptor.*;
+import static jsx.ui.StructureDSL.*;
 
 import java.util.ArrayList;
 import java.util.List;

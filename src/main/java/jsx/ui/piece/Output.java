@@ -9,7 +9,7 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.StructureDescriptor.*;
+import static jsx.ui.StructureDSL.*;
 
 import java.util.function.Function;
 
@@ -17,14 +17,14 @@ import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
 import kiss.I;
 
 /**
  * @version 2014/08/22 11:27:22
  */
-public class Output extends LowLevelWidget<StyleDescriptor, Output> {
+public class Output extends LowLevelWidget<StyleDSL, Output> {
 
     /** The text contents. */
     public final StringProperty text;

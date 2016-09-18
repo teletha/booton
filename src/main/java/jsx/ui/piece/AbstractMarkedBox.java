@@ -10,7 +10,7 @@
 package jsx.ui.piece;
 
 import static js.dom.User.*;
-import static jsx.ui.StructureDescriptor.*;
+import static jsx.ui.StructureDSL.*;
 
 import java.util.Objects;
 import java.util.function.Consumer;

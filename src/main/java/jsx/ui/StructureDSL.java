@@ -19,13 +19,13 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 
 import js.lang.NativeString;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import kiss.Events;
 
 /**
- * @version 2015/10/14 10:18:46
+ * @version 2016/09/18 19:02:50
  */
-public class StructureDescriptor {
+public class StructureDSL {
 
     /** The namespace uri for HTML. */
     static final String HTML = "http://www.w3.org/1999/xhtml";
@@ -547,7 +547,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <Styles extends StyleDescriptor, E extends Enum> Declarable contents(Class<? extends Widget1<Styles, E>> childType, Class<E> children) {
+    public static <Styles extends StyleDSL, E extends Enum> Declarable contents(Class<? extends Widget1<Styles, E>> childType, Class<E> children) {
         return contents(childType, children.getEnumConstants());
     }
 
@@ -558,7 +558,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <Styles extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, C[] children) {
+    public static <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, C[] children) {
         return contents(childType, Arrays.asList(children));
     }
 
@@ -569,7 +569,7 @@ public class StructureDescriptor {
      *
      * @param children A list of child widget.
      */
-    public static <Styles extends StyleDescriptor, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
+    public static <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
         return contents(children, child -> {
             widget(Widget.of(childType, child));
         });

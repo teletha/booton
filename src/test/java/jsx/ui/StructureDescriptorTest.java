@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import static jsx.ui.StructureDescriptor.*;
+import static jsx.ui.StructureDSL.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 
 /**
  * @version 2015/10/04 23:56:49
@@ -232,7 +232,7 @@ public class StructureDescriptorTest extends DiffTestBase {
     /**
      * @version 2015/10/04 23:50:43
      */
-    private static class SubString extends Widget1<StyleDescriptor, String> {
+    private static class SubString extends Widget1<StyleDSL, String> {
 
         /**
          * {@inheritDoc}

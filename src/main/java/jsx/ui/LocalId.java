@@ -28,7 +28,7 @@ import kiss.I;
 class LocalId {
 
     /** The class name. */
-    private static final String CLASS = StructureDescriptor.class.getName();
+    private static final String CLASS = StructureDSL.class.getName();
 
     /**
      * <p>
@@ -155,7 +155,7 @@ class LocalId {
     private static class MethodLineSearch extends MethodVisitor {
 
         /** Reusable type. */
-        private static final Type Declarables = Type.getType(StructureDescriptor.class);
+        private static final Type Declarables = Type.getType(StructureDSL.class);
 
         /** The line mapping. */
         private final Map<Integer, Integer> lines;

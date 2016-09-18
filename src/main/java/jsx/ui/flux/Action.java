@@ -10,12 +10,12 @@
 package jsx.ui.flux;
 
 import js.dom.User;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 
 /**
  * @version 2016/04/07 12:17:39
  */
-public class Action<Model, T extends StyleDescriptor> {
+public class Action<Model, T extends StyleDSL> {
 
     protected T $;
 

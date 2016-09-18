@@ -25,7 +25,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.Element;
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import jsx.ui.Style;
 import jsx.ui.Widget;
 import kiss.Events;
@@ -434,7 +434,7 @@ public class UI {
         /**
          * @version 2015/10/16 14:46:30
          */
-        private static class $ extends StyleDescriptor {
+        private static class $ extends StyleDSL {
 
             static Style Modal = () -> {
                 display.none();

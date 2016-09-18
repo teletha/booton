@@ -49,7 +49,7 @@ class VirtualElement extends VirtualNode<Element> {
     VirtualElement(int id, String name, Object context) {
         super(id);
 
-        this.ns = StructureDescriptor.HTML;
+        this.ns = StructureDSL.HTML;
         this.name = name;
         this.context = context;
     }

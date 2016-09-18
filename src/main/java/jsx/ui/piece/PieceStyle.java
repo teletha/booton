@@ -9,7 +9,7 @@
  */
 package jsx.ui.piece;
 
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 import jsx.style.property.Background.BackgroundImage;
 import jsx.style.value.Color;
 import jsx.style.value.Numeric;
@@ -19,7 +19,7 @@ import jsx.ui.Style;
 /**
  * @version 2015/09/29 2:55:11
  */
-public class PieceStyle extends StyleDescriptor {
+public class PieceStyle extends StyleDSL {
 
     // ===========================================
     // Form Related Style

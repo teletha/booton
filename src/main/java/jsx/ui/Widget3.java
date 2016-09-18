@@ -9,12 +9,12 @@
  */
 package jsx.ui;
 
-import jsx.style.StyleDescriptor;
+import jsx.style.StyleDSL;
 
 /**
  * @version 2016/04/07 17:40:24
  */
-public abstract class Widget3<Styles extends StyleDescriptor, First, Second, Third> extends Widget<Styles> {
+public abstract class Widget3<Styles extends StyleDSL, First, Second, Third> extends Widget<Styles> {
 
     /** The first model associated with this {@link Widget}. */
     protected final First model1;
