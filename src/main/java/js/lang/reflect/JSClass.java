@@ -40,7 +40,7 @@ import js.lang.NativeObject;
  * functionalities.
  * </p>
  * 
- * @version 2013/09/21 23:38:00
+ * @version 2016/09/18 11:07:12
  */
 @JavaAPIProvider(Class.class)
 class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
@@ -1402,6 +1402,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
             // convert java class name to javascript class name
             fqcn = boot.getPropertyAs(NativeObject.class, "names").getPropertyAs(String.class, fqcn);
+
+            if (fqcn == null) {
+                throw (RuntimeException) (Object) new ClassNotFoundException(fqcn);
+                // return (Class) (Object) new JSClass(fqcn, new NativeObject(), new NativeArray(),
+                // Object.class, new NativeObject());
+            }
         }
 
         if (fqcn.equals("NativeNumber")) {
