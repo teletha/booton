@@ -644,22 +644,4 @@ public class StyleDSL extends SelectorDSL {
             });
         }
     }
-
-    // The "require" functionality is useless. Use normal method call and post processor instead.
-    //
-    // "require" method make:
-    // a{} a:hover{} b{require(a)} >>> a,b{} a:hover,b:hover{}
-    //
-    // post processor make:
-    // a{} a:hover{} b{} b:hover{} >>> a,b{} a:hover,b:hover{}
-    //
-    // /**
-    // * <p>
-    // * Import other styles.
-    // * </p>
-    // *
-    // * @param styles Styles to import.
-    // */
-    // public final void require(Style... styles) {
-    // }
 }
