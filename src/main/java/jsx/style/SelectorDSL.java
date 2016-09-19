@@ -40,6 +40,45 @@ public abstract class SelectorDSL {
 
     /**
      * <p>
+     * Attribute selectors select an element using the presence of a given attribute or attribute
+     * value.
+     * </p>
+     * <p>
+     * Represents an element with an attribute name.
+     * </p>
+     * <p>
+     * This is shorthand method of {@link Attribute#exist(Style)}
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @param A sub style rule.
+     */
+    public final void attr(String name, Style sub) {
+        attr(name).exist(sub);
+    }
+
+    /**
+     * <p>
+     * Attribute selectors select an element using the presence of a given attribute or attribute
+     * value.
+     * </p>
+     * <p>
+     * Represents an element with an attribute name.
+     * </p>
+     * <p>
+     * This is shorthand method of {@link Attribute#is(Style)}
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @param value An attribute value.
+     * @param A sub style rule.
+     */
+    public final void attr(String name, String value, Style sub) {
+        attr(name).is(value, sub);
+    }
+
+    /**
+     * <p>
      * In an HTML document, CSS class selectors match an element based on the contents of the
      * element's class attribute.
      * </p>
@@ -1169,6 +1208,9 @@ public abstract class SelectorDSL {
         /** An attribute name. */
         private final String name;
 
+        /** The flag for ignore case. */
+        private boolean ignoreCase;
+
         /**
          * <p>
          * Create attribute selector builder.
@@ -1185,6 +1227,18 @@ public abstract class SelectorDSL {
 
         /**
          * <p>
+         * Set case sensitivity.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public Attribute ignoreCase() {
+            ignoreCase = true;
+            return this;
+        }
+
+        /**
+         * <p>
          * Attribute selectors select an element using the presence of a given attribute or
          * attribute value.
          * </p>
@@ -1195,7 +1249,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL exist() {
-            return attr(name, null, null, true);
+            return attr(name, null, null);
         }
 
         /**
@@ -1226,7 +1280,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL is(String value) {
-            return attr(name, "", value, true);
+            return attr(name, "", value);
         }
 
         /**
@@ -1259,7 +1313,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL isSpace(String value) {
-            return attr(name, "~", value, true);
+            return attr(name, "~", value);
         }
 
         /**
@@ -1294,7 +1348,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL isHyphen(String value) {
-            return attr(name, "|", value, true);
+            return attr(name, "|", value);
         }
 
         /**
@@ -1329,7 +1383,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL startsWith(String value) {
-            return attr(name, "^", value, true);
+            return attr(name, "^", value);
         }
 
         /**
@@ -1363,7 +1417,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL endsWith(String value) {
-            return attr(name, "$", value, true);
+            return attr(name, "$", value);
         }
 
         /**
@@ -1397,7 +1451,7 @@ public abstract class SelectorDSL {
          * @return Chainable API.
          */
         public SelectorDSL contains(String value) {
-            return attr(name, "*", value, true);
+            return attr(name, "*", value);
         }
 
         /**
@@ -1423,19 +1477,18 @@ public abstract class SelectorDSL {
          * @param name An attribute name.
          * @param operator A operator.
          * @param value An attribute value.
-         * @param caseSensitive A flag for case sensitive.
          * @return Chainable API.
          */
-        private SelectorDSL attr(String name, String operator, String value, boolean caseSensitive) {
+        private SelectorDSL attr(String name, String operator, String value) {
             StringBuilder builder = new StringBuilder();
             builder.append("[").append(name);
 
             if (operator != null) {
                 builder.append(operator).append("=\"").append(value).append('"');
-            }
 
-            if (!caseSensitive) {
-                builder.append(" i");
+                if (ignoreCase) {
+                    builder.append(" i");
+                }
             }
             builder.append("]");
 

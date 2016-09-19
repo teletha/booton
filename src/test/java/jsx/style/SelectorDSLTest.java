@@ -69,6 +69,18 @@ public class SelectorDSLTest {
         test(selector -> selector.hover().before(null), "$:hover::before");
     }
 
+    @Test
+    public void attribute() {
+        test(selector().attr("name").exist(), "$[name]");
+        test(selector().attr("name").is("value"), "$[name=\"value\"]");
+    }
+
+    @Test
+    public void attributeCaseSensitive() {
+        test(selector().attr("name").ignoreCase().exist(), "$[name]");
+        test(selector().attr("name").ignoreCase().is("value"), "$[name=\"value\" i]");
+    }
+
     /**
      * Helper method.
      */
