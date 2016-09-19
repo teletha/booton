@@ -175,7 +175,7 @@ public class PseudoClassTest extends StyleTester {
     @Test
     public void LastType() throws Exception {
         ValidatableStyle parsed = writeStyle(() -> {
-            lastOfType(() -> {
+            lastType(() -> {
                 font.size(1, px);
             });
         });
@@ -186,15 +186,15 @@ public class PseudoClassTest extends StyleTester {
     @Test
     public void nthType() throws Exception {
         ValidatableStyle parsed = writeStyle(() -> {
-            nthOfType("1", () -> {
+            nthType("1", () -> {
                 font.size(1, px);
             });
 
-            nthOfType("2n", () -> {
+            nthType("2n", () -> {
                 font.size(1, px);
             });
 
-            nthOfType("odd", () -> {
+            nthType("odd", () -> {
                 font.size(1, px);
             });
         });
@@ -207,15 +207,15 @@ public class PseudoClassTest extends StyleTester {
     @Test
     public void nthLastType() throws Exception {
         ValidatableStyle parsed = writeStyle(() -> {
-            nthLastOfType("1", () -> {
+            nthLastType("1", () -> {
                 font.size(1, px);
             });
 
-            nthLastOfType("2n", () -> {
+            nthLastType("2n", () -> {
                 font.size(1, px);
             });
 
-            nthLastOfType("odd", () -> {
+            nthLastType("odd", () -> {
                 font.size(1, px);
             });
         });
@@ -236,9 +236,9 @@ public class PseudoClassTest extends StyleTester {
     }
 
     @Test
-    public void onlyType() throws Exception {
+    public void OnlyType() throws Exception {
         ValidatableStyle parsed = writeStyle(() -> {
-            onlyOfType(() -> {
+            onlyType(() -> {
                 font.size(1, px);
             });
         });

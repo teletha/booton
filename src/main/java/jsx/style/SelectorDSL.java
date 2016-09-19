@@ -39,31 +39,6 @@ public abstract class SelectorDSL {
     }
 
     /**
-     * Write attribute selector pattern.
-     * 
-     * @param name An attribute name.
-     * @param operator A operator.
-     * @param value An attribute value.
-     * @param caseSensitive A flag for case sensitive.
-     * @return Chainable API.
-     */
-    private SelectorDSL attr(String name, String operator, String value, boolean caseSensitive) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("[").append(name);
-
-        if (operator != null) {
-            builder.append(operator).append("=\"").append(value).append('"');
-        }
-
-        if (!caseSensitive) {
-            builder.append(" i");
-        }
-        builder.append("]");
-
-        return basic(builder.toString());
-    }
-
-    /**
      * <p>
      * In an HTML document, CSS class selectors match an element based on the contents of the
      * element's class attribute.
@@ -474,14 +449,26 @@ public abstract class SelectorDSL {
 
     /**
      * <p>
-     * The :public final CSS pseudo-class represents any user interface element that is the public
-     * final among a group of similar elements.
+     * The :default CSS pseudo-class represents any user interface element that is the public final
+     * among a group of similar elements.
      * </p>
      * 
      * @return Chainable API.
      */
     public final SelectorDSL defaults() {
         return pseudo(false, "default");
+    }
+
+    /**
+     * <p>
+     * The :default CSS pseudo-class represents any user interface element that is the public final
+     * among a group of similar elements.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final void defaults(Style sub) {
+        defaults().declare(sub);
     }
 
     /**
@@ -760,7 +747,7 @@ public abstract class SelectorDSL {
      * 
      * @param sub A sub style.
      */
-    public final void lastOfType(Style sub) {
+    public final void lastType(Style sub) {
         lastType().declare(sub);
     }
 
@@ -803,7 +790,7 @@ public abstract class SelectorDSL {
      * contain another negation selector.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL not(SelectorDSL selector) {
         // not-pseudo-class accepts simple selector only
@@ -830,7 +817,7 @@ public abstract class SelectorDSL {
      * contain another negation selector.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL not(Style selector) {
         // not-pseudo-class accepts simple selector only
@@ -856,7 +843,7 @@ public abstract class SelectorDSL {
      * document tree, for a given positive or zero value for n, and has a parent element.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL nthChild(String pattern) {
         return pseudo(false, "nth-child(" + pattern + ")");
@@ -881,7 +868,7 @@ public abstract class SelectorDSL {
      * :nth-child for a more thorough description of the syntax of its argument.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL nthLastChild(String pattern) {
         return pseudo(false, "nth-last-child(" + pattern + ")");
@@ -910,9 +897,9 @@ public abstract class SelectorDSL {
      * different tags appear before it.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
-    public final SelectorDSL nthOfType(String pattern) {
+    public final SelectorDSL nthType(String pattern) {
         return pseudo(false, "nth-of-type(" + pattern + ")");
     }
 
@@ -928,8 +915,8 @@ public abstract class SelectorDSL {
      * 
      * @param sub A sub style.
      */
-    public final void nthOfType(String pattern, Style sub) {
-        nthOfType(pattern).declare(sub);
+    public final void nthType(String pattern, Style sub) {
+        nthType(pattern).declare(sub);
     }
 
     /**
@@ -940,9 +927,9 @@ public abstract class SelectorDSL {
      * argument.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
-    public final SelectorDSL nthLastOfType(String pattern) {
+    public final SelectorDSL nthLastType(String pattern) {
         return pseudo(false, "nth-last-of-type(" + pattern + ")");
     }
 
@@ -956,8 +943,8 @@ public abstract class SelectorDSL {
      * 
      * @param sub A sub style.
      */
-    public final void nthLastOfType(String pattern, Style sub) {
-        nthLastOfType(pattern).declare(sub);
+    public final void nthLastType(String pattern, Style sub) {
+        nthLastType(pattern).declare(sub);
     }
 
     /**
@@ -967,7 +954,7 @@ public abstract class SelectorDSL {
      * with a lower specificity.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL onlyChild() {
         return pseudo(false, "only-child");
@@ -992,9 +979,9 @@ public abstract class SelectorDSL {
      * type.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
-    public final SelectorDSL onlyOfType() {
+    public final SelectorDSL onlyType() {
         return pseudo(false, "only-of-type");
     }
 
@@ -1006,8 +993,8 @@ public abstract class SelectorDSL {
      * 
      * @param sub A sub style.
      */
-    public final void onlyOfType(Style sub) {
-        onlyOfType().declare(sub);
+    public final void onlyType(Style sub) {
+        onlyType().declare(sub);
     }
 
     /**
@@ -1017,7 +1004,7 @@ public abstract class SelectorDSL {
      * accordingly.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL optional() {
         return pseudo(false, "optional");
@@ -1043,7 +1030,7 @@ public abstract class SelectorDSL {
      * form can be submitted.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL required() {
         return pseudo(false, "required");
@@ -1060,6 +1047,30 @@ public abstract class SelectorDSL {
      */
     public final void required(Style sub) {
         required().declare(sub);
+    }
+
+    /**
+     * <p>
+     * The :target pseudo-class represents the unique element, if any, with an id matching the
+     * fragment identifier of the URI of the document.
+     * </p>
+     * 
+     * @return Chainable API.
+     */
+    public final SelectorDSL target() {
+        return pseudo(false, "target");
+    }
+
+    /**
+     * <p>
+     * The :target pseudo-class represents the unique element, if any, with an id matching the
+     * fragment identifier of the URI of the document.
+     * </p>
+     * 
+     * @param sub A sub style.
+     */
+    public final void target(Style sub) {
+        target().declare(sub);
     }
 
     /**
@@ -1097,7 +1108,7 @@ public abstract class SelectorDSL {
      * LVHA-order: :link — :visited — :hover — :active.
      * </p>
      * 
-     * @return
+     * @return Chainable API.
      */
     public final SelectorDSL visited() {
         return pseudo(false, "visited");
@@ -1404,6 +1415,31 @@ public abstract class SelectorDSL {
          */
         public void contains(String value, Style sub) {
             contains(value).declare(sub);
+        }
+
+        /**
+         * Write attribute selector pattern.
+         * 
+         * @param name An attribute name.
+         * @param operator A operator.
+         * @param value An attribute value.
+         * @param caseSensitive A flag for case sensitive.
+         * @return Chainable API.
+         */
+        private SelectorDSL attr(String name, String operator, String value, boolean caseSensitive) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("[").append(name);
+
+            if (operator != null) {
+                builder.append(operator).append("=\"").append(value).append('"');
+            }
+
+            if (!caseSensitive) {
+                builder.append(" i");
+            }
+            builder.append("]");
+
+            return basic(builder.toString());
         }
     }
 
