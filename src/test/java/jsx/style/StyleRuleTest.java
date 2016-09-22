@@ -11,8 +11,6 @@ package jsx.style;
 
 import org.junit.Test;
 
-import jsx.ui.Style;
-
 /**
  * @version 2016/09/18 10:30:49
  */

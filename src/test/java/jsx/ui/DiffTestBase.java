@@ -13,6 +13,7 @@ import java.util.List;
 
 import js.dom.Node;
 import js.dom.NodeComparator;
+import jsx.style.Style;
 import jsx.style.StyleDSL;
 
 /**

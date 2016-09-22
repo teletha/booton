@@ -19,6 +19,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 
 import js.lang.NativeString;
+import jsx.style.Style;
 import jsx.style.StyleDSL;
 
 /**
@@ -33,7 +34,7 @@ public class StructureDSL {
     static final String SVG = "http://www.w3.org/2000/svg";
 
     /** The latest element. */
-    static VirtualElement latestElement;
+    private static VirtualElement latestElement;
 
     private static Widget<?> latestWidget;
 
@@ -263,7 +264,7 @@ public class StructureDSL {
 
         for (Declarable declarable : declarables) {
             if (declarable != null) {
-                declarable.declare();
+                declarable.declare(element);
             }
         }
 
@@ -466,7 +467,7 @@ public class StructureDSL {
         return () -> {
             if (condition) {
                 for (Declarable declarable : declarables) {
-                    declarable.declare();
+                    declarable.declare(latestElement);
                 }
             }
         };

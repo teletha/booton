@@ -20,4 +20,8 @@ public interface Declarable {
      * </p>
      */
     void declare();
+
+    default void declare(VirtualElement element) {
+        declare();
+    }
 }

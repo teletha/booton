@@ -12,8 +12,6 @@ package jsx.style;
 import java.util.HashMap;
 import java.util.Map;
 
-import jsx.ui.Style;
-
 /**
  * <p>
  * {@link Style} with the context value.

@@ -7,9 +7,11 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.style;
 
 import js.dom.UIEvent;
+import jsx.ui.Declarable;
+import jsx.ui.VirtualElement;
 import jsx.ui.flux.Location;
 
 /**
@@ -29,7 +31,17 @@ public interface Style extends Declarable, Location<UIEvent> {
      */
     @Override
     default void declare() {
-        StructureDSL.latestElement.classList.push(this);
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default void declare(VirtualElement element) {
+        element.classList.push(this);
     }
 
     /**

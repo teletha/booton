@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import jsx.ui.Style;
 import jsx.ui.flux.Location;
 
 /**

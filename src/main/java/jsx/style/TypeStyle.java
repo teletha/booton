@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.style;
 
 /**
  * @version 2016/04/06 16:39:33

@@ -11,8 +11,6 @@ package jsx.style;
 
 import javafx.beans.property.Property;
 
-import jsx.ui.Style;
-
 /**
  * @version 2015/05/04 13:33:36
  */

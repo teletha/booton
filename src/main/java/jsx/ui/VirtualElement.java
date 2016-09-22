@@ -14,12 +14,13 @@ import static js.lang.Global.*;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import jsx.style.Style;
 import jsx.ui.flux.Interactive;
 
 /**
  * @version 2015/10/04 22:16:29
  */
-class VirtualElement extends VirtualNode<Element> {
+public class VirtualElement extends VirtualNode<Element> {
 
     /** The namespace uri. */
     final String ns;
@@ -28,13 +29,13 @@ class VirtualElement extends VirtualNode<Element> {
     final String name;
 
     /** The attributes. */
-    final DualList<String, String> attributes = new DualList();
+    public final DualList<String, String> attributes = new DualList();
 
     /** The class attributes. */
-    final NativeArray<Style> classList = new NativeArray();
+    public final NativeArray<Style> classList = new NativeArray();
 
     /** The items nodes. */
-    final NativeArray<VirtualNode> items = new NativeArray();
+    public final NativeArray<VirtualNode> items = new NativeArray();
 
     final Object context;
 

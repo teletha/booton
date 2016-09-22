@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.style;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -19,11 +19,11 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import booton.Necessary;
+import jsx.style.Style;
 import jsx.style.StyleDSL;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
 import jsx.ui.StructureDSL;
-import jsx.ui.Style;
 import jsx.ui.Widget1;
 import jsx.ui.i18n.TextLocalizer;
 import jsx.ui.piece.Button;

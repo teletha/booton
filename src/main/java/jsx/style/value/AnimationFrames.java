@@ -10,8 +10,8 @@
 package jsx.style.value;
 
 import js.lang.NativeArray;
+import jsx.style.Style;
 import jsx.style.StyleRule;
-import jsx.ui.Style;
 
 /**
  * @version 2015/10/06 14:00:26

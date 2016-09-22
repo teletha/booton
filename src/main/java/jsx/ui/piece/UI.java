@@ -25,8 +25,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import js.dom.Element;
+import jsx.style.Style;
 import jsx.style.StyleDSL;
-import jsx.ui.Style;
 import jsx.ui.Widget;
 import kiss.Events;
 import kiss.I;

@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import jsx.style.Style;
 
 /**
  * @version 2015/10/05 0:13:16

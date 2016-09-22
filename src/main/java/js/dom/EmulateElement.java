@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import js.lang.NativeFunction;
-import jsx.ui.Style;
+import jsx.style.Style;
 import kiss.I;
 import kiss.XML;
 

@@ -12,10 +12,10 @@ package jsx.ui.piece;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
 
+import jsx.style.Style;
 import jsx.style.value.Color;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
-import jsx.ui.Style;
 import jsx.ui.piece.Button.$;
 
 /**

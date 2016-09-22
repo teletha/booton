@@ -39,6 +39,7 @@ import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;
 import jsx.debug.Profile;
+import jsx.style.Style;
 import jsx.style.StyleDSL;
 import jsx.ui.flux.Interactive;
 import jsx.ui.flux.Location;

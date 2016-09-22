@@ -15,6 +15,7 @@ import java.util.List;
 import js.dom.Element;
 import js.lang.NativeArray;
 import jsx.collection.DualList;
+import jsx.style.Style;
 import jsx.ui.Patch.AddAttribute;
 import jsx.ui.Patch.AddClass;
 import jsx.ui.Patch.ChangeAttribute;

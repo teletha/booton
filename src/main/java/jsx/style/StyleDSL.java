@@ -39,7 +39,6 @@ import jsx.style.value.Numeric;
 import jsx.style.value.RadialGradient;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
-import jsx.ui.Style;
 import kiss.Manageable;
 import kiss.Singleton;
 

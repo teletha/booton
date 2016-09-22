@@ -11,6 +11,7 @@ package jsx.ui;
 
 import js.dom.Element;
 import js.dom.Node;
+import jsx.style.Style;
 
 /**
  * @version 2014/09/08 18:21:16

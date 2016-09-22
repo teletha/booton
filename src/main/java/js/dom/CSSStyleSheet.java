@@ -18,10 +18,10 @@ import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import js.lang.NativeCSSRuleList;
+import jsx.style.Style;
 import jsx.style.StyleRule;
 import jsx.style.value.AnimationFrames;
 import jsx.style.value.Font;
-import jsx.ui.Style;
 import jsx.ui.WidgetLog;
 
 /**

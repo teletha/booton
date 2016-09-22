@@ -18,13 +18,13 @@ import java.util.function.Supplier;
 import javafx.beans.property.Property;
 
 import js.dom.UIEvent;
+import jsx.style.Style;
 import jsx.style.value.Color;
 import jsx.style.value.Font;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
-import jsx.ui.Style;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
 
 /**

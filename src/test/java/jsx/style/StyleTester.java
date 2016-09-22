@@ -14,7 +14,6 @@ import static java.lang.Integer.*;
 import java.util.List;
 
 import jsx.style.value.Color;
-import jsx.ui.Style;
 
 /**
  * @version 2016/09/18 10:32:55

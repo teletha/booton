@@ -10,7 +10,7 @@
 package jsx.ui.flux;
 
 import js.dom.UIEvent;
-import jsx.ui.TypeStyle;
+import jsx.style.TypeStyle;
 import jsx.ui.Widget;
 import kiss.Events;
 
