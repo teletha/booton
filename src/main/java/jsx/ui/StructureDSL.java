@@ -42,7 +42,7 @@ public class StructureDSL {
     private static Object localContext;
 
     /** The modifier of context id. */
-    private static int localContextIdModifier = 31;
+    private static int localContextModifier = 31;
 
     /**
      * <p>
@@ -259,7 +259,7 @@ public class StructureDSL {
         VirtualElement parentElement = latestElement;
 
         // create element and connect it to the parent element
-        VirtualElement element = new VirtualElement((31 + id) ^ localContextIdModifier, ns, name, localContext, latestWidget);
+        VirtualElement element = new VirtualElement((31 + id) ^ localContextModifier, ns, name, localContext, latestWidget);
         parentElement.items.push(latestElement = element);
 
         for (Declarable declarable : declarables) {
@@ -570,17 +570,17 @@ public class StructureDSL {
         return () -> {
             // store parent context
             Object parentContext = localContext;
-            int parentModifier = localContextIdModifier;
+            int parentModifier = localContextModifier;
 
             for (C content : contents) {
                 localContext = content;
-                localContextIdModifier = (Objects.hash(content) + 117) ^ 31;
+                localContextModifier = (Objects.hash(content) + 117) ^ 31;
                 process.accept(content);
             }
 
             // restore parent context
             localContext = parentContext;
-            localContextIdModifier = parentModifier;
+            localContextModifier = parentModifier;
         };
     }
 
