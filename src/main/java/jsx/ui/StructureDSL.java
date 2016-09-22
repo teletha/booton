@@ -18,7 +18,6 @@ import java.util.function.Supplier;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 
-import js.lang.NativeString;
 import jsx.style.Style;
 import jsx.style.StyleDSL;
 
@@ -274,55 +273,6 @@ public class StructureDSL {
 
         // leave from the child node (revert context)
         latestElement = parentElement;
-    }
-
-    /**
-     * <p>
-     * The viewBox attribute allows to specify that a given set of graphics stretch to fit a
-     * particular container element.
-     * </p>
-     * <p>
-     * The value of the viewBox attribute is a list of four numbers min-x, min-y, width and height,
-     * separated by whitespace and/or a comma, which specify a rectangle in user space which should
-     * be mapped to the bounds of the viewport established by the given element, taking into account
-     * attribute preserveAspectRatio.
-     * </p>
-     * <p>
-     * Negative values for width or height are not permitted and a value of zero disables rendering
-     * of the element.
-     * </p>
-     * 
-     * @param minX
-     * @param minY
-     * @param width
-     * @param height
-     */
-    protected final Declarable viewBox(int minX, int minY, int width, int height) {
-        return attr("viewBox", new NativeString(minX).concat(" ")
-                .concat(minY)
-                .concat(" ")
-                .concat(width)
-                .concat(" ")
-                .concat(height)
-                .toString());
-    }
-
-    protected final Declarable position(double x, double y) {
-        return () -> {
-            latestElement.attributes.add("x", String.valueOf(x));
-            latestElement.attributes.add("y", String.valueOf(y));
-        };
-    }
-
-    protected final Declarable size(double width, double height) {
-        return () -> {
-            latestElement.attributes.add("width", String.valueOf(width));
-            latestElement.attributes.add("height", String.valueOf(height));
-        };
-    }
-
-    protected final SVGPath d() {
-        return new SVGPath();
     }
 
     /**
