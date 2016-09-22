@@ -63,17 +63,6 @@ public class StructureDSL {
      * @param widget A widget to define.
      */
     static VirtualWidget createWidget(Widget widget) {
-        return createWidget(widget, widget::virtualize);
-    }
-
-    /**
-     * <p>
-     * Internal API.
-     * </p>
-     * 
-     * @param widget A widget to define.
-     */
-    static VirtualWidget createWidget(Widget widget, Supplier<StructureDSL> method) {
         // store parent
         Widget parentWidget = latestWidget;
         VirtualElement parentElement = latestElement;
@@ -109,7 +98,7 @@ public class StructureDSL {
          * Assemble {@link VirtualStructure} actually.
          */
         WidgetLog.Virtualize.start();
-        method.get();
+        widget.virtualize();
         WidgetLog.Virtualize.stop();
 
         /**
@@ -701,7 +690,7 @@ public class StructureDSL {
     /**
      * @version 2015/09/15 11:18:03
      */
-    public static final class SVGPath implements Declarable {
+    public final class SVGPath implements Declarable {
 
         /** The current draw mode. */
         private boolean relativeMode = false;
