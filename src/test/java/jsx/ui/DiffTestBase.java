@@ -9,8 +9,6 @@
  */
 package jsx.ui;
 
-import static jsx.ui.StructureDSL.*;
-
 import java.util.List;
 
 import js.dom.Node;
@@ -20,7 +18,7 @@ import jsx.style.StyleDSL;
 /**
  * @version 2015/10/05 0:15:02
  */
-public class DiffTestBase {
+public class DiffTestBase extends StructureDSL {
 
     /** Empty style. */
     protected static final Style style = () -> {
@@ -35,7 +33,7 @@ public class DiffTestBase {
      * @return
      */
     protected final VirtualWidget make(Runnable writer) {
-        return createWidget(0, make(DSLWidget.class, writer));
+        return createWidget(make(DSLWidget.class, writer));
     }
 
     /**

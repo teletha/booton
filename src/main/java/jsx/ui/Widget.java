@@ -446,7 +446,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
             requestAnimationFrame(() -> {
                 for (Widget widget : updater) {
                     // create new virtual element
-                    VirtualElement next = StructureDSL.createWidget(0, widget);
+                    VirtualElement next = StructureDSL.createWidget(widget);
 
                     // create patch to manipulate DOM and apply it
                     WidgetLog.Diff.start();
@@ -469,7 +469,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
      */
     @Override
     public void declare() {
-        StructureDSL.createWidget(id, this);
+        StructureDSL.createWidget(this);
     }
 
     /**

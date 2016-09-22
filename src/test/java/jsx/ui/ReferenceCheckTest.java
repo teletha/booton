@@ -172,7 +172,7 @@ public class ReferenceCheckTest {
          */
         private VirtualNodeInfo(Widget widget) {
             // virtualize element
-            this.root = createWidget(0, widget);
+            this.root = createWidget(widget);
 
             // collect all nodes to test
             collect(root);
@@ -197,7 +197,7 @@ public class ReferenceCheckTest {
          */
         private VirtualNodeInfo(Widget widget, VirtualNodeInfo previous) {
             // virtualize element
-            this.root = createWidget(0, widget);
+            this.root = createWidget(widget);
 
             // collect all nodes to test
             collect(root);

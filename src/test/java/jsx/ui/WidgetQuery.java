@@ -25,7 +25,7 @@ public class WidgetQuery {
      * @return
      */
     public static <T extends Widget> List<T> find(Widget widget, Class<T> childWidgetType) {
-        VirtualElement root = createWidget(widget.id, widget);
+        VirtualElement root = createWidget(widget);
 
         List<T> list = new ArrayList();
         find(list, childWidgetType, root);

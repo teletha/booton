@@ -186,7 +186,7 @@ public class DiffElementTest extends DiffTestBase {
 
     @Test
     public void nestAttributeAdd() {
-        assertDiff(root(e("child")), root(e("child", attr("a", "A"))), 1);
+        assertDiff(root(e("child")), root(e("child", attribute("a", "A"))), 1);
     }
 
     @Test
@@ -231,7 +231,7 @@ public class DiffElementTest extends DiffTestBase {
      * @return
      */
     private static VirtualElement rootAttr(String... attributes) {
-        return e("root", attr(attributes));
+        return e("root", attribute(attributes));
     }
 
     /**
@@ -338,7 +338,7 @@ public class DiffElementTest extends DiffTestBase {
      * @param attributes
      * @return
      */
-    private static Map<String, String> attr(String... attributes) {
+    private static Map<String, String> attribute(String... attributes) {
         Map<String, String> map = new HashMap();
 
         for (int i = 0; i < attributes.length; i += 2) {
