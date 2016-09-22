@@ -12,7 +12,6 @@ package jsx.ui.piece;
 import static java.util.concurrent.TimeUnit.*;
 import static js.dom.User.*;
 import static jsx.ui.FunctionHelper.*;
-import static jsx.ui.StructureDSL.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ import javafx.beans.property.StringProperty;
 import js.dom.UIEvent;
 import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
+import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
 import jsx.ui.Widget1;
 import jsx.ui.Widget2;
@@ -204,9 +204,14 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize() {
-        html("input", WidgetRoot, $.SingleLineFormBase, userStyle
-                .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
+    protected StructureDSL virtualize() {
+        return new StructureDSL() {
+
+            {
+                html("input", WidgetRoot, $.SingleLineFormBase, userStyle
+                        .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
+            }
+        };
     }
 
     /**
@@ -239,8 +244,13 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            text(model2.apply(model1));
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    text(model2.apply(model1));
+                }
+            };
         }
     }
 }

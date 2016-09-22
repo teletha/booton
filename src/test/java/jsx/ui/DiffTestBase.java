@@ -154,8 +154,13 @@ public class DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            dsl.run();
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    dsl.run();
+                }
+            };
         }
     }
 }

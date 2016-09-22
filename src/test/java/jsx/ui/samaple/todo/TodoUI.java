@@ -10,7 +10,6 @@
 package jsx.ui.samaple.todo;
 
 import static jsx.ui.FunctionHelper.*;
-import static jsx.ui.StructureDSL.*;
 
 import java.util.function.Predicate;
 
@@ -23,6 +22,7 @@ import booton.Necessary;
 import jsx.style.StyleDSL;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
+import jsx.ui.StructureDSL;
 import jsx.ui.Style;
 import jsx.ui.Widget1;
 import jsx.ui.i18n.TextLocalizer;
@@ -124,14 +124,19 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize() {
-        widget(input);
-        box($.ITEMS, contents(Item.class, todos.list));
-        box($.FOTTER, () -> {
-            text(text.leftTaskIs(todos.countIncompleted()));
-            box($.BUTTONS, all, active, completed);
-            widget(clear);
-        });
+    protected StructureDSL virtualize() {
+        return new StructureDSL() {
+
+            {
+                widget(input);
+                box($.ITEMS, contents(Item.class, todos.list));
+                box($.FOTTER, () -> {
+                    text(text.leftTaskIs(todos.countIncompleted()));
+                    box($.BUTTONS, all, active, completed);
+                    widget(clear);
+                });
+            }
+        };
     }
 
     /**
@@ -158,17 +163,22 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            if (filter.getValue().test(model1)) {
-                if (editing.get()) {
-                    widget(edit);
-                } else {
-                    box($.HBox, () -> {
-                        widget(complete);
-                        widget(delete);
-                    });
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    if (filter.getValue().test(model1)) {
+                        if (editing.get()) {
+                            widget(edit);
+                        } else {
+                            box($.HBox, () -> {
+                                widget(complete);
+                                widget(delete);
+                            });
+                        }
+                    }
                 }
-            }
+            };
         }
 
         /**

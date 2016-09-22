@@ -9,8 +9,6 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.StructureDSL.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +17,7 @@ import javafx.beans.property.Property;
 import javafx.scene.control.SingleSelectionModel;
 
 import js.dom.User;
+import jsx.ui.StructureDSL;
 import jsx.ui.Style;
 import jsx.ui.Widget;
 import jsx.ui.piece.Select.Styles;
@@ -49,21 +48,26 @@ public class Select<M> extends Widget<Styles> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize() {
-        box($.Root, () -> {
-            html("select", $.Select, contents(values.size(), i -> {
-                M value = values.get(i);
+    protected StructureDSL virtualize() {
+        return new StructureDSL() {
 
-                html("option", attr("value", i), If(selection.getValue().equals(value), attr("selected", "selected")), () -> {
-                    text(value);
+            {
+                box($.Root, () -> {
+                    html("select", $.Select, contents(values.size(), i -> {
+                        M value = values.get(i);
+
+                        html("option", attr("value", i), If(selection.getValue().equals(value), attr("selected", "selected")), () -> {
+                            text(value);
+                        });
+                    }));
+                    svg("svg", $.SVGRoot, size(16, 16), position(0, 0), viewBox(0, 0, 16, 16), () -> {
+                        svg("g", () -> {
+                            svg("polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
+                        });
+                    });
                 });
-            }));
-            svg("svg", $.SVGRoot, size(16, 16), position(0, 0), viewBox(0, 0, 16, 16), () -> {
-                svg("g", () -> {
-                    svg("polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
-                });
-            });
-        });
+            }
+        };
     }
 
     /**

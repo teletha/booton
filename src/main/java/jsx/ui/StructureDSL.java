@@ -87,7 +87,7 @@ public class StructureDSL {
      * @param id A local id.
      * @param widget A widget to define.
      */
-    static VirtualWidget createWidget(int id, Widget widget, Runnable method) {
+    static VirtualWidget createWidget(int id, Widget widget, Supplier<StructureDSL> method) {
         // store parent
         Widget parentWidget = latestWidget;
         VirtualElement parentElement = latestElement;
@@ -123,7 +123,7 @@ public class StructureDSL {
          * Assemble {@link VirtualStructure} actually.
          */
         WidgetLog.Virtualize.start();
-        method.run();
+        method.get();
         WidgetLog.Virtualize.stop();
 
         /**

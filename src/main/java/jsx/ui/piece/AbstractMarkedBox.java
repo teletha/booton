@@ -10,7 +10,6 @@
 package jsx.ui.piece;
 
 import static js.dom.User.*;
-import static jsx.ui.StructureDSL.*;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -24,6 +23,7 @@ import jsx.style.value.Font;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
+import jsx.ui.StructureDSL;
 import jsx.ui.Style;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
 
@@ -82,11 +82,16 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
      * {@inheritDoc}
      */
     @Override
-    protected final void virtualize() {
-        box(WidgetRoot, $.Root, userStyle.getValue(), If(isMarked, $.Checked), () -> {
-            html("input", $.Input, attr("type", type), attr("name", name), attr("id", id));
-            html("label", $.Label, attr("for", id), contents(label));
-        });
+    protected final StructureDSL virtualize() {
+        return new StructureDSL() {
+
+            {
+                box(WidgetRoot, $.Root, userStyle.getValue(), If(isMarked, $.Checked), () -> {
+                    html("input", $.Input, attr("type", type), attr("name", name), attr("id", id));
+                    html("label", $.Label, attr("for", id), contents(label));
+                });
+            }
+        };
     }
 
     /**

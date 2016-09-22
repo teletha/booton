@@ -359,8 +359,10 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
      * <p>
      * Create virtual elements of this {@link Widget}.
      * </p>
+     * 
+     * @return A virtual structure of this {@link Widget}.
      */
-    protected abstract void virtualize();
+    protected abstract StructureDSL virtualize();
 
     /**
      * <p>

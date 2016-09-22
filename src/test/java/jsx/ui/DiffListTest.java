@@ -89,8 +89,13 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            text(style, model1);
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    text(style, model1);
+                }
+            };
         }
     }
 
@@ -117,9 +122,14 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            text(style, model1 + "1");
-            text(style, model1 + "2");
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    text(style, model1 + "1");
+                    text(style, model1 + "2");
+                }
+            };
         }
     }
 
@@ -146,11 +156,16 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            List<String> items = Arrays.asList(model1 + "A", model1 + "B");
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
 
-            box(style, contents(SingleBox.class, items));
-            box(style, contents(SingleBox.class, items));
+                {
+                    List<String> items = Arrays.asList(model1 + "A", model1 + "B");
+
+                    box(style, contents(SingleBox.class, items));
+                    box(style, contents(SingleBox.class, items));
+                }
+            };
         }
     }
 
@@ -189,8 +204,13 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            text(style, model1.getName(), " is ", model1.getAge(), " years old.");
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    text(style, model1.getName(), " is ", model1.getAge(), " years old.");
+                }
+            };
         }
     }
 }

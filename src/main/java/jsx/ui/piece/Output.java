@@ -9,8 +9,6 @@
  */
 package jsx.ui.piece;
 
-import static jsx.ui.StructureDSL.*;
-
 import java.util.function.Function;
 
 import javafx.beans.binding.IntegerExpression;
@@ -19,6 +17,7 @@ import javafx.beans.property.StringProperty;
 
 import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
+import jsx.ui.StructureDSL;
 import kiss.I;
 
 /**
@@ -68,7 +67,12 @@ public class Output extends LowLevelWidget<StyleDSL, Output> {
      * {@inheritDoc}
      */
     @Override
-    protected void virtualize() {
-        text(text.get());
+    protected StructureDSL virtualize() {
+        return new StructureDSL() {
+
+            {
+                text(text.get());
+            }
+        };
     }
 }

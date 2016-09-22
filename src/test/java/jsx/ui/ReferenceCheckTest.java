@@ -64,8 +64,13 @@ public class ReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            text(property);
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    text(property);
+                }
+            };
         }
     }
 
@@ -97,10 +102,15 @@ public class ReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            box(style, contents(1, property.get(), i -> {
-                text("Text" + i);
-            }));
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    box(style, contents(1, property.get(), i -> {
+                        text("Text" + i);
+                    }));
+                }
+            };
         }
     }
 
@@ -132,8 +142,13 @@ public class ReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            box(input);
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    box(input);
+                }
+            };
         }
     }
 

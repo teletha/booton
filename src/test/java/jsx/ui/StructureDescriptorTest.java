@@ -238,8 +238,13 @@ public class StructureDescriptorTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected void virtualize() {
-            text(model1);
+        protected StructureDSL virtualize() {
+            return new StructureDSL() {
+
+                {
+                    text(model1);
+                }
+            };
         }
     }
 }
