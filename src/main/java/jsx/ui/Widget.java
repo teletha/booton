@@ -599,47 +599,6 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
         return widget;
     }
 
-    private Map<Events, ValueContext> values = new HashMap();
-
-    <V> V value(Events<V> events) {
-        return (V) values.computeIfAbsent(events, e -> new ValueContext<V>(e)).value;
-    }
-
-    <V> List<V> values(Events<V> events) {
-        return (List<V>) values.computeIfAbsent(events, e -> new ValueContext<List<V>>(e, new ArrayList())).value;
-    }
-
-    /**
-     * @version 2015/10/22 11:58:15
-     */
-    private class ValueContext<V> {
-
-        V value;
-
-        final Disposable disposable;
-
-        /**
-         * @param events
-         */
-        private ValueContext(Events<V> events) {
-            disposable = events.to(value -> {
-                this.value = value;
-                // update();
-            });
-        }
-
-        /**
-         * @param events
-         */
-        private ValueContext(Events<V> events, List<V> list) {
-            this.value = (V) list;
-
-            disposable = events.to(update(value -> {
-                list.add(value);
-            }));
-        }
-    }
-
     /**
      * @version 2015/10/18 14:44:25
      */

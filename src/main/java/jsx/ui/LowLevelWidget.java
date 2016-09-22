@@ -142,15 +142,10 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
         return (T) this;
     }
 
-    protected Events<Boolean> disabled = Events.from(false);
-
-    // public T disableIf(ObservableValue<Boolean> condition) {
-    // this.disable = condition;
-    // return (T) this;
-    // }
+    protected BooleanProperty disabled = new SimpleBooleanProperty();
 
     public T disableIf(Events<Boolean> condition) {
-        disabled = disabled.combineLatest(condition, (a, b) -> a || b);
+        condition.toValue(disabled);
 
         return (T) this;
     }

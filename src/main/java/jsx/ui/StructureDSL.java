@@ -20,7 +20,6 @@ import javafx.beans.property.ReadOnlyProperty;
 
 import js.lang.NativeString;
 import jsx.style.StyleDSL;
-import kiss.Events;
 
 /**
  * @version 2016/09/18 19:02:50
@@ -138,7 +137,7 @@ public class StructureDSL {
     private void text(int id, Object... texts) {
         for (Object text : texts) {
             if ("\r\n".equals(text)) {
-                latestElement.items.push(new VirtualElement(id, "br", latestWidget));
+                latestElement.items.push(new VirtualElement(id, "br", null));
             } else {
                 latestElement.items.push(new VirtualText(String.valueOf(text)));
             }
@@ -475,25 +474,6 @@ public class StructureDSL {
 
     /**
      * <p>
-     * Conditional expression.
-     * </p>
-     * 
-     * @param condition
-     * @param declarables
-     * @return
-     */
-    protected final Declarable If(Events<Boolean> condition, Declarable... declarables) {
-        return () -> {
-            if (latestWidget.value(condition)) {
-                for (Declarable declarable : declarables) {
-                    declarable.declare();
-                }
-            }
-        };
-    }
-
-    /**
-     * <p>
      * Define children.
      * </p>
      *
@@ -574,17 +554,6 @@ public class StructureDSL {
      */
     protected final <C> Declarable contents(C[] contents, Consumer<C> process) {
         return contents(Arrays.asList(contents), process);
-    }
-
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     *
-     * @param children A list of child widget.
-     */
-    protected final <C> Declarable contents(Events<C> contents, Consumer<C> process) {
-        return contents(latestWidget.values(contents), process);
     }
 
     /**
