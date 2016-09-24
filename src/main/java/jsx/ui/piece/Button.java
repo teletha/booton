@@ -63,7 +63,7 @@ public class Button extends LowLevelWidget<$, Button> {
         return new StructureDSL() {
 
             {
-                html("button", $.Button, userStyle.getValue(), WidgetRoot, If(disabled, attr("disabled", "disabled")), () -> {
+                html("button", $.Button, userStyle, WidgetRoot, If(disabled, attr("disabled", "disabled")), () -> {
                     text(label.get());
                 });
             }

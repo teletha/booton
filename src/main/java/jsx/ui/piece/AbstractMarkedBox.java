@@ -25,6 +25,7 @@ import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
+import jsx.ui.View;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
 
 /**
@@ -86,11 +87,24 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
         return new StructureDSL() {
 
             {
-                box(WidgetRoot, $.Root, userStyle.getValue(), If(isMarked, $.Checked), () -> {
-                    html("input", $.Input, attr("type", type), attr("name", name), attr("id", id));
+                box(WidgetRoot, $.Root, userStyle, () -> {
+                    html("input", $.Input, attr("type", type), attr("name", name), attr("id", id), If(isMarked, attr("checked")));
                     html("label", $.Label, attr("for", id), contents(label));
                 });
             }
+        };
+    }
+
+    /**
+     * @version 2016/09/24 9:26:11
+     */
+    class Views extends StructureDSL {
+
+        View main = () -> {
+            box(WidgetRoot, $.Root, userStyle, () -> {
+                html("input", $.Input, attr("type", type), attr("name", name), attr("id", id), If(isMarked, attr("checked")));
+                html("label", $.Label, attr("for", id), contents(label));
+            });
         };
     }
 
@@ -100,9 +114,6 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
     static class Styles extends PieceStyle {
 
         Numeric boxSize = new Numeric(14, Unit.px);
-
-        Style Checked = () -> {
-        };
 
         Style Root = () -> {
             display.inlineBlock();

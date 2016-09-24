@@ -19,6 +19,10 @@ import jsx.ui.flux.Location;
  */
 public interface Style extends Declarable, Location<UIEvent> {
 
+    /** The empty style. */
+    Style Empty = () -> {
+    };
+
     /**
      * <p>
      * Define the style declaration.

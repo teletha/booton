@@ -208,8 +208,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
         return new StructureDSL() {
 
             {
-                html("input", WidgetRoot, $.SingleLineFormBase, userStyle
-                        .getValue(), attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
+                html("input", WidgetRoot, $.SingleLineFormBase, userStyle, attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
             }
         };
     }

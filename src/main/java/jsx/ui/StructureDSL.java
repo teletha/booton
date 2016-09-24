@@ -35,24 +35,13 @@ public class StructureDSL {
     /** The latest element. */
     private static VirtualElement latestElement;
 
-    private static Widget<?> latestWidget;
+    private static Widget latestWidget;
 
     /** The context object to propagate implicitly. */
     private static Object localContext;
 
     /** The modifier of context id. */
     private static int localContextModifier = 31;
-
-    /**
-     * <p>
-     * Internal API.
-     * </p>
-     * 
-     * @param widget A widget to define.
-     */
-    protected final void widget(Widget widget) {
-        createWidget(widget);
-    }
 
     /**
      * <p>
@@ -113,6 +102,17 @@ public class StructureDSL {
 
         // API definition
         return virtualize;
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param widget A widget to define.
+     */
+    protected final void widget(Widget widget) {
+        createWidget(widget);
     }
 
     /**
@@ -309,6 +309,18 @@ public class StructureDSL {
      */
     protected final Declarable xlink(String href) {
         return attr("xlink:href", href);
+    }
+
+    /**
+     * <p>
+     * General attribute definition method.
+     * </p>
+     * 
+     * @param name An attribute name.
+     * @return
+     */
+    protected final Declarable attr(String name) {
+        return attr(name, name);
     }
 
     /**

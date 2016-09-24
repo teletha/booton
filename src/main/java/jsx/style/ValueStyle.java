@@ -36,6 +36,9 @@ public interface ValueStyle<V> extends Location<V> {
      * @return A refined {@link Style}.
      */
     default Style of(V value) {
+        if (value == null) {
+            return Style.Empty;
+        }
         return cache.computeIfAbsent(this, style -> new HashMap()).computeIfAbsent(value, key -> new ValuedStyle(this, key));
     }
 }

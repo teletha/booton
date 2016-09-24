@@ -18,15 +18,14 @@ import java.util.function.Supplier;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
 import js.dom.User;
 import jsx.style.Style;
 import jsx.style.StyleDSL;
+import jsx.style.StyleProperty;
 import kiss.Disposable;
 import kiss.Events;
 
@@ -40,7 +39,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
 
     private BooleanProperty hover;
 
-    protected final Property<Declarable> userStyle = new SimpleObjectProperty();
+    protected final StyleProperty userStyle = new StyleProperty();
 
     /**
      * 
