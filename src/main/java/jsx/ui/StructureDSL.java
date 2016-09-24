@@ -111,7 +111,18 @@ public class StructureDSL {
      * 
      * @param widget A widget to define.
      */
-    protected final void widget(Widget widget) {
+    public static final void widget(Widget widget) {
+        widget(LocalId.findContextLineNumber(), widget);
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param widget A widget to define.
+     */
+    private static void widget(int id, Widget widget) {
         createWidget(widget);
     }
 
@@ -122,7 +133,7 @@ public class StructureDSL {
      * 
      * @param text A list of text contents.
      */
-    protected final void text(Object... texts) {
+    public static final void text(Object... texts) {
         text(LocalId.findContextLineNumber(), texts);
     }
 
@@ -134,7 +145,7 @@ public class StructureDSL {
      * @param id A content id.
      * @param text A content to append.
      */
-    private void text(int id, Object... texts) {
+    private static void text(int id, Object... texts) {
         for (Object text : texts) {
             if ("\r\n".equals(text)) {
                 latestElement.items.push(new VirtualElement(id, "br", null));
@@ -152,7 +163,7 @@ public class StructureDSL {
      * @param style A style of the parent container.
      * @param texts A list of text contents.
      */
-    protected final void text(Style style, Object... texts) {
+    public static final void text(Style style, Object... texts) {
         text(LocalId.findContextLineNumber(), style, texts);
     }
 
@@ -165,7 +176,7 @@ public class StructureDSL {
      * @param style A style of the parent container.
      * @param texts A list of text contents.
      */
-    private void text(int id, Style style, Object... texts) {
+    private static void text(int id, Style style, Object... texts) {
         html(id, "span", style, contents(texts));
     }
 
@@ -176,7 +187,7 @@ public class StructureDSL {
      * 
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    protected final void box(Declarable... declarables) {
+    public static final void box(Declarable... declarables) {
         box(LocalId.findContextLineNumber(), declarables);
     }
 
@@ -188,7 +199,7 @@ public class StructureDSL {
      * @param id A local id.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private void box(int id, Declarable... declarables) {
+    private static void box(int id, Declarable... declarables) {
         html(id, "span", declarables);
     }
 
@@ -200,7 +211,7 @@ public class StructureDSL {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    protected final void html(String name, Declarable... declarables) {
+    public static final void html(String name, Declarable... declarables) {
         html(LocalId.findContextLineNumber(), name, declarables);
     }
 
@@ -213,7 +224,7 @@ public class StructureDSL {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private void html(int id, String name, Declarable... declarables) {
+    private static void html(int id, String name, Declarable... declarables) {
         element(id, HTML, name, declarables, null);
     }
 
@@ -225,7 +236,7 @@ public class StructureDSL {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    protected final void svg(String name, Declarable... declarables) {
+    public static final void svg(String name, Declarable... declarables) {
         svg(LocalId.findContextLineNumber(), name, declarables);
     }
 
@@ -238,7 +249,7 @@ public class StructureDSL {
      * @param name A name of element.
      * @param declarables A list of contents (attributes, children nodes etc).
      */
-    private void svg(int id, String name, Declarable... declarables) {
+    private static void svg(int id, String name, Declarable... declarables) {
         element(id, SVG, name, declarables, null);
     }
 
@@ -253,7 +264,7 @@ public class StructureDSL {
      * @param declarables A list of contents (attributes, children nodes etc).
      * @param process
      */
-    private void element(int id, String ns, String name, Declarable[] declarables, Runnable process) {
+    private static void element(int id, String ns, String name, Declarable[] declarables, Runnable process) {
         // enter into the child node (store context)
         VirtualElement parentElement = latestElement;
 
@@ -283,7 +294,7 @@ public class StructureDSL {
      * @param id A value of "id" attribute.
      * @return An attribute declaration.
      */
-    protected final Declarable id(String id) {
+    public static final Declarable id(String id) {
         return attr("id", id);
     }
 
@@ -295,7 +306,7 @@ public class StructureDSL {
      * @param title A value of "title" attribute.
      * @return An attribute declaration.
      */
-    protected final Declarable title(String title) {
+    public static final Declarable title(String title) {
         return attr("title", title);
     }
 
@@ -307,7 +318,7 @@ public class StructureDSL {
      * @param id A value of "xlink:href" attribute.
      * @return An attribute declaration.
      */
-    protected final Declarable xlink(String href) {
+    public static final Declarable xlink(String href) {
         return attr("xlink:href", href);
     }
 
@@ -319,7 +330,7 @@ public class StructureDSL {
      * @param name An attribute name.
      * @return
      */
-    protected final Declarable attr(String name) {
+    public static final Declarable attr(String name) {
         return attr(name, name);
     }
 
@@ -332,7 +343,7 @@ public class StructureDSL {
      * @param value An attribute value.
      * @return
      */
-    protected final Declarable attr(String name, Object value) {
+    public static final Declarable attr(String name, Object value) {
         return value == null ? null : attr(name, value.toString());
     }
 
@@ -345,7 +356,7 @@ public class StructureDSL {
      * @param value An attribute value.
      * @return
      */
-    protected final Declarable attr(String name, Supplier value) {
+    public static final Declarable attr(String name, Supplier value) {
         return value == null ? null : attr(name, value.get());
     }
 
@@ -358,7 +369,7 @@ public class StructureDSL {
      * @param value An attribute value.
      * @return
      */
-    protected final Declarable attr(String name, Property value) {
+    public static final Declarable attr(String name, Property value) {
         return value == null ? null : attr(name, value.getValue());
     }
 
@@ -371,7 +382,7 @@ public class StructureDSL {
      * @param value An attribute value.
      * @return
      */
-    protected final Declarable attr(String name, String value) {
+    public static final Declarable attr(String name, String value) {
         return name == null || name.length() == 0 || value == null ? null : () -> {
             latestElement.attributes.add(name, value);
         };
@@ -386,7 +397,7 @@ public class StructureDSL {
      * @param declarables
      * @return
      */
-    protected final Declarable If(String condition, Declarable... declarables) {
+    public static final Declarable If(String condition, Declarable... declarables) {
         return If(condition != null && condition.length() != 0, declarables);
     }
 
@@ -399,7 +410,7 @@ public class StructureDSL {
      * @param declarables
      * @return
      */
-    protected final Declarable If(Supplier<Boolean> condition, Declarable... declarables) {
+    public static final Declarable If(Supplier<Boolean> condition, Declarable... declarables) {
         return If(condition != null && Boolean.TRUE.equals(condition.get()), declarables);
     }
 
@@ -412,7 +423,7 @@ public class StructureDSL {
      * @param declarables
      * @return
      */
-    protected final Declarable If(ReadOnlyProperty<Boolean> condition, Declarable... declarables) {
+    public static final Declarable If(ReadOnlyProperty<Boolean> condition, Declarable... declarables) {
         return If(condition != null && Boolean.TRUE.equals(condition.getValue()), declarables);
     }
 
@@ -425,7 +436,7 @@ public class StructureDSL {
      * @param declarables
      * @return
      */
-    protected final Declarable If(boolean condition, Declarable... declarables) {
+    public static final Declarable If(boolean condition, Declarable... declarables) {
         return () -> {
             if (condition) {
                 for (Declarable declarable : declarables) {
@@ -442,7 +453,7 @@ public class StructureDSL {
      *
      * @param children A list of child widget.
      */
-    protected final Declarable contents(int size, Consumer<Integer> process) {
+    public static final Declarable contents(int size, Consumer<Integer> process) {
         return contents(0, size, process);
     }
 
@@ -453,7 +464,7 @@ public class StructureDSL {
      *
      * @param children A list of child widget.
      */
-    protected final Declarable contents(int initial, int size, Consumer<Integer> process) {
+    public static final Declarable contents(int initial, int size, Consumer<Integer> process) {
         // we can optimize code using IntConsumer, but the uniformity has high priority than that
         return contents(new Range(initial, initial + size), process);
     }
@@ -465,7 +476,7 @@ public class StructureDSL {
      *
      * @param children A list of child widget.
      */
-    protected final <Styles extends StyleDSL, E extends Enum> Declarable contents(Class<? extends Widget1<Styles, E>> childType, Class<E> children) {
+    public static final <Styles extends StyleDSL, E extends Enum> Declarable contents(Class<? extends Widget1<Styles, E>> childType, Class<E> children) {
         return contents(childType, children.getEnumConstants());
     }
 
@@ -476,7 +487,7 @@ public class StructureDSL {
      *
      * @param children A list of child widget.
      */
-    protected final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, C[] children) {
+    public static final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, C[] children) {
         return contents(childType, Arrays.asList(children));
     }
 
@@ -487,7 +498,7 @@ public class StructureDSL {
      *
      * @param children A list of child widget.
      */
-    protected final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
+    public static final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
         return contents(children, child -> {
             widget(Widget.of(childType, child));
         });
@@ -502,7 +513,7 @@ public class StructureDSL {
      * @param process A content writer.
      * @return A declaration of contents.
      */
-    protected final <E extends Enum> Declarable contents(Class<E> type, Consumer<E> process) {
+    public static final <E extends Enum> Declarable contents(Class<E> type, Consumer<E> process) {
         return contents(type.getEnumConstants(), process);
     }
 
@@ -515,7 +526,7 @@ public class StructureDSL {
      * @param process A content writer.
      * @return A declaration of contents.
      */
-    protected final <C> Declarable contents(C[] contents, Consumer<C> process) {
+    public static final <C> Declarable contents(C[] contents, Consumer<C> process) {
         return contents(Arrays.asList(contents), process);
     }
 
@@ -528,7 +539,7 @@ public class StructureDSL {
      * @param process A content writer.
      * @return A declaration of contents.
      */
-    protected final <C> Declarable contents(Iterable<C> contents, Consumer<C> process) {
+    public static final <C> Declarable contents(Iterable<C> contents, Consumer<C> process) {
         return () -> {
             // store parent context
             Object parentContext = localContext;
@@ -553,7 +564,7 @@ public class StructureDSL {
      *
      * @param texts A list of child text contents.
      */
-    protected final Declarable contents(Widget... widgets) {
+    public static final Declarable contents(Widget... widgets) {
         return () -> {
             for (Widget widget : widgets) {
                 widget(widget);
@@ -568,7 +579,7 @@ public class StructureDSL {
      *
      * @param texts A list of child text contents.
      */
-    protected final Declarable contents(Object... texts) {
+    public static final Declarable contents(Object... texts) {
         return () -> {
             text(texts);
         };
