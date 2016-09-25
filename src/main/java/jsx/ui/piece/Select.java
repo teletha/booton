@@ -20,7 +20,6 @@ import js.dom.User;
 import jsx.style.Style;
 import jsx.ui.ViewDSL;
 import jsx.ui.Widget;
-import jsx.ui.piece.Button.$;
 import jsx.ui.piece.Select.Styles;
 
 /**
@@ -43,14 +42,6 @@ public class Select<M> extends Widget<Styles> {
         this.selection = selection;
 
         when(User.Change).at($.Select).to(update(e -> selection.setValue(values.get(Integer.valueOf(e.value())))));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected final ViewDSL virtualize() {
-        return new View();
     }
 
     /**

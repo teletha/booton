@@ -121,14 +121,6 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected final ViewDSL virtualize() {
-        return new View();
-    }
-
-    /**
      * @version 2016/09/25 13:58:55
      */
     private class View extends ViewDSL {
@@ -167,14 +159,6 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
 
         /** The editable todo text. */
         final Input edit = UI.input(model1.contents).shortcut(Key.Enter, this::finishEdit);
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
 
         /**
          * @version 2016/09/25 13:58:55

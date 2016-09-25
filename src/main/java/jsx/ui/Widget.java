@@ -12,6 +12,7 @@ package jsx.ui;
 import static js.lang.Global.*;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ import jsx.style.StyleDSL;
 import jsx.ui.flux.Interactive;
 import jsx.ui.flux.Location;
 import jsx.ui.flux.Locator;
-import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
 import kiss.Manageable;
@@ -52,10 +52,10 @@ import kiss.Observer;
 import kiss.model.Model;
 
 /**
- * @version 2016/04/07 17:40:37
+ * @version 2016/09/25 14:33:57
  */
 @Manageable(lifestyle = VirtualWidgetHierarchy.class)
-public abstract class Widget<Styles extends StyleDSL> implements Declarable {
+public class Widget<Styles extends StyleDSL> implements Declarable {
 
     /** The cache for widget metadata. */
     private static final Map<Class, WidgetModelManager> metas = new HashMap();
@@ -117,6 +117,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
         // if (previous != null) {
         // throw new IllegalStateException(getClass() + " is a nest in virtual structure.");
         // }
+        modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
     }
 
     /**
@@ -132,7 +133,6 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
          */
         VirtualWidgetHierarchy.hierarchy.remove(getClass());
 
-        modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
         try {
             for (ModelMetadata meta : modelManager.properties) {
 
@@ -180,6 +180,9 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
      */
     static class WidgetModelManager {
 
+        /** The associated view class. */
+        private final Class<ViewDSL> view;
+
         /** The models. */
         private final List<ModelMetadata> properties = new ArrayList();
 
@@ -194,6 +197,9 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
          * @param clazz A target widget.
          */
         private WidgetModelManager(Class clazz) {
+            this.view = searchView(clazz);
+            System.out.println(view);
+
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ModelValue.class)) {
                     Class type = field.getType();
@@ -207,6 +213,21 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
                     }
                 }
             }
+        }
+
+        /**
+         * @param clazz
+         * @return
+         */
+        private Class searchView(Class clazz) {
+            for (Class sub : clazz.getDeclaredClasses()) {
+                if (ViewDSL.class.isAssignableFrom(sub)) {
+                    return sub;
+                }
+            }
+
+            Class parent = clazz.getSuperclass();
+            return parent == Object.class ? null : searchView(parent);
         }
     }
 
@@ -363,7 +384,15 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
      * 
      * @return A virtual structure of this {@link Widget}.
      */
-    protected abstract ViewDSL virtualize();
+    protected final ViewDSL virtualize() {
+        try {
+            Constructor<?> con = modelManager.view.getDeclaredConstructors()[0];
+            con.setAccessible(true);
+            return (ViewDSL) con.newInstance(this);
+        } catch (Exception e) {
+            throw I.quiet(e);
+        }
+    }
 
     /**
      * <p>

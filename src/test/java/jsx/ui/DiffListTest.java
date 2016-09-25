@@ -84,14 +84,6 @@ public class DiffListTest extends DiffTestBase {
     private static class SingleBox extends Widget1<StyleDSL, String> {
 
         /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
-
-        /**
          * @version 2016/09/25 13:58:55
          */
         private class View extends ViewDSL {
@@ -124,14 +116,6 @@ public class DiffListTest extends DiffTestBase {
      * @version 2015/10/05 0:50:19
      */
     private static class MultiBox extends Widget1<StyleDSL, String> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -167,14 +151,6 @@ public class DiffListTest extends DiffTestBase {
      * @version 2015/10/05 0:51:22
      */
     private static class NestBox extends Widget1<StyleDSL, String> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -224,14 +200,6 @@ public class DiffListTest extends DiffTestBase {
      * @version 2015/10/05 0:53:14
      */
     private static class PersonBox extends Widget1<StyleDSL, Person> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
 
         /**
          * @version 2016/09/25 13:58:55

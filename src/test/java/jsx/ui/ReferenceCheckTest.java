@@ -62,14 +62,6 @@ public class ReferenceCheckTest {
         private final StringProperty property = new SimpleStringProperty("base");
 
         /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
-
-        /**
          * @version 2016/09/25 13:58:55
          */
         private class View extends ViewDSL {
@@ -107,14 +99,6 @@ public class ReferenceCheckTest {
     private static class NestedElement extends Widget<StyleDSL> {
 
         private final IntegerProperty property = new SimpleIntegerProperty(3);
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -156,14 +140,6 @@ public class ReferenceCheckTest {
     private static class SingleWidget extends Widget<StyleDSL> {
 
         private final Input input = UI.input();
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
 
         /**
          * @version 2016/09/25 13:58:55

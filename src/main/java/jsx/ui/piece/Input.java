@@ -201,14 +201,6 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected final ViewDSL virtualize() {
-        return new View();
-    }
-
-    /**
      * @version 2016/09/25 13:58:55
      */
     private class View extends ViewDSL {
@@ -247,14 +239,6 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      * @version 2015/10/21 13:40:36
      */
     private static class InvalidMassage<C> extends Widget2<StyleDSL, String, Function<String, String>> {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected final ViewDSL virtualize() {
-            return new View();
-        }
 
         /**
          * @version 2016/09/25 13:58:55
