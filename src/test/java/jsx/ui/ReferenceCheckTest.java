@@ -65,13 +65,22 @@ public class ReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    text(property);
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                text(property);
+            }
         }
     }
 
@@ -103,15 +112,24 @@ public class ReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    box(style, contents(1, property.get(), i -> {
-                        text("Text" + i);
-                    }));
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                box(style, contents(1, property.get(), i -> {
+                    text("Text" + i);
+                }));
+            }
         }
     }
 
@@ -143,13 +161,22 @@ public class ReferenceCheckTest {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    box(input);
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                box(input);
+            }
         }
     }
 

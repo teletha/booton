@@ -15,7 +15,7 @@ import javafx.beans.property.SimpleStringProperty;
 import jsx.style.Style;
 import jsx.style.value.Color;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.StructureDSL;
+import jsx.ui.ViewDSL;
 import jsx.ui.piece.Button.$;
 
 /**
@@ -59,15 +59,24 @@ public class Button extends LowLevelWidget<$, Button> {
      * {@inheritDoc}
      */
     @Override
-    protected StructureDSL virtualize() {
-        return new StructureDSL() {
+    protected final ViewDSL virtualize() {
+        return new View();
+    }
 
-            {
-                html("button", $.Button, userStyle, WidgetRoot, If(disabled, attr("disabled", "disabled")), () -> {
-                    text(label.get());
-                });
-            }
-        };
+    /**
+     * @version 2016/09/25 13:58:55
+     */
+    private class View extends ViewDSL {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
+            html("button", $.Button, userStyle, WidgetRoot, If(disabled, attr("disabled", "disabled")), () -> {
+                text(label.get());
+            });
+        }
     }
 
     /**

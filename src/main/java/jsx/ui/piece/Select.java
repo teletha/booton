@@ -18,7 +18,7 @@ import javafx.scene.control.SingleSelectionModel;
 
 import js.dom.User;
 import jsx.style.Style;
-import jsx.ui.StructureDSL;
+import jsx.ui.ViewDSL;
 import jsx.ui.Widget;
 import jsx.ui.piece.Button.$;
 import jsx.ui.piece.Select.Styles;
@@ -49,26 +49,35 @@ public class Select<M> extends Widget<Styles> {
      * {@inheritDoc}
      */
     @Override
-    protected StructureDSL virtualize() {
-        return new StructureDSL() {
+    protected final ViewDSL virtualize() {
+        return new View();
+    }
 
-            {
-                box($.Root, () -> {
-                    html("select", $.Select, contents(values.size(), i -> {
-                        M value = values.get(i);
+    /**
+     * @version 2016/09/25 13:58:55
+     */
+    private class View extends ViewDSL {
 
-                        html("option", attr("value", i), If(selection.getValue().equals(value), attr("selected", "selected")), () -> {
-                            text(value);
-                        });
-                    }));
-                    svg("svg", $.SVGRoot, attr("size", "16 16"), attr("position", "0 0"), attr("viewBox", "0 0 16 16"), () -> {
-                        svg("g", () -> {
-                            svg("polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
-                        });
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
+            box($.Root, () -> {
+                html("select", $.Select, contents(values.size(), i -> {
+                    M value = values.get(i);
+
+                    html("option", attr("value", i), If(selection.getValue().equals(value), attr("selected", "selected")), () -> {
+                        text(value);
+                    });
+                }));
+                svg("svg", $.SVGRoot, attr("size", "16 16"), attr("position", "0 0"), attr("viewBox", "0 0 16 16"), () -> {
+                    svg("g", () -> {
+                        svg("polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
                     });
                 });
-            }
-        };
+            });
+        }
     }
 
     /**

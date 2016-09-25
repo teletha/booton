@@ -86,7 +86,7 @@ public class StructureDSL {
          * Assemble {@link VirtualStructure} actually.
          */
         WidgetLog.Virtualize.start();
-        widget.virtualize();
+        widget.virtualize().virtualize();;
         WidgetLog.Virtualize.stop();
 
         /**

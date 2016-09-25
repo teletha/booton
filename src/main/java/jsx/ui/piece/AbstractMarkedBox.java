@@ -24,9 +24,9 @@ import jsx.style.value.Font;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.StructureDSL;
-import jsx.ui.View;
+import jsx.ui.ViewDSL;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
+import jsx.ui.piece.Button.$;
 
 /**
  * @version 2016/09/17 9:17:06
@@ -83,29 +83,25 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
      * {@inheritDoc}
      */
     @Override
-    protected final StructureDSL virtualize() {
-        return new StructureDSL() {
-
-            {
-                box(WidgetRoot, $.Root, userStyle, () -> {
-                    html("input", $.Input, attr("type", type), attr("name", name), attr("id", id), If(isMarked, attr("checked")));
-                    html("label", $.Label, attr("for", id), contents(label));
-                });
-            }
-        };
+    protected final ViewDSL virtualize() {
+        return new View();
     }
 
     /**
-     * @version 2016/09/24 9:26:11
+     * @version 2016/09/25 13:58:55
      */
-    class Views extends StructureDSL {
+    private class View extends ViewDSL {
 
-        View main = () -> {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
             box(WidgetRoot, $.Root, userStyle, () -> {
                 html("input", $.Input, attr("type", type), attr("name", name), attr("id", id), If(isMarked, attr("checked")));
                 html("label", $.Label, attr("for", id), contents(label));
             });
-        };
+        }
     }
 
     /**

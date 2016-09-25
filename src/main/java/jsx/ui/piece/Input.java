@@ -26,7 +26,7 @@ import javafx.beans.property.StringProperty;
 import js.dom.UIEvent;
 import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.StructureDSL;
+import jsx.ui.ViewDSL;
 import jsx.ui.Widget;
 import jsx.ui.Widget1;
 import jsx.ui.Widget2;
@@ -204,13 +204,22 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      * {@inheritDoc}
      */
     @Override
-    protected StructureDSL virtualize() {
-        return new StructureDSL() {
+    protected final ViewDSL virtualize() {
+        return new View();
+    }
 
-            {
-                html("input", WidgetRoot, $.SingleLineFormBase, userStyle, attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
-            }
-        };
+    /**
+     * @version 2016/09/25 13:58:55
+     */
+    private class View extends ViewDSL {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
+            html("input", WidgetRoot, $.SingleLineFormBase, userStyle, attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
+        }
     }
 
     /**
@@ -243,13 +252,22 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    text(model2.apply(model1));
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                text(model2.apply(model1));
+            }
         }
     }
 }

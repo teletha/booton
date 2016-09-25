@@ -9,8 +9,6 @@
  */
 package jsx.ui;
 
-import static jsx.ui.StructureDSL.*;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -238,13 +236,22 @@ public class StructureDescriptorTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    text(model1);
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                text(model1);
+            }
         }
     }
 }

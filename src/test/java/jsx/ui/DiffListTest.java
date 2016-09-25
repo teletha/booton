@@ -9,8 +9,6 @@
  */
 package jsx.ui;
 
-import static jsx.ui.StructureDSL.*;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,13 +87,22 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    text(style, model1);
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                text(style, model1);
+            }
         }
     }
 
@@ -122,14 +129,23 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    text(style, model1 + "1");
-                    text(style, model1 + "2");
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                text(style, model1 + "1");
+                text(style, model1 + "2");
+            }
         }
     }
 
@@ -156,16 +172,25 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    List<String> items = Arrays.asList(model1 + "A", model1 + "B");
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
 
-                    box(style, contents(SingleBox.class, items));
-                    box(style, contents(SingleBox.class, items));
-                }
-            };
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                List<String> items = Arrays.asList(model1 + "A", model1 + "B");
+
+                box(style, contents(SingleBox.class, items));
+                box(style, contents(SingleBox.class, items));
+            }
         }
     }
 
@@ -204,13 +229,22 @@ public class DiffListTest extends DiffTestBase {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    text(style, model1.getName(), " is ", model1.getAge(), " years old.");
-                }
-            };
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                text(style, model1.getName(), " is ", model1.getAge(), " years old.");
+            }
         }
     }
 }

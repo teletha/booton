@@ -23,7 +23,7 @@ import jsx.style.Style;
 import jsx.style.StyleDSL;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
-import jsx.ui.StructureDSL;
+import jsx.ui.ViewDSL;
 import jsx.ui.Widget1;
 import jsx.ui.i18n.TextLocalizer;
 import jsx.ui.piece.Button;
@@ -124,19 +124,28 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
      * {@inheritDoc}
      */
     @Override
-    protected StructureDSL virtualize() {
-        return new StructureDSL() {
+    protected final ViewDSL virtualize() {
+        return new View();
+    }
 
-            {
-                widget(input);
-                box($.ITEMS, contents(Item.class, todos.list));
-                box($.FOTTER, () -> {
-                    text(text.leftTaskIs(todos.countIncompleted()));
-                    box($.BUTTONS, all, active, completed);
-                    widget(clear);
-                });
-            }
-        };
+    /**
+     * @version 2016/09/25 13:58:55
+     */
+    private class View extends ViewDSL {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void virtualize() {
+            widget(input);
+            box($.ITEMS, contents(Item.class, todos.list));
+            box($.FOTTER, () -> {
+                text(text.leftTaskIs(todos.countIncompleted()));
+                box($.BUTTONS, all, active, completed);
+                widget(clear);
+            });
+        }
     }
 
     /**
@@ -163,22 +172,31 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
          * {@inheritDoc}
          */
         @Override
-        protected StructureDSL virtualize() {
-            return new StructureDSL() {
+        protected final ViewDSL virtualize() {
+            return new View();
+        }
 
-                {
-                    if (filter.getValue().test(model1)) {
-                        if (editing.get()) {
-                            widget(edit);
-                        } else {
-                            box($.HBox, () -> {
-                                widget(complete);
-                                widget(delete);
-                            });
-                        }
+        /**
+         * @version 2016/09/25 13:58:55
+         */
+        private class View extends ViewDSL {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            protected void virtualize() {
+                if (filter.getValue().test(model1)) {
+                    if (editing.get()) {
+                        widget(edit);
+                    } else {
+                        box($.HBox, () -> {
+                            widget(complete);
+                            widget(delete);
+                        });
                     }
                 }
-            };
+            }
         }
 
         /**
