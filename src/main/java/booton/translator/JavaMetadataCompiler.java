@@ -24,15 +24,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import kiss.I;
-
 import org.junit.runner.RunWith;
 
 import booton.Necessary;
 import booton.Unnecessary;
+import kiss.I;
 
 /**
- * @version 2013/10/10 9:13:49
+ * @version 2016/09/25 12:07:55
  */
 class JavaMetadataCompiler {
 
@@ -317,7 +316,7 @@ class JavaMetadataCompiler {
     }
 
     /**
-     * @version 2013/09/07 10:21:55
+     * @version 2016/09/25 12:07:51
      */
     private class ClassMetadata extends Metadata {
 
@@ -352,10 +351,10 @@ class JavaMetadataCompiler {
             }
 
             // code.append(modifier);
-            code
-                    .append(modifier, ",\"" + JavaAPIProviders.revert(clazz).getName() + "\"", ",", new JavaSignatureCompiler(clazz
-                            .getTypeParameters()), ",", new JavaSignatureCompiler(clazz.getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz
-                            .getGenericInterfaces()));
+            code.append(modifier, ",\"" + JavaAPIProviders.revert(clazz).getName() + "\"", ",", new JavaSignatureCompiler(clazz
+                    .getTypeParameters()), ",", new JavaSignatureCompiler(clazz
+                            .getGenericSuperclass()), ",", new JavaSignatureCompiler(clazz
+                                    .getGenericInterfaces()), ",", new JavaSignatureCompiler(clazz.getDeclaredClasses()));
         }
     }
 
@@ -381,8 +380,7 @@ class JavaMetadataCompiler {
          */
         @Override
         protected void defineMetadata() {
-            code.append(field.getModifiers(), ",\"", field.getName(), "\",", new JavaSignatureCompiler(field
-                    .getGenericType()));
+            code.append(field.getModifiers(), ",\"", field.getName(), "\",", new JavaSignatureCompiler(field.getGenericType()));
         }
     }
 

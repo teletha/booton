@@ -695,6 +695,69 @@ public class ClassTest {
     }
 
     @Test
+    public void getClasses() throws Exception {
+        Class[] classes = Classes.class.getClasses();
+        assert classes != null;
+        assert classes.length == 2;
+        assert classes[0] == Classes.PublicNonStatic.class;
+        assert classes[1] == Classes.PublicStatic.class;
+
+        classes = ExtendClasses.class.getClasses();
+        assert classes != null;
+        assert classes.length == 3;
+        assert classes[0] == ExtendClasses.ExtendPublicStatic.class;
+        assert classes[1] == Classes.PublicNonStatic.class;
+        assert classes[2] == Classes.PublicStatic.class;
+    }
+
+    @Test
+    public void getDeclaredClasses() throws Exception {
+        Class[] classes = Classes.class.getDeclaredClasses();
+        assert classes != null;
+        assert classes.length == 4;
+        assert classes[0] == Classes.PirvateStatic.class;
+        assert classes[1] == Classes.PrivateNonStatic.class;
+        assert classes[2] == Classes.PublicNonStatic.class;
+        assert classes[3] == Classes.PublicStatic.class;
+
+        classes = ExtendClasses.class.getDeclaredClasses();
+        assert classes != null;
+        assert classes.length == 2;
+        assert classes[0] == ExtendClasses.ExtendPrivateStatic.class;
+        assert classes[1] == ExtendClasses.ExtendPublicStatic.class;
+    }
+
+    /**
+     * @version 2016/09/25 11:51:32
+     */
+    private static class Classes {
+
+        public static class PublicStatic {
+        }
+
+        public class PublicNonStatic {
+        }
+
+        private static class PirvateStatic {
+        }
+
+        private class PrivateNonStatic {
+        }
+    }
+
+    /**
+     * @version 2016/09/25 12:33:57
+     */
+    private static class ExtendClasses extends Classes {
+
+        public static class ExtendPublicStatic {
+        }
+
+        private static class ExtendPrivateStatic {
+        }
+    }
+
+    @Test
     public void asSubclass() throws Exception {
         assert Integer.class.asSubclass(Number.class) == Integer.class;
     }

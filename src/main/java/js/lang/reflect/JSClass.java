@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.security.ProtectionDomain;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
+import sun.reflect.CallerSensitive;
 
 import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
@@ -40,7 +43,7 @@ import js.lang.NativeObject;
  * functionalities.
  * </p>
  * 
- * @version 2016/09/18 11:07:12
+ * @version 2016/09/25 12:40:27
  */
 @JavaAPIProvider(Class.class)
 class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
@@ -68,6 +71,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
 
     /** The cache for array class. */
     private JSClass arrayClass;
+
+    /** The cache for public classes. */
+    private List<Class> publicClasses;
+
+    /** The cache for declared classes. */
+    private List<Class> privateClasses;
 
     /** The cache for public constructors. */
     private Map<Integer, Constructor> publicConstructors;
@@ -103,7 +112,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * @param definition A full metadata info for class, constructors, methods and fields.
      */
     protected JSClass(String nameJS, NativeObject prototype, NativeArray<?> metadata, Class superclass, NativeObject definition) {
-        super((String) metadata.remove(1), nameJS, metadata, 4);
+        super((String) metadata.remove(1), nameJS, metadata, 5);
 
         this.prototype = prototype;
         this.definition = definition;
@@ -200,6 +209,70 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     public ClassLoader getClassLoader() {
         return null;
+    }
+
+    /**
+     * Returns an array containing {@code Class} objects representing all the public classes and
+     * interfaces that are members of the class represented by this {@code Class} object. This
+     * includes public class and interface members inherited from superclasses and public class and
+     * interface members declared by the class. This method returns an array of length 0 if this
+     * {@code Class} object has no public member classes or interfaces. This method also returns an
+     * array of length 0 if this {@code Class} object represents a primitive type, an array class,
+     * or void.
+     *
+     * @return the array of {@code Class} objects representing the public members of this class
+     * @throws SecurityException If a security manager, <i>s</i>, is present and the caller's class
+     *             loader is not the same as or an ancestor of the class loader for the current
+     *             class and invocation of {@link SecurityManager#checkPackageAccess
+     *             s.checkPackageAccess()} denies access to the package of this class.
+     * @since JDK1.1
+     */
+    public Class<?>[] getClasses() {
+        if (publicClasses == null) {
+            publicClasses = new ArrayList();
+
+            for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
+                for (Class sub : type.getDeclaredClasses()) {
+                    if (Modifier.isPublic(sub.getModifiers())) {
+                        publicClasses.add(sub);
+                    }
+                }
+            }
+        }
+        return publicClasses.toArray(new Class[publicClasses.size()]);
+    }
+
+    /**
+     * Returns an array of {@code Class} objects reflecting all the classes and interfaces declared
+     * as members of the class represented by this {@code Class} object. This includes public,
+     * protected, default (package) access, and private classes and interfaces declared by the
+     * class, but excludes inherited classes and interfaces. This method returns an array of length
+     * 0 if the class declares no classes or interfaces as members, or if this {@code Class} object
+     * represents a primitive type, an array class, or void.
+     *
+     * @return the array of {@code Class} objects representing all the declared members of this
+     *         class
+     * @throws SecurityException If a security manager, <i>s</i>, is present and any of the
+     *             following conditions is met:
+     *             <ul>
+     *             <li>the caller's class loader is not the same as the class loader of this class
+     *             and invocation of {@link SecurityManager#checkPermission s.checkPermission}
+     *             method with {@code RuntimePermission("accessDeclaredMembers")} denies access to
+     *             the declared classes within this class
+     *             <li>the caller's class loader is not the same as or an ancestor of the class
+     *             loader for the current class and invocation of
+     *             {@link SecurityManager#checkPackageAccess s.checkPackageAccess()} denies access
+     *             to the package of this class
+     *             </ul>
+     * @since JDK1.1
+     */
+    @CallerSensitive
+    public Class<?>[] getDeclaredClasses() throws SecurityException {
+        if (privateClasses == null) {
+            privateClasses = new Signature(metadata.get(4, ""), this).types;
+            metadata.deleteProperty(4);
+        }
+        return privateClasses.toArray(new Class[privateClasses.size()]);
     }
 
     /**
