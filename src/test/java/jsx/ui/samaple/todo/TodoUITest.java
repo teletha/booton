@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import jsx.ui.Key;
 import jsx.ui.UserBot;
-import jsx.ui.Widget;
 import jsx.ui.WidgetQuery;
 import jsx.ui.samaple.todo.TodoTasks.Task;
 import jsx.ui.samaple.todo.TodoUI.Item;
@@ -29,7 +28,7 @@ public class TodoUITest {
     public void add() throws Exception {
         TodoTasks todos = new TodoTasks();
 
-        TodoUI w = Widget.of(TodoUI.class, todos);
+        TodoUI w = new TodoUI(todos);
         assert todos.list.size() == 0;
         assert w.todos.countCompleted() == 0;
         assert w.todos.countIncompleted() == 0;
@@ -48,7 +47,7 @@ public class TodoUITest {
         TodoTasks todos = new TodoTasks();
         todos.list.add(new Task("now"));
 
-        TodoUI w = Widget.of(TodoUI.class, todos);
+        TodoUI w = new TodoUI(todos);
         Item item = WidgetQuery.findFirst(w, Item.class);
 
         UserBot.click(item.delete);

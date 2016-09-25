@@ -11,7 +11,6 @@ package jsx.ui;
 
 import static js.lang.Global.*;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -104,8 +103,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
-        Type[] parameters = Model.collectParameters(getClass(), Widget.class);
-        this.$ = (Styles) (parameters.length == 0 ? new StyleDSL() : I.make((Class) parameters[0]));
 
         /**
          * <p>
@@ -113,6 +110,9 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
          * </p>
          */
         Widget previous = VirtualWidgetHierarchy.hierarchy.putIfAbsent(getClass(), this);
+
+        Type[] parameters = Model.collectParameters(getClass(), Widget.class);
+        this.$ = (Styles) (parameters.length == 0 ? new StyleDSL() : I.make((Class) parameters[0]));
 
         // if (previous != null) {
         // throw new IllegalStateException(getClass() + " is a nest in virtual structure.");
@@ -513,37 +513,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      */
     public static final <W extends Widget> W of(Class<W> widgetType) {
         return create(widgetType, new Object[0]);
-    }
-
-    /**
-     * <p>
-     * Create widget which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @param model1 An associated model.
-     * @return A widget with the specified models.
-     */
-    public static final <StyledLocations extends StyleDSL, W extends Widget1<StyledLocations, First>, First> W of(Class<W> widgetType, First model1) {
-        return create(widgetType, new Object[] {model1});
-    }
-
-    /**
-     * <p>
-     * Create widgets which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @param models An associated model.
-     * @return A list of widget with the specified models.
-     */
-    public static final <StyledLocations extends StyleDSL, W extends Widget1<StyledLocations, First>, First> W[] of(Class<W> widgetType, First[] models) {
-        W[] widgets = (W[]) Array.newInstance(widgetType, models.length);
-
-        for (int i = 0; i < models.length; i++) {
-            widgets[i] = of(widgetType, models[i]);
-        }
-        return widgets;
     }
 
     /**

@@ -502,19 +502,6 @@ public abstract class StructureDSL {
      * <p>
      * Define children.
      * </p>
-     *
-     * @param children A list of child widget.
-     */
-    public static final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
-        return contents(children, child -> {
-            widget(Widget.of(childType, child));
-        });
-    }
-
-    /**
-     * <p>
-     * Define children.
-     * </p>
      * 
      * @param type A type of {@link Enum} contents.
      * @param process A content writer.

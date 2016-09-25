@@ -24,6 +24,7 @@ import jsx.style.StyleDSL;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
 import jsx.ui.StructureDSL;
+import jsx.ui.Widget;
 import jsx.ui.Widget1;
 import jsx.ui.i18n.TextLocalizer;
 import jsx.ui.piece.Button;
@@ -39,13 +40,13 @@ import kiss.I;
 /**
  * @version 2015/10/05 2:01:04
  */
-public class TodoUI extends Widget1<Styles, TodoTasks> {
+public class TodoUI extends Widget<Styles> {
 
     /** The localization. */
     final Text text = I.i18n(Text.class);
 
     /** Reassign to meaningful name. */
-    final TodoTasks todos = model1;
+    final TodoTasks todos;
 
     /** The filter model. */
     final ObjectProperty<Filter> filter = new SimpleObjectProperty(Filter.All);
@@ -75,10 +76,19 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
             .styleIf(filter.isEqualTo(Filter.Completed), $.SELECTED_FILTER);
 
     /** The clear button. */
-    final Button clear = UI.button()
-            .label(text.clearCompleted(todos.countCompleted()))
-            // .showIf(todos.completedSize.greaterThan(0))
-            .click(todos::removeCompleted);
+    final Button clear;
+
+    /**
+     * @param todos
+     */
+    public TodoUI(TodoTasks todos) {
+        this.todos = todos;
+
+        clear = UI.button()
+                .label(text.clearCompleted(todos.countCompleted()))
+                // .showIf(todos.completedSize.greaterThan(0))
+                .click(todos::removeCompleted);
+    }
 
     /**
      * Add todo task.

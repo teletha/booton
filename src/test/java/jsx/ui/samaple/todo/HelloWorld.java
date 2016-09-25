@@ -10,7 +10,6 @@
 package jsx.ui.samaple.todo;
 
 import js.lang.Global;
-import jsx.ui.Widget;
 
 /**
  * @version 2014/03/08 11:13:39
@@ -29,7 +28,7 @@ public class HelloWorld {
 
         TodoTasks tasks = new TodoTasks();
 
-        TodoUI widget = Widget.of(TodoUI.class, tasks);
+        TodoUI widget = new TodoUI(tasks);
         widget.renderIn(Global.document.getElementById("Content"));
     }
 }

@@ -28,7 +28,6 @@ import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
-import jsx.ui.Widget1;
 import jsx.ui.Widget2;
 import kiss.Events;
 import kiss.I;
@@ -163,21 +162,6 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      */
     public Input invalidIf(Predicate<String> condition, Function<String, String> message) {
         return invalidWhen(condition, input -> Widget.of(InvalidMassage.class, input, message));
-    }
-
-    /**
-     * <p>
-     * Declare the invalid condition and error message.
-     * </p>
-     * 
-     * @param condition
-     * @param message
-     * @return
-     */
-    public Input invalidIf(Predicate<String> condition, Class<? extends Widget1<StyleDSL, String>> message) {
-        return invalidWhen(condition, input -> {
-            return Widget.of(message, input);
-        });
     }
 
     /**
