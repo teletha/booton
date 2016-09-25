@@ -19,8 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
-import js.dom.User;
 import js.dom.UIEvent;
+import js.dom.User;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import kiss.Decoder;

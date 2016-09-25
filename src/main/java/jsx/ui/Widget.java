@@ -198,7 +198,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
          */
         private WidgetModelManager(Class clazz) {
             this.view = searchView(clazz);
-            System.out.println(view);
 
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ModelValue.class)) {
