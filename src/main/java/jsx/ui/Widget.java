@@ -390,7 +390,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
             con.setAccessible(true);
             StructureDSL dsl = (StructureDSL) con.newInstance(this);
             dsl.virtualize();
-            return StructureDSL.latestElement;
+            return null;
         } catch (Exception e) {
             throw I.quiet(e);
         }
