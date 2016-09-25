@@ -384,7 +384,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      * 
      * @return A virtual structure of this {@link Widget}.
      */
-    final VirtualElement virtualize() {
+    protected VirtualElement virtualize() {
         try {
             Constructor<?> con = modelManager.view.getDeclaredConstructors()[0];
             con.setAccessible(true);
