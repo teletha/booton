@@ -181,7 +181,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     static class WidgetModelManager {
 
         /** The associated view class. */
-        private final Class<ViewDSL> view;
+        private final Class<StructureDSL> view;
 
         /** The models. */
         private final List<ModelMetadata> properties = new ArrayList();
@@ -221,7 +221,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
          */
         private Class searchView(Class clazz) {
             for (Class sub : clazz.getDeclaredClasses()) {
-                if (ViewDSL.class.isAssignableFrom(sub)) {
+                if (StructureDSL.class.isAssignableFrom(sub)) {
                     return sub;
                 }
             }
@@ -384,11 +384,13 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      * 
      * @return A virtual structure of this {@link Widget}.
      */
-    protected final ViewDSL virtualize() {
+    final VirtualElement virtualize() {
         try {
             Constructor<?> con = modelManager.view.getDeclaredConstructors()[0];
             con.setAccessible(true);
-            return (ViewDSL) con.newInstance(this);
+            StructureDSL dsl = (StructureDSL) con.newInstance(this);
+            dsl.virtualize();
+            return StructureDSL.latestElement;
         } catch (Exception e) {
             throw I.quiet(e);
         }

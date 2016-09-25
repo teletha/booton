@@ -235,7 +235,7 @@ public class StructureDescriptorTest extends DiffTestBase {
         /**
          * @version 2016/09/25 13:58:55
          */
-        private class View extends ViewDSL {
+        private class View extends StructureDSL {
 
             /**
              * {@inheritDoc}

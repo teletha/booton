@@ -17,7 +17,7 @@ import javafx.beans.property.StringProperty;
 
 import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.ViewDSL;
+import jsx.ui.StructureDSL;
 import kiss.I;
 
 /**
@@ -66,7 +66,7 @@ public class Output extends LowLevelWidget<StyleDSL, Output> {
     /**
      * @version 2016/09/25 13:58:55
      */
-    private class View extends ViewDSL {
+    private class View extends StructureDSL {
 
         /**
          * {@inheritDoc}

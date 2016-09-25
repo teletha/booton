@@ -26,7 +26,7 @@ import javafx.beans.property.StringProperty;
 import js.dom.UIEvent;
 import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.ViewDSL;
+import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
 import jsx.ui.Widget1;
 import jsx.ui.Widget2;
@@ -203,7 +203,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
     /**
      * @version 2016/09/25 13:58:55
      */
-    private class View extends ViewDSL {
+    private class View extends StructureDSL {
 
         /**
          * {@inheritDoc}
@@ -243,7 +243,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
         /**
          * @version 2016/09/25 13:58:55
          */
-        private class View extends ViewDSL {
+        private class View extends StructureDSL {
 
             /**
              * {@inheritDoc}

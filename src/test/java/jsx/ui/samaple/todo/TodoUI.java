@@ -23,7 +23,7 @@ import jsx.style.Style;
 import jsx.style.StyleDSL;
 import jsx.style.ValueStyle;
 import jsx.ui.Key;
-import jsx.ui.ViewDSL;
+import jsx.ui.StructureDSL;
 import jsx.ui.Widget1;
 import jsx.ui.i18n.TextLocalizer;
 import jsx.ui.piece.Button;
@@ -123,7 +123,7 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
     /**
      * @version 2016/09/25 13:58:55
      */
-    private class View extends ViewDSL {
+    private class View extends StructureDSL {
 
         /**
          * {@inheritDoc}
@@ -163,7 +163,7 @@ public class TodoUI extends Widget1<Styles, TodoTasks> {
         /**
          * @version 2016/09/25 13:58:55
          */
-        private class View extends ViewDSL {
+        private class View extends StructureDSL {
 
             /**
              * {@inheritDoc}

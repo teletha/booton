@@ -15,7 +15,7 @@ import javafx.beans.property.SimpleStringProperty;
 import jsx.style.Style;
 import jsx.style.value.Color;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.ViewDSL;
+import jsx.ui.StructureDSL;
 import jsx.ui.piece.Button.$;
 
 /**
@@ -58,7 +58,7 @@ public class Button extends LowLevelWidget<$, Button> {
     /**
      * @version 2016/09/25 13:58:55
      */
-    private class View extends ViewDSL {
+    private class View extends StructureDSL {
 
         /**
          * {@inheritDoc}

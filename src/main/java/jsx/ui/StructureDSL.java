@@ -24,7 +24,7 @@ import jsx.style.StyleDSL;
 /**
  * @version 2016/09/18 19:02:50
  */
-public class StructureDSL {
+public abstract class StructureDSL {
 
     /** The namespace uri for HTML. */
     static final String HTML = "http://www.w3.org/1999/xhtml";
@@ -33,7 +33,7 @@ public class StructureDSL {
     static final String SVG = "http://www.w3.org/2000/svg";
 
     /** The latest element. */
-    private static VirtualElement latestElement;
+    static VirtualElement latestElement;
 
     private static Widget latestWidget;
 
@@ -42,6 +42,13 @@ public class StructureDSL {
 
     /** The modifier of context id. */
     private static int localContextModifier = 31;
+
+    /**
+     * <p>
+     * Create virtual elements of the {@link Widget}.
+     * </p>
+     */
+    protected abstract void virtualize();
 
     /**
      * <p>
@@ -86,7 +93,7 @@ public class StructureDSL {
          * Assemble {@link VirtualStructure} actually.
          */
         WidgetLog.Virtualize.start();
-        widget.virtualize().virtualize();;
+        widget.virtualize();
         WidgetLog.Virtualize.stop();
 
         /**

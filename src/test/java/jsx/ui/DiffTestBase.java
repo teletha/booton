@@ -26,6 +26,13 @@ public class DiffTestBase extends StructureDSL {
     };
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void virtualize() {
+    }
+
+    /**
      * <p>
      * Create {@link VirtualWidget}.
      * </p>
@@ -152,7 +159,7 @@ public class DiffTestBase extends StructureDSL {
         /**
          * @version 2016/09/25 13:58:55
          */
-        private class View extends ViewDSL {
+        private class View extends StructureDSL {
 
             /**
              * {@inheritDoc}

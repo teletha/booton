@@ -24,8 +24,9 @@ import jsx.style.value.Font;
 import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
-import jsx.ui.ViewDSL;
+import jsx.ui.StructureDSL;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
+import jsx.ui.piece.Button.$;
 
 /**
  * @version 2016/09/17 9:17:06
@@ -81,7 +82,7 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
     /**
      * @version 2016/09/25 13:58:55
      */
-    private class View extends ViewDSL {
+    private class View extends StructureDSL {
 
         /**
          * {@inheritDoc}
