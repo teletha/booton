@@ -515,6 +515,10 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         return create(widgetType, new Object[0]);
     }
 
+    public static final <StyledLocations extends StyleDSL, W extends Widget1<StyledLocations, First>, First> W of(Class<W> widgetType, First model1) {
+        return create(widgetType, new Object[] {model1});
+    }
+
     /**
      * <p>
      * Create widget which is associated with the specified models.

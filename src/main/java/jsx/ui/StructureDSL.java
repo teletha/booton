@@ -498,6 +498,12 @@ public abstract class StructureDSL {
         return contents(childType, Arrays.asList(children));
     }
 
+    public static final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
+        return contents(children, child -> {
+            widget(Widget.of(childType, child));
+        });
+    }
+
     /**
      * <p>
      * Define children.
