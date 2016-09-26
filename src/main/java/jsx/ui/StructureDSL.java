@@ -13,13 +13,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 
 import jsx.style.Style;
-import jsx.style.StyleDSL;
 
 /**
  * @version 2016/09/25 15:08:25
@@ -480,34 +480,6 @@ public abstract class StructureDSL {
      * <p>
      * Define children.
      * </p>
-     *
-     * @param children A list of child widget.
-     */
-    public static final <Styles extends StyleDSL, E extends Enum> Declarable contents(Class<? extends Widget1<Styles, E>> childType, Class<E> children) {
-        return contents(childType, children.getEnumConstants());
-    }
-
-    /**
-     * <p>
-     * Define children.
-     * </p>
-     *
-     * @param children A list of child widget.
-     */
-    public static final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, C[] children) {
-        return contents(childType, Arrays.asList(children));
-    }
-
-    public static final <Styles extends StyleDSL, C> Declarable contents(Class<? extends Widget1<Styles, C>> childType, Iterable<C> children) {
-        return contents(children, child -> {
-            widget(Widget.of(childType, child));
-        });
-    }
-
-    /**
-     * <p>
-     * Define children.
-     * </p>
      * 
      * @param type A type of {@link Enum} contents.
      * @param process A content writer.
@@ -549,6 +521,46 @@ public abstract class StructureDSL {
                 localContext = content;
                 localContextModifier = (Objects.hash(content) + 117) ^ 31;
                 process.accept(content);
+            }
+
+            // restore parent context
+            localContext = parentContext;
+            localContextModifier = parentModifier;
+        };
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     * 
+     * @param contents A list of contents.
+     * @param process A content writer.
+     * @return A declaration of contents.
+     */
+    public static final <C> Declarable contents(C[] contents, Function<C, Declarable> process) {
+        return contents(Arrays.asList(contents), process);
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     * 
+     * @param contents A list of contents.
+     * @param process A content writer.
+     * @return A declaration of contents.
+     */
+    public static final <C> Declarable contents(Iterable<C> contents, Function<C, Declarable> process) {
+        return () -> {
+            // store parent context
+            Object parentContext = localContext;
+            int parentModifier = localContextModifier;
+
+            for (C content : contents) {
+                localContext = content;
+                localContextModifier = (Objects.hash(content) + 117) ^ 31;
+                process.apply(content).declare();
             }
 
             // restore parent context

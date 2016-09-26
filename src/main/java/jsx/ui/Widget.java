@@ -99,6 +99,13 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     }
 
     /**
+     * @param models
+     */
+    protected Widget(Object... models) {
+        this(Objects.hash(models));
+    }
+
+    /**
      * 
      */
     protected Widget(int id) {
@@ -513,72 +520,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      */
     public static final <W extends Widget> W of(Class<W> widgetType) {
         return create(widgetType, new Object[0]);
-    }
-
-    public static final <StyledLocations extends StyleDSL, W extends Widget1<StyledLocations, First>, First> W of(Class<W> widgetType, First model1) {
-        return create(widgetType, new Object[] {model1});
-    }
-
-    /**
-     * <p>
-     * Create widget which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @param model1 An associated model.
-     * @param model2 An associated model.
-     * @return A widget with the specified models.
-     */
-    public static final <StyledLocations extends StyleDSL, W extends Widget2<StyledLocations, First, Second>, First, Second> W of(Class<W> widgetType, First model1, Second model2) {
-        return create(widgetType, new Object[] {model1, model2});
-    }
-
-    /**
-     * <p>
-     * Create widget which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @param model1 An associated model.
-     * @param model2 An associated model.
-     * @param model3 An associated model.
-     * @return A widget with the specified models.
-     */
-    public static final <StyledLocations extends StyleDSL, W extends Widget3<StyledLocations, First, Second, Third>, First, Second, Third> W of(Class<W> widgetType, First model1, Second model2, Third model3) {
-        return create(widgetType, new Object[] {model1, model2, model3});
-    }
-
-    /**
-     * <p>
-     * Create widget which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @param model1 An associated model.
-     * @param model2 An associated model.
-     * @param model3 An associated model.
-     * @param model4 An associated model.
-     * @return A widget with the specified models.
-     */
-    public static final <StyledLocations extends StyleDSL, W extends Widget4<StyledLocations, First, Second, Third, Fourth>, First, Second, Third, Fourth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4) {
-        return create(widgetType, new Object[] {model1, model2, model3, model4});
-    }
-
-    /**
-     * <p>
-     * Create widget which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @param model1 An associated model.
-     * @param model2 An associated model.
-     * @param model3 An associated model.
-     * @param model4 An associated model.
-     * @param model5 An associated model.
-     * @return A widget with the specified models.
-     */
-    public static final <StyledLocations extends StyleDSL, W extends Widget5<StyledLocations, First, Second, Third, Fourth, Fifth>, First, Second, Third, Fourth, Fifth> W of(Class<W> widgetType, First model1, Second model2, Third model3, Fourth model4, Fifth model5) {
-        return create(widgetType, new Object[] {model1, model2, model3, model4, model5});
     }
 
     /**

@@ -20,7 +20,7 @@ import booton.soeur.ScriptRunner;
 import jsx.style.StyleDSL;
 
 /**
- * @version 2015/10/04 23:56:49
+ * @version 2016/09/26 16:35:29
  */
 @RunWith(ScriptRunner.class)
 public class StructureDescriptorTest extends DiffTestBase {
@@ -127,7 +127,7 @@ public class StructureDescriptorTest extends DiffTestBase {
         List<String> items = Arrays.asList("first", "second", "third");
 
         VirtualWidget root = make(() -> {
-            box(contents(SubString.class, items));
+            box(contents(items, SubString::new));
         });
 
         assert root.items.length() == 1;
@@ -230,7 +230,18 @@ public class StructureDescriptorTest extends DiffTestBase {
     /**
      * @version 2015/10/04 23:50:43
      */
-    private static class SubString extends Widget1<StyleDSL, String> {
+    private static class SubString extends Widget<StyleDSL> {
+
+        private String text;
+
+        /**
+         * @param text
+         */
+        private SubString(String text) {
+            super(text);
+
+            this.text = text;
+        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -242,7 +253,7 @@ public class StructureDescriptorTest extends DiffTestBase {
              */
             @Override
             protected void virtualize() {
-                text(model1);
+                text(text);
             }
         }
     }

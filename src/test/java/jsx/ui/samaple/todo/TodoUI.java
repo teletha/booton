@@ -25,7 +25,6 @@ import jsx.style.ValueStyle;
 import jsx.ui.Key;
 import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
-import jsx.ui.Widget1;
 import jsx.ui.i18n.TextLocalizer;
 import jsx.ui.piece.Button;
 import jsx.ui.piece.CheckBox;
@@ -141,7 +140,7 @@ public class TodoUI extends Widget<Styles> {
         @Override
         protected void virtualize() {
             widget(input);
-            box($.ITEMS, contents(Item.class, todos.list));
+            box($.ITEMS, contents(todos.list, Item::new));
             box($.FOTTER, () -> {
                 text(text.leftTaskIs(todos.countIncompleted()));
                 box($.BUTTONS, all, active, completed);
@@ -153,22 +152,31 @@ public class TodoUI extends Widget<Styles> {
     /**
      * @version 2014/09/01 11:31:37
      */
-    class Item extends Widget1<Styles, Task> {
+    class Item extends Widget<Styles> {
+
+        Task task;
 
         /** The edit mode. */
         final BooleanProperty editing = new SimpleBooleanProperty();
 
         /** The todo text. */
-        final Output text = UI.output(model1.contents).dbclick(this::startEdit);
+        final Output text = UI.output(task.contents).dbclick(this::startEdit);
 
         /** The completion box. */
-        final CheckBox complete = UI.checkbox(model1.completed, model1, model1.contents.get());
+        final CheckBox complete = UI.checkbox(task.completed, task, task.contents.get());
 
         /** The remove button. */
-        final Button delete = UI.button().label("×").click($(todos.list::remove, model1));
+        final Button delete = UI.button().label("×").click($(todos.list::remove, task));
 
         /** The editable todo text. */
-        final Input edit = UI.input(model1.contents).shortcut(Key.Enter, this::finishEdit);
+        final Input edit = UI.input(task.contents).shortcut(Key.Enter, this::finishEdit);
+
+        /**
+         * @param task
+         */
+        private Item(Task task) {
+            this.task = task;
+        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -180,7 +188,7 @@ public class TodoUI extends Widget<Styles> {
              */
             @Override
             protected void virtualize() {
-                if (filter.getValue().test(model1)) {
+                if (filter.getValue().test(task)) {
                     if (editing.get()) {
                         widget(edit);
                     } else {
@@ -217,7 +225,7 @@ public class TodoUI extends Widget<Styles> {
         protected void finishEdit() {
             System.out.println("end edit");
             editing.set(false);
-            model1.contents.set(edit.value.get());
+            task.contents.set(edit.value.get());
         }
     }
 

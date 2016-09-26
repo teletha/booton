@@ -20,7 +20,7 @@ import booton.soeur.ScriptRunner;
 import jsx.style.StyleDSL;
 
 /**
- * @version 2015/10/05 0:54:19
+ * @version 2016/09/26 16:34:09
  */
 @RunWith(ScriptRunner.class)
 public class DiffListTest extends DiffTestBase {
@@ -74,14 +74,25 @@ public class DiffListTest extends DiffTestBase {
      */
     private <T> VirtualWidget single(List<String> items) {
         return make(() -> {
-            box(style, contents(SingleBox.class, items));
+            box(style, contents(items, SingleBox::new));
         });
     }
 
     /**
      * @version 2015/10/05 0:48:29
      */
-    private static class SingleBox extends Widget1<StyleDSL, String> {
+    private static class SingleBox extends Widget<StyleDSL> {
+
+        private String text;
+
+        /**
+         * @param text
+         */
+        private SingleBox(String text) {
+            super(text);
+
+            this.text = text;
+        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -93,7 +104,7 @@ public class DiffListTest extends DiffTestBase {
              */
             @Override
             protected void virtualize() {
-                text(style, model1);
+                text(style, text);
             }
         }
     }
@@ -108,14 +119,25 @@ public class DiffListTest extends DiffTestBase {
      */
     private <T> VirtualWidget multi(List<String> items) {
         return make(() -> {
-            box(style, contents(MultiBox.class, items));
+            box(style, contents(items, MultiBox::new));
         });
     }
 
     /**
      * @version 2015/10/05 0:50:19
      */
-    private static class MultiBox extends Widget1<StyleDSL, String> {
+    private static class MultiBox extends Widget<StyleDSL> {
+
+        private String text;
+
+        /**
+         * @param text
+         */
+        private MultiBox(String text) {
+            super(text);
+
+            this.text = text;
+        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -127,8 +149,8 @@ public class DiffListTest extends DiffTestBase {
              */
             @Override
             protected void virtualize() {
-                text(style, model1 + "1");
-                text(style, model1 + "2");
+                text(style, text + "1");
+                text(style, text + "2");
             }
         }
     }
@@ -143,14 +165,25 @@ public class DiffListTest extends DiffTestBase {
      */
     private <T> VirtualWidget nest(List<String> items) {
         return make(() -> {
-            box(style, contents(NestBox.class, items));
+            box(style, contents(items, NestBox::new));
         });
     }
 
     /**
      * @version 2015/10/05 0:51:22
      */
-    private static class NestBox extends Widget1<StyleDSL, String> {
+    private static class NestBox extends Widget<StyleDSL> {
+
+        private String text;
+
+        /**
+         * @param text
+         */
+        private NestBox(String text) {
+            super(text);
+
+            this.text = text;
+        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -162,7 +195,7 @@ public class DiffListTest extends DiffTestBase {
              */
             @Override
             protected void virtualize() {
-                List<String> items = Arrays.asList(model1 + "A", model1 + "B");
+                List<String> items = Arrays.asList(text + "A", text + "B");
 
                 box(style, contents(SingleBox.class, items));
                 box(style, contents(SingleBox.class, items));
@@ -192,14 +225,25 @@ public class DiffListTest extends DiffTestBase {
      */
     private <T> VirtualWidget bean(List<Person> items) {
         return make(() -> {
-            box(style, contents(PersonBox.class, items));
+            box(style, contents(items, PersonBox::new));
         });
     }
 
     /**
-     * @version 2015/10/05 0:53:14
+     * @version 2016/09/26 16:33:50
      */
-    private static class PersonBox extends Widget1<StyleDSL, Person> {
+    private static class PersonBox extends Widget<StyleDSL> {
+
+        private Person person;
+
+        /**
+         * @param person
+         */
+        private PersonBox(Person person) {
+            super(person);
+
+            this.person = person;
+        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -211,7 +255,7 @@ public class DiffListTest extends DiffTestBase {
              */
             @Override
             protected void virtualize() {
-                text(style, model1.getName(), " is ", model1.getAge(), " years old.");
+                text(style, person.getName(), " is ", person.getAge(), " years old.");
             }
         }
     }

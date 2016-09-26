@@ -28,7 +28,6 @@ import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
-import jsx.ui.Widget2;
 import kiss.Events;
 import kiss.I;
 
@@ -161,7 +160,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      * @return
      */
     public Input invalidIf(Predicate<String> condition, Function<String, String> message) {
-        return invalidWhen(condition, input -> Widget.of(InvalidMassage.class, input, message));
+        return invalidWhen(condition, input -> new InvalidMassage(input, message));
     }
 
     /**
@@ -222,7 +221,22 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
     /**
      * @version 2015/10/21 13:40:36
      */
-    private static class InvalidMassage<C> extends Widget2<StyleDSL, String, Function<String, String>> {
+    private static class InvalidMassage<C> extends Widget<StyleDSL> {
+
+        private String input;
+
+        private Function<String, String> message;
+
+        /**
+         * @param input
+         * @param message
+         */
+        private InvalidMassage(String input, Function<String, String> message) {
+            super(input);
+
+            this.input = input;
+            this.message = message;
+        }
 
         /**
          * @version 2016/09/25 13:58:55
@@ -234,7 +248,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
              */
             @Override
             protected void virtualize() {
-                text(model2.apply(model1));
+                text(message.apply(input));
             }
         }
     }
