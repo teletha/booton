@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.application;
 
 import static js.lang.Global.*;
 
@@ -23,6 +23,7 @@ import js.dom.UIEvent;
 import js.dom.User;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
+import jsx.ui.Widget;
 import kiss.Decoder;
 import kiss.Encoder;
 import kiss.I;

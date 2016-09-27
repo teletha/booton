@@ -7,7 +7,7 @@
  *
  *          http://opensource.org/licenses/mit-license.php
  */
-package jsx.ui;
+package jsx.application;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
