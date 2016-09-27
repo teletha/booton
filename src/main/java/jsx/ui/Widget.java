@@ -109,9 +109,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         Type[] parameters = Model.collectParameters(getClass(), Widget.class);
         this.$ = (Styles) (parameters.length == 0 ? new StyleDSL() : I.make((Class) parameters[0]));
 
-        // if (previous != null) {
-        // throw new IllegalStateException(getClass() + " is a nest in virtual structure.");
-        // }
         modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
 
         try {
