@@ -74,6 +74,8 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     /** The styled location set. */
     protected Styles $;
 
+    protected final Updater updateView = new Updater();
+
     /** The metadata for this {@link Widget}. */
     private Metadata metadata;
 
@@ -137,6 +139,36 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
 
     /**
      * <p>
+     * Try to re-render UI in the future.
+     * </p>
+     */
+    protected final void update() {
+        updater.add(this);
+    
+        if (updater.size() == 1) {
+            requestAnimationFrame(() -> {
+                for (Widget widget : updater) {
+                    // create new virtual element
+                    VirtualElement next = StructureDSL.createWidget(widget);
+    
+                    // create patch to manipulate DOM and apply it
+                    WidgetLog.Diff.start();
+                    PatchDiff.apply(widget.virtual, next);
+                    WidgetLog.Diff.stop();
+    
+                    Profile.show();
+    
+                    // update to new virtual element
+                    widget.virtual = next;
+                }
+                updater.clear();
+                System.out.println("Run rendering on RAF timing.");
+            });
+        }
+    }
+
+    /**
+     * <p>
      * Store all current values.
      * </p>
      */
@@ -173,6 +205,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
 
         initializeEventListeners(rootElement);
         update();
+        System.out.println("renderin " + getClass());
     }
 
     /**
@@ -188,6 +221,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         // this.virtual.dom = null;
         this.virtual = null;
         this.root = null;
+        System.out.println("renderout " + getClass());
     }
 
     /**
@@ -279,53 +313,25 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     }
 
     /**
-     * <p>
-     * Try to re-render UI in the future.
-     * </p>
-     */
-    protected final <V> Observer<V> update(Observer<V> action) {
-        return v -> {
-            action.accept(v);
-            if (root != null) root.update();
-        };
-    }
-
-    /**
-     * <p>
-     * Try to re-render UI in the future.
-     * </p>
-     */
-    protected final void update() {
-        updater.add(this);
-
-        if (updater.size() == 1) {
-            requestAnimationFrame(() -> {
-                for (Widget widget : updater) {
-                    // create new virtual element
-                    VirtualElement next = StructureDSL.createWidget(widget);
-
-                    // create patch to manipulate DOM and apply it
-                    WidgetLog.Diff.start();
-                    PatchDiff.apply(widget.virtual, next);
-                    WidgetLog.Diff.stop();
-
-                    Profile.show();
-
-                    // update to new virtual element
-                    widget.virtual = next;
-                }
-                updater.clear();
-                System.out.println("Run rendering on RAF timing.");
-            });
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public void declare() {
         StructureDSL.createWidget(this);
+    }
+
+    /**
+     * @version 2016/09/27 14:55:04
+     */
+    private class Updater implements Consumer {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(Object t) {
+            if (root != null) root.update();
+        }
     }
 
     /**

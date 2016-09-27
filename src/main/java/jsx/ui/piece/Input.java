@@ -62,7 +62,12 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
         this.invalid = I.observe(value).map(input -> !validate(input)).startWith(false);
 
         // user input functionality
-        when(KeyUp, Cut, Paste).at($.SingleLineFormBase).debounce(100, MILLISECONDS).map(UIEvent::value).diff().to(update(value::set));
+        when(KeyUp, Cut, Paste).at($.SingleLineFormBase)
+                .debounce(100, MILLISECONDS)
+                .map(UIEvent::value)
+                .diff()
+                .sideEffect(updateView)
+                .to(value::set);
 
         disableIf(invalid);
     }

@@ -26,7 +26,6 @@ import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
-import jsx.ui.piece.Button.$;
 
 /**
  * @version 2016/09/17 9:17:06
@@ -76,7 +75,7 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
         this.id = "Mark" + hashCode();
         this.isMarked = isMarked;
 
-        when(Change).at($.Root).to(update(changeListener::accept));
+        when(Change).at($.Root).sideEffect(updateView).to(changeListener::accept);
     }
 
     /**

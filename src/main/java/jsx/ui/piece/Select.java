@@ -20,7 +20,6 @@ import js.dom.User;
 import jsx.style.Style;
 import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
-import jsx.ui.piece.Button.$;
 import jsx.ui.piece.Select.Styles;
 
 /**
@@ -42,7 +41,7 @@ public class Select<M> extends Widget<Styles> {
         this.values = values;
         this.selection = selection;
 
-        when(User.Change).at($.Select).to(update(e -> selection.setValue(values.get(Integer.valueOf(e.value())))));
+        when(User.Change).at($.Select).sideEffect(updateView).to(e -> selection.setValue(values.get(Integer.valueOf(e.value()))));
     }
 
     /**
