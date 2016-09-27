@@ -65,16 +65,19 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     /** The update scheduler. */
     private static Set<Widget> updater = new HashSet();
 
+    /** The root widget. */
+    Widget root;
+
     /** The identifier of this {@link Widget}. */
     protected final int id;
 
-    /** The root widget. */
-    protected Widget root;
-
     /** The styled location set. */
-    protected Styles $;
+    protected final Styles $;
 
-    protected final Updater updateView = new Updater();
+    /** The view updater. */
+    protected final Consumer updateView = v -> {
+        if (root != null) root.update();
+    };
 
     /** The metadata for this {@link Widget}. */
     private Metadata metadata;
@@ -112,29 +115,10 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : hashCode();
-
         Type[] parameters = Model.collectParameters(getClass(), Widget.class);
         this.$ = (Styles) (parameters.length == 0 ? new StyleDSL() : I.make((Class) parameters[0]));
 
         metadata = Metadata.of(this);
-
-        try {
-            for (Metadata.Value meta : metadata.properties) {
-                ReadOnlyProperty property = (ReadOnlyProperty) meta.field.get(this);
-
-                if (property != null) {
-                    property.addListener((instance, oldValue, newValue) -> {
-                        update();
-                    });
-                }
-            }
-
-            for (Field field : metadata.events) {
-                ((Events) field.get(this)).to(v -> update());
-            }
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
     }
 
     /**
@@ -144,20 +128,20 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      */
     protected final void update() {
         updater.add(this);
-    
+
         if (updater.size() == 1) {
             requestAnimationFrame(() -> {
                 for (Widget widget : updater) {
                     // create new virtual element
                     VirtualElement next = StructureDSL.createWidget(widget);
-    
+
                     // create patch to manipulate DOM and apply it
                     WidgetLog.Diff.start();
                     PatchDiff.apply(widget.virtual, next);
                     WidgetLog.Diff.stop();
-    
+
                     Profile.show();
-    
+
                     // update to new virtual element
                     widget.virtual = next;
                 }
@@ -165,6 +149,26 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
                 System.out.println("Run rendering on RAF timing.");
             });
         }
+    }
+
+    /**
+     * <p>
+     * Register the {@link Events} listener for the specified action type.
+     * </p>
+     * 
+     * @param actions A list of action types.
+     * @return A location descriptor.
+     */
+    protected final Locator when(User... actions) {
+        EventContext context = new EventContext(actions);
+
+        if (locators == null) {
+            locators = new NativeArray();
+        }
+        locators.push(context);
+
+        // API definition
+        return context;
     }
 
     /**
@@ -256,26 +260,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
 
     /**
      * <p>
-     * Register the {@link Events} listener for the specified action type.
-     * </p>
-     * 
-     * @param actions A list of action types.
-     * @return A location descriptor.
-     */
-    protected final Locator when(User... actions) {
-        EventContext context = new EventContext(actions);
-
-        if (locators == null) {
-            locators = new NativeArray();
-        }
-        locators.push(context);
-
-        // API definition
-        return context;
-    }
-
-    /**
-     * <p>
      * Initialize event listeners on this {@link Widget}.
      * </p>
      * 
@@ -318,20 +302,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     @Override
     public void declare() {
         StructureDSL.createWidget(this);
-    }
-
-    /**
-     * @version 2016/09/27 14:55:04
-     */
-    private class Updater implements Consumer {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(Object t) {
-            if (root != null) root.update();
-        }
     }
 
     /**
