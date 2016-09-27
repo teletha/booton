@@ -54,9 +54,6 @@ import kiss.model.Model;
  */
 public class Widget<Styles extends StyleDSL> implements Declarable {
 
-    /** The cache for widget metadata. */
-    private static final Map<Class, WidgetModelManager> metas = new HashMap();
-
     /** The root locator. */
     protected static final Style WidgetRoot = () -> {
     };
@@ -66,7 +63,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     }
 
     /** The update scheduler. */
-    static Set<Widget> updater = new HashSet();
+    private static Set<Widget> updater = new HashSet();
 
     /** The identifier of this {@link Widget}. */
     protected final int id;
@@ -78,7 +75,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     protected Styles $;
 
     /** The metadata for this {@link Widget}. */
-    WidgetModelManager modelManager;
+    private Metadata metadata;
 
     /** The event context holder. */
     private NativeArray<EventContext> locators;
@@ -87,13 +84,19 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     private VirtualElement virtual;
 
     /**
-     * 
+     * <p>
+     * Create {@link Widget} without id.
+     * </p>
      */
     protected Widget() {
         this(0);
     }
 
     /**
+     * <p>
+     * Create {@link Widget} with id which is calculated by the specified models.
+     * </p>
+     * 
      * @param models
      */
     protected Widget(Object... models) {
@@ -101,7 +104,9 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     }
 
     /**
-     * 
+     * <p>
+     * Create {@link Widget} with the specified id.
+     * </p>
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : hashCode();
@@ -109,10 +114,10 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         Type[] parameters = Model.collectParameters(getClass(), Widget.class);
         this.$ = (Styles) (parameters.length == 0 ? new StyleDSL() : I.make((Class) parameters[0]));
 
-        modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
+        metadata = Metadata.of(this);
 
         try {
-            for (ModelMetadata meta : modelManager.properties) {
+            for (Metadata.Value meta : metadata.properties) {
                 ReadOnlyProperty property = (ReadOnlyProperty) meta.field.get(this);
 
                 if (property != null) {
@@ -122,7 +127,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
                 }
             }
 
-            for (Field field : modelManager.events) {
+            for (Field field : metadata.events) {
                 ((Events) field.get(this)).to(v -> update());
             }
         } catch (Exception e) {
@@ -136,7 +141,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      * </p>
      */
     final void store() throws Exception {
-        for (ModelMetadata meta : modelManager.properties) {
+        for (Metadata.Value meta : metadata.properties) {
             meta.store(this);
         }
     }
@@ -147,165 +152,8 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      * </p>
      */
     final void restore() throws Exception {
-        for (ModelMetadata meta : modelManager.properties) {
+        for (Metadata.Value meta : metadata.properties) {
             meta.restore(this);
-        }
-    }
-
-    /**
-     * @version 2015/10/15 14:51:28
-     */
-    static class WidgetModelManager {
-
-        /** The associated view class. */
-        private final Class<StructureDSL> view;
-
-        /** The models. */
-        private final List<ModelMetadata> properties = new ArrayList();
-
-        /** The events. */
-        private final List<Field> events = new ArrayList();
-
-        /**
-         * <p>
-         * Analyze widget.
-         * </p>
-         * 
-         * @param clazz A target widget.
-         */
-        private WidgetModelManager(Class clazz) {
-            this.view = searchView(clazz);
-
-            for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(ModelValue.class)) {
-                    Class type = field.getType();
-
-                    if (ReadOnlyProperty.class.isAssignableFrom(type)) {
-                        properties.add(new ModelMetadata(field.getName(), null, field));
-                    } else if (Events.class.isAssignableFrom(type)) {
-                        events.add(field);
-                    } else {
-
-                    }
-                }
-            }
-        }
-
-        /**
-         * @param clazz
-         * @return
-         */
-        private Class searchView(Class clazz) {
-            for (Class sub : clazz.getDeclaredClasses()) {
-                if (StructureDSL.class.isAssignableFrom(sub)) {
-                    return sub;
-                }
-            }
-
-            Class parent = clazz.getSuperclass();
-            return parent == Object.class ? null : searchView(parent);
-        }
-    }
-
-    /**
-     * @version 2015/10/15 17:18:43
-     */
-    private static class ModelMetadata {
-
-        /** The model name. */
-        private final String name;
-
-        /** The model type. */
-        private final Class type;
-
-        /** The accessor. */
-        private final Field field;
-
-        /** The value extractor. */
-        private final Function<Property, Object> extractor;
-
-        /** The value injector. */
-        private final BiConsumer<Property, Object> injector;
-
-        /** The persistence area. */
-        private NativeArray values = new NativeArray();
-
-        /**
-         * @param name
-         * @param type
-         * @param field
-         */
-        private ModelMetadata(String name, Class type, Field field) {
-            this.name = name;
-            this.type = type;
-            this.field = field;
-
-            if (SetProperty.class.isAssignableFrom(type) || ListProperty.class.isAssignableFrom(type)) {
-                this.extractor = this::collect;
-                this.injector = this::replenish;
-            } else {
-                this.extractor = Property::getValue;
-                this.injector = Property::setValue;
-            }
-        }
-
-        /**
-         * <p>
-         * Helper method to collect items from the specified {@link Collection}.
-         * </p>
-         * 
-         * @param collection An item container.
-         * @return A list of all items.
-         */
-        private Object collect(Property<Collection> collection) {
-            NativeArray array = new NativeArray();
-
-            for (Object object : collection.getValue()) {
-                array.push(object);
-            }
-            return array;
-        }
-
-        /**
-         * <p>
-         * Helper method to add items to the specified {@link Collection}.
-         * </p>
-         * 
-         * @param property An item container.
-         * @param items A list of items.
-         * @return A list of all items.
-         */
-        private void replenish(Property<Collection> property, Object items) {
-            Collection collection = property.getValue();
-            NativeArray arrays = (NativeArray) items;
-
-            for (int i = 0; i < arrays.length(); i++) {
-                collection.add(arrays.get(i));
-            }
-        }
-
-        /**
-         * <p>
-         * Store the current value.
-         * </p>
-         * 
-         * @param widget A target to store.
-         */
-        private void store(Widget widget) throws Exception {
-            values.push(extractor.apply((Property) field.get(widget)));
-            System.out.println("Store " + name + "  [" + values.get(values.length() - 1) + "]");
-        }
-
-        /**
-         * <p>
-         * Restore the persisted value.
-         * </p>
-         * 
-         * @param widget A target to restore.
-         */
-        private void restore(Widget widget) throws Exception {
-            injector.accept((Property) field.get(widget), values.pop());
-            System.out.println("Restore " + name + "  [" + field.get(widget) + "]");
         }
     }
 
@@ -362,7 +210,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      */
     protected VirtualElement virtualize() {
         try {
-            Constructor<?> con = modelManager.view.getDeclaredConstructors()[0];
+            Constructor<?> con = metadata.view.getDeclaredConstructors()[0];
             con.setAccessible(true);
             StructureDSL dsl = (StructureDSL) con.newInstance(this);
             dsl.virtualize();
@@ -582,4 +430,179 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         }
     }
 
+    /**
+     * @version 2016/09/27 14:27:14
+     */
+    private static class Metadata {
+
+        /** The metadata cache. */
+        private static final Map<Class, Metadata> cache = new HashMap();
+
+        /** The associated view class. */
+        private final Class<StructureDSL> view;
+
+        /** The models. */
+        private final List<Value> properties = new ArrayList();
+
+        /** The events. */
+        private final List<Field> events = new ArrayList();
+
+        /**
+         * <p>
+         * Analyze widget.
+         * </p>
+         * 
+         * @param clazz A target widget class.
+         */
+        private Metadata(Class clazz) {
+            this.view = searchView(clazz);
+
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(ModelValue.class)) {
+                    Class type = field.getType();
+
+                    if (ReadOnlyProperty.class.isAssignableFrom(type)) {
+                        properties.add(new Value(field.getName(), null, field));
+                    } else if (Events.class.isAssignableFrom(type)) {
+                        events.add(field);
+                    } else {
+
+                    }
+                }
+            }
+        }
+
+        /**
+         * @param clazz
+         * @return
+         */
+        private Class searchView(Class clazz) {
+            for (Class sub : clazz.getDeclaredClasses()) {
+                if (StructureDSL.class.isAssignableFrom(sub)) {
+                    return sub;
+                }
+            }
+
+            Class parent = clazz.getSuperclass();
+            return parent == Object.class ? null : searchView(parent);
+        }
+
+        /**
+         * <p>
+         * Retrieve from cache.
+         * </p>
+         * 
+         * @param widget A target {@link Widget}.
+         * @return A cached metadata.
+         */
+        private static Metadata of(Widget widget) {
+            return cache.computeIfAbsent(widget.getClass(), Metadata::new);
+        }
+
+        /**
+         * @version 2016/09/27 14:32:17
+         */
+        private static class Value {
+
+            /** The value name. */
+            private final String name;
+
+            /** The value type. */
+            private final Class type;
+
+            /** The accessor. */
+            private final Field field;
+
+            /** The value extractor. */
+            private final Function<Property, Object> extractor;
+
+            /** The value injector. */
+            private final BiConsumer<Property, Object> injector;
+
+            /** The persistence area. */
+            private NativeArray values = new NativeArray();
+
+            /**
+             * <p>
+             * Create value metadata.
+             * </p>
+             * 
+             * @param name A value name.
+             * @param type A value type.
+             * @param field A value accessor.
+             */
+            private Value(String name, Class type, Field field) {
+                this.name = name;
+                this.type = type;
+                this.field = field;
+
+                if (SetProperty.class.isAssignableFrom(type) || ListProperty.class.isAssignableFrom(type)) {
+                    this.extractor = this::collect;
+                    this.injector = this::replenish;
+                } else {
+                    this.extractor = Property::getValue;
+                    this.injector = Property::setValue;
+                }
+            }
+
+            /**
+             * <p>
+             * Helper method to collect items from the specified {@link Collection}.
+             * </p>
+             * 
+             * @param collection An item container.
+             * @return A list of all items.
+             */
+            private Object collect(Property<Collection> collection) {
+                NativeArray array = new NativeArray();
+
+                for (Object object : collection.getValue()) {
+                    array.push(object);
+                }
+                return array;
+            }
+
+            /**
+             * <p>
+             * Helper method to add items to the specified {@link Collection}.
+             * </p>
+             * 
+             * @param property An item container.
+             * @param items A list of items.
+             * @return A list of all items.
+             */
+            private void replenish(Property<Collection> property, Object items) {
+                Collection collection = property.getValue();
+                NativeArray arrays = (NativeArray) items;
+
+                for (int i = 0; i < arrays.length(); i++) {
+                    collection.add(arrays.get(i));
+                }
+            }
+
+            /**
+             * <p>
+             * Store the current value.
+             * </p>
+             * 
+             * @param widget A target to store.
+             */
+            private void store(Widget widget) throws Exception {
+                values.push(extractor.apply((Property) field.get(widget)));
+                System.out.println("Store " + name + "  [" + values.get(values.length() - 1) + "]");
+            }
+
+            /**
+             * <p>
+             * Restore the persisted value.
+             * </p>
+             * 
+             * @param widget A target to restore.
+             */
+            private void restore(Widget widget) throws Exception {
+                injector.accept((Property) field.get(widget), values.pop());
+                System.out.println("Restore " + name + "  [" + field.get(widget) + "]");
+            }
+        }
+    }
 }
