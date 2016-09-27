@@ -75,33 +75,12 @@ public abstract class StructureDSL {
         latestWidget = widget;
         latestElement = virtualize;
 
-        // process child nodes
-        Class clazz = widget.getClass();
-
-        /**
-         * <p>
-         * Enter the hierarchy of {@link VirtualStructure}.
-         * </p>
-         */
-        Widget previous = VirtualWidgetHierarchy.hierarchy.putIfAbsent(clazz, widget);
-
-        // if (previous != null) {
-        // throw new IllegalStateException(clazz + " is a nest in virtual structure.");
-        // }
-
         /**
          * Assemble {@link VirtualStructure} actually.
          */
         WidgetLog.Virtualize.start();
         widget.virtualize();
         WidgetLog.Virtualize.stop();
-
-        /**
-         * <p>
-         * Leave the hierarchy of {@link VirtualStructure}.
-         * </p>
-         */
-        VirtualWidgetHierarchy.hierarchy.remove(clazz);
 
         // restore parent
         latestWidget = parentWidget;

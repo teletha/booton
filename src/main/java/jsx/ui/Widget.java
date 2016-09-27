@@ -46,14 +46,12 @@ import jsx.ui.flux.Location;
 import jsx.ui.flux.Locator;
 import kiss.Events;
 import kiss.I;
-import kiss.Manageable;
 import kiss.Observer;
 import kiss.model.Model;
 
 /**
- * @version 2016/09/25 14:33:57
+ * @version 2016/09/27 10:10:23
  */
-@Manageable(lifestyle = VirtualWidgetHierarchy.class)
 public class Widget<Styles extends StyleDSL> implements Declarable {
 
     /** The cache for widget metadata. */
@@ -107,13 +105,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      */
     protected Widget(int id) {
         this.id = id != 0 ? id : hashCode();
-        System.out.println("Create " + getClass());
-        /**
-         * <p>
-         * Enter the hierarchy of {@link VirtualStructure}.
-         * </p>
-         */
-        Widget previous = VirtualWidgetHierarchy.hierarchy.putIfAbsent(getClass(), this);
 
         Type[] parameters = Model.collectParameters(getClass(), Widget.class);
         this.$ = (Styles) (parameters.length == 0 ? new StyleDSL() : I.make((Class) parameters[0]));
@@ -122,13 +113,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         // throw new IllegalStateException(getClass() + " is a nest in virtual structure.");
         // }
         modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
-
-        /**
-         * <p>
-         * Leave the hierarchy of {@link VirtualStructure}.
-         * </p>
-         */
-        VirtualWidgetHierarchy.hierarchy.remove(getClass());
 
         try {
             for (ModelMetadata meta : modelManager.properties) {
