@@ -12,8 +12,8 @@ package kiss;
 import static js.lang.Global.*;
 
 import booton.translator.JavaAPIProvider;
-import js.dom.User;
 import js.lang.NativeFunction;
+import jsx.ui.User;
 
 /**
  * @version 2015/10/20 2:07:28

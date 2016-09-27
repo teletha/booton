@@ -9,8 +9,6 @@
  */
 package jsx.ui.piece;
 
-import static js.dom.User.*;
-
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -25,6 +23,7 @@ import jsx.style.value.Numeric;
 import jsx.style.value.Unit;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
+import jsx.ui.User;
 import jsx.ui.piece.AbstractMarkedBox.Styles;
 
 /**
@@ -75,7 +74,7 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
         this.id = "Mark" + hashCode();
         this.isMarked = isMarked;
 
-        when(Change).at($.Root).sideEffect(updateView).to(changeListener::accept);
+        when(User.Change).at($.Root).sideEffect(updateView).to(changeListener::accept);
     }
 
     /**

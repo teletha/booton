@@ -22,7 +22,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 
 import js.dom.UIEvent;
-import js.dom.User;
 import jsx.style.Style;
 import jsx.style.StyleDSL;
 import jsx.style.StyleProperty;

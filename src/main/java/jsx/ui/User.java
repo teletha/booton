@@ -8,9 +8,11 @@
  *          http://opensource.org/licenses/mit-license.php
  */
 
-package js.dom;
+package jsx.ui;
 
 import java.util.function.Predicate;
+
+import js.dom.UIEvent;
 
 /**
  * @version 2013/10/10 13:45:14

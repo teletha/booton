@@ -14,9 +14,9 @@ import java.util.function.Consumer;
 
 import js.dom.Element;
 import js.dom.UIEvent;
-import js.dom.User;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
+import jsx.ui.User;
 import kiss.Events;
 import kiss.Observer;
 

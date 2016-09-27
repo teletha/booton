@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
 
 import js.dom.DocumentFragment;
 import js.dom.UIEvent;
-import js.dom.User;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
+import jsx.ui.User;
 import jsx.ui.Widget;
 import kiss.Decoder;
 import kiss.Encoder;

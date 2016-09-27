@@ -10,8 +10,8 @@
 package jsx.ui.piece;
 
 import static java.util.concurrent.TimeUnit.*;
-import static js.dom.User.*;
 import static jsx.ui.FunctionHelper.*;
+import static jsx.ui.User.*;
 
 import java.util.ArrayList;
 import java.util.List;

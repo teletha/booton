@@ -16,9 +16,9 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.scene.control.SingleSelectionModel;
 
-import js.dom.User;
 import jsx.style.Style;
 import jsx.ui.StructureDSL;
+import jsx.ui.User;
 import jsx.ui.Widget;
 import jsx.ui.piece.Select.Styles;
 

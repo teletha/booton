@@ -11,7 +11,6 @@ package jsx.ui;
 
 import java.util.Objects;
 
-import js.dom.User;
 import js.dom.UIEvent;
 import jsx.ui.piece.Button;
 import jsx.ui.piece.Input;

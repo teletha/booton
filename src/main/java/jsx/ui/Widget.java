@@ -34,7 +34,6 @@ import javafx.beans.property.SetProperty;
 import js.dom.Element;
 import js.dom.EventTarget;
 import js.dom.UIEvent;
-import js.dom.User;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.util.HashMap;

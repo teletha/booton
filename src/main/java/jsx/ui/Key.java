@@ -9,8 +9,6 @@
  */
 package jsx.ui;
 
-import js.dom.User;
-
 /**
  * @version 2014/09/01 10:59:35
  */
