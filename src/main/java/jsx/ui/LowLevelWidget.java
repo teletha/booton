@@ -76,7 +76,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
      * @return
      */
     public T click(Runnable action) {
-        when(User.Click).at(WidgetRoot).take(this::isValid).sideEffect(updateView).to(e -> action.run());
+        when(User.Click).at(WidgetRoot).take(this::isValid).sideEffect(updateView).to(action);
 
         return (T) this;
     }
@@ -85,7 +85,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
      * @return
      */
     public T dbclick(Runnable action) {
-        when(User.DoubleClick).at(WidgetRoot).take(this::isValid).sideEffect(updateView).to(e -> action.run());
+        when(User.DoubleClick).at(WidgetRoot).take(this::isValid).sideEffect(updateView).to(action);
 
         return (T) this;
     }
@@ -128,7 +128,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
             Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
 
             // activate shortcut command
-            disposeLater(keyInput.take(this::isValid).sideEffect(updateView).to(e -> action.run()));
+            disposeLater(keyInput.take(this::isValid).sideEffect(updateView).to(action));
         }
         return (T) this;
     }
