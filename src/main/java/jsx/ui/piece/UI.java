@@ -251,7 +251,7 @@ public class UI {
          * @return
          */
         default <W extends Widget> ModalCloser<O, W> show(Class<W> contents) {
-            return show(Widget.of(contents));
+            return show(I.make(contents));
         }
 
         /**

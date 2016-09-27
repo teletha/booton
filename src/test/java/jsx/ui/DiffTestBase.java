@@ -54,7 +54,7 @@ public class DiffTestBase extends StructureDSL {
      * @return
      */
     protected final Widget make(Class<? extends DSLWidget> type, Runnable dsl) {
-        DSLWidget widget = Widget.of(type);
+        DSLWidget widget = new DSLWidget();
         widget.dsl = dsl;
 
         return widget;

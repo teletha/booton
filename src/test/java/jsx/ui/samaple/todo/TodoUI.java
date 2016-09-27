@@ -154,28 +154,32 @@ public class TodoUI extends Widget<Styles> {
      */
     class Item extends Widget<Styles> {
 
-        Task task;
+        final Task task;
 
         /** The edit mode. */
         final BooleanProperty editing = new SimpleBooleanProperty();
 
         /** The todo text. */
-        final Output text = UI.output(task.contents).dbclick(this::startEdit);
+        final Output text;
 
         /** The completion box. */
-        final CheckBox complete = UI.checkbox(task.completed, task, task.contents.get());
+        final CheckBox complete;
 
         /** The remove button. */
-        final Button delete = UI.button().label("×").click($(todos.list::remove, task));
+        final Button delete;
 
         /** The editable todo text. */
-        final Input edit = UI.input(task.contents).shortcut(Key.Enter, this::finishEdit);
+        final Input edit;
 
         /**
          * @param task
          */
         private Item(Task task) {
             this.task = task;
+            this.text = UI.output(task.contents).dbclick(this::startEdit);
+            this.complete = UI.checkbox(task.completed, task, task.contents.get());
+            this.delete = UI.button().label("×").click($(todos.list::remove, task));
+            this.edit = UI.input(task.contents).shortcut(Key.Enter, this::finishEdit);
         }
 
         /**

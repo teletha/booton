@@ -70,9 +70,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     /** The update scheduler. */
     static Set<Widget> updater = new HashSet();
 
-    /** The model loophole to CHEAT. */
-    static Object[] loophole;
-
     /** The identifier of this {@link Widget}. */
     protected final int id;
 
@@ -109,8 +106,8 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      * 
      */
     protected Widget(int id) {
-        this.id = id != 0 ? id : loophole == null ? hashCode() : Objects.hash(loophole);
-
+        this.id = id != 0 ? id : hashCode();
+        System.out.println("Create " + getClass());
         /**
          * <p>
          * Enter the hierarchy of {@link VirtualStructure}.
@@ -125,14 +122,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         // throw new IllegalStateException(getClass() + " is a nest in virtual structure.");
         // }
         modelManager = metas.computeIfAbsent(getClass(), p -> new WidgetModelManager(p));
-    }
 
-    /**
-     * <p>
-     * Lazy initializer.
-     * </p>
-     */
-    final void initialize() {
         /**
          * <p>
          * Leave the hierarchy of {@link VirtualStructure}.
@@ -142,7 +132,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
 
         try {
             for (ModelMetadata meta : modelManager.properties) {
-
                 ReadOnlyProperty property = (ReadOnlyProperty) meta.field.get(this);
 
                 if (property != null) {
@@ -508,40 +497,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
     @Override
     public void declare() {
         StructureDSL.createWidget(this);
-    }
-
-    /**
-     * <p>
-     * Create widget which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @return A widget with the specified models.
-     */
-    public static final <W extends Widget> W of(Class<W> widgetType) {
-        return create(widgetType, new Object[0]);
-    }
-
-    /**
-     * <p>
-     * Create widget which is associated with the specified models.
-     * </p>
-     * 
-     * @param widgetType A widget type.
-     * @param models Associated models.
-     * @return A widget with the specified models.
-     */
-    private static final <W extends Widget> W create(Class<W> widgetType, Object[] models) {
-        W widget;
-
-        loophole = models;
-        WidgetLog.Make.start();
-        widget = I.make(widgetType);
-        widget.initialize();
-        WidgetLog.Make.stop();
-        loophole = null;
-
-        return widget;
     }
 
     /**

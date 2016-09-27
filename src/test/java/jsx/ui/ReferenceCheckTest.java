@@ -39,7 +39,7 @@ public class ReferenceCheckTest {
 
     @Test
     public void textChange() throws Exception {
-        SingleRootText widget = Widget.of(SingleRootText.class);
+        SingleRootText widget = new SingleRootText();
 
         VirtualNodeInfo info = new VirtualNodeInfo(widget);
 
@@ -78,7 +78,7 @@ public class ReferenceCheckTest {
 
     @Test
     public void nestedElement() throws Exception {
-        NestedElement widget = Widget.of(NestedElement.class);
+        NestedElement widget = new NestedElement();
 
         VirtualNodeInfo info = new VirtualNodeInfo(widget);
 
@@ -119,7 +119,7 @@ public class ReferenceCheckTest {
 
     @Test
     public void widget() throws Exception {
-        SingleWidget widget = Widget.of(SingleWidget.class);
+        SingleWidget widget = new SingleWidget();
 
         VirtualNodeInfo info = new VirtualNodeInfo(widget);
 

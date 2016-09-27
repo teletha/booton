@@ -389,6 +389,11 @@ public class StyleDSL extends SelectorDSL {
         });
     };
 
+    /** The built-in style. */
+    public final Style Hide = () -> {
+        display.none();
+    };
+
     /**
      * <p>
      * Create Color without alpha channel.
