@@ -15,10 +15,70 @@ import java.security.Permission;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/24 16:10:33
+ * @version 2016/10/09 11:57:14
  */
 @JavaAPIProvider(SecurityManager.class)
 class JSSecurityManager {
+
+    /**
+     * Throws a <code>SecurityException</code> if the calling thread is not allowed to open a socket
+     * connection to the specified host and port number.
+     * <p>
+     * A port number of <code>-1</code> indicates that the calling method is attempting to determine
+     * the IP address of the specified host name.
+     * <p>
+     * This method calls <code>checkPermission</code> with the
+     * <code>SocketPermission(host+":"+port,"connect")</code> permission if the port is not equal to
+     * -1. If the port is equal to -1, then it calls <code>checkPermission</code> with the
+     * <code>SocketPermission(host,"resolve")</code> permission.
+     * <p>
+     * If you override this method, then you should make a call to <code>super.checkConnect</code>
+     * at the point the overridden method would normally throw an exception.
+     *
+     * @param host the host name port to connect to.
+     * @param port the protocol port to connect to.
+     * @exception SecurityException if the calling thread does not have permission to open a socket
+     *                connection to the specified <code>host</code> and <code>port</code>.
+     * @exception NullPointerException if the <code>host</code> argument is <code>null</code>.
+     * @see #checkPermission(java.security.Permission) checkPermission
+     */
+    public void checkConnect(String host, int port) {
+        // do nothing
+    }
+
+    /**
+     * Throws a <code>SecurityException</code> if the specified security context is not allowed to
+     * open a socket connection to the specified host and port number.
+     * <p>
+     * A port number of <code>-1</code> indicates that the calling method is attempting to determine
+     * the IP address of the specified host name.
+     * <p>
+     * If <code>context</code> is not an instance of <code>AccessControlContext</code> then a
+     * <code>SecurityException</code> is thrown.
+     * <p>
+     * Otherwise, the port number is checked. If it is not equal to -1, the <code>context</code>'s
+     * <code>checkPermission</code> method is called with a
+     * <code>SocketPermission(host+":"+port,"connect")</code> permission. If the port is equal to
+     * -1, then the <code>context</code>'s <code>checkPermission</code> method is called with a
+     * <code>SocketPermission(host,"resolve")</code> permission.
+     * <p>
+     * If you override this method, then you should make a call to <code>super.checkConnect</code>
+     * at the point the overridden method would normally throw an exception.
+     *
+     * @param host the host name port to connect to.
+     * @param port the protocol port to connect to.
+     * @param context a system-dependent security context.
+     * @exception SecurityException if the specified security context is not an instance of
+     *                <code>AccessControlContext</code> (e.g., is <code>null</code>), or does not
+     *                have permission to open a socket connection to the specified <code>host</code>
+     *                and <code>port</code>.
+     * @exception NullPointerException if the <code>host</code> argument is <code>null</code>.
+     * @see java.lang.SecurityManager#getSecurityContext()
+     * @see java.security.AccessControlContext#checkPermission(java.security.Permission)
+     */
+    public void checkConnect(String host, int port, Object context) {
+        // do nothing
+    }
 
     /**
      * Throws a <code>SecurityException</code> if the calling thread is not allowed to read the file
@@ -192,6 +252,31 @@ class JSSecurityManager {
      * @since 1.2
      */
     public void checkPermission(Permission perm) {
+        // do nothing
+    }
+
+    /**
+     * Throws a <code>SecurityException</code> if the calling thread is not allowed to set the
+     * socket factory used by <code>ServerSocket</code> or <code>Socket</code>, or the stream
+     * handler factory used by <code>URL</code>.
+     * <p>
+     * This method calls <code>checkPermission</code> with the
+     * <code>RuntimePermission("setFactory")</code> permission.
+     * <p>
+     * If you override this method, then you should make a call to
+     * <code>super.checkSetFactory</code> at the point the overridden method would normally throw an
+     * exception.
+     * <p>
+     *
+     * @exception SecurityException if the calling thread does not have permission to specify a
+     *                socket factory or a stream handler factory.
+     * @see java.net.ServerSocket#setSocketFactory(java.net.SocketImplFactory) setSocketFactory
+     * @see java.net.Socket#setSocketImplFactory(java.net.SocketImplFactory) setSocketImplFactory
+     * @see java.net.URL#setURLStreamHandlerFactory(java.net.URLStreamHandlerFactory)
+     *      setURLStreamHandlerFactory
+     * @see #checkPermission(java.security.Permission) checkPermission
+     */
+    public void checkSetFactory() {
         // do nothing
     }
 }

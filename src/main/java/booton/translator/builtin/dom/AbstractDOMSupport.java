@@ -10,10 +10,8 @@
 package booton.translator.builtin.dom;
 
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.UserDataHandler;
 
 import booton.translator.Translator;
@@ -124,12 +122,16 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * A <code>NodeList</code> that contains all children of this node. If there are no children,
      * this is a <code>NodeList</code> containing no nodes.
      */
-    public native NodeList getChildNodes();
+    public String getChildNodes() {
+        return that + ".childNodes";
+    }
 
     /**
      * The first child of this node. If there is no such node, this returns <code>null</code>.
      */
-    public native Node getFirstChild();
+    public String getFirstChild() {
+        return that + ".firstChild";
+    }
 
     /**
      * The last child of this node. If there is no such node, this returns <code>null</code>.
@@ -162,7 +164,9 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * 
      * @since DOM Level 2
      */
-    public native Document getOwnerDocument();
+    public String getOwnerDocument() {
+        return that + ".ownerDocument";
+    }
 
     /**
      * Inserts the node <code>newChild</code> before the existing child node <code>refChild</code>.
@@ -187,7 +191,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      *                different document than the one that created this node. <br>
      *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly or if the parent
      *                of the node being inserted is readonly. <br>
-     *                NOT_FOUND_ERR: Raised if <code>refChild</code> is not a child of this node. <br>
+     *                NOT_FOUND_ERR: Raised if <code>refChild</code> is not a child of this node.
+     *                <br>
      *                NOT_SUPPORTED_ERR: if this node is of type <code>Document</code>, this
      *                exception might be raised if the DOM implementation doesn't support the
      *                insertion of a <code>DocumentType</code> or <code>Element</code> node.
@@ -217,7 +222,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      *                different document than the one that created this node. <br>
      *                NO_MODIFICATION_ALLOWED_ERR: Raised if this node or the parent of the new node
      *                is readonly. <br>
-     *                NOT_FOUND_ERR: Raised if <code>oldChild</code> is not a child of this node. <br>
+     *                NOT_FOUND_ERR: Raised if <code>oldChild</code> is not a child of this node.
+     *                <br>
      *                NOT_SUPPORTED_ERR: if this node is of type <code>Document</code>, this
      *                exception might be raised if the DOM implementation doesn't support the
      *                replacement of the <code>DocumentType</code> child or <code>Element</code>
@@ -233,7 +239,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * @param oldChild The node being removed.
      * @return The node removed.
      * @exception DOMException NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly. <br>
-     *                NOT_FOUND_ERR: Raised if <code>oldChild</code> is not a child of this node. <br>
+     *                NOT_FOUND_ERR: Raised if <code>oldChild</code> is not a child of this node.
+     *                <br>
      *                NOT_SUPPORTED_ERR: if this node is of type <code>Document</code>, this
      *                exception might be raised if the DOM implementation doesn't support the
      *                removal of the <code>DocumentType</code> child or the <code>Element</code>
@@ -346,8 +353,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * and nodes created with a DOM Level 1 method, such as <code>Document.createElement()</code>,
      * this is always <code>null</code>.
      * <p >
-     * <b>Note:</b> Per the <em>Namespaces in XML</em> Specification [<a
-     * href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>] an attribute
+     * <b>Note:</b> Per the <em>Namespaces in XML</em> Specification [
+     * <a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>] an attribute
      * does not inherit its namespace from the element it is attached to. If an attribute is not
      * explicitly given a namespace, it simply has no namespace.
      * 
@@ -400,15 +407,15 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      *                NAMESPACE_ERR: Raised if the specified <code>prefix</code> is malformed per
      *                the Namespaces in XML specification, if the <code>namespaceURI</code> of this
      *                node is <code>null</code>, if the specified prefix is "xml" and the
-     *                <code>namespaceURI</code> of this node is different from "<a
-     *                href='http://www.w3.org/XML/1998/namespace'>
-     *                http://www.w3.org/XML/1998/namespace
-     *                </a>", if this node is an attribute and the specified prefix is "xmlns" and
-     *                the <code>namespaceURI</code> of this node is different from
+     *                <code>namespaceURI</code> of this node is different from "
+     *                <a href='http://www.w3.org/XML/1998/namespace'> http://www.w3.org/XML/1998/
+     *                namespace </a>", if this node is an attribute and the specified prefix is "
+     *                xmlns" and the <code>namespaceURI</code> of this node is different from
      *                "<a href='http://www.w3.org/2000/xmlns/'>http://www.w3.org/2000/xmlns/</a>",
      *                or if this node is an attribute and the <code>qualifiedName</code> of this
-     *                node is "xmlns" [<a
-     *                href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>] .
+     *                node is "xmlns" [
+     *                <a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>
+     *                ] .
      * @since DOM Level 2
      */
     public native void setPrefix(String prefix) throws DOMException;
@@ -435,8 +442,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
     /**
      * The absolute base URI of this node or <code>null</code> if the implementation wasn't able to
      * obtain an absolute URI. This value is computed as described in . However, when the
-     * <code>Document</code> supports the feature "HTML" [<a
-     * href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>DOM Level 2 HTML</a>] , the
+     * <code>Document</code> supports the feature "HTML" [
+     * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>DOM Level 2 HTML</a>] , the
      * base URI is computed using first the value of the href attribute of the HTML BASE element if
      * any, and the value of the <code>documentURI</code> attribute from the <code>Document</code>
      * interface otherwise.
@@ -496,7 +503,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * This attribute returns the text content of this node and its descendants. When it is defined
      * to be <code>null</code>, setting it has no effect. On setting, any possible children this
      * node may have are removed and, if it the new string is not empty or <code>null</code>,
-     * replaced by a single <code>Text</code> node containing the string this attribute is set to. <br>
+     * replaced by a single <code>Text</code> node containing the string this attribute is set to.
+     * <br>
      * On getting, no serialization is performed, the returned string does not contain any markup.
      * No whitespace normalization is performed and the returned string does not contain the white
      * spaces in element content (see the attribute <code>Text.isElementContentWhitespace</code>).
@@ -522,7 +530,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * <td valign='top' rowspan='1' colspan='1'><code>nodeValue</code></td>
      * </tr>
      * <tr>
-     * <td valign='top' rowspan='1' colspan='1'>DOCUMENT_NODE, DOCUMENT_TYPE_NODE, NOTATION_NODE</td>
+     * <td valign='top' rowspan='1' colspan='1'>DOCUMENT_NODE, DOCUMENT_TYPE_NODE, NOTATION_NODE
+     * </td>
      * <td valign='top' rowspan='1' colspan='1'><em>null</em></td>
      * </tr>
      * </table>
@@ -537,7 +546,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * This attribute returns the text content of this node and its descendants. When it is defined
      * to be <code>null</code>, setting it has no effect. On setting, any possible children this
      * node may have are removed and, if it the new string is not empty or <code>null</code>,
-     * replaced by a single <code>Text</code> node containing the string this attribute is set to. <br>
+     * replaced by a single <code>Text</code> node containing the string this attribute is set to.
+     * <br>
      * On getting, no serialization is performed, the returned string does not contain any markup.
      * No whitespace normalization is performed and the returned string does not contain the white
      * spaces in element content (see the attribute <code>Text.isElementContentWhitespace</code>).
@@ -563,7 +573,8 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * <td valign='top' rowspan='1' colspan='1'><code>nodeValue</code></td>
      * </tr>
      * <tr>
-     * <td valign='top' rowspan='1' colspan='1'>DOCUMENT_NODE, DOCUMENT_TYPE_NODE, NOTATION_NODE</td>
+     * <td valign='top' rowspan='1' colspan='1'>DOCUMENT_NODE, DOCUMENT_TYPE_NODE, NOTATION_NODE
+     * </td>
      * <td valign='top' rowspan='1' colspan='1'><em>null</em></td>
      * </tr>
      * </table>
@@ -718,4 +729,38 @@ abstract class AbstractDOMSupport<T> extends Translator<T> {
      * @since DOM Level 3
      */
     public native Object getUserData(String key);
+
+    /**
+     * Creates a <code>Text</code> node given the specified string.
+     * 
+     * @param data The data for the node.
+     * @return The new <code>Text</code> object.
+     */
+    public String createTextNode(String data) {
+        return "document.createTextNode(" + param(0) + ")";
+    }
+
+    /**
+     * Creates an element of the type specified. Note that the instance returned implements the
+     * <code>Element</code> interface, so attributes can be specified directly on the returned
+     * object. <br>
+     * In addition, if there are known attributes with default values, <code>Attr</code> nodes
+     * representing them are automatically created and attached to the element. <br>
+     * To create an element with a qualified name and namespace URI, use the
+     * <code>createElementNS</code> method.
+     * 
+     * @param tagName The name of the element type to instantiate. For XML, this is case-sensitive,
+     *            otherwise it depends on the case-sensitivity of the markup language in use. In
+     *            that case, the name is mapped to the canonical form of that markup by the DOM
+     *            implementation.
+     * @return A new <code>Element</code> object with the <code>nodeName</code> attribute set to
+     *         <code>tagName</code>, and <code>localName</code>, <code>prefix</code>, and
+     *         <code>namespaceURI</code> set to <code>null</code>.
+     * @exception DOMException INVALID_CHARACTER_ERR: Raised if the specified name is not an XML
+     *                name according to the XML version in use specified in the
+     *                <code>Document.xmlVersion</code> attribute.
+     */
+    public String createElement(String tagName) throws DOMException {
+        return "document.createElement(" + param(0) + ")";
+    }
 }

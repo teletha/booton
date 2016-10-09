@@ -9,11 +9,9 @@
  */
 package js.io;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2015/08/08 8:42:30
  */
-@JavaAPIProvider(java.io.OutputStream.class)
+// @JavaAPIProvider(java.io.OutputStream.class)
 class OutputStream {
 }

@@ -461,4 +461,21 @@ class JSThread {
         }
     }
 
+    /**
+     * Returns <tt>true</tt> if and only if the current thread holds the monitor lock on the
+     * specified object.
+     * <p>
+     * This method is designed to allow a program to assert that the current thread already holds a
+     * specified lock: <pre>
+     *     assert Thread.holdsLock(obj);
+     * </pre>
+     *
+     * @param obj the object on which to test lock ownership
+     * @throws NullPointerException if obj is <tt>null</tt>
+     * @return <tt>true</tt> if the current thread holds the monitor lock on the specified object.
+     * @since 1.4
+     */
+    public static boolean holdsLock(Object obj) {
+        return false;
+    }
 }

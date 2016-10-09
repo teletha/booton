@@ -24,9 +24,9 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/10/09 15:52:21
@@ -41,9 +41,7 @@ class Arrays {
      * serializable and implements {@link RandomAccess}.
      * <p>
      * This method also provides a convenient way to create a fixed-size list initialized to contain
-     * several elements:
-     * 
-     * <pre>
+     * several elements: <pre>
      *     List&lt;String&gt; stooges = Arrays.asList("Larry", "Moe", "Curly");
      * </pre>
      * 
@@ -322,7 +320,7 @@ class Arrays {
      * @since 1.6
      */
     public static int binarySearch(double[] array, int fromIndex, int toIndex, double key) {
-        return search((double[]) array, fromIndex, toIndex, key);
+        return search(array, fromIndex, toIndex, key);
     }
 
     /**
@@ -1261,10 +1259,8 @@ class Arrays {
      * considered equal if both are <tt>null</tt>.
      * <p>
      * Two doubles <tt>d1</tt> and <tt>d2</tt> are considered equal if:
-     * 
-     * <pre>    <tt>new Double(d1).equals(new Double(d2))</tt></pre>
-     * (Unlike the <tt>==</tt> operator, this method considers <tt>NaN</tt> equals to itself, and
-     * 0.0d unequal to -0.0d.)
+     * <pre>    <tt>new Double(d1).equals(new Double(d2))</tt></pre> (Unlike the <tt>==</tt>
+     * operator, this method considers <tt>NaN</tt> equals to itself, and 0.0d unequal to -0.0d.)
      * 
      * @param a one array to be tested for equality
      * @param a2 the other array to be tested for equality
@@ -1302,10 +1298,8 @@ class Arrays {
      * considered equal if both are <tt>null</tt>.
      * <p>
      * Two floats <tt>f1</tt> and <tt>f2</tt> are considered equal if:
-     * 
-     * <pre>    <tt>new Float(f1).equals(new Float(f2))</tt></pre>
-     * (Unlike the <tt>==</tt> operator, this method considers <tt>NaN</tt> equals to itself, and
-     * 0.0f unequal to -0.0f.)
+     * <pre>    <tt>new Float(f1).equals(new Float(f2))</tt></pre> (Unlike the <tt>==</tt> operator,
+     * this method considers <tt>NaN</tt> equals to itself, and 0.0f unequal to -0.0f.)
      * 
      * @param a one array to be tested for equality
      * @param a2 the other array to be tested for equality
@@ -1733,12 +1727,12 @@ class Arrays {
      * Two possibly <tt>null</tt> elements <tt>e1</tt> and <tt>e2</tt> are deeply equal if any of
      * the following conditions hold:
      * <ul>
-     * <li> <tt>e1</tt> and <tt>e2</tt> are both arrays of object reference types, and
+     * <li><tt>e1</tt> and <tt>e2</tt> are both arrays of object reference types, and
      * <tt>Arrays.deepEquals(e1, e2) would return true</tt>
-     * <li> <tt>e1</tt> and <tt>e2</tt> are arrays of the same primitive type, and the appropriate
+     * <li><tt>e1</tt> and <tt>e2</tt> are arrays of the same primitive type, and the appropriate
      * overloading of <tt>Arrays.equals(e1, e2)</tt> would return true.
-     * <li> <tt>e1 == e2</tt>
-     * <li> <tt>e1.equals(e2)</tt> would return true.
+     * <li><tt>e1 == e2</tt>
+     * <li><tt>e1.equals(e2)</tt> would return true.
      * </ul>
      * Note that this definition permits <tt>null</tt> elements at any depth.
      * <p>
@@ -2248,6 +2242,286 @@ class Arrays {
     }
 
     /**
+     * Sorts the specified array into ascending numerical order.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(int[] a) {
+        sort(a, 0, a.length);
+    }
+
+    /**
+     * Sorts the specified range of the array into ascending order. The range to be sorted extends
+     * from the index {@code fromIndex}, inclusive, to the index {@code toIndex}, exclusive. If
+     * {@code fromIndex == toIndex}, the range to be sorted is empty.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     * @param fromIndex the index of the first element, inclusive, to be sorted
+     * @param toIndex the index of the last element, exclusive, to be sorted
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static void sort(int[] a, int fromIndex, int toIndex) {
+        sortPrimitive((double[]) (Object) a, fromIndex, toIndex);
+    }
+
+    /**
+     * Sorts the specified array into ascending numerical order.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(long[] a) {
+        sort(a, 0, a.length);
+    }
+
+    /**
+     * Sorts the specified range of the array into ascending order. The range to be sorted extends
+     * from the index {@code fromIndex}, inclusive, to the index {@code toIndex}, exclusive. If
+     * {@code fromIndex == toIndex}, the range to be sorted is empty.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     * @param fromIndex the index of the first element, inclusive, to be sorted
+     * @param toIndex the index of the last element, exclusive, to be sorted
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static void sort(long[] a, int fromIndex, int toIndex) {
+        sortPrimitive((double[]) (Object) a, fromIndex, toIndex);
+    }
+
+    /**
+     * Sorts the specified array into ascending numerical order.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(short[] a) {
+        sort(a, 0, a.length - 1);
+    }
+
+    /**
+     * Sorts the specified range of the array into ascending order. The range to be sorted extends
+     * from the index {@code fromIndex}, inclusive, to the index {@code toIndex}, exclusive. If
+     * {@code fromIndex == toIndex}, the range to be sorted is empty.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     * @param fromIndex the index of the first element, inclusive, to be sorted
+     * @param toIndex the index of the last element, exclusive, to be sorted
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static void sort(short[] a, int fromIndex, int toIndex) {
+        sortPrimitive((double[]) (Object) a, fromIndex, toIndex);
+    }
+
+    /**
+     * Sorts the specified array into ascending numerical order.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(char[] a) {
+        sort(a, 0, a.length);
+    }
+
+    /**
+     * Sorts the specified range of the array into ascending order. The range to be sorted extends
+     * from the index {@code fromIndex}, inclusive, to the index {@code toIndex}, exclusive. If
+     * {@code fromIndex == toIndex}, the range to be sorted is empty.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     * @param fromIndex the index of the first element, inclusive, to be sorted
+     * @param toIndex the index of the last element, exclusive, to be sorted
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static void sort(char[] a, int fromIndex, int toIndex) {
+        sortPrimitive((double[]) (Object) a, fromIndex, toIndex);
+    }
+
+    /**
+     * Sorts the specified array into ascending numerical order.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(byte[] a) {
+        sort(a, 0, a.length);
+    }
+
+    /**
+     * Sorts the specified range of the array into ascending order. The range to be sorted extends
+     * from the index {@code fromIndex}, inclusive, to the index {@code toIndex}, exclusive. If
+     * {@code fromIndex == toIndex}, the range to be sorted is empty.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     * @param fromIndex the index of the first element, inclusive, to be sorted
+     * @param toIndex the index of the last element, exclusive, to be sorted
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static void sort(byte[] a, int fromIndex, int toIndex) {
+        sortPrimitive((double[]) (Object) a, fromIndex, toIndex);
+    }
+
+    /**
+     * Sorts the specified array into ascending numerical order.
+     * <p>
+     * The {@code <} relation does not provide a total order on all float values:
+     * {@code -0.0f == 0.0f} is {@code true} and a {@code Float.NaN} value compares neither less
+     * than, greater than, nor equal to any value, even itself. This method uses the total order
+     * imposed by the method {@link Float#compareTo}: {@code -0.0f} is treated as less than value
+     * {@code 0.0f} and {@code Float.NaN} is considered greater than any other value and all
+     * {@code Float.NaN} values are considered equal.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(float[] a) {
+        sort(a, 0, a.length);
+    }
+
+    /**
+     * Sorts the specified range of the array into ascending order. The range to be sorted extends
+     * from the index {@code fromIndex}, inclusive, to the index {@code toIndex}, exclusive. If
+     * {@code fromIndex == toIndex}, the range to be sorted is empty.
+     * <p>
+     * The {@code <} relation does not provide a total order on all float values:
+     * {@code -0.0f == 0.0f} is {@code true} and a {@code Float.NaN} value compares neither less
+     * than, greater than, nor equal to any value, even itself. This method uses the total order
+     * imposed by the method {@link Float#compareTo}: {@code -0.0f} is treated as less than value
+     * {@code 0.0f} and {@code Float.NaN} is considered greater than any other value and all
+     * {@code Float.NaN} values are considered equal.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     * @param fromIndex the index of the first element, inclusive, to be sorted
+     * @param toIndex the index of the last element, exclusive, to be sorted
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static void sort(float[] a, int fromIndex, int toIndex) {
+        sortPrimitive((double[]) (Object) a, fromIndex, toIndex);
+    }
+
+    /**
+     * Sorts the specified array into ascending numerical order.
+     * <p>
+     * The {@code <} relation does not provide a total order on all double values:
+     * {@code -0.0d == 0.0d} is {@code true} and a {@code Double.NaN} value compares neither less
+     * than, greater than, nor equal to any value, even itself. This method uses the total order
+     * imposed by the method {@link Double#compareTo}: {@code -0.0d} is treated as less than value
+     * {@code 0.0d} and {@code Double.NaN} is considered greater than any other value and all
+     * {@code Double.NaN} values are considered equal.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     */
+    public static void sort(double[] a) {
+        sort(a, 0, a.length);
+    }
+
+    /**
+     * Sorts the specified range of the array into ascending order. The range to be sorted extends
+     * from the index {@code fromIndex}, inclusive, to the index {@code toIndex}, exclusive. If
+     * {@code fromIndex == toIndex}, the range to be sorted is empty.
+     * <p>
+     * The {@code <} relation does not provide a total order on all double values:
+     * {@code -0.0d == 0.0d} is {@code true} and a {@code Double.NaN} value compares neither less
+     * than, greater than, nor equal to any value, even itself. This method uses the total order
+     * imposed by the method {@link Double#compareTo}: {@code -0.0d} is treated as less than value
+     * {@code 0.0d} and {@code Double.NaN} is considered greater than any other value and all
+     * {@code Double.NaN} values are considered equal.
+     * <p>
+     * Implementation note: The sorting algorithm is a Dual-Pivot Quicksort by Vladimir
+     * Yaroslavskiy, Jon Bentley, and Joshua Bloch. This algorithm offers O(n log(n)) performance on
+     * many data sets that cause other quicksorts to degrade to quadratic performance, and is
+     * typically faster than traditional (one-pivot) Quicksort implementations.
+     *
+     * @param a the array to be sorted
+     * @param fromIndex the index of the first element, inclusive, to be sorted
+     * @param toIndex the index of the last element, exclusive, to be sorted
+     * @throws IllegalArgumentException if {@code fromIndex > toIndex}
+     * @throws ArrayIndexOutOfBoundsException if {@code fromIndex < 0} or {@code toIndex > a.length}
+     */
+    public static void sort(double[] a, int fromIndex, int toIndex) {
+        sortPrimitive(a, fromIndex, toIndex);
+    }
+
+    /**
+     * <p>
+     * Sort helper for primitive type.
+     * </p>
+     * 
+     * @param array
+     * @param from
+     * @param end
+     */
+    private static void sortPrimitive(double[] array, int from, int end) {
+        Comparator comparator = Comparator.naturalOrder();
+        ((NativeArray) (Object) array).sort(new NativeFunction(comparator).bind(comparator));
+    }
+
+    /**
      * Sorts the specified array of objects into ascending order, according to the
      * {@linkplain Comparable natural ordering} of its elements. All elements in the array must
      * implement the {@link Comparable} interface. Furthermore, all elements in the array must be
@@ -2269,8 +2543,8 @@ class Arrays {
      * same input array. It is well-suited to merging two or more sorted arrays: simply concatenate
      * the arrays and sort the resulting array.
      * <p>
-     * The implementation was adapted from Tim Peters's list sort for Python (<a
-     * href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
+     * The implementation was adapted from Tim Peters's list sort for Python (
+     * <a href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
      * uses techiques from Peter McIlroy's "Optimistic Sorting and Information Theoretic
      * Complexity", in Proceedings of the Fourth Annual ACM-SIAM Symposium on Discrete Algorithms,
      * pp 467-474, January 1993.
@@ -2306,8 +2580,8 @@ class Arrays {
      * same input array. It is well-suited to merging two or more sorted arrays: simply concatenate
      * the arrays and sort the resulting array.
      * <p>
-     * The implementation was adapted from Tim Peters's list sort for Python (<a
-     * href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
+     * The implementation was adapted from Tim Peters's list sort for Python (
+     * <a href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
      * uses techiques from Peter McIlroy's "Optimistic Sorting and Information Theoretic
      * Complexity", in Proceedings of the Fourth Annual ACM-SIAM Symposium on Discrete Algorithms,
      * pp 467-474, January 1993.
@@ -2348,8 +2622,8 @@ class Arrays {
      * same input array. It is well-suited to merging two or more sorted arrays: simply concatenate
      * the arrays and sort the resulting array.
      * <p>
-     * The implementation was adapted from Tim Peters's list sort for Python (<a
-     * href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
+     * The implementation was adapted from Tim Peters's list sort for Python (
+     * <a href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
      * uses techniques from Peter McIlroy's "Optimistic Sorting and Information Theoretic
      * Complexity", in Proceedings of the Fourth Annual ACM-SIAM Symposium on Discrete Algorithms,
      * pp 467-474, January 1993.

@@ -12,10 +12,10 @@ package js.lang;
 import java.util.HashMap;
 import java.util.Map;
 
-import kiss.I;
 import booton.translator.JavaAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.Translator;
+import kiss.I;
 
 /**
  * @version 2013/09/07 1:44:24

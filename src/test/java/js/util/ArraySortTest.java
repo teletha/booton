@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/08/18 5:35:02
+ * @version 2016/10/09 11:59:47
  */
 @RunWith(ScriptRunner.class)
 public class ArraySortTest {
@@ -42,6 +42,27 @@ public class ArraySortTest {
         assert array[0].equals("c");
         assert array[1].equals("b");
         assert array[2].equals("a");
+    }
+
+    @Test
+    public void integer() throws Exception {
+        int[] array = {2, 3, 1};
+        assert array.length == 3;
+        assert array[0] == 2;
+        assert array[1] == 3;
+        assert array[2] == 1;
+
+        Arrays.sort(array);
+        assert array.length == 3;
+        assert array[0] == 1;
+        assert array[1] == 2;
+        assert array[2] == 3;
+
+        Arrays.sort(array);
+        assert array.length == 3;
+        assert array[0] == 1;
+        assert array[1] == 2;
+        assert array[2] == 3;
     }
 
     /**

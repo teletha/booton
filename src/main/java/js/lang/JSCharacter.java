@@ -196,6 +196,94 @@ class JSCharacter implements JavascriptNative {
     }
 
     /**
+     * Returns a value indicating a character's general category.
+     * <p>
+     * <b>Note:</b> This method cannot handle <a href="#supplementary"> supplementary characters</a>
+     * . To support all Unicode characters, including supplementary characters, use the
+     * {@link #getType(int)} method.
+     *
+     * @param ch the character to be tested.
+     * @return a value of type {@code int} representing the character's general category.
+     * @see Character#COMBINING_SPACING_MARK
+     * @see Character#CONNECTOR_PUNCTUATION
+     * @see Character#CONTROL
+     * @see Character#CURRENCY_SYMBOL
+     * @see Character#DASH_PUNCTUATION
+     * @see Character#DECIMAL_DIGIT_NUMBER
+     * @see Character#ENCLOSING_MARK
+     * @see Character#END_PUNCTUATION
+     * @see Character#FINAL_QUOTE_PUNCTUATION
+     * @see Character#FORMAT
+     * @see Character#INITIAL_QUOTE_PUNCTUATION
+     * @see Character#LETTER_NUMBER
+     * @see Character#LINE_SEPARATOR
+     * @see Character#LOWERCASE_LETTER
+     * @see Character#MATH_SYMBOL
+     * @see Character#MODIFIER_LETTER
+     * @see Character#MODIFIER_SYMBOL
+     * @see Character#NON_SPACING_MARK
+     * @see Character#OTHER_LETTER
+     * @see Character#OTHER_NUMBER
+     * @see Character#OTHER_PUNCTUATION
+     * @see Character#OTHER_SYMBOL
+     * @see Character#PARAGRAPH_SEPARATOR
+     * @see Character#PRIVATE_USE
+     * @see Character#SPACE_SEPARATOR
+     * @see Character#START_PUNCTUATION
+     * @see Character#SURROGATE
+     * @see Character#TITLECASE_LETTER
+     * @see Character#UNASSIGNED
+     * @see Character#UPPERCASE_LETTER
+     * @since 1.1
+     */
+    public static int getType(char ch) {
+        return getType((int) ch);
+    }
+
+    /**
+     * Returns a value indicating a character's general category.
+     *
+     * @param codePoint the character (Unicode code point) to be tested.
+     * @return a value of type {@code int} representing the character's general category.
+     * @see Character#COMBINING_SPACING_MARK COMBINING_SPACING_MARK
+     * @see Character#CONNECTOR_PUNCTUATION CONNECTOR_PUNCTUATION
+     * @see Character#CONTROL CONTROL
+     * @see Character#CURRENCY_SYMBOL CURRENCY_SYMBOL
+     * @see Character#DASH_PUNCTUATION DASH_PUNCTUATION
+     * @see Character#DECIMAL_DIGIT_NUMBER DECIMAL_DIGIT_NUMBER
+     * @see Character#ENCLOSING_MARK ENCLOSING_MARK
+     * @see Character#END_PUNCTUATION END_PUNCTUATION
+     * @see Character#FINAL_QUOTE_PUNCTUATION FINAL_QUOTE_PUNCTUATION
+     * @see Character#FORMAT FORMAT
+     * @see Character#INITIAL_QUOTE_PUNCTUATION INITIAL_QUOTE_PUNCTUATION
+     * @see Character#LETTER_NUMBER LETTER_NUMBER
+     * @see Character#LINE_SEPARATOR LINE_SEPARATOR
+     * @see Character#LOWERCASE_LETTER LOWERCASE_LETTER
+     * @see Character#MATH_SYMBOL MATH_SYMBOL
+     * @see Character#MODIFIER_LETTER MODIFIER_LETTER
+     * @see Character#MODIFIER_SYMBOL MODIFIER_SYMBOL
+     * @see Character#NON_SPACING_MARK NON_SPACING_MARK
+     * @see Character#OTHER_LETTER OTHER_LETTER
+     * @see Character#OTHER_NUMBER OTHER_NUMBER
+     * @see Character#OTHER_PUNCTUATION OTHER_PUNCTUATION
+     * @see Character#OTHER_SYMBOL OTHER_SYMBOL
+     * @see Character#PARAGRAPH_SEPARATOR PARAGRAPH_SEPARATOR
+     * @see Character#PRIVATE_USE PRIVATE_USE
+     * @see Character#SPACE_SEPARATOR SPACE_SEPARATOR
+     * @see Character#START_PUNCTUATION START_PUNCTUATION
+     * @see Character#SURROGATE SURROGATE
+     * @see Character#TITLECASE_LETTER TITLECASE_LETTER
+     * @see Character#UNASSIGNED UNASSIGNED
+     * @see Character#UPPERCASE_LETTER UPPERCASE_LETTER
+     * @since 1.5
+     */
+    public static int getType(int codePoint) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Determines if the specified character is a digit.
      * <p>
      * A character is a digit if its general category type, provided by
@@ -416,6 +504,115 @@ class JSCharacter implements JavascriptNative {
      */
     public static boolean isWhitespace(int codePoint) {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Determines if the specified character is a letter.
+     * <p>
+     * A character is considered to be a letter if its general category type, provided by
+     * {@code Character.getType(ch)}, is any of the following:
+     * <ul>
+     * <li>{@code UPPERCASE_LETTER}
+     * <li>{@code LOWERCASE_LETTER}
+     * <li>{@code TITLECASE_LETTER}
+     * <li>{@code MODIFIER_LETTER}
+     * <li>{@code OTHER_LETTER}
+     * </ul>
+     * Not all letters have case. Many characters are letters but are neither uppercase nor
+     * lowercase nor titlecase.
+     * <p>
+     * <b>Note:</b> This method cannot handle <a href="#supplementary"> supplementary characters</a>
+     * . To support all Unicode characters, including supplementary characters, use the
+     * {@link #isLetter(int)} method.
+     *
+     * @param ch the character to be tested.
+     * @return {@code true} if the character is a letter; {@code false} otherwise.
+     * @see Character#isDigit(char)
+     * @see Character#isJavaIdentifierStart(char)
+     * @see Character#isJavaLetter(char)
+     * @see Character#isJavaLetterOrDigit(char)
+     * @see Character#isLetterOrDigit(char)
+     * @see Character#isLowerCase(char)
+     * @see Character#isTitleCase(char)
+     * @see Character#isUnicodeIdentifierStart(char)
+     * @see Character#isUpperCase(char)
+     */
+    public static boolean isLetter(char ch) {
+        return isLetter((int) ch);
+    }
+
+    /**
+     * Determines if the specified character (Unicode code point) is a letter.
+     * <p>
+     * A character is considered to be a letter if its general category type, provided by
+     * {@link Character#getType(int) getType(codePoint)}, is any of the following:
+     * <ul>
+     * <li>{@code UPPERCASE_LETTER}
+     * <li>{@code LOWERCASE_LETTER}
+     * <li>{@code TITLECASE_LETTER}
+     * <li>{@code MODIFIER_LETTER}
+     * <li>{@code OTHER_LETTER}
+     * </ul>
+     * Not all letters have case. Many characters are letters but are neither uppercase nor
+     * lowercase nor titlecase.
+     *
+     * @param codePoint the character (Unicode code point) to be tested.
+     * @return {@code true} if the character is a letter; {@code false} otherwise.
+     * @see Character#isDigit(int)
+     * @see Character#isJavaIdentifierStart(int)
+     * @see Character#isLetterOrDigit(int)
+     * @see Character#isLowerCase(int)
+     * @see Character#isTitleCase(int)
+     * @see Character#isUnicodeIdentifierStart(int)
+     * @see Character#isUpperCase(int)
+     * @since 1.5
+     */
+    public static boolean isLetter(int codePoint) {
+        return ((((1 << Character.UPPERCASE_LETTER) | (1 << Character.LOWERCASE_LETTER) | (1 << Character.TITLECASE_LETTER) | (1 << Character.MODIFIER_LETTER) | (1 << Character.OTHER_LETTER)) >> getType(codePoint)) & 1) != 0;
+    }
+
+    /**
+     * Determines if the specified character is a letter or digit.
+     * <p>
+     * A character is considered to be a letter or digit if either
+     * {@code Character.isLetter(char ch)} or {@code Character.isDigit(char ch)} returns
+     * {@code true} for the character.
+     * <p>
+     * <b>Note:</b> This method cannot handle <a href="#supplementary"> supplementary characters</a>
+     * . To support all Unicode characters, including supplementary characters, use the
+     * {@link #isLetterOrDigit(int)} method.
+     *
+     * @param ch the character to be tested.
+     * @return {@code true} if the character is a letter or digit; {@code false} otherwise.
+     * @see Character#isDigit(char)
+     * @see Character#isJavaIdentifierPart(char)
+     * @see Character#isJavaLetter(char)
+     * @see Character#isJavaLetterOrDigit(char)
+     * @see Character#isLetter(char)
+     * @see Character#isUnicodeIdentifierPart(char)
+     * @since 1.0.2
+     */
+    public static boolean isLetterOrDigit(char ch) {
+        return isLetterOrDigit((int) ch);
+    }
+
+    /**
+     * Determines if the specified character (Unicode code point) is a letter or digit.
+     * <p>
+     * A character is considered to be a letter or digit if either {@link #isLetter(int)
+     * isLetter(codePoint)} or {@link #isDigit(int) isDigit(codePoint)} returns {@code true} for the
+     * character.
+     *
+     * @param codePoint the character (Unicode code point) to be tested.
+     * @return {@code true} if the character is a letter or digit; {@code false} otherwise.
+     * @see Character#isDigit(int)
+     * @see Character#isJavaIdentifierPart(int)
+     * @see Character#isLetter(int)
+     * @see Character#isUnicodeIdentifierPart(int)
+     * @since 1.5
+     */
+    public static boolean isLetterOrDigit(int codePoint) {
+        return ((((1 << Character.UPPERCASE_LETTER) | (1 << Character.LOWERCASE_LETTER) | (1 << Character.TITLECASE_LETTER) | (1 << Character.MODIFIER_LETTER) | (1 << Character.OTHER_LETTER) | (1 << Character.DECIMAL_DIGIT_NUMBER)) >> getType(codePoint)) & 1) != 0;
     }
 
     /**
