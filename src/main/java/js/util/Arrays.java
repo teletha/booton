@@ -2517,8 +2517,45 @@ class Arrays {
      * @param end
      */
     private static void sortPrimitive(double[] array, int from, int end) {
-        Comparator comparator = Comparator.naturalOrder();
-        ((NativeArray) (Object) array).sort(new NativeFunction(comparator).bind(comparator));
+        NativeArray original = (NativeArray) (Object) array;
+        int length = original.length();
+
+        NativeArray before = null;
+        NativeArray after = null;
+
+        if (from != 0) {
+            before = original.slice(0, from);
+        }
+
+        if (end != length) {
+            after = original.slice(end, length);
+        }
+
+        if (before == null && after == null) {
+            original.sort();
+        } else {
+            int index = 0;
+            NativeArray main = original.slice(from, end);
+            main.sort();
+
+            if (before != null) {
+                for (int i = 0; i < before.length(); i++) {
+                    original.set(i, before.get(i));
+                }
+                index += before.length();
+            }
+
+            for (int i = 0; i < main.length(); i++) {
+                original.set(i + index, main.get(i));
+            }
+            index += main.length();
+
+            if (after != null) {
+                for (int i = 0; i < after.length(); i++) {
+                    original.set(i + index, after.get(i));
+                }
+            }
+        }
     }
 
     /**

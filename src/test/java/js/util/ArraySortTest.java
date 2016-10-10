@@ -45,24 +45,33 @@ public class ArraySortTest {
     }
 
     @Test
-    public void integer() throws Exception {
+    public void integers() throws Exception {
         int[] array = {2, 3, 1};
-        assert array.length == 3;
-        assert array[0] == 2;
-        assert array[1] == 3;
-        assert array[2] == 1;
-
         Arrays.sort(array);
-        assert array.length == 3;
+
         assert array[0] == 1;
         assert array[1] == 2;
         assert array[2] == 3;
+    }
 
+    @Test
+    public void doubles() throws Exception {
+        double[] array = {2d, 3d, 1d};
         Arrays.sort(array);
-        assert array.length == 3;
-        assert array[0] == 1;
-        assert array[1] == 2;
-        assert array[2] == 3;
+
+        assert array[0] == 1d;
+        assert array[1] == 2d;
+        assert array[2] == 3d;
+    }
+
+    @Test
+    public void doublesRange() throws Exception {
+        double[] array = {2d, 3d, 1d};
+        Arrays.sort(array, 1, 3);
+
+        assert array[0] == 2d;
+        assert array[1] == 1d;
+        assert array[2] == 3d;
     }
 
     /**

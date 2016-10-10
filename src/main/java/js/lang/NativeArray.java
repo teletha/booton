@@ -370,6 +370,22 @@ public class NativeArray<T> extends NativeObject {
      * @param values Arrays and/or values to concatenate to the resulting array.
      * @return
      */
+    public NativeArray<T> concat(NativeArray<T> values) {
+        List<T> items = new ArrayList();
+        items.addAll(list);
+        items.addAll(values.list);
+
+        return new NativeArray(items);
+    }
+
+    /**
+     * <p>
+     * Returns a new array comprised of this array joined with other array(s) and/or value(s).
+     * </p>
+     * 
+     * @param values Arrays and/or values to concatenate to the resulting array.
+     * @return
+     */
     public NativeArray<T> concat(T[] values) {
         List<T> items = new ArrayList();
         items.addAll(list);
@@ -612,6 +628,18 @@ public class NativeArray<T> extends NativeObject {
      */
     public T[] toArray(T[] container) {
         return list.toArray(container);
+    }
+
+    /**
+     * <p>
+     * Sorts the elements of an array in place and returns the array.
+     * </p>
+     * 
+     * @return
+     */
+    public <V extends Comparable<? super V>> NativeArray<T> sort() {
+        ((List<V>) list).sort(Comparator.<V> naturalOrder());
+        return this;
     }
 
     /**
@@ -954,6 +982,18 @@ public class NativeArray<T> extends NativeObject {
          * @param values Arrays and/or values to concatenate to the resulting array.
          * @return
          */
+        public String concat(NativeArray<T> values) {
+            return that + ".concat(" + param(0) + ")";
+        }
+
+        /**
+         * <p>
+         * Returns a new array comprised of this array joined with other array(s) and/or value(s).
+         * </p>
+         * 
+         * @param values Arrays and/or values to concatenate to the resulting array.
+         * @return
+         */
         public String concat(T[] values) {
             return that + ".concat(" + param(0) + ")";
         }
@@ -1172,6 +1212,17 @@ public class NativeArray<T> extends NativeObject {
          */
         public String toArray(Object[] container) {
             return that;
+        }
+
+        /**
+         * <p>
+         * Sorts the elements of an array in place and returns the array.
+         * </p>
+         * 
+         * @return
+         */
+        public String sort() {
+            return that + ".sort()";
         }
 
         /**
