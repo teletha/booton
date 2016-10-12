@@ -559,7 +559,7 @@ public class Javascript {
             } else {
                 code = context.toString();
             }
-            return code + "." + computeMethodName(method) + "(" + I.join(",", params) + ")";
+            return code + "." + computeMethodName(method) + "(" + String.join(",", params) + ")";
         } catch (Exception e) {
             throw I.quiet(e);
         }
