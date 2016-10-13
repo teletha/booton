@@ -193,11 +193,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      */
     private class View extends StructureDSL {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
+        {
             html("input", WidgetRoot, $.SingleLineFormBase, userStyle, attr("type", "text"), attr("value", value), attr("placeholder", placeholder));
         }
     }
@@ -248,11 +244,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 text(message.apply(input));
             }
         }

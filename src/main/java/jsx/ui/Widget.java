@@ -249,8 +249,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         try {
             Constructor<?> con = metadata.view.getDeclaredConstructors()[0];
             con.setAccessible(true);
-            StructureDSL dsl = (StructureDSL) con.newInstance(this);
-            dsl.virtualize();
+            con.newInstance(this);
             return null;
         } catch (Exception e) {
             throw I.quiet(e);

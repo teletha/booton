@@ -68,11 +68,7 @@ public class Output extends LowLevelWidget<StyleDSL, Output> {
      */
     private class View extends StructureDSL {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
+        {
             text(text.get());
         }
     }

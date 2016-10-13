@@ -99,11 +99,7 @@ public class DiffListTest extends DiffTestBase {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 text(style, text);
             }
         }
@@ -144,11 +140,7 @@ public class DiffListTest extends DiffTestBase {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 text(style, text + "1");
                 text(style, text + "2");
             }
@@ -190,11 +182,7 @@ public class DiffListTest extends DiffTestBase {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 List<String> items = Arrays.asList(text + "A", text + "B");
 
                 box(style, contents(SingleBox.class, items));
@@ -250,11 +238,7 @@ public class DiffListTest extends DiffTestBase {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 text(style, person.getName(), " is ", person.getAge(), " years old.");
             }
         }

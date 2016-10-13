@@ -45,13 +45,6 @@ public abstract class StructureDSL {
 
     /**
      * <p>
-     * Create virtual elements of the {@link Widget}.
-     * </p>
-     */
-    protected abstract void virtualize();
-
-    /**
-     * <p>
      * Internal API.
      * </p>
      * 

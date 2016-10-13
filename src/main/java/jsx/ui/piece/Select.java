@@ -49,11 +49,7 @@ public class Select<M> extends Widget<Styles> {
      */
     private class View extends StructureDSL {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
+        {
             box($.Root, () -> {
                 html("select", $.Select, contents(values.size(), i -> {
                     M value = values.get(i);

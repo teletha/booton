@@ -66,11 +66,7 @@ public class ReferenceCheckTest {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 text(property);
             }
         }
@@ -105,11 +101,7 @@ public class ReferenceCheckTest {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 box(style, contents(1, property.get(), i -> {
                     text("Text" + i);
                 }));
@@ -146,11 +138,7 @@ public class ReferenceCheckTest {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 box(input);
             }
         }

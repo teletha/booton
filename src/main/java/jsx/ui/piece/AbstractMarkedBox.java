@@ -82,11 +82,7 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
      */
     private class View extends StructureDSL {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
+        {
             box(WidgetRoot, $.Root, userStyle, () -> {
                 html("input", $.Input, attr("type", type), attr("name", name), attr("id", id), If(isMarked, attr("checked")));
                 html("label", $.Label, attr("for", id), contents(label));

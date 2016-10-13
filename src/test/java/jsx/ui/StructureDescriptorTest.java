@@ -248,11 +248,7 @@ public class StructureDescriptorTest extends DiffTestBase {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 text(text);
             }
         }

@@ -26,13 +26,6 @@ public class DiffTestBase extends StructureDSL {
     };
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void virtualize() {
-    }
-
-    /**
      * <p>
      * Create {@link VirtualWidget}.
      * </p>
@@ -161,11 +154,7 @@ public class DiffTestBase extends StructureDSL {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 dsl.run();
             }
         }

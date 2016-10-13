@@ -60,11 +60,7 @@ public class Button extends LowLevelWidget<$, Button> {
      */
     private class View extends StructureDSL {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
+        {
             html("button", $.Button, userStyle, WidgetRoot, If(disabled, attr("disabled", "disabled")), () -> {
                 text(label.get());
             });

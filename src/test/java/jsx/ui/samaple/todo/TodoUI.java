@@ -134,11 +134,7 @@ public class TodoUI extends Widget<Styles> {
      */
     private class View extends StructureDSL {
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void virtualize() {
+        {
             widget(input);
             box($.ITEMS, contents(todos.list, Item::new));
             box($.FOTTER, () -> {
@@ -187,11 +183,7 @@ public class TodoUI extends Widget<Styles> {
          */
         private class View extends StructureDSL {
 
-            /**
-             * {@inheritDoc}
-             */
-            @Override
-            protected void virtualize() {
+            {
                 if (filter.getValue().test(task)) {
                     if (editing.get()) {
                         widget(edit);
