@@ -150,13 +150,15 @@ public class DiffTestBase extends StructureDSL {
         private Runnable dsl;
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                dsl.run();
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    dsl.run();
+                }
+            };
         }
     }
 }

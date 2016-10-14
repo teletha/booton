@@ -62,13 +62,15 @@ public class ReferenceCheckTest {
         private final StringProperty property = new SimpleStringProperty("base");
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                text(property);
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    text(property);
+                }
+            };
         }
     }
 
@@ -97,15 +99,17 @@ public class ReferenceCheckTest {
         private final IntegerProperty property = new SimpleIntegerProperty(3);
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                box(style, contents(1, property.get(), i -> {
-                    text("Text" + i);
-                }));
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    box(style, contents(1, property.get(), i -> {
+                        text("Text" + i);
+                    }));
+                }
+            };
         }
     }
 
@@ -134,13 +138,15 @@ public class ReferenceCheckTest {
         private final Input input = UI.input();
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                box(input);
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    box(input);
+                }
+            };
         }
     }
 

@@ -11,7 +11,6 @@ package jsx.ui;
 
 import static js.lang.Global.*;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ import kiss.model.Model;
 /**
  * @version 2016/09/27 10:10:23
  */
-public class Widget<Styles extends StyleDSL> implements Declarable {
+public abstract class Widget<Styles extends StyleDSL> implements Declarable {
 
     /** The root locator. */
     protected static final Style WidgetRoot = () -> {
@@ -245,16 +244,7 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
      * 
      * @return A virtual structure of this {@link Widget}.
      */
-    protected VirtualElement virtualize() {
-        try {
-            Constructor<?> con = metadata.view.getDeclaredConstructors()[0];
-            con.setAccessible(true);
-            con.newInstance(this);
-            return null;
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
-    }
+    protected abstract void virtualize();
 
     /**
      * <p>
@@ -412,9 +402,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
         /** The metadata cache. */
         private static final Map<Class, Metadata> cache = new HashMap();
 
-        /** The associated view class. */
-        private final Class<StructureDSL> view;
-
         /** The models. */
         private final List<Value> properties = new ArrayList();
 
@@ -429,8 +416,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
          * @param clazz A target widget class.
          */
         private Metadata(Class clazz) {
-            this.view = searchView(clazz);
-
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(ModelValue.class)) {
                     Class type = field.getType();
@@ -444,21 +429,6 @@ public class Widget<Styles extends StyleDSL> implements Declarable {
                     }
                 }
             }
-        }
-
-        /**
-         * @param clazz
-         * @return
-         */
-        private Class searchView(Class clazz) {
-            for (Class sub : clazz.getDeclaredClasses()) {
-                if (StructureDSL.class.isAssignableFrom(sub)) {
-                    return sub;
-                }
-            }
-
-            Class parent = clazz.getSuperclass();
-            return parent == Object.class ? null : searchView(parent);
         }
 
         /**

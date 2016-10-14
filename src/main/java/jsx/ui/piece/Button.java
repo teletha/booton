@@ -56,15 +56,17 @@ public class Button extends LowLevelWidget<$, Button> {
     }
 
     /**
-     * @version 2016/09/25 13:58:55
+     * {@inheritDoc}
      */
-    private class View extends StructureDSL {
-
-        {
-            html("button", $.Button, userStyle, WidgetRoot, If(disabled, attr("disabled", "disabled")), () -> {
-                text(label.get());
-            });
-        }
+    @Override
+    protected void virtualize() {
+        new StructureDSL() {
+            {
+                html("button", $.Button, userStyle, WidgetRoot, If(disabled, attr("disabled", "disabled")), () -> {
+                    text(label.get());
+                });
+            }
+        };
     }
 
     /**

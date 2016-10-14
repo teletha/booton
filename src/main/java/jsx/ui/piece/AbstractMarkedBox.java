@@ -78,16 +78,18 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
     }
 
     /**
-     * @version 2016/09/25 13:58:55
+     * {@inheritDoc}
      */
-    private class View extends StructureDSL {
-
-        {
-            box(WidgetRoot, $.Root, userStyle, () -> {
-                html("input", $.Input, attr("type", type), attr("name", name), attr("id", id), If(isMarked, attr("checked")));
-                html("label", $.Label, attr("for", id), contents(label));
-            });
-        }
+    @Override
+    protected void virtualize() {
+        new StructureDSL() {
+            {
+                box(WidgetRoot, $.Root, userStyle, () -> {
+                    html("input", $.Input, attr("type", type), attr("name", name), attr("id", id), If(isMarked, attr("checked")));
+                    html("label", $.Label, attr("for", id), contents(label));
+                });
+            }
+        };
     }
 
     /**

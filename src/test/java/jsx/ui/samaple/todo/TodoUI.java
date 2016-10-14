@@ -130,19 +130,21 @@ public class TodoUI extends Widget<Styles> {
     }
 
     /**
-     * @version 2016/09/25 13:58:55
+     * {@inheritDoc}
      */
-    private class View extends StructureDSL {
-
-        {
-            widget(input);
-            box($.ITEMS, contents(todos.list, Item::new));
-            box($.FOTTER, () -> {
-                text(text.leftTaskIs(todos.countIncompleted()));
-                box($.BUTTONS, all, active, completed);
-                widget(clear);
-            });
-        }
+    @Override
+    protected void virtualize() {
+        new StructureDSL() {
+            {
+                widget(input);
+                box($.ITEMS, contents(todos.list, Item::new));
+                box($.FOTTER, () -> {
+                    text(text.leftTaskIs(todos.countIncompleted()));
+                    box($.BUTTONS, all, active, completed);
+                    widget(clear);
+                });
+            }
+        };
     }
 
     /**
@@ -179,22 +181,24 @@ public class TodoUI extends Widget<Styles> {
         }
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                if (filter.getValue().test(task)) {
-                    if (editing.get()) {
-                        widget(edit);
-                    } else {
-                        box($.HBox, () -> {
-                            widget(complete);
-                            widget(delete);
-                        });
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    if (filter.getValue().test(task)) {
+                        if (editing.get()) {
+                            widget(edit);
+                        } else {
+                            box($.HBox, () -> {
+                                widget(complete);
+                                widget(delete);
+                            });
+                        }
                     }
                 }
-            }
+            };
         }
 
         /**

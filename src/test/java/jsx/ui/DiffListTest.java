@@ -95,13 +95,15 @@ public class DiffListTest extends DiffTestBase {
         }
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                text(style, text);
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    text(style, text);
+                }
+            };
         }
     }
 
@@ -136,14 +138,16 @@ public class DiffListTest extends DiffTestBase {
         }
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                text(style, text + "1");
-                text(style, text + "2");
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    text(style, text + "1");
+                    text(style, text + "2");
+                }
+            };
         }
     }
 
@@ -178,16 +182,18 @@ public class DiffListTest extends DiffTestBase {
         }
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    List<String> items = Arrays.asList(text + "A", text + "B");
 
-            {
-                List<String> items = Arrays.asList(text + "A", text + "B");
-
-                box(style, contents(SingleBox.class, items));
-                box(style, contents(SingleBox.class, items));
-            }
+                    box(style, contents(SingleBox.class, items));
+                    box(style, contents(SingleBox.class, items));
+                }
+            };
         }
     }
 
@@ -234,13 +240,15 @@ public class DiffListTest extends DiffTestBase {
         }
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                text(style, person.getName(), " is ", person.getAge(), " years old.");
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    text(style, person.getName(), " is ", person.getAge(), " years old.");
+                }
+            };
         }
     }
 }

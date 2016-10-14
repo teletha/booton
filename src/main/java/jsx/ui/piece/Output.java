@@ -64,12 +64,14 @@ public class Output extends LowLevelWidget<StyleDSL, Output> {
     }
 
     /**
-     * @version 2016/09/25 13:58:55
+     * {@inheritDoc}
      */
-    private class View extends StructureDSL {
-
-        {
-            text(text.get());
-        }
+    @Override
+    protected void virtualize() {
+        new StructureDSL() {
+            {
+                text(text.get());
+            }
+        };
     }
 }

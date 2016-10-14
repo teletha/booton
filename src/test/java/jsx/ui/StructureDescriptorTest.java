@@ -244,13 +244,15 @@ public class StructureDescriptorTest extends DiffTestBase {
         }
 
         /**
-         * @version 2016/09/25 13:58:55
+         * {@inheritDoc}
          */
-        private class View extends StructureDSL {
-
-            {
-                text(text);
-            }
+        @Override
+        protected void virtualize() {
+            new StructureDSL() {
+                {
+                    text(text);
+                }
+            };
         }
     }
 }
