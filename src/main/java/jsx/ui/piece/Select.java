@@ -23,7 +23,7 @@ import jsx.ui.Widget;
 import jsx.ui.piece.Select.Styles;
 
 /**
- * @version 2015/10/20 16:02:38
+ * @version 2016/10/20 11:00:29
  */
 public class Select<M> extends Widget<Styles> {
 
@@ -51,20 +51,11 @@ public class Select<M> extends Widget<Styles> {
     protected void virtualize() {
         new StructureDSL() {
             {
-                box($.Root, () -> {
-                    html("select", $.Select, contents(values.size(), i -> {
-                        M value = values.get(i);
-
-                        html("option", attr("value", i), If(selection.getValue().equals(value), attr("selected", "selected")), () -> {
-                            text(value);
-                        });
-                    }));
-                    svg("svg", $.SVGRoot, attr("size", "16 16"), attr("position", "0 0"), attr("viewBox", "0 0 16 16"), () -> {
-                        svg("g", () -> {
-                            svg("polygon", $.Mark, attr("points", "0.9,5.5 3.1,3.4 8,8.3 12.9,3.4 15.1,5.5 8,12.6"));
-                        });
+                html("select", $.Select, contents(values, (index, value) -> {
+                    html("option", attr("value", index), If(selection.getValue().equals(value), attr("selected")), () -> {
+                        text(value);
                     });
-                });
+                }));
             }
         };
     }
@@ -121,31 +112,12 @@ public class Select<M> extends Widget<Styles> {
     }
 
     /**
-     * @version 2015/10/05 8:14:05
+     * @version 2016/10/20 11:00:16
      */
     static class Styles extends PieceStyle {
-
-        Style Root = () -> {
-            display.inlineBlock();
-            position.relative();
-        };
 
         Style Select = SingleLineFormBase.with(() -> {
             cursor.pointer();
         });
-
-        Style SVGRoot = () -> {
-            position.centerVertically().right(FormHorizontalPadding);
-            display.size(16, px);
-            pointerEvents.none();
-        };
-
-        Style Mark = () -> {
-            fill.color(BorderColor);
-
-            ancestor().with(Root).hover(() -> {
-                fill.color(BorderColorFocused);
-            });
-        };
     }
 }
