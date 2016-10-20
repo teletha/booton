@@ -162,13 +162,8 @@ public class UI {
      * 
      * @param values
      */
-    public static final <E extends Enum> Select<E> select(Property<E> selection, Class<E> enumClass) {
-        ListProperty<E> items = I.make(ListProperty.class);
-
-        for (Enum constant : enumClass.getEnumConstants()) {
-            items.add((E) constant);
-        }
-        return select(selection, items);
+    public static final <E extends Enum> Select<E> select(Class<E> enumClass, Property<E> selection) {
+        return select(enumClass.getEnumConstants(), selection);
     }
 
     /**
@@ -178,13 +173,11 @@ public class UI {
      * 
      * @param values
      */
-    public static final <M> Select<M> select(Property<M> selection, M[] values) {
+    public static final <M> Select<M> select(M[] values, Property<M> selection) {
         ListProperty<M> items = I.make(ListProperty.class);
+        items.addAll(values);
 
-        for (M item : values) {
-            items.add(item);
-        }
-        return select(selection, items);
+        return select(items, selection);
     }
 
     /**
@@ -194,8 +187,8 @@ public class UI {
      * 
      * @param values
      */
-    public static final <M> Select<M> select(Property<M> selection, ListProperty<M> values) {
-        return new Select(selection, values);
+    public static final <M> Select<M> select(ListProperty<M> values, Property<M> selection) {
+        return new Select(values, selection);
     }
 
     /**

@@ -34,10 +34,14 @@ public class Select<M> extends Widget<Styles> {
     private final Property<M> selection;
 
     /**
-     * @param selection
-     * @param values
+     * <p>
+     * Create select UI.
+     * </p>
+     * 
+     * @param values The values.
+     * @param selection A selected value.
      */
-    Select(Property<M> selection, ListProperty<M> values) {
+    Select(ListProperty<M> values, Property<M> selection) {
         this.values = values;
         this.selection = selection;
 
