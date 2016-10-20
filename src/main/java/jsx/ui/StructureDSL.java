@@ -23,12 +23,15 @@ import javafx.beans.property.ReadOnlyProperty;
 import jsx.style.Style;
 
 /**
- * @version 2016/10/20 11:12:06
+ * @version 2016/09/25 15:08:25
  */
 public abstract class StructureDSL {
 
     /** The namespace uri for HTML. */
     static final String HTML = "http://www.w3.org/1999/xhtml";
+
+    /** The namespace uri for SVG. */
+    static final String SVG = "http://www.w3.org/2000/svg";
 
     /** The latest element. */
     static VirtualElement latestElement;
@@ -207,6 +210,31 @@ public abstract class StructureDSL {
 
     /**
      * <p>
+     * Declara element definition with the specified name.
+     * </p>
+     * 
+     * @param name A name of element.
+     * @param declarables A list of contents (attributes, children nodes etc).
+     */
+    public static final void svg(String name, Declarable... declarables) {
+        svg(LocalId.findContextLineNumber(), name, declarables);
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param id A local id.
+     * @param name A name of element.
+     * @param declarables A list of contents (attributes, children nodes etc).
+     */
+    private static void svg(int id, String name, Declarable... declarables) {
+        element(id, SVG, name, declarables, null);
+    }
+
+    /**
+     * <p>
      * Internal API.
      * </p>
      * 
@@ -260,6 +288,18 @@ public abstract class StructureDSL {
      */
     public static final Declarable title(String title) {
         return attr("title", title);
+    }
+
+    /**
+     * <p>
+     * Declare "xlink:href" attribute with the specified value.
+     * </p>
+     * 
+     * @param id A value of "xlink:href" attribute.
+     * @return An attribute declaration.
+     */
+    public static final Declarable xlink(String href) {
+        return attr("xlink:href", href);
     }
 
     /**
@@ -584,6 +624,200 @@ public abstract class StructureDSL {
         @Override
         public Iterator<Integer> iterator() {
             return this;
+        }
+    }
+
+    /**
+     * @version 2015/09/15 11:18:03
+     */
+    public final class SVGPath implements Declarable {
+
+        /** The current draw mode. */
+        private boolean relativeMode = false;
+
+        /** The buffer. */
+        private StringBuilder builder = new StringBuilder();
+
+        /**
+         * 
+         */
+        private SVGPath() {
+            super();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void declare() {
+            latestElement.attributes.add("d", builder.toString());
+        }
+
+        /**
+         * <p>
+         * Set the start position to draw.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public SVGPath moveTo(double x, double y) {
+            command("M").append(x).append(" ").append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw line to the specified position.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public SVGPath lineTo(double x, double y) {
+            command("L").append(x).append(" ").append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw horizontal line to the specified position.
+         * </p>
+         * 
+         * @param x A horizontal position.
+         * @return Chainable API.
+         */
+        public SVGPath hlineTo(double x) {
+            command("H").append(x);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw vertical line to the specified position.
+         * </p>
+         * 
+         * @param y A vertical position.
+         * @return Chainable API.
+         */
+        public SVGPath vlineTo(double y) {
+            command("V").append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Close the current path.
+         * </p>
+         * 
+         * @return Chainable API.
+         */
+        public SVGPath end() {
+            command("Z");
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw cubic Bézier curve to the path. It requires three points. The first two points are
+         * control points and the third one is the end point. The starting point is the last point
+         * in the current path, which can be changed using moveTo() before creating the Bézier
+         * curve.
+         * </p>
+         * 
+         * @param cp1x The x axis of the coordinate for the first control point.
+         * @param cp1y The y axis of the coordinate for first control point.
+         * @param cp2x The x axis of the coordinate for the second control point.
+         * @param cp2y The y axis of the coordinate for the second control point.
+         * @param x The x axis of the coordinate for the end point.
+         * @param y The y axis of the coordinate for the end point.
+         * @return Chainable API.
+         */
+        public SVGPath curveTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
+            command("C").append(cp1x)
+                    .append(" ")
+                    .append(cp1y)
+                    .append(" ")
+                    .append(cp2x)
+                    .append(" ")
+                    .append(cp2y)
+                    .append(" ")
+                    .append(x)
+                    .append(" ")
+                    .append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Draw cubic Bézier curve to the path. It requires three points. The first two points are
+         * control points and the third one is the end point. The starting point is the last point
+         * in the current path, which can be changed using moveTo() before creating the Bézier
+         * curve.
+         * </p>
+         * 
+         * @param cp1x The x axis of the coordinate for the first control point.
+         * @param cp1y The y axis of the coordinate for first control point.
+         * @param cp2x The x axis of the coordinate for the second control point.
+         * @param cp2y The y axis of the coordinate for the second control point.
+         * @param x The x axis of the coordinate for the end point.
+         * @param y The y axis of the coordinate for the end point.
+         * @return Chainable API.
+         */
+        public SVGPath curveRelativeTo(double cp1x, double cp1y, double cp2x, double cp2y, double x, double y) {
+            command("C").append(cp1x)
+                    .append(" ")
+                    .append(cp1y)
+                    .append(" ")
+                    .append(cp2x)
+                    .append(" ")
+                    .append(cp2y)
+                    .append(" ")
+                    .append(x)
+                    .append(" ")
+                    .append(y);
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make drawing context relative.
+         * </p>
+         * 
+         * @return
+         */
+        public final SVGPath relatively() {
+            relativeMode = true;
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make drawing context relative.
+         * </p>
+         * 
+         * @return
+         */
+        public final SVGPath absolutely() {
+            relativeMode = false;
+
+            return this;
+        }
+
+        /**
+         * <p>
+         * Make command expression.
+         * </p>
+         * 
+         * @param command
+         * @return
+         */
+        private final StringBuilder command(String command) {
+            builder.append(" ").append(relativeMode ? command.toLowerCase() : command).append(" ");
+            return builder;
         }
     }
 }
