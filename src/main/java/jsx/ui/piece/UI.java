@@ -149,6 +149,19 @@ public class UI {
      * 
      * @param value
      */
+    public static final <T> RadioBox<T> radiobox(Property<T> group, T value) {
+        RadioBox box = new RadioBox(group, value, String.valueOf(value));
+
+        return box;
+    }
+
+    /**
+     * <p>
+     * Create {@link RadioBox} with the specified value.
+     * </p>
+     * 
+     * @param value
+     */
     public static final <T> RadioBox<T> radiobox(Property<T> group, T value, String label) {
         RadioBox box = new RadioBox(group, value, label);
 

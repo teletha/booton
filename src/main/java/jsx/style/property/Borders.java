@@ -107,6 +107,15 @@ public class Borders extends Border {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Border initial() {
+        value("border-radius", "initial");
+        return value("border", Arrays.asList("initial"), " ", 2);
+    }
+
+    /**
      * @version 2015/09/09 14:52:16
      */
     private static class Each extends Border {

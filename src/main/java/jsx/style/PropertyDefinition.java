@@ -23,7 +23,7 @@ import booton.util.Strings;
 import js.lang.NativeArray;
 
 /**
- * @version 2014/11/13 15:49:09
+ * @version 2016/10/21 17:41:32
  */
 public class PropertyDefinition<T> {
 
@@ -82,6 +82,19 @@ public class PropertyDefinition<T> {
         this.name = name;
         this.context = context;
         this.vendors = EnumSet.of(Standard, vendors);
+    }
+
+    /**
+     * <p>
+     * The initial CSS keyword applies the initial value of a property to an element. It is allowed
+     * on every CSS property and causes the element for which it is specified to use the initial
+     * value of the property.
+     * </p>
+     * 
+     * @return
+     */
+    public T initial() {
+        return value("initial");
     }
 
     /**

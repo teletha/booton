@@ -56,9 +56,8 @@ public class Select<M> extends Widget<Styles> {
         new StructureDSL() {
             {
                 html("select", $.Select, contents(values, (index, value) -> {
-                    html("option", attr("value", index), If(selection.getValue().equals(value), attr("selected")), () -> {
-                        text(value);
-                    });
+                    html("option", $.Option, attr("value", index), If(selection.getValue()
+                            .equals(value), attr("selected")), contents(value));
                 }));
             }
         };
@@ -122,6 +121,12 @@ public class Select<M> extends Widget<Styles> {
 
         Style Select = SingleLineFormBase.with(() -> {
             cursor.pointer();
+        });
+
+        Style Option = SingleLineFormBase.with(() -> {
+            display.block().width(100, percent);
+            border.initial();
+            padding.horizontal(10, px);
         });
     }
 }

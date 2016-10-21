@@ -11,6 +11,7 @@ package jsx.ui;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -158,6 +159,29 @@ public abstract class StructureDSL {
      */
     private static void text(int id, Style style, Object... texts) {
         html(id, "span", style, contents(texts));
+    }
+
+    /**
+     * <p>
+     * Declara span element with the specified contents (attributes, children nodes etc).
+     * </p>
+     * 
+     * @param declarables A list of contents (attributes, children nodes etc).
+     */
+    public static final void box(List<? extends Declarable> declarables) {
+        box(LocalId.findContextLineNumber(), declarables);
+    }
+
+    /**
+     * <p>
+     * Internal API.
+     * </p>
+     * 
+     * @param id A local id.
+     * @param declarables A list of contents (attributes, children nodes etc).
+     */
+    private static void box(int id, List<? extends Declarable> declarables) {
+        html(id, "span", declarables.toArray(new Declarable[declarables.size()]));
     }
 
     /**
