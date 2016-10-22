@@ -11,6 +11,8 @@ package jsx.ui.piece;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
@@ -33,6 +35,9 @@ public class Select<M> extends Widget<Styles> {
     /** The selection model. */
     private final Property<M> selection;
 
+    /** The item name option. */
+    private Function<M, String> namer = String::valueOf;
+
     /**
      * <p>
      * Create select UI.
@@ -49,6 +54,20 @@ public class Select<M> extends Widget<Styles> {
     }
 
     /**
+     * <p>
+     * Configure displaying item name builder.
+     * </p>
+     * 
+     * @param namer An item name builder.
+     * @return Chainable API.
+     */
+    public Select label(Function<M, String> namer) {
+        this.namer = Objects.requireNonNull(namer);
+
+        return this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -56,8 +75,8 @@ public class Select<M> extends Widget<Styles> {
         new StructureDSL() {
             {
                 html("select", $.Select, contents(values, (index, value) -> {
-                    html("option", $.Option, attr("value", index), If(selection.getValue()
-                            .equals(value), attr("selected")), contents(value));
+                    html("option", $.Option, attr("value", index), If(selection.getValue().equals(value), attr("selected")), contents(namer
+                            .apply(value)));
                 }));
             }
         };

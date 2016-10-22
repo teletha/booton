@@ -11,6 +11,7 @@ package jsx.ui.piece;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javafx.beans.property.Property;
@@ -75,6 +76,30 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
         this.isMarked = isMarked;
 
         when(User.Change).at($.Root).sideEffect(updateView).to(changeListener::accept);
+    }
+
+    /**
+     * <p>
+     * Configure label.
+     * </p>
+     * 
+     * @param label A new label.
+     * @return Chainable API.
+     */
+    public W label(String label) {
+        return (W) this;
+    }
+    
+    /**
+     * <p>
+     * Configure label.
+     * </p>
+     * 
+     * @param label A new label.
+     * @return Chainable API.
+     */
+    public W label(Function<V, String> lable) {
+        return (W) this;
     }
 
     /**

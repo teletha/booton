@@ -16,12 +16,12 @@ import jsx.style.Style;
 import jsx.style.value.Color;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
-import jsx.ui.piece.Button.$;
+import jsx.ui.piece.Button.Styles;
 
 /**
  * @version 2015/10/21 3:00:41
  */
-public class Button extends LowLevelWidget<$, Button> {
+public class Button extends LowLevelWidget<Styles, Button> {
 
     /** The label text. */
     public StringExpression label;
@@ -70,16 +70,16 @@ public class Button extends LowLevelWidget<$, Button> {
     }
 
     /**
-     * @version 2015/10/12 11:17:56
+     * @version 2016/10/22 10:43:47
      */
-    protected static class $ extends PieceStyle {
+    protected static class Styles extends PieceStyle {
 
         Style Button = SingleLineFormBase.with(() -> {
             background.color(Color.Transparent);
             cursor.pointer();
 
             hover(() -> {
-                background.color(BorderColor.opacify(-0.75));
+                background.color(BorderColor.opacify(-0.4));
             });
         });
     }
