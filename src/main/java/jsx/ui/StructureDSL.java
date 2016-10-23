@@ -316,18 +316,6 @@ public abstract class StructureDSL {
 
     /**
      * <p>
-     * Declare "xlink:href" attribute with the specified value.
-     * </p>
-     * 
-     * @param id A value of "xlink:href" attribute.
-     * @return An attribute declaration.
-     */
-    public static final Declarable xlink(String href) {
-        return attr("xlink:href", href);
-    }
-
-    /**
-     * <p>
      * General attribute definition method.
      * </p>
      * 
