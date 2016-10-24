@@ -12,8 +12,8 @@ package js.lang.reflect;
 import java.lang.reflect.Array;
 import java.util.Objects;
 
-import js.lang.NativeArray;
 import booton.translator.JavaAPIProvider;
+import js.lang.NativeArray;
 
 /**
  * @version 2013/05/01 19:14:49

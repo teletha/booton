@@ -11,12 +11,11 @@ package jsfx;
 
 import javafx.beans.property.ListProperty;
 
-import kiss.I;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import kiss.I;
 
 /**
  * @version 2014/09/09 22:38:43

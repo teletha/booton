@@ -10,8 +10,6 @@
 package js.dom;
 
 import static js.lang.Global.*;
-import js.dom.Element;
-import js.dom.UIEvent;
 
 /**
  * @version 2013/10/20 10:02:05

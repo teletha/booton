@@ -10,6 +10,7 @@
 package jsx.ui;
 
 import static js.lang.Global.*;
+
 import js.dom.Text;
 
 /**

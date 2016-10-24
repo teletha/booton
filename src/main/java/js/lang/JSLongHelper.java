@@ -9,8 +9,8 @@
  */
 package js.lang;
 
-import js.lang.JSLong.Primitive;
 import booton.translator.Translator;
+import js.lang.JSLong.Primitive;
 
 /**
  * @version 2014/05/26 16:48:04

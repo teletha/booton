@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-import js.lang.NativeArray;
 import booton.translator.JavaAPIProvider;
+import js.lang.NativeArray;
 
 /**
  * @version 2013/09/25 17:14:37

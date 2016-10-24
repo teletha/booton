@@ -11,10 +11,10 @@ package js.lang.reflect;
 
 import java.lang.reflect.Constructor;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import booton.translator.JavaAPIProvider;
 
 /**
  * <p>

@@ -14,8 +14,8 @@ import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
-import kiss.I;
 import booton.translator.JavaAPIProvider;
+import kiss.I;
 
 /**
  * @version 2013/10/26 10:58:00

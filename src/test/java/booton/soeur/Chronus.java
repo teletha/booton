@@ -16,6 +16,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import antibug.internal.Awaitable;
+import booton.translator.Translator;
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.Function;
@@ -24,8 +26,6 @@ import net.sourceforge.htmlunit.corejs.javascript.Scriptable;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.annotations.JSFunction;
 import net.sourceforge.htmlunit.corejs.javascript.annotations.JSStaticFunction;
-import antibug.internal.Awaitable;
-import booton.translator.Translator;
 
 /**
  * <p>

@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.Property;
 import javafx.scene.control.SingleSelectionModel;
 
 import jsx.style.Style;
@@ -23,6 +22,7 @@ import jsx.ui.StructureDSL;
 import jsx.ui.User;
 import jsx.ui.Widget;
 import jsx.ui.piece.Select.Styles;
+import kiss.Variable;
 
 /**
  * @version 2016/10/20 11:00:29
@@ -33,7 +33,7 @@ public class Select<M> extends Widget<Styles> {
     private final ListProperty<M> values;
 
     /** The selection model. */
-    private final Property<M> selection;
+    private final Variable<M> selection;
 
     /** The item name option. */
     private Function<M, String> namer = String::valueOf;
@@ -46,11 +46,11 @@ public class Select<M> extends Widget<Styles> {
      * @param values The values.
      * @param selection A selected value.
      */
-    Select(ListProperty<M> values, Property<M> selection) {
+    Select(ListProperty<M> values, Variable<M> selection) {
         this.values = values;
         this.selection = selection;
 
-        when(User.Change).at($.Select).sideEffect(updateView).to(e -> selection.setValue(values.get(Integer.valueOf(e.value()))));
+        when(User.Change).at($.Select).sideEffect(updateView).to(e -> selection.set(values.get(Integer.valueOf(e.value()))));
     }
 
     /**
@@ -75,8 +75,7 @@ public class Select<M> extends Widget<Styles> {
         new StructureDSL() {
             {
                 html("select", $.Select, contents(values, (index, value) -> {
-                    html("option", $.Option, attr("value", index), If(selection.getValue().equals(value), attr("selected")), contents(namer
-                            .apply(value)));
+                    html("option", $.Option, attr("value", index), If(selection.is(value), attr("selected")), contents(namer.apply(value)));
                 }));
             }
         };

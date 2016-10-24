@@ -73,6 +73,35 @@ class AtomicReference<V> {
     }
 
     /**
+     * Atomically sets to the given value and returns the old value.
+     * 
+     * @param newValue the new value
+     * @return the previous value
+     */
+    public final V getAndSet(V newValue) {
+        V old = value;
+    
+        value = newValue;
+    
+        return old;
+    }
+
+    /**
+     * Atomically updates the current value with the results of applying the given function,
+     * returning the previous value. The function should be side-effect-free, since it may be
+     * re-applied when attempted updates fail due to contention among threads.
+     *
+     * @param updateFunction a side-effect-free function
+     * @return the previous value
+     * @since 1.8
+     */
+    public final V getAndUpdate(UnaryOperator<V> updateFunction) {
+        V prev = get();
+        set(updateFunction.apply(prev));
+        return prev;
+    }
+
+    /**
      * Atomically updates the current value with the results of applying the given function,
      * returning the updated value. The function should be side-effect-free, since it may be
      * re-applied when attempted updates fail due to contention among threads.
@@ -85,19 +114,5 @@ class AtomicReference<V> {
         V value = updateFunction.apply(get());
         set(value);
         return value;
-    }
-
-    /**
-     * Atomically sets to the given value and returns the old value.
-     * 
-     * @param newValue the new value
-     * @return the previous value
-     */
-    public final V getAndSet(V newValue) {
-        V old = value;
-
-        value = newValue;
-
-        return old;
     }
 }

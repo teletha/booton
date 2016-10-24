@@ -25,13 +25,14 @@ import java.util.spi.LocaleNameProvider;
 import java.util.spi.LocaleServiceProvider;
 import java.util.spi.TimeZoneNameProvider;
 
-import kiss.Manageable;
-import kiss.Singleton;
 import sun.util.locale.provider.LocaleProviderAdapter.Type;
 import sun.util.locale.provider.LocaleResources;
 import sun.util.spi.CalendarProvider;
+
 import booton.JDKEmulator;
 import booton.translator.JavaAPIProvider;
+import kiss.Manageable;
+import kiss.Singleton;
 
 /**
  * @version 2014/03/12 2:53:27

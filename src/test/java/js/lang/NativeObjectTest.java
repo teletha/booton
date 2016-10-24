@@ -9,9 +9,6 @@
  */
 package js.lang;
 
-import js.lang.NativeArray;
-import js.lang.NativeObject;
-
 import org.junit.Test;
 
 import booton.soeur.ScriptTester;

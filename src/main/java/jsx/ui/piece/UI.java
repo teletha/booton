@@ -31,6 +31,7 @@ import jsx.ui.Widget;
 import kiss.Events;
 import kiss.I;
 import kiss.Observer;
+import kiss.Variable;
 import kiss.Ⅲ;
 
 /**
@@ -175,7 +176,7 @@ public class UI {
      * 
      * @param values
      */
-    public static final <E extends Enum> Select<E> select(Class<E> enumClass, Property<E> selection) {
+    public static final <E extends Enum> Select<E> select(Class<E> enumClass, Variable<E> selection) {
         return select(enumClass.getEnumConstants(), selection);
     }
 
@@ -186,7 +187,7 @@ public class UI {
      * 
      * @param values
      */
-    public static final <M> Select<M> select(M[] values, Property<M> selection) {
+    public static final <M> Select<M> select(M[] values, Variable<M> selection) {
         ListProperty<M> items = I.make(ListProperty.class);
         items.addAll(values);
 
@@ -200,7 +201,7 @@ public class UI {
      * 
      * @param values
      */
-    public static final <M> Select<M> select(ListProperty<M> values, Property<M> selection) {
+    public static final <M> Select<M> select(ListProperty<M> values, Variable<M> selection) {
         return new Select(values, selection);
     }
 

@@ -9,15 +9,14 @@
  */
 package js.dom;
 
-import js.lang.Global;
-import js.lang.builtin.Storage;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.sample.Person;
 import booton.soeur.ScriptRunner;
+import js.lang.Global;
+import js.lang.builtin.Storage;
 
 /**
  * @version 2013/10/04 10:35:29

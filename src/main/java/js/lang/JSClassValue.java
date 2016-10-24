@@ -11,8 +11,8 @@ package js.lang;
 
 import java.util.Map;
 
-import js.util.HashMap;
 import booton.translator.JavaAPIProvider;
+import js.util.HashMap;
 
 /**
  * TODO should be abstract class.

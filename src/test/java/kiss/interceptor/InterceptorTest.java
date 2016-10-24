@@ -12,14 +12,13 @@ package kiss.interceptor;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import kiss.I;
-import kiss.Interceptor;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.Necessary;
 import booton.soeur.ScriptRunner;
+import kiss.I;
+import kiss.Interceptor;
 
 /**
  * @version 2013/10/12 0:00:21

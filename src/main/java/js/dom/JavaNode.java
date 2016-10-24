@@ -9,11 +9,11 @@
  */
 package js.dom;
 
-import kiss.I;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.UserDataHandler;
+
+import kiss.I;
 
 /**
  * @version 2014/09/20 11:01:04

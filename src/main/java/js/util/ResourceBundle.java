@@ -24,11 +24,12 @@ import java.util.ResourceBundle.Control;
 import java.util.Set;
 import java.util.spi.ResourceBundleControlProvider;
 
+import sun.reflect.CallerSensitive;
+
+import booton.translator.JavaAPIProvider;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import sun.reflect.CallerSensitive;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2014/03/12 3:11:10

@@ -22,6 +22,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyProperty;
 
 import jsx.style.Style;
+import kiss.Variable;
 
 /**
  * @version 2016/09/25 15:08:25
@@ -498,6 +499,19 @@ public abstract class StructureDSL {
      */
     public static final <C> Declarable contents(Iterable<C> contents, Consumer<C> process) {
         return contents(contents, (index, child) -> process.accept(child));
+    }
+
+    /**
+     * <p>
+     * Define children.
+     * </p>
+     * 
+     * @param contents A list of contents.
+     * @param process A content writer.
+     * @return A declaration of contents.
+     */
+    public static final <C> Declarable contents(Variable<Iterable<C>> contents, Consumer<C> process) {
+        return contents(contents.get(), (index, child) -> process.accept(child));
     }
 
     /**

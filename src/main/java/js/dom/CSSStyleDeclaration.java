@@ -12,9 +12,9 @@ package js.dom;
 import java.util.HashMap;
 import java.util.Map;
 
-import js.lang.NativeObject;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
+import js.lang.NativeObject;
 
 /**
  * <p>

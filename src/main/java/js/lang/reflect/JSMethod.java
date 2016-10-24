@@ -15,13 +15,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeBoolean;
 import js.lang.NativeFunction;
 import js.lang.NativeNumber;
 import js.lang.NativeObject;
 import js.lang.NativeString;
-import booton.translator.JavaAPIProvider;
 
 /**
  * <p>

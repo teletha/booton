@@ -9,12 +9,11 @@
  */
 package js.lang.reflect;
 
-import js.lang.NativeArray;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import booton.soeur.ScriptRunner;
+import js.lang.NativeArray;
 
 /**
  * @version 2015/01/11 15:00:09

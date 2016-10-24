@@ -9,16 +9,12 @@
  */
 package js.dom;
 
-import kiss.I;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.TypeInfo;
-import org.w3c.dom.UserDataHandler;
 
 /**
  * @version 2014/01/22 0:55:59

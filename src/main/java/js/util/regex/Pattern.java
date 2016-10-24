@@ -12,9 +12,9 @@ package js.util.regex;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.NativeRegExp;
 import js.lang.NativeString;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2013/08/28 8:38:31

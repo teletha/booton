@@ -15,11 +15,11 @@ import java.util.ArrayList;
 
 import javax.xml.XMLConstants;
 
-import kiss.I;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
+
+import kiss.I;
 
 /**
  * @version 2012/12/17 1:49:14

@@ -9,10 +9,10 @@
  */
 package js.lang.builtin;
 
-import js.lang.NativeObject;
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
+import js.lang.NativeObject;
 
 /**
  * <p>

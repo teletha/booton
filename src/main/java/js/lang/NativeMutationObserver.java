@@ -9,12 +9,12 @@
  */
 package js.lang;
 
-import js.dom.Element;
-import js.dom.Node;
-import js.dom.NodeList;
 import booton.translator.JavascriptNative;
 import booton.translator.JavascriptNativeProperty;
 import booton.translator.Translator;
+import js.dom.Element;
+import js.dom.Node;
+import js.dom.NodeList;
 
 /**
  * <p>

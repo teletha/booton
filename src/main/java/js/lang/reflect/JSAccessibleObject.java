@@ -13,8 +13,8 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 
-import js.lang.NativeArray;
 import booton.translator.JavaAPIProvider;
+import js.lang.NativeArray;
 
 /**
  * @version 2013/09/11 0:19:34

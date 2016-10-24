@@ -16,12 +16,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import booton.JDKEmulator;
 import jdk.internal.org.objectweb.asm.Type;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
-import booton.JDKEmulator;
 
 /**
  * @version 2014/03/12 20:02:06

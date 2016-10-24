@@ -18,11 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.Global;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
-import booton.translator.JavaAPIProvider;
 
 /**
  * @version 2015/02/26 11:44:22

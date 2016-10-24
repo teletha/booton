@@ -9,8 +9,6 @@
  */
 package jsx.ui;
 
-import static jsx.ui.StructureDSL.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
