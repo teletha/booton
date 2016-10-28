@@ -130,7 +130,7 @@ class JSKiss {
      * <p>
      * Retrieve the associated value with the specified object by the specified type.
      * </p>
-     * 
+     *
      * @param host A host object.
      * @param type An association type.
      * @return An associated value.
@@ -150,7 +150,7 @@ class JSKiss {
      * other words, this method must allocate a new list). The caller is thus free to modify the
      * returned list.
      * </p>
-     * 
+     *
      * @param <E> An Extension Point.
      * @param extensionPoint An extension point class. The
      *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
@@ -178,7 +178,7 @@ class JSKiss {
      * Find the <a href="Extensible.html#Extension">Extension</a> which are specified by the given
      * <a href="Extensible#ExtensionPoint">Extension Point</a> and the given key.
      * </p>
-     * 
+     *
      * @param <E> An Extension Point.
      * @param extensionPoint An Extension Point class. The
      *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
@@ -222,7 +222,7 @@ class JSKiss {
      * other words, this method must allocate a new list). The caller is thus free to modify the
      * returned list.
      * </p>
-     * 
+     *
      * @param <E> An Extension Point.
      * @param extensionPoint An extension point class. The
      *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
@@ -327,7 +327,7 @@ class JSKiss {
      * Returns a string containing the string representation of each of items, using the specified
      * separator between each.
      * </p>
-     * 
+     *
      * @param delimiter A sequence of characters that is used to separate each of the elements in
      *            the resulting String.
      * @param items A {@link Iterable} items.
@@ -343,7 +343,7 @@ class JSKiss {
      * Returns a string containing the string representation of each of items, using the specified
      * separator between each.
      * </p>
-     * 
+     *
      * @param delimiter A sequence of characters that is used to separate each of the elements in
      *            the resulting String.
      * @param items A {@link Iterable} items.
@@ -426,7 +426,7 @@ class JSKiss {
      * anonymous class is passed to this argument, {@link UnsupportedOperationException} will be
      * thrown. There is a possibility that a part of this limitation will be removed in the future.
      * </p>
-     * 
+     *
      * @param <M>
      * @param modelClass
      * @return A instance of the specified model class. This instance is managed by Sinobu.
@@ -449,7 +449,7 @@ class JSKiss {
      * anonymous class is passed to this argument, {@link UnsupportedOperationException} will be
      * thrown. There is a possibility that a part of this limitation will be removed in the future.
      * </p>
-     * 
+     *
      * @param <M>
      * @param modelClass
      * @return A instance of the specified model class. This instance is managed by Sinobu.
@@ -554,7 +554,7 @@ class JSKiss {
      * <p>
      * Findthe first parameter name of lambda method.
      * </p>
-     * 
+     *
      * @param object A lambda instance.
      * @return A parameter name.
      */
@@ -571,7 +571,7 @@ class JSKiss {
      * the value is not immediately recomputed after changes, but lazily the next time the value is
      * requested.
      * </p>
-     * 
+     *
      * @param observable A target to observe.
      * @return A observable event stream.
      */
@@ -603,7 +603,7 @@ class JSKiss {
      * the value is not immediately recomputed after changes, but lazily the next time the value is
      * requested.
      * </p>
-     * 
+     *
      * @param observable A target to observe.
      * @return A observable event stream.
      */
@@ -637,19 +637,7 @@ class JSKiss {
      * <p>
      * Create value set.
      * </p>
-     * 
-     * @param param1 A first parameter.
-     * @return
-     */
-    public static <Param1> Ⅰ<Param1> pair(Param1 param1) {
-        return new Ⅰ(param1);
-    }
-
-    /**
-     * <p>
-     * Create value set.
-     * </p>
-     * 
+     *
      * @param param1 A first parameter.
      * @param param2 A second parameter.
      * @return
@@ -662,7 +650,7 @@ class JSKiss {
      * <p>
      * Create value set.
      * </p>
-     * 
+     *
      * @param param1 A first parameter.
      * @param param2 A second parameter.
      * @param param3 A third parameter.
@@ -676,7 +664,7 @@ class JSKiss {
      * <p>
      * Create paired value {@link Consumer}.
      * </p>
-     * 
+     *
      * @param consumer A {@link BiConsumer} to make parameters paired.
      * @return A paired value {@link Consumer}.
      */
@@ -688,7 +676,7 @@ class JSKiss {
      * <p>
      * Create paired value {@link Function}.
      * </p>
-     * 
+     *
      * @param funtion A {@link BiFunction} to make parameters paired.
      * @return A paired value {@link Function}.
      */
@@ -704,7 +692,7 @@ class JSKiss {
      * </p>
      * <pre>
      * AutoCloseable input = null;
-     * 
+     *
      * try {
      *     // some IO action
      * } catch (Exception e) {
@@ -727,7 +715,7 @@ class JSKiss {
      * private void callerWithoutErrorHandling() {
      *     methodQuietly();
      * }
-     * 
+     *
      * private void callerWithErrorHandling() {
      *     try {
      *         methodQuietly();
@@ -735,7 +723,7 @@ class JSKiss {
      *         // you can catch the checked exception here
      *     }
      * }
-     * 
+     *
      * private void methodQuietly() {
      *     try {
      *         // throw some cheched exception
@@ -744,7 +732,7 @@ class JSKiss {
      *     }
      * }
      * </pre>
-     * 
+     *
      * @param object A exception to throw quietly or a object to close quietly.
      * @return A pseudo unchecked exception.
      * @throws NullPointerException If the specified exception is <code>null</code>.
@@ -776,7 +764,7 @@ class JSKiss {
      * <p>
      * Transform any type object into the specified type if possible.
      * </p>
-     * 
+     *
      * @param <In> A input type you want to transform from.
      * @param <Out> An output type you want to transform into.
      * @param input A target object.
@@ -818,7 +806,7 @@ class JSKiss {
      * usual means, but not by this method. Because Sinobu manages additional classpath for enabling
      * dynamic manipulation.
      * </p>
-     * 
+     *
      * @param classPath A classpath to load.
      * @param filter Filter classes by package of the specified class.
      * @return A managed {@link ClassLoader}.
@@ -838,7 +826,7 @@ class JSKiss {
      * <p>
      * Define interceptor code.
      * </p>
-     * 
+     *
      * @param source
      * @param interceptors
      */
@@ -907,7 +895,7 @@ class JSKiss {
      * <p>
      * Find all sub class of the specified class.
      * </p>
-     * 
+     *
      * @param type A type to search.
      * @return A list of found classes.
      */
@@ -934,7 +922,7 @@ class JSKiss {
      * <p>
      * Reads Java object tree from the given XML or JSON input.
      * </p>
-     * 
+     *
      * @param input A serialized Java object tree data as XML or JSON. If the input is incompatible
      *            with Java object, this method ignores the input. <code>null</code> will throw
      *            {@link NullPointerException}. The empty or invalid format data will throw
@@ -958,7 +946,7 @@ class JSKiss {
      * <p>
      * Read property and write it.
      * </p>
-     * 
+     *
      * @param java
      * @param js
      * @return
@@ -986,7 +974,7 @@ class JSKiss {
      * <p>
      * Execute the specified task in background {@link Thread}.
      * </p>
-     * 
+     *
      * @param task A task to execute.
      */
     public static Future<?> schedule(Runnable task) {
@@ -997,7 +985,7 @@ class JSKiss {
      * <p>
      * Execute the specified task in background {@link Thread} with the specified delay.
      * </p>
-     * 
+     *
      * @param time A delay time.
      * @param unit A delay time unit.
      * @param parallelExecution The <code>true</code> will execute task in parallel,
@@ -1030,7 +1018,7 @@ class JSKiss {
      * Return a non-primitive {@link Class} of the specified {@link Class} object. <code>null</code>
      * will be return <code>null</code>.
      * </p>
-     * 
+     *
      * @param type A {@link Class} object to convert to non-primitive class.
      * @return A non-primitive {@link Class} object.
      */
@@ -1054,7 +1042,7 @@ class JSKiss {
      * If the output object implements {@link AutoCloseable}, {@link AutoCloseable#close()} method
      * will be invoked certainly.
      * </p>
-     * 
+     *
      * @param input A Java object. All properties will be serialized deeply. <code>null</code> will
      *            throw {@link java.lang.NullPointerException}.
      * @param output A serialized data output. <code>null</code> will throw
