@@ -17,6 +17,7 @@ import java.util.function.Function;
 import javafx.beans.property.ListProperty;
 import javafx.scene.control.SingleSelectionModel;
 
+import js.dom.UIEvent;
 import jsx.style.Style;
 import jsx.ui.StructureDSL;
 import jsx.ui.User;
@@ -50,7 +51,7 @@ public class Select<M> extends Widget<Styles> {
         this.values = values;
         this.selection = selection;
 
-        when(User.Change).at($.Select).sideEffect(updateView).to(e -> selection.set(values.get(Integer.valueOf(e.value()))));
+        when(User.Change).at($.Select).sideEffect(updateView).map(UIEvent::value).map(Integer::valueOf).map(values::get).to(selection::set);
     }
 
     /**
