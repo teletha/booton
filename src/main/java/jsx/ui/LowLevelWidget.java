@@ -144,7 +144,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
     protected BooleanProperty disabled = new SimpleBooleanProperty();
 
     public T disableIf(Events<Boolean> condition) {
-        condition.toValue(disabled);
+        condition.to(disabled);
 
         return (T) this;
     }

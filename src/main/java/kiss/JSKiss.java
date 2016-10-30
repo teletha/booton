@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -42,6 +43,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import javax.script.ScriptException;
 
@@ -74,6 +77,11 @@ import kiss.model.Property;
  */
 @JavaAPIProvider(I.class)
 class JSKiss {
+
+    /** No Operation */
+    public static final Runnable NoOP = () -> {
+        // no operation
+    };
 
     public static ScheduledExecutorService $scheduler = Executors.newScheduledThreadPool(1);
 
@@ -128,6 +136,17 @@ class JSKiss {
 
     /**
      * <p>
+     * Create {@link Predicate} which accpets any item.
+     * </p>
+     * 
+     * @return An acceptable {@link Predicate}.
+     */
+    public static <V> Predicate<V> accept() {
+        return e -> true;
+    }
+
+    /**
+     * <p>
      * Retrieve the associated value with the specified object by the specified type.
      * </p>
      *
@@ -138,6 +157,60 @@ class JSKiss {
     public static <V> V associate(Object host, Class<V> type) {
         WeakHashMap<Class<V>, V> association = associatables.computeIfAbsent(host, key -> new WeakHashMap());
         return association.computeIfAbsent(type, I::make);
+    }
+
+    /**
+     * <p>
+     * Create the partial applied {@link Consumer}.
+     * </p>
+     *
+     * @param function A target function.
+     * @param param A parameter to apply.
+     * @return A partial applied function.
+     */
+    public static <Param> Runnable bind(Consumer<Param> function, Param param) {
+        return function == null ? NoOP : () -> function.accept(param);
+    }
+
+    /**
+     * <p>
+     * Create the partial applied {@link Consumer}.
+     * </p>
+     *
+     * @param function A target function.
+     * @param param A parameter to apply.
+     * @return A partial applied function.
+     */
+    public static <Param1, Param2> Runnable bind(BiConsumer<Param1, Param2> function, Param1 param1, Param2 param2) {
+        return function == null ? NoOP : () -> function.accept(param1, param2);
+    }
+
+    /**
+     * <p>
+     * Create the partial applied {@link Function}.
+     * </p>
+     *
+     * @param function A target function.
+     * @param param A parameter to apply.
+     * @return A partial applied function.
+     */
+    public static <Param, Return> Supplier<Return> bind(Function<Param, Return> function, Param param) {
+        Objects.requireNonNull(function);
+        return () -> function.apply(param);
+    }
+
+    /**
+     * <p>
+     * Create the partial applied {@link Function}.
+     * </p>
+     *
+     * @param function A target function.
+     * @param param A parameter to apply.
+     * @return A partial applied function.
+     */
+    public static <Param1, Param2, Return> Supplier<Return> bind(BiFunction<Param1, Param2, Return> function, Param1 param1, Param2 param2) {
+        Objects.requireNonNull(function);
+        return () -> function.apply(param1, param2);
     }
 
     /**
@@ -758,6 +831,17 @@ class JSKiss {
 
         // API definition
         return null;
+    }
+
+    /**
+     * <p>
+     * Create {@link Predicate} which rejects any item.
+     * </p>
+     * 
+     * @return An rejectable {@link Predicate}.
+     */
+    public static <V> Predicate<V> reject() {
+        return e -> false;
     }
 
     /**
