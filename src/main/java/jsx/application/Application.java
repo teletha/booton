@@ -11,6 +11,7 @@ package jsx.application;
 
 import static js.lang.Global.*;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -241,7 +242,7 @@ public abstract class Application<R extends ApplicationRouter> {
      * @version 2015/08/18 16:48:41
      */
     @Manageable(lifestyle = Singleton.class)
-    private class Router extends Interceptor<Route> implements InvocationHandler {
+    private class Router extends Interceptor<Route>implements InvocationHandler {
 
         /**
          * {@inheritDoc}
@@ -293,14 +294,16 @@ public abstract class Application<R extends ApplicationRouter> {
 
             // update history if needed
             String path = builder.toString();
-
+            System.out.println(path);
             // create widget for this path
             Object widget;
 
-            if (method.getAnnotation(Route.class).cache()) {
-                widget = cache.computeIfAbsent(path, p -> super.invoke(params));
+            Route route = method.getAnnotation(Route.class);
+
+            if (route != null && route.cache()) {
+                widget = cache.computeIfAbsent(path, p -> call(proxy, method, params));
             } else {
-                widget = method.invoke(proxy, params);
+                widget = call(proxy, method, params);
             }
 
             // validation
@@ -313,6 +316,19 @@ public abstract class Application<R extends ApplicationRouter> {
                 show(path, (Widget) widget);
             }
             return widget;
+        }
+
+        private Object call(Object proxy, Method method, Object[] args) {
+            try {
+                if (method.isDefault()) {
+                    Class target = method.getDeclaringClass();
+                    return MethodHandles.lookup().in(target).unreflectSpecial(method, target).bindTo(proxy).invokeWithArguments(args);
+                } else {
+                    return method.invoke(proxy, args);
+                }
+            } catch (Throwable e) {
+                throw I.quiet(e);
+            }
         }
     }
 }

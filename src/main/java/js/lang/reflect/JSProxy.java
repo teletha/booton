@@ -99,11 +99,9 @@ class JSProxy {
 
             // implement interface methods for proxy api
             for (Method method : interfaceType.getMethods()) {
-                if (!method.isDefault() && (method.getDeclaringClass() != Annotation.class || method.getName()
-                        .equals("annotationType"))) {
+                if (method.getDeclaringClass() != Annotation.class || method.getName().equals("annotationType")) {
                     ProxyFunction function = new ProxyFunction(proxy, method);
-                    NativeObject.by(proxy)
-                            .setProperty(((JSMethod) (Object) method).nameJS, new NativeFunction(function).bind(function));
+                    NativeObject.by(proxy).setProperty(((JSMethod) (Object) method).nameJS, new NativeFunction(function).bind(function));
                 }
             }
         }

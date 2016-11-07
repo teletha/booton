@@ -17,10 +17,37 @@ import java.lang.reflect.Method;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/24 23:06:20
+ * @version 2016/11/07 12:43:04
  */
 @JavaAPIProvider(Lookup.class)
 class JSLookup {
+
+    /**
+     * Creates a lookup on the specified new lookup class. The resulting object will report the
+     * specified class as its own {@link #lookupClass lookupClass}.
+     * <p>
+     * However, the resulting {@code Lookup} object is guaranteed to have no more access
+     * capabilities than the original. In particular, access capabilities can be lost as follows:
+     * <ul>
+     * <li>If the new lookup class differs from the old one, protected members will not be
+     * accessible by virtue of inheritance. (Protected members may continue to be accessible because
+     * of package sharing.)
+     * <li>If the new lookup class is in a different package than the old one, protected and default
+     * (package) members will not be accessible.
+     * <li>If the new lookup class is not within the same package member as the old one, private
+     * members will not be accessible.
+     * <li>If the new lookup class is not accessible to the old lookup class, then no members, not
+     * even public members, will be accessible. (In all other cases, public members will continue to
+     * be accessible.)
+     * </ul>
+     *
+     * @param requestedLookupClass the desired lookup class for the new lookup object
+     * @return a lookup object which reports the desired lookup class
+     * @throws NullPointerException if the argument is null
+     */
+    public Lookup in(Class<?> requestedLookupClass) {
+        return (Lookup) (Object) this;
+    }
 
     /**
      * Makes a direct method handle to <i>m</i>, if the lookup class has permission. If <i>m</i> is
@@ -75,5 +102,32 @@ class JSLookup {
      */
     public MethodHandle unreflectSetter(Field field) throws IllegalAccessException {
         return (MethodHandle) (Object) new JSMethodHandle(field, true);
+    }
+
+    /**
+     * Produces a method handle for a reflected method. It will bypass checks for overriding methods
+     * on the receiver, <a href="MethodHandles.Lookup.html#equiv">as if called</a> from an
+     * {@code invokespecial} instruction from within the explicitly specified {@code specialCaller}.
+     * The type of the method handle will be that of the method, with a suitably restricted receiver
+     * type prepended. (The receiver type will be {@code specialCaller} or a subtype.) If the
+     * method's {@code accessible} flag is not set, access checking is performed immediately on
+     * behalf of the lookup class, as if {@code invokespecial} instruction were being linked.
+     * <p>
+     * Before method resolution, if the explicitly specified caller class is not identical with the
+     * lookup class, or if this lookup object does not have
+     * <a href="MethodHandles.Lookup.html#privacc">private access</a> privileges, the access fails.
+     * <p>
+     * The returned method handle will have {@linkplain MethodHandle#asVarargsCollector variable
+     * arity} if and only if the method's variable arity modifier bit ({@code 0x0080}) is set.
+     * 
+     * @param method the reflected method
+     * @param specialCaller the class nominally calling the method
+     * @return a method handle which can invoke the reflected method
+     * @throws IllegalAccessException if access checking fails or if the method's variable arity
+     *             modifier bit is set and {@code asVarargsCollector} fails
+     * @throws NullPointerException if any argument is null
+     */
+    public MethodHandle unreflectSpecial(Method method, Class<?> specialCaller) throws IllegalAccessException {
+        return (MethodHandle) (Object) new JSMethodHandle(method, specialCaller);
     }
 }

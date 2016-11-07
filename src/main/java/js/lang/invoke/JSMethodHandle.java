@@ -21,7 +21,7 @@ import js.lang.NativeFunction;
 import js.lang.reflect.Reflections;
 
 /**
- * @version 2015/10/15 17:02:01
+ * @version 2016/11/07 12:42:55
  */
 @JavaAPIProvider(MethodHandle.class)
 class JSMethodHandle {
@@ -36,10 +36,16 @@ class JSMethodHandle {
      * @param method
      */
     JSMethodHandle(Method method) {
+        this(method, method.getDeclaringClass());
+    }
+
+    /**
+     * @param method
+     */
+    JSMethodHandle(Method method, Class caller) {
         this.member = method;
 
-        function = Reflections.getPrototype(method.getDeclaringClass())
-                .getPropertyAs(NativeFunction.class, Reflections.getPropertyName(method));
+        function = Reflections.getPrototype(caller).getPropertyAs(NativeFunction.class, Reflections.getPropertyName(method));
     }
 
     /**

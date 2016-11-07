@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import booton.soeur.ScriptRunner;
 
 /**
- * @version 2013/09/03 1:25:49
+ * @version 2016/11/07 12:02:18
  */
 @RunWith(ScriptRunner.class)
 public class ProxyTest {
@@ -48,14 +48,14 @@ public class ProxyTest {
 
     @Test
     public void proxy() throws Exception {
-        Machine machine = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class,
-                Bird.class}, proxy);
+        Machine machine = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class, Bird.class}, proxy);
         assert Proxy.isProxyClass(machine.getClass());
         assert Proxy.getInvocationHandler(machine) == proxy;
         assert machine instanceof Machine;
         assert machine.echo("ignored").equals("PROXY");
+        assert machine.defaults().equals("PROXY");
         assert machine instanceof Bird;
-        assert ((Bird) machine).tweet("ignored").equals("PROXY");
+        assert((Bird) machine).tweet("ignored").equals("PROXY");
         assert machine instanceof Object;
     }
 
@@ -64,10 +64,8 @@ public class ProxyTest {
         Machine machine1 = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class}, proxy);
         Machine machine2 = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class}, proxy);
         Machine machine3 = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class}, echo);
-        Machine machine4 = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class,
-                Bird.class}, proxy);
-        Machine machine5 = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Bird.class,
-                Machine.class}, proxy);
+        Machine machine4 = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class, Bird.class}, proxy);
+        Machine machine5 = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Bird.class, Machine.class}, proxy);
 
         assert machine1 != machine2;
         assert machine1 != machine3;
@@ -87,8 +85,8 @@ public class ProxyTest {
     public void handler() throws Exception {
         Machine machine = (Machine) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] {Machine.class}, echo);
 
-        assert machine instanceof Machine;
-        assert !(machine instanceof Bird);
+        assert machine instanceof Machine == true;
+        assert machine instanceof Bird == false;
         assert machine.echo("echo").equals("echo");
     }
 
@@ -98,42 +96,36 @@ public class ProxyTest {
 
         assert chicken instanceof Bird;
         assert chicken instanceof Chicken;
-        assert !(chicken instanceof Machine);
+        assert!(chicken instanceof Machine);
         assert chicken.tweet("koke-").equals("PROXY");
         assert chicken.talk("moti ummai").equals("PROXY");
     }
 
     /**
-     * @version 2013/08/19 14:05:50
+     * @version 2016/11/07 12:03:17
      */
     private static interface Machine {
 
-        /**
-         * @param message
-         */
         String echo(String message);
+
+        default String defaults() {
+            return "default";
+        }
     }
 
     /**
-     * @version 2013/08/19 14:05:50
+     * @version 2016/11/07 12:03:15
      */
     private static interface Bird {
 
-        /**
-         * @param message
-         */
         String tweet(String message);
     }
 
     /**
-     * @version 2013/09/03 13:35:06
+     * @version 2016/11/07 12:03:13
      */
     private static interface Chicken extends Bird {
 
-        /**
-         * @param message
-         * @return
-         */
         String talk(String message);
     }
 }
