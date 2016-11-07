@@ -1099,6 +1099,22 @@ class JSKiss {
 
     /**
      * <p>
+     * Execute the specified task in background {@link Thread} with the specified delay.
+     * </p>
+     *
+     * @param delay A initial delay time.
+     * @param unit A delay time unit.
+     * @param parallelExecution The <code>true</code> will execute task in parallel,
+     *            <code>false</code> will execute task in serial.
+     * @param task A task to execute.
+     */
+    public static Future<?> schedule(Runnable task, long interval, TimeUnit unit) {
+        // return schedule.scheduleAtFixedRate(task, 0, interval, unit);
+        return null;
+    }
+
+    /**
+     * <p>
      * Return a non-primitive {@link Class} of the specified {@link Class} object. <code>null</code>
      * will be return <code>null</code>.
      * </p>

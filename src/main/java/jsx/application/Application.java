@@ -11,7 +11,10 @@ package jsx.application;
 
 import static js.lang.Global.*;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -30,21 +33,36 @@ import kiss.I;
 import kiss.Interceptor;
 import kiss.Manageable;
 import kiss.Singleton;
+import kiss.model.Model;
 
 /**
  * @version 2015/08/18 10:27:23
  */
 @Manageable(lifestyle = Singleton.class)
-public abstract class Application {
+public abstract class Application<R extends ApplicationRouter> {
+
+    public R router;
 
     /** The path router. */
-    private final NativeArray<PageRoute> router = new NativeArray();
+    private final NativeArray<PageRoute> paths = new NativeArray();
 
     /**
      * Initialize application.
      */
     protected Application() {
-        root: for (Method method : getClass().getMethods()) {
+        Type[] types = Model.collectParameters(getClass(), Application.class);
+
+        if (types.length != 1) {
+            throw new IllegalArgumentException("Application must have single router interface parameter.");
+        }
+
+        Class routerInterface = (Class) types[0];
+
+        if (routerInterface.isInterface() == false) {
+            throw new IllegalArgumentException("Application must have single router interface parameter");
+        }
+
+        root: for (Method method : routerInterface.getMethods()) {
             if (method.isAnnotationPresent(Route.class)) {
                 // Return type must be Widget
                 if (!Widget.class.isAssignableFrom(method.getReturnType())) {
@@ -67,32 +85,16 @@ public abstract class Application {
                     pattern.append("/").append("([^/].+)");
                 }
 
-                router.push(new PageRoute(pattern.toString(), decoders, method));
+                paths.push(new PageRoute(pattern.toString(), decoders, method));
             }
         }
+
+        router = (R) Proxy.newProxyInstance(null, new Class[] {routerInterface}, new Router());
 
         // Activate router system.
         window.addEventListener(User.HashChange.name, new NativeFunction<UIEvent>(event -> {
             dispatch(location.hash);
         }));
-    }
-
-    /**
-     * <p>
-     * Retrieve the default widget.
-     * </p>
-     */
-    protected abstract Supplier<Widget> defaultWidget();
-
-    /**
-     * <p>
-     * Retrieve the general error widget.
-     * </p>
-     * 
-     * @return
-     */
-    protected Supplier<Widget> errorWidget() {
-        return defaultWidget();
     }
 
     /**
@@ -112,8 +114,8 @@ public abstract class Application {
             return;
         }
 
-        for (int i = 0; i < router.length(); i++) {
-            Widget widget = router.get(i).dispatch(path);
+        for (int i = 0; i < paths.length(); i++) {
+            Widget widget = paths.get(i).dispatch(path);
 
             if (widget != null) {
                 return;
@@ -153,7 +155,7 @@ public abstract class Application {
      * @return
      */
     private Widget findDefault() {
-        Supplier<Widget> supplier = defaultWidget();
+        Supplier<Widget> supplier = router.defaultWidget();
 
         if (supplier != null) {
             Widget widget = supplier.get();
@@ -225,21 +227,21 @@ public abstract class Application {
             }
 
             try {
-                return (Widget) method.invoke(Application.this, parameters);
+                return (Widget) method.invoke(router, parameters);
             } catch (Exception e) {
                 throw I.quiet(e);
             }
         }
     }
 
+    /** The cache for root widget. */
+    private final static Map<String, Object> cache = new HashMap();
+
     /**
      * @version 2015/08/18 16:48:41
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class Router extends Interceptor<Route> {
-
-        /** The cache for root widget. */
-        private final static Map<String, Object> cache = new HashMap();
+    private class Router extends Interceptor<Route> implements InvocationHandler {
 
         /**
          * {@inheritDoc}
@@ -273,6 +275,42 @@ public abstract class Application {
 
                 // render widget
                 ((Application) that).show(path, (Widget) widget);
+            }
+            return widget;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] params) throws Throwable {
+            // rebuild path
+            StringBuilder builder = new StringBuilder("#").append(method.getName());
+
+            for (Object param : params) {
+                builder.append("/").append(I.find(Encoder.class, param.getClass()).encode(param));
+            }
+
+            // update history if needed
+            String path = builder.toString();
+
+            // create widget for this path
+            Object widget;
+
+            if (method.getAnnotation(Route.class).cache()) {
+                widget = cache.computeIfAbsent(path, p -> super.invoke(params));
+            } else {
+                widget = method.invoke(proxy, params);
+            }
+
+            // validation
+            if (widget instanceof Widget) {
+                if (!location.hash.equals(path)) {
+                    history.pushState("", "", path);
+                }
+
+                // render widget
+                show(path, (Widget) widget);
             }
             return widget;
         }
