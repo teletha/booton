@@ -16,7 +16,7 @@ import jsx.ui.Widget;
 /**
  * @version 2016/11/06 11:21:43
  */
-public interface ApplicationRouter {
+public interface Router {
 
     /**
      * <p>
