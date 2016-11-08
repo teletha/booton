@@ -18,7 +18,7 @@ import booton.translator.JavascriptNativeProperty;
  * methods for changing that URL. You can also assign to this property to load another URL.
  * </p>
  * 
- * @version 2013/01/08 12:51:46
+ * @version 2016/11/08 16:08:48
  */
 public abstract class Location implements JavascriptNative {
 
