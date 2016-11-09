@@ -18,6 +18,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import js.dom.DocumentFragment;
@@ -32,19 +33,19 @@ import kiss.Variable;
 import kiss.model.Model;
 
 /**
- * @version 2016/11/08 12:58:47
+ * @version 2016/11/09 11:43:55
  */
 @Manageable(lifestyle = Singleton.class)
-public abstract class Application<Router> {
+public abstract class Application<Router extends ApplicationRouter> {
+
+    /** The cache for widget. */
+    private static final Map<Integer, Widget> cache = new HashMap();
 
     /** The application router. */
     public final Router router;
 
     /** The route info. */
     private final Map<Integer, Route> routes = new HashMap();
-
-    /** The cache for root widget. */
-    private final Map<String, Widget> cache = new HashMap();
 
     /** The error route. */
     private final Route error = params -> errorWidget().get();
@@ -122,6 +123,14 @@ public abstract class Application<Router> {
         routes.getOrDefault(key, error).dispatch(parts);
     }
 
+    private final Widget invoke(Class clazz, Object router, Method method, Object[] params) {
+        try {
+            return (Widget) MethodHandles.lookup().in(clazz).unreflectSpecial(method, clazz).bindTo(router).invokeWithArguments(params);
+        } catch (Throwable e) {
+            throw I.quiet(e);
+        }
+    }
+
     /**
      * <p>
      * Convert from URI to Widget.
@@ -132,7 +141,13 @@ public abstract class Application<Router> {
      * @param params A list of invocation context parameters.
      * @return The requested widget.
      */
-    private final Widget router(Object router, Method method, Object[] params) {
+    private final Widget router(Object router, Method method, Object[] params) throws Throwable {
+        Class<?> clazz = method.getDeclaringClass();
+
+        if (clazz == ApplicationRouter.class) {
+            return invoke(clazz, router, method, params);
+        }
+
         // rebuild path
         StringBuilder builder = new StringBuilder("#").append(method.getName());
 
@@ -147,18 +162,7 @@ public abstract class Application<Router> {
         }
 
         // create widget by path
-        Widget widget = cache.computeIfAbsent(path, p -> {
-            try {
-                Class target = method.getDeclaringClass();
-                return (Widget) MethodHandles.lookup()
-                        .in(target)
-                        .unreflectSpecial(method, target)
-                        .bindTo(router)
-                        .invokeWithArguments(params);
-            } catch (Throwable e) {
-                throw I.quiet(e);
-            }
-        });
+        Widget widget = invoke(clazz, router, method, params);
 
         // rendering widget element
         Variable.of(widget).or(defaultWidget()).map(w -> {
@@ -187,6 +191,19 @@ public abstract class Application<Router> {
 
         // View initial page by URL.
         application.dispatch();
+    }
+
+    /**
+     * <p>
+     * Caching widget by the specified keys.
+     * </p>
+     * 
+     * @param builder A widget builder.
+     * @param keys A list of keys.
+     * @return
+     */
+    static Widget cache(Supplier<Widget> builder, Object... keys) {
+        return cache.computeIfAbsent(Objects.hash(keys), hash -> builder.get());
     }
 
     /**

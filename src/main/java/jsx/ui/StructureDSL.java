@@ -530,7 +530,7 @@ public abstract class StructureDSL {
 
             for (C content : contents) {
                 localContext = content;
-                localContextModifier = (Objects.hash(content) + 117 + index) ^ 31;
+                localContextModifier = (Objects.hash(content) + 117) ^ 31;
                 process.accept(index++, content);
             }
 
