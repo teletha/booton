@@ -9,6 +9,7 @@
  */
 package js.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -28,7 +29,7 @@ import java.util.SortedSet;
 import booton.translator.JavaAPIProvider;
 
 /**
- * @version 2013/09/25 13:00:16
+ * @version 2016/11/12 13:55:50
  */
 @JavaAPIProvider(java.util.Collections.class)
 class Collections {
@@ -74,9 +75,7 @@ class Collections {
      * significantly faster under most implementations.
      * <p>
      * When elements are specified individually, this method provides a convenient way to add a few
-     * elements to an existing collection:
-     * 
-     * <pre>
+     * elements to an existing collection: <pre>
      *     Collections.addAll(flavors, "Peaches 'n Plutonium", "Rocky Racoon");
      * </pre>
      * 
@@ -159,7 +158,7 @@ class Collections {
      * Returns an enumeration that has no elements. More precisely,
      * <ul>
      * <li>{@link Enumeration#hasMoreElements hasMoreElements} always returns {@code false}.</li>
-     * <li> {@link Enumeration#nextElement nextElement} always throws {@link NoSuchElementException}.
+     * <li>{@link Enumeration#nextElement nextElement} always throws {@link NoSuchElementException}.
      * </li>
      * </ul>
      * <p>
@@ -175,8 +174,7 @@ class Collections {
     }
 
     /**
-     * Returns an iterator that has no elements. More precisely,
-     * <ul compact>
+     * Returns an iterator that has no elements. More precisely, <ul compact>
      * <li>{@link Iterator#hasNext hasNext} always returns {@code false}.
      * <li>{@link Iterator#next next} always throws {@link NoSuchElementException}.
      * <li>{@link Iterator#remove remove} always throws {@link IllegalStateException}.
@@ -193,8 +191,7 @@ class Collections {
     }
 
     /**
-     * Returns a list iterator that has no elements. More precisely,
-     * <ul compact>
+     * Returns a list iterator that has no elements. More precisely, <ul compact>
      * <li>{@link Iterator#hasNext hasNext} and {@link ListIterator#hasPrevious hasPrevious} always
      * return {@code false}.
      * <li>{@link Iterator#next next} and {@link ListIterator#previous previous} always throw
@@ -219,14 +216,11 @@ class Collections {
     /**
      * Returns the empty list (immutable). This list is serializable.
      * <p>
-     * This example illustrates the type-safe way to obtain an empty list:
-     * 
-     * <pre>
+     * This example illustrates the type-safe way to obtain an empty list: <pre>
      *     List&lt;String&gt; s = Collections.emptyList();
-     * </pre>
-     * Implementation note: Implementations of this method need not create a separate <tt>List</tt>
-     * object for each call. Using this method is likely to have comparable cost to using the
-     * like-named field. (Unlike this method, the field does not provide type safety.)
+     * </pre> Implementation note: Implementations of this method need not create a separate
+     * <tt>List</tt> object for each call. Using this method is likely to have comparable cost to
+     * using the like-named field. (Unlike this method, the field does not provide type safety.)
      * 
      * @see #EMPTY_LIST
      * @since 1.5
@@ -239,14 +233,11 @@ class Collections {
      * Returns the empty set (immutable). This set is serializable. Unlike the like-named field,
      * this method is parameterized.
      * <p>
-     * This example illustrates the type-safe way to obtain an empty set:
-     * 
-     * <pre>
+     * This example illustrates the type-safe way to obtain an empty set: <pre>
      *     Set&lt;String&gt; s = Collections.emptySet();
-     * </pre>
-     * Implementation note: Implementations of this method need not create a separate <tt>Set</tt>
-     * object for each call. Using this method is likely to have comparable cost to using the
-     * like-named field. (Unlike this method, the field does not provide type safety.)
+     * </pre> Implementation note: Implementations of this method need not create a separate
+     * <tt>Set</tt> object for each call. Using this method is likely to have comparable cost to
+     * using the like-named field. (Unlike this method, the field does not provide type safety.)
      * 
      * @see #EMPTY_SET
      * @since 1.5
@@ -258,20 +249,37 @@ class Collections {
     /**
      * Returns the empty map (immutable). This map is serializable.
      * <p>
-     * This example illustrates the type-safe way to obtain an empty set:
-     * 
-     * <pre>
+     * This example illustrates the type-safe way to obtain an empty set: <pre>
      *     Map&lt;String, Date&gt; s = Collections.emptyMap();
-     * </pre>
-     * Implementation note: Implementations of this method need not create a separate <tt>Map</tt>
-     * object for each call. Using this method is likely to have comparable cost to using the
-     * like-named field. (Unlike this method, the field does not provide type safety.)
+     * </pre> Implementation note: Implementations of this method need not create a separate
+     * <tt>Map</tt> object for each call. Using this method is likely to have comparable cost to
+     * using the like-named field. (Unlike this method, the field does not provide type safety.)
      * 
      * @see #EMPTY_MAP
      * @since 1.5
      */
     public static <K, V> Map<K, V> emptyMap() {
         return EMPTY_MAP;
+    }
+
+    /**
+     * Returns an array list containing the elements returned by the specified enumeration in the
+     * order they are returned by the enumeration. This method provides interoperability between
+     * legacy APIs that return enumerations and new APIs that require collections.
+     *
+     * @param <T> the class of the objects returned by the enumeration
+     * @param e enumeration providing elements for the returned array list
+     * @return an array list containing the elements returned by the specified enumeration.
+     * @since 1.4
+     * @see Enumeration
+     * @see ArrayList
+     */
+    public static <T> ArrayList<T> list(Enumeration<T> e) {
+        ArrayList<T> list = new ArrayList<>();
+        while (e.hasMoreElements()) {
+            list.add(e.nextElement());
+        }
+        return list;
     }
 
     /**
@@ -410,9 +418,7 @@ class Collections {
      * collection is accomplished through the returned collection.
      * <p>
      * It is imperative that the user manually synchronize on the returned collection when iterating
-     * over it:
-     * 
-     * <pre>
+     * over it: <pre>
      *  Collection c = Collections.synchronizedCollection(myCollection);
      *     ...
      *  synchronized (c) {
@@ -420,8 +426,7 @@ class Collections {
      *      while (i.hasNext())
      *         foo(i.next());
      *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
+     * </pre> Failure to follow this advice may result in non-deterministic behavior.
      * <p>
      * The returned collection does <i>not</i> pass the <tt>hashCode</tt> and <tt>equals</tt>
      * operations through to the backing collection, but relies on <tt>Object</tt>'s equals and
@@ -456,9 +461,7 @@ class Collections {
      * accomplished through the returned list.
      * <p>
      * It is imperative that the user manually synchronize on the returned list when iterating over
-     * it:
-     * 
-     * <pre>
+     * it: <pre>
      *  List list = Collections.synchronizedList(new ArrayList());
      *      ...
      *  synchronized (list) {
@@ -466,8 +469,7 @@ class Collections {
      *      while (i.hasNext())
      *          foo(i.next());
      *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
+     * </pre> Failure to follow this advice may result in non-deterministic behavior.
      * <p>
      * The returned list will be serializable if the specified list is serializable.
      * 
@@ -497,9 +499,7 @@ class Collections {
      * accomplished through the returned set.
      * <p>
      * It is imperative that the user manually synchronize on the returned set when iterating over
-     * it:
-     * 
-     * <pre>
+     * it: <pre>
      *  Set s = Collections.synchronizedSet(new HashSet());
      *      ...
      *  synchronized (s) {
@@ -507,8 +507,7 @@ class Collections {
      *      while (i.hasNext())
      *          foo(i.next());
      *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
+     * </pre> Failure to follow this advice may result in non-deterministic behavior.
      * <p>
      * The returned set will be serializable if the specified set is serializable.
      * 
@@ -538,9 +537,7 @@ class Collections {
      * sorted set is accomplished through the returned sorted set (or its views).
      * <p>
      * It is imperative that the user manually synchronize on the returned sorted set when iterating
-     * over it or any of its <tt>subSet</tt>, <tt>headSet</tt>, or <tt>tailSet</tt> views.
-     * 
-     * <pre>
+     * over it or any of its <tt>subSet</tt>, <tt>headSet</tt>, or <tt>tailSet</tt> views. <pre>
      *  SortedSet s = Collections.synchronizedSortedSet(new TreeSet());
      *      ...
      *  synchronized (s) {
@@ -548,10 +545,7 @@ class Collections {
      *      while (i.hasNext())
      *          foo(i.next());
      *  }
-     * </pre>
-     * or:
-     * 
-     * <pre>
+     * </pre> or: <pre>
      *  SortedSet s = Collections.synchronizedSortedSet(new TreeSet());
      *  SortedSet s2 = s.headSet(foo);
      *      ...
@@ -560,8 +554,7 @@ class Collections {
      *      while (i.hasNext())
      *          foo(i.next());
      *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
+     * </pre> Failure to follow this advice may result in non-deterministic behavior.
      * <p>
      * The returned sorted set will be serializable if the specified sorted set is serializable.
      * 
@@ -578,9 +571,7 @@ class Collections {
      * accomplished through the returned map.
      * <p>
      * It is imperative that the user manually synchronize on the returned map when iterating over
-     * any of its collection views:
-     * 
-     * <pre>
+     * any of its collection views: <pre>
      *  Map m = Collections.synchronizedMap(new HashMap());
      *      ...
      *  Set s = m.keySet();  // Needn't be in synchronized block
@@ -590,8 +581,7 @@ class Collections {
      *      while (i.hasNext())
      *          foo(i.next());
      *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
+     * </pre> Failure to follow this advice may result in non-deterministic behavior.
      * <p>
      * The returned map will be serializable if the specified map is serializable.
      * 
@@ -609,9 +599,7 @@ class Collections {
      * <p>
      * It is imperative that the user manually synchronize on the returned sorted map when iterating
      * over any of its collection views, or the collections views of any of its <tt>subMap</tt>,
-     * <tt>headMap</tt> or <tt>tailMap</tt> views.
-     * 
-     * <pre>
+     * <tt>headMap</tt> or <tt>tailMap</tt> views. <pre>
      *  SortedMap m = Collections.synchronizedSortedMap(new TreeMap());
      *      ...
      *  Set s = m.keySet();  // Needn't be in synchronized block
@@ -621,10 +609,7 @@ class Collections {
      *      while (i.hasNext())
      *          foo(i.next());
      *  }
-     * </pre>
-     * or:
-     * 
-     * <pre>
+     * </pre> or: <pre>
      *  SortedMap m = Collections.synchronizedSortedMap(new TreeMap());
      *  SortedMap m2 = m.subMap(foo, bar);
      *      ...
@@ -635,8 +620,7 @@ class Collections {
      *      while (i.hasNext())
      *          foo(i.next());
      *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
+     * </pre> Failure to follow this advice may result in non-deterministic behavior.
      * <p>
      * The returned sorted map will be serializable if the specified sorted map is serializable.
      * 
@@ -671,8 +655,8 @@ class Collections {
      * same input array. It is well-suited to merging two or more sorted arrays: simply concatenate
      * the arrays and sort the resulting array.
      * <p>
-     * The implementation was adapted from Tim Peters's list sort for Python (<a
-     * href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
+     * The implementation was adapted from Tim Peters's list sort for Python (
+     * <a href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
      * uses techiques from Peter McIlroy's "Optimistic Sorting and Information Theoretic
      * Complexity", in Proceedings of the Fourth Annual ACM-SIAM Symposium on Discrete Algorithms,
      * pp 467-474, January 1993.
@@ -726,8 +710,8 @@ class Collections {
      * same input array. It is well-suited to merging two or more sorted arrays: simply concatenate
      * the arrays and sort the resulting array.
      * <p>
-     * The implementation was adapted from Tim Peters's list sort for Python (<a
-     * href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
+     * The implementation was adapted from Tim Peters's list sort for Python (
+     * <a href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt"> TimSort</a>). It
      * uses techiques from Peter McIlroy's "Optimistic Sorting and Information Theoretic
      * Complexity", in Proceedings of the Fourth Annual ACM-SIAM Symposium on Discrete Algorithms,
      * pp 467-474, January 1993.
@@ -765,13 +749,9 @@ class Collections {
      * (The natural ordering is the ordering imposed by the objects' own {@code compareTo} method.)
      * This enables a simple idiom for sorting (or maintaining) collections (or arrays) of objects
      * that implement the {@code Comparable} interface in reverse-natural-order. For example,
-     * suppose {@code a} is an array of strings. Then:
-     * 
-     * <pre>
+     * suppose {@code a} is an array of strings. Then: <pre>
      *          Arrays.sort(a, Collections.reverseOrder());
-     * </pre>
-     * 
-     * sorts the array in reverse-lexicographic (alphabetical) order.
+     * </pre> sorts the array in reverse-lexicographic (alphabetical) order.
      * <p>
      * The returned comparator is serializable.
      * 
@@ -913,7 +893,7 @@ class Collections {
     /**
      * @version 2013/08/02 15:46:25
      */
-    private static class EmptyListIterator<E> extends EmptyIterator<E> implements ListIterator<E> {
+    private static class EmptyListIterator<E> extends EmptyIterator<E>implements ListIterator<E> {
 
         /** The singleton. */
         private static final EmptyListIterator EMPTY_ITERATOR = new EmptyListIterator();
@@ -1149,8 +1129,7 @@ class Collections {
     /**
      * @version 2013/08/05 9:05:23
      */
-    private static class UnmodifiableListIterator<E> extends UnmodifiableIterator<E, ListIterator<E>>
-            implements ListIterator<E> {
+    private static class UnmodifiableListIterator<E> extends UnmodifiableIterator<E, ListIterator<E>>implements ListIterator<E> {
 
         /**
          * <p>
@@ -1215,7 +1194,7 @@ class Collections {
     /**
      * @version 2013/08/04 11:41:29
      */
-    private static class UnmodifiableSet<E, S extends Set<E>> extends UnmodifiableCollection<E, S> implements Set<E> {
+    private static class UnmodifiableSet<E, S extends Set<E>> extends UnmodifiableCollection<E, S>implements Set<E> {
 
         /**
          * <p>
@@ -1248,7 +1227,7 @@ class Collections {
     /**
      * @version 2013/08/09 0:52:29
      */
-    private static class UnmodifiableSortedSet<E> extends UnmodifiableSet<E, SortedSet<E>> implements SortedSet<E> {
+    private static class UnmodifiableSortedSet<E> extends UnmodifiableSet<E, SortedSet<E>>implements SortedSet<E> {
 
         /**
          * <p>
@@ -1313,7 +1292,7 @@ class Collections {
     /**
      * @version 2013/08/04 11:34:48
      */
-    private static class UnmodifiableList<E> extends UnmodifiableCollection<E, List<E>> implements List<E> {
+    private static class UnmodifiableList<E> extends UnmodifiableCollection<E, List<E>>implements List<E> {
 
         /**
          * <p>

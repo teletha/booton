@@ -117,7 +117,12 @@ public abstract class Application<Router extends ApplicationRouter> {
      * </p>
      */
     final void dispatch() {
-        String[] parts = location.hash.substring(1).split("/");
+        String path = location.hash;
+
+        if (path.length() != 0) {
+            path = path.substring(1);
+        }
+        String[] parts = path.split("/");
         int key = hash(parts[0], parts.length - 1);
 
         routes.getOrDefault(key, error).dispatch(parts);
