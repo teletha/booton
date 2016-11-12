@@ -20,7 +20,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,6 +85,31 @@ class JSKiss {
     public static final Runnable NoOP = () -> {
         // no operation
     };
+
+    /**
+     * <p>
+     * The configuration of charcter encoding in Sinobu, default value is <em>UTF-8</em>. It is
+     * encouraged to use this encoding instead of platform default encoding when file I/O under the
+     * Sinobu environment.
+     * </p>
+     */
+    public static Charset $encoding = StandardCharsets.UTF_8;
+
+    /**
+     * <p>
+     * The configuration of parent class loader in Sinobu, default value is
+     * <code><em>I.class.getClassLoader()</em></code>.
+     * </p>
+     */
+    public static ClassLoader $loader = I.class.getClassLoader();
+
+    /**
+     * <p>
+     * The configuration of working directory in Sinobu, default value is <em>current directory</em>
+     * of JVM .
+     * </p>
+     */
+    public static Path $working = Paths.get(""); // Poplar Taneshima
 
     public static ScheduledExecutorService $scheduler = Executors.newScheduledThreadPool(1);
 
@@ -867,6 +895,28 @@ class JSKiss {
             return (Out) encoded;
         }
         return ((Decoder<Out>) find(Decoder.class, output)).decode(encoded);
+    }
+
+    /**
+     * <p>
+     * Find the class by the specified fully qualified class name.
+     * </p>
+     *
+     * @param fqcn A fully qualified class name to want.
+     * @return The specified class.
+     */
+    public static Class type(String fqcn) {
+        for (Class clazz : primitives) {
+            if (clazz.getName().equals(fqcn)) {
+                return clazz;
+            }
+        }
+
+        try {
+            return Class.forName(fqcn, false, null);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException(fqcn);
+        }
     }
 
     /**

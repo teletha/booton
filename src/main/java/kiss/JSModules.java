@@ -19,7 +19,7 @@ import booton.translator.JavaAPIProvider;
  * @version 2014/03/07 20:21:02
  */
 @JavaAPIProvider(Modules.class)
-class JSModules extends ClassVariable<Lifestyle> implements Decoder<Class>, Encoder<Class> {
+class JSModules extends ClassVariable<Lifestyle>implements Decoder<Class>, Encoder<Class> {
 
     /** The module list. */
     final List<Object> modules = new CopyOnWriteArrayList();

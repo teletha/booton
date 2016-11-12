@@ -75,4 +75,20 @@ class AccessController {
             throw I.quiet(e);
         }
     }
+
+    /**
+     * This method takes a "snapshot" of the current calling context, which includes the current
+     * Thread's inherited AccessControlContext and any limited privilege scope, and places it in an
+     * AccessControlContext object. This context may then be checked at a later point, possibly in
+     * another thread.
+     *
+     * @see AccessControlContext
+     * @return the AccessControlContext based on the current context.
+     */
+
+    public static AccessControlContext getContext() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 }
