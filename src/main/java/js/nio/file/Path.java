@@ -9,9 +9,11 @@
  */
 package js.nio.file;
 
+import booton.translator.JavaAPIProvider;
+
 /**
  * @version 2013/10/26 12:31:36
  */
-// @JavaAPIProvider(java.nio.file.Path.class)
+@JavaAPIProvider(java.nio.file.Path.class)
 class Path {
 }
