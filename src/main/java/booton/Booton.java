@@ -80,12 +80,12 @@ public class Booton {
     public void launch() {
         if (requireServer()) {
             try {
-                ServletContextHandler servletHandler = new ServletContextHandler();
-                servletHandler.addServlet(new ServletHolder(new LiveCodingServlet(config.root)), "/live/*");
-                servletHandler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
+                ServletContextHandler handler = new ServletContextHandler();
+                handler.addServlet(new ServletHolder(new LiveCodingServlet()), "/live/*");
+                handler.addServlet(new ServletHolder(new ResourceServlet(config.root)), "/*");
 
                 Server server = new Server(config.port);
-                server.setHandler(servletHandler);
+                server.setHandler(handler);
                 server.start();
             } catch (Exception e) {
                 throw I.quiet(e);

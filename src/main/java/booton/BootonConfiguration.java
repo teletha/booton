@@ -19,7 +19,7 @@ import kiss.Manageable;
 import kiss.Singleton;
 
 /**
- * @version 2015/08/06 18:28:54
+ * @version 2016/12/04 13:04:43
  */
 @Manageable(lifestyle = Singleton.class)
 public class BootonConfiguration {

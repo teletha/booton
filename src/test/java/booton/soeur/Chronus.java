@@ -22,7 +22,6 @@ import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
 import net.sourceforge.htmlunit.corejs.javascript.Function;
 import net.sourceforge.htmlunit.corejs.javascript.JavaScriptException;
-import net.sourceforge.htmlunit.corejs.javascript.Scriptable;
 import net.sourceforge.htmlunit.corejs.javascript.ScriptableObject;
 import net.sourceforge.htmlunit.corejs.javascript.annotations.JSFunction;
 import net.sourceforge.htmlunit.corejs.javascript.annotations.JSStaticFunction;
@@ -131,8 +130,8 @@ public class Chronus extends ScriptableObject {
         @Override
         public void run() {
             try {
-                function.call(Context.enter(), ScriptTester.html.getScriptObject(), (Scriptable) ScriptTester.html.getEnclosingWindow()
-                        .getScriptObject(), new Object[0]);
+                function.call(Context.enter(), ScriptTester.html.getScriptableObject(), ScriptTester.html.getEnclosingWindow()
+                        .getScriptableObject(), new Object[0]);
             } catch (JavaScriptException e) {
                 // ignore
             } finally {

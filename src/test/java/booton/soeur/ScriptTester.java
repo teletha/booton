@@ -99,7 +99,7 @@ public class ScriptTester {
             unitTest = new String(Files.readAllBytes(I.locate("src/test/resources/unitTest.js")), UTF_8);
 
             // build client
-            client = new WebClient(BrowserVersion.FIREFOX_24);
+            client = new WebClient(BrowserVersion.FIREFOX_45);
             client.getWebConsole().setLogger(new Debugger());
 
             // build dummy page
@@ -109,7 +109,7 @@ public class ScriptTester {
             engine = client.getJavaScriptEngine();
 
             // add test utility
-            ScriptableObject window = (ScriptableObject) html.getEnclosingWindow().getScriptObject();
+            ScriptableObject window = html.getEnclosingWindow().getScriptableObject();
             ScriptableObject.defineClass(window, Chronus.class);
 
             for (Class definition : JavascriptClassDefinition.class.getDeclaredClasses()) {
@@ -576,12 +576,12 @@ public class ScriptTester {
                 // ========================
                 // SHORT
                 // ========================
-                assert ((Short) java).doubleValue() == ((Double) js).doubleValue();
+                assert((Short) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Byte.class) {
                 // ========================
                 // BYTE
                 // ========================
-                assert ((Byte) java).doubleValue() == ((Double) js).doubleValue();
+                assert((Byte) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Boolean.class) {
                 // ========================
                 // BOOLEAN
@@ -607,7 +607,7 @@ public class ScriptTester {
                     js = NativeObject.callMethod((NativeObject) js, Javascript
                             .computeMethodName(Object.class, "toString", "()Ljava/lang/String;"), new Object[] {});
                 }
-                assert ((Character) java).toString().equals(js.toString());
+                assert((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {
                 // ========================
                 // THROWABLE
@@ -715,6 +715,46 @@ public class ScriptTester {
      * @version 2013/08/03 20:44:05
      */
     private static class Debugger implements Logger {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isTraceEnabled() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isDebugEnabled() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isInfoEnabled() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isWarnEnabled() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isErrorEnabled() {
+            return true;
+        }
 
         /**
          * {@inheritDoc}

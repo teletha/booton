@@ -10,14 +10,17 @@
 public class Project extends bee.api.Project {
 
     {
+        String jettyVersion = "9.2.19.v20160908";
+
         product("npc", "Booton", "0.1");
         producer("Nameless Production Committee");
 
         require("npc", "sinobu", "1.0");
-        require("org.eclipse.jetty", "jetty-server", "8.1.15.v20140411");
-        require("org.eclipse.jetty", "jetty-websocket", "8.1.15.v20140411");
-        require("org.eclipse.jetty", "jetty-servlet", "8.1.15.v20140411");
+        require("org.eclipse.jetty.websocket", "websocket-server", jettyVersion);
+        require("org.eclipse.jetty", "jetty-servlet", jettyVersion);
+        require("org.eclipse.jetty", "jetty-util", jettyVersion);
+        require("org.eclipse.jetty", "jetty-http", jettyVersion);
         require("npc", "antibug", "0.3").atTest();
-        require("net.sourceforge.htmlunit", "htmlunit", "2.15").atTest();
+        require("net.sourceforge.htmlunit", "htmlunit", "2.23").atTest();
     }
 }

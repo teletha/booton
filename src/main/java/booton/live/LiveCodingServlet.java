@@ -18,76 +18,64 @@ import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 
-import javax.servlet.http.HttpServletRequest;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.UpgradeRequest;
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
-import org.eclipse.jetty.websocket.WebSocketServlet;
-
+import booton.BootonConfiguration;
 import kiss.Disposable;
 import kiss.Events;
 import kiss.I;
 import kiss.XML;
 
 /**
- * @version 2013/08/08 11:48:43
+ * @version 2016/12/04 13:07:59
  */
 @SuppressWarnings("serial")
 public class LiveCodingServlet extends WebSocketServlet {
-
-    /** The target. */
-    private final Path root;
-
-    /**
-     * @param project
-     */
-    public LiveCodingServlet(Path root) {
-        this.root = root.toAbsolutePath();
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
-        return new LiveCoder(request, root.resolve(request.getPathInfo().substring(1)));
+    public void configure(WebSocketServletFactory factory) {
+        factory.getPolicy().setIdleTimeout(Integer.MAX_VALUE);
+        factory.register(LiveCoder.class);
     }
 
     /**
-     * @version 2014/03/07 15:48:20
+     * @version 2016/12/04 13:11:02
      */
-    private class LiveCoder implements OnTextMessage {
+    public static class LiveCoder extends WebSocketAdapter {
+
+        /** The booton setting. */
+        private BootonConfiguration config = I.make(BootonConfiguration.class);
 
         /** The html file. */
-        private final Path html;
+        private Path html;
 
         /** The user agnet. */
-        private final String agent;
+        private String agent;
 
         /** The actual connection. */
-        private Connection connection;
+        private Session session;
 
         /** For source observers. */
         private Disposable sources;
 
         /**
-         * @param request
-         * @param html
-         */
-        private LiveCoder(HttpServletRequest request, Path html) {
-            this.html = html;
-            this.agent = analyzeAgent(request.getHeader("User-Agent"));
-        }
-
-        /**
          * {@inheritDoc}
          */
         @Override
-        public void onOpen(Connection connection) {
+        public void onWebSocketConnect(Session session) {
+            UpgradeRequest request = session.getUpgradeRequest();
+            this.agent = analyzeAgent(request.getHeader("User-Agent"));
+            this.html = config.root.resolve("application.html");
             System.out.println("CONNECT [" + agent + "]");
 
-            this.connection = connection;
-            this.connection.setMaxIdleTime(Integer.MAX_VALUE);
+            this.session = session;
 
             // observe html
             Events<WatchEvent<Path>> observable = I.observe(html);
@@ -125,10 +113,10 @@ public class LiveCodingServlet extends WebSocketServlet {
          * {@inheritDoc}
          */
         @Override
-        public void onClose(int closeCode, String message) {
+        public void onWebSocketClose(int statusCode, String reason) {
             System.out.println("DISCONNECT [" + agent + "]");
 
-            connection = null;
+            session = null;
             sources.dispose();
             sources = null;
         }
@@ -137,10 +125,10 @@ public class LiveCodingServlet extends WebSocketServlet {
          * {@inheritDoc}
          */
         @Override
-        public void onMessage(String data) {
+        public void onWebSocketText(String message) {
             Source application = create(html.resolveSibling("application.js"));
             Source live = create(html.resolveSibling("live.js"));
-            ClientStackTrace.decode(data, application, live).printStackTrace(System.err);
+            ClientStackTrace.decode(message, application, live).printStackTrace(System.err);
         }
 
         /**
@@ -171,7 +159,7 @@ public class LiveCodingServlet extends WebSocketServlet {
          */
         private void send(String message) {
             try {
-                connection.sendMessage(message);
+                session.getRemote().sendString(message);
             } catch (IOException e) {
                 throw I.quiet(e);
             }
@@ -192,7 +180,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             if (index != -1) {
                 relativePath = relativePath.substring(0, index);
             }
-            return I.observe(root.resolve(relativePath));
+            return I.observe(config.root.resolve(relativePath));
         }
 
         /**

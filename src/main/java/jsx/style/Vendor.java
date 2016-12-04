@@ -46,7 +46,7 @@ public enum Vendor {
             Current = Mozilla;
             isMozilla = true;
             isWebkit = false;
-        } else if (CSS.supports("-moz-appearance", "none")) {
+        } else if (CSS.supports("-webkit-appearance", "none")) {
             Current = Webkit;
             isMozilla = false;
             isWebkit = true;
