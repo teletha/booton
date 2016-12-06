@@ -30,3 +30,10 @@ Element.prototype.matches = function(selector) {
 };
 
 window.performance = new Performance();
+
+/**
+ * Polyfill for CSS.
+ */
+window.CSS.supports = function(name, value) {
+  return true;
+}
