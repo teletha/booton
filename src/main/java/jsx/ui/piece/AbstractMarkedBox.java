@@ -89,7 +89,7 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
     public W label(String label) {
         return (W) this;
     }
-    
+
     /**
      * <p>
      * Configure label.

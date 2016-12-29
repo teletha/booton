@@ -73,7 +73,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
     protected final Styles $;
 
     /** The view updater. */
-    protected final Consumer updateView = v -> {
+    protected final Consumer<Object> updateView = v -> {
         if (root != null) root.update();
     };
 

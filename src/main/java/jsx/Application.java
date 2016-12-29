@@ -170,7 +170,7 @@ public abstract class Application<Router extends ApplicationRouter> {
         Widget widget = invoke(clazz, router, method, params);
 
         // rendering widget element
-        Variable.of(widget).or(defaultWidget()).map(w -> {
+        Variable.of(widget).or(defaultWidget()).to(w -> {
             // create element cradle
             DocumentFragment cradle = document.createDocumentFragment();
 

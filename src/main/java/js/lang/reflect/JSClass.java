@@ -231,7 +231,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         if (publicClasses == null) {
             publicClasses = new ArrayList();
 
-            for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
+            for (Class type : collectTypes((Class) (Object) this, new HashSet<>())) {
                 for (Class sub : type.getDeclaredClasses()) {
                     if (Modifier.isPublic(sub.getModifiers())) {
                         publicClasses.add(sub);
@@ -502,7 +502,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         if (publicMethods == null) {
             publicMethods = new HashMap();
 
-            for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
+            for (Class type : collectTypes((Class) (Object) this, new HashSet<>())) {
                 for (Method method : type.getDeclaredMethods()) {
                     Integer hash = hash(method.getName(), method.getParameterTypes());
 
@@ -655,7 +655,7 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
         if (publicFields == null) {
             publicFields = new HashMap();
 
-            for (Class type : collectTypes((Class) (Object) this, new HashSet())) {
+            for (Class type : collectTypes((Class) (Object) this, new HashSet<>())) {
                 for (Field field : type.getDeclaredFields()) {
                     if (Modifier.isPublic(field.getModifiers()) && !publicFields.containsKey(field.getName())) {
                         publicFields.put(field.getName(), field);
@@ -1520,13 +1520,12 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      * If {@code name} denotes an array class, the component type of the array class is loaded but
      * not initialized.
      * <p>
-     * For example, in an instance method the expression:
-     * <blockquote> {@code Class.forName("Foo")} </blockquote> is equivalent to:
-     * <blockquote> {@code Class.forName("Foo", true, this.getClass().getClassLoader())}
-     * </blockquote> Note that this method throws errors related to loading, linking or initializing
-     * as specified in Sections 12.2, 12.3 and 12.4 of <em>The
-     * Java Language Specification</em>. Note that this method does not check whether the requested
-     * class is accessible to its caller.
+     * For example, in an instance method the expression: <blockquote> {@code Class.forName("Foo")}
+     * </blockquote> is equivalent to: <blockquote>
+     * {@code Class.forName("Foo", true, this.getClass().getClassLoader())} </blockquote> Note that
+     * this method throws errors related to loading, linking or initializing as specified in
+     * Sections 12.2, 12.3 and 12.4 of <em>The Java Language Specification</em>. Note that this
+     * method does not check whether the requested class is accessible to its caller.
      * <p>
      * If the {@code loader} is {@code null}, and a security manager is present, and the caller's
      * class loader is not null, then this method calls the security manager's

@@ -270,7 +270,7 @@ public class UI {
          * @return
          */
         default <W extends Widget> ModalCloser<O, W> show(W contents) {
-            return show(o -> contents);
+            return show((Function) o -> contents);
         }
 
         /**
