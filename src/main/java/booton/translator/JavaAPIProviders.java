@@ -16,8 +16,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.objectweb.asm.Type;
+
 import booton.JDKEmulator;
-import jdk.internal.org.objectweb.asm.Type;
 import kiss.ClassListener;
 import kiss.I;
 import kiss.Manageable;

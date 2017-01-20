@@ -10,14 +10,15 @@
 package booton.translator;
 
 import static booton.translator.Javascript.*;
-import static jdk.internal.org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+
 import booton.translator.Node.Switch;
-import jdk.internal.org.objectweb.asm.ClassVisitor;
-import jdk.internal.org.objectweb.asm.FieldVisitor;
-import jdk.internal.org.objectweb.asm.MethodVisitor;
 
 /**
  * @version 2013/11/24 22:31:54

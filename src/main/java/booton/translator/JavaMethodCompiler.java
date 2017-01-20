@@ -12,8 +12,8 @@ package booton.translator;
 import static booton.translator.Javascript.*;
 import static booton.translator.Node.*;
 import static booton.translator.OperandCondition.*;
-import static jdk.internal.org.objectweb.asm.Opcodes.*;
-import static jdk.internal.org.objectweb.asm.Type.*;
+import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Type.*;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -21,7 +21,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,17 +29,19 @@ import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
+
 import booton.Obfuscator;
 import booton.translator.Node.Switch;
 import booton.translator.Node.TryCatchFinallyBlocks;
-import jdk.internal.org.objectweb.asm.AnnotationVisitor;
-import jdk.internal.org.objectweb.asm.Attribute;
-import jdk.internal.org.objectweb.asm.ClassReader;
-import jdk.internal.org.objectweb.asm.Handle;
-import jdk.internal.org.objectweb.asm.Label;
-import jdk.internal.org.objectweb.asm.MethodVisitor;
-import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeObject;
+import js.util.HashMap;
 import jsx.ui.StructureDSL;
 import kiss.I;
 

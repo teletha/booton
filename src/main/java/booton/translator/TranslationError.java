@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import jdk.internal.org.objectweb.asm.Type;
+import org.objectweb.asm.Type;
 
 /**
  * @version 2013/04/14 14:47:13

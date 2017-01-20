@@ -32,12 +32,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Supplier;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Type;
+
 import booton.BootonConfiguration;
 import booton.BootonLog;
 import booton.Necessary;
 import booton.Unnecessary;
-import jdk.internal.org.objectweb.asm.ClassReader;
-import jdk.internal.org.objectweb.asm.Type;
 import js.dom.InputElement;
 import js.lang.Global;
 import js.lang.NativeString;

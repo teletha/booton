@@ -23,8 +23,9 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
+import org.objectweb.asm.AnnotationVisitor;
+
 import booton.translator.Node.TryCatchFinally;
-import jdk.internal.org.objectweb.asm.AnnotationVisitor;
 
 /**
  * @version 2014/06/07 15:00:34
