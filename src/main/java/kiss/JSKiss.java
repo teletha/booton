@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -839,6 +841,26 @@ class JSKiss {
      */
     public static <V> Predicate<V> reject() {
         return e -> false;
+    }
+
+    /**
+     * <p>
+     * Create {@link Set} with the specified items.
+     * </p>
+     * 
+     * @param items A list of itmes.
+     * @return The new created {@link Set}.
+     */
+    public static <V> Set<V> set(V... items) {
+        Set<V> set = new HashSet();
+
+        if (items != null) {
+            for (V item : items) {
+                set.add(item);
+            }
+        }
+
+        return set;
     }
 
     /**
