@@ -11,9 +11,6 @@ package js.lang;
 
 import java.util.Random;
 
-import sun.misc.DoubleConsts;
-import sun.misc.FloatConsts;
-
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -1113,8 +1110,8 @@ class JSMath {
      * {@code -1.0}. Note that once the exact result of <i>e</i><sup>{@code x}</sup>&nbsp;-&nbsp;1
      * is within 1/2 ulp of the limit value -1, {@code -1.0} should be returned.
      *
-     * @param x the exponent to raise <i>e</i> to in the computation of <i>e</i><sup>
-     *            {@code x} </sup>&nbsp;-1.
+     * @param x the exponent to raise <i>e</i> to in the computation of <i>e</i><sup> {@code x}
+     *            </sup>&nbsp;-1.
      * @return the value <i>e</i><sup>{@code x}</sup>&nbsp;-&nbsp;1.
      * @since 1.5
      */
@@ -1158,8 +1155,8 @@ class JSMath {
      * @since 1.6
      */
     public static double copySign(double magnitude, double sign) {
-        return Double.longBitsToDouble((Double.doubleToRawLongBits(sign) & (DoubleConsts.SIGN_BIT_MASK)) | (Double
-                .doubleToRawLongBits(magnitude) & (DoubleConsts.EXP_BIT_MASK | DoubleConsts.SIGNIF_BIT_MASK)));
+        return Double.longBitsToDouble((Double.doubleToRawLongBits(sign) & (0x8000000000000000L)) | (Double
+                .doubleToRawLongBits(magnitude) & (0x7FF0000000000000L | 0x000FFFFFFFFFFFFFL)));
     }
 
     /**
@@ -1178,7 +1175,7 @@ class JSMath {
          * Bitwise convert f to integer, mask out exponent bits, shift to the right and then
          * subtract out float's bias adjust to get true exponent value
          */
-        return ((Float.floatToRawIntBits(f) & FloatConsts.EXP_BIT_MASK) >> (FloatConsts.SIGNIFICAND_WIDTH - 1)) - FloatConsts.EXP_BIAS;
+        return ((Float.floatToRawIntBits(f) & 0x7F800000) >> 23) - 127;
     }
 
     /**
@@ -1197,8 +1194,7 @@ class JSMath {
          * Bitwise convert d to long, mask out exponent bits, shift to the right and then subtract
          * out double's bias adjust to get true exponent value.
          */
-        return (int) (((Double
-                .doubleToRawLongBits(d) & DoubleConsts.EXP_BIT_MASK) >> (DoubleConsts.SIGNIFICAND_WIDTH - 1)) - DoubleConsts.EXP_BIAS);
+        return (int) (((Double.doubleToRawLongBits(d) & 0x7FF0000000000000L) >> (53 - 1)) - 1023);
     }
 
     static double twoToTheDoubleScaleUp = powerOfTwoD(512);
@@ -1255,7 +1251,7 @@ class JSMath {
         // nonzero value by it would be guaranteed to over or
         // underflow; due to rounding, scaling down takes takes an
         // additional power of two which is reflected here
-        final int MAX_SCALE = DoubleConsts.MAX_EXPONENT + -DoubleConsts.MIN_EXPONENT + DoubleConsts.SIGNIFICAND_WIDTH + 1;
+        final int MAX_SCALE = 1023 + 1022 + 53 + 1;
         int exp_adjust = 0;
         int scale_increment = 0;
         double exp_delta = Double.NaN;
@@ -1315,7 +1311,7 @@ class JSMath {
         // nonzero value by it would be guaranteed to over or
         // underflow; due to rounding, scaling down takes takes an
         // additional power of two which is reflected here
-        final int MAX_SCALE = FloatConsts.MAX_EXPONENT + -FloatConsts.MIN_EXPONENT + FloatConsts.SIGNIFICAND_WIDTH + 1;
+        final int MAX_SCALE = 127 + 126 + 24 + 1;
 
         // Make sure scaling factor is in a reasonable range
         scaleFactor = Math.max(Math.min(scaleFactor, MAX_SCALE), -MAX_SCALE);
@@ -1334,9 +1330,9 @@ class JSMath {
      * Returns a floating-point power of two in the normal range.
      */
     static double powerOfTwoD(int n) {
-        long value = (long) n + (long) DoubleConsts.EXP_BIAS;
-        value = value << (DoubleConsts.SIGNIFICAND_WIDTH - 1);
-        value = value & DoubleConsts.EXP_BIT_MASK;
+        long value = n + (long) 1023;
+        value = value << (53 - 1);
+        value = value & 0x7FF0000000000000L;
         return Double.longBitsToDouble(value);
     }
 }

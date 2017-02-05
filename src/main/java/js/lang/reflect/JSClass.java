@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import sun.reflect.CallerSensitive;
-
 import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
@@ -266,7 +264,6 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      *             </ul>
      * @since JDK1.1
      */
-    @CallerSensitive
     public Class<?>[] getDeclaredClasses() throws SecurityException {
         if (privateClasses == null) {
             privateClasses = new Signature(metadata.get(4, ""), this).types;

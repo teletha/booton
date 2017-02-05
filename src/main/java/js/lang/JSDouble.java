@@ -9,9 +9,8 @@
  */
 package js.lang;
 
-import sun.misc.DoubleConsts;
-
 import booton.translator.JavaAPIProvider;
+import jdk.internal.math.DoubleConsts;
 
 /**
  * <p>
@@ -54,9 +53,9 @@ class JSDouble extends JSNumber {
      * Returns a hash code for this {@code Double} object. The result is the exclusive OR of the two
      * halves of the {@code long} integer bit representation, exactly as produced by the method
      * {@link #doubleToLongBits(double)}, of the primitive {@code double} value represented by this
-     * {@code Double} object. That is, the hash code is the value of the expression:
-     * <blockquote> {@code (int)(v^(v>>>32))} </blockquote> where {@code v} is defined by:
-     * <blockquote> {@code long v = Double.doubleToLongBits(this.doubleValue());} </blockquote>
+     * {@code Double} object. That is, the hash code is the value of the expression: <blockquote>
+     * {@code (int)(v^(v>>>32))} </blockquote> where {@code v} is defined by: <blockquote>
+     * {@code long v = Double.doubleToLongBits(this.doubleValue());} </blockquote>
      * 
      * @return a {@code hash code} value for this object.
      */
@@ -86,7 +85,7 @@ class JSDouble extends JSNumber {
      * @since 1.8
      */
     public static boolean isFinite(double d) {
-        return Math.abs(d) <= DoubleConsts.MAX_VALUE;
+        return Math.abs(d) <= Double.MAX_VALUE;
     }
 
     /**
@@ -440,7 +439,7 @@ class JSDouble extends JSNumber {
             if (d == 0.0) {
                 answer.append("0.0p0");
             } else {
-                boolean subnormal = (d < DoubleConsts.MIN_NORMAL);
+                boolean subnormal = (d < 2.2250738585072014E-308);
 
                 // Isolate significand bits and OR in a high-order bit
                 // so that the string representation has a known
@@ -464,7 +463,7 @@ class JSDouble extends JSNumber {
                 // value for double; otherwise, extract and report d's
                 // exponent (the representation of a subnormal uses
                 // E_min -1).
-                answer.append(subnormal ? DoubleConsts.MIN_EXPONENT : Math.getExponent(d));
+                answer.append(subnormal ? -1022 : Math.getExponent(d));
             }
             return answer.toString();
         }
@@ -567,17 +566,17 @@ class JSDouble extends JSNumber {
      * lexical structure sections of <cite>The Java&trade; Language Specification</cite>, except
      * that underscores are not accepted between digits. If {@code s} does not have the form of a
      * <i>FloatValue</i>, then a {@code NumberFormatException} is thrown. Otherwise, {@code s} is
-     * regarded as representing an exact decimal value in the usual
-     * "computerized scientific notation" or as an exact hexadecimal value; this exact numerical
-     * value is then conceptually converted to an "infinitely precise" binary value that is then
-     * rounded to type {@code double} by the usual round-to-nearest rule of IEEE 754 floating-point
-     * arithmetic, which includes preserving the sign of a zero value. Note that the
-     * round-to-nearest rule also implies overflow and underflow behaviour; if the exact value of
-     * {@code s} is large enough in magnitude (greater than or equal to ({@link #MAX_VALUE} +
-     * {@link Math#ulp(double) ulp(MAX_VALUE)}/2), rounding to {@code double} will result in an
-     * infinity and if the exact value of {@code s} is small enough in magnitude (less than or equal
-     * to {@link #MIN_VALUE}/2), rounding to float will result in a zero. Finally, after rounding a
-     * {@code Double} object representing this {@code double} value is returned.
+     * regarded as representing an exact decimal value in the usual "computerized scientific
+     * notation" or as an exact hexadecimal value; this exact numerical value is then conceptually
+     * converted to an "infinitely precise" binary value that is then rounded to type {@code double}
+     * by the usual round-to-nearest rule of IEEE 754 floating-point arithmetic, which includes
+     * preserving the sign of a zero value. Note that the round-to-nearest rule also implies
+     * overflow and underflow behaviour; if the exact value of {@code s} is large enough in
+     * magnitude (greater than or equal to ({@link #MAX_VALUE} + {@link Math#ulp(double)
+     * ulp(MAX_VALUE)}/2), rounding to {@code double} will result in an infinity and if the exact
+     * value of {@code s} is small enough in magnitude (less than or equal to {@link #MIN_VALUE}/2),
+     * rounding to float will result in a zero. Finally, after rounding a {@code Double} object
+     * representing this {@code double} value is returned.
      * <p>
      * To interpret localized string representations of a floating-point value, use subclasses of
      * {@link java.text.NumberFormat}.

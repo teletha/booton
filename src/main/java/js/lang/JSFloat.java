@@ -9,8 +9,6 @@
  */
 package js.lang;
 
-import sun.misc.FloatConsts;
-
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -110,7 +108,7 @@ class JSFloat extends JSNumber {
         int result = floatToRawIntBits(value);
         // Check for NaN based on values of bit fields, maximum
         // exponent and nonzero significand.
-        if (((result & FloatConsts.EXP_BIT_MASK) == FloatConsts.EXP_BIT_MASK) && (result & FloatConsts.SIGNIF_BIT_MASK) != 0) {
+        if (((result & 0x7F800000) == 0x7F800000) && (result & 0x007FFFFF) != 0) {
             result = 0x7fc00000;
         }
         return result;
@@ -159,17 +157,14 @@ class JSFloat extends JSNumber {
      * the {@code Float.floatToRawIntBits} method.
      * <p>
      * In all other cases, let <i>s</i>, <i>e</i>, and <i>m</i> be three values that can be computed
-     * from the argument: <blockquote>
-     * 
-     * <pre>{@code
+     * from the argument: <blockquote> <pre>{@code
      * int s = ((bits >> 31) == 0) ? 1 : -1;
      * int e = ((bits >> 23) & 0xff);
      * int m = (e == 0) ?
      *                 (bits & 0x7fffff) << 1 :
      *                 (bits & 0x7fffff) | 0x800000;
-     * }</pre>
-     * </blockquote> Then the floating-point result equals the value of the mathematical expression
-     * <i>s</i>&middot;<i>m</i>&middot;2<sup><i>e</i>-150</sup>.
+     * }</pre> </blockquote> Then the floating-point result equals the value of the mathematical
+     * expression <i>s</i>&middot;<i>m</i>&middot;2<sup><i>e</i>-150</sup>.
      * <p>
      * Note that this method may not be able to return a {@code float} NaN with exactly same bit
      * pattern as the {@code int} argument. IEEE 754 distinguishes between two kinds of NaNs, quiet
@@ -310,17 +305,17 @@ class JSFloat extends JSNumber {
      * lexical structure sections of <cite>The Java&trade; Language Specification</cite>, except
      * that underscores are not accepted between digits. If {@code s} does not have the form of a
      * <i>FloatValue</i>, then a {@code NumberFormatException} is thrown. Otherwise, {@code s} is
-     * regarded as representing an exact decimal value in the usual
-     * "computerized scientific notation" or as an exact hexadecimal value; this exact numerical
-     * value is then conceptually converted to an "infinitely precise" binary value that is then
-     * rounded to type {@code float} by the usual round-to-nearest rule of IEEE 754 floating-point
-     * arithmetic, which includes preserving the sign of a zero value. Note that the
-     * round-to-nearest rule also implies overflow and underflow behaviour; if the exact value of
-     * {@code s} is large enough in magnitude (greater than or equal to ({@link #MAX_VALUE} +
-     * {@link Math#ulp(float) ulp(MAX_VALUE)}/2), rounding to {@code float} will result in an
-     * infinity and if the exact value of {@code s} is small enough in magnitude (less than or equal
-     * to {@link #MIN_VALUE}/2), rounding to float will result in a zero. Finally, after rounding a
-     * {@code Float} object representing this {@code float} value is returned.
+     * regarded as representing an exact decimal value in the usual "computerized scientific
+     * notation" or as an exact hexadecimal value; this exact numerical value is then conceptually
+     * converted to an "infinitely precise" binary value that is then rounded to type {@code float}
+     * by the usual round-to-nearest rule of IEEE 754 floating-point arithmetic, which includes
+     * preserving the sign of a zero value. Note that the round-to-nearest rule also implies
+     * overflow and underflow behaviour; if the exact value of {@code s} is large enough in
+     * magnitude (greater than or equal to ({@link #MAX_VALUE} + {@link Math#ulp(float)
+     * ulp(MAX_VALUE)}/2), rounding to {@code float} will result in an infinity and if the exact
+     * value of {@code s} is small enough in magnitude (less than or equal to {@link #MIN_VALUE}/2),
+     * rounding to float will result in a zero. Finally, after rounding a {@code Float} object
+     * representing this {@code float} value is returned.
      * <p>
      * To interpret localized string representations of a floating-point value, use subclasses of
      * {@link java.text.NumberFormat}.
