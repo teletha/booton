@@ -10,7 +10,6 @@
 package js.lang;
 
 import booton.translator.JavaAPIProvider;
-import jdk.internal.math.DoubleConsts;
 
 /**
  * <p>
@@ -262,7 +261,7 @@ class JSDouble extends JSNumber {
     public static long doubleToLongBits(double value) {
         long result = doubleToRawLongBits(value);
 
-        if (((result & DoubleConsts.EXP_BIT_MASK) == DoubleConsts.EXP_BIT_MASK) && (result & DoubleConsts.SIGNIF_BIT_MASK) != 0L) {
+        if (((result & 0x7FF0000000000000L) == 0x7FF0000000000000L) && (result & 0x000FFFFFFFFFFFFFL) != 0L) {
             result = 0x7ff8000000000000L;
         }
         return result;
@@ -444,7 +443,7 @@ class JSDouble extends JSNumber {
                 // Isolate significand bits and OR in a high-order bit
                 // so that the string representation has a known
                 // length.
-                long signifBits = (Double.doubleToLongBits(d) & DoubleConsts.SIGNIF_BIT_MASK) | 0x1000000000000000L;
+                long signifBits = (Double.doubleToLongBits(d) & 0x000FFFFFFFFFFFFFL) | 0x1000000000000000L;
 
                 // Subnormal values have a 0 implicit bit; normal
                 // values have a 1 implicit bit.
