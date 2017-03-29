@@ -75,7 +75,7 @@ class AbstractMarkedBox<W extends AbstractMarkedBox<W, V>, V> extends LowLevelWi
         this.id = "Mark" + hashCode();
         this.isMarked = isMarked;
 
-        when(User.Change).at($.Root).sideEffect(updateView).to(changeListener::accept);
+        when(User.Change).at($.Root).effect(updateView).to(changeListener::accept);
     }
 
     /**

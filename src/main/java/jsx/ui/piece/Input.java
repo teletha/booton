@@ -28,8 +28,8 @@ import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
-import kiss.Events;
 import kiss.I;
+import kiss.Signal;
 
 /**
  * @version 2016/09/15 8:42:32
@@ -40,10 +40,10 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
     public final StringProperty value;
 
     /** The valid property. */
-    public final Events<Boolean> valid;
+    public final Signal<Boolean> valid;
 
     /** The invalid property. */
-    public final Events<Boolean> invalid;
+    public final Signal<Boolean> invalid;
 
     /** The managed validation. */
     private List<Validation> validations;
@@ -66,7 +66,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
                 .debounce(100, MILLISECONDS)
                 .map(UIEvent::value)
                 .diff()
-                .sideEffect(updateView)
+                .effect(updateView)
                 .to(value::set);
 
         disableIf(invalid);

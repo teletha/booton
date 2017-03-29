@@ -647,12 +647,12 @@ class JSKiss {
      * @param observable A target to observe.
      * @return A observable event stream.
      */
-    public static <E extends javafx.beans.Observable> Events<E> observe(E observable) {
+    public static <E extends javafx.beans.Observable> Signal<E> observe(E observable) {
         if (observable == null) {
-            return Events.NEVER;
+            return Signal.NEVER;
         }
 
-        return new Events<>(observer -> {
+        return new Signal<>((observer, disposer) -> {
             // create actual listener
             InvalidationListener listener = value -> {
                 observer.accept((E) value);
@@ -679,12 +679,12 @@ class JSKiss {
      * @param observable A target to observe.
      * @return A observable event stream.
      */
-    public static <E> Events<E> observe(ObservableValue<E> observable) {
+    public static <E> Signal<E> observe(ObservableValue<E> observable) {
         if (observable == null) {
-            return Events.NEVER;
+            return Signal.NEVER;
         }
 
-        return new Events<>(observer -> {
+        return new Signal<>((observer, disposer) -> {
             // create actual listener
             ChangeListener<E> listener = (o, oldValue, newValue) -> {
                 observer.accept(newValue);

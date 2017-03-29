@@ -51,7 +51,7 @@ public class Select<M> extends Widget<Styles> {
         this.values = values;
         this.selection = selection;
 
-        when(User.Change).at($.Select).sideEffect(updateView).map(UIEvent::value).map(Integer::valueOf).map(values::get).to(selection::set);
+        when(User.Change).at($.Select).effect(updateView).map(UIEvent::value).map(Integer::valueOf).map(values::get).to(selection::set);
     }
 
     /**

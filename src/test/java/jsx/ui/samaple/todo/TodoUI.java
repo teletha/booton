@@ -42,7 +42,7 @@ import kiss.I;
 public class TodoUI extends Widget<Styles> {
 
     /** The localization. */
-    final Text text = I.i18n(Text.class);
+    final Text text = I.make(Text.class);
 
     /** Reassign to meaningful name. */
     final TodoTasks todos;

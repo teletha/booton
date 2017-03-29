@@ -17,8 +17,8 @@ import js.dom.UIEvent;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import jsx.ui.User;
-import kiss.Events;
 import kiss.Observer;
+import kiss.Signal;
 
 /**
  * @version 2016/04/06 16:10:48
@@ -78,7 +78,7 @@ public abstract class Interactive {
 
         /**
          * <p>
-         * Setup {@link Events} context.
+         * Setup {@link Signal} context.
          * </p>
          * 
          * @param actions A list of event types.
@@ -92,11 +92,11 @@ public abstract class Interactive {
          * {@inheritDoc}
          */
         @Override
-        public <T> Events<T> at(Location locatable, Class<T> type) {
+        public <T> Signal<T> at(Location locatable, Class<T> type) {
             this.name = locatable.name();
             this.useUIEvent = type == UIEvent.class || type == Object.class;
 
-            return new Events<T>(observer -> {
+            return new Signal<T>((observer, disposer) -> {
                 if (observers == null) {
                     observers = new CopyOnWriteArrayList();
                 }

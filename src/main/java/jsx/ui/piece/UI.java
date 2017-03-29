@@ -28,9 +28,9 @@ import js.dom.Element;
 import jsx.style.Style;
 import jsx.style.StyleDSL;
 import jsx.ui.Widget;
-import kiss.Events;
 import kiss.I;
 import kiss.Observer;
+import kiss.Signal;
 import kiss.Variable;
 import kiss.Ⅲ;
 
@@ -223,13 +223,13 @@ public class UI {
 
         /**
          * <p>
-         * Alias method for {@link #openWhen(Events)}.
+         * Alias method for {@link #openWhen(Signal)}.
          * </p>
          * 
          * @param opener A open timing for the modal contents.
          * @return A contents builder.
          */
-        default <O> ModalBuilder<O> open(Events<O> opener) {
+        default <O> ModalBuilder<O> open(Signal<O> opener) {
             return openWhen(opener);
         }
 
@@ -241,7 +241,7 @@ public class UI {
          * @param opener A open timing for the modal contents.
          * @return A contents builder.s
          */
-        <O> ModalBuilder<O> openWhen(Events<O> opener);
+        <O> ModalBuilder<O> openWhen(Signal<O> opener);
     }
 
     /**
@@ -297,7 +297,7 @@ public class UI {
          * @param closer A close timing for the modal contents.
          * @return A user action.
          */
-        default <C> Events<Ⅲ<O, W, C>> close(Events<C> closer) {
+        default <C> Signal<Ⅲ<O, W, C>> close(Signal<C> closer) {
             return closeWhen(closer);
         }
 
@@ -309,7 +309,7 @@ public class UI {
          * @param closer A close timing for the modal contents.
          * @return A user action.
          */
-        default <C> Events<Ⅲ<O, W, C>> closeWhen(Events<C> closer) {
+        default <C> Signal<Ⅲ<O, W, C>> closeWhen(Signal<C> closer) {
             return closeWhen(w -> closer);
         }
 
@@ -321,7 +321,7 @@ public class UI {
          * @param closer A close timing for the modal contents.
          * @return A user action.
          */
-        <C> Events<Ⅲ<O, W, C>> closeWhen(Function<W, Events<C>> closer);
+        <C> Signal<Ⅲ<O, W, C>> closeWhen(Function<W, Signal<C>> closer);
     }
 
     /**
@@ -331,7 +331,7 @@ public class UI {
     private static class ModalMaker<O, W extends Widget, C> implements ModalOpener, ModalBuilder<O>, ModalCloser<O, W> {
 
         /** The open event. */
-        private Events<O> opener;
+        private Signal<O> opener;
 
         /** The build event. */
         private Function<O, W> builder;
@@ -346,8 +346,8 @@ public class UI {
          * {@inheritDoc}
          */
         @Override
-        public <T> ModalBuilder<T> openWhen(Events<T> opener) {
-            this.opener = (Events) Objects.requireNonNull(opener);
+        public <T> ModalBuilder<T> openWhen(Signal<T> opener) {
+            this.opener = (Signal) Objects.requireNonNull(opener);
 
             return (ModalBuilder<T>) this;
         }
@@ -366,15 +366,15 @@ public class UI {
          * {@inheritDoc}
          */
         @Override
-        public <C> Events<Ⅲ<O, W, C>> closeWhen(Function<W, Events<C>> closer) {
+        public <C> Signal<Ⅲ<O, W, C>> closeWhen(Function<W, Signal<C>> closer) {
             Objects.requireNonNull(closer);
 
             // =====================================
             // Ideal Code
             // =====================================
-            // Events<O> open = opener;
-            // Events<Binary<O, W>> build = open.map(v -> I.pair(v, builder.apply(v)));
-            // Events<Ternary<O, W, C>> close = build.flatMapLatest(v -> closer.apply(v.e).map(x ->
+            // Signal<O> open = opener;
+            // Signal<Binary<O, W>> build = open.map(v -> I.pair(v, builder.apply(v)));
+            // Signal<Ternary<O, W, C>> close = build.flatMapLatest(v -> closer.apply(v.e).map(x ->
             // v.ò(x)));
             //
             // build.to(v -> open(v.e));
@@ -400,7 +400,7 @@ public class UI {
                     }
                 });
             });
-            return new Events(observers);
+            return new Signal(observers);
         }
 
         /**

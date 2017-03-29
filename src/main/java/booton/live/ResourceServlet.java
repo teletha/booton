@@ -73,7 +73,7 @@ public class ResourceServlet extends HttpServlet {
         Path file = root.resolve(path);
 
         if (path.endsWith(".html")) {
-            rebuild(file).to(new HTMLWriter(new OutputStreamWriter(response.getOutputStream(), I.$encoding)));
+            new HTMLWriter(new OutputStreamWriter(response.getOutputStream(), I.$encoding)).write(rebuild(file));
         } else {
             // assign content-type
             if (path.endsWith(".css")) {

@@ -12,7 +12,7 @@ package jsx.ui.flux;
 import js.dom.UIEvent;
 import jsx.style.TypeStyle;
 import jsx.ui.Widget;
-import kiss.Events;
+import kiss.Signal;
 
 /**
  * @version 2015/10/04 14:39:49
@@ -25,9 +25,9 @@ public interface Locator {
      * </p>
      * 
      * @param location A locator object with the bound context type.
-     * @return A user intent {@link Events}.
+     * @return A user intent {@link Signal}.
      */
-    default <T> Events<T> at(Location<T> location) {
+    default <T> Signal<T> at(Location<T> location) {
         return at(location, (Class) UIEvent.class);
     }
 
@@ -37,9 +37,9 @@ public interface Locator {
      * </p>
      * 
      * @param location A locator object with the bound context type.
-     * @return A user intent {@link Events}.
+     * @return A user intent {@link Signal}.
      */
-    default <T> Events<T> at(TypeStyle<T> location) {
+    default <T> Signal<T> at(TypeStyle<T> location) {
         return at(location, (Class) null);
     }
 
@@ -50,7 +50,7 @@ public interface Locator {
      * 
      * @param location A locator object.
      * @param type A context type.
-     * @return A user intent {@link Events}.
+     * @return A user intent {@link Signal}.
      */
-    <T> Events<T> at(Location location, Class<T> type);
+    <T> Signal<T> at(Location location, Class<T> type);
 }

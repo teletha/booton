@@ -195,7 +195,7 @@ public class Booton {
         body.child("script").attr("type", "text/javascript").attr("src", config.root.relativize(js));
 
         try {
-            html.to(new HTMLWriter(Files.newBufferedWriter(this.html, I.$encoding)));
+            new HTMLWriter(Files.newBufferedWriter(this.html, I.$encoding)).write(html);
         } catch (IOException e) {
             throw I.quiet(e);
         }

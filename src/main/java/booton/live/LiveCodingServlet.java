@@ -26,8 +26,8 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import booton.BootonConfiguration;
 import kiss.Disposable;
-import kiss.Events;
 import kiss.I;
+import kiss.Signal;
 import kiss.XML;
 
 /**
@@ -78,7 +78,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             this.session = session;
 
             // observe html
-            Events<WatchEvent<Path>> observable = I.observe(html);
+            Signal<WatchEvent<Path>> observable = I.observe(html);
 
             XML xml = I.xml(html);
 
@@ -172,9 +172,9 @@ public class LiveCodingServlet extends WebSocketServlet {
          * 
          * @param relativePath A relative path from root.
          * @param file A target file.
-         * @return A {@link Events}.
+         * @return A {@link Signal}.
          */
-        private Events<WatchEvent<Path>> observeFile(String relativePath) {
+        private Signal<WatchEvent<Path>> observeFile(String relativePath) {
             int index = relativePath.indexOf('?');
 
             if (index != -1) {

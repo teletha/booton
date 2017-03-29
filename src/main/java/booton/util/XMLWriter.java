@@ -11,15 +11,21 @@ package booton.util;
 
 import java.io.Flushable;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.XMLConstants;
 
+import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
 
+import com.sun.org.apache.xml.internal.utils.TreeWalker;
+
 import kiss.I;
+import kiss.XML;
 
 /**
  * @version 2012/12/17 1:49:14
@@ -530,6 +536,23 @@ public class XMLWriter extends XMLFilterImpl implements LexicalHandler {
             default:
                 out.append(data[i]);
             }
+        }
+    }
+
+    public void write(XML xml) {
+        try {
+            startDocument();
+            TreeWalker walker = new TreeWalker(this);
+
+            Field nodes = XML.class.getDeclaredField("nodes");
+            nodes.setAccessible(true);
+
+            for (Node node : (List<Node>) nodes.get(xml)) {
+                walker.traverseFragment(node);
+            }
+            endDocument();
+        } catch (Exception e) {
+            throw I.quiet(e);
         }
     }
 }

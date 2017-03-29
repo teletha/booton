@@ -42,9 +42,9 @@ import jsx.style.StyleDSL;
 import jsx.ui.flux.Interactive;
 import jsx.ui.flux.Location;
 import jsx.ui.flux.Locator;
-import kiss.Events;
 import kiss.I;
 import kiss.Observer;
+import kiss.Signal;
 import kiss.model.Model;
 
 /**
@@ -151,7 +151,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
 
     /**
      * <p>
-     * Register the {@link Events} listener for the specified action type.
+     * Register the {@link Signal} listener for the specified action type.
      * </p>
      * 
      * @param actions A list of action types.
@@ -314,7 +314,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
 
         /**
          * <p>
-         * Setup {@link Events} context.
+         * Setup {@link Signal} context.
          * </p>
          * 
          * @param actions A list of event types.
@@ -328,11 +328,11 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
          * {@inheritDoc}
          */
         @Override
-        public <T> Events<T> at(Location locatable, Class<T> type) {
+        public <T> Signal<T> at(Location locatable, Class<T> type) {
             this.name = locatable.name();
             this.useUIEvent = type == UIEvent.class || type == Object.class;
 
-            return new Events<T>(observer -> {
+            return new Signal<T>((observer, disposer) -> {
                 if (observers == null) {
                     observers = new CopyOnWriteArrayList();
                 }
@@ -422,7 +422,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
 
                     if (ReadOnlyProperty.class.isAssignableFrom(type)) {
                         properties.add(new Value(field.getName(), null, field));
-                    } else if (Events.class.isAssignableFrom(type)) {
+                    } else if (Signal.class.isAssignableFrom(type)) {
                         events.add(field);
                     } else {
 

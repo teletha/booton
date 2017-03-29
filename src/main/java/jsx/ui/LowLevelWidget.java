@@ -26,7 +26,7 @@ import jsx.style.Style;
 import jsx.style.StyleDSL;
 import jsx.style.StyleProperty;
 import kiss.Disposable;
-import kiss.Events;
+import kiss.Signal;
 
 /**
  * @version 2016/04/07 17:41:32
@@ -75,7 +75,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
      * @return
      */
     public T click(Runnable action) {
-        when(User.Click).at(WidgetRoot).take(this::isValid).sideEffect(updateView).to(action);
+        when(User.Click).at(WidgetRoot).take(this::isValid).effect(updateView).to(action);
 
         return (T) this;
     }
@@ -84,7 +84,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
      * @return
      */
     public T dbclick(Runnable action) {
-        when(User.DoubleClick).at(WidgetRoot).take(this::isValid).sideEffect(updateView).to(action);
+        when(User.DoubleClick).at(WidgetRoot).take(this::isValid).effect(updateView).to(action);
 
         return (T) this;
     }
@@ -98,12 +98,12 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
 
     /**
      * <p>
-     * Create {@link Events} for key down.
+     * Create {@link Signal} for key down.
      * </p>
      * 
      * @return
      */
-    public Events<Key> keyDown() {
+    public Signal<Key> keyDown() {
         return null;
     }
 
@@ -120,14 +120,14 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
         if (key != null && action != null) {
             Predicate<UIEvent> byKey = e -> e.which == key.code;
 
-            Events<UIEvent> keyPress = when(User.KeyPress).at(WidgetRoot).take(byKey);
-            Events<UIEvent> keyUp = when(User.KeyUp).at(WidgetRoot).take(byKey);
+            Signal<UIEvent> keyPress = when(User.KeyPress).at(WidgetRoot).take(byKey);
+            Signal<UIEvent> keyUp = when(User.KeyUp).at(WidgetRoot).take(byKey);
             // All js environment never fire keypress event in IME mode.
             // So the following code can ignore key event while IME is on.
-            Events<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
+            Signal<UIEvent> keyInput = keyUp.skipUntil(keyPress).take(1).repeat();
 
             // activate shortcut command
-            disposeLater(keyInput.take(this::isValid).sideEffect(updateView).to(action));
+            disposeLater(keyInput.take(this::isValid).effect(updateView).to(action));
         }
         return (T) this;
     }
@@ -143,7 +143,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
 
     protected BooleanProperty disabled = new SimpleBooleanProperty();
 
-    public T disableIf(Events<Boolean> condition) {
+    public T disableIf(Signal<Boolean> condition) {
         condition.to(disabled);
 
         return (T) this;
@@ -173,7 +173,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
         return (T) this;
     }
 
-    public T popupIf(Events<Boolean> condition, Widget widget) {
+    public T popupIf(Signal<Boolean> condition, Widget widget) {
         return (T) this;
     }
 
