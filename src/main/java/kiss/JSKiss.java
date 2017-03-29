@@ -1192,16 +1192,17 @@ class JSKiss {
      *            XML expression.
      * @throws NullPointerException If the input Java object or the output is <code>null</code> .
      */
-    public static void write(Object input, Appendable output) {
-        if (output == null) {
-            throw new NullPointerException();
+    public static void write(Object input, Appendable out) {
+        Objects.nonNull(out);
+
+        try {
+            // traverse object as json
+            Model model = Model.of(input);
+            new JSONWriter(out, 0).accept(pair(model, new Property(model, ""), input));
+        } finally {
+            // close carefuly
+            quiet(out);
         }
-
-        Model model = Model.of(input);
-        Property property = new Property(model, model.name);
-
-        // traverse configuration as json
-        new JSON(output, 0).accept(I.pair(model, property, input));
     }
 
     /**
