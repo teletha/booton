@@ -1198,7 +1198,9 @@ class JSKiss {
         try {
             // traverse object as json
             Model model = Model.of(input);
-            new JSONWriter(out, 0).accept(pair(model, new Property(model, ""), input));
+            Format format = new Format();
+            format.out = out;
+            format.accept(pair(model, new Property(model, ""), input));
         } finally {
             // close carefuly
             quiet(out);
