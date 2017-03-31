@@ -170,6 +170,18 @@ class JSThread {
     }
 
     /**
+     * Returns the identifier of this Thread. The thread ID is a positive <tt>long</tt> number
+     * generated when this thread was created. The thread ID is unique and remains unchanged during
+     * its lifetime. When a thread is terminated, this thread ID may be reused.
+     *
+     * @return this thread's ID.
+     * @since 1.5
+     */
+    public long getId() {
+        return hashCode();
+    }
+
+    /**
      * Returns this thread's name.
      * 
      * @return this thread's name.

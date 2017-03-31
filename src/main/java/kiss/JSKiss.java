@@ -11,19 +11,24 @@ package kiss;
 
 import static js.lang.Global.*;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -112,6 +117,9 @@ class JSKiss {
     /** The list of wrapper classes. (except for void type) */
     private static final Class[] wrappers = {Boolean.class, Integer.class, Long.class, Float.class, Double.class, Byte.class, Short.class,
             Character.class, Void.class};
+
+    /** The holder for lambda reference. */
+    private static final ClassVariable<Executable> executables = new ClassVariable();
 
     static {
         // built-in lifestyles
@@ -210,6 +218,108 @@ class JSKiss {
     public static <Param1, Param2, Return> Supplier<Return> bind(BiFunction<Param1, Param2, Return> function, Param1 param1, Param2 param2) {
         Objects.requireNonNull(function);
         return () -> function.apply(param1, param2);
+    }
+
+    /**
+     * <p>
+     * Bundle all given funcitons into single function.
+     * </p>
+     * 
+     * @param functions A list of functions to bundle.
+     * @return A bundled function.
+     */
+    public static <F> F bundle(F... functions) {
+        return bundle((Class<F>) functions.getClass().getComponentType(), functions);
+    }
+
+    /**
+     * <p>
+     * Bundle all given funcitons into single function.
+     * </p>
+     * 
+     * @param functions A list of functions to bundle.
+     * @return A bundled function.
+     */
+    public static <F> F bundle(Collection<F> functions) {
+        return bundle(findNCA(functions, Class::isInterface), functions);
+    }
+
+    // /**
+    // * <p>
+    // * Find the nearest common ancestor class of the given classes.
+    // * </p>
+    // *
+    // * @param <X> A type.
+    // * @param classes A list of classes.
+    // * @return A nearest common ancestor class.
+    // */
+    // private static <X> Class findNCA(X... classes) {
+    // return classes.getClass().getComponentType();
+    // }
+
+    /**
+     * <p>
+     * Find the nearest common ancestor class of the given classes.
+     * </p>
+     * 
+     * @param <X> A type.
+     * @param items A list of items.
+     * @return A nearest common ancestor class.
+     */
+    private static <X> Class<X> findNCA(Collection<X> items, Predicate<Class> filter) {
+        if (filter == null) {
+            filter = accept();
+        }
+
+        Set<Class> types = null;
+        Iterator<X> iterator = items.iterator();
+
+        if (iterator.hasNext()) {
+            types = Model.collectTypes(iterator.next().getClass());
+            types.removeIf(filter.negate());
+
+            while (iterator.hasNext()) {
+                types.retainAll(Model.collectTypes(iterator.next().getClass()));
+            }
+        }
+        return types == null || types.isEmpty() ? null : types.iterator().next();
+    }
+
+    /**
+     * <p>
+     * Bundle all given typed funcitons into single typed function.
+     * </p>
+     * 
+     * @param type A function type.
+     * @param functions A list of functions to bundle.
+     * @return A bundled function.
+     */
+    public static <F> F bundle(Class<F> type, F... functions) {
+        return bundle(type, Arrays.asList(functions));
+    }
+
+    /**
+     * <p>
+     * Bundle all given typed funcitons into single typed function.
+     * </p>
+     * 
+     * @param type A function type.
+     * @param functions A list of functions to bundle.
+     * @return A bundled function.
+     */
+    public static <F> F bundle(Class<F> type, Collection<F> functions) {
+        return make(type, (proxy, method, args) -> {
+            Object result = null;
+
+            if (functions != null) {
+                for (Object fun : functions) {
+                    if (fun != null) {
+                        result = method.invoke(fun, args);
+                    }
+                }
+            }
+            return result;
+        });
     }
 
     /**
@@ -394,6 +504,23 @@ class JSKiss {
         return make(bundleClass);
     }
 
+    public static <P> Consumer<P> imitateConsumer(Runnable lambda) {
+        return p -> {
+            if (lambda != null) lambda.run();
+        };
+    }
+
+    public static <P, R> Function<P, R> imitateFunction(Consumer<P> function) {
+        return p -> {
+            function.accept(p);
+            return null;
+        };
+    }
+
+    public static <P, R> Function<P, R> imitateFunction(Supplier<R> function) {
+        return p -> function.get();
+    }
+
     /**
      * <p>
      * Returns a string containing the string representation of each of items, using the specified
@@ -434,6 +561,20 @@ class JSKiss {
             }
         }
         return builder.toString();
+    }
+
+    /**
+     * <p>
+     * Retrieve lambda reference.
+     * </p>
+     * 
+     * @param lambda A lambda instance.
+     * @return An actual reference.
+     */
+    static Executable lambda(Serializable lambda) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**
@@ -620,6 +761,25 @@ class JSKiss {
         } finally {
             dependency.pollLast();
         }
+    }
+
+    /**
+     * <p>
+     * Create proxy instance.
+     * </p>
+     * 
+     * @param type A model type.
+     * @param handler A proxy handler.
+     * @return
+     */
+    public static <T> T make(Class<T> type, InvocationHandler handler) {
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(handler);
+
+        if (type.isInterface() == false) {
+            throw new IllegalArgumentException("Type must be interface.");
+        }
+        return (T) Proxy.newProxyInstance(I.class.getClassLoader(), new Class[] {type}, handler);
     }
 
     /**

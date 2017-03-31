@@ -16,6 +16,7 @@ public class Project extends bee.api.Project {
         producer("Nameless Production Committee");
 
         require("com.github.teletha", "sinobu", "1.0");
+        require("io.github.lukehutch", "fast-classpath-scanner", "LATEST");
         require("org.eclipse.jetty.websocket", "websocket-server", jettyVersion);
         require("org.eclipse.jetty", "jetty-servlet", jettyVersion);
         require("org.eclipse.jetty", "jetty-util", jettyVersion);

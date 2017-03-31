@@ -39,10 +39,9 @@ import booton.BootonConfiguration;
 import booton.BootonLog;
 import booton.Necessary;
 import booton.Unnecessary;
-import js.dom.InputElement;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import js.lang.Global;
 import js.lang.NativeString;
-import kiss.ClassListener;
 import kiss.Extensible;
 import kiss.I;
 import kiss.Manageable;
@@ -855,29 +854,13 @@ public class Javascript {
      * @version 2013/11/05 9:58:05
      */
     @Manageable(lifestyle = Singleton.class)
-    private static class NecessaryManager implements ClassListener<Necessary> {
+    private static class NecessaryManager {
 
         /** The extensions. */
         private final Set<Class> classes = new HashSet();
 
         private NecessaryManager() {
-            classes.add(InputElement.class);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void load(Class clazz) {
-            classes.add(clazz);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void unload(Class clazz) {
-            classes.remove(clazz);
+            new FastClasspathScanner().matchClassesWithAnnotation(Necessary.class, classes::add).scan();
         }
 
         /**

@@ -19,7 +19,7 @@ import java.util.Set;
 import org.objectweb.asm.Type;
 
 import booton.JDKEmulator;
-import kiss.ClassListener;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -28,7 +28,7 @@ import kiss.Singleton;
  * @version 2014/03/12 20:02:06
  */
 @Manageable(lifestyle = Singleton.class)
-class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
+class JavaAPIProviders {
 
     /** The mapping between Java class and JS implementation class. */
     private static final Map<Class, Definition> definitions = new HashMap();
@@ -36,13 +36,15 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
     /** The mapping between Java class and JS implementation class. */
     private static final Map<Class, Class> revert = new HashMap();
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void load(Class clazz) {
-        Class api = find(clazz);
+    static {
+        new FastClasspathScanner().matchClassesWithAnnotation(JavaAPIProvider.class, JavaAPIProviders::load).scan();
+    }
 
+    /**
+     * @param clazz
+     */
+    private static void load(Class clazz) {
+        Class api = find(clazz);
         if (api != null && !definitions.containsKey(api)) {
             definitions.put(api, new Definition(clazz));
             revert.put(clazz, api);
@@ -55,26 +57,7 @@ class JavaAPIProviders implements ClassListener<JavaAPIProvider> {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unload(Class<JavaAPIProvider> clazz) {
-        Class api = find(clazz);
-
-        if (api != null && !definitions.containsKey(api)) {
-            definitions.remove(api);
-            revert.remove(clazz);
-        }
-
-        Class parent = clazz.getSuperclass();
-
-        if (parent != null) {
-            unload(parent);
-        }
-    }
-
-    private Class find(Class<?> declared) {
+    private static Class find(Class<?> declared) {
         JavaAPIProvider api = declared.getAnnotation(JavaAPIProvider.class);
 
         if (api == null) {
