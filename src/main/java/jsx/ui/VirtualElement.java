@@ -124,8 +124,8 @@ public class VirtualElement extends VirtualNode<Element> {
      * {@inheritDoc}
      */
     @Override
-    public void dispose() {
-        super.dispose();
+    public void vandalize() {
+        super.vandalize();
 
         // discard children reference
         for (int i = items.length() - 1; 0 <= i; i--) {

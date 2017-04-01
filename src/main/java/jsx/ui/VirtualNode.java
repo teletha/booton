@@ -60,7 +60,7 @@ abstract class VirtualNode<N extends Node> implements Disposable {
      * {@inheritDoc}
      */
     @Override
-    public void dispose() {
+    public void vandalize() {
         dom = null;
     }
 }

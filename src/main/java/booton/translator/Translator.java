@@ -175,6 +175,7 @@ public class Translator<T> implements Extensible {
      */
     private Writer search(String methodName, String description, Class[] parameterTypes) {
         Class translator = getClass();
+
         if (translator == Translator.class) {
             return null; // use generic translator
         }
