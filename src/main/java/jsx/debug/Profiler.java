@@ -19,12 +19,10 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import kiss.Interceptor;
-
 /**
  * @version 2015/08/15 22:20:21
  */
-class Profiler<K, E, Y> extends Interceptor<Profilable> {
+class Profiler<K, E, Y> {
 
     static boolean execute = true;
 
@@ -33,18 +31,6 @@ class Profiler<K, E, Y> extends Interceptor<Profilable> {
 
     /** The latest profiling. */
     private static Result latest = new Result(null, null, null, null);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Object invoke(Object... params) {
-        start(() -> that.getClass().getSimpleName() + "#" + name, null, null, null);
-        Object value = super.invoke(params);
-        stop();
-
-        return value;
-    }
 
     /**
      * <p>
