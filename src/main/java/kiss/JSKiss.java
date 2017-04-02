@@ -12,14 +12,10 @@ package kiss;
 import static js.lang.Global.*;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
@@ -37,7 +33,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -72,10 +67,7 @@ import javafx.collections.ObservableSet;
 import booton.translator.JavaAPIProvider;
 import js.lang.Global;
 import js.lang.NativeArray;
-import js.lang.NativeFunction;
-import js.lang.NativeFunction.Delegator;
 import js.lang.NativeObject;
-import js.lang.reflect.Reflections;
 import kiss.model.Model;
 import kiss.model.Property;
 
@@ -689,34 +681,9 @@ class JSKiss {
             throw new UnsupportedOperationException(modelClass + " is  inner class.");
         }
 
-        int modifier = modelClass.getModifiers();
-
-        // In the second place, we must find the actual model class which is associated with this
-        // model class. If the actual model class is a concreate, we can use it directly.
-        Class<M> actualClass = modelClass;
-
-        // if (((Modifier.ABSTRACT | Modifier.INTERFACE) & modifier) != 0) {
-        // // TODO model provider finding strategy
-        // // This strategy is decided at execution phase.
-        // actualClass = make(Modules.class).find(modelClass);
-        //
-        // // updata to the actual model class's modifier
-        // modifier = actualClass.getModifiers();
-        // }
-
-        // If this model is non-private or final class, we can extend it for interceptor mechanism.
-        if (((Modifier.PRIVATE | Modifier.FINAL) & modifier) == 0) {
-            Table<Method, Annotation> interceptables = Model.collectAnnotatedMethods(actualClass);
-
-            // Enhance the actual model class if needed.
-            if (!interceptables.isEmpty()) {
-                define(actualClass, interceptables);
-            }
-        }
-
         // Construct dependency graph for the current thred.
         Deque<Class> dependency = dependencies.get();
-        dependency.add(actualClass);
+        dependency.add(modelClass);
 
         // Don't use 'contains' method check here to resolve singleton based
         // circular reference. So we must judge it from the size of context. If the
@@ -736,14 +703,14 @@ class JSKiss {
             if (lifestyle == null) {
                 // If the actual model class doesn't provide its lifestyle explicitly, we use
                 // Prototype lifestyle which is default lifestyle in Sinobu.
-                Manageable manageable = actualClass.getAnnotation(Manageable.class);
+                Manageable manageable = modelClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
                 lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class : manageable.lifestyle()));
             }
 
             // Trace dependency graph to detect circular dependencies.
-            Constructor constructor = Model.collectConstructors(actualClass)[0];
+            Constructor constructor = Model.collectConstructors(modelClass)[0];
 
             if (constructor != null) {
                 for (Class param : constructor.getParameterTypes()) {
@@ -1108,33 +1075,6 @@ class JSKiss {
     }
 
     /**
-     * <p>
-     * Define interceptor code.
-     * </p>
-     *
-     * @param source
-     * @param interceptors
-     */
-    private static void define(Class source, Table<Method, Annotation> interceptors) {
-        try {
-            NativeObject prototype = Reflections.getPrototype(source);
-
-            for (Entry<Method, List<Annotation>> entry : interceptors.entrySet()) {
-                Method method = entry.getKey();
-                List<Annotation> annotations = entry.getValue();
-
-                if (!annotations.isEmpty()) {
-                    InterceptorFunction function = new InterceptorFunction(method.getName(), MethodHandles.lookup()
-                            .unreflect(method), annotations.toArray(new Annotation[annotations.size()]));
-                    prototype.setProperty(Reflections.getPropertyName(method), new NativeFunction(function));
-                }
-            }
-        } catch (Exception e) {
-            throw I.quiet(e);
-        }
-    }
-
-    /**
      * Lazy initialization.
      */
     private static void initialize() {
@@ -1364,40 +1304,6 @@ class JSKiss {
         } finally {
             // close carefuly
             quiet(out);
-        }
-    }
-
-    /**
-     * @version 2013/09/26 14:55:33
-     */
-    private static class InterceptorFunction implements Delegator {
-
-        /** The method name. */
-        private final String name;
-
-        /** The method handle. */
-        private final MethodHandle method;
-
-        /** The annotations. */
-        private final Annotation[] annotations;
-
-        /**
-         * @param name
-         * @param method
-         * @param annotations
-         */
-        private InterceptorFunction(String name, MethodHandle method, Annotation[] annotations) {
-            this.name = name;
-            this.method = method;
-            this.annotations = annotations;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Object delegate(Object that, Object[] arguments) {
-            return Interceptor.invoke(name, method, that, arguments, annotations);
         }
     }
 
