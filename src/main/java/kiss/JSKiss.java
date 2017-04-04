@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1252,6 +1253,127 @@ class JSKiss {
     public static Future<?> schedule(Runnable task, long interval, TimeUnit unit) {
         // return schedule.scheduleAtFixedRate(task, 0, interval, unit);
         return null;
+    }
+
+    /**
+     * <p>
+     * Signal the specified values.
+     * </p>
+     *
+     * @param values A list of values to emit.
+     * @return The {@link Signal} to emit sequencial values.
+     */
+    @SafeVarargs
+    public static <V> Signal<V> signal(V... values) {
+        return Signal.EMPTY.startWith(values);
+    }
+
+    /**
+     * <p>
+     * Signal the specified values.
+     * </p>
+     *
+     * @param values A list of values to emit.
+     * @return The {@link Signal} to emit sequencial values.
+     */
+    public static <V> Signal<V> signal(Iterable<V> values) {
+        return Signal.EMPTY.startWith(values);
+    }
+
+    /**
+     * <p>
+     * Signal the specified values.
+     * </p>
+     *
+     * @param values A list of values to emit.
+     * @return The {@link Signal} to emit sequencial values.
+     */
+    public static <V> Signal<V> signal(Enumeration<V> values) {
+        return Signal.EMPTY.startWith(values);
+    }
+
+    /**
+     * <p>
+     * Signal the specified values.
+     * </p>
+     *
+     * @param values A list of values to emit.
+     * @return The {@link Signal} to emit sequencial values.
+     */
+    public static <V> Signal<V> signal(Variable<V> value) {
+        return Signal.EMPTY.startWith(value);
+    }
+
+    /**
+     * @param value A initial value.
+     * @param time A time to interval.
+     * @param unit A time unit.
+     * @param <V> Value type.
+     * @return An {@link Signal} that emits values as a first sequence.
+     */
+    public static <V> Signal<V> signalInfinite(V value, long time, TimeUnit unit) {
+        return new Signal<>((observer, disposer) -> {
+            Future schedule = schedule(() -> observer.accept(value), time, unit);
+
+            return disposer.add(() -> schedule.cancel(true));
+        });
+    }
+
+    /**
+     * Returns a sequential ordered {@code Events} from {@code startInclusive} (inclusive) to
+     * {@code endExclusive} (exclusive) by an incremental step of {@code 1}.
+     *
+     * @apiNote An equivalent sequence of increasing values can be produced sequentially using a
+     *          {@code for} loop as follows: <pre>{@code
+     *     for (int i = startInclusive; i < endExclusive ; i++) { ... }
+     * }</pre>
+     * @param startInclusive A (inclusive) initial value.
+     * @param endExclusive An exclusive upper bound.
+     * @return a sequential {@code Events} for the range of {@code Integer} elements
+     */
+    public static Signal<Integer> signalRange(int startInclusive, int endExclusive) {
+        return signalRange(startInclusive, 1, endExclusive);
+    }
+
+    /**
+     * Returns a sequential ordered {@code Events} from {@code startInclusive} (inclusive) to
+     * {@code endExclusive} (exclusive) by an incremental step of {@code 1}.
+     *
+     * @apiNote An equivalent sequence of increasing values can be produced sequentially using a
+     *          {@code for} loop as follows: <pre>{@code
+     *     for (int i = startInclusive; i < endExclusive ; i += step) { ... }
+     * }</pre>
+     * @param startInclusive A (inclusive) initial value.
+     * @param step A incremental step.
+     * @param endExclusive An exclusive upper bound.
+     * @return a sequential {@code Events} for the range of {@code Integer} elements
+     */
+    public static Signal<Integer> signalRange(int startInclusive, int step, int endExclusive) {
+        if (step == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        return (0 < step ? endExclusive <= startInclusive : startInclusive <= endExclusive) ? Signal.EMPTY
+                : signal(() -> new Iterator<Integer>() {
+
+                    private int now = startInclusive;
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public boolean hasNext() {
+                        return 0 < step ? now < endExclusive : endExclusive < now;
+                    }
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public Integer next() {
+                        return (now += step) - step; // guilty?
+                    }
+                });
     }
 
     /**
