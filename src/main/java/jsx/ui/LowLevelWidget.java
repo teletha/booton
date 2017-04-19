@@ -27,9 +27,10 @@ import jsx.style.StyleDSL;
 import jsx.style.StyleProperty;
 import kiss.Disposable;
 import kiss.Signal;
+import kiss.Variable;
 
 /**
- * @version 2016/04/07 17:41:32
+ * @version 2017/04/19 11:20:44
  */
 public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevelWidget<Styles, T>> extends Widget<Styles> {
 
@@ -141,7 +142,7 @@ public abstract class LowLevelWidget<Styles extends StyleDSL, T extends LowLevel
         return (T) this;
     }
 
-    protected BooleanProperty disabled = new SimpleBooleanProperty();
+    protected Variable<Boolean> disabled = Variable.of(false);
 
     public T disableIf(Signal<Boolean> condition) {
         condition.to(disabled);

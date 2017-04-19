@@ -11,8 +11,10 @@ package jsx.style;
 
 import javafx.beans.property.Property;
 
+import kiss.Variable;
+
 /**
- * @version 2015/05/04 13:33:36
+ * @version 2017/04/19 11:12:11
  */
 public interface BinaryStyle extends ValueStyle<Boolean> {
 
@@ -26,6 +28,18 @@ public interface BinaryStyle extends ValueStyle<Boolean> {
      */
     default Style of(Property state) {
         return of(state == null ? false : Boolean.valueOf(String.valueOf(state.getValue())));
+    }
+
+    /**
+     * <p>
+     * Retrieve the specific {@link Style} of the specified state.
+     * </p>
+     * 
+     * @param state A binary state.
+     * @return A specific {@link Style}.
+     */
+    default Style of(Variable<Boolean> state) {
+        return of(state == null ? false : state.get());
     }
 
     /**
