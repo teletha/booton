@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import booton.Booton;
 import booton.util.HTMLWriter;
+import filer.Filer;
 import kiss.I;
 import kiss.XML;
 
@@ -42,7 +43,7 @@ public class ResourceServlet extends HttpServlet {
      * @param root
      */
     public ResourceServlet(Path root) {
-        Path resources = I.locate(Booton.class);
+        Path resources = Filer.locate(Booton.class);
 
         if (Files.isRegularFile(resources)) {
             try {
@@ -88,7 +89,7 @@ public class ResourceServlet extends HttpServlet {
 
             if (Files.exists(resource)) {
                 if (Files.notExists(deployed) || Files.getLastModifiedTime(resource) != Files.getLastModifiedTime(deployed)) {
-                    I.copy(resource, deployed);
+                    Filer.copy(resource, deployed);
                 }
             }
 

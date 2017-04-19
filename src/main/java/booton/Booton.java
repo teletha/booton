@@ -25,6 +25,7 @@ import booton.live.LiveCodingServlet;
 import booton.live.ResourceServlet;
 import booton.translator.Javascript;
 import booton.util.HTMLWriter;
+import filer.Filer;
 import jsx.debug.Profile;
 import jsx.ui.samaple.todo.HelloWorld;
 import kiss.I;
@@ -165,7 +166,7 @@ public class Booton {
             e.printStackTrace(System.out);
         } finally {
             // ending build phase
-            I.delete(mutex);
+            Filer.delete(mutex);
 
             Profile.show();
         }

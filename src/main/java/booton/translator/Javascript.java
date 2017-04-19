@@ -39,6 +39,7 @@ import booton.BootonConfiguration;
 import booton.BootonLog;
 import booton.Necessary;
 import booton.Unnecessary;
+import filer.Filer;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import js.lang.Global;
 import js.lang.NativeString;
@@ -920,7 +921,7 @@ public class Javascript {
 
         private String getCode(Class clazz, Supplier<String> coder) {
             try {
-                Path archive = I.locate(clazz);
+                Path archive = Filer.locate(clazz);
 
                 if (archive == null) {
                     code = coder.get();

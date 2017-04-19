@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import filer.Filer;
 import jsx.ApplicationTheme;
 import kiss.I;
 import kiss.Manageable;
@@ -77,7 +78,7 @@ public class BootonConfiguration {
      */
     private void validateRoot() {
         if (root == null) {
-            root = I.locate("");
+            root = Filer.locate("");
         }
 
         if (Files.notExists(root)) {

@@ -41,6 +41,7 @@ import booton.live.ClientStackTrace;
 import booton.live.Source;
 import booton.translator.Javascript;
 import booton.translator.TranslationError;
+import filer.Filer;
 import jsx.debug.Profile;
 import kiss.I;
 import net.sourceforge.htmlunit.corejs.javascript.EcmaError;
@@ -95,15 +96,15 @@ public class ScriptTester {
             I.load(ScriptTester.class, true);
 
             // read boot.js
-            boot = new String(Files.readAllBytes(I.locate("src/main/resources/init/boot.js")), UTF_8);
-            unitTest = new String(Files.readAllBytes(I.locate("src/test/resources/unitTest.js")), UTF_8);
+            boot = new String(Files.readAllBytes(Filer.locate("src/main/resources/init/boot.js")), UTF_8);
+            unitTest = new String(Files.readAllBytes(Filer.locate("src/test/resources/unitTest.js")), UTF_8);
 
             // build client
             client = new WebClient(BrowserVersion.FIREFOX_45);
             client.getWebConsole().setLogger(new Debugger());
 
             // build dummy page
-            html = (HtmlPage) client.getPage(I.locate("src/test/resources/empty.html").toUri().toURL());
+            html = (HtmlPage) client.getPage(Filer.locate("src/test/resources/empty.html").toUri().toURL());
 
             // build script engine
             engine = client.getJavaScriptEngine();
@@ -576,12 +577,12 @@ public class ScriptTester {
                 // ========================
                 // SHORT
                 // ========================
-                assert((Short) java).doubleValue() == ((Double) js).doubleValue();
+                assert ((Short) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Byte.class) {
                 // ========================
                 // BYTE
                 // ========================
-                assert((Byte) java).doubleValue() == ((Double) js).doubleValue();
+                assert ((Byte) java).doubleValue() == ((Double) js).doubleValue();
             } else if (type == Boolean.class) {
                 // ========================
                 // BOOLEAN
@@ -607,7 +608,7 @@ public class ScriptTester {
                     js = NativeObject.callMethod((NativeObject) js, Javascript
                             .computeMethodName(Object.class, "toString", "()Ljava/lang/String;"), new Object[] {});
                 }
-                assert((Character) java).toString().equals(js.toString());
+                assert ((Character) java).toString().equals(js.toString());
             } else if (Throwable.class.isAssignableFrom(type)) {
                 // ========================
                 // THROWABLE
@@ -705,7 +706,7 @@ public class ScriptTester {
      */
     private void dump() {
         try {
-            Files.write(I.locate("target/dump.js"), codes.lines, StandardCharsets.UTF_8);
+            Files.write(Filer.locate("target/dump.js"), codes.lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw I.quiet(e);
         }
