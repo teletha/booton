@@ -17,12 +17,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import js.dom.Element;
 import jsx.style.Style;
@@ -56,7 +53,7 @@ public class UI {
      * </p>
      */
     public static final Input input() {
-        return input((StringProperty) null);
+        return input((Variable) null);
     }
 
     /**
@@ -65,7 +62,7 @@ public class UI {
      * </p>
      */
     public static final Input input(String value) {
-        return input(new SimpleStringProperty(value));
+        return input(Variable.of(value));
     }
 
     /**
@@ -73,9 +70,9 @@ public class UI {
      * Create {@link Input} form field with the specified value.
      * </p>
      */
-    public static final Input input(StringProperty value) {
+    public static final Input input(Variable<String> value) {
         if (value == null) {
-            value = new SimpleStringProperty();
+            value = Variable.empty();
         }
         return new Input(value);
     }
@@ -88,7 +85,7 @@ public class UI {
      * @param text
      */
     public static final Output output(String text) {
-        return output(new SimpleStringProperty(text));
+        return output(Variable.of(text));
     }
 
     /**
@@ -98,18 +95,7 @@ public class UI {
      * 
      * @param text
      */
-    public static final Output output(IntegerProperty value) {
-        return new Output(value);
-    }
-
-    /**
-     * <p>
-     * Create text {@link Output} with the specified value.
-     * </p>
-     * 
-     * @param text
-     */
-    public static final Output output(StringProperty text) {
+    public static final Output output(Variable<String> text) {
         return new Output(text);
     }
 

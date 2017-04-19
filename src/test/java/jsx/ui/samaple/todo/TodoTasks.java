@@ -12,10 +12,9 @@ package jsx.ui.samaple.todo;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import kiss.I;
+import kiss.Variable;
 
 /**
  * @version 2015/09/24 16:56:51
@@ -91,7 +90,7 @@ public class TodoTasks {
         public final BooleanProperty completed = new SimpleBooleanProperty();
 
         /** The todo contents. */
-        public final StringProperty contents = new SimpleStringProperty();
+        public final Variable<String> contents = Variable.empty();
 
         /**
          * 

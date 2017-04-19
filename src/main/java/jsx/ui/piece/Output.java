@@ -9,24 +9,18 @@
  */
 package jsx.ui.piece;
 
-import java.util.function.Function;
-
-import javafx.beans.binding.IntegerExpression;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
-import kiss.I;
+import kiss.Variable;
 
 /**
- * @version 2014/08/22 11:27:22
+ * @version 2017/04/19 11:33:26
  */
 public class Output extends LowLevelWidget<StyleDSL, Output> {
 
     /** The text contents. */
-    public final StringProperty text;
+    public final Variable<String> text;
 
     /**
      * <p>
@@ -35,31 +29,7 @@ public class Output extends LowLevelWidget<StyleDSL, Output> {
      * 
      * @param text
      */
-    public Output(IntegerExpression value) {
-        this(value, v -> String.valueOf(v));
-    }
-
-    /**
-     * <p>
-     * Create text {@link Output} with the specified value.
-     * </p>
-     * 
-     * @param text
-     */
-    public Output(IntegerExpression value, Function<Integer, String> converter) {
-        this.text = new SimpleStringProperty(converter.apply(value.getValue()));
-
-        I.observe(value).as(Integer.class).map(converter).to(v -> text.set(v));
-    }
-
-    /**
-     * <p>
-     * Create text {@link Output} with the specified value.
-     * </p>
-     * 
-     * @param text
-     */
-    Output(StringProperty text) {
+    Output(Variable<String> text) {
         this.text = text;
     }
 

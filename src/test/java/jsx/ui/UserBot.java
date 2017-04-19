@@ -48,7 +48,7 @@ public class UserBot {
             if (stroke instanceof Key) {
                 type(input, (Key) stroke);
             } else {
-                input.value.setValue(input.value.get() + stroke);
+                input.value.set(input.value.get() + stroke);
             }
         }
     }

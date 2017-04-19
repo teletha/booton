@@ -21,15 +21,14 @@ import java.util.function.Supplier;
 
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import js.dom.UIEvent;
 import jsx.style.StyleDSL;
 import jsx.ui.LowLevelWidget;
 import jsx.ui.StructureDSL;
 import jsx.ui.Widget;
-import kiss.I;
 import kiss.Signal;
+import kiss.Variable;
 
 /**
  * @version 2016/09/15 8:42:32
@@ -37,7 +36,7 @@ import kiss.Signal;
 public class Input extends LowLevelWidget<PieceStyle, Input> {
 
     /** The current input value. */
-    public final StringProperty value;
+    public final Variable<String> value;
 
     /** The valid property. */
     public final Signal<Boolean> valid;
@@ -56,10 +55,10 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
      * Create {@link Input} form field with the specified value.
      * </p>
      */
-    Input(StringProperty value) {
+    Input(Variable<String> value) {
         this.value = value;
-        this.valid = I.observe(value).map(input -> validate(input)).startWith(true);
-        this.invalid = I.observe(value).map(input -> !validate(input)).startWith(false);
+        this.valid = value.observe().map(input -> validate(input)).startWith(true);
+        this.invalid = value.observe().map(input -> !validate(input)).startWith(false);
 
         // user input functionality
         when(KeyUp, Cut, Paste).at($.SingleLineFormBase)
@@ -96,7 +95,7 @@ public class Input extends LowLevelWidget<PieceStyle, Input> {
         String current = value.get();
 
         // clear value
-        value.setValue("");
+        value.set("");
 
         // API definition
         return current;
