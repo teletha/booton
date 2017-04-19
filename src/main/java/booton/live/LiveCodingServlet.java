@@ -81,7 +81,7 @@ public class LiveCodingServlet extends WebSocketServlet {
             // observe html
             Signal<WatchEvent<Path>> observable = Filer.observe(html);
 
-            XML xml = I.xml(html);
+            XML xml = I.xml(html.toFile());
 
             // observe js
             for (XML js : xml.find("script[src]")) {

@@ -19,7 +19,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -317,6 +316,26 @@ class JSKiss {
 
     /**
      * <p>
+     * Create the specified {@link Collection} with the specified items.
+     * </p>
+     * 
+     * @param type A {@link Collection} type.
+     * @param items A list of itmes.
+     * @return The new created {@link Collection}.
+     */
+    public static <T extends Collection<V>, V> T collect(Class<T> type, V... items) {
+        T collection = I.make(type);
+
+        if (items != null) {
+            for (V item : items) {
+                collection.add(item);
+            }
+        }
+        return collection;
+    }
+
+    /**
+     * <p>
      * Find all <a href="Extensible.html#Extension">Extensions</a> which are specified by the given
      * <a href="Extensible#ExtensionPoint">Extension Point</a>.
      * </p>
@@ -572,55 +591,14 @@ class JSKiss {
 
     /**
      * <p>
-     * Locate the specified file URL and return the plain {@link Path} object.
+     * Create {@link ArrayList} with the specified items.
      * </p>
-     *
-     * @param filePath A location path.
-     * @return A located {@link Path}.
-     * @throws NullPointerException If the given file path is null.
-     * @throws SecurityException If a security manager exists and its
-     *             {@link SecurityManager#checkWrite(String)} method does not allow a file to be
-     *             created.
+     * 
+     * @param items A list of itmes.
+     * @return The new created {@link ArrayList}.
      */
-    public static Path locate(URL filePath) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * <p>
-     * Locate the specified file path and return the plain {@link Path} object.
-     * </p>
-     *
-     * @param filePath A location path.
-     * @return A located {@link Path}.
-     * @throws NullPointerException If the given file path is null.
-     * @throws SecurityException If a security manager exists and its
-     *             {@link SecurityManager#checkWrite(String)} method does not allow a file to be
-     *             created.
-     */
-    public static Path locate(String filePath) {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
-    }
-
-    /**
-     * <p>
-     * Creates a new abstract file somewhere beneath the system's temporary directory (as defined by
-     * the <code>java.io.tmpdir</code> system property).
-     * </p>
-     *
-     * @return A newly created temporary file which is not exist yet.
-     * @throws SecurityException If a security manager exists and its
-     *             {@link SecurityManager#checkWrite(String)} method does not allow a file to be
-     *             created.
-     */
-    public static Path locateTemporary() {
-        // If this exception will be thrown, it is bug of this program. So we must rethrow the
-        // wrapped error in here.
-        throw new Error();
+    public static <V> List<V> list(V... items) {
+        return collect(ArrayList.class, items);
     }
 
     /**

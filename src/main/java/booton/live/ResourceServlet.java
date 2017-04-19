@@ -126,7 +126,7 @@ public class ResourceServlet extends HttpServlet {
      */
     private synchronized XML rebuild(Path file) {
         long now = new Date().getTime();
-        XML html = I.xml(file);
+        XML html = I.xml(file.toFile());
 
         // append live coding script
         html.find("script[src=\"application.js\"]").after(I.xml("script").attr("type", "text/javascript").attr("src", "live.js"));
