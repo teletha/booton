@@ -20,6 +20,9 @@ import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +37,7 @@ import booton.translator.JavaAPIProvider;
 import js.lang.NativeArray;
 import js.lang.NativeFunction;
 import js.lang.NativeObject;
+import kiss.I;
 
 /**
  * <p>
@@ -1550,6 +1554,36 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
      */
     @JavaAPIProvider(ProtectionDomain.class)
     private static class JSProtectionDomain {
+
+        /**
+         * Returns the CodeSource of this domain.
+         * 
+         * @return the CodeSource of this domain which may be null.
+         * @since 1.2
+         */
+        public final CodeSource getCodeSource() {
+            return (CodeSource) (Object) new JSCodeSource();
+        }
+    }
+
+    /**
+     * @version 2017/04/21 15:22:36
+     */
+    @JavaAPIProvider(CodeSource.class)
+    private static class JSCodeSource {
+
+        /**
+         * Returns the location associated with this CodeSource.
+         *
+         * @return the location (URL).
+         */
+        public final URL getLocation() {
+            try {
+                return new URL("");
+            } catch (MalformedURLException e) {
+                throw I.quiet(e);
+            }
+        }
     }
 
 }

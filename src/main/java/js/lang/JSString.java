@@ -11,6 +11,7 @@ package js.lang;
 
 import static js.lang.JSStringHelper.*;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
@@ -74,6 +75,23 @@ class JSString implements Comparable<String>, CharSequence {
      * @param original A {@code String}
      */
     public JSString(String original) {
+    }
+
+    /**
+     * Constructs a new {@code String} by decoding the specified array of bytes using the specified
+     * {@linkplain java.nio.charset.Charset charset}. The length of the new {@code String} is a
+     * function of the charset, and hence may not be equal to the length of the byte array.
+     * <p>
+     * This method always replaces malformed-input and unmappable-character sequences with this
+     * charset's default replacement string. The {@link java.nio.charset.CharsetDecoder} class
+     * should be used when more control over the decoding process is required.
+     *
+     * @param bytes The bytes to be decoded into characters
+     * @param charset The {@linkplain java.nio.charset.Charset charset} to be used to decode the
+     *            {@code bytes}
+     * @since 1.6
+     */
+    public void String(byte[] param0, Charset param1) {
     }
 
     /**
@@ -261,6 +279,21 @@ class JSString implements Comparable<String>, CharSequence {
             return false;
         }
         return that.toLowerCase().equals(anotherString.toLowerCase());
+    }
+
+    /**
+     * Encodes this {@code String} into a sequence of bytes using the platform's default charset,
+     * storing the result into a new byte array.
+     * <p>
+     * The behavior of this method when this string cannot be encoded in the default charset is
+     * unspecified. The {@link java.nio.charset.CharsetEncoder} class should be used when more
+     * control over the encoding process is required.
+     *
+     * @return The resultant byte array
+     * @since JDK1.1
+     */
+    public byte[] getBytes() {
+        return new byte[0];
     }
 
     /**
@@ -800,34 +833,43 @@ class JSString implements Comparable<String>, CharSequence {
      * <th>Result</th>
      * </tr>
      * <tr>
-     * <td align=center>:</td> <td align=center>2</td> <td><tt>{ "boo", "and:foo" }</tt></td>
+     * <td align=center>:</td>
+     * <td align=center>2</td>
+     * <td><tt>{ "boo", "and:foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>:</td> <td align=center>5</td> <td><tt>{ "boo", "and", "foo" }</tt></td>
+     * <td align=center>:</td>
+     * <td align=center>5</td>
+     * <td><tt>{ "boo", "and", "foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>:</td> <td align=center>-2</td> <td><tt>{ "boo", "and", "foo" }</tt></td>
+     * <td align=center>:</td>
+     * <td align=center>-2</td>
+     * <td><tt>{ "boo", "and", "foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>o</td> <td align=center>5</td> <td><tt>{ "b", "", ":and:f", "", "" }</tt>
-     * </td>
+     * <td align=center>o</td>
+     * <td align=center>5</td>
+     * <td><tt>{ "b", "", ":and:f", "", "" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>o</td> <td align=center>-2</td> <td><tt>{ "b", "", ":and:f", "", "" }</tt>
-     * </td>
+     * <td align=center>o</td>
+     * <td align=center>-2</td>
+     * <td><tt>{ "b", "", ":and:f", "", "" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>o</td> <td align=center>0</td> <td><tt>{ "b", "", ":and:f" }</tt></td>
+     * <td align=center>o</td>
+     * <td align=center>0</td>
+     * <td><tt>{ "b", "", ":and:f" }</tt></td>
      * </tr>
      * </table>
      * </blockquote>
      * <p>
      * An invocation of this method of the form <i>str.</i><tt>split(</tt><i>regex</i><tt>,</tt>
-     * &nbsp;<i>n</i><tt>)</tt> yields the same result as the expression
-     * <blockquote> {@link java.util.regex.Pattern}.{@link java.util.regex.Pattern#compile compile}
-     * <tt>(</tt> <i>regex</i><tt>)</tt>.
-     * {@link java.util.regex.Pattern#split(java.lang.CharSequence,int) split}<tt>(</tt><i>str</i>
-     * <tt>,</tt>&nbsp;<i>n</i><tt>)</tt> </blockquote>
+     * &nbsp;<i>n</i><tt>)</tt> yields the same result as the expression <blockquote>
+     * {@link java.util.regex.Pattern}.{@link java.util.regex.Pattern#compile compile} <tt>(</tt>
+     * <i>regex</i><tt>)</tt>. {@link java.util.regex.Pattern#split(java.lang.CharSequence,int)
+     * split}<tt>(</tt><i>str</i> <tt>,</tt>&nbsp;<i>n</i><tt>)</tt> </blockquote>
      * 
      * @param regex the delimiting regular expression
      * @param limit the result threshold, as described above
@@ -858,10 +900,12 @@ class JSString implements Comparable<String>, CharSequence {
      * <th>Result</th>
      * </tr>
      * <tr>
-     * <td align=center>:</td> <td><tt>{ "boo", "and", "foo" }</tt></td>
+     * <td align=center>:</td>
+     * <td><tt>{ "boo", "and", "foo" }</tt></td>
      * </tr>
      * <tr>
-     * <td align=center>o</td> <td><tt>{ "b", "", ":and:f" }</tt></td>
+     * <td align=center>o</td>
+     * <td><tt>{ "b", "", ":and:f" }</tt></td>
      * </tr>
      * </table>
      * </blockquote>
@@ -1034,9 +1078,8 @@ class JSString implements Comparable<String>, CharSequence {
      * {@code String}.
      * <p>
      * Examples of lowercase mappings are in the following table:
-     * <table border="1" summary=
-     * "Lowercase mapping examples showing language code of locale, upper case, lower case, and description"
-     * >
+     * <table border="1" summary= "Lowercase mapping examples showing language code of locale, upper
+     * case, lower case, and description" >
      * <tr>
      * <th>Language Code of Locale</th>
      * <th>Upper Case</th>
@@ -1064,11 +1107,12 @@ class JSString implements Comparable<String>, CharSequence {
      * <tr>
      * <td>(all)</td>
      * <td><img src="doc-files/capiota.gif" alt="capiota"><img src="doc-files/capchi.gif" alt=
-     * "capchi"> <img src="doc-files/captheta.gif" alt="captheta"><img src="doc-files/capupsil.gif"
-     * alt="capupsil"> <img src="doc-files/capsigma.gif" alt="capsigma"></td>
-     * <td><img src="doc-files/iota.gif" alt="iota"><img src="doc-files/chi.gif" alt="chi"> <img src
-     * ="doc-files/theta.gif" alt="theta"><img src="doc-files/upsilon.gif" alt="upsilon"> <img src=
-     * "doc-files/sigma1.gif" alt="sigma"></td>
+     * "capchi">
+     * <img src="doc-files/captheta.gif" alt="captheta"><img src="doc-files/capupsil.gif" alt=
+     * "capupsil"> <img src="doc-files/capsigma.gif" alt="capsigma"></td>
+     * <td><img src="doc-files/iota.gif" alt="iota"><img src="doc-files/chi.gif" alt="chi">
+     * <img src ="doc-files/theta.gif" alt="theta"><img src="doc-files/upsilon.gif" alt="upsilon">
+     * <img src= "doc-files/sigma1.gif" alt="sigma"></td>
      * <td>lowercased all chars in String</td>
      * </tr>
      * </table>
@@ -1112,9 +1156,8 @@ class JSString implements Comparable<String>, CharSequence {
      * {@code String}.
      * <p>
      * Examples of locale-sensitive and 1:M case mappings are in the following table.
-     * <table border="1" summary=
-     * "Examples of locale-sensitive and 1:M case mappings. Shows Language code of locale, lower case, upper case, and description."
-     * >
+     * <table border="1" summary= "Examples of locale-sensitive and 1:M case mappings. Shows
+     * Language code of locale, lower case, upper case, and description." >
      * <tr>
      * <th>Language Code of Locale</th>
      * <th>Lower Case</th>

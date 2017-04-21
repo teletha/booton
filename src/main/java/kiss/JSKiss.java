@@ -64,7 +64,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
-import booton.translator.JavaAPIProvider;
 import js.lang.Global;
 import js.lang.NativeArray;
 import js.lang.NativeObject;
@@ -74,7 +73,7 @@ import kiss.model.Property;
 /**
  * @version 2013/08/02 12:39:06
  */
-@JavaAPIProvider(I.class)
+// @JavaAPIProvider(I.class)
 class JSKiss {
 
     /** No Operation */

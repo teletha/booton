@@ -10,6 +10,7 @@
 package js.lang;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
@@ -29,6 +30,13 @@ class JSSystem {
 
     /** The properties. */
     private static final Map<String, String> properties = new HashMap();
+
+    /**
+     * The "standard" input stream. This stream is already open and ready to supply input data.
+     * Typically this stream corresponds to keyboard input or another input source specified by the
+     * host environment or user.
+     */
+    public static InputStream in = null;
 
     /**
      * The "standard" output stream. This stream is already open and ready to accept output data.
@@ -68,12 +76,31 @@ class JSSystem {
     public static PrintStream err = new PrintStream(new DummyOutputStream());
 
     /**
+     * Reassigns the "standard" input stream.
+     * <p>
+     * First, if there is a security manager, its <code>checkPermission</code> method is called with
+     * a <code>RuntimePermission("setIO")</code> permission to see if it's ok to reassign the
+     * "standard" input stream.
+     * <p>
+     *
+     * @param stream the new standard input stream.
+     * @throws SecurityException if a security manager exists and its <code>checkPermission</code>
+     *             method doesn't allow reassigning of the standard input stream.
+     * @see SecurityManager#checkPermission
+     * @see java.lang.RuntimePermission
+     * @since JDK1.1
+     */
+    public static void setIn(InputStream stream) {
+        in = stream;
+    }
+
+    /**
      * Reassigns the "standard" output stream.
      * <p>
      * First, if there is a security manager, its <code>checkPermission</code> method is called with
      * a <code>RuntimePermission("setIO")</code> permission to see if it's ok to reassign the
      * "standard" output stream.
-     * 
+     *
      * @param out the new standard output stream
      * @throws SecurityException if a security manager exists and its <code>checkPermission</code>
      *             method doesn't allow reassigning of the standard output stream.
@@ -83,6 +110,24 @@ class JSSystem {
      */
     public static void setOut(PrintStream stream) {
         out = stream;
+    }
+
+    /**
+     * Reassigns the "standard" error output stream.
+     * <p>
+     * First, if there is a security manager, its <code>checkPermission</code> method is called with
+     * a <code>RuntimePermission("setIO")</code> permission to see if it's ok to reassign the
+     * "standard" error output stream.
+     *
+     * @param err the new standard error output stream.
+     * @throws SecurityException if a security manager exists and its <code>checkPermission</code>
+     *             method doesn't allow reassigning of the standard error output stream.
+     * @see SecurityManager#checkPermission
+     * @see java.lang.RuntimePermission
+     * @since JDK1.1
+     */
+    public static void setErr(PrintStream stream) {
+        err = stream;
     }
 
     /**
