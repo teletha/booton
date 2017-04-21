@@ -13,8 +13,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
+
+import jsx.debug.Profile;
+import kiss.I;
 
 /**
  * @version 2013/04/14 14:47:13
@@ -231,4 +238,23 @@ public class TranslationError extends Error {
      */
     public void writeConstructor(Constructor constructor) {
     }
+
+    private static final Set<String> names = I.signal(Profile.class, ClassReader.class, Javascript.class).map(Class::getName).toSet();
+
+    /**
+     * <p>
+     * Filtering stack trace to make human-readable.
+     * </p>
+     */
+    public void filterStackTrace() {
+        List<StackTraceElement> list = new ArrayList();
+
+        for (StackTraceElement e : getStackTrace()) {
+            if (!names.contains(e.getClassName())) {
+                list.add(e);
+            }
+        }
+        setStackTrace(list.toArray(new StackTraceElement[list.size()]));
+    }
+
 }

@@ -138,6 +138,7 @@ class JavaAPIProviders {
 
         if (originalDescriptor == null) {
             TranslationError error = new TranslationError();
+            error.filterStackTrace();
             error.write("You must define the method in " + definition.clazz + ".");
             error.writeMethod(name, Type.getReturnType(description), Type.getArgumentTypes(description));
 
@@ -159,6 +160,7 @@ class JavaAPIProviders {
 
         if (definition != null && !definition.fields.contains(field.getName())) {
             TranslationError error = new TranslationError();
+            error.filterStackTrace();
             error.write("You must define the field in ", definition.clazz, ".");
             error.write("");
             error.writeField(field);
