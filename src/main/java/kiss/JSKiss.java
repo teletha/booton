@@ -110,7 +110,7 @@ class JSKiss {
             Character.class, Void.class};
 
     /** The holder for lambda reference. */
-    private static final ClassVariable<Executable> executables = new ClassVariable();
+    private static final Map<Class, Executable> executables = new ConcurrentHashMap();
 
     static {
         // built-in lifestyles
