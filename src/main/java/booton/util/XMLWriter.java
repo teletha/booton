@@ -12,6 +12,7 @@ package booton.util;
 import java.io.Flushable;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class XMLWriter extends XMLFilterImpl implements LexicalHandler {
     public void startDocument() {
         try {
             // write xml declaration
-            out.append("<?xml version=\"1.0\" encoding=\"").append(I.$encoding.name()).append("\"?>").append(EOL);
+            out.append("<?xml version=\"1.0\" encoding=\"").append(StandardCharsets.UTF_8.name()).append("\"?>").append(EOL);
         } catch (IOException e) {
             throw I.quiet(e);
         }

@@ -16,6 +16,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
@@ -242,7 +243,7 @@ public class Javascript {
      */
     public void writeTo(Path output, Set<Class> defined) {
         try {
-            writeTo(Files.newBufferedWriter(output, I.$encoding), defined);
+            writeTo(Files.newBufferedWriter(output, StandardCharsets.UTF_8), defined);
         } catch (IOException e) {
             throw I.quiet(e);
         }

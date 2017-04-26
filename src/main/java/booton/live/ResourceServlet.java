@@ -11,6 +11,7 @@ package booton.live;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,7 +75,7 @@ public class ResourceServlet extends HttpServlet {
         Path file = root.resolve(path);
 
         if (path.endsWith(".html")) {
-            new HTMLWriter(new OutputStreamWriter(response.getOutputStream(), I.$encoding)).write(rebuild(file));
+            new HTMLWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8)).write(rebuild(file));
         } else {
             // assign content-type
             if (path.endsWith(".css")) {

@@ -11,6 +11,7 @@ package booton;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -196,7 +197,7 @@ public class Booton {
         body.child("script").attr("type", "text/javascript").attr("src", config.root.relativize(js));
 
         try {
-            new HTMLWriter(Files.newBufferedWriter(this.html, I.$encoding)).write(html);
+            new HTMLWriter(Files.newBufferedWriter(this.html, StandardCharsets.UTF_8)).write(html);
         } catch (IOException e) {
             throw I.quiet(e);
         }
