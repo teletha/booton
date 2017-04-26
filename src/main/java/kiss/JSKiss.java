@@ -64,6 +64,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
+import booton.translator.JavaAPIProvider;
 import js.lang.Global;
 import js.lang.NativeArray;
 import js.lang.NativeObject;
@@ -73,7 +74,7 @@ import kiss.model.Property;
 /**
  * @version 2013/08/02 12:39:06
  */
-// @JavaAPIProvider(I.class)
+@JavaAPIProvider(I.class)
 class JSKiss {
 
     /** No Operation */
@@ -1397,9 +1398,7 @@ class JSKiss {
         try {
             // traverse object as json
             Model model = Model.of(input);
-            Format format = new Format();
-            format.out = out;
-            format.accept(pair(model, new Property(model, ""), input));
+            new JSON(out).accept(pair(model, new Property(model, ""), input));
         } finally {
             // close carefuly
             quiet(out);
