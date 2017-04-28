@@ -1398,42 +1398,10 @@ class JSKiss {
         try {
             // traverse object as json
             Model model = Model.of(input);
-            new JSON(out).accept(pair(model, new Property(model, ""), input));
+            new JSON(out).accept(model, new Property(model, ""), input);
         } finally {
             // close carefuly
             quiet(out);
-        }
-    }
-
-    /**
-     * @version 2013/10/01 15:53:27
-     */
-    private static class Copy implements Consumer<Ⅲ<Model, Property, Object>> {
-
-        /** The current model. */
-        private Model model;
-
-        /** The curret object. */
-        private Object object;
-
-        /**
-         * @param model
-         * @param object
-         */
-        private Copy(Object object, Model model) {
-            this.model = model;
-            this.object = object;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void accept(Ⅲ<Model, Property, Object> t) {
-            Property dest = this.model.property(t.ⅱ.name);
-
-            // never check null because PropertyWalker traverses existing properties
-            this.model.set(object, dest, I.transform(t.ⅲ, dest.model.type));
         }
     }
 }
