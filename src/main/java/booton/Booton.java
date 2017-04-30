@@ -25,6 +25,7 @@ import booton.live.LiveCoding;
 import booton.live.LiveCodingServlet;
 import booton.live.ResourceServlet;
 import booton.translator.Javascript;
+import booton.translator.Translator;
 import booton.util.HTMLWriter;
 import filer.Filer;
 import jsx.debug.Profile;
@@ -138,7 +139,7 @@ public class Booton {
 
         BootonLog.LoadLibrary.start(() -> {
             // load booton extensions
-            I.load(Booton.class, false);
+            I.loadAll(Translator.class);
 
             // load application extensions
             I.load(application, true);

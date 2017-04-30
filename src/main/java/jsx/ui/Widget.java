@@ -56,10 +56,6 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
     protected static final Style WidgetRoot = () -> {
     };
 
-    static {
-        I.load(Widget.class, true);
-    }
-
     /** The update scheduler. */
     private static Set<Widget> updater = new HashSet();
 

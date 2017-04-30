@@ -42,7 +42,6 @@ import booton.Necessary;
 import booton.Unnecessary;
 import filer.Filer;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import js.lang.Global;
 import js.lang.NativeString;
 import kiss.Extensible;
 import kiss.I;
@@ -116,7 +115,7 @@ public class Javascript {
         }
 
         // Load Booton module
-        I.load(Global.class, false);
+        I.loadAll(Translator.class);
 
         // Define Class class at first. It is ensured that Class definition is
         // assigned in 'boot.A' variable.

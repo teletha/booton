@@ -92,9 +92,6 @@ public class ScriptTester {
 
     static {
         try {
-            // load test runner for booton
-            I.load(ScriptTester.class, true);
-
             // read boot.js
             boot = new String(Files.readAllBytes(Filer.locate("src/main/resources/init/boot.js")), UTF_8);
             unitTest = new String(Files.readAllBytes(Filer.locate("src/test/resources/unitTest.js")), UTF_8);
