@@ -637,7 +637,25 @@ class EmulateElement extends Element implements EmulateNodable {
      */
     @Override
     public String toString() {
-        return I.xml(new JavaElement(this)).toString();
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<").append(name);
+
+        for (int i = 0; i < attributes.length(); i++) {
+            Attribute attribute = attributes.get(i);
+            builder.append(" ").append(attribute.name()).append("=\"").append(attribute.value()).append('"');
+        }
+
+        if (elements.length() == 0) {
+            builder.append(" />");
+        } else {
+            for (int i = 0; i < elements.length(); i++) {
+                Element item = elements.item(i);
+                builder.append(item);
+            }
+            builder.append("</").append(name).append(">");
+        }
+        return builder.toString();
     }
 
     /**

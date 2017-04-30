@@ -97,8 +97,7 @@ class EmulateDocument extends Document {
      */
     @Override
     protected void textContent(String textContent) {
-        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR,
-                "Document cannot be inserted at the specified point in the hierarchy.");
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -106,8 +105,7 @@ class EmulateDocument extends Document {
      */
     @Override
     protected Node appendChild(Node newNode) {
-        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR,
-                "Document cannot be inserted at the specified point in the hierarchy.");
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -115,8 +113,7 @@ class EmulateDocument extends Document {
      */
     @Override
     public Node removeChild(Node childNode) {
-        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR,
-                "Document cannot be inserted at the specified point in the hierarchy.");
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -124,8 +121,7 @@ class EmulateDocument extends Document {
      */
     @Override
     public Node insertBefore(Node newNode, Node referenceNode) {
-        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR,
-                "Document cannot be inserted at the specified point in the hierarchy.");
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**
@@ -133,8 +129,7 @@ class EmulateDocument extends Document {
      */
     @Override
     protected Node replaceChild(Node newChild, Node oldChild) {
-        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR,
-                "Document cannot be inserted at the specified point in the hierarchy.");
+        throw new DOMException(DOMException.INVALID_MODIFICATION_ERR, "Document cannot be inserted at the specified point in the hierarchy.");
     }
 
     /**

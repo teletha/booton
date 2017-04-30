@@ -11,14 +11,17 @@ package kiss;
 
 import static js.lang.Global.*;
 
+import java.io.File;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
-import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -29,7 +32,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -51,18 +53,8 @@ import java.util.function.Supplier;
 import javax.script.ScriptException;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleMapProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
 import booton.translator.JavaAPIProvider;
 import js.lang.Global;
@@ -84,11 +76,8 @@ class JSKiss {
 
     public static ScheduledExecutorService $scheduler = Executors.newScheduledThreadPool(1);
 
-    /** The mapping from extension point to extensions. */
-    private static Table<Class, Class> extensions;
-
-    /** The mapping from extension point to assosiated extension mapping. */
-    private static final Table<String, Class> keys = new Table();
+    /** The definitions for extensions. */
+    private static Map extensions;
 
     /** The circularity dependency graph per thread. */
     static final ThreadSpecific<Deque<Class>> dependencies = new ThreadSpecific(ArrayDeque.class);
@@ -115,22 +104,11 @@ class JSKiss {
 
     static {
         // built-in lifestyles
-        lifestyles.put(List.class, new Prototype(ArrayList.class));
-        lifestyles.put(Map.class, new Prototype(HashMap.class));
+        lifestyles.put(List.class, ArrayList::new);
+        lifestyles.put(Map.class, HashMap::new);
+        lifestyles.put(Set.class, HashSet::new);
+        lifestyles.put(Lifestyle.class, new Prototype(Prototype.class));
         lifestyles.put(Prototype.class, new Prototype(Prototype.class));
-        lifestyles.put(ListProperty.class, () -> {
-            return new SimpleListProperty(FXCollections.observableArrayList());
-        });
-        lifestyles.put(ObservableList.class, FXCollections::observableArrayList);
-        lifestyles.put(MapProperty.class, () -> {
-            return new SimpleMapProperty(FXCollections.observableHashMap());
-        });
-        lifestyles.put(ObservableMap.class, FXCollections::observableHashMap);
-        lifestyles.put(SetProperty.class, () -> {
-            return new SimpleSetProperty(FXCollections.observableSet());
-        });
-        lifestyles.put(ObservableSet.class, FXCollections::observableSet);
-        lifestyles.put(Locale.class, () -> Locale.getDefault());
     }
 
     /**
@@ -355,16 +333,7 @@ class JSKiss {
     public static <E extends Extensible> List<E> find(Class<E> extensionPoint) {
         initialize();
 
-        // Skip null check because this method can throw NullPointerException.
-        List<Class> classes = extensions.get(extensionPoint);
-
-        // instantiate all found extesions
-        List list = new ArrayList(classes.size());
-
-        for (Class extension : classes) {
-            list.add(make(extension));
-        }
-        return list;
+        return I.signal(findBy(extensionPoint)).flatIterable(Ⅱ::ⅰ).map(I::make).toList();
     }
 
     /**
@@ -384,23 +353,23 @@ class JSKiss {
     public static <E extends Extensible> E find(Class<E> extensionPoint, Class key) {
         initialize();
 
-        if (extensionPoint == null || key == null) {
-            return null;
-        }
+        if (extensionPoint != null && key != null) {
+            Ⅱ<List<Class<E>>, Map<Class, Supplier<E>>> extensions = findBy(extensionPoint);
 
-        for (Class clazz : Model.collectTypes(key)) {
-            Class<E> supplier = keys.find(extensionPoint.getName().concat(clazz.getName()));
+            for (Class type : Model.collectTypes(key)) {
+                Supplier<E> supplier = extensions.ⅱ.get(type);
 
-            if (supplier != null) {
-                return make(supplier);
+                if (supplier != null) {
+                    return supplier.get();
+                }
             }
-        }
 
-        if (extensionPoint != ExtensionFactory.class) {
-            ExtensionFactory factory = find(ExtensionFactory.class, extensionPoint);
+            if (extensionPoint != ExtensionFactory.class) {
+                ExtensionFactory<E> factory = find(ExtensionFactory.class, extensionPoint);
 
-            if (factory != null) {
-                return (E) factory.create(key);
+                if (factory != null) {
+                    return factory.create(key);
+                }
             }
         }
         return null;
@@ -427,93 +396,21 @@ class JSKiss {
     public static <E extends Extensible> List<Class<E>> findAs(Class<E> extensionPoint) {
         initialize();
 
-        // Skip null check because this method can throw NullPointerException.
-        List<Class> classes = extensions.get(extensionPoint);
-
-        // instantiate all found extesions
-        List list = new ArrayList(classes.size());
-
-        for (Class extension : classes) {
-            list.add(extension);
-        }
-        return list;
+        return new ArrayList(findBy(extensionPoint).ⅰ);
     }
 
     /**
      * <p>
-     * Gets a <em>type-safe and refactoring-safe</em> resource bundle (<em>not</em>
-     * {@link java.util.ResourceBundle}) corresponding to the specified resource bundle class.
+     * Find the extension definition for the specified extension point.
      * </p>
-     * <p>
-     * Conceptually, i18n method uses the following strategy for locating and instantiating resource
-     * bundles:
-     * </p>
-     * <p>
-     * i18n method uses the bundle class name and the default locale (obtained from
-     * <code>I.make(Locale.class)</code>)) to generate a sequence of candidate bundle names. If the
-     * default locale's language, country, and variant are all empty strings, then the bundle class
-     * name is the only candidate bundle name. Otherwise, the following sequence is generated from
-     * the attribute values of the default locale (language, country, and variant):
-     * </p>
-     * <ol>
-     * <li>bundleClassSimpleName + "_" + language + "_" + country + "_" + variant</li>
-     * <li>bundleClassSimpleName + "_" + language + "_" + country</li>
-     * <li>bundleClassSimpleName + "_" + language</li>
-     * <li>bundleClassSimpleName</li>
-     * </ol>
-     * <p>
-     * Candidate bundle names where the final component is an empty string are omitted. For example,
-     * if country is an empty string, the second candidate bundle name is omitted.
-     * </p>
-     * <p>
-     * i18n method then iterates over the candidate bundle names to find the first one for which it
-     * can instantiate an actual resource bundle. For each candidate bundle name, it attempts to
-     * create a resource bundle:
-     * </p>
-     * <ol>
-     * <li>First, it attempts to find a class using the candidate bundle name. If such a class can
-     * be found and loaded using {@link I#find(Class)}, is assignment compatible with the given
-     * bundle class, and can be instantiated, i18n method creates a new instance of this class and
-     * uses it as the result resource bundle.</li>
-     * </ol>
-     * <p>
-     * If the following classes are provided:
-     * </p>
-     * <ul>
-     * <li>MyResources.class</li>
-     * <li>MyResources_fr.class</li>
-     * <li>MyResources_fr_CH.class</li>
-     * </ul>
-     * <p>
-     * The contents of all files are valid (that is non-abstract subclasses of {@link Extensible}
-     * for the ".class" files). The default locale is Locale("en", "GB").
-     * </p>
-     * <p>
-     * Calling i18n method with the shown locale argument values instantiates resource bundles from
-     * the following sources:
-     * </p>
-     * <ol>
-     * <li>Locale("fr", "CH"): result MyResources_fr_CH.class</li>
-     * <li>Locale("fr", "FR"): result MyResources_fr.class</li>
-     * <li>Locale("es"): result MyResources.class</li>
-     * </ol>
-     *
-     * @param <B> A resource bundle.
-     * @param bundleClass A resource bundle class. <code>null</code> will throw
-     *            {@link NullPointerException}.
-     * @return A suitable resource bundle class for the given bundle class and locale.
-     * @throws NullPointerException If the bundle class is <code>null</code>.
+     * 
+     * @param extensionPoint A target extension point.
+     * @return A extension definition.
      */
-    public static <B extends Extensible> B i18n(Class<B> bundleClass) {
-        String lang = "_".concat(make(Locale.class).getLanguage());
+    private static <E extends Extensible> Ⅱ<List<Class<E>>, Map<Class, Supplier<E>>> findBy(Class<E> extensionPoint) {
+        initialize();
 
-        for (Class clazz : extensions.get(bundleClass)) {
-            if (clazz.getName().endsWith(lang)) {
-                bundleClass = clazz;
-                break;
-            }
-        }
-        return make(bundleClass);
+        return (Ⅱ) extensions.computeIfAbsent(extensionPoint, p -> pair(new ArrayList(), new HashMap()));
     }
 
     public static <P> Consumer<P> imitateConsumer(Runnable lambda) {
@@ -644,13 +541,14 @@ class JSKiss {
      * @throws InstantiationException If Sinobu can't instantiate(resolve) the model class.
      */
     static <M> Lifestyle<M> makeLifestyle(Class<M> modelClass) {
+        // Skip null check because this method can throw NullPointerException.
+        // if (modelClass == null) throw new NullPointerException("NPE");
+
         // At first, we must confirm the cached lifestyle associated with the model class. If
         // there is no such cache, we will try to create newly lifestyle.
         Lifestyle<M> lifestyle = lifestyles.get(modelClass);
 
-        if (lifestyle != null) {
-            return lifestyle; // use cache
-        }
+        if (lifestyle != null) return lifestyle; // use cache
 
         // Skip null check because this method can throw NullPointerException.
         // if (modelClass == null) throw new NullPointerException("NPE");
@@ -664,16 +562,6 @@ class JSKiss {
         Deque<Class> dependency = dependencies.get();
         dependency.add(modelClass);
 
-        // Don't use 'contains' method check here to resolve singleton based
-        // circular reference. So we must judge it from the size of context. If the
-        // context contains too many classes, it has a circular reference
-        // independencies.
-        if (16 < dependency.size()) {
-            // Deque will be contain repeated Classes so we must shrink it with
-            // maintaining its class order.
-            throw new ClassCircularityError(new LinkedHashSet(dependency).toString());
-        }
-
         try {
             // At first, we should search the associated lifestyle from extension points.
             lifestyle = find(Lifestyle.class, modelClass);
@@ -685,25 +573,15 @@ class JSKiss {
                 Manageable manageable = modelClass.getAnnotation(Manageable.class);
 
                 // Create new lifestyle for the actual model class
-                lifestyle = (Lifestyle<M>) make((Class) (manageable == null ? Prototype.class : manageable.lifestyle()));
+                lifestyle = (Lifestyle) make((Class) (manageable == null ? Prototype.class : manageable.lifestyle()));
             }
 
-            // Trace dependency graph to detect circular dependencies.
-            Constructor constructor = Model.collectConstructors(modelClass)[0];
-
-            if (constructor != null) {
-                for (Class param : constructor.getParameterTypes()) {
-                    if (param != Lifestyle.class && param != Class.class) {
-                        makeLifestyle(param);
-                    }
-                }
+            if (lifestyles.containsKey(modelClass)) {
+                return lifestyles.get(modelClass);
+            } else {
+                lifestyles.put(modelClass, lifestyle);
+                return lifestyle;
             }
-
-            // This lifestyle is safe and has no circular dependencies.
-            lifestyles.putIfAbsent(modelClass, lifestyle);
-
-            // API definition
-            return lifestyles.get(modelClass);
         } finally {
             dependency.pollLast();
         }
@@ -1046,9 +924,6 @@ class JSKiss {
      * @see java.lang.ClassLoader#getSystemClassLoader()
      */
     public static ClassLoader load(Class classPath, boolean filter) {
-        // reset
-        extensions = null;
-
         // API definition
         return null;
     }
@@ -1058,41 +933,164 @@ class JSKiss {
      */
     private static void initialize() {
         if (extensions == null) {
-            extensions = new Table();
+            extensions = new HashMap();
 
             for (Class<? extends Extensible> extension : search(Extensible.class)) {
                 load(extension);
             }
+
+            // built-in encoders
+            load(ExtensionFactory.class, Encoder.class, () -> (ExtensionFactory<Encoder>) type -> {
+                if (type.isEnum()) {
+                    return value -> ((Enum) value).name();
+                }
+                switch (type.getName().hashCode()) {
+                case -530663260: // java.lang.Class
+                    return value -> ((Class) value).getName();
+                default:
+                    return String::valueOf;
+                }
+            });
+
+            // built-in decoders
+            load(ExtensionFactory.class, Decoder.class, () -> (ExtensionFactory<Decoder>) type -> {
+                if (type.isEnum()) {
+                    return value -> Enum.valueOf((Class<Enum>) type, value);
+                }
+                switch (type.getName().hashCode()) {
+                case 64711720: // boolean
+                case 344809556: // java.lang.Boolean
+                    return Boolean::new;
+                case 104431: // int
+                case -2056817302: // java.lang.Integer
+                    return Integer::new;
+                case 3327612: // long
+                case 398795216: // java.lang.Long
+                    return Long::new;
+                case 97526364: // float
+                case -527879800: // java.lang.Float
+                    return Float::new;
+                case -1325958191: // double
+                case 761287205: // java.lang.Double
+                    return Double::new;
+                case 3039496: // byte
+                case 398507100: // java.lang.Byte
+                    return Byte::new;
+                case 109413500: // short
+                case -515992664: // java.lang.Short
+                    return Short::new;
+                case 3052374: // char
+                case 155276373: // java.lang.Character
+                    return value -> value.charAt(0);
+                case -530663260: // java.lang.Class
+                    return I::type;
+                case 1195259493: // java.lang.String
+                    return String::new;
+                case -1555282570: // java.lang.StringBuilder
+                    return StringBuilder::new;
+                case 1196660485: // java.lang.StringBuffer
+                    return StringBuffer::new;
+                case 2130072984: // java.io.File
+                    return File::new;
+                case 2050244018: // java.net.URL
+                    return value -> {
+                        try {
+                            return new URL(value);
+                        } catch (Exception e) {
+                            throw I.quiet(e);
+                        }
+                    };
+                case 2050244015: // java.net.URI
+                    return URI::create;
+                case -989675752: // java.math.BigInteger
+                    return BigInteger::new;
+                case -1405464277: // java.math.BigDecimal
+                    return BigDecimal::new;
+                case -1165211622: // java.util.Locale
+                    return Locale::forLanguageTag;
+                case -1023498007: // java.time.Duration
+                case 1296075756: // java.time.Instant
+                case -1246518012: // java.time.LocalDate
+                case -1179039247: // java.time.LocalDateTime
+                case -1246033885: // java.time.LocalTime
+                case 649475153: // java.time.MonthDay
+                case -682591005: // java.time.OffsetDateTime
+                case -1917484011: // java.time.OffsetTime
+                case 649503318: // java.time.Period
+                case -1062742510: // java.time.Year
+                case -537503858: // java.time.YearMonth
+                case 1505337278: // java.time.ZonedDateTime
+                    return value -> {
+                        try {
+                            return type.getMethod("parse", CharSequence.class).invoke(null, value);
+                        } catch (Exception e) {
+                            throw I.quiet(e);
+                        }
+                    };
+                // case -89228377: // java.nio.file.attribute.FileTime
+                // decoder = value -> FileTime.fromMillis(Long.valueOf(value));
+                // encoder = (Encoder<FileTime>) value -> String.valueOf(value.toMillis());
+                // break;
+                default:
+                    return null;
+                }
+            });
         }
     }
 
-    private static void load(Class extension) {
+    private static <E extends Extensible> Disposable load(Class extension) {
+        Disposable disposer = Disposable.empty();
+
         // search and collect information for all extension points
-        for (Class extensionPoint : Model.collectTypes(extension)) {
+        for (Class<E> extensionPoint : Model.collectTypes(extension)) {
             if (Arrays.asList(extensionPoint.getInterfaces()).contains(Extensible.class)) {
-                // register new extension
-                extensions.push(extensionPoint, extension);
+                // register as new extension
+                findBy(extensionPoint).ⅰ.add(extension);
+                disposer.add(() -> findBy(extensionPoint).ⅰ.remove(extension));
 
                 // register extension key
-                Type[] params = Model.collectParameters(extension, extensionPoint);
+                java.lang.reflect.Type[] params = Model.collectParameters(extension, extensionPoint);
 
                 if (params.length != 0 && params[0] != Object.class) {
-                    keys.push(extensionPoint.getName().concat(((Class) params[0]).getName()), extension);
+                    Class clazz = (Class) params[0];
 
-                    // The user has registered a newly custom lifestyle, so we should update
-                    // lifestyle for this extension key class. Normally, when we update some data,
-                    // it is desirable to store the previous data to be able to restore it later.
-                    // But, in this case, the contextual sensitive instance that the lifestyle emits
-                    // changes twice on "load" and "unload" event from the point of view of the
-                    // user. So the previous data becomes all but meaningless for a cacheable
-                    // lifestyles (e.g. Singleton and ThreadSpecifiec). Therefore we we completely
-                    // refresh lifestyles associated with this extension key class.
+                    // register extension by key
+                    disposer.add(load(extensionPoint, clazz, () -> (E) I.make(extension)));
+
+                    // The user has registered a newly custom lifestyle, so we
+                    // should update lifestyle for this extension key class.
+                    // Normally, when we update some data, it is desirable to store
+                    // the previous data to be able to restore it later.
+                    // But, in this case, the contextual sensitive instance that
+                    // the lifestyle emits changes twice on "load" and "unload"
+                    // event from the point of view of the user.
+                    // So the previous data becomes all but meaningless for a
+                    // cacheable lifestyles (e.g. Singleton and ThreadSpecifiec).
+                    // Therefore we we completely refresh lifestyles associated with
+                    // this extension key class.
                     if (extensionPoint == Lifestyle.class) {
-                        lifestyles.remove(params[0]);
+                        lifestyles.remove(clazz);
+                        disposer.add(() -> lifestyles.remove(clazz));
                     }
                 }
             }
         }
+        return disposer;
+    }
+
+    /**
+     * <p>
+     * Register extension with key.
+     * </p>
+     * 
+     * @param extensionPoint A extension point.
+     * @param extensionKey A extension key,
+     * @param extension A extension to register.
+     * @return A disposer to unregister.
+     */
+    public static <E extends Extensible> Disposable load(Class<E> extensionPoint, Class extensionKey, Supplier<E> extension) {
+        findBy(extensionPoint).ⅱ.put(extensionKey, extension);
+        return () -> findBy(extensionPoint).ⅱ.remove(extensionKey);
     }
 
     /**
