@@ -139,7 +139,7 @@ public class Booton {
 
         BootonLog.LoadLibrary.start(() -> {
             // load booton extensions
-            I.loadAll(Translator.class);
+            I.load(Translator.class, false);
 
             // load application extensions
             I.load(application, true);

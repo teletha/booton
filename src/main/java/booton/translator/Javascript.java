@@ -115,7 +115,7 @@ public class Javascript {
         }
 
         // Load Booton module
-        I.loadAll(Translator.class);
+        I.load(Translator.class, false);
 
         // Define Class class at first. It is ensured that Class definition is
         // assigned in 'boot.A' variable.
