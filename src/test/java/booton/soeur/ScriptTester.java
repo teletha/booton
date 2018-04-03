@@ -34,7 +34,6 @@ import com.gargoylesoftware.htmlunit.WebConsole.Logger;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.JavaScriptEngine;
 
-import antibug.powerassert.PowerAssertOffError;
 import booton.BootonLog;
 import booton.Unnecessary;
 import booton.live.ClientStackTrace;
@@ -305,7 +304,7 @@ public class ScriptTester {
                         if (error instanceof AssertionError || error instanceof InternalError) {
                             dump();
 
-                            error = new PowerAssertOffError(error);
+                            error = new Error(error);
                         }
                         throw I.quiet(error);
                     }
