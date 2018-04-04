@@ -38,17 +38,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import javax.script.ScriptException;
 
@@ -346,7 +350,7 @@ class JSKiss {
      * @param extensionPoint An Extension Point class. The
      *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
      *            otherwise this method will return <code>null</code>.
-     * @param key An <a href="Extensible.html#ExtensionKey">Extension Key</a> class.
+     * @param key An <a  href="Extensible.html#ExtensionKey">Extension Key</a> class.
      * @return A associated Extension of the given Extension Point and the given Extension Key or
      *         <code>null</code>.
      */
@@ -742,6 +746,78 @@ class JSKiss {
 
     /**
      * <p>
+     * Ease the checked exception on lambda.
+     * </p>
+     * 
+     * @param lambda A checked lambda.
+     * @return A unchecked lambda.
+     */
+    public static Runnable quiet(WiseRunnable lambda) {
+        return lambda;
+    }
+
+    /**
+     * <p>
+     * Ease the checked exception on lambda.
+     * </p>
+     * 
+     * @param lambda A checked lambda.
+     * @return A unchecked lambda.
+     */
+    public static <P> Consumer<P> quiet(WiseConsumer<P> lambda) {
+        return lambda;
+    }
+
+    /**
+     * <p>
+     * Ease the checked exception on lambda.
+     * </p>
+     * 
+     * @param lambda A checked lambda.
+     * @return A unchecked lambda.
+     */
+    public static <P1, P2> BiConsumer<P1, P2> quiet(WiseBiConsumer<P1, P2> lambda) {
+        return lambda;
+    }
+
+    /**
+     * <p>
+     * Ease the checked exception on lambda.
+     * </p>
+     * 
+     * @param lambda A checked lambda.
+     * @return A unchecked lambda.
+     */
+    public static <R> Supplier<R> quiet(WiseSupplier<R> lambda) {
+        return lambda;
+    }
+
+    /**
+     * <p>
+     * Ease the checked exception on lambda.
+     * </p>
+     * 
+     * @param lambda A checked lambda.
+     * @return A unchecked lambda.
+     */
+    public static <P, R> Function<P, R> quiet(WiseFunction<P, R> lambda) {
+        return lambda;
+    }
+
+    /**
+     * <p>
+     * Ease the checked exception on lambda.
+     * </p>
+     * 
+     * @param lambda A checked lambda.
+     * @return A unchecked lambda.
+     */
+    public static <P1, P2, R> BiFunction<P1, P2, R> quiet(WiseBiFunction<P1, P2, R> lambda) {
+        return lambda;
+    }
+
+    /**
+     * <p>
      * Close the specified object quietly if it is {@link AutoCloseable}. Equivalent to
      * {@link AutoCloseable#close()}, except any exceptions will be ignored. This is typically used
      * in finally block like the following.
@@ -814,6 +890,170 @@ class JSKiss {
 
         // API definition
         return null;
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link BiConsumer}.
+     * </p>
+     * <pre>
+     * I.recurBC(self -> (param1, param2) -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     */
+    public static <Param1, Param2> BiConsumer<Param1, Param2> recurseBC(Function<BiConsumer<Param1, Param2>, BiConsumer<Param1, Param2>> function) {
+        Recursive<BiConsumer<Param1, Param2>> recursive = recursiveFunction -> function.apply((param1, param2) -> {
+            recursiveFunction.apply(recursiveFunction).accept(param1, param2);
+        });
+        return recursive.apply(recursive);
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link BiFunction}.
+     * </p>
+     * <pre>
+     * I.recurBF(self -> (param1, param2) -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     */
+    public static <Param1, Param2, Return> BiFunction<Param1, Param2, Return> recurseBF(Function<BiFunction<Param1, Param2, Return>, BiFunction<Param1, Param2, Return>> function) {
+        Recursive<BiFunction<Param1, Param2, Return>> recursive = recursiveFunction -> function.apply((param1, param2) -> {
+            return recursiveFunction.apply(recursiveFunction).apply(param1, param2);
+        });
+        return recursive.apply(recursive);
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link Consumer}.
+     * </p>
+     * <pre>
+     * I.recurC(self -> param1 -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     * @param function A target function to convert.
+     * @return A converted recursive function.
+     */
+    public static <Param> Consumer<Param> recurseC(Function<Consumer<Param>, Consumer<Param>> function) {
+        Recursive<Consumer<Param>> recursive = recursiveFunction -> function.apply(param -> {
+            recursiveFunction.apply(recursiveFunction).accept(param);
+        });
+        return recursive.apply(recursive);
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link Function}.
+     * </p>
+     * <pre>
+     * I.recurF(self -> param -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     */
+    public static <Param, Return> Function<Param, Return> recurseF(Function<Function<Param, Return>, Function<Param, Return>> function) {
+        Recursive<Function<Param, Return>> recursive = recursiveFunction -> function.apply(param -> {
+            return recursiveFunction.apply(recursiveFunction).apply(param);
+        });
+
+        return recursive.apply(recursive);
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link Runnable}.
+     * </p>
+     * <pre>
+     * I.recurR(self -> () -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     */
+    public static Runnable recurseR(Function<Runnable, Runnable> function) {
+        Recursive<Runnable> recursive = recursiveFunction -> function.apply(() -> {
+            recursiveFunction.apply(recursiveFunction).run();
+        });
+        return recursive.apply(recursive);
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link Supplier}.
+     * </p>
+     * <pre>
+     * I.recurS(self -> () -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     */
+    public static <Result> Supplier<Result> recurseS(Function<Supplier<Result>, Supplier<Result>> function) {
+        Recursive<Supplier<Result>> recursive = recursiveFunction -> function.apply(() -> {
+            return recursiveFunction.apply(recursiveFunction).get();
+        });
+        return recursive.apply(recursive);
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link WiseTriConsumer}.
+     * </p>
+     * <pre>
+     * I.recurTC(self -> (param1, param2, param3) -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     */
+    public static <Param1, Param2, Param3> WiseTriConsumer<Param1, Param2, Param3> recurseTC(Function<WiseTriConsumer<Param1, Param2, Param3>, WiseTriConsumer<Param1, Param2, Param3>> function) {
+        Recursive<WiseTriConsumer<Param1, Param2, Param3>> recursive = recursiveFunction -> function.apply((param1, param2, param3) -> {
+            recursiveFunction.apply(recursiveFunction).accept(param1, param2, param3);
+        });
+        return recursive.apply(recursive);
+    }
+
+    /**
+     * <p>
+     * Define recursive {@link WiseTriFunction}.
+     * </p>
+     * <pre>
+     * I.recurTF(self -> (param1, param2, param3) -> {
+     *   // your function code
+     * });
+     * </pre>
+     * 
+     * @param function A recursive function.
+     * @return A created function.
+     */
+    public static <Param1, Param2, Param3, Return> WiseTriFunction<Param1, Param2, Param3, Return> recurseTF(Function<WiseTriFunction<Param1, Param2, Param3, Return>, WiseTriFunction<Param1, Param2, Param3, Return>> function) {
+        Recursive<WiseTriFunction<Param1, Param2, Param3, Return>> recursive = recursiveFunction -> function
+                .apply((param1, param2, param3) -> {
+                    return recursiveFunction.apply(recursiveFunction).apply(param1, param2, param3);
+                });
+        return recursive.apply(recursive);
     }
 
     /**
@@ -1245,6 +1485,50 @@ class JSKiss {
     }
 
     /**
+     * Converts a {@link Future} into a {@link Signal}.
+     *
+     * @param value The source {@link Future}.
+     * @param <V> The type of object that the {@link Future} returns, and also the type of item to
+     *            be emitted by the resulting {@link Signal}.
+     * @return {@link Signal} that emits the item from the source {@link Future}.
+     */
+    public static <V> Signal<V> signal(Future<V> value) {
+        return new Signal<>((observer, disposer) -> {
+            I.schedule(() -> {
+                try {
+                    observer.accept(value.get());
+                    observer.complete();
+                } catch (Throwable e) {
+                    observer.error(e);
+                }
+            });
+            return disposer.add(() -> value.cancel(true));
+        });
+    }
+
+    /**
+     * Converts a {@link CompletableFuture} into a {@link Signal}.
+     *
+     * @param value The source {@link CompletableFuture}.
+     * @param <V> The type of object that the {@link CompletableFuture} returns, and also the type
+     *            of item to be emitted by the resulting {@link Signal}.
+     * @return {@link Signal} that emits the item from the source {@link CompletableFuture}.
+     */
+    public static <V> Signal<V> signal(CompletableFuture<V> value) {
+        return new Signal<>((observer, disposer) -> {
+            value.whenComplete((v, e) -> {
+                if (e == null) {
+                    observer.accept(v);
+                    observer.complete();
+                } else {
+                    observer.error(e);
+                }
+            });
+            return disposer.add(() -> value.cancel(true));
+        });
+    }
+
+    /**
      * <p>
      * Signal the specified values.
      * </p>
@@ -1270,7 +1554,7 @@ class JSKiss {
 
     /**
      * <p>
-     * Signal the specified values.
+     * {@link Signal} the specified values.
      * </p>
      *
      * @param values A list of values to emit.
@@ -1281,75 +1565,220 @@ class JSKiss {
     }
 
     /**
-     * @param value A initial value.
-     * @param time A time to interval.
-     * @param unit A time unit.
-     * @param <V> Value type.
-     * @return An {@link Signal} that emits values as a first sequence.
+     * Returns an {@link Signal} that emits {@code 0L} after a specified delay, and then completes.
+     *
+     * @param delayTime The initial delay before emitting a single {@code 0L}.
+     * @param timeUnit Time units to use for {@code delay}.
+     * @return {@link Signal} that {@code 0L} after a specified delay, and then completes.
      */
-    public static <V> Signal<V> signalInfinite(V value, long time, TimeUnit unit) {
+    public static Signal<Long> signal(long delayTime, TimeUnit timeUnit) {
         return new Signal<>((observer, disposer) -> {
-            Future schedule = schedule(() -> observer.accept(value), time, unit);
+            ScheduledFuture<?> future = parallel.schedule(() -> {
+                observer.accept(0L);
+                observer.complete();
+            }, delayTime, timeUnit);
 
-            return disposer.add(() -> schedule.cancel(true));
+            return disposer.add(() -> future.cancel(true));
         });
     }
 
     /**
-     * Returns a sequential ordered {@code Events} from {@code startInclusive} (inclusive) to
-     * {@code endExclusive} (exclusive) by an incremental step of {@code 1}.
-     *
-     * @apiNote An equivalent sequence of increasing values can be produced sequentially using a
-     *          {@code for} loop as follows: <pre>{@code
-     *     for (int i = startInclusive; i < endExclusive ; i++) { ... }
-     * }</pre>
-     * @param startInclusive A (inclusive) initial value.
-     * @param endExclusive An exclusive upper bound.
-     * @return a sequential {@code Events} for the range of {@code Integer} elements
+     * Returns an {@link Signal} that emits a {@code 0L} after the {@code delayTime} and ever
+     * increasing numbers after each {@code intervalTime} of time thereafter.
+     * 
+     * @param delayTime The initial delay time to wait before emitting the first value of 0L
+     * @param intervalTime The period of time between emissions of the subsequent numbers
+     * @param timeUnit the time unit for both {@code initialDelay} and {@code period}
+     * @return {@link Signal} that emits a 0L after the {@code delayTime} and ever increasing
+     *         numbers after each {@code intervalTime} of time thereafter
      */
-    public static Signal<Integer> signalRange(int startInclusive, int endExclusive) {
-        return signalRange(startInclusive, 1, endExclusive);
+    public static Signal<Long> signal(long delayTime, long intervalTime, TimeUnit timeUnit) {
+        return new Signal<>((observer, disposer) -> {
+            AtomicLong count = new AtomicLong();
+            ScheduledFuture<?> future = parallel.scheduleAtFixedRate(() -> {
+                observer.accept(count.getAndIncrement());
+            }, delayTime, intervalTime, timeUnit);
+
+            return disposer.add(() -> future.cancel(true));
+        });
     }
 
     /**
-     * Returns a sequential ordered {@code Events} from {@code startInclusive} (inclusive) to
-     * {@code endExclusive} (exclusive) by an incremental step of {@code 1}.
-     *
-     * @apiNote An equivalent sequence of increasing values can be produced sequentially using a
-     *          {@code for} loop as follows: <pre>{@code
-     *     for (int i = startInclusive; i < endExclusive ; i += step) { ... }
-     * }</pre>
-     * @param startInclusive A (inclusive) initial value.
-     * @param step A incremental step.
-     * @param endExclusive An exclusive upper bound.
-     * @return a sequential {@code Events} for the range of {@code Integer} elements
+     * <p>
+     * Traverse the tree structure.
+     * </p>
+     * 
+     * @param root A root node to traverse.
+     * @param traverser A function to navigate from a node to its children.
+     * @return
      */
-    public static Signal<Integer> signalRange(int startInclusive, int step, int endExclusive) {
-        if (step == 0) {
-            throw new IllegalArgumentException();
-        }
+    public static <T> Signal<T> signal(T root, UnaryOperator<Signal<T>> traverser) {
+        return signal(signal(root), traverser);
+    }
 
-        return (0 < step ? endExclusive <= startInclusive : startInclusive <= endExclusive) ? Signal.EMPTY
-                : signal(() -> new Iterator<Integer>() {
+    /**
+     * <p>
+     * Traverse the tree structure.
+     * </p>
+     * 
+     * @param root A root node to traverse.
+     * @param traverser A function to navigate from a node to its children.
+     * @return
+     */
+    private static <T> Signal<T> signal(Signal<T> root, UnaryOperator<Signal<T>> traverser) {
+        return root.merge(root.flatMap(e -> signal(traverser.apply(I.signal(e)), traverser)));
+    }
 
-                    private int now = startInclusive;
+    /**
+     * <p>
+     * Returns an {@link Signal} that invokes an {@link Observer#error(Throwable)} method when the
+     * {@link Observer} subscribes to it.
+     * </p>
+     *
+     * @param error An error to emit.
+     * @return The {@link Signal} to emit error.
+     */
+    public static <V, E extends Throwable> Signal<V> signalError(E error) {
+        return new Signal<V>((observer, disposer) -> {
+            observer.error(error);
+            return disposer;
+        });
+    }
 
-                    /**
-                     * {@inheritDoc}
-                     */
-                    @Override
-                    public boolean hasNext() {
-                        return 0 < step ? now < endExclusive : endExclusive < now;
-                    }
+    /**
+     * Signal a sequence of logns within a specified range.
+     * 
+     * @param start A value of the first long in the sequence.
+     * @param count A number of sequential longs to generate.
+     * @return A {@link Signal} that emits a range of sequential longs
+     */
+    public static Signal<Integer> signalRange(int start, int count) {
+        return signalRange(start, count, 1);
+    }
 
-                    /**
-                     * {@inheritDoc}
-                     */
-                    @Override
-                    public Integer next() {
-                        return (now += step) - step; // guilty?
-                    }
-                });
+    /**
+     * Signal a sequence of logns within a specified range.
+     * 
+     * @param start A value of the first long in the sequence.
+     * @param count A number of sequential longs to generate.
+     * @param step A step value for each sequential longs to generate.
+     * @return A {@link Signal} that emits a range of sequential longs
+     */
+    public static Signal<Integer> signalRange(int start, int count, int step) {
+        return new Signal<>((observer, disposer) -> {
+            for (int i = 0; i < count; i++) {
+                observer.accept(start + i * step);
+            }
+            observer.complete();
+            return disposer;
+        });
+    }
+
+    /**
+     * Signal a sequence of logns within a specified range.
+     * 
+     * @param start A value of the first long in the sequence.
+     * @param count A number of sequential longs to generate.
+     * @return A {@link Signal} that emits a range of sequential longs
+     */
+    public static Signal<Long> signalRange(long start, long count) {
+        return signalRange(start, count, 1L);
+    }
+
+    /**
+     * Signal a sequence of logns within a specified range.
+     * 
+     * @param start A value of the first long in the sequence.
+     * @param count A number of sequential longs to generate.
+     * @param step A step value for each sequential longs to generate.
+     * @return A {@link Signal} that emits a range of sequential longs
+     */
+    public static Signal<Long> signalRange(long start, long count, long step) {
+        return new Signal<>((observer, disposer) -> {
+            for (long i = 0; i < count; i++) {
+                observer.accept(start + i * step);
+            }
+            observer.complete();
+            return disposer;
+        });
+    }
+
+    /**
+     * <p>
+     * Down cast from {@link Runnable} to {@link WiseRunnable}.
+     * </p>
+     * 
+     * @param lambda A target function.
+     * @return A casted function.
+     * @see #quiet(WiseRunnable)
+     */
+    public static WiseRunnable wise(Runnable lambda) {
+        return lambda instanceof WiseRunnable ? (WiseRunnable) lambda : () -> lambda.run();
+    }
+
+    /**
+     * <p>
+     * Down cast from {@link Consumer} to {@link WiseConsumer}.
+     * </p>
+     * 
+     * @param lambda A target function.
+     * @return A casted function.
+     * @see #quiet(WiseConsumer)
+     */
+    public static <P> WiseConsumer<P> wise(Consumer<P> lambda) {
+        return lambda instanceof WiseConsumer ? (WiseConsumer) lambda : v -> lambda.accept(v);
+    }
+
+    /**
+     * <p>
+     * Down cast from {@link BiConsumer} to {@link WiseBiConsumer}.
+     * </p>
+     * 
+     * @param lambda A target function.
+     * @return A casted function.
+     * @see #quiet(WiseBiConsumer)
+     */
+    public static <P1, P2> WiseBiConsumer<P1, P2> wise(BiConsumer<P1, P2> lambda) {
+        return lambda instanceof WiseBiConsumer ? (WiseBiConsumer) lambda : (p1, p2) -> lambda.accept(p1, p2);
+    }
+
+    /**
+     * <p>
+     * Down cast from {@link Supplier} to {@link WiseSupplier}.
+     * </p>
+     * 
+     * @param lambda A target function.
+     * @return A casted function.
+     * @see #quiet(WiseSupplier)
+     */
+    public static <R> WiseSupplier<R> wise(Supplier<R> lambda) {
+        return lambda instanceof WiseSupplier ? (WiseSupplier) lambda : () -> lambda.get();
+    }
+
+    /**
+     * <p>
+     * Down cast from {@link Function} to {@link WiseFunction}.
+     * </p>
+     * 
+     * @param lambda A target function.
+     * @return A casted function.
+     * @see #quiet(WiseFunction)
+     */
+    public static <P, R> WiseFunction<P, R> wise(Function<P, R> lambda) {
+        return lambda instanceof WiseFunction ? (WiseFunction) lambda : p -> lambda.apply(p);
+    }
+
+    /**
+     * <p>
+     * Down cast from {@link BiFunction} to {@link WiseBiFunction}.
+     * </p>
+     * 
+     * @param lambda A target function.
+     * @return A casted function.
+     * @see #quiet(WiseBiFunction)
+     */
+    public static <P1, P2, R> WiseBiFunction<P1, P2, R> wise(BiFunction<P1, P2, R> lambda) {
+        return lambda instanceof WiseBiFunction ? (WiseBiFunction) lambda : (p1, p2) -> lambda.apply(p1, p2);
     }
 
     /**

@@ -26,12 +26,10 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
-import booton.translator.JavaAPIProvider;
-
 /**
  * @version 2016/11/12 13:55:50
  */
-@JavaAPIProvider(java.util.Collections.class)
+// @JavaAPIProvider(java.util.Collections.class)
 class Collections {
 
     /**
@@ -306,9 +304,9 @@ class Collections {
 
     /**
      * Returns an unmodifiable view of the specified list. This method allows modules to provide
-     * users with "read-only" access to internal lists. Query operations on the returned list
-     * "read through" to the specified list, and attempts to modify the returned list, whether
-     * direct or via its iterator, result in an <tt>UnsupportedOperationException</tt>.
+     * users with "read-only" access to internal lists. Query operations on the returned list "read
+     * through" to the specified list, and attempts to modify the returned list, whether direct or
+     * via its iterator, result in an <tt>UnsupportedOperationException</tt>.
      * <p>
      * The returned list will be serializable if the specified list is serializable. Similarly, the
      * returned list will implement {@link RandomAccess} if the specified list does.
@@ -322,9 +320,9 @@ class Collections {
 
     /**
      * Returns an unmodifiable view of the specified map. This method allows modules to provide
-     * users with "read-only" access to internal maps. Query operations on the returned map
-     * "read through" to the specified map, and attempts to modify the returned map, whether direct
-     * or via its collection views, result in an <tt>UnsupportedOperationException</tt>.
+     * users with "read-only" access to internal maps. Query operations on the returned map "read
+     * through" to the specified map, and attempts to modify the returned map, whether direct or via
+     * its collection views, result in an <tt>UnsupportedOperationException</tt>.
      * <p>
      * The returned map will be serializable if the specified map is serializable.
      * 
@@ -337,9 +335,9 @@ class Collections {
 
     /**
      * Returns an unmodifiable view of the specified set. This method allows modules to provide
-     * users with "read-only" access to internal sets. Query operations on the returned set
-     * "read through" to the specified set, and attempts to modify the returned set, whether direct
-     * or via its iterator, result in an <tt>UnsupportedOperationException</tt>.
+     * users with "read-only" access to internal sets. Query operations on the returned set "read
+     * through" to the specified set, and attempts to modify the returned set, whether direct or via
+     * its iterator, result in an <tt>UnsupportedOperationException</tt>.
      * <p>
      * The returned set will be serializable if the specified set is serializable.
      * 
@@ -744,12 +742,12 @@ class Collections {
     }
 
     /**
-     * Returns a comparator that imposes the reverse of the <em>natural
-     * ordering</em> on a collection of objects that implement the {@code Comparable} interface.
-     * (The natural ordering is the ordering imposed by the objects' own {@code compareTo} method.)
-     * This enables a simple idiom for sorting (or maintaining) collections (or arrays) of objects
-     * that implement the {@code Comparable} interface in reverse-natural-order. For example,
-     * suppose {@code a} is an array of strings. Then: <pre>
+     * Returns a comparator that imposes the reverse of the <em>natural ordering</em> on a
+     * collection of objects that implement the {@code Comparable} interface. (The natural ordering
+     * is the ordering imposed by the objects' own {@code compareTo} method.) This enables a simple
+     * idiom for sorting (or maintaining) collections (or arrays) of objects that implement the
+     * {@code Comparable} interface in reverse-natural-order. For example, suppose {@code a} is an
+     * array of strings. Then: <pre>
      *          Arrays.sort(a, Collections.reverseOrder());
      * </pre> sorts the array in reverse-lexicographic (alphabetical) order.
      * <p>
@@ -766,9 +764,8 @@ class Collections {
     /**
      * Returns a comparator that imposes the reverse ordering of the specified comparator. If the
      * specified comparator is {@code null}, this method is equivalent to {@link #reverseOrder()}
-     * (in other words, it returns a comparator that imposes the reverse of the
-     * <em>natural ordering</em> on a collection of objects that implement the Comparable
-     * interface).
+     * (in other words, it returns a comparator that imposes the reverse of the <em>natural
+     * ordering</em> on a collection of objects that implement the Comparable interface).
      * <p>
      * The returned comparator is serializable (assuming the specified comparator is also
      * serializable or {@code null}).
@@ -893,7 +890,7 @@ class Collections {
     /**
      * @version 2013/08/02 15:46:25
      */
-    private static class EmptyListIterator<E> extends EmptyIterator<E>implements ListIterator<E> {
+    private static class EmptyListIterator<E> extends EmptyIterator<E> implements ListIterator<E> {
 
         /** The singleton. */
         private static final EmptyListIterator EMPTY_ITERATOR = new EmptyListIterator();
@@ -1129,7 +1126,7 @@ class Collections {
     /**
      * @version 2013/08/05 9:05:23
      */
-    private static class UnmodifiableListIterator<E> extends UnmodifiableIterator<E, ListIterator<E>>implements ListIterator<E> {
+    private static class UnmodifiableListIterator<E> extends UnmodifiableIterator<E, ListIterator<E>> implements ListIterator<E> {
 
         /**
          * <p>
@@ -1194,7 +1191,7 @@ class Collections {
     /**
      * @version 2013/08/04 11:41:29
      */
-    private static class UnmodifiableSet<E, S extends Set<E>> extends UnmodifiableCollection<E, S>implements Set<E> {
+    private static class UnmodifiableSet<E, S extends Set<E>> extends UnmodifiableCollection<E, S> implements Set<E> {
 
         /**
          * <p>
@@ -1227,7 +1224,7 @@ class Collections {
     /**
      * @version 2013/08/09 0:52:29
      */
-    private static class UnmodifiableSortedSet<E> extends UnmodifiableSet<E, SortedSet<E>>implements SortedSet<E> {
+    private static class UnmodifiableSortedSet<E> extends UnmodifiableSet<E, SortedSet<E>> implements SortedSet<E> {
 
         /**
          * <p>
@@ -1292,7 +1289,7 @@ class Collections {
     /**
      * @version 2013/08/04 11:34:48
      */
-    private static class UnmodifiableList<E> extends UnmodifiableCollection<E, List<E>>implements List<E> {
+    private static class UnmodifiableList<E> extends UnmodifiableCollection<E, List<E>> implements List<E> {
 
         /**
          * <p>
