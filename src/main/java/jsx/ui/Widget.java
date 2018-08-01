@@ -45,6 +45,7 @@ import jsx.ui.flux.Locator;
 import kiss.I;
 import kiss.Observer;
 import kiss.Signal;
+import kiss.WiseConsumer;
 import kiss.model.Model;
 
 /**
@@ -69,7 +70,7 @@ public abstract class Widget<Styles extends StyleDSL> implements Declarable {
     protected final Styles $;
 
     /** The view updater. */
-    protected final Consumer<Object> updateView = v -> {
+    protected final WiseConsumer<Object> updateView = v -> {
         if (root != null) root.update();
     };
 
