@@ -350,7 +350,7 @@ class JSKiss {
      * @param extensionPoint An Extension Point class. The
      *            <a href="Extensible#ExtensionPoint">Extension Point</a> class is only accepted,
      *            otherwise this method will return <code>null</code>.
-     * @param key An <a  href="Extensible.html#ExtensionKey">Extension Key</a> class.
+     * @param key An <a href="Extensible.html#ExtensionKey">Extension Key</a> class.
      * @return A associated Extension of the given Extension Point and the given Extension Key or
      *         <code>null</code>.
      */
@@ -637,7 +637,7 @@ class JSKiss {
      */
     public static <E extends javafx.beans.Observable> Signal<E> observe(E observable) {
         if (observable == null) {
-            return Signal.NEVER;
+            return Signal.never();
         }
 
         return new Signal<>((observer, disposer) -> {
@@ -669,7 +669,7 @@ class JSKiss {
      */
     public static <E> Signal<E> observe(ObservableValue<E> observable) {
         if (observable == null) {
-            return Signal.NEVER;
+            return Signal.never();
         }
 
         return new Signal<>((observer, disposer) -> {
@@ -1481,7 +1481,7 @@ class JSKiss {
      */
     @SafeVarargs
     public static <V> Signal<V> signal(V... values) {
-        return Signal.EMPTY.startWith(values);
+        return Signal.<V> empty().startWith(values);
     }
 
     /**
@@ -1537,7 +1537,7 @@ class JSKiss {
      * @return The {@link Signal} to emit sequencial values.
      */
     public static <V> Signal<V> signal(Iterable<V> values) {
-        return Signal.EMPTY.startWith(values);
+        return Signal.<V> empty().startWith(values);
     }
 
     /**
@@ -1549,7 +1549,7 @@ class JSKiss {
      * @return The {@link Signal} to emit sequencial values.
      */
     public static <V> Signal<V> signal(Enumeration<V> values) {
-        return Signal.EMPTY.startWith(values);
+        return Signal.<V> empty().startWith(values);
     }
 
     /**
@@ -1561,7 +1561,7 @@ class JSKiss {
      * @return The {@link Signal} to emit sequencial values.
      */
     public static <V> Signal<V> signal(Variable<V> value) {
-        return Signal.EMPTY.startWith(value);
+        return Signal.<V> empty().startWith(value);
     }
 
     /**
