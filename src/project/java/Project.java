@@ -18,11 +18,12 @@ public class Project extends bee.api.Project {
         require("com.github.teletha", "sinobu", "1.0");
         require("com.github.teletha", "filer", "0.5");
         require("org.ow2.asm", "asm", "6.1.1");
-        require("io.github.lukehutch", "fast-classpath-scanner", "LATEST");
+        require("io.github.classgraph", "classgraph", "LATEST");
         require("org.eclipse.jetty.websocket", "websocket-server", jettyVersion);
         require("org.eclipse.jetty", "jetty-servlet", jettyVersion);
         require("org.eclipse.jetty", "jetty-util", jettyVersion);
         require("org.eclipse.jetty", "jetty-http", jettyVersion);
+        require("org.openjfx", "javafx-controls", "11");
         require("com.github.teletha", "antibug", "0.6").atTest();
         require("org.junit.vintage", "junit-vintage-engine", "5.1.0").atTest();
         require("junit", "junit", "4.12").atTest();

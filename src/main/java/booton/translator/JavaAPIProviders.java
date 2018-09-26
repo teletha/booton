@@ -19,7 +19,7 @@ import java.util.Set;
 import org.objectweb.asm.Type;
 
 import booton.JDKEmulator;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.classgraph.ClassGraph;
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;
@@ -37,7 +37,7 @@ class JavaAPIProviders {
     private static final Map<Class, Class> revert = new HashMap();
 
     static {
-        new FastClasspathScanner().matchClassesWithAnnotation(JavaAPIProvider.class, JavaAPIProviders::load).scan();
+        new ClassGraph().scan().getClassesWithAnnotation(JavaAPIProvider.class.getName()).loadClasses().forEach(JavaAPIProviders::load);
     }
 
     /**

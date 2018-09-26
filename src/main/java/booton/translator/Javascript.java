@@ -41,7 +41,7 @@ import booton.BootonLog;
 import booton.Necessary;
 import booton.Unnecessary;
 import filer.Filer;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.classgraph.ClassGraph;
 import js.lang.NativeString;
 import kiss.Extensible;
 import kiss.I;
@@ -858,10 +858,9 @@ public class Javascript {
     private static class NecessaryManager {
 
         /** The extensions. */
-        private final Set<Class> classes = new HashSet();
+        private final List<Class<?>> classes = new ClassGraph().scan().getClassesWithAnnotation(Necessary.class.getName()).loadClasses();
 
         private NecessaryManager() {
-            new FastClasspathScanner().matchClassesWithAnnotation(Necessary.class, classes::add).scan();
         }
 
         /**
