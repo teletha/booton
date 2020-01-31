@@ -29,7 +29,6 @@ import booton.translator.Translator;
 import booton.util.HTMLWriter;
 import filer.Filer;
 import jsx.debug.Profile;
-import jsx.ui.samaple.todo.HelloWorld;
 import kiss.I;
 import kiss.XML;
 
@@ -212,7 +211,7 @@ public class Booton {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        launch(HelloWorld.class);
+        // launch(HelloWorld.class);
     }
 
     /**

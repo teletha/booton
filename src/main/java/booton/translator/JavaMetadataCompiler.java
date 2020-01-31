@@ -9,7 +9,7 @@
  */
 package booton.translator;
 
-import static booton.translator.Javascript.*;
+import static booton.translator.Javascript.writePrimitiveCode;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
-
-import org.junit.runner.RunWith;
 
 import booton.Necessary;
 import booton.Unnecessary;
@@ -44,7 +42,6 @@ class JavaMetadataCompiler {
             ignorables.add(JavascriptAPIProvider.class);
             ignorables.add(JavascriptNativeProperty.class);
             ignorables.add(JavascriptNativePropertyAccessor.class);
-            ignorables.add(RunWith.class);
             ignorables.add(Override.class);
             ignorables.add(Necessary.class);
             ignorables.add(Unnecessary.class);

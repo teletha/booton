@@ -37,7 +37,11 @@ class JavaAPIProviders {
     private static final Map<Class, Class> revert = new HashMap();
 
     static {
-        new ClassGraph().scan().getClassesWithAnnotation(JavaAPIProvider.class.getName()).loadClasses().forEach(JavaAPIProviders::load);
+        new ClassGraph().enableAllInfo()
+                .scan()
+                .getClassesWithAnnotation(JavaAPIProvider.class.getName())
+                .loadClasses()
+                .forEach(JavaAPIProviders::load);
     }
 
     /**
