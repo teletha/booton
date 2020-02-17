@@ -200,6 +200,8 @@ abstract class ChronoLocalDateImpl<D extends ChronoLocalDate> implements ChronoL
                 return plusYears(Math.multiplyExact(amountToAdd, 1000));
             case ERAS:
                 return with(ERA, Math.addExact(getLong(ERA), amountToAdd));
+            default:
+                break;
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
@@ -391,6 +393,8 @@ abstract class ChronoLocalDateImpl<D extends ChronoLocalDate> implements ChronoL
                 return monthsUntil(end) / 12000;
             case ERAS:
                 return end.getLong(ERA) - getLong(ERA);
+            default:
+                break;
             }
             throw new UnsupportedTemporalTypeException("Unsupported unit: " + unit);
         }
