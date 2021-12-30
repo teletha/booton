@@ -30,49 +30,44 @@ class JSCharacter implements JavascriptNative {
     public static final Class TYPE = Primitive.class;
 
     /**
-     * The minimum value of a
-     * <a href="http://www.unicode.org/glossary/#high_surrogate_code_unit"> Unicode high-surrogate
-     * code unit</a> in the UTF-16 encoding, constant {@code '\u005CuD800'}. A high-surrogate is
-     * also known as a <i>leading-surrogate</i>.
+     * The minimum value of a <a href="http://www.unicode.org/glossary/#high_surrogate_code_unit">
+     * Unicode high-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuD800'}.
+     * A high-surrogate is also known as a <i>leading-surrogate</i>.
      *
      * @since 1.5
      */
     public static final char MIN_HIGH_SURROGATE = '\uD800';
 
     /**
-     * The maximum value of a
-     * <a href="http://www.unicode.org/glossary/#high_surrogate_code_unit"> Unicode high-surrogate
-     * code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDBFF'}. A high-surrogate is
-     * also known as a <i>leading-surrogate</i>.
+     * The maximum value of a <a href="http://www.unicode.org/glossary/#high_surrogate_code_unit">
+     * Unicode high-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDBFF'}.
+     * A high-surrogate is also known as a <i>leading-surrogate</i>.
      *
      * @since 1.5
      */
     public static final char MAX_HIGH_SURROGATE = '\uDBFF';
 
     /**
-     * The minimum value of a
-     * <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit"> Unicode low-surrogate
-     * code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDC00'}. A low-surrogate is also
-     * known as a <i>trailing-surrogate</i>.
+     * The minimum value of a <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit">
+     * Unicode low-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDC00'}. A
+     * low-surrogate is also known as a <i>trailing-surrogate</i>.
      *
      * @since 1.5
      */
     public static final char MIN_LOW_SURROGATE = '\uDC00';
 
     /**
-     * The maximum value of a
-     * <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit"> Unicode low-surrogate
-     * code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDFFF'}. A low-surrogate is also
-     * known as a <i>trailing-surrogate</i>.
+     * The maximum value of a <a href="http://www.unicode.org/glossary/#low_surrogate_code_unit">
+     * Unicode low-surrogate code unit</a> in the UTF-16 encoding, constant {@code '\u005CuDFFF'}. A
+     * low-surrogate is also known as a <i>trailing-surrogate</i>.
      *
      * @since 1.5
      */
     public static final char MAX_LOW_SURROGATE = '\uDFFF';
 
     /**
-     * The minimum value of a
-     * <a href="http://www.unicode.org/glossary/#supplementary_code_point"> Unicode supplementary
-     * code point</a>, constant {@code U+10000}.
+     * The minimum value of a <a href="http://www.unicode.org/glossary/#supplementary_code_point">
+     * Unicode supplementary code point</a>, constant {@code U+10000}.
      *
      * @since 1.5
      */
@@ -678,6 +673,41 @@ class JSCharacter implements JavascriptNative {
      */
     public static boolean isLowerCase(int codePoint) {
         return isLowerCase(NativeString.fromCharCode(codePoint).charAt(0));
+    }
+
+    /**
+     * Determines if the given {@code char} value is a Unicode <i>surrogate code unit</i>.
+     * <p>
+     * Such values do not represent characters by themselves, but are used in the representation of
+     * <a href="#supplementary">supplementary characters</a> in the UTF-16 encoding.
+     * <p>
+     * A char value is a surrogate code unit if and only if it is either a
+     * {@linkplain #isLowSurrogate(char) low-surrogate code unit} or a
+     * {@linkplain #isHighSurrogate(char) high-surrogate code unit}.
+     *
+     * @param ch the {@code char} value to be tested.
+     * @return {@code true} if the {@code char} value is between {@link #MIN_SURROGATE} and
+     *         {@link #MAX_SURROGATE} inclusive; {@code false} otherwise.
+     * @since 1.7
+     */
+    public static boolean isSurrogate(char ch) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Determines whether the specified character (Unicode code point) is in the
+     * <a href="#supplementary">supplementary character</a> range.
+     *
+     * @param codePoint the character (Unicode code point) to be tested
+     * @return {@code true} if the specified code point is between
+     *         {@link #MIN_SUPPLEMENTARY_CODE_POINT} and {@link #MAX_CODE_POINT} inclusive;
+     *         {@code false} otherwise.
+     * @since 1.5
+     */
+    public static boolean isSupplementaryCodePoint(int codePoint) {
+        return codePoint >= MIN_SUPPLEMENTARY_CODE_POINT && codePoint < MAX_CODE_POINT + 1;
     }
 
     /**

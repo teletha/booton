@@ -130,4 +130,28 @@ class JSLookup {
     public MethodHandle unreflectSpecial(Method method, Class<?> specialCaller) throws IllegalAccessException {
         return (MethodHandle) (Object) new JSMethodHandle(method, specialCaller);
     }
+
+    /**
+     * Ensures that {@code targetClass} has been initialized. The class to be initialized must be
+     * {@linkplain #accessClass accessible} to this {@code Lookup} object. This method causes
+     * {@code targetClass} to be initialized if it has not been already initialized, as specified in
+     * JVMS {@jvms 5.5}.
+     *
+     * @param targetClass the class to be initialized
+     * @return {@code targetClass} that has been initialized
+     * @throws IllegalArgumentException if {@code targetClass} is a primitive type or {@code void}
+     *             or array class
+     * @throws IllegalAccessException if {@code targetClass} is not {@linkplain #accessClass
+     *             accessible} to this lookup
+     * @throws ExceptionInInitializerError if the class initialization provoked by this method fails
+     * @throws SecurityException if a security manager is present and it
+     *             <a href="MethodHandles.Lookup.html#secmgr">refuses access</a>
+     * @since 15
+     * @jvms 5.5 Initialization
+     */
+    public Class<?> ensureInitialized(Class<?> targetClass) throws IllegalAccessException {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
 }

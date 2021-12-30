@@ -9,6 +9,8 @@
  */
 package js.lang;
 
+import java.lang.Runtime.Version;
+
 import booton.translator.JavaAPIProvider;
 
 /**
@@ -45,5 +47,17 @@ class JSRuntime {
      */
     public int availableProcessors() {
         return 1;
+    }
+
+    /**
+     * Returns the version of the Java Runtime Environment as a {@link Version}.
+     *
+     * @return the {@link Version} of the Java Runtime Environment
+     * @since 9
+     */
+    public static Version version() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 }

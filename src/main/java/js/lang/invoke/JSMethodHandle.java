@@ -64,6 +64,56 @@ class JSMethodHandle {
     }
 
     /**
+     * Invokes the method handle, allowing any caller type descriptor, but requiring an exact type
+     * match. The symbolic type descriptor at the call site of {@code invokeExact} must exactly
+     * match this method handle's {@link #type() type}. No conversions are allowed on arguments or
+     * return values.
+     * <p>
+     * When this method is observed via the Core Reflection API, it will appear as a single native
+     * method, taking an object array and returning an object. If this native method is invoked
+     * directly via {@link java.lang.reflect.Method#invoke java.lang.reflect.Method.invoke}, via
+     * JNI, or indirectly via {@link java.lang.invoke.MethodHandles.Lookup#unreflect
+     * Lookup.unreflect}, it will throw an {@code UnsupportedOperationException}.
+     * 
+     * @param args the signature-polymorphic parameter list, statically represented using varargs
+     * @return the signature-polymorphic result, statically represented using {@code Object}
+     * @throws WrongMethodTypeException if the target's type is not identical with the caller's
+     *             symbolic type descriptor
+     * @throws Throwable anything thrown by the underlying method propagates unchanged through the
+     *             method handle call
+     */
+    public final Object invokeExact(Object arg, Object... args) throws Throwable {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Invokes the method handle, allowing any caller type descriptor, but requiring an exact type
+     * match. The symbolic type descriptor at the call site of {@code invokeExact} must exactly
+     * match this method handle's {@link #type() type}. No conversions are allowed on arguments or
+     * return values.
+     * <p>
+     * When this method is observed via the Core Reflection API, it will appear as a single native
+     * method, taking an object array and returning an object. If this native method is invoked
+     * directly via {@link java.lang.reflect.Method#invoke java.lang.reflect.Method.invoke}, via
+     * JNI, or indirectly via {@link java.lang.invoke.MethodHandles.Lookup#unreflect
+     * Lookup.unreflect}, it will throw an {@code UnsupportedOperationException}.
+     * 
+     * @param args the signature-polymorphic parameter list, statically represented using varargs
+     * @return the signature-polymorphic result, statically represented using {@code Object}
+     * @throws WrongMethodTypeException if the target's type is not identical with the caller's
+     *             symbolic type descriptor
+     * @throws Throwable anything thrown by the underlying method propagates unchanged through the
+     *             method handle call
+     */
+    public final Object invokeExact(Object... args) throws Throwable {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * Invokes the method handle, allowing any caller type descriptor, and optionally performing
      * conversions on arguments and return values.
      * <p>

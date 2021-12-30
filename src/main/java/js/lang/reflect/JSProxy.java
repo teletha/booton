@@ -10,6 +10,7 @@
 package js.lang.reflect;
 
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -108,6 +109,14 @@ class JSProxy {
 
         // API definition
         return proxy;
+    }
+
+    static final Object[] EMPTY_ARGS = new Object[0];
+
+    static MethodHandle defaultMethodHandle(Class<? extends Proxy> proxyClass, Method method) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
     }
 
     /**

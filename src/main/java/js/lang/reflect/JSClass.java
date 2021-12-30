@@ -9,10 +9,11 @@
  */
 package js.lang.reflect;
 
-import static js.lang.Global.*;
+import static js.lang.Global.boot;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
+import java.lang.constant.ClassDesc;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -22,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.CodeSigner;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import booton.translator.JavaAPIProvider;
@@ -1412,6 +1415,20 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
     }
 
     /**
+     * Returns a nominal descriptor for this instance, if one can be constructed, or an empty
+     * {@link Optional} if one cannot be.
+     *
+     * @return An {@link Optional} containing the resulting nominal descriptor, or an empty
+     *         {@link Optional} if one cannot be constructed.
+     * @since 12
+     */
+    public Optional<ClassDesc> describeConstable() {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * <p>
      * Create {@link Class} for the array of this {@link Class}.
      * </p>
@@ -1583,6 +1600,23 @@ class JSClass<T> extends JSAnnotatedElement implements GenericDeclaration {
             } catch (MalformedURLException e) {
                 throw I.quiet(e);
             }
+        }
+
+        /**
+         * Returns the code signers associated with this CodeSource.
+         * <p>
+         * If this CodeSource object was created using the
+         * {@link #CodeSource(URL url, java.security.cert.Certificate[] certs)} constructor then its
+         * certificate chains are extracted and used to create an array of CodeSigner objects. Note
+         * that only X.509 certificates are examined - all other certificate types are ignored.
+         *
+         * @return a copy of the code signer array, or {@code null} if there is none.
+         * @since 1.5
+         */
+        public final CodeSigner[] getCodeSigners() {
+            // If this exception will be thrown, it is bug of this program. So we must rethrow the
+            // wrapped error in here.
+            throw new Error();
         }
     }
 

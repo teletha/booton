@@ -279,4 +279,27 @@ class JSSecurityManager {
     public void checkSetFactory() {
         // do nothing
     }
+
+    /**
+     * Throws a {@code SecurityException} if the calling thread is not allowed to delete the
+     * specified file.
+     * <p>
+     * This method is invoked for the current security manager by the {@code delete} method of class
+     * {@code File}.
+     * <p>
+     * This method calls {@code checkPermission} with the {@code FilePermission(file,"delete")}
+     * permission.
+     * <p>
+     * If you override this method, then you should make a call to {@code super.checkDelete} at the
+     * point the overridden method would normally throw an exception.
+     *
+     * @param file the system-dependent filename.
+     * @throws SecurityException if the calling thread does not have permission to delete the file.
+     * @throws NullPointerException if the {@code file} argument is {@code null}.
+     * @see java.io.File#delete()
+     * @see #checkPermission(java.security.Permission) checkPermission
+     */
+    public void checkDelete(String file) {
+        // do nothing
+    }
 }

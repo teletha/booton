@@ -28,8 +28,8 @@ class JSInteger extends JSNumber {
     /**
      * All possible chars for representing a number as a String
      */
-    static final char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
-            'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    static final char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+            'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
     /**
      * Constructs a newly allocated {@code Integer} object that represents the specified {@code int}
@@ -381,6 +381,35 @@ class JSInteger extends JSNumber {
     }
 
     /**
+     * Parses the {@link CharSequence} argument as a signed {@code int} in the specified
+     * {@code radix}, beginning at the specified {@code beginIndex} and extending to
+     * {@code endIndex - 1}.
+     * <p>
+     * The method does not take steps to guard against the {@code CharSequence} being mutated while
+     * parsing.
+     *
+     * @param s the {@code CharSequence} containing the {@code int} representation to be parsed
+     * @param beginIndex the beginning index, inclusive.
+     * @param endIndex the ending index, exclusive.
+     * @param radix the radix to be used while parsing {@code s}.
+     * @return the signed {@code int} represented by the subsequence in the specified radix.
+     * @throws NullPointerException if {@code s} is null.
+     * @throws IndexOutOfBoundsException if {@code beginIndex} is negative, or if {@code beginIndex}
+     *             is greater than {@code endIndex} or if {@code endIndex} is greater than
+     *             {@code s.length()}.
+     * @throws NumberFormatException if the {@code CharSequence} does not contain a parsable
+     *             {@code int} in the specified {@code radix}, or if {@code radix} is either smaller
+     *             than {@link java.lang.Character#MIN_RADIX} or larger than
+     *             {@link java.lang.Character#MAX_RADIX}.
+     * @since 9
+     */
+    public static int parseInt(CharSequence s, int beginIndex, int endIndex, int radix) throws NumberFormatException {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
      * <p>
      * Returns an {@code Integer} object holding the value of the specified {@code String}. The
      * argument is interpreted as representing a signed decimal integer, exactly as if the argument
@@ -514,12 +543,12 @@ class JSInteger extends JSNumber {
      * in hexadecimal (base&nbsp;16) with no extra leading {@code 0}s. If the unsigned magnitude is
      * zero, it is represented by a single zero character {@code '0'} (<code>'&#92;u0030'</code>);
      * otherwise, the first character of the representation of the unsigned magnitude will not be
-     * the zero character. The following characters are used as hexadecimal digits:
-     * <blockquote> {@code 0123456789abcdef} </blockquote> These are the characters
-     * <code>'&#92;u0030'</code> through <code>'&#92;u0039'</code> and <code>'&#92;u0061'</code>
-     * through <code>'&#92;u0066'</code>. If uppercase letters are desired, the
-     * {@link java.lang.String#toUpperCase()} method may be called on the result:
-     * <blockquote> {@code Integer.toHexString(n).toUpperCase()} </blockquote>
+     * the zero character. The following characters are used as hexadecimal digits: <blockquote>
+     * {@code 0123456789abcdef} </blockquote> These are the characters <code>'&#92;u0030'</code>
+     * through <code>'&#92;u0039'</code> and <code>'&#92;u0061'</code> through
+     * <code>'&#92;u0066'</code>. If uppercase letters are desired, the
+     * {@link java.lang.String#toUpperCase()} method may be called on the result: <blockquote>
+     * {@code Integer.toHexString(n).toUpperCase()} </blockquote>
      * 
      * @param value an integer to be converted to a string.
      * @return the string representation of the unsigned integer value represented by the argument

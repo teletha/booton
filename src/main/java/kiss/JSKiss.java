@@ -9,7 +9,7 @@
  */
 package kiss;
 
-import static js.lang.Global.*;
+import static js.lang.Global.boot;
 
 import java.io.File;
 import java.io.Serializable;
@@ -1538,6 +1538,18 @@ class JSKiss {
      */
     public static <V> Signal<V> signal(Iterable<V> values) {
         return Signal.<V> empty().startWith(values);
+    }
+
+    /**
+     * <p>
+     * {@link Signal} the specified values.
+     * </p>
+     *
+     * @param values A list of values to emit.
+     * @return The {@link Signal} to emit sequencial values.
+     */
+    public static <V> Signal<V> signal(Supplier<V> value) {
+        return Signal.<V> empty().startWith(value);
     }
 
     /**

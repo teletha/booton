@@ -866,6 +866,31 @@ class JSMath {
     }
 
     /**
+     * Returns the floor modulus of the {@code long} and {@code int} arguments.
+     * <p>
+     * The floor modulus is {@code x - (floorDiv(x, y) * y)}, has the same sign as the divisor
+     * {@code y}, and is in the range of {@code -abs(y) < r < +abs(y)}.
+     * <p>
+     * The relationship between {@code floorDiv} and {@code floorMod} is such that:
+     * <ul>
+     * <li>{@code floorDiv(x, y) * y + floorMod(x, y) == x}
+     * </ul>
+     * <p>
+     * For examples, see {@link #floorMod(int, int)}.
+     *
+     * @param x the dividend
+     * @param y the divisor
+     * @return the floor modulus {@code x - (floorDiv(x, y) * y)}
+     * @throws ArithmeticException if the divisor {@code y} is zero
+     * @see #floorDiv(long, int)
+     * @since 9
+     */
+    public static int floorMod(long x, int y) {
+        // Result cannot overflow the range of int.
+        return (int) floorMod(x, (long) y);
+    }
+
+    /**
      * Returns the floor modulus of the {@code long} arguments.
      * <p>
      * The floor modulus is {@code x - (floorDiv(x, y) * y)}, has the same sign as the divisor

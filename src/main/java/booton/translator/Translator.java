@@ -16,8 +16,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import org.objectweb.asm.Type;
+
 import booton.Unnecessary;
-import jdk.internal.org.objectweb.asm.Type;
 import js.lang.NativeFunction;
 import kiss.Extensible;
 import kiss.Manageable;

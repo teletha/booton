@@ -23,7 +23,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jdk.internal.org.objectweb.asm.Type;
+import org.objectweb.asm.Type;
+
 import kiss.I;
 import kiss.Manageable;
 import kiss.Singleton;

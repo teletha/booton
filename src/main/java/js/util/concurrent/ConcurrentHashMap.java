@@ -105,6 +105,16 @@ class ConcurrentHashMap<K, V> extends HashMap<K, V> implements ConcurrentMap<K, 
     }
 
     /**
+     * Returns an enumeration of the values in this table.
+     *
+     * @return an enumeration of the values in this table
+     * @see #values()
+     */
+    public Enumeration<V> elements() {
+        return Collections.enumeration(values());
+    }
+
+    /**
      * @version 2013/10/26 12:27:31
      */
     @JavaAPIProvider(java.util.concurrent.ConcurrentHashMap.KeySetView.class)

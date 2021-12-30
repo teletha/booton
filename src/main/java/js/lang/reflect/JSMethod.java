@@ -231,6 +231,12 @@ class JSMethod extends Parameterizable {
         return ((NativeObject) context).getPropertyAs(NativeFunction.class, nameJS).apply(context, parameters);
     }
 
+    public void checkAccess(Class a, Class b, Class c, int d) {
+        // If this exception will be thrown, it is bug of this program. So we must rethrow the
+        // wrapped error in here.
+        throw new Error();
+    }
+
     // /**
     // * Compares this {@code Method} against the specified object. Returns true if the objects are
     // * the same. Two {@code Methods} are the same if they were declared by the same class and have

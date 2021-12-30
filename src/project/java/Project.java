@@ -13,12 +13,11 @@ public class Project extends bee.api.Project {
         String jettyVersion = "9.2.19.v20160908";
 
         product("npc", "Booton", "0.1");
-        producer("Nameless Production Committee");
 
         require("com.github.teletha", "sinobu", "1.0");
         require("com.github.teletha", "filer", "0.5");
-        require("org.ow2.asm", "asm", "7.3.1");
-        require("io.github.classgraph", "classgraph", "LATEST");
+        require("org.ow2.asm", "asm");
+        require("io.github.classgraph", "classgraph");
         require("org.eclipse.jetty.websocket", "websocket-server", jettyVersion);
         require("org.eclipse.jetty", "jetty-servlet", jettyVersion);
         require("org.eclipse.jetty", "jetty-util", jettyVersion);

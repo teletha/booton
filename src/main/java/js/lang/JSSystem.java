@@ -432,6 +432,25 @@ class JSSystem {
     }
 
     /**
+     * Terminates the currently running Java Virtual Machine. The argument serves as a status code;
+     * by convention, a nonzero status code indicates abnormal termination.
+     * <p>
+     * This method calls the {@code exit} method in class {@code Runtime}. This method never returns
+     * normally.
+     * <p>
+     * The call {@code System.exit(n)} is effectively equivalent to the call: <blockquote><pre>
+     * Runtime.getRuntime().exit(n)
+     * </pre></blockquote>
+     *
+     * @param status exit status.
+     * @throws SecurityException if a security manager exists and its {@code checkExit} method
+     *             doesn't allow exit with the specified status.
+     * @see java.lang.Runtime#exit(int)
+     */
+    public static void exit(int status) {
+    }
+
+    /**
      * @version 2013/05/16 19:27:00
      */
     private static class DummyOutputStream extends OutputStream {
