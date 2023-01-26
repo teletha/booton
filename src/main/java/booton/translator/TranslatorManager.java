@@ -179,10 +179,11 @@ class TranslatorManager {
     private static String getNativeAccessor(Class owner, String name, String description) {
         Integer hash = hash(name, description);
         List<Class> classes = nativeAccessorMethods.get(hash);
-
-        for (Class clazz : classes) {
-            if (clazz.isAssignableFrom(owner)) {
-                return nativeAccessorMethodNames.get(hash);
+        if (classes != null) {
+            for (Class clazz : classes) {
+                if (clazz.isAssignableFrom(owner)) {
+                    return nativeAccessorMethodNames.get(hash);
+                }
             }
         }
         return null;
@@ -204,10 +205,11 @@ class TranslatorManager {
         }
 
         List<Class> classes = nativeMethods.get(hash(name, description));
-
-        for (Class clazz : classes) {
-            if (clazz.isAssignableFrom(owner)) {
-                return true;
+        if (classes != null) {
+            for (Class clazz : classes) {
+                if (clazz.isAssignableFrom(owner)) {
+                    return true;
+                }
             }
         }
         return false;

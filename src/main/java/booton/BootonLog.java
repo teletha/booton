@@ -13,11 +13,9 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 import jsx.debug.Profile;
+import psychopath.Location;
 import psychopath.Locator;
 
-/**
- * @version 2015/08/05 12:50:25
- */
 public enum BootonLog implements Profile<Class, Object, Object> {
 
     RunTest1, RunTestAsJava, ParseTest1, RunTestMethod1, RunTest2, ParseTest2, RunTestMethod2, JavascriptConstructor, WriteTo, WriteJS, WriteSuperClass, WriteInterface, WriteJSActually, WriteDependency, Compile, PraseByteCode, CompileAnnotation, LoadLibrary;
@@ -27,8 +25,13 @@ public enum BootonLog implements Profile<Class, Object, Object> {
      */
     @Override
     public String name(Class key1, Object key2, Object key3) {
-        Path archive = key1 == null ? null : Locator.locate(key1).asJavaPath();
-
+        Path archive = null;
+        if (key1 != null) {
+            Location loc = Locator.locate(key1);
+            if (loc != null) {
+                archive = loc.asJavaPath();
+            }
+        }
         return name() + "(" + (archive == null ? "JDK" : archive.getFileName()) + ")";
     }
 
@@ -37,8 +40,13 @@ public enum BootonLog implements Profile<Class, Object, Object> {
      */
     @Override
     public Object group(Class key1, Object key2, Object key3) {
-        Path archive = key1 == null ? null : Locator.locate(key1).asJavaPath();
-
+        Path archive = null;
+        if (key1 != null) {
+            Location loc = Locator.locate(key1);
+            if (loc != null) {
+                archive = loc.asJavaPath();
+            }
+        }
         return Objects.hash(name(key1, key2, key3), archive);
     }
 }

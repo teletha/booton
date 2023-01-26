@@ -46,6 +46,7 @@ import kiss.Extensible;
 import kiss.I;
 import kiss.Managed;
 import kiss.Singleton;
+import psychopath.Location;
 import psychopath.Locator;
 
 /**
@@ -920,13 +921,13 @@ public class Javascript {
 
         private String getCode(Class clazz, Supplier<String> coder) {
             try {
-                Path archive = Locator.locate(clazz).asJavaPath();
+                Location location = Locator.locate(clazz);
 
-                if (archive == null) {
+                if (location == null) {
                     code = coder.get();
-                } else if (Files.isDirectory(archive)) {
+                } else if (location.isDirectory()) {
                     // source files
-                    Path source = archive.resolve(clazz.getName().replaceAll("\\.", "/").concat(".class"));
+                    Path source = location.asDirectory().file(clazz.getName().replaceAll("\\.", "/").concat(".class")).asJavaPath();
                     FileTime sourceTime = Files.getLastModifiedTime(source);
 
                     if (!sourceTime.equals(modified)) {
@@ -935,7 +936,7 @@ public class Javascript {
                     }
                 } else {
                     // jar archive
-                    FileTime sourceTime = Files.getLastModifiedTime(archive);
+                    FileTime sourceTime = Files.getLastModifiedTime(location.asJavaPath());
 
                     if (!sourceTime.equals(modified)) {
                         modified = sourceTime;

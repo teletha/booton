@@ -71,6 +71,18 @@ class JSFloat extends JSNumber {
     }
 
     /**
+     * Returns {@code true} if the specified number is infinitely large in magnitude, {@code false}
+     * otherwise.
+     * 
+     * @param value the value to be tested.
+     * @return {@code true} if the argument is positive infinity or negative infinity; {@code false}
+     *         otherwise.
+     */
+    public static boolean isFinite(float value) {
+        return Global.isFinite(value);
+    }
+
+    /**
      * Returns {@code true} if the specified number is a Not-a-Number (NaN) value, {@code false}
      * otherwise.
      * 

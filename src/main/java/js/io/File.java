@@ -10,6 +10,7 @@
 package js.io;
 
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -217,6 +218,71 @@ class File {
     public File[] listFiles(FilenameFilter filter) {
         // If this exception will be thrown, it is bug of this program. So we must rethrow the
         // wrapped error in here.
+        throw new Error();
+    }
+
+    /**
+     * Atomically creates a new, empty file named by this abstract pathname if and only if a file
+     * with this name does not yet exist. The check for the existence of the file and the creation
+     * of the file if it does not exist are a single operation that is atomic with respect to all
+     * other filesystem activities that might affect the file.
+     * <P>
+     * Note: this method should <i>not</i> be used for file-locking, as the resulting protocol
+     * cannot be made to work reliably. The {@link java.nio.channels.FileLock FileLock} facility
+     * should be used instead.
+     *
+     * @return {@code true} if the named file does not exist and was successfully created;
+     *         {@code false} if the named file already exists
+     * @throws IOException If an I/O error occurred
+     * @throws SecurityException If a security manager exists and its
+     *             {@link java.lang.SecurityManager#checkWrite(java.lang.String)} method denies
+     *             write access to the file
+     * @since 1.2
+     */
+    public boolean createNewFile() throws IOException {
+        throw new Error();
+    }
+
+    /**
+     * Deletes the file or directory denoted by this abstract pathname. If this pathname denotes a
+     * directory, then the directory must be empty in order to be deleted.
+     * <p>
+     * Note that the {@link java.nio.file.Files} class defines the
+     * {@link java.nio.file.Files#delete(Path) delete} method to throw an {@link IOException} when a
+     * file cannot be deleted. This is useful for error reporting and to diagnose why a file cannot
+     * be deleted.
+     *
+     * @return {@code true} if and only if the file or directory is successfully deleted;
+     *         {@code false} otherwise
+     * @throws SecurityException If a security manager exists and its
+     *             {@link java.lang.SecurityManager#checkDelete} method denies delete access to the
+     *             file
+     */
+    public boolean delete() {
+        throw new Error();
+    }
+
+    /**
+     * Renames the file denoted by this abstract pathname.
+     * <p>
+     * Many aspects of the behavior of this method are inherently platform-dependent: The rename
+     * operation might not be able to move a file from one filesystem to another, it might not be
+     * atomic, and it might not succeed if a file with the destination abstract pathname already
+     * exists. The return value should always be checked to make sure that the rename operation was
+     * successful. As instances of {@code File} are immutable, this File object is not changed to
+     * name the destination file or directory.
+     * <p>
+     * Note that the {@link java.nio.file.Files} class defines the {@link java.nio.file.Files#move
+     * move} method to move or rename a file in a platform independent manner.
+     *
+     * @param dest The new abstract pathname for the named file
+     * @return {@code true} if and only if the renaming succeeded; {@code false} otherwise
+     * @throws SecurityException If a security manager exists and its
+     *             {@link java.lang.SecurityManager#checkWrite(java.lang.String)} method denies
+     *             write access to either the old or new pathnames
+     * @throws NullPointerException If parameter {@code dest} is {@code null}
+     */
+    public boolean renameTo(File dest) {
         throw new Error();
     }
 
