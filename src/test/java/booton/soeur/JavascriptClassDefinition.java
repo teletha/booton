@@ -51,7 +51,7 @@ public class JavascriptClassDefinition {
 
                 if (value == null || value instanceof Undefined) {
                     // do nothing
-                } else if (property.isAttribute()) {
+                } else if (property.model.atomic) {
                     model.set(instance, property, value);
                 } else {
                     model.set(instance, property, cast(value, property.model.type));

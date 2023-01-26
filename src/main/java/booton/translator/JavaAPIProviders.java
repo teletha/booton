@@ -21,13 +21,10 @@ import org.objectweb.asm.Type;
 import booton.JDKEmulator;
 import io.github.classgraph.ClassGraph;
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 
-/**
- * @version 2014/03/12 20:02:06
- */
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 class JavaAPIProviders {
 
     /** The mapping between Java class and JS implementation class. */

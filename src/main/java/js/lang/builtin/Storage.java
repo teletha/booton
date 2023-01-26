@@ -115,7 +115,7 @@ public abstract class Storage implements JavascriptNative {
             return null;
         }
 
-        return I.read(text, I.make(modelClass));
+        return I.json(text, modelClass);
     }
 
     /**

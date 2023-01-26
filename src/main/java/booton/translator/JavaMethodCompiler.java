@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
@@ -369,7 +370,7 @@ class JavaMethodCompiler extends MethodVisitor {
         try {
             // write method declaration
             code.mark();
-            code.append(methodName, ":", "function(", I.join(",", variables.names()), "){");
+            code.append(methodName, ":", "function(", variables.names().stream().collect(Collectors.joining(",")), "){");
             nodes.get(0).write(code);
             code.optimize();
             code.append('}'); // method end

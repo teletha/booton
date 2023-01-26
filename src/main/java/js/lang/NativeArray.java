@@ -14,10 +14,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import booton.translator.JavascriptAPIProvider;
 import booton.translator.Translator;
-import kiss.I;
 
 /**
  * @version 2015/01/13 10:48:46
@@ -405,7 +405,11 @@ public class NativeArray<T> extends NativeObject {
      * @return A built expression.
      */
     public String join(String separator) {
-        return I.join(separator, list);
+        StringJoiner joiner = new StringJoiner(separator);
+        for (T value : list) {
+            joiner.add(value.toString());
+        }
+        return joiner.toString();
     }
 
     /**

@@ -138,7 +138,7 @@ public class ReadWriteTest {
     private <T> T writeThenRead(T model) {
         StringBuilder builder = new StringBuilder();
         I.write(model, builder);
-        T other = (T) I.read(builder, I.make(model.getClass()));
+        T other = I.json(builder.toString(), (Class<T>) model.getClass());
 
         assert other != model;
         return other;

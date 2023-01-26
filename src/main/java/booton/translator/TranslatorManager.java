@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,9 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.objectweb.asm.Type;
 
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
-import kiss.Table;
 import kiss.model.Model;
 
 /**
@@ -46,10 +46,10 @@ class TranslatorManager {
     private static final Map<Class, Set<String>> nativeFields = new ConcurrentHashMap();
 
     /** The native methods. */
-    private static final Table<Integer, Class> nativeMethods = new Table();
+    private static final Map<Integer, List<Class>> nativeMethods = new HashMap();
 
     /** The native accessor methods. */
-    private static final Table<Integer, Class> nativeAccessorMethods = new Table();
+    private static final Map<Integer, List<Class>> nativeAccessorMethods = new HashMap();
 
     /** The native accessor methods. */
     private static final Map<Integer, String> nativeAccessorMethodNames = new HashMap();
@@ -80,7 +80,9 @@ class TranslatorManager {
                             // Methods defined in class are as native if these have native modifier.
                             if (type.isInterface() || Modifier.isNative(method.getModifiers()) || method
                                     .isAnnotationPresent(JavascriptNativeProperty.class)) {
-                                nativeMethods.push(hash(method.getName(), Type.getMethodDescriptor(method)), nativeClass);
+                                nativeMethods
+                                        .computeIfAbsent(hash(method.getName(), Type.getMethodDescriptor(method)), k -> new ArrayList())
+                                        .add(nativeClass);
                             }
 
                             JavascriptNativePropertyAccessor accessor = method.getAnnotation(JavascriptNativePropertyAccessor.class);
@@ -92,7 +94,7 @@ class TranslatorManager {
                                 if (name.length() == 0) {
                                     name = method.getName();
                                 }
-                                nativeAccessorMethods.push(hash, type);
+                                nativeAccessorMethods.computeIfAbsent(hash, k -> new ArrayList()).add(type);
                                 nativeAccessorMethodNames.put(hash, name);
                             }
                         }
@@ -275,10 +277,7 @@ class TranslatorManager {
         return false;
     }
 
-    /**
-     * @version 2013/08/27 23:26:48
-     */
-    @Manageable(lifestyle = Singleton.class)
+    @Managed(Singleton.class)
     private static class GeneralTranslator extends Translator<Object> {
 
         /** The global jumper. */

@@ -13,16 +13,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import filer.Filer;
 import jsx.ApplicationTheme;
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
+import psychopath.Locator;
 
 /**
  * @version 2016/12/04 13:04:43
  */
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 public class BootonConfiguration {
 
     /** The outpu root directory. */
@@ -78,7 +78,7 @@ public class BootonConfiguration {
      */
     private void validateRoot() {
         if (root == null) {
-            root = Filer.locate("");
+            root = Locator.locate("").asJavaPath();
         }
 
         if (Files.notExists(root)) {

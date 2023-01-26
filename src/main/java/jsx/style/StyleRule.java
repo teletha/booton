@@ -17,17 +17,13 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import js.lang.NativeArray;
 import jsx.collection.DualList;
-import kiss.I;
 
 /**
- * <p>
  * This class is CSSStyleRule which represents a single CSS style rule.
- * </p>
- * 
- * @version 2015/09/28 22:18:13
  */
 public class StyleRule {
 
@@ -121,7 +117,7 @@ public class StyleRule {
             }
 
             for (Entry<Vendor, List<String>> property : properties.entrySet()) {
-                String value = I.join(separator, property.getValue());
+                String value = property.getValue().stream().collect(Collectors.joining(separator));
 
                 if (value.length() != 0) {
                     Vendor vendor = property.getKey();

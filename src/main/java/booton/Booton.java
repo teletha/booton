@@ -27,10 +27,10 @@ import booton.live.ResourceServlet;
 import booton.translator.Javascript;
 import booton.translator.Translator;
 import booton.util.HTMLWriter;
-import filer.Filer;
 import jsx.debug.Profile;
 import kiss.I;
 import kiss.XML;
+import psychopath.Locator;
 
 /**
  * @version 2015/09/29 1:24:39
@@ -138,10 +138,10 @@ public class Booton {
 
         BootonLog.LoadLibrary.start(() -> {
             // load booton extensions
-            I.load(Translator.class, false);
+            I.load(Translator.class);
 
             // load application extensions
-            I.load(application, true);
+            I.load(application);
         });
 
         Path mutex = root.resolve(BuildPhase);
@@ -167,7 +167,7 @@ public class Booton {
             e.printStackTrace(System.out);
         } finally {
             // ending build phase
-            Filer.delete(mutex);
+            Locator.file(mutex).delete();
 
             Profile.show();
         }

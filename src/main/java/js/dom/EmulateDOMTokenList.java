@@ -10,11 +10,9 @@
 package js.dom;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import kiss.I;
+import java.util.stream.Collectors;
 
 /**
- * 
  * @version 2015/09/30 13:37:47
  */
 class EmulateDOMTokenList extends DOMTokenList {
@@ -117,6 +115,6 @@ class EmulateDOMTokenList extends DOMTokenList {
      */
     @Override
     public String toString() {
-        return I.join(" ", classes);
+        return classes.stream().collect(Collectors.joining(" "));
     }
 }

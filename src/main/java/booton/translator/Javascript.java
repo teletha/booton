@@ -40,13 +40,13 @@ import booton.BootonConfiguration;
 import booton.BootonLog;
 import booton.Necessary;
 import booton.Unnecessary;
-import filer.Filer;
 import io.github.classgraph.ClassGraph;
 import js.lang.NativeString;
 import kiss.Extensible;
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
+import psychopath.Locator;
 
 /**
  * <h2>The Reserved words in ECMA Script Third Edition</h2>
@@ -115,7 +115,7 @@ public class Javascript {
         }
 
         // Load Booton module
-        I.load(Translator.class, false);
+        I.load(Translator.class);
 
         // Define Class class at first. It is ensured that Class definition is
         // assigned in 'boot.A' variable.
@@ -854,7 +854,7 @@ public class Javascript {
     /**
      * @version 2013/11/05 9:58:05
      */
-    @Manageable(lifestyle = Singleton.class)
+    @Managed(Singleton.class)
     private static class NecessaryManager {
 
         /** The extensions. */
@@ -920,7 +920,7 @@ public class Javascript {
 
         private String getCode(Class clazz, Supplier<String> coder) {
             try {
-                Path archive = Filer.locate(clazz);
+                Path archive = Locator.locate(clazz).asJavaPath();
 
                 if (archive == null) {
                     code = coder.get();

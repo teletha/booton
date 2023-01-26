@@ -27,7 +27,7 @@ import jsx.ui.Widget;
 import kiss.Decoder;
 import kiss.Encoder;
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 import kiss.Variable;
 import kiss.model.Model;
@@ -35,7 +35,7 @@ import kiss.model.Model;
 /**
  * @version 2016/11/09 11:43:55
  */
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 public abstract class Application<Router extends ApplicationRouter> {
 
     /** The cache for widget. */
@@ -170,15 +170,15 @@ public abstract class Application<Router extends ApplicationRouter> {
         Widget widget = invoke(clazz, router, method, params);
 
         // rendering widget element
-        Variable.of(widget).or(defaultWidget()).to(w -> {
-            // create element cradle
-            DocumentFragment cradle = document.createDocumentFragment();
+        Widget w = Variable.of(widget).or(defaultWidget());
 
-            w.renderIn(cradle.child("div"));
+        // create element cradle
+        DocumentFragment cradle = document.createDocumentFragment();
 
-            // clear old page and append new page
-            document.contentElement().empty().append(cradle);
-        });
+        w.renderIn(cradle.child("div"));
+
+        // clear old page and append new page
+        document.contentElement().empty().append(cradle);
 
         return widget;
     }

@@ -21,7 +21,7 @@ import org.objectweb.asm.Type;
 import booton.Unnecessary;
 import js.lang.NativeFunction;
 import kiss.Extensible;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 import kiss.model.Model;
 
@@ -33,7 +33,7 @@ import kiss.model.Model;
  * @version 2014/05/26 16:51:05
  */
 @Unnecessary
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 public class Translator<T> implements Extensible {
 
     /** The quote literal. */

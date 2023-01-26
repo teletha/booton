@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import booton.Booton;
 import booton.util.HTMLWriter;
-import filer.Filer;
 import kiss.I;
 import kiss.XML;
+import psychopath.Locator;
 
 /**
  * @version 2014/03/07 10:22:55
@@ -44,7 +44,7 @@ public class ResourceServlet extends HttpServlet {
      * @param root
      */
     public ResourceServlet(Path root) {
-        Path resources = Filer.locate(Booton.class);
+        Path resources = Locator.locate(Booton.class).asJavaPath();
 
         if (Files.isRegularFile(resources)) {
             try {
@@ -90,7 +90,7 @@ public class ResourceServlet extends HttpServlet {
 
             if (Files.exists(resource)) {
                 if (Files.notExists(deployed) || Files.getLastModifiedTime(resource) != Files.getLastModifiedTime(deployed)) {
-                    Filer.copy(resource, deployed);
+                    Files.copy(resource, Files.newOutputStream(deployed));
                 }
             }
 
@@ -127,7 +127,7 @@ public class ResourceServlet extends HttpServlet {
      */
     private synchronized XML rebuild(Path file) {
         long now = new Date().getTime();
-        XML html = I.xml(file.toFile());
+        XML html = I.xml(file);
 
         // append live coding script
         html.find("script[src=\"application.js\"]").after(I.xml("script").attr("type", "text/javascript").attr("src", "live.js"));

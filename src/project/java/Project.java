@@ -14,8 +14,8 @@ public class Project extends bee.api.Project {
 
         product("npc", "Booton", "0.1");
 
-        require("com.github.teletha", "sinobu", "1.0");
-        require("com.github.teletha", "filer", "0.5");
+        require("com.github.teletha", "sinobu");
+        require("com.github.teletha", "psychopath");
         require("org.ow2.asm", "asm");
         require("org.ow2.asm", "asm-util");
         require("org.apache.xml", "serializer");

@@ -13,13 +13,13 @@ import org.w3c.dom.DOMException;
 
 import js.lang.NativeCSSStyleSheetList;
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 
 /**
  * @version 2015/10/05 0:05:50
  */
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 class EmulateDocument extends Document {
 
     /** The root element. */

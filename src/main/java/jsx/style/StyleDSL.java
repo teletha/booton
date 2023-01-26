@@ -39,20 +39,16 @@ import jsx.style.value.Numeric;
 import jsx.style.value.RadialGradient;
 import jsx.style.value.Shadow;
 import jsx.style.value.Unit;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 
-/**
- * @version 2016/09/18 19:02:34
- */
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 public class StyleDSL extends SelectorDSL {
 
     /**
      * <p>
-     * This unit represents the font-size of the root element (e.g. the font-size of the
-     * <html> element). When used on the font-size on this root element, it represents its initial
-     * value.
+     * This unit represents the font-size of the root element (e.g. the font-size of the <html>
+     * element). When used on the font-size on this root element, it represents its initial value.
      * </p>
      */
     public static final Unit rem = Unit.rem;

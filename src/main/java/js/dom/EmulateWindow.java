@@ -11,13 +11,13 @@ package js.dom;
 
 import java.util.Locale;
 
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 
 /**
  * @version 2015/06/09 12:29:41
  */
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 public class EmulateWindow extends Window {
 
     public String language = Locale.getDefault().getDisplayLanguage();

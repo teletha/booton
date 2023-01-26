@@ -62,14 +62,13 @@ public class KissTest {
     /**
      * @version 2013/09/25 19:16:21
      */
-    @Manageable(lifestyle = Prototype.class)
     private static class PrototypeClass {
     }
 
     /**
      * @version 2013/09/25 19:16:21
      */
-    @Manageable(lifestyle = Singleton.class)
+    @Managed(Singleton.class)
     private static class SingletonClass {
     }
 

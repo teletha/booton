@@ -25,7 +25,7 @@ import js.dom.Window;
 import js.lang.builtin.JSON;
 import js.lang.builtin.Storage;
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 
 /**
@@ -841,7 +841,7 @@ public class Global {
     /**
      * @version 2013/12/17 22:28:15
      */
-    @Manageable(lifestyle = Singleton.class)
+    @Managed(Singleton.class)
     private static class TaskScheduler {
 
         /** The service. */

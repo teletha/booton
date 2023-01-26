@@ -10,13 +10,10 @@
 package jsx.ui.i18n;
 
 import js.lang.NativeString;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 
-/**
- * @version 2015/06/10 10:06:48
- */
-@Manageable(lifestyle = Singleton.class)
+@Managed(Singleton.class)
 public abstract class TextLocalizer {
 
     /**

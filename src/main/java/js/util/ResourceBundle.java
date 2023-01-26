@@ -26,7 +26,7 @@ import java.util.spi.ResourceBundleControlProvider;
 
 import booton.translator.JavaAPIProvider;
 import kiss.I;
-import kiss.Manageable;
+import kiss.Managed;
 import kiss.Singleton;
 
 /**
@@ -535,11 +535,8 @@ class ResourceBundle {
 
     }
 
-    /**
-     * @version 2014/03/12 8:37:39
-     */
     @JavaAPIProvider(Control.class)
-    @Manageable(lifestyle = Singleton.class)
+    @Managed(Singleton.class)
     private static class JSControl {
 
         /**

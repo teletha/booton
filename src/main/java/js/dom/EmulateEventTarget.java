@@ -9,16 +9,17 @@
  */
 package js.dom;
 
-import js.lang.NativeFunction;
-import kiss.Table;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- * @version 2013/10/05 10:07:28
- */
+import js.lang.NativeFunction;
+
 class EmulateEventTarget<T extends EmulateEventTarget<T>> extends EventTarget<T> {
 
     /** The listener table. */
-    private Table<String, NativeFunction> listeners = new Table();
+    private Map<String, List<NativeFunction>> listeners = new HashMap();
 
     /**
      * {@inheritDoc}
@@ -26,7 +27,7 @@ class EmulateEventTarget<T extends EmulateEventTarget<T>> extends EventTarget<T>
     @Override
     public void addEventListener(String type, NativeFunction listener) {
         if (type != null && listener != null) {
-            listeners.push(type, listener);
+            listeners.computeIfAbsent(type, k -> new ArrayList()).add(listener);
         }
     }
 
@@ -36,7 +37,7 @@ class EmulateEventTarget<T extends EmulateEventTarget<T>> extends EventTarget<T>
     @Override
     public void removeEventListener(String type, NativeFunction listener) {
         if (type != null && listener != null) {
-            listeners.pull(type, listener);
+            listeners.computeIfAbsent(type, k -> new ArrayList()).remove(listener);
         }
     }
 

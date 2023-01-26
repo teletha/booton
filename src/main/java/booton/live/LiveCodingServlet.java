@@ -25,11 +25,12 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import booton.BootonConfiguration;
-import filer.Filer;
 import kiss.Disposable;
 import kiss.I;
 import kiss.Signal;
 import kiss.XML;
+import psychopath.Location;
+import psychopath.Locator;
 
 /**
  * @version 2016/12/04 13:07:59
@@ -79,9 +80,9 @@ public class LiveCodingServlet extends WebSocketServlet {
             this.session = session;
 
             // observe html
-            Signal<WatchEvent<Path>> observable = Filer.observe(html);
+            Signal<WatchEvent<Location>> observable = Locator.file(html).observe();
 
-            XML xml = I.xml(html.toFile());
+            XML xml = I.xml(html);
 
             // observe js
             for (XML js : xml.find("script[src]")) {
@@ -103,9 +104,9 @@ public class LiveCodingServlet extends WebSocketServlet {
             }
 
             sources = observable.debounce(1, SECONDS).to(event -> {
-                if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                if (event.kind().name() == StandardWatchEventKinds.ENTRY_MODIFY.name()) {
                     System.out.println("modify " + event.context());
-                    send(event.context().getFileName().toString());
+                    send(event.context().path());
                 }
             });
         }
@@ -175,13 +176,13 @@ public class LiveCodingServlet extends WebSocketServlet {
          * @param file A target file.
          * @return A {@link Signal}.
          */
-        private Signal<WatchEvent<Path>> observeFile(String relativePath) {
+        private Signal<WatchEvent<Location>> observeFile(String relativePath) {
             int index = relativePath.indexOf('?');
 
             if (index != -1) {
                 relativePath = relativePath.substring(0, index);
             }
-            return Filer.observe(config.root.resolve(relativePath));
+            return Locator.file(config.root.resolve(relativePath)).observe();
         }
 
         /**
