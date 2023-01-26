@@ -10,7 +10,7 @@
 package booton.translator;
 
 import static booton.translator.CompilerRecorder.*;
-import static jdk.internal.org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +69,7 @@ public class Debugger extends AnnotationVisitor {
      * 
      */
     private Debugger() {
-        super(ASM5);
+        super(ASM9);
 
         // update
         debugger = this;

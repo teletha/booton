@@ -12,7 +12,6 @@ package js.lang.ref;
 import java.lang.ref.ReferenceQueue;
 
 import booton.translator.JavaAPIProvider;
-import jdk.internal.vm.annotation.ForceInline;
 
 /**
  * @version 2014/02/26 14:23:09
@@ -149,7 +148,6 @@ class Reference<T> {
      * @since 9
      * @jls 12.6 Finalization of Class Instances
      */
-    @ForceInline
     public static void reachabilityFence(Object ref) {
         // Does nothing. This method is annotated with @ForceInline to eliminate
         // most of the overhead that using @DontInline would cause with the

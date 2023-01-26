@@ -17,6 +17,8 @@ public class Project extends bee.api.Project {
         require("com.github.teletha", "sinobu", "1.0");
         require("com.github.teletha", "filer", "0.5");
         require("org.ow2.asm", "asm");
+        require("org.ow2.asm", "asm-util");
+        require("org.apache.xml", "serializer");
         require("io.github.classgraph", "classgraph");
         require("org.eclipse.jetty.websocket", "websocket-server", jettyVersion);
         require("org.eclipse.jetty", "jetty-servlet", jettyVersion);

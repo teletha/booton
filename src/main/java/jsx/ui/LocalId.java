@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import static jdk.internal.org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,9 +23,6 @@ import org.objectweb.asm.Type;
 import booton.translator.Translator;
 import kiss.I;
 
-/**
- * @version 2014/09/13 9:44:24
- */
 class LocalId {
 
     /** The class name. */
@@ -136,7 +133,7 @@ class LocalId {
          * 
          */
         private ClassLineSearch(Map<Integer, Integer> lines) {
-            super(ASM5);
+            super(ASM9);
 
             this.lines = lines;
         }
@@ -171,7 +168,7 @@ class LocalId {
          * 
          */
         private MethodLineSearch(Map<Integer, Integer> lines) {
-            super(ASM5);
+            super(ASM9);
 
             this.lines = lines;
         }
