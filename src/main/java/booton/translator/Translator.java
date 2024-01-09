@@ -9,7 +9,9 @@
  */
 package booton.translator;
 
-import static booton.translator.Javascript.*;
+import static booton.translator.Javascript.PrimitiveLong;
+import static booton.translator.Javascript.computeMethodName;
+import static booton.translator.Javascript.writeMethodCode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -22,8 +24,8 @@ import booton.Unnecessary;
 import js.lang.NativeFunction;
 import kiss.Extensible;
 import kiss.Managed;
+import kiss.Model;
 import kiss.Singleton;
-import kiss.model.Model;
 
 /**
  * <p>

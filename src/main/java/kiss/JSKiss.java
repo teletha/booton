@@ -9,8 +9,9 @@
  */
 package kiss;
 
-import static java.lang.Boolean.*;
-import static java.time.format.DateTimeFormatter.*;
+import static java.lang.Boolean.FALSE;
+import static java.time.format.DateTimeFormatter.ISO_DATE;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -76,9 +77,6 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
-
-import kiss.model.Model;
-import kiss.model.Property;
 
 /**
  * <p>

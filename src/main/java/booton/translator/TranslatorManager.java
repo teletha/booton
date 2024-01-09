@@ -28,8 +28,8 @@ import org.objectweb.asm.Type;
 
 import kiss.I;
 import kiss.Managed;
+import kiss.Model;
 import kiss.Singleton;
-import kiss.model.Model;
 
 /**
  * @version 2013/11/22 13:19:38

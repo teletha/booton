@@ -9,7 +9,7 @@
  */
 package jsx.ui;
 
-import static js.lang.Global.*;
+import static js.lang.Global.requestAnimationFrame;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -43,10 +43,10 @@ import jsx.ui.flux.Interactive;
 import jsx.ui.flux.Location;
 import jsx.ui.flux.Locator;
 import kiss.I;
+import kiss.Model;
 import kiss.Observer;
 import kiss.Signal;
 import kiss.WiseConsumer;
-import kiss.model.Model;
 
 /**
  * @version 2016/09/27 10:10:23

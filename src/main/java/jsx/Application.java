@@ -9,8 +9,11 @@
  */
 package jsx;
 
-import static java.util.Objects.*;
-import static js.lang.Global.*;
+import static java.util.Objects.hash;
+import static js.lang.Global.document;
+import static js.lang.Global.history;
+import static js.lang.Global.location;
+import static js.lang.Global.window;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
@@ -28,9 +31,9 @@ import kiss.Decoder;
 import kiss.Encoder;
 import kiss.I;
 import kiss.Managed;
+import kiss.Model;
 import kiss.Singleton;
 import kiss.Variable;
-import kiss.model.Model;
 
 /**
  * @version 2016/11/09 11:43:55

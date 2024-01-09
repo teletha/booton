@@ -23,6 +23,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLFilterImpl;
 
+import com.sun.org.apache.xml.internal.serializer.TreeWalker;
+
 import kiss.I;
 import kiss.XML;
 
@@ -541,7 +543,7 @@ public class XMLWriter extends XMLFilterImpl implements LexicalHandler {
     public void write(XML xml) {
         try {
             startDocument();
-            org.apache.xml.serializer.TreeWalker walker = new org.apache.xml.serializer.TreeWalker(this);
+            TreeWalker walker = new TreeWalker(this);
 
             Field nodes = XML.class.getDeclaredField("nodes");
             nodes.setAccessible(true);
